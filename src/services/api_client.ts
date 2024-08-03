@@ -66,12 +66,12 @@ const ApiClient = (() => {
     }
 
     function getConfig(): Promise<Config> | Config {
-        const localConfig: Config | undefined = getLocalConfig();
-        const sessionConfig: Config | undefined = getSessionConfig();
+        // const localConfig: Config | undefined = getLocalConfig();
+        // const sessionConfig: Config | undefined = getSessionConfig();
 
-        if (localStorage.useLocalStorage && localConfig) return localConfig;
+        // if (localStorage.useLocalStorage && localConfig) return localConfig;
 
-        if (sessionConfig) return sessionConfig;
+        // if (sessionConfig) return sessionConfig;
 
         return getFileConfig();
     }
@@ -117,7 +117,7 @@ const ApiClient = (() => {
             handleUnauthorized(response.statusText);
             return response;
         } catch (e) {
-            console.error(e);
+            // console.error(e);
             if (`${e}`.match(/NetworkError|Failed to fetch/i)) {
                 EventBus.emit(ApiBusEvents.ON_API_CRASH, e);
             } else {
