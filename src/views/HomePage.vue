@@ -172,7 +172,8 @@ import { resetDemographics } from "@/services/reset_data";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
-import { setOfflineData } from "@/services/set_location";
+import { setOfflineLocation } from "@/services/set_location";
+import { setOfflineRelationship } from "@/services/set_relationships";
 
 export default defineComponent({
     name: "Home",
@@ -255,7 +256,8 @@ export default defineComponent({
         },
     },
     async mounted() {
-        await setOfflineData();
+        await setOfflineLocation();
+        await setOfflineRelationship();
         resetDemographics();
         await this.setAppointments();
         this.setView();
