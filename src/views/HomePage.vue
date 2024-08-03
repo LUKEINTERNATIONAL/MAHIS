@@ -77,7 +77,7 @@
                 </ion-card>
                 <ion-card class="section">
                     <ion-card-header>
-                        <ion-card-title class="cardTitle"> Today appointments({{ appointments.length }}) </ion-card-title></ion-card-header
+                        <ion-card-title class="cardTitle"> Today appointments({{ appointments?.length }}) </ion-card-title></ion-card-header
                     >
                     <ion-card-content>
                         <div
@@ -172,6 +172,7 @@ import { resetDemographics } from "@/services/reset_data";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
+import { setOfflineData } from "@/services/set_location";
 
 export default defineComponent({
     name: "Home",
@@ -206,7 +207,20 @@ export default defineComponent({
             reportData: "" as any,
             appointments: [] as any,
             programBtn: {} as any,
-            totalStats: [] as any,
+            totalStats: [
+                {
+                    name: "Total vaccinated this year",
+                    value: 0,
+                },
+                {
+                    name: "Total Female vaccinated this year",
+                    value: 0,
+                },
+                {
+                    name: "Total Male vaccinated this year",
+                    value: 0,
+                },
+            ] as any,
         };
     },
     setup() {
@@ -241,6 +255,7 @@ export default defineComponent({
         },
     },
     async mounted() {
+        await setOfflineData();
         resetDemographics();
         await this.setAppointments();
         this.setView();
@@ -250,7 +265,7 @@ export default defineComponent({
     methods: {
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
-            this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
+            if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
@@ -264,7 +279,7 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
-                console.log("🚀 ~ onMessage ~ this.reportData:", this.reportData);
+                console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
                 this.totalStats = [
                     {
                         name: "Total vaccinated this year",

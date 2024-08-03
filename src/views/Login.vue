@@ -168,7 +168,6 @@ export default defineComponent({
                     //     throw "Local date does not match API date. Please Update your device's date";
                     // }
                     await this.auth.login(this.password);
-                    this.auth.startSession();
                     if (this.auth.checkUserPrograms(this.program.name)) {
                         this.$router.push("/home");
                     } else {
@@ -188,10 +187,10 @@ export default defineComponent({
         handleInput(event: any) {
             sessionStorage.setItem("app", JSON.stringify({ programID: event.program_id, applicationName: event.name }));
         },
-    },
-    togglePasswordVisibility() {
-        if (!this.togglePasswordVisibility) return true;
-        else return false;
+        togglePasswordVisibility() {
+            if (!this.togglePasswordVisibility) return true;
+            else return false;
+        },
     },
 });
 </script>

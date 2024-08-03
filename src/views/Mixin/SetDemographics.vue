@@ -33,6 +33,30 @@ export default defineComponent({
                 phone: this.getPhone(item),
             });
         },
+        setOfflineDemographics(item: any) {
+            const demographicsStore = useDemographicsStore();
+            let fullName = "";
+            if (item.personInformation.middle_name && item.personInformation.middle_name != "N/A") {
+                fullName = item.personInformation.given_name + " " + item.personInformation.middle_name + " " + item.personInformation.family_name;
+            } else {
+                fullName = item.personInformation.given_name + " " + item.personInformation.family_name;
+            }
+            demographicsStore.setDemographics({
+                name: fullName,
+                mrn: item.offlinePatientID,
+                birthdate: item.personInformation.birthdate,
+                category: "",
+                gender: item.personInformation.gender,
+                patient_id: item.offlinePatientID,
+                address:
+                    item?.personInformation?.current_district +
+                    "," +
+                    item?.personInformation?.current_traditional_authority +
+                    "," +
+                    item?.personInformation?.current_village,
+                phone: item.personInformation.cell_phone_number,
+            });
+        },
         patientIdentifier(identifiers: any) {
             return identifiers.patient_identifiers
                 .filter((identifier: any) => identifier.identifier_type === 3)
