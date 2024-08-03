@@ -53,7 +53,12 @@ export async function formatInputFiledData(data: any, obs_datetime: any = Concep
 }
 
 async function getValue(element: any, value: any, obs_datetime: any, childData = "") {
-    const concept_id = await ConceptService.getConceptID(element.name, true);
+    const concept_id = await ConceptService.getConceptID(element.name);
+    // return {
+    //     categories: [],
+    //     concept_id: concept_id,
+    //     name: element.name,
+    // };
     if (element.valueType === "coded") {
         if (childData) {
             return {
