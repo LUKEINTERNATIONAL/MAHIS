@@ -3,6 +3,9 @@
 
     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >First Name<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="input_properties[1].placeHolder"
                 :icon="personOutline"
@@ -17,6 +20,9 @@
             </div>
         </ion-col>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Last name<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="input_properties[2].placeHolder"
                 :icon="peopleOutline"
@@ -34,6 +40,9 @@
 
     <ion-row>
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Username<span style="color: #b42318">*</span></ion-label
+                >
                 <BasicInputField
                     :placeholder="input_properties[0].placeHolder"
                     :icon="personCircleOutline"
@@ -66,6 +75,9 @@
 
         <ion-row v-if="isSuperUser">
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Activate/Deactivate user<span style="color: #b42318">*</span></ion-label
+                >
                 <Toggle
                     class="toggle-green"
                     :classes="{
@@ -80,6 +92,9 @@
 
         <ion-row v-if="isSuperUser">
             <ion-col size="6">
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Find and select facility name<span style="color: #b42318">*</span></ion-label
+                >
                 <VueMultiselect
                     v-model="selected_location"
                     @update:model-value="selectedLocation($event)"
@@ -88,8 +103,8 @@
                     :hide-selected="true"
                     :close-on-select="true"
                     openDirection="bottom"
-                    tag-placeholder="Find and select medication"
-                    placeholder="Find and select medication"
+                    tag-placeholder="Find and select facility name"
+                    placeholder="Find and select facility name"
                     selectLabel=""
                     label="name"
                     :searchable="true"
@@ -108,6 +123,9 @@
 
         <ion-row v-if="isSuperUser">
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Find and select facility Role(s)<span style="color: #b42318">*</span></ion-label
+                >
                 <ListPicker
                     :multiSelection="list_picker_prperties[0].multi_Selection"
                     :show_label="list_picker_prperties[0].show_list_label"
@@ -126,6 +144,9 @@
 
         <ion-row v-if="isSuperUser">
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Find and select facility Program(s)<span style="color: #b42318">*</span></ion-label
+                >
                 <ListPicker
                     :multiSelection="list_picker_prperties[1].multi_Selection"
                     :show_label="list_picker_prperties[1].show_list_label"
@@ -156,13 +177,16 @@
         </ion-row>
 
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px;">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Change Password</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >New password<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="password_input_properties[0].placeHolder"
                 :icon="keyOutline"
@@ -177,6 +201,9 @@
             </div>
         </ion-col>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Repeat password<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="password_input_properties[1].placeHolder"
                 :icon="keyOutline"
@@ -227,34 +254,35 @@ import {
     transgenderOutline,
     personOutline,
     peopleOutline
-} from "ionicons/icons"
-import { ref, onMounted, watch } from "vue"
-import BasicInputField from "@/components/BasicInputField.vue"
-import { UserService } from "@/services/user_service"
-import { ProgramService } from "@/services/program_service"
-import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti"
-import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
+} from "ionicons/icons";
+import { ref, onMounted, watch } from "vue";
+import BasicInputField from "@/components/BasicInputField.vue";
+import { UserService } from "@/services/user_service";
+import { ProgramService } from "@/services/program_service";
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { useUserStore } from "@/stores/userStore";
 
-const toggle_local = ref(false)
-const user_roles = ref([] as any)
-const user_programs = ref([] as any)
-const user_data = ref()
-const user_name = ref()
-const first_name = ref()
-const last_name = ref()
-const userId = ref() as any
-const show_user_programs = ref(false)
-const actionN = ref('')
-const selected_location = ref()
-const locationData = ref([]) as any
-const locationId = ref()
-const location_error_message = ref('Select location')
-const location_show_error = ref(false)
+const toggle_local = ref(false);
+const user_roles = ref([] as any);
+const user_programs = ref([] as any);
+const user_data = ref();
+const user_name = ref();
+const first_name = ref();
+const last_name = ref();
+const userId = ref() as any;
+const show_user_programs = ref(false);
+const actionN = ref('');
+const selected_location = ref();
+const locationData = ref([]) as any;
+const locationId = ref();
+const location_error_message = ref('Select location');
+const location_show_error = ref(false);
 const passwordErrorMsgs = [
     'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
     'Password does not match'
 ]
-const isSuperUser = ref(false)
+const isSuperUser = ref(false);
 
 const props = defineProps<{
     toggle: true,
@@ -265,7 +293,8 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
-    await getUserData() 
+    await getUserData()
+    getCurrentUser() 
 })
 
 watch(
@@ -362,7 +391,7 @@ const password_input_properties = [
         error_message: passwordErrorMsgs[0],
     },
     {
-        placeHolder: 'confirm password',
+        placeHolder: 'repeat password',
         dataHandler: passwordInputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
@@ -567,7 +596,6 @@ async function updateUserDemographics() {
 
         try {
             const response = await UserService.updateusername(userId.value, username_payload)
-            // console.log(response.message[0])
             toastSuccess("username updated successfully")
         } catch (error) {
             toastWarning("username update failed, already existing")
@@ -596,7 +624,6 @@ async function preSavePrograms() {
         selectedProgramIds.push(program.other.program_id)
     })
 
-    console.log(selectedProgramIds)
     if (selectedProgramIds.length > 0) {
         savePrograms(selectedProgramIds)
     }
@@ -613,12 +640,17 @@ function fillUserRoles() {
         user_data.value.roles.forEach((userR: any) => {
             if (userR.uuid == item.other.uuid) {
                 item.selected = true
-
-                console.log(item)
-                findSuperUserRole(item)
             }
         })
     })
+}
+
+function getCurrentUser() {
+    const user_store = useUserStore();
+    const current_user = user_store.getUser()
+    current_user.roles.forEach((userR: any) => {
+            findSuperUserRole(userR)
+        })
 }
 
 function findSuperUserRole(role: any) {
@@ -626,9 +658,9 @@ function findSuperUserRole(role: any) {
         'Superuser',
         'Superuser,Superuser,'
     ]
-    superUserRoles.forEach((SUR: any) => {
-        if (role.name.toLowerCase() == SUR.toLowerCase()) {
-            // isSuperUser.value = true
+    superUserRoles.forEach((SUR: any) => {  
+        if (role.role.toLowerCase() == SUR.toLowerCase()) {
+            isSuperUser.value = true
         }
     })
 }

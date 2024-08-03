@@ -22,5 +22,20 @@ export class SmsService extends Service {
   }
 
 
+  static async setConfigurations(Configdata: any) { 
+    return super.postJson('sms_configuration', {
+      "sms_gateway_url": Configdata.url,
+      "sms_api_key": Configdata.apiKey,
+      "sms_reminder": Configdata.smsReminder,
+      "next_appointment_message": Configdata.reminderMessage,
+      "next_appointment_reminder_period": Configdata.reminderPeriod,
+      "sms_activation": Configdata.smsActivation,
+      "show_sms_popup": Configdata.smsPopup
+  })
+}
+
+static async getConfigurations() {
+     return super.getJson('configurations')
+}
 
 }

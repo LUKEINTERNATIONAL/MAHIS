@@ -267,6 +267,8 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
+                this.currentStep = "Personal Information";
+                await resetPatientData();
                 if (data.name == "registration") resetDemographics();
             },
             deep: true,
@@ -360,6 +362,9 @@ export default defineComponent({
             const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
             const isOtherSelected = selectedLandmark?.name === "Other";
 
+            if (isOtherSelected) {
+                currentFields.push("Other (specify)");
+            }
             if (isOtherSelected) {
                 currentFields.push("Other (specify)");
             }
@@ -494,6 +499,10 @@ export default defineComponent({
             const closestLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value")?.name;
             const otherLandmark = getFieldValue(this.currentLocation, "Other (specify)", "value");
             const landmark = closestLandmark === "Other" ? otherLandmark : closestLandmark;
+        async buildPersonalInformation() {
+            const closestLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value")?.name;
+            const otherLandmark = getFieldValue(this.currentLocation, "Other (specify)", "value");
+            const landmark = closestLandmark === "Other" ? otherLandmark : closestLandmark;
 
             this.personInformation[0].selectedData = {
                 given_name: getFieldValue(this.personInformation, "firstname", "value"),
@@ -518,7 +527,31 @@ export default defineComponent({
                 education_level: getRadioSelectedValue(this.socialHistory, "highestLevelOfEducation"),
             };
         },
+            this.personInformation[0].selectedData = {
+                given_name: getFieldValue(this.personInformation, "firstname", "value"),
+                middle_name: getFieldValue(this.personInformation, "middleName", "value"),
+                family_name: getFieldValue(this.personInformation, "lastname", "value"),
+                gender: this.gender,
+                birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
+                birthdate_estimated: "false",
+                home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
+                home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
+                home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
+                home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
+                current_region: await this.getRegion(this.current_district),
+                current_district: this.current_district,
+                current_traditional_authority: this.current_traditional_authority,
+                current_village: this.current_village,
+                landmark: landmark,
+                cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
+                occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
+                marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
+                religion: getFieldValue(this.socialHistory, "religion", "value")?.name,
+                education_level: getRadioSelectedValue(this.socialHistory, "highestLevelOfEducation"),
+            };
+        },
 
+        setDisplayType(type: any) {
         setDisplayType(type: any) {
             const demographicsStore = useConfigurationStore();
             demographicsStore.setRegistrationDisplayType(type);

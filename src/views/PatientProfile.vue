@@ -274,6 +274,7 @@ import {
     add,
     person,
 } from "ionicons/icons";
+
 import { modalController } from "@ionic/vue";
 import { icons } from "@/utils/svg";
 
