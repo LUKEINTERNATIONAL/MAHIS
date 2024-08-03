@@ -23,6 +23,7 @@
     "@ionic-native/pdf-generator": "^5.36.0",
     "@ionic/vue": "^7.6.1",
     "@ionic/vue-router": "^7.7.2",
+    "@types/crypto-js": "^4.2.2",
     "@types/vue-select": "^3.16.8",
     "@vue/compiler-sfc": "^3.4.31",
     "@vueform/toggle": "^2.1.4",
