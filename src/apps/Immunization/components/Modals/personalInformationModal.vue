@@ -178,12 +178,11 @@ export default defineComponent({
         async saveDetails() {
             try {
                 await this.updateDemographics();
-                // const updatedGuardian = await this.updateGuardian();
+                await this.updateGuardian();
                 await this.updatePatientDemographics();
                 toastSuccess("Successfully Updated Patient");
                 this.handleCancel();
             } catch (error) {
-                console.log("🚀 ~ saveDetails ~ error:", error);
                 toastWarning("Failed to save details");
             }
         },
@@ -234,9 +233,7 @@ export default defineComponent({
                 facility_name: "",
                 patient_type: "",
             };
-            const personService = new PersonService(updatedData);
-            const data = await personService.update(this.demographics.patient_id);
-            console.log("🚀 ~ updateDemographics ~ data:", data);
+            await this.updatePerson(this.demographics.patient_id, updatedData);
         },
         async updateGuardian() {
             let guardianDetails: any = {
@@ -267,7 +264,9 @@ export default defineComponent({
             const selectedID = getFieldValue(this.guardianInformation, "relationship", "value")?.id;
             if (selectedID) {
                 if (data.length > 0) {
+                    const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
                     await RelationsService.amendRelation(this.demographics.patient_id, data[0].person_b, data[0].relationship_id, selectedID);
+                    await this.updatePerson(guardianData[0]?.person_b, guardianDetails);
                 } else {
                     const guardian: any = new PatientRegistrationService();
                     await guardian.registerGuardian(guardianDetails);
@@ -276,7 +275,10 @@ export default defineComponent({
                 }
             }
         },
-
+        async updatePerson(personID: any, updatedData: any) {
+            const personService = new PersonService(updatedData);
+            const data = await personService.update(personID);
+        },
         async updatePatientDemographics() {
             const item = await PatientService.findByID(this.demographics.patient_id);
             const demographicsStore = useDemographicsStore();
