@@ -6,7 +6,7 @@ export default function img(name: string) {
     return `${baseURL}/images/${name}`;
 }
 
-function getBaseURl() {
+export function getBaseURl() {
     const baseURL = sessionStorage.baseURL
     if (baseURL) {
         let  websockerURL = removeQuotes(baseURL);

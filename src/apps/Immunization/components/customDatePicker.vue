@@ -83,6 +83,10 @@
         corrected_date.setFullYear(sessionYear)
         pickerInstance.setDate(corrected_date)
       }
+      const sessionDate = new Date(Service.getSessionDate());
+      if (pickerInstance.getDate() > sessionDate) {
+        pickerInstance.setDate(sessionDate)
+      }
     }
      else {
       const corrected_date = pickerInstance.getDate()
