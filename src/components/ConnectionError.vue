@@ -1,9 +1,6 @@
 <template>
-    <div id="api-error" class="his-card">
-        <p>Cannot connect to the server</p>
-        <ion-button router-link="/settings/host" color="warning"> New Config </ion-button>
-        <ion-button @click="refresh" color="warning"> Refresh </ion-button>
-    </div>
+    <div class="api-error offline" v-if="!apiStatus">Offline mode</div>
+    <div class="api-error online" v-if="apiStatus">Online mode</div>
 </template>
 
 <script lang="ts">
@@ -18,22 +15,32 @@ export default defineComponent({
             refresh,
         };
     },
+    props: {
+        apiStatus: {
+            default: true as any,
+        },
+    },
 });
 </script>
 <style scoped>
-#api-error {
-    bottom: 0;
+.api-error {
+    bottom: 5px;
     position: absolute;
-    background: red;
+
     color: white;
-    font-weight: bold;
-    width: 25vw;
-    bottom: 30px; /* Position Y halfway in */
-    left: 50%; /* Position X halfway in */
-    transform: translate(-50%, -50%); /* Move it halfway back(x,y) */
+    left: 5px;
     text-align: center;
     z-index: 40;
-    padding-bottom: 20px;
     border-radius: 5px;
+    padding: 2.5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 14px;
+}
+.offline {
+    background: rgb(216, 16, 16);
+}
+.online {
+    background: rgb(6, 177, 20);
 }
 </style>

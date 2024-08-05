@@ -46,7 +46,6 @@ export default defineComponent({
             inputField: "" as any,
             setName: "" as any,
             locationData: [] as any,
-            districtList: [] as any,
         };
     },
     computed: {
@@ -63,9 +62,9 @@ export default defineComponent({
             return getFieldValue(this.currentLocation, "current_village", "value")?.name;
         },
 
-      "Other (specify)"() {
-        return getFieldValue(this.currentLocation, "Other (specify)", "value")
-      },
+        "Other (specify)"() {
+            return getFieldValue(this.currentLocation, "Other (specify)", "value");
+        },
     },
     watch: {
         currentLocation: {
@@ -76,7 +75,7 @@ export default defineComponent({
         },
         districtList: {
             handler() {
-                modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
+                if (this.districtList.length > 0) modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
             },
             deep: true,
         },
@@ -87,11 +86,9 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.updateRegistrationStores();
         this.buildCards();
         this.setData();
-        this.validaterowData({})
-
+        this.validaterowData({});
     },
     methods: {
         setData() {
@@ -131,11 +128,6 @@ export default defineComponent({
         openModal() {
             createModal(DispositionModal);
         },
-        updateRegistrationStores() {
-            const registrationStore = useRegistrationStore();
-            // registrationStore.setHomeLocation(this.homeLocation);
-            // registrationStore.setCurrentLocation(this.currentLocation);
-        },
         handleBtns(event: any) {
             if (event == "TA") createModal(AddTA, { class: "otherVitalsModal" });
             if (event == "Village") createModal(AddVillage, { class: "otherVitalsModal" });
@@ -143,54 +135,62 @@ export default defineComponent({
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
-      validationRules(event: any) {
-        return validateField(this.currentLocation,event.name, (this as any)[event.name]);
-      },
-      validaterowData(event: any) {
-        this.validationRules(event)
-      },
-      async handleInputData(event: any) {
-        sessionStorage.setItem("activeLocation", "current");
-        const currentFields: any = ["current_district", "current_traditional_authority", "current_village", "Other (specify)"];
-        await this.validations(this.currentLocation, currentFields);
+        validationRules(event: any) {
+            return validateField(this.currentLocation, event.name, (this as any)[event.name]);
+        },
+        validaterowData(event: any) {
+            this.validationRules(event);
+        },
+        async handleInputData(event: any) {
+            sessionStorage.setItem("activeLocation", "current");
+            const currentFields: any = ["current_district", "current_traditional_authority", "current_village", "Other (specify)"];
+            await this.validations(this.currentLocation, currentFields);
 
-        if (event.name == "current_district") {
-          modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", true);
-          modifyFieldValue(this.currentLocation, "current_traditional_authority", "value", "");
-          modifyFieldValue(this.currentLocation, "current_village", "displayNone", true);
-          modifyFieldValue(this.currentLocation, "current_village", "value", "");
-          if (event?.value?.district_id) this.setTA(event.value);
-        }
+            if (event.name == "current_district") {
+                modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", true);
+                modifyFieldValue(this.currentLocation, "current_traditional_authority", "value", "");
+                modifyFieldValue(this.currentLocation, "current_village", "displayNone", true);
+                modifyFieldValue(this.currentLocation, "current_village", "value", "");
+                if (event?.value?.district_id) this.setTA(event.value);
+            }
 
-        if (event.name == "current_traditional_authority") {
-          modifyFieldValue(this.currentLocation, "current_village", "displayNone", true);
-          modifyFieldValue(this.currentLocation, "current_village", "value", "");
-          if (event?.value?.traditional_authority_id) this.setVillage(event.value);
-        }
+            if (event.name == "current_traditional_authority") {
+                modifyFieldValue(this.currentLocation, "current_village", "displayNone", true);
+                modifyFieldValue(this.currentLocation, "current_village", "value", "");
+                if (event?.value?.traditional_authority_id) this.setVillage(event.value);
+            }
 
-        if (event.name == "closestLandmark") {
-          const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
-          if (selectedLandmark?.name === "Other") {
-            modifyFieldValue(this.currentLocation, "Other (specify)", "displayNone", false);
-          } else {
-            modifyFieldValue(this.currentLocation, "Other (specify)", "displayNone", true);
-            modifyFieldValue(this.currentLocation, "Other (specify)", "value", "");
-          }
-        }
-        this.validaterowData(event)
+            if (event.name == "closestLandmark") {
+                const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
+                if (selectedLandmark?.name === "Other") {
+                    modifyFieldValue(this.currentLocation, "Other (specify)", "displayNone", false);
+                } else {
+                    modifyFieldValue(this.currentLocation, "Other (specify)", "displayNone", true);
+                    modifyFieldValue(this.currentLocation, "Other (specify)", "value", "");
+                }
+            }
+            this.validaterowData(event);
+        },
 
-      },
-
-      async setTA(obj: any) {
-            const targetData = await LocationService.getTraditionalAuthorities(obj.district_id, "");
-            modifyFieldValue(this.currentLocation, "current_traditional_authority", "multiSelectData", targetData);
-            modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", false);
+        async setTA(obj: any) {
+            const targetData = this.getTAs(obj.district_id);
+            if (targetData.length > 0) {
+                modifyFieldValue(this.currentLocation, "current_traditional_authority", "multiSelectData", targetData);
+                modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", false);
+                return true;
+            } else {
+                return false;
+            }
         },
         async setVillage(obj: any) {
-            const targetData = await LocationService.getVillages(obj.traditional_authority_id, "");
-            console.log("🚀 ~ setVillage ~ targetData:", targetData);
-            modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
-            modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);
+            const targetData = this.getVillages(obj.traditional_authority_id);
+            if (targetData.length > 0) {
+                modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
+                modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);
+                return true;
+            } else {
+                return false;
+            }
         },
     },
 });

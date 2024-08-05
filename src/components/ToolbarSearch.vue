@@ -43,10 +43,35 @@
                 <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
+            <ion-row
+                v-show="!patients"
+                class="search_result clickable-row"
+                v-for="(item, index) in offlineFilteredPatients"
+                :key="index"
+                @click="setOfflineDemo(item)"
+            >
+                <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
+                    item.personInformation.given_name + " " + item.personInformation.family_name
+                }}</ion-col>
+                <ion-col style="max-width: 120px; min-width: 120px">{{ item.personInformation.birthdate }}</ion-col>
+                <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.personInformation.gender }}</ion-col>
+                <ion-col style="max-width: 330px; min-width: 330px"
+                    >{{ item?.personInformation?.current_district }}, {{ item?.personInformation?.current_traditional_authority }},{{
+                        item?.personInformation?.current_village
+                    }}</ion-col
+                >
+                <ion-col style="max-width: 330px; min-width: 330px"
+                    >{{ item?.personInformation?.home_district }}, {{ item?.personInformation?.home_traditional_authority }},{{
+                        item?.personInformation?.home_village
+                    }}</ion-col
+                >
+                <ion-col style="max-width: 150px; min-width: 150px">{{ item?.personInformation?.cell_phone_number }}</ion-col>
+                <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
+            </ion-row>
             <ion-row class="ion-justify-content-start ion-align-items-center">
                 <Pagination
                     :disablePrevious="page - 1 == 0"
-                    :disableNext="patients.length < paginationSize"
+                    :disableNext="patients?.length < paginationSize"
                     :page="page"
                     :onClickNext="nextPage"
                     :onClickPrevious="previousPage"
@@ -114,6 +139,7 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
 import Pagination from "./Pagination.vue";
 import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import db from "@/db";
 
 export default defineComponent({
     name: "Home",
@@ -142,6 +168,8 @@ export default defineComponent({
             popoverOpen: false,
             event: null,
             patients: [] as any,
+            offlinePatients: [] as any,
+            offlineFilteredPatients: [] as any,
             showPopover: true,
             page: 1,
             searchText: "",
@@ -149,9 +177,20 @@ export default defineComponent({
             isRoleSelectionModalOpen: false,
         };
     },
+    watch: {
+        page() {
+            this.searchDemographicPayload(this.searchText);
+        },
+        searchText() {
+            this.page = 1;
+        },
+    },
     computed: {
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useGeneralStore, ["NCDUserActions"]),
+    },
+    async mounted() {
+        this.offlinePatients = await db.collection("patientRecords").get();
     },
     methods: {
         programID() {
@@ -182,18 +221,19 @@ export default defineComponent({
         },
         async searchByName(searchText: any) {
             const splittedArray = searchText.split(" ");
-            if (Validation.isName(splittedArray[0]) == null) {
-                const payload = {
-                    given_name: splittedArray[0],
-                    family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
-                    gender: splittedArray.length >= 3 ? splittedArray[2] : "",
-                    page: this.page.toString(),
-                    per_page: this.paginationSize.toString(),
-                };
-                this.patients = await PatientService.search(payload);
-                if (this.patients.length > 0) {
-                    this.callswipeleft();
-                }
+            const payload = {
+                given_name: splittedArray[0],
+                family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
+                gender: splittedArray.length >= 3 ? splittedArray[2] : "",
+                page: this.page.toString(),
+                per_page: this.paginationSize.toString(),
+            };
+            this.offlineFilteredPatients = [];
+            this.patients = await PatientService.search(payload);
+            if (this.patients && this.patients?.length > 0) {
+                this.callswipeleft();
+            } else {
+                this.offlineFilteredPatients = await this.searchOfflinePatients(payload);
             }
         },
         async searchByNpid(searchText: any) {
@@ -244,6 +284,13 @@ export default defineComponent({
                 .filter((identifier: any) => identifier.identifier_type === 3)
                 .map((identifier: any) => identifier.identifier)
                 .join(", ");
+        },
+        setOfflineDemo(data: any) {
+            this.popoverOpen = false;
+            resetPatientData();
+            this.setOfflineDemographics(data);
+            let url = "/patientProfile";
+            this.$router.push(url);
         },
         async openNewPage(url: any, item: any) {
             this.popoverOpen = false;
@@ -304,13 +351,90 @@ export default defineComponent({
         previousPage() {
             this.page--;
         },
-    },
-    watch: {
-        page() {
-            this.searchDemographicPayload(this.searchText);
+        searchOfflinePatients(searchCriteria: any) {
+            return this.offlinePatients.filter((patient: any) => {
+                const personInfo = patient.personInformation;
+
+                return (
+                    (!searchCriteria.given_name || personInfo.given_name.toLowerCase().includes(searchCriteria.given_name.toLowerCase())) &&
+                    (!searchCriteria.family_name || personInfo.family_name.toLowerCase().includes(searchCriteria.family_name.toLowerCase())) &&
+                    (!searchCriteria.gender || personInfo.gender === searchCriteria.gender)
+                );
+            });
         },
-        searchText() {
-            this.page = 1;
+        async searchOffline(searchText: any) {
+            this.offlinePatients;
+            return {
+                patient_id: 25,
+                date_created: "2024-07-26T11:41:27.000+02:00",
+                person: {
+                    gender: "M",
+                    birthdate: "2024-07-26",
+                    names: [
+                        {
+                            given_name: "test",
+                            middle_name: "",
+                            family_name: "ppea",
+                        },
+                    ],
+                    addresses: [
+                        {
+                            address1: null,
+                            address2: null,
+                            city_village: "Chidothi",
+                            state_province: "Dowa ",
+                            postal_code: null,
+                            county_district: null,
+                            neighborhood_cell: null,
+                            region: null,
+                            subregion: null,
+                            township_division: "Mponela Urban",
+                        },
+                    ],
+                    person_attributes: [
+                        {
+                            value: "",
+                            type: {
+                                person_attribute_type_id: 12,
+                                name: "Cell Phone Number",
+                            },
+                        },
+                        {
+                            person_attribute_id: 272,
+                            value: "",
+                            type: {
+                                person_attribute_type_id: 13,
+                                name: "Occupation",
+                            },
+                        },
+                        {
+                            value: "",
+                            type: {
+                                person_attribute_type_id: 5,
+                                name: "Civil Status",
+                            },
+                        },
+                        {
+                            person_attribute_id: 274,
+                            value: "",
+                            type: {
+                                person_attribute_type_id: 28,
+                                name: "EDUCATION LEVEL",
+                            },
+                        },
+                    ],
+                },
+                patient_identifiers: [
+                    {
+                        patient_identifier_id: 1,
+                        identifier: "P170000000013",
+                        type: {
+                            patient_identifier_type_id: 3,
+                            name: "National id",
+                        },
+                    },
+                ],
+            };
         },
     },
 });

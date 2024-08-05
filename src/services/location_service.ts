@@ -51,4 +51,16 @@ export class LocationService extends Service {
     static getTraditionalAuthorities(villageID: number, name = "") {
         return super.getJson("/traditional_authorities", { district_id: villageID, name, page_size: 1000 });
     }
+
+    static getAllDistricts() {
+        return super.getJson("/districts", { paginate: false });
+    }
+
+    static getAllVillages() {
+        return super.getJson("/villages", { paginate: false });
+    }
+
+    static getAllTraditionalAuthorities() {
+        return super.getJson("/traditional_authorities", { paginate: false });
+    }
 }

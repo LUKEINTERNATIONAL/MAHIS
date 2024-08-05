@@ -3,6 +3,7 @@ import ApiClient from "./api_client";
 import HisDate from "@/utils/Date";
 import PACK_CONF from "../../package.json";
 import { useUserStore } from "@/stores/userStore";
+import * as CryptoJS from "crypto-js";
 export class InvalidAPIVersionError extends Error {
     message: string;
     constructor(version: string) {
@@ -53,23 +54,71 @@ export class AuthService {
     }
 
     async login(password: string) {
-        const response = await this.requestLogin(password);
-        if (response) {
-            const {
-                authorization: { token, user },
-            } = response;
-            this.token = token;
-            this.roles = user.roles;
-            this.programs = user.programs;
-            this.userID = user.user_id;
-            this.sessionDate = await this.getSystemDate();
-            this.systemVersion = await this.getApiVersion();
-            this.coreVersion = this.getHeadVersion();
-            const user_store = useUserStore();
-            user_store.setUser(user);
-        } else {
-            throw "Unable to login" + response;
+        try {
+            const response = await this.requestLogin(password);
+            if (response) {
+                const {
+                    authorization: { token, user, expiry_time },
+                } = response;
+                this.token = token;
+                this.roles = user.roles;
+                this.programs = user.programs;
+                this.userID = user.user_id;
+                this.sessionDate = await this.getSystemDate();
+                this.systemVersion = await this.getApiVersion();
+                this.coreVersion = this.getHeadVersion();
+                const user_store = useUserStore();
+                user_store.setUser(user);
+
+                // Store login info for offline use
+                this.storeOfflineLoginInfo(this.username, password, token, expiry_time);
+                this.startSession();
+            } else {
+                throw "Unable to login";
+            }
+        } catch (error) {
+            // If online login fails, try offline login
+            if (await this.offlineLogin(this.username, password)) {
+                console.log("Offline login successful");
+            } else {
+                throw error;
+            }
         }
+    }
+
+    private storeOfflineLoginInfo(username: string, password: string, token: string, expiryTime: string) {
+        const offlineLoginInfo = {
+            username,
+            passwordHash: this.hashPassword(password),
+            token,
+            expiryTime,
+        };
+        localStorage.setItem("offlineLoginInfo", JSON.stringify(offlineLoginInfo));
+    }
+
+    private hashPassword(password: string): string {
+        return CryptoJS.SHA256(password).toString();
+    }
+
+    async offlineLogin(username: string, password: string): Promise<boolean> {
+        const offlineLoginInfoString = localStorage.getItem("offlineLoginInfo");
+        if (!offlineLoginInfoString) return false;
+
+        const offlineLoginInfo = JSON.parse(offlineLoginInfoString);
+        if (
+            offlineLoginInfo.username !== username ||
+            offlineLoginInfo.passwordHash !== this.hashPassword(password) ||
+            new Date(offlineLoginInfo.expiryTime) < new Date()
+        ) {
+            return false;
+        }
+
+        // Set session data from stored info
+        this.token = offlineLoginInfo.token;
+        // You might want to set other properties like roles, programs, etc. here
+        // if you decide to store them for offline use
+
+        return true;
     }
 
     startSession() {
@@ -85,8 +134,8 @@ export class AuthService {
     checkUserPrograms(selectedProgram: any) {
         const accessPrograms: any = sessionStorage.getItem("userPrograms");
         const programs = JSON.parse(accessPrograms);
+        console.log("🚀 ~ AuthService ~ checkUserPrograms ~ programs:", programs);
         return programs.some((program: any) => program.name === selectedProgram);
-        console.log("🚀 ~ AuthService ~ checkUserProgram ~ programs:", programs);
     }
     clearSession() {
         sessionStorage.clear();

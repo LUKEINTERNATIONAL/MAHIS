@@ -1,13 +1,19 @@
-
-import { getBaseURL } from "@/utils/GeneralUti"
 export interface Bmi {
     M: { [key: string]: { [key: string]: string } };
     F: { [key: string]: { [key: string]: string } };
     colors: { [key: string]: string };
 }
+
+function removeQuotes(str: string) {
+    if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
+      return str.substring(1, str.length - 1);
+    }
+    return str;
+  }
 export class BMIService {
     static async getBMIData(): Promise<Bmi> {
-        const baseURL = await getBaseURL()
+        let  baseURL = removeQuotes(sessionStorage.baseURL);
+        if (baseURL.length > 0) {baseURL = '/'+baseURL}
         const req = await fetch(`${baseURL}/bmi.json`);
         return req.json();
     }
