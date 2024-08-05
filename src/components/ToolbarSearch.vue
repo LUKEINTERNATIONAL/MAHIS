@@ -298,20 +298,8 @@ export default defineComponent({
             this.offlineFilteredPatients = [];
 
             // DDE enabled search
-            if (this.ddeEnabled) {
-                const patients = await this.ddeInstance.searchDemographics(payload);
-                this.patients = patients.map((item: any) => {
-                    const itemData = PersonField.getPersonAttributeOptions(item);
-                    itemData.other.options.push({
-                        label: "Patient Type",
-                        value: item.patient_type,
-                    });
-                    itemData.other.options.push({
-                        label: "Doc ID",
-                        value: item.doc_id,
-                    });
-                    return itemData;
-                });
+            if (this.ddeEnabled && payload.given_name && payload.family_name && payload.gender) {
+                return (this.patients = await this.ddeInstance.searchDemographics(payload));
             }
             // Regular search
             this.patients = await PatientService.search(payload);
