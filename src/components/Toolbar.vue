@@ -206,12 +206,12 @@ export default defineComponent({
 
   .facility-name,
   .date-label {
-    font-size: 12px;
+    font-size: 14px;
     margin: 0;
     color: #838688;
   }
   .date-value {
     color: #838688;
-    font-size: 12px;
+    font-size: 14px;
   }
 </style>

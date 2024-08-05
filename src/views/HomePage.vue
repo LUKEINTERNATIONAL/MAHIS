@@ -18,13 +18,7 @@
             <div class="topStats">
                 <div>
                     <div
-                        style="
-                            background: linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%),
-                                url('/images/backgroundImg.png');
-                            background-size: cover;
-                            background-blend-mode: overlay;
-                            height: 22.8vh;
-                        "
+                        :style="backgroundStyle"
                     >
                         <!-- :autoplay="4000" -->
                         <Carousel :autoplay="4000" :wrap-around="true" :itemsToShow="1.2" :transition="600" style="padding-top: 20px">
@@ -172,6 +166,7 @@ import { resetDemographics } from "@/services/reset_data";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
+import { getBaseURL } from "@/utils/GeneralUti"
 import { setOfflineData } from "@/services/set_location";
 
 export default defineComponent({
@@ -207,6 +202,7 @@ export default defineComponent({
             reportData: "" as any,
             appointments: [] as any,
             programBtn: {} as any,
+            base_url:  '/images/backgroundImg.png',
             totalStats: [
                 {
                     name: "Total vaccinated this year",
@@ -242,6 +238,14 @@ export default defineComponent({
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
         ...mapState(useDemographicsStore, ["demographics"]),
+        backgroundStyle() {
+            return {
+                background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${this.base_url})`,
+                backgroundSize: 'cover',
+                backgroundBlendMode: 'overlay',
+                height: '22.8vh'
+            };
+        },
     },
     watch: {
         $route: {
@@ -261,6 +265,7 @@ export default defineComponent({
         this.setView();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
+        this.getImagePath()
     },
     methods: {
         async setAppointments() {
@@ -309,6 +314,10 @@ export default defineComponent({
             const dataToPass = { title: name };
             createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
         },
+        async getImagePath() {
+            const BASE_URL = await getBaseURL()
+            this.base_url = BASE_URL + this.base_url
+        }
     },
 });
 </script>
