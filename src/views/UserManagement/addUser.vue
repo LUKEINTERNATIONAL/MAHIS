@@ -58,7 +58,7 @@
     </ion-row>
 
     <ion-row>
-        <ion-col size="6">
+        <ion-col size="6" v-if="false">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >Find and select District(s)<span style="color: #b42318">*</span></ion-label
             >
@@ -400,7 +400,6 @@ function selectedVillage(VillagesList: any) {
 }
 
 function selectedTA(selectedTAList: any) {
-    console.log(selectedTAList)
     selectedTAIds.length = 0
     selectedTAList.forEach((village: any ) => {
         selectedTAIds.push(village.traditional_authority_id)
@@ -860,6 +859,12 @@ async function getdistrictList() {
         districtList.push(...districts);
     }
 
+    //__________________________not ideal
+    districtList.forEach((district: any ) => {
+        fetchTraditionalAuthorities(district.district_id, '')
+    })
+    //__________________________
+
     return districtList
 }
 
@@ -873,7 +878,9 @@ async function fetchTraditionalAuthorities(district_id: any,name: string) {
     TAList.value = TAList.value.concat(arrayWithIds)
     // if (villageList.value.length > 0) {
     //     disableVillageSelection.value = false
-    // }         
+    // } 
+    
+    //______________________not ideal
 }
 
 async function fetchVillages(district_id: any,name: string) {   
