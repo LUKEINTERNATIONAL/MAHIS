@@ -84,7 +84,7 @@ export async function getFileConfig2(): Promise<Config> {
             if (!response.ok) {
                 throw new Error(`Unable to retrieve configuration file from ${path}`);
             }
-            const { apiURL, apiPort, apiProtocol, appConf, baseURL, apps, thirdpartyApps, platformProfiles, otherApps } = await response.json();
+            const { apiURL, apiPort, apiProtocol, appConf, baseURL, apps, thirdpartyApps, platformProfiles, otherApps, websockerURL } = await response.json();
             sessionStorage.setItem("apiURL", apiURL);
             sessionStorage.setItem("apiPort", apiPort);
             sessionStorage.setItem("apiProtocol", apiProtocol);
@@ -95,6 +95,7 @@ export async function getFileConfig2(): Promise<Config> {
             sessionStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
             sessionStorage.setItem("otherApps", JSON.stringify(otherApps));
             sessionStorage.setItem("baseURL", JSON.stringify(baseURL));
+            sessionStorage.setItem("websockerURL", JSON.stringify(websockerURL))
             return {
                 host: apiURL,
                 port: apiPort,
@@ -141,4 +142,20 @@ export async function getBaseURL() {
     const baseURL = await readConfigValueAsync()
     console.log('Base URL (async):', baseURL);
     return baseURL;
+}
+
+export function getWebsockerURL() {
+    const webST = sessionStorage.websockerURL
+    if (webST) {
+        let  websockerURL = removeQuotes(webST);
+        return websockerURL;
+    }
+    return ''
+}
+
+function removeQuotes(str: string) {
+    if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
+      return str.substring(1, str.length - 1);
+    }
+    return str;
 }

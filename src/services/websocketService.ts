@@ -1,5 +1,6 @@
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
+import { getWebsockerURL } from "@/utils/GeneralUti"
 export class WebSocketService {
     private socket: WebSocket | null = null;
     private channel: string = "ImmunizationReportChannel";
@@ -11,13 +12,12 @@ export class WebSocketService {
         const apiPort = sessionStorage.getItem("apiPort");
 
         if (apiURL && apiPort) {
-            // this.socket = new WebSocket(`ws://${apiURL}:${apiPort}/cable`);
-            // for now
-            this.socket = new WebSocket(`ws://apps.linmalawi.org/api/v1/cable`);
-
+            const websocketURL = getWebsockerURL();
+            const url = websocketURL.length > 0 ? `ws://${websocketURL}` : `ws://${apiURL}:${apiPort}/cable`;
+            this.socket = new WebSocket(url);
             this.socket.onopen = this.onOpen;
             this.socket.onclose = this.onClose;
-            this.socket.onerror = this.onError;
+            this.socket.onerror = this.onError;            
         } else {
             console.error("WebSocket not initialized: apiURL or apiPort is missing in sessionStorage.");
         }

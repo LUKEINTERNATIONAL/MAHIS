@@ -9,7 +9,7 @@ function removeQuotes(str: string) {
       return str.substring(1, str.length - 1);
     }
     return str;
-  }
+}
 export class BMIService {
     static async getBMIData(): Promise<Bmi> {
         let  baseURL = removeQuotes(sessionStorage.baseURL);
