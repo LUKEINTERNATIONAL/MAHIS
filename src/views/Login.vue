@@ -4,7 +4,7 @@
             <div class="login-container">
                 <ion-card style="background-color: #fff">
                     <ion-card-content>
-                        <ion-img class="login_img" :src="loginIcon" id="logo"></ion-img>
+                        <ion-img class="login_img" :src="loginIcon()" id="logo"></ion-img>
                         <ion-title class="login-title">MaHIS</ion-title>
                         <span style="text-align: left">
                             <ion-input
@@ -139,9 +139,7 @@ export default defineComponent({
         };
     },
     computed: {
-        loginIcon() {
-            return img("mw.png");
-        },
+
     },
     setup() {
         return { eye, person, eyeOff };
@@ -150,6 +148,8 @@ export default defineComponent({
         this.auth = new AuthService();
     },
     async mounted() {
+        const auth = new AuthService()
+        await auth.loadConfig();
         await this.getPrograms();
     },
     methods: {
@@ -190,6 +190,9 @@ export default defineComponent({
         togglePasswordVisibility() {
             if (!this.togglePasswordVisibility) return true;
             else return false;
+        },
+        loginIcon() {
+            return img("mw.png");
         },
     },
 });
