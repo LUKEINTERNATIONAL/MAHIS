@@ -159,6 +159,7 @@ export default defineComponent({
         },
         handleBlur(event: any) {
             this.$emit("update:inputValue", event);
+            this.$emit("ionBlur", event);
         },
         setEvent(event: Event) {
             this.event = event;

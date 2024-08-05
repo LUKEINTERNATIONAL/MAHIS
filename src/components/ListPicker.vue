@@ -4,15 +4,14 @@
             <ion-label v-if="show_label" :class="disableCls">{{ name_of_list }}: </ion-label>
             <ion-col style="width: 100%;">
             <ion-item lines="none" class="ItemAl modal_wrapper" style="display: flex; flex-wrap: wrap; margin-left: -30px; margin-top: 0%; background-color: inherit; background: inherit;">
-                <div v-for="(item, index) in local_itmes_List" :key="index">
-                    <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
+                <div class="item-container">
+                    <div v-for="(item, index) in local_itmes_List" :key="index">
+                        <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}
-                    <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
-                    </ion-button>
-                </div>
-
-            <ion-row>
-                <div>
+                        <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
+                        </ion-button>
+                    </div>
+          
                     <ion-button
                         :id="uniqueId"
                         fill="clear" class="itemAlAddBtn"
@@ -28,21 +27,30 @@
                         trigger-action="click"
                         @didPresent="dissmissDrugAddField"
                     >
-                    <ion-content color="light" class="ion-padding content-al">
-                        <ion-label>{{ choose_place_holder }}</ion-label>
-                        <ion-input ref="input" v-model="itemName" @ionInput="FindItemName" fill="outline"></ion-input>
-                        <ion-list class="list-al">
-                            <div class="item-al" v-for="(item, index) in items_List_copy" @click="selectAl(item)" :key="index">
-                                <ion-label style="display: flex; justify-content: space-between">
-                                    {{ item.name }}
-                                    <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
-                                </ion-label>
+                    <ion-content color="light" class="ion-padding content-al popover-content">
+                        <ion-label>{{ choose_place_holder }}:</ion-label>
+                        <div class="modern-input-container">
+                            <input type="text" id="itemNameInput" class="modern-input" v-model="itemName" @input="FindItemName" placeholder="Enter name">
+                        </div>
+                        <ion-list class="custom-list">
+                            <div v-for="(item, index) in items_List_copy" 
+                                @click="selectAl(item)" 
+                                :key="index"
+                                class="list-item">
+                                <div class="item-content">
+                                    <span class="item-name">{{ item.name }}</span>
+                                    <ion-icon v-if="item.selected" 
+                                            class="icon-al" 
+                                            :icon="checkmarkOutline">
+                                    </ion-icon>
+                                </div>
                             </div>
                         </ion-list>
                     </ion-content>
                 </ion-popover>
                 </div>
-            </ion-row>
+        
+
             </ion-item>
         </ion-col>
         </ion-row>
@@ -52,6 +60,7 @@
 import { IonList, IonLabel, IonRow, IonCol, IonItem, IonButton, IonIcon, IonInput, IonContent } from "@ionic/vue"
 import { closeOutline, addOutline, checkmarkOutline } from "ionicons/icons"
 import { ref, watch, onMounted } from "vue"
+import BasicInputField from "@/components/BasicInputField.vue"
 
 const input = ref()
 const itemName = ref("")
@@ -196,12 +205,18 @@ ion-item.ItemAl {
     display: grid;
 }
 ion-button.itemAlBtn {
+    flex: 0 1 auto;
     --background: #5cc55e;
     --color: #006401;
     font-size: 15px;
     font-weight: bold;
     text-transform: none;
 }
+.item-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .error-label {
     background: #5cc55e;
     color: #006401;
@@ -235,11 +250,22 @@ ion-icon.icon-al {
     padding: 5px;
     border-radius: 3px;
 }
-ion-popover.popover-al {
-    --background: #fff;
+.popover-al {
+    --width: 300px;
+    --max-width: 90%;
+    --background: #ffffff;
+    --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --backdrop-opacity: 0.3;
+}
+.popover-content {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 ion-content.content-al {
     --background: #fff;
+}
+.popover-al::part(content) {
+    border-radius: 8px;
+    padding: 0px;
 }
 ion-list.list-al {
     --background: #fff;
@@ -302,6 +328,60 @@ ion-list.list-al {
     line-height: 3;
     border-radius: 10%;
     padding: 4px;
+}
+.modern-input-container {
+    margin: 2px;
+    margin-bottom: 10px;
+}
+
+.modern-input {
+    padding: 12px 20px;
+    font-size: 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.modern-input:focus {
+    border-color: #34db6c;
+    box-shadow: 0 0 0 3px rgba(71, 219, 52, 0.2);
+}
+
+.modern-input::placeholder {
+    color: #696b6c;
+}
+
+.custom-list {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    overflow: hidden;
+    
+}
+.list-item {
+    padding: 11px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s;
+}
+.list-item:last-child {
+    border-bottom: none;
+}
+.list-item:hover {
+    background-color: #e8e8e8;
+    cursor: pointer;
+}
+.item-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.item-name {
+    font-size: 18px;
+    color: #333;
+}
+.icon-al {
+    color: #4caf50;
+    font-size: 20px;
 }
 
 

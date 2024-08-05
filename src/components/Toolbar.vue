@@ -33,12 +33,36 @@
             </ion-buttons>
         </div>
     </ion-header>
+    <ion-header>
+    <ion-toolbar color="dark" class="compact-toolbar">
+        <ion-grid class="ion-no-padding content_width" style="margin-top: -3px;">
+        <ion-row class="ion-align-items-center">
+            <ion-col size="6">
+                <TruncateText
+                    style="margin-left: 10px;" 
+                    class="date-value"
+                    :text=site
+                    :maxLines="1"
+                />
+            </ion-col>
+            <ion-col size="6" class="ion-text-right">
+                <TruncateText
+                    style="margin-right: 10px;" 
+                    class="date-value"
+                    :text=sessionDate
+                    :maxLines="1"
+                />
+            </ion-col>
+        </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+    </ion-header>
 
     <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed"/>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonRow, IonCol, IonLabel, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
 import { notificationsOutline, personCircleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -47,6 +71,9 @@ import { Service } from "@/services/service";
 import userProfile from "@/views/UserManagement/userProfile.vue"
 import { useProgramStore } from "@/stores/ProgramStore";
 import { mapState } from "pinia";
+import HisDate from "@/utils/Date";
+import TruncateText from '@/components/TruncateText.vue'
+import { getUserLocation } from "@/services/userService"
 export default defineComponent({
     name: "Home",
     components: {
@@ -60,7 +87,11 @@ export default defineComponent({
         ToolbarSearch,
         IonIcon,
         IonPopover,
-        userProfile
+        userProfile,
+        IonRow,
+        IonCol,
+        IonLabel,
+        TruncateText,
     },
     data() {
         return {
@@ -69,6 +100,8 @@ export default defineComponent({
             locationName: "",
             programName: "",
             showUserProfileModal: false,
+            sessionDate: 'Date: '+HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
+            site: '',
         };
     },
     watch: {
@@ -84,6 +117,7 @@ export default defineComponent({
     },
     mounted() {
         this.updateData();
+        this.loadUserFacilityDetails()
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
@@ -105,6 +139,10 @@ export default defineComponent({
         },
         modalClosed() {
            this.showUserProfileModal = false;
+        },
+        async loadUserFacilityDetails() {
+            const data = await getUserLocation()
+            this.site = "Facility name: "+ data.name
         }
     },
 });
@@ -162,4 +200,18 @@ export default defineComponent({
     align-items: center;
     /* justify-content: center; */
 }
+.compact-toolbar {
+    --min-height: 11px;
+  }
+
+  .facility-name,
+  .date-label {
+    font-size: 14px;
+    margin: 0;
+    color: #838688;
+  }
+  .date-value {
+    color: #838688;
+    font-size: 14px;
+  }
 </style>

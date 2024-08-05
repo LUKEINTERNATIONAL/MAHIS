@@ -59,7 +59,9 @@
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
-                                        <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer;">Indicators And Performance Metrics</ion-item>
+                                        <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer"
+                                            >Indicators And Performance Metrics</ion-item
+                                        >
                                     </ion-list>
                                 </div>
                             </ion-accordion>
@@ -85,6 +87,7 @@
                                         <ion-item @click="navigationMenu('setDDE')" value="DDE"> DDE </ion-item>
                                         <ion-item class="list-bottom" @click="navigationMenu('setLocation')" value="Location"> Location </ion-item>
                                         <ion-item @click="navigationMenu('setPreferences')" value="Preferences"> Preferences </ion-item>
+                                        <ion-item @click="navigationMenu('setSmsConfig')" value="SMS" class="list-bottom">Sms Alerts</ion-item>
                                     </ion-list>
                                 </div>
                             </ion-accordion>
@@ -97,6 +100,11 @@
                 <ion-accordion value="fourth" @click="navigationMenu('stockManagement')">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Stock Management</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="fifth" @click="navigationMenu('scheduleImmunization')">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Schedule Immunization</ion-label>
                     </ion-item>
                 </ion-accordion>
             </ion-accordion-group>

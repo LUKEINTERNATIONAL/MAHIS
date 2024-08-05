@@ -2,6 +2,9 @@
     <ion-grid>
         <ion-row>
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Find and select {{ main_program }}  Activities<span style="color: #b42318">*</span></ion-label
+                >
                 <ListPicker
                     :multiSelection="list_picker_prperties[0].multi_Selection"
                     :show_label="list_picker_prperties[0].show_list_label"

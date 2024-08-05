@@ -51,13 +51,7 @@
             <div class="topStats">
                 <div>
                     <div
-                        style="
-                            background: linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%),
-                                url('/images/backgroundImg.png');
-                            background-size: cover;
-                            background-blend-mode: overlay;
-                            height: 22.8vh;
-                        "
+                        :style="backgroundStyle"
                     >
                         <!-- :autoplay="4000" -->
                         <Carousel :autoplay="4000" :wrap-around="true" :itemsToShow="1.2" :transition="600" style="padding-top: 20px">
@@ -79,15 +73,15 @@
                     <ion-card-content>
                         <div class="dueCardContent">
                             <div class="dueCard" @click="openDueModal('Client due today')" style="border: 1px solid rgb(158, 207, 136)">
-                                <div class="statsValue">0</div>
+                                <div class="statsValue">{{ reportData?.due_today_count || 0 }}</div>
                                 <div class="statsText">Due today</div>
                             </div>
                             <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)" @click="openDueModal('Client due this week')">
-                                <div class="statsValue">0</div>
+                                <div class="statsValue">{{ reportData?.due_this_week_count || 0 }}</div>
                                 <div class="statsText">Due this week</div>
                             </div>
                             <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)" @click="openDueModal('Client due this month')">
-                                <div class="statsValue">0</div>
+                                <div class="statsValue">{{ reportData?.due_this_month_count || 0 }}</div>
                                 <div class="statsText">Due this month</div>
                             </div>
                         </div>
@@ -98,11 +92,11 @@
                     <ion-card-content>
                         <div class="overDueCardContent">
                             <div class="overDueCard" @click="openDueModal('Client overdue under 5yrs')">
-                                <div class="statsValue">{{ reportData?.client_overdue_under_five_years || 0 }}</div>
+                                <div class="statsValue">{{ reportData?.under_five_overdue || 0 }}</div>
                                 <div class="statsText">Under 5yrs</div>
                             </div>
                             <div class="overDueCard" @click="openDueModal('Client overdue over 5yrs')">
-                                <div class="statsValue">{{ reportData?.client_overdue_over_five_years || 0 }}</div>
+                                <div class="statsValue">{{ reportData?.over_five_overdue || 0 }}</div>
                                 <div class="statsText">Over 5yrs</div>
                             </div>
                         </div>
@@ -110,7 +104,7 @@
                 </ion-card>
                 <ion-card class="section">
                     <ion-card-header>
-                        <ion-card-title class="cardTitle"> Today appointments({{ appointments.length }}) </ion-card-title></ion-card-header
+                        <ion-card-title class="cardTitle"> Today appointments({{ appointments?.length }}) </ion-card-title></ion-card-header
                     >
                     <ion-card-content>
                         <div
@@ -136,6 +130,7 @@
                                             <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
                                         </div>
                                     </div>
+                                    <div>Village: {{ item?.city_village }}</div>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +201,8 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
 import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
-
+import { getBaseURL } from "@/utils/GeneralUti"
+import { setOfflineData } from "@/services/set_location";
 export default defineComponent({
     name: "Home",
     mixins: [SetUser, SetDemographics, SetPrograms],
@@ -240,7 +236,21 @@ export default defineComponent({
             reportData: "" as any,
             appointments: [] as any,
             programBtn: {} as any,
-            totalStats: [] as any,
+            base_url:  '/images/backgroundImg.png',
+            totalStats: [
+                {
+                    name: "Total vaccinated this year",
+                    value: 0,
+                },
+                {
+                    name: "Total Female vaccinated this year",
+                    value: 0,
+                },
+                {
+                    name: "Total Male vaccinated this year",
+                    value: 0,
+                },
+            ] as any,
         };
     },
     setup() {
@@ -262,6 +272,14 @@ export default defineComponent({
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
         ...mapState(useDemographicsStore, ["demographics"]),
+        backgroundStyle() {
+            return {
+                background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${this.base_url})`,
+                backgroundSize: 'cover',
+                backgroundBlendMode: 'overlay',
+                height: '22.8vh'
+            };
+        },
     },
     watch: {
         $route: {
@@ -275,16 +293,18 @@ export default defineComponent({
         },
     },
     async mounted() {
+        await setOfflineData();
         resetDemographics();
         await this.setAppointments();
         this.setView();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
+        this.getImagePath()
     },
     methods: {
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
-            this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
+            if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
@@ -298,19 +318,19 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
-                console.log("🚀 ~ onMessage ~ this.reportData:", this.reportData);
+                console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
                 this.totalStats = [
                     {
                         name: "Total vaccinated this year",
-                        value: this.reportData?.total_client_registered || 0,
+                        value: this.reportData?.total_vaccinated_this_year || 0,
                     },
                     {
                         name: "Total Female vaccinated this year",
-                        value: this.reportData?.total_female_registered || 0,
+                        value: this.reportData?.total_female_vaccinated_this_year || 0,
                     },
                     {
                         name: "Total Male vaccinated this year",
-                        value: this.reportData?.total_male_registered || 0,
+                        value: this.reportData?.total_male_vaccinated_this_year || 0,
                     },
                 ];
             }
@@ -337,6 +357,10 @@ export default defineComponent({
         const dataToPass = { title: name };
         createModal(OPDAllPatientsModal, { class: "fullScreenModal" }, true, dataToPass);
       },
+        async getImagePath() {
+            const BASE_URL = await getBaseURL()
+            this.base_url = BASE_URL + this.base_url
+        }
     },
 });
 </script>

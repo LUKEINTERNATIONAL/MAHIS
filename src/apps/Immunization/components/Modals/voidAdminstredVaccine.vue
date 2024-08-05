@@ -109,7 +109,7 @@
                     try {
                         const store = useAdministerVaccineStore();
                         const AdministrdVaccine = store.getVaccineToBeVoided();
-                        await EncounterService.voidEncounter(AdministrdVaccine.drug.order.encounter_id, this.selectedOption.name)
+                        await EncounterService.voidEncounter(AdministrdVaccine.drug.order_encounter_id, this.selectedOption.name)
                         toastSuccess("Vaccine was successfully voided!");
                         store.setVaccineReload(!store.getVaccineReload());
                         modalController.dismiss({voided: true});

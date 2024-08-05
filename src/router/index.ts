@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import stockManagement from "../views/StockManagement.vue";
+import scheduleImmunization from "../views/ScheduleImmunizationSessions.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
 import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
+import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
 import NCD from "@/apps/NCD/config/routes";
@@ -32,6 +34,11 @@ const routes: Array<RouteRecordRaw> = [
         component: stockManagement,
     },
     {
+        path: "/scheduleImmunization",
+        name: "scheduleImmunization",
+        component: scheduleImmunization,
+    },
+    {
         path: "/login",
         name: "Login",
         component: Login,
@@ -45,6 +52,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/setSessionDate",
         name: "setSessionDate",
         component: setSessionDate,
+    },
+    {
+        path: "/setSmsConfig",
+        name: "setSMSConfiguration",
+        component: setSmsConfig,
     },
     {
         path: "/registration/:registrationType",

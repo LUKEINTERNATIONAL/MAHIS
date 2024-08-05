@@ -468,8 +468,13 @@ export default defineComponent({
     align-items: center;
 }
 .administerVac {
-    height: 58px;
-    width: 160px;
-    margin: 7px;
+  height: 58px;
+  min-width: 160px;
+  max-width: 100%; 
+  width: auto; 
+  margin: 7px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 </style>

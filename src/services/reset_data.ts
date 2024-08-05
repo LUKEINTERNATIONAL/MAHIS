@@ -151,7 +151,6 @@ export async function resetPatientData() {
     registration.setHomeLocation(registration.getInitialHomeLocation());
     registration.setCurrentLocation(registration.getInitialCurrentLocation());
     registration.setGuardianInformation(registration.getInitialGuardianInformation());
-    registration.$reset();
     weightHeightVitals.setVitals(weightHeightVitals.getInitialVitals());
 
     enrollement.setDiagnosis(enrollement.getInitialEnrollmentDiagnosis());

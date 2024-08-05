@@ -5,10 +5,9 @@
         <full-screen-notice v-if="checkFullScreen" />
         <update-notification v-if="checkForUpdates" />
         <ion-router-outlet id="main" />
-        <connection-error v-if="!apiOk && notConfigPage" />
+        <connection-error :apiStatus="apiOk" />
     </ion-app>
 </template>
-
 
 <script lang="ts">
 import Menu from "@/components/Menu.vue";

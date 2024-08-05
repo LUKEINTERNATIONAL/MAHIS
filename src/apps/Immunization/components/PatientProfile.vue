@@ -14,7 +14,8 @@
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText">
-                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span> {{ formatBirthdate() }}
+                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
+                                {{ getAge(demographics.birthdate) }} ({{ formatBirthdate() }})
                             </div>
                         </div>
                         <div class="demographicsOtherRow">
@@ -326,7 +327,6 @@ export default defineComponent({
         this.loadCurrentMilestone();
         this.checkAge();
         await this.checkProtectedStatus();
-        await this.getLastVaccinesGiven();
     },
     watch: {
         vitals: {
@@ -372,15 +372,8 @@ export default defineComponent({
                     if (!this.demographics.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
-                    await this.getLastVaccinesGiven();
                 }
             },
-        },
-        vaccineReload: {
-            async handler() {
-                await this.getLastVaccinesGiven();
-            },
-            deep: true,
         },
     },
     setup() {
@@ -388,6 +381,9 @@ export default defineComponent({
     },
 
     methods: {
+        getAge(dateOfBirth: string): string {
+            return HisDate.calculateDisplayAge(HisDate.toStandardHisFormat(dateOfBirth));
+        },
         printID() {
             new PatientPrintoutService(this.demographics.patient_id).printNidLbl();
         },
@@ -443,9 +439,6 @@ export default defineComponent({
                 if (patient.isUnderFive()) return true;
                 else return false;
             }
-        },
-        formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
         async getData() {
             const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];
@@ -644,6 +637,9 @@ export default defineComponent({
                 };
             });
         },
+        formatBirthdate() {
+            return HisDate.toStandardHisDisplayFormat(this.demographics.birthdate);
+        },
         calculateExpireDate(startDate: string | Date, duration: any) {
             const date = new Date(startDate);
             date.setDate(date.getDate() + parseInt(duration));
@@ -670,13 +666,6 @@ export default defineComponent({
         setMilestoneReload() {
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
-        },
-        async getLastVaccinesGiven() {
-            if (this.demographics.patient_id) {
-                const data = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-                const store = useAdministerVaccineStore();
-                store.setLastVaccinesGiven(data);
-            }
         },
         getLastVaccinesGivenDisplayDate() {
             return HisDate.toStandardHisDisplayFormat(this.lastVaccineGievenDate);
