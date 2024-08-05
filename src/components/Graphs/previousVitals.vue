@@ -1,32 +1,32 @@
 <template>
     <div class="modal_wrapper">
-        <ion-row>
-            <ion-col size="3">
+        <div style="width: 100%; display: flex; justify-content: space-between; padding: 10px">
+            <div style="width: 160px">
                 <div class="diplay_space_between bmi_blood">
                     <div style="cursor: pointer" :class="activeHeight" @click="setHeight()">Height</div>
                     <div style="cursor: pointer" :class="activeWeight" @click="setWeight()">Weight</div>
                     <div style="cursor: pointer" :class="activeBMI" @click="setBMI()">BMI</div>
                 </div>
-            </ion-col>
-            <ion-col size-lg="2" size-xs="3" size-sm="2" offset-xl="7" offset-lg="7" offset-md="6.5" offset-sm="5.5" offset-xs="6">
-                <div class="diplay_space_between graphBtn">
+            </div>
+            <div>
+                <div class="diplay_space_between">
                     <ion-icon
-                        slot="end"
                         style="font-size: x-large; cursor: pointer"
                         :class="iconBg.graph"
                         :icon="graphIcon"
-                        @click="toggleDisplay(true)"
+                        @click="toggleDisplay()"
+                        v-if="displayGraph"
                     ></ion-icon>
                     <ion-icon
-                        slot="end"
+                        v-else
                         style="font-size: x-large; cursor: pointer"
                         :class="iconBg.list"
                         :icon="listIcon"
-                        @click="toggleDisplay(false)"
+                        @click="toggleDisplay()"
                     ></ion-icon>
                 </div>
-            </ion-col>
-        </ion-row>
+            </div>
+        </div>
         <div>
             <ApexChart width="100%" height="390px" type="area" :options="options" :series="series" v-if="displayGraph" />
             <list :listData="list" v-else></list>
@@ -170,18 +170,46 @@ export default defineComponent({
         this.iconBg.graph = "iconBg";
     },
     methods: {
+        processObservations() {
+            let result: any = [];
+            let weightData = this.weight.filter((item: any) => item.concept.concept_id === 5089);
+            let heightData = this.height.filter((item: any) => item.concept.concept_id === 5090);
+
+            // Combine all unique observation datetimes
+            let allDates = new Set([...weightData.map((w: any) => w.obs_datetime), ...heightData.map((h: any) => h.obs_datetime)]);
+
+            // Process each unique datetime
+            allDates.forEach((datetime) => {
+                let weightObs = weightData.find((w: any) => w.obs_datetime === datetime);
+                let heightObs = heightData.find((h: any) => h.obs_datetime === datetime);
+
+                result.push({
+                    obs_datetime: datetime,
+                    weight: weightObs ? weightObs.value_numeric : null,
+                    height: heightObs ? heightObs.value_numeric : null,
+                });
+            });
+
+            // Sort by obs_datetime
+            // result.sort((a: any, b: any) => new Date(a.obs_datetime) - new Date(b.obs_datetime));
+
+            return result;
+        },
         async updateData() {
             this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
+            console.log("🚀 ~ updateData ~ this.weight :", this.weight);
             this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
-            this.BMI = await ObservationService.getAll(this.demographics.patient_id, "BMI");
+            console.log("🚀 ~ updateData ~ this.height:", this.height);
+            this.setListData(this.processObservations());
+            console.log("🚀 ~ updateData ~ this.processObservations():", this.processObservations());
             this.setHeight();
         },
         dismiss() {
             modalController.dismiss();
         },
         handleIcon() {},
-        toggleDisplay(status: any) {
-            this.displayGraph = status;
+        toggleDisplay() {
+            this.displayGraph = !this.displayGraph;
             if (this.displayGraph) {
                 this.graphIcon = iconGraph(["#006401"]);
                 this.listIcon = iconList(["#636363"]);
@@ -218,7 +246,6 @@ export default defineComponent({
             else if (active == "BMI") this.activeBMI = "_active";
         },
         setData(data: any, active: any) {
-            this.setListData(data);
             this.setActivClass(active);
             this.valueNumericArray = data.map((item: any) => item.value_numeric);
             this.obsDatetime = data.map((item: any) => HisDate.toStandardHisFormat(item.obs_datetime));
@@ -236,18 +263,21 @@ export default defineComponent({
         setListData(data: any) {
             this.list = [];
             this.list.push({
+                containSize: 2.7,
                 actionBtn: false,
-                class: "col_background",
+                class: "col_background display_center",
                 header: true,
                 minHeight: "--min-height: 25px;",
-                display: ["Date", "Measure"],
+                display: ["Date", "Height", "Weight", "Action"],
             });
             data.forEach((item: any) => {
                 this.list.push({
-                    actionBtn: false,
+                    actionBtn: true,
                     minHeight: "--min-height: 25px;",
                     class: "col_background",
-                    display: [HisDate.toStandardHisFormat(item.obs_datetime), item.value_numeric],
+                    display: [HisDate.toStandardHisFormat(item.obs_datetime), item.height, item.weight],
+                    btn: ["void"],
+                    btnSize: 2.7,
                 });
             });
         },
