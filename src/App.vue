@@ -26,6 +26,7 @@ import { loadingController } from "@ionic/vue";
 import { AuthService } from "./services/auth_service";
 import Screentimeout from "@/composables/Screentimeout";
 import useFacility from "./composables/useFacility";
+import { savePatientRecord } from "@/services/save_records";
 
 export default defineComponent({
     name: "App",
@@ -86,6 +87,7 @@ export default defineComponent({
                 // });
                 // if (confirm) location.reload();
                 toastSuccess("Connection restored");
+                await savePatientRecord();
             }
             if (res && res.status === 401 && route.name != "Login") {
                 router.push("/login");

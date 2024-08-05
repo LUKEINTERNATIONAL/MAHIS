@@ -5,6 +5,7 @@ import { mapState } from "pinia";
 import { RelationsService } from "@/services/relations_service";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { getOfflineRelationship } from "@/services/set_relationships";
 
 export default defineComponent({
     data: () => ({
@@ -32,7 +33,7 @@ export default defineComponent({
     methods: {
         async getRelationships() {
             if (this.gender) {
-                this.relationshipsData = await RelationsService.getRelations();
+                this.relationshipsData = await getOfflineRelationship();
                 this.filterRelationships();
 
                 this.relationships = this.filteredRelationships
