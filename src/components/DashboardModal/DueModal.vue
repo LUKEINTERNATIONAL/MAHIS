@@ -206,6 +206,48 @@ export default defineComponent({
         const data = await getVaccinesData();
         data.map((item: any) => {
             if (item.name == "missed_immunizations") {
+                if (this.title == "Client due today") {
+                    const data = this.countDrugs(item.value.due_today);
+                    this.tableData = data.map((item: any) => {
+                        return [item.drug_name, item.due_doses];
+                    });
+                    this.clientDetails = item.value.due_today.map((item: any) => {
+                        return {
+                            given_name: item.client.table.given_name,
+                            family_name: item.client.table.family_name,
+                            patient_id: item.client.table.patient_id,
+                            birthdate: item.client.table.birthdate,
+                        };
+                    });
+                }
+                if (this.title == "Client due this week") {
+                    const data = this.countDrugs(item.value.due_this_week);
+                    this.tableData = data.map((item: any) => {
+                        return [item.drug_name, item.due_doses];
+                    });
+                    this.clientDetails = item.value.due_this_week.map((item: any) => {
+                        return {
+                            given_name: item.client.table.given_name,
+                            family_name: item.client.table.family_name,
+                            patient_id: item.client.table.patient_id,
+                            birthdate: item.client.table.birthdate,
+                        };
+                    });
+                }
+                if (this.title == "Client due this month") {
+                    const data = this.countDrugs(item.value.due_this_month);
+                    this.tableData = data.map((item: any) => {
+                        return [item.drug_name, item.due_doses];
+                    });
+                    this.clientDetails = item.value.due_this_month.map((item: any) => {
+                        return {
+                            given_name: item.client.table.given_name,
+                            family_name: item.client.table.family_name,
+                            patient_id: item.client.table.patient_id,
+                            birthdate: item.client.table.birthdate,
+                        };
+                    });
+                }
                 if (this.title == "Client overdue over 5yrs") {
                     this.tableData = item.value.over_five_missed_doses.map((item: any) => {
                         return [item.drug_name, item.missed_doses];
@@ -261,6 +303,24 @@ export default defineComponent({
         return { person, pulseOutline, clipboardOutline };
     },
     methods: {
+        countDrugs(clientList: any) {
+            const drugCounts: any = {};
+            clientList.forEach((client: any) => {
+                client.antigens.forEach((antigen: any) => {
+                    if (drugCounts[antigen.drug_name]) {
+                        drugCounts[antigen.drug_name]++;
+                    } else {
+                        drugCounts[antigen.drug_name] = 1;
+                    }
+                });
+            });
+            const result = Object.entries(drugCounts).map(([drug_name, due_doses]) => ({
+                drug_name,
+                due_doses,
+            }));
+
+            return result;
+        },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
             this.setDemographics(patientData);
