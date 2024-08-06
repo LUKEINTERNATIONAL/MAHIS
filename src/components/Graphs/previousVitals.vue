@@ -29,7 +29,7 @@
         </div>
         <div>
             <ApexChart width="100%" height="390px" type="area" :options="options" :series="series" v-if="displayGraph" />
-            <list :listData="list" v-else></list>
+            <list :listData="list" @clicked:void="openVoidPopover($event)" v-else></list>
         </div>
     </div>
 </template>
@@ -170,6 +170,10 @@ export default defineComponent({
         this.iconBg.graph = "iconBg";
     },
     methods: {
+        async openVoidPopover(data: any) {
+            await ObservationService.voidObs(data.id.weightObsId);
+            await ObservationService.voidObs(data.id.heightObsId);
+        },
         processObservations() {
             let result: any = [];
             let weightData = this.weight.filter((item: any) => item.concept.concept_id === 5089);
@@ -184,6 +188,7 @@ export default defineComponent({
                 let heightObs = heightData.find((h: any) => h.obs_datetime === datetime);
 
                 result.push({
+                    ids: { weightObsId: weightObs.obs_id, heightObsId: heightObs.obs_id },
                     obs_datetime: datetime,
                     weight: weightObs ? weightObs.value_numeric : null,
                     height: heightObs ? heightObs.value_numeric : null,
@@ -197,11 +202,8 @@ export default defineComponent({
         },
         async updateData() {
             this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
-            console.log("🚀 ~ updateData ~ this.weight :", this.weight);
             this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
-            console.log("🚀 ~ updateData ~ this.height:", this.height);
             this.setListData(this.processObservations());
-            console.log("🚀 ~ updateData ~ this.processObservations():", this.processObservations());
             this.setHeight();
         },
         dismiss() {
@@ -263,21 +265,22 @@ export default defineComponent({
         setListData(data: any) {
             this.list = [];
             this.list.push({
-                containSize: 2.7,
+                containSize: 2.6,
                 actionBtn: false,
                 class: "col_background display_center",
                 header: true,
                 minHeight: "--min-height: 25px;",
-                display: ["Date", "Height", "Weight", "Action"],
+                display: ["Date", "Height(cm)", "Weight(kg)", "Action"],
             });
             data.forEach((item: any) => {
                 this.list.push({
+                    id: item.ids,
                     actionBtn: true,
                     minHeight: "--min-height: 25px;",
                     class: "col_background",
-                    display: [HisDate.toStandardHisFormat(item.obs_datetime), item.height, item.weight],
+                    display: [HisDate.toStandardHisDisplayFormat(item.obs_datetime), item.height, item.weight],
                     btn: ["void"],
-                    btnSize: 2.7,
+                    name: `height: ${item.height} and weight: ${item.weight} captured on ${HisDate.toStandardHisDisplayFormat(item.obs_datetime)} `,
                 });
             });
         },
