@@ -860,6 +860,11 @@ async function getdistrictList() {
     }
 
     //__________________________not ideal
+
+    districtList.forEach((district: any) => {
+        selectedDistrictIds.push(district.district_id)
+    })
+
     districtList.forEach((district: any ) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
@@ -878,9 +883,7 @@ async function fetchTraditionalAuthorities(district_id: any,name: string) {
     TAList.value = TAList.value.concat(arrayWithIds)
     // if (villageList.value.length > 0) {
     //     disableVillageSelection.value = false
-    // } 
-    
-    //______________________not ideal
+    // }
 }
 
 async function fetchVillages(district_id: any,name: string) {   
