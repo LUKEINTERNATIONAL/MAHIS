@@ -61,7 +61,7 @@
                 iconSlot="icon-only"
                 color="danger"
                 @click="
-                    openDeletePopover({
+                    openVoidPopover({
                         event: $event,
                         name: item.name,
                         id: item.id,
@@ -111,6 +111,14 @@ export default defineComponent({
             const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e.name} ?`, e.event);
             if (deleteConfirmed) {
                 this.$emit("clicked:delete", e);
+            }
+        },
+        async openVoidPopover(e: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to void ${e.name} ?`, e.event, {
+                confirmBtnLabel: "Void",
+            });
+            if (deleteConfirmed) {
+                this.$emit("clicked:void", e);
             }
         },
     },
