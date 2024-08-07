@@ -139,7 +139,7 @@ function isNotEmptyandNumber(value: any) {
     return `${value}`.match(/^-?\d+\.?\d*$/) ? null : `Invalid entry`;
 }
 function validateWeight(val: any) {
-    return isNotEmptyandNumber(val) || checkMinMax(val, 2.0, 250.0);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 0.5, 250.0);
 }
 function validateHeight(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 40, 220);
