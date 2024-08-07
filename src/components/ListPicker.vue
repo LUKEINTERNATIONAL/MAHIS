@@ -139,7 +139,7 @@ async function FindItemName(text: any) {
 }
 
 function setFocus() {
-    input.value.$el.setFocus()
+    // input.value.$el.setFocus()
 }
 
 const emit = defineEmits<{

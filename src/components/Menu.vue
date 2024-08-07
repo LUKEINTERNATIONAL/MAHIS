@@ -114,6 +114,11 @@
                         <ion-label class="header" style="color: rgb(223, 78, 69)" v-if="!apiStatus">Offline</ion-label>
                     </ion-item>
                 </ion-accordion>
+                <ion-accordion value="fifth" @click="navigationMenu('manageAppointMents')">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Manage Appointments</ion-label>
+                    </ion-item>
+                </ion-accordion>
             </ion-accordion-group>
         </ion-content>
     </ion-menu>

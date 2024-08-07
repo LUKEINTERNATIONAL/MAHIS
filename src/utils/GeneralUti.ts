@@ -75,7 +75,7 @@ export function isSameDate(date1: Date, date2: Date) {
            date1.getDate() === date2.getDate();
 }
 
-const configPaths = ["/config.json", "/mahis/config.json"];
+const configPaths = ["/mahis/config.json"];
 
 export async function getFileConfig2(): Promise<Config> {
     for (const path of configPaths) {

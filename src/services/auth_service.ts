@@ -34,9 +34,11 @@ export class AuthService {
     sessionDate: string;
     systemVersion: string;
     coreVersion: string;
+    locationID: string;
     constructor() {
         this.token = "";
         this.username = "";
+        this.locationID = "";
         this.roles = [];
         this.programs = [];
         this.userID = -1;
@@ -57,6 +59,7 @@ export class AuthService {
         try {
             const response = await this.requestLogin(password);
             if (response) {
+                console.log("🚀 ~ AuthService ~ login ~ response:", response);
                 const {
                     authorization: { token, user, expiry_time },
                 } = response;
@@ -64,6 +67,7 @@ export class AuthService {
                 this.roles = user.roles;
                 this.programs = user.programs;
                 this.userID = user.user_id;
+                this.locationID = user.location_id;
                 this.sessionDate = await this.getSystemDate();
                 this.systemVersion = await this.getApiVersion();
                 this.coreVersion = this.getHeadVersion();
@@ -129,6 +133,7 @@ export class AuthService {
         sessionStorage.setItem("userPrograms", JSON.stringify(this.programs));
         sessionStorage.setItem("sessionDate", this.sessionDate);
         sessionStorage.setItem("APIVersion", this.systemVersion);
+        sessionStorage.setItem("locationID", this.locationID);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
     }
     checkUserPrograms(selectedProgram: any) {
