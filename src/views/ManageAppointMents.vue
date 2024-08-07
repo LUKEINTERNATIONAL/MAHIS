@@ -181,33 +181,35 @@ export default defineComponent({
             if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
         async getAppointments() {
+            const filteredData = [] as any;
             const appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
-            return appointments
+            appointments.forEach((client: any) => {
+                    const tableItem = {
+                        name: client.given_name.concat(' ',client.given_name),
+                        gender: client.gender,
+                        age_dob: this.formatBirthdate(client.birthdate),
+                        village: client.city_village,
+                        person_id: client.person_id,
+                    }
+                    filteredData.push(tableItem)
+            }) 
+            return filteredData
         },
         async buildTableData() {
             this.isLoading = true;
             try {
-
-                const filteredData = [{}] as any;
-                // const data = await stockService.getItems("2024-08-07");
-                const data = await this.getAppointments()
-
-                data.forEach((client: any) => {
-                    console.log(client)
-                }) 
-
-                this.reportData = filteredData.map((item: any) => {
+                const appointments = await this.getAppointments()
+                this.reportData = appointments.map((item: any) => {
                     return [
                         HisDate.toStandardHisDisplayFormat(HisDate.currentDate()),
-                        'qqqqqqqq',
-                        'qqqqqqqq',
-                        'qqqqqqqq',
-                        'qqqqqqqq',
+                        item.name,
+                        item.gender,
+                        item.age_dob,
+                        item.village,
                         `<button class="btn btn-sm btn-primary edit-btn" data-id="${''}">Edit</button>
                          <button class="btn btn-sm btn-danger delete-btn" data-id="${''}">Delete</button>`,
                     ];
                 });
-
                 DataTable.use(DataTablesCore);
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
