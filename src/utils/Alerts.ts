@@ -130,7 +130,7 @@ export function createPopover(massege: any, e: any, btns = [] as Array<NavBtnInt
 export async function popoverConfirmation(massege: string, e: any, options = {} as AlertConfirmationOtions) {
     const popover = await createPopover(massege, e, [
         {
-            name: "Delete",
+            name: options.confirmBtnLabel || "Delete",
             size: "small",
             slot: "start",
             color: "danger",
