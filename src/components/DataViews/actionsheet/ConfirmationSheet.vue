@@ -6,26 +6,28 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-import ActionSheetMixin from "@/components/DataViews/actionsheet/ActionSheetMixin.vue"
+import { defineComponent } from "vue";
+import ActionSheetMixin from "@/components/DataViews/actionsheet/ActionSheetMixin.vue";
 
 export default defineComponent({
     mixins: [ActionSheetMixin],
     props: {
         body: {
             type: String,
-            require: true
-        }
-    }
-
-})
+            require: true,
+        },
+    },
+});
 </script>
 <style>
-.popoverBody{
-    text-align: center; 
+.popoverBody {
+    text-align: center;
     padding: 20px;
     font-weight: 600;
     font-size: 16px;
     color: #636363;
+}
+.popover {
+    border-radius: 10px;
 }
 </style>
