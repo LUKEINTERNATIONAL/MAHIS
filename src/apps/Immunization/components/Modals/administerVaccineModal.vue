@@ -35,7 +35,7 @@
                     {{ batch_number_error_message }}
                 </ion-label>
             </div> -->
-            <lotNumberList :action="childAction" ref="childComponentRef" @actionTriggered="ActionTriggered" @emptyList="ShowAlert"/>
+            <lotNumberList :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered" @emptyList="ShowAlert"/>
         </div>
 
         <div class="client_admi">
@@ -205,6 +205,8 @@ export default defineComponent({
         showCPD() {
             this.showPD = true as boolean;
             this.showDateBtns = false as boolean;
+
+
         },
         dismiss() {
             modalController.dismiss();

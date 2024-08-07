@@ -26,10 +26,22 @@ export default defineComponent({
             type: Function as PropType<() => void>,
             required: true
         },
+        retro: {
+            type: Boolean,
+            required: true
+        }
     },
     async mounted() {
         this.loadCurrentSelectedDrug()
     },
+    watch: {
+    retro: {
+      handler() {
+        this.checkToShow()
+      },
+      deep: true, // `deep` is not needed for primitive types like Boolean
+    },
+  },
     data() {
         return {
             lotNumbers: [] as any,
@@ -77,8 +89,22 @@ export default defineComponent({
                     }
                     this.lotNumbers.push(listItem)
                 })
+                this.checkToShow()
             } catch (error) {
                 
+            }
+        },
+        addUnkownLotNumberOption() {
+            const store = useAdministerVaccineStore();
+            const currentDrug = store.getCurrentSelectedDrug();
+            this.lotNumbers.push({
+                id: currentDrug.drug.drug_id,
+                lotNumber: 'Unknown',
+            })
+        },
+        checkToShow() {
+            if (this.$props.retro == true) {
+                    this.addUnkownLotNumberOption()
             }
         }
     },
