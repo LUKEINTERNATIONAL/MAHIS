@@ -1,19 +1,30 @@
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
 import { getWebsockerURL } from "@/utils/GeneralUti"
+import { getUserLocation } from "@/services/userService";
 export class WebSocketService {
     private socket: WebSocket | null = null;
     private channel: string = "ImmunizationReportChannel";
     private isConnected: boolean = false;
     private pendingFetch: (() => void) | null = null;
+    private location_id: any;
 
     constructor() {
+        this.init();
+    }
+
+    private async init() {
         const apiURL = sessionStorage.getItem("apiURL");
         const apiPort = sessionStorage.getItem("apiPort");
 
+        this.location_id =  await this.getUserLocationId()
+
         if (apiURL && apiPort) {
             const websocketURL = getWebsockerURL();
-            const url = websocketURL.length > 0 ? `ws://${websocketURL}` : `ws://${apiURL}:${apiPort}/cable`;
+            const url = (websocketURL && websocketURL !== "undefined" && websocketURL.trim().length > 0) ? 
+                                    `ws://${websocketURL}` : 
+                                    `ws://${apiURL}:${apiPort}/cable`;
+
             this.socket = new WebSocket(url);
             this.socket.onopen = this.onOpen;
             this.socket.onclose = this.onClose;
@@ -50,7 +61,7 @@ export class WebSocketService {
         if (this.socket) {
             const subscribeMessage = {
                 command: "subscribe",
-                identifier: JSON.stringify({ channel: this.channel }),
+                identifier: JSON.stringify({ channel: this.channel, location_id: this.location_id}),
             };
             this.socket.send(JSON.stringify(subscribeMessage));
         } else {
@@ -64,6 +75,17 @@ export class WebSocketService {
             end_date: HisDate.currentDate(),
         });
     }
+
+    public async getUserLocationId() {
+        try {
+            const userLocation = await getUserLocation();
+            return userLocation.location_id; // Assuming userLocation has an id property
+        } catch (error) {
+            console.error("Failed to get user location:", error);
+            return null;
+        }
+    }
+
     public setMessageHandler(handler: (event: MessageEvent) => void) {
         if (this.socket) {
             this.socket.onmessage = (event: MessageEvent) => {
