@@ -151,6 +151,7 @@ import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
 import { useWebWorkerFn } from "@vueuse/core";
 import db from "@/db";
+import { alertConfirmation } from "@/utils/Alerts";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -368,13 +369,12 @@ export default defineComponent({
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
-                this.validateBirthData() &&
+                (await this.validateBirthData()) &&
                 this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
                 this.isLoading = true;
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-
                 const offlinePatientID = Date.now();
                 await db.collection("patientRecords").add({
                     offlinePatientID: offlinePatientID,
@@ -410,8 +410,40 @@ export default defineComponent({
                 toastWarning("Please complete all required fields");
             }
         },
-        validateBirthData() {
+        checkWeightForAge(age: any, weight: any) {
+            let isValid = false;
+            if (age >= 0 && age < 1 && weight >= 0.5 && weight <= 13.1) {
+                isValid = true;
+            } else if (age >= 1 && age < 2 && weight > 13.1 && weight <= 15) {
+                isValid = true;
+            } else if (age >= 2 && age < 3 && weight > 15 && weight <= 20.9) {
+                isValid = true;
+            } else if (age >= 3 && age < 4 && weight > 20.9 && weight <= 24.1) {
+                isValid = true;
+            } else if (age >= 4 && age < 5 && weight > 24.1 && weight <= 28) {
+                isValid = true;
+            }
+            return isValid;
+        },
+        async validateBirthData() {
             if (this.checkUnderNine) {
+                const result = this.checkWeightForAge(
+                    getFieldValue(this.birthRegistration, "Weight", "value"),
+                    HisDate.getAgeInYears(this.birthdate)
+                );
+                console.log("🚀 ~ validateBirthData ~ result:", result);
+                if (!result) {
+                    const confirm = await alertConfirmation(
+                        `Do you want to continue with this weight (${getFieldValue(
+                            this.birthRegistration,
+                            "Weight",
+                            "value"
+                        )}) for age (${HisDate.getAgeInYears(this.birthdate)})`
+                    );
+                    console.log("🚀 ~ validateBirthData ~ confirm:", confirm);
+                    if (confirm) return true;
+                    else return false;
+                }
                 return validateInputFiledData(this.birthRegistration);
             } else {
                 return true;
