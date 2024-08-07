@@ -12,6 +12,17 @@
                         <ion-label class="header">Home</ion-label>
                     </ion-item>
                 </ion-accordion>
+
+                <ion-accordion value="fourth" @click="navigationMenu('stockManagement')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Stock Management</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="fifth" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Schedule Immunization</ion-label>
+                    </ion-item>
+                </ion-accordion>
                 <ion-accordion value="second">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Reports</ion-label>
@@ -96,16 +107,6 @@
                             </ion-item>
                         </ion-accordion-group>
                     </div>
-                </ion-accordion>
-                <ion-accordion value="fourth" @click="navigationMenu('stockManagement')">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="header">Stock Management</ion-label>
-                    </ion-item>
-                </ion-accordion>
-                <ion-accordion value="fifth" @click="navigationMenu('scheduleImmunization')">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="header">Schedule Immunization</ion-label>
-                    </ion-item>
                 </ion-accordion>
                 <ion-accordion value="six" toggle-icon="" toggle-icon-slot="start" :readonly="true">
                     <ion-item slot="header" color="light">
