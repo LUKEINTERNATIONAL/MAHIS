@@ -69,7 +69,7 @@
                 </ion-card>
                 <ion-card class="section">
                     <ion-card-header>
-                        <ion-card-title class="cardTitle"> Today appointments({{ appointments?.length }}) </ion-card-title></ion-card-header
+                        <ion-card-title class="cardTitle">Today's appointments({{ appointments?.length }}) </ion-card-title></ion-card-header
                     >
                     <ion-card-content>
                         <div
