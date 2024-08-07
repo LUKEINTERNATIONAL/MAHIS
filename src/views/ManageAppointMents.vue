@@ -12,10 +12,10 @@
 
                 <ion-row style="width: 50%;">
                     <ion-col>
-                        <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Select Start Date</ion-button>
+                        <ion-button @click="selectAppointMentDate()" class="btnText" fill="solid">Select Start Date</ion-button>
                     </ion-col>
                     <ion-col>
-                        <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Select End Date</ion-button>
+                        <ion-button @click="selectAppointMentDate()" class="btnText" fill="solid">Select End Date</ion-button>
                     </ion-col>
                 </ion-row>
 
@@ -59,6 +59,7 @@ import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import selectAppointMentDate from "@/apps/Immunization/components/Modals/SelectAppointMentDate.vue";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
 import { mapState } from "pinia";
+import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 import {
     medkit,
     chevronBackOutline,
@@ -153,13 +154,12 @@ export default defineComponent({
             });
         },
         handleEdit(id: any) {
-            // Implement edit logic here
-            console.log(`Editing item with id: ${id}`);
+            this.openNextVaccineAppoinment(id)
         },
 
         handleDelete(id: any) {
             // Implement delete logic here
-            console.log(`Deleting item with id: ${id}`);
+            console.log(`Deleting item with id: ${id} kkkkkkkk`);
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
@@ -190,15 +190,13 @@ export default defineComponent({
                 const appointments = await this.getAppointments()
                 this.reportData = appointments.map((item: any) => {
                     return [
-                       
                         item.name,
-                        
                         item.gender,
                         item.age_dob,
                         item.village,
                         HisDate.toStandardHisDisplayFormat(this.selectDate),
-                        `<button class="btn btn-sm btn-primary edit-btn" data-id="${''}">Reschedule</button>
-                         <button class="btn btn-sm btn-danger delete-btn" data-id="${''}">Cancel</button>`,
+                        `<button class="btn btn-sm btn-primary edit-btn" data-id="${item.person_id}">Reschedule</button>
+                         <button class="btn btn-sm btn-danger delete-btn" data-id="${item.person_id}">Cancel</button>`,
                     ];
                 });
                 DataTable.use(DataTablesCore);
@@ -208,8 +206,12 @@ export default defineComponent({
                 this.isLoading = false;
             }
         },
-        openNextVaccineAppoinment() {
+        selectAppointMentDate() {
             createModal(selectAppointMentDate, { class: "otherVitalsModal" }, false);
+        },
+        openNextVaccineAppoinment(patientId: string) {
+            const dataToPass = { patient_Id: patientId };
+            createModal(nextAppointMent, { class: "otherVitalsModal" }, false, dataToPass);
         },
     }
 })
