@@ -48,8 +48,7 @@
                 <DataTable ref="dataTable" :options="options" :data="reportData" class="display nowrap" width="100%">
                     <thead>
                         <tr>
-                            <th>Start Date</th>
-                            <th>End date</th>
+                            <th>Date</th>
                             <th>Name</th>
                             <th>Gender</th>
                             <th>Age/DOB</th>
@@ -81,6 +80,7 @@ import "datatables.net-select";
 import { PatientService } from "@/services/patient_service";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { AppointmentService } from "@/services/appointment_service";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import {
     medkit,
     chevronBackOutline,
@@ -146,8 +146,28 @@ export default defineComponent({
     computed: {},
     async mounted() {
         await this.setAppointments();
+        await this.buildTableData().then(() => {
+            const table = (this.$refs.dataTable as any).dt;
+            table.on("click", ".edit-btn", (e: Event) => {
+                const id = (e.target as HTMLElement).getAttribute("data-id");
+                this.handleEdit(id);
+            });
+            table.on("click", ".delete-btn", (e: Event) => {
+                const id = (e.target as HTMLElement).getAttribute("data-id");
+                this.handleDelete(id);
+            });
+        });
     },
     methods: {
+        handleEdit(id: any) {
+            // Implement edit logic here
+            console.log(`Editing item with id: ${id}`);
+        },
+
+        handleDelete(id: any) {
+            // Implement delete logic here
+            console.log(`Deleting item with id: ${id}`);
+        },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
             this.setDemographics(patientData[0]);
@@ -159,6 +179,33 @@ export default defineComponent({
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
             if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
+        },
+        async buildTableData() {
+            this.isLoading = true;
+            try {
+
+                // const data = await stockService.getItems("2024-08-07");
+
+                let filteredData = [{}] as any;
+
+                this.reportData = filteredData.map((item: any) => {
+                    return [
+                        'qqqqqqqq',
+                        'qqqqqqqq',
+                        'qqqqqqqq',
+                        'qqqqqqqq',
+                        'qqqqqqqq',
+                        `<button class="btn btn-sm btn-primary edit-btn" data-id="${''}">Edit</button>
+                         <button class="btn btn-sm btn-danger delete-btn" data-id="${''}">Delete</button>`,
+                    ];
+                });
+
+                DataTable.use(DataTablesCore);
+            } catch (error) {
+                toastWarning("An error occurred while loading data.");
+            } finally {
+                this.isLoading = false;
+            }
         },
     }
 })
