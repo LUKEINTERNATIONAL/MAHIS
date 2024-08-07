@@ -8,53 +8,25 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                <h1 style="width: 100%; text-align: center; font-weight: 700">Appointments Report</h1>
+                <h1 style="width: 100%; text-align: center; font-weight: 700">Appointments</h1>
 
-                <ion-card class="section">
-                    <ion-card-header>
-                        <ion-card-title class="cardTitle">Today's appointments({{ appointments?.length }}) </ion-card-title></ion-card-header
-                    >
-                    <ion-card-content>
-                        <div
-                            class="appointments"
-                            style="display: flex; margin-bottom: 10px"
-                            v-for="(item, index) in appointments"
-                            :key="index"
-                            @click="openClientProfile(item.npid)"
-                        >
-                            <div style="margin-right: 15px">
-                                <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
-                                    <ion-icon style="color: rgb(78, 78, 78); font-size: 30px" :icon="person"></ion-icon>
-                                </div>
-                            </div>
-                            <div style="align-items: center; display: flex">
-                                <div style="line-height: 1">
-                                    <div class="client_name">
-                                        <div class="name">{{ item.given_name }} {{ item.family_name }}</div>
-                                    </div>
-                                    <div class="demographicsOtherRow">
-                                        <div class="demographicsText">
-                                            {{ item.gender == "M" ? "Male" : "Female" }}
-                                            <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
-                                        </div>
-                                    </div>
-                                    <div>Village: {{ item?.city_village }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </ion-card-content>
-                </ion-card>
-
-                <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Select Appointment Date</ion-button>
+                <ion-row style="width: 50%;">
+                    <ion-col>
+                        <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Select Start Date</ion-button>
+                    </ion-col>
+                    <ion-col>
+                        <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Select End Date</ion-button>
+                    </ion-col>
+                </ion-row>
 
                 <DataTable ref="dataTable" :options="options" :data="reportData" class="display nowrap" width="100%">
                     <thead>
                         <tr>
-                            <th>Appointment Date</th>
                             <th>Name</th>
                             <th>Gender</th>
                             <th>Age/DOB</th>
                             <th>Village</th>
+                            <th>Appointment Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -163,7 +135,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        await this.getTodaysAppointments();
         await this.initDate(HisDate.currentDate())
     },
     methods: {
@@ -198,10 +169,6 @@ export default defineComponent({
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
         },
-        async getTodaysAppointments() {
-            this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
-            if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
-        },
         async getAppointments() {
             const filteredData = [] as any;
             const appointments = await AppointmentService.getDailiyAppointments(this.selectDate);
@@ -223,13 +190,15 @@ export default defineComponent({
                 const appointments = await this.getAppointments()
                 this.reportData = appointments.map((item: any) => {
                     return [
-                        HisDate.toStandardHisDisplayFormat(this.selectDate),
+                       
                         item.name,
+                        
                         item.gender,
                         item.age_dob,
                         item.village,
-                        `<button class="btn btn-sm btn-primary edit-btn" data-id="${''}">Edit</button>
-                         <button class="btn btn-sm btn-danger delete-btn" data-id="${''}">Delete</button>`,
+                        HisDate.toStandardHisDisplayFormat(this.selectDate),
+                        `<button class="btn btn-sm btn-primary edit-btn" data-id="${''}">Reschedule</button>
+                         <button class="btn btn-sm btn-danger delete-btn" data-id="${''}">Cancel</button>`,
                     ];
                 });
                 DataTable.use(DataTablesCore);
@@ -285,22 +254,7 @@ export default defineComponent({
     display: flex;
     justify-content: center;
 }
-.maleColor {
-    background: #5983ba;
-}
-.femaleColor {
-    background: #876d9b;
-}
-.client_name {
-    font-size: 1em;
-    font-weight: 600;
-}
-.demographicsText {
-    font-size: 1em;
-}
-.dot {
-    font-size: 25px;
-}
+
 </style>
 
 <style>
