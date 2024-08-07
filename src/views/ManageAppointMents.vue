@@ -45,6 +45,8 @@
                     </ion-card-content>
                 </ion-card>
 
+                <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Select Appointment Date</ion-button>
+
                 <DataTable ref="dataTable" :options="options" :data="reportData" class="display nowrap" width="100%">
                     <thead>
                         <tr>
@@ -65,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard } from "@ionic/vue";
+import { IonContent, IonHeader, IonButton, IonMenuButton, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -77,10 +79,14 @@ import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import "datatables.net-select";
+import { createModal } from "@/utils/Alerts";
 import { PatientService } from "@/services/patient_service";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { AppointmentService } from "@/services/appointment_service";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import selectAppointMentDate from "@/apps/Immunization/components/Modals/SelectAppointMentDate.vue";
+import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
+import { mapState } from "pinia";
 import {
     medkit,
     chevronBackOutline,
@@ -115,6 +121,7 @@ export default defineComponent({
         IonCardHeader,
         IonCardTitle,
         IonCardContent,
+        IonButton
     },
     data() {
         return {
@@ -125,6 +132,7 @@ export default defineComponent({
             } as any,
             reportData: [] as any,
             appointments: [] as any,
+            selectDate: '',
         }
     },
     setup() {
@@ -143,22 +151,36 @@ export default defineComponent({
             person,
         };
     },
-    computed: {},
+    computed: {
+        ...mapState(useImmunizationAppointMentStore, ["selectedAppointmentMentForAppointmentsPage"]),
+    },
+    watch: {
+        selectedAppointmentMentForAppointmentsPage: {
+            handler() {
+                this.initDate(HisDate.toStandardHisFormat(this.selectedAppointmentMentForAppointmentsPage));
+            },
+            deep: true,
+        },
+    },
     async mounted() {
-        await this.setAppointments();
-        await this.buildTableData().then(() => {
-            const table = (this.$refs.dataTable as any).dt;
-            table.on("click", ".edit-btn", (e: Event) => {
-                const id = (e.target as HTMLElement).getAttribute("data-id");
-                this.handleEdit(id);
-            });
-            table.on("click", ".delete-btn", (e: Event) => {
-                const id = (e.target as HTMLElement).getAttribute("data-id");
-                this.handleDelete(id);
-            });
-        });
+        await this.getTodaysAppointments();
+        await this.initDate(HisDate.currentDate())
     },
     methods: {
+        async initDate(date: string) {
+            this.selectDate = date;
+            await this.buildTableData().then(() => {
+                const table = (this.$refs.dataTable as any).dt;
+                table.on("click", ".edit-btn", (e: Event) => {
+                    const id = (e.target as HTMLElement).getAttribute("data-id");
+                    this.handleEdit(id);
+                });
+                table.on("click", ".delete-btn", (e: Event) => {
+                    const id = (e.target as HTMLElement).getAttribute("data-id");
+                    this.handleDelete(id);
+                });
+            });
+        },
         handleEdit(id: any) {
             // Implement edit logic here
             console.log(`Editing item with id: ${id}`);
@@ -176,13 +198,13 @@ export default defineComponent({
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
         },
-        async setAppointments() {
+        async getTodaysAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
             if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
         async getAppointments() {
             const filteredData = [] as any;
-            const appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
+            const appointments = await AppointmentService.getDailiyAppointments(this.selectDate);
             appointments.forEach((client: any) => {
                     const tableItem = {
                         name: client.given_name.concat(' ',client.given_name),
@@ -201,7 +223,7 @@ export default defineComponent({
                 const appointments = await this.getAppointments()
                 this.reportData = appointments.map((item: any) => {
                     return [
-                        HisDate.toStandardHisDisplayFormat(HisDate.currentDate()),
+                        HisDate.toStandardHisDisplayFormat(this.selectDate),
                         item.name,
                         item.gender,
                         item.age_dob,
@@ -216,6 +238,9 @@ export default defineComponent({
             } finally {
                 this.isLoading = false;
             }
+        },
+        openNextVaccineAppoinment() {
+            createModal(selectAppointMentDate, { class: "otherVitalsModal" }, false);
         },
     }
 })

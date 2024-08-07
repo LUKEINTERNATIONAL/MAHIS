@@ -101,3 +101,6 @@ function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
     return antigens.every((antigen: any) => antigen.status === 'administered');
 }
 
+export async function voidVaccine(orderId: number, reason: string) {
+    return Service.void(`orders/${orderId}?reason=${JSON.stringify(reason)}`, { reason });
+}

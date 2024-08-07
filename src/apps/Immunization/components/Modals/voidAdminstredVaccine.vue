@@ -28,7 +28,7 @@
             </ion-col>
 
             <ion-col>
-                <ion-button @click="voidVaccine" class="btnText" fill="solid" style="width: 130px; text-align: right;">
+                <ion-button @click="voidVaccine1" class="btnText" fill="solid" style="width: 130px; text-align: right;">
                     Void
                     <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                 </ion-button>
@@ -39,9 +39,9 @@
 <script lang="ts">
     import { defineComponent } from "vue";
     import { IonContent, IonRow, IonItem, IonList, IonRadio, IonRadioGroup, modalController } from "@ionic/vue";
-    import { EncounterService } from '@/services/encounter_service'
     import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
     import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
+    import { voidVaccine } from "@/apps/Immunization/services/vaccines_service";
     import _ from 'lodash';
     export default defineComponent({
         components: {
@@ -103,13 +103,13 @@
                     return false;
                 }
             }, 
-            async voidVaccine() {
+            async voidVaccine1() {
                 if (this.checkIfSelected() == true) {
 
                     try {
                         const store = useAdministerVaccineStore();
                         const AdministrdVaccine = store.getVaccineToBeVoided();
-                        await EncounterService.voidEncounter(AdministrdVaccine.drug.order_encounter_id, this.selectedOption.name)
+                        await voidVaccine(AdministrdVaccine.drug.order_id, this.selectedOption.name)
                         toastSuccess("Vaccine was successfully voided!");
                         store.setVaccineReload(!store.getVaccineReload());
                         modalController.dismiss({voided: true});
