@@ -20,6 +20,9 @@
     align-content: center;
     align-items: center;
 }
+.popover {
+    --bs-popover-max-width: none;
+}
 .ellipsis {
     text-overflow: ellipsis;
     white-space: nowrap;
