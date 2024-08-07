@@ -10,7 +10,7 @@
             <div class="container">
                 <h1 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h1>
                 <div style="width: 100%; align-items: center">
-                    <div class="bigGroupButton" style="display: inline-block; vertical-align: top">
+                    <!--<div class="bigGroupButton" style="display: inline-block; vertical-align: top">
                         <ion-button :color="selectedButton === 'all' ? 'tertiary' : 'secondary'" @click="selectButton('all')">
                             <div>
                                 <div class="centerBigBtnContain bigBtnHeader">{{ allStock.length }}</div>
@@ -32,11 +32,11 @@
                     </div>
                     <div style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
                         <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
-                    </div>
+                    </div>-->
                     <div style="display: inline-block; vertical-align: top; margin-top: 10px; float: right">
                         <ion-button class="addBtn" color="primary" @click="openAddStockModal()">
                             <div>
-                                <div class="centerBigBtnContain">+ Add Product</div>
+                                <div class="centerBigBtnContain">+ Add Products</div>
                             </div>
                         </ion-button>
                     </div>
@@ -121,8 +121,9 @@ export default defineComponent({
             currentStock: [] as any,
             allStock: [] as any,
             outStock: [] as any,
-            startDate: HisDate.currentDate(),
+            startDate: "2000-01-01",
             endDate: HisDate.currentDate(),
+            pageCount: 1,
             options: {
                 responsive: true,
                 select: true,
@@ -163,21 +164,33 @@ export default defineComponent({
         async buildTableData() {
             this.isLoading = true;
             try {
-                const stockService = new StockService();
-                const data = await stockService.getItems(this.startDate, this.endDate);
+                
+                const stockService = new StockService();                
+                this.allStock = []; 
+                this.currentStock = [];
+                this.outStock = []; 
+                this.reportData = []; 
+                this.pageCount = 1; 
+                let fetchedData: any[] = [];
+                
+                do {
 
-                let filteredData = data;
-                this.allStock = data;
-                this.currentStock = data.filter((item: any) => item.current_quantity !== 0);
-                this.outStock = data.filter((item: any) => item.current_quantity === 0);
+                     fetchedData = await stockService.getItems(this.startDate, this.endDate, this.pageCount);
+                     this.pageCount++;
 
-                if (this.selectedButton === "current") {
-                    filteredData = this.currentStock;
-                } else if (this.selectedButton === "out") {
-                    filteredData = this.outStock;
-                }
+                     this.allStock = this.allStock.concat(fetchedData);
+                     this.currentStock = this.allStock.filter((item: any) => item.current_quantity !== 0);
+                     this.outStock = this.allStock.filter((item: any) => item.current_quantity === 0);
 
-                this.reportData = filteredData.map((item: any) => {
+                     let filteredData = this.allStock;
+                    if (this.selectedButton === "current") {
+                            filteredData = this.currentStock;
+                    } else if (this.selectedButton === "out") {
+                       filteredData = this.outStock;
+                    }
+
+
+                   this.reportData = filteredData.map((item: any) => {
                     return [
                         HisDate.toStandardHisDisplayFormat(item.delivery_date),
                         item.batch_number,
@@ -190,6 +203,10 @@ export default defineComponent({
                 });
 
                 DataTable.use(DataTablesCore);
+                this.$forceUpdate();
+                this.isLoading = false;
+               } while (fetchedData.length === 10);
+
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
