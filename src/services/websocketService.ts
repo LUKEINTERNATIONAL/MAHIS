@@ -1,7 +1,6 @@
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
 import { getWebsockerURL } from "@/utils/GeneralUti";
-import { getUserLocation } from "@/services/userService";
 export class WebSocketService {
     private socket: WebSocket | null = null;
     private channel: string = "ImmunizationReportChannel";
@@ -17,7 +16,7 @@ export class WebSocketService {
         const apiURL = sessionStorage.getItem("apiURL");
         const apiPort = sessionStorage.getItem("apiPort");
 
-        this.location_id = await this.getUserLocationId();
+        this.location_id = sessionStorage.getItem("locationID");
 
         if (apiURL && apiPort) {
             const websocketURL = getWebsockerURL();
@@ -75,16 +74,6 @@ export class WebSocketService {
             start_date: HisDate.getDateBeforeByDays(HisDate.currentDate(), 365),
             end_date: HisDate.currentDate(),
         });
-    }
-
-    public async getUserLocationId() {
-        try {
-            const userLocation = await getUserLocation();
-            return userLocation.location_id; // Assuming userLocation has an id property
-        } catch (error) {
-            console.error("Failed to get user location:", error);
-            return null;
-        }
     }
 
     public async setMessageHandler(handler: (event: MessageEvent) => void) {

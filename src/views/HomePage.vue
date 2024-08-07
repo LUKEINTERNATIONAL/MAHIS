@@ -167,7 +167,6 @@ import { createModal } from "@/utils/Alerts";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
 import { getBaseURL } from "@/utils/GeneralUti";
-import { getUserLocation } from "@/services/userService";
 
 export default defineComponent({
     name: "Home",
@@ -282,7 +281,7 @@ export default defineComponent({
         },
         async onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);
-            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: await this.getUserLocationId() })) {
+            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: sessionStorage.getItem("locationID") })) {
                 this.reportData = data.message;
                 console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
                 this.totalStats = [
@@ -299,15 +298,6 @@ export default defineComponent({
                         value: this.reportData?.total_male_vaccinated_this_year || 0,
                     },
                 ];
-            }
-        },
-        async getUserLocationId() {
-            try {
-                const userLocation = await getUserLocation();
-                return userLocation.location_id; // Assuming userLocation has an id property
-            } catch (error) {
-                console.error("Failed to get user location:", error);
-                return null;
             }
         },
         setView() {
