@@ -17,9 +17,7 @@
         <ion-content class="content" v-if="programID() == 33">
             <div class="topStats">
                 <div>
-                    <div
-                        :style="backgroundStyle"
-                    >
+                    <div :style="backgroundStyle">
                         <!-- :autoplay="4000" -->
                         <Carousel :autoplay="4000" :wrap-around="true" :itemsToShow="1.2" :transition="600" style="padding-top: 20px">
                             <Slide v-for="slide in totalStats" :key="slide">
@@ -168,7 +166,8 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
-import { getBaseURL } from "@/utils/GeneralUti"
+import { getBaseURL } from "@/utils/GeneralUti";
+import { getUserLocation } from "@/services/userService";
 
 export default defineComponent({
     name: "Home",
@@ -203,7 +202,7 @@ export default defineComponent({
             reportData: "" as any,
             appointments: [] as any,
             programBtn: {} as any,
-            base_url:  'backgroundImg.png',
+            base_url: "backgroundImg.png",
             totalStats: [
                 {
                     name: "Total vaccinated this year",
@@ -242,9 +241,9 @@ export default defineComponent({
         backgroundStyle() {
             return {
                 background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(this.base_url)})`,
-                backgroundSize: 'cover',
-                backgroundBlendMode: 'overlay',
-                height: '22.8vh'
+                backgroundSize: "cover",
+                backgroundBlendMode: "overlay",
+                height: "22.8vh",
             };
         },
     },
@@ -281,9 +280,9 @@ export default defineComponent({
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
         },
-        onMessage(event: MessageEvent) {
+        async onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);
-            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
+            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: await this.getUserLocationId() })) {
                 this.reportData = data.message;
                 console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
                 this.totalStats = [
@@ -300,6 +299,15 @@ export default defineComponent({
                         value: this.reportData?.total_male_vaccinated_this_year || 0,
                     },
                 ];
+            }
+        },
+        async getUserLocationId() {
+            try {
+                const userLocation = await getUserLocation();
+                return userLocation.location_id; // Assuming userLocation has an id property
+            } catch (error) {
+                console.error("Failed to get user location:", error);
+                return null;
             }
         },
         setView() {
