@@ -106,7 +106,7 @@ import { Service } from '@/services/service'
 const store = useImmunizationAppointMentStore()
 
 const date = ref()
-var configsSms: string;
+const configsSms = ref(false);
 const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
 const show_selected_date = ref(false)
 const currently_selected_date = ref()
@@ -133,7 +133,7 @@ async function save() {
     const appointmentDetails = await appointment_service.createAppointment();
     dismiss();
     if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
-          if(configsSms){        
+          if(configsSms.value){        
              createModal(smsConfirmation, {
                    componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1] },
                    class: "smsConfirmation"
@@ -147,8 +147,8 @@ async function save() {
 
 onMounted(async () => {
     store.clearAppointmentMent()    
-      var data = await SmsService.getConfigurations();
-    configsSms = data.show_sms_popup;     
+    let data = await SmsService.getConfigurations();
+    configsSms.value = data.show_sms_popup;     
 })
 
 async function getAppointmentMents(date: any) {
