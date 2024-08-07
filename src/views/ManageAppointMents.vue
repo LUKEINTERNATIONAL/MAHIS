@@ -48,7 +48,7 @@
                 <DataTable ref="dataTable" :options="options" :data="reportData" class="display nowrap" width="100%">
                     <thead>
                         <tr>
-                            <th>Date</th>
+                            <th>Appointment Date</th>
                             <th>Name</th>
                             <th>Gender</th>
                             <th>Age/DOB</th>
@@ -180,17 +180,25 @@ export default defineComponent({
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
             if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
+        async getAppointments() {
+            const appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
+            return appointments
+        },
         async buildTableData() {
             this.isLoading = true;
             try {
 
+                const filteredData = [{}] as any;
                 // const data = await stockService.getItems("2024-08-07");
+                const data = await this.getAppointments()
 
-                let filteredData = [{}] as any;
+                data.forEach((client: any) => {
+                    console.log(client)
+                }) 
 
                 this.reportData = filteredData.map((item: any) => {
                     return [
-                        'qqqqqqqq',
+                        HisDate.toStandardHisDisplayFormat(HisDate.currentDate()),
                         'qqqqqqqq',
                         'qqqqqqqq',
                         'qqqqqqqq',
