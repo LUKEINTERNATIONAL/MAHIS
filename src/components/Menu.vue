@@ -7,7 +7,7 @@
         </ion-header>
         <ion-content>
             <ion-accordion-group expand="inset">
-                <ion-accordion value="first" @click="navigationMenu('home')">
+                <ion-accordion value="first" @click="navigationMenu('home')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Home</ion-label>
                     </ion-item>
@@ -107,6 +107,12 @@
                         <ion-label class="header">Schedule Immunization</ion-label>
                     </ion-item>
                 </ion-accordion>
+                <ion-accordion value="six" toggle-icon="" toggle-icon-slot="start" :readonly="true">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header" style="color: var(--ion-color-primary)" v-if="apiStatus">Online </ion-label>
+                        <ion-label class="header" style="color: rgb(223, 78, 69)" v-if="!apiStatus">Offline</ion-label>
+                    </ion-item>
+                </ion-accordion>
             </ion-accordion-group>
         </ion-content>
     </ion-menu>
@@ -117,6 +123,8 @@ import { IonAccordion, IonAccordionGroup, IonContent, IonHeader, IonItem, IonLis
 import { defineComponent, ref, computed, onMounted, onUpdated } from "vue";
 import { UserService } from "@/services/user_service";
 import { useRouter } from "vue-router";
+import { useStatusStore } from "@/stores/StatusStore";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
     name: "Menu",
@@ -134,7 +142,8 @@ export default defineComponent({
     setup() {
         const router = useRouter();
         const user_data = ref<any>(null);
-
+        const status = useStatusStore();
+        const { apiStatus } = storeToRefs(status);
         onMounted(async () => {
             await fetchUserData();
         });
@@ -158,6 +167,7 @@ export default defineComponent({
         }
 
         return {
+            apiStatus,
             isSuperuser,
             user_data,
             navigationMenu,
