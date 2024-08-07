@@ -47,7 +47,7 @@ export function createAlert(message: string, header = "" as string, btns = [] as
     return modalController.create({
         component: ConfimationSheet,
         backdropDismiss: false,
-        cssClass: "small-modal custom-modal-backdrop",
+        cssClass: "otherVitalsModal",
         componentProps: {
             subtitle: header,
             body: message,
@@ -60,7 +60,7 @@ export async function alertConfirmation(message: string, options = {} as AlertCo
     const alert = await createAlert(message, options.header || "Confirmation", [
         {
             name: options.cancelBtnLabel || "No",
-            size: "large",
+            size: "Default",
             slot: "start",
             color: "danger",
             visible: true,
@@ -69,7 +69,7 @@ export async function alertConfirmation(message: string, options = {} as AlertCo
         },
         {
             name: options.confirmBtnLabel || "Yes",
-            size: "large",
+            size: "Default",
             slot: "end",
             color: "success",
             visible: true,
