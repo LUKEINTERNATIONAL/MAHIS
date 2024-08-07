@@ -256,61 +256,60 @@ export default defineComponent({
             this.zScoreValue = Math.round(zScore * 10) / 10;
         },
         async buildGraph() {
-            console.log("🚀 ~ buildGraph ~ this.dataset:", this.dataset);
             this.vitalsWeightHeight[0].validationStatus = "";
-            // const ctx: any = document.getElementById("myChart");
-            // if (this.chart) {
-            //     this.chart.destroy();
-            // }
-            // this.chart = new Chart(ctx, {
-            //     type: "line",
-            //     data: {
-            //         labels: ["0", "1", "2", "3", "4", "5"],
-            //         datasets: this.dataset,
-            //     },
-            //     options: {
-            //         scales: {
-            //             y: {
-            //                 beginAtZero: true,
-            //                 title: {
-            //                     display: true,
-            //                     align: "center",
-            //                     text: this.YTitle,
-            //                     color: "#979998",
-            //                     font: {
-            //                         size: 14,
-            //                     },
-            //                 },
-            //                 grace: "5%",
-            //                 ticks: {
-            //                     stepSize: this.stepSize,
-            //                 },
-            //             },
-            //             x: {
-            //                 beginAtZero: true,
-            //                 title: {
-            //                     display: true,
-            //                     align: "center",
-            //                     text: "Age",
-            //                     color: "#979998",
-            //                     font: {
-            //                         size: 14,
-            //                     },
-            //                 },
-            //             },
-            //         },
-            //         elements: {
-            //             point: {
-            //                 radius: 0,
-            //             },
-            //         },
-            //         plugins: {
-            //             legend: {
-            //                 display: false,
-            //             },
-            //         },
-            //     },
-            // });
+            const ctx: any = document.getElementById("myChart");
+            if (this.chart) {
+                this.chart.destroy();
+            }
+            this.chart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: ["0", "1", "2", "3", "4", "5"],
+                    datasets: this.dataset,
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                align: "center",
+                                text: this.YTitle,
+                                color: "#979998",
+                                font: {
+                                    size: 14,
+                                },
+                            },
+                            grace: "5%",
+                            ticks: {
+                                stepSize: this.stepSize,
+                            },
+                        },
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                align: "center",
+                                text: "Age",
+                                color: "#979998",
+                                font: {
+                                    size: 14,
+                                },
+                            },
+                        },
+                    },
+                    elements: {
+                        point: {
+                            radius: 0,
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    },
+                },
+            });
         },
         datasetWeightAgeBoy() {
             this.dataset = [

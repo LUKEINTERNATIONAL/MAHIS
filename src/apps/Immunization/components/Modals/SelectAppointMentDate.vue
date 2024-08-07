@@ -1,10 +1,24 @@
 <template>
     <ion-row style="margin-top: 10px;">
         <ion-col style="margin-left: -3px">
-            <div class="om">Set Next Appointment Date</div>
+            <div class="om" style="font-weight: 600; color:#8d8686;">Select Appointment Date</div>
         </ion-col>
         <ion-col size="6" style="text-align: right;">
             <ion-label class="lbl-tl" style="font-size: 13"> Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label>
+        </ion-col>
+    </ion-row>
+
+    <ion-row style="margin-top: 10px;">
+        <ion-col style="margin-left: -3px">
+            <div class="om"></div>
+        </ion-col>
+        <ion-col size="10" style="text-align: right;" v-if="show_selected_date">
+            <ion-label class="lbl-tl" style="font-size: 16; font-weight: 500;">
+                Total Appointments
+                <span class="lbl-ct">({{ currently_selected_date }})</span>: 
+                <span style="margin-right: 20px; color: black;">
+                    <ion-badge color="primary" style="margin-bottom: -5px; font-size: 15px;">{{ appointment_count }}</ion-badge>
+                </span></ion-label>
         </ion-col>
     </ion-row>
 
@@ -36,14 +50,7 @@
     <ion-row style="margin-top: 10px; margin-bottom: 10px;">
         <ion-col>
             <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid"  style="width: 130px">
-                Cancel
-                <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
-            </ion-button>
-        </ion-col>
-
-        <ion-col style="text-align: right">
-            <ion-button @click="save" class="btnText" fill="solid"  style="width: 130px">
-                save
+                Close
                 <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
             </ion-button>
         </ion-col>
@@ -79,20 +86,21 @@ import {
     IonAccordionGroup,
     AccordionGroupCustomEvent,
     IonCheckbox,
-    modalController
+    modalController,
+    IonBadge
 } from "@ionic/vue"
 import { ref, onMounted,computed, watch } from "vue"
 import HisDate from "@/utils/Date"
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore"
 import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service"
-import smsConfirmation from "@/apps/Immunization/components/Modals/smsConfirmation.vue";
-import { SmsService } from "@/apps/Immunization/services/sms_service";
 import { Service } from '@/services/service'
 const store = useImmunizationAppointMentStore()
 
 const date = ref()
-const configsSms = ref(false);
 const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
+const show_selected_date = ref(false)
+const currently_selected_date = ref()
+const appointment_count = ref(0)
 
 function disablePastDates(date: any) {
     const today = new Date(Service.getSessionDate())
@@ -101,49 +109,32 @@ function disablePastDates(date: any) {
     return date < today;
 }
 
-async function createModal(component: any, options: any) {
-    const modal = await modalController.create({
-        component,
-        ...options
-    });
-    return modal.present();
-}
-
 async function save() {
-
-    const appointment_service = new Appointment();
-    const appointmentDetails = await appointment_service.createAppointment();
-    dismiss(); 
-    if (Array.isArray(appointmentDetails)) {
-          if(configsSms){        
-             createModal(smsConfirmation, {
-                   componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1] },
-                   class: "smsConfirmation"
-             });        
-        }
-        else{
-               await SmsService.appointment(appointmentDetails[0],appointmentDetails[1]);
-            }
-   }
+    dismiss();
 }
 
 onMounted(async () => {
-    store.clearAppointmentMent()    
-    let data = await SmsService.getConfigurations();
-    configsSms.value = data.show_sms_popup;     
+    store.clearAppointmentMent()
 })
+
+async function getAppointmentMents(date: any) {
+    const appointment_service = new Appointment()
+    const res =  await appointment_service.getDailiyAppointments(HisDate.toStandardHisFormat(date))
+    appointment_count.value = res.length
+    console.log(res)
+}
 
 function dismiss() {
     modalController.dismiss()
 }
 
-function DateUpdated(date: any) {
+async function DateUpdated(date: any) {
     const store = useImmunizationAppointMentStore()
-    const appointment = {
-            counter: 1,
-            date: date
-        }
-    store.setAppointmentMent(appointment)
+    store.setSelectedAppointmentMentForAppointmentsPage(date)
+    show_selected_date.value = false
+    await getAppointmentMents(date)
+    show_selected_date.value = true
+    currently_selected_date.value = HisDate.toStandardHisDisplayFormat(date)
 }
 
 function getCounter(date: any) {
