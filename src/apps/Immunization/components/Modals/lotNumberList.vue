@@ -17,6 +17,7 @@ import { defineComponent, PropType } from 'vue'
 import { toastWarning } from "@/utils/Alerts"
 import { StockService } from '@/services/stock_service'
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
 import _ from 'lodash'
 
 export default defineComponent({
@@ -97,6 +98,7 @@ export default defineComponent({
         addUnkownLotNumberOption() {
             const store = useAdministerVaccineStore();
             const currentDrug = store.getCurrentSelectedDrug();
+            console.log(currentDrug.drug)
             this.lotNumbers.push({
                 id: currentDrug.drug.drug_id,
                 lotNumber: 'Unknown',
@@ -106,7 +108,19 @@ export default defineComponent({
             if (this.$props.retro == true) {
                     this.addUnkownLotNumberOption()
             }
-        }
+            this.checkDrugNameInt()
+        },
+        checkDrugNameInt() {
+            const store = useAdministerVaccineStore();
+            const currentDrug = store.getCurrentSelectedDrug();
+            if (checkDrugName(currentDrug.drug) == true) {
+                this.lotNumbers = []
+                this.lotNumbers.push({
+                    id: currentDrug.drug.drug_id,
+                    lotNumber: 'Unknown',
+                })
+            }
+        },
     },
 });
 </script>

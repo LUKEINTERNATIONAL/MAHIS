@@ -143,6 +143,7 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import lotNumberList from "./lotNumberList.vue"
 import alert from "@/apps/Immunization/components/Modals/alert.vue"
 import { StockService } from '@/services/stock_service'
+import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
 
 export default defineComponent({
     components: {
@@ -310,7 +311,13 @@ export default defineComponent({
             store.setLotNumberData(data_)
 
             if(data_.length == 0) {
-                createModal(alert, { class: "otherVitalsModal" })
+                if(checkDrugName(data) == false) {
+                    createModal(alert, { class: "otherVitalsModal" });
+                }
+
+                if (checkDrugName(data) == true) {
+                    this.show_select_batach = true;
+                } 
             }
 
             if (data_.length > 0) {
