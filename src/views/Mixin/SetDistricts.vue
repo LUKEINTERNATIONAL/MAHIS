@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { LocationService } from "@/services/location_service";
-import { getOfflineLocation } from "@/services/set_location";
+import { getOfflineLocation, getLocalVillages } from "@/services/set_location";
 export default defineComponent({
     data: () => ({
         districtList: [] as any,
@@ -15,15 +15,15 @@ export default defineComponent({
                 this.locations = await getOfflineLocation();
                 this.districtList = this.locations?.districts;
                 this.TAsList = this.locations?.TAs;
-                this.villageList = this.locations?.villages;
             },
             immediate: true,
             deep: true,
         },
     },
     methods: {
-        getVillages(targetId: any) {
-            return this.villageList.filter((obj: any) => obj.traditional_authority_id === targetId);
+        async getVillages(targetId: any) {
+            const data = await getLocalVillages();
+            return data.filter((obj: any) => obj.traditional_authority_id === targetId);
         },
         getTAs(targetId: any) {
             return this.TAsList.filter((obj: any) => obj.district_id === targetId);
