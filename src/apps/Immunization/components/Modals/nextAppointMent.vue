@@ -91,7 +91,7 @@ import { Service } from '@/services/service'
 const store = useImmunizationAppointMentStore()
 
 const date = ref()
-const configsSms = ref(false);
+var configsSms = ref(false);
 const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
 
 function disablePastDates(date: any) {
@@ -130,7 +130,7 @@ async function save() {
 onMounted(async () => {
     store.clearAppointmentMent()    
     let data = await SmsService.getConfigurations();
-    configsSms.value = data.show_sms_popup;     
+    configsSms = data.show_sms_popup;     
 })
 
 function dismiss() {
