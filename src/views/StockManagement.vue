@@ -10,26 +10,6 @@
             <div class="container">
                 <h1 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h1>
                 <div style="width: 100%; align-items: center">
-                    <div class="bigGroupButton" style="display: inline-block; vertical-align: top">
-                        <ion-button :color="selectedButton === 'all' ? 'tertiary' : 'secondary'" @click="selectButton('all')">
-                            <div>
-                                <div class="centerBigBtnContain bigBtnHeader">{{ allStock.length }}</div>
-                                <div class="centerBigBtnContain">All Stock</div>
-                            </div>
-                        </ion-button>
-                        <ion-button :color="selectedButton === 'current' ? 'tertiary' : 'secondary'" @click="selectButton('current')">
-                            <div>
-                                <div class="centerBigBtnContain bigBtnHeader">{{ currentStock.length }}</div>
-                                <div class="centerBigBtnContain">Current Stock</div>
-                            </div>
-                        </ion-button>
-                        <ion-button :color="selectedButton === 'out' ? 'tertiary' : 'secondary'" @click="selectButton('out')">
-                            <div>
-                                <div class="centerBigBtnContain bigBtnHeader">{{ outStock.length }}</div>
-                                <div class="centerBigBtnContain">Out of Stock</div>
-                            </div>
-                        </ion-button>
-                    </div>
                     <div style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
                         <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
                     </div>
@@ -56,12 +36,30 @@
                     </thead>
                 </DataTable>
             </div>
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal()">
+                <ion-fab-button color="primary"> <ion-icon :icon="add"></ion-icon> </ion-fab-button>
+                <ion-fab-list side="top"> </ion-fab-list>
+            </ion-fab>
         </ion-content>
     </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard } from "@ionic/vue";
+import {
+    IonIcon,
+    IonFab,
+    IonFabButton,
+    IonFabList,
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonRow,
+    IonCol,
+    IonCard,
+} from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -92,6 +90,20 @@ import { useStartEndDate } from "@/stores/StartEndDate";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import {
+    medkit,
+    chevronBackOutline,
+    checkmark,
+    grid,
+    chevronDownCircle,
+    chevronForwardCircle,
+    chevronUpCircle,
+    colorPalette,
+    document,
+    globe,
+    add,
+    person,
+} from "ionicons/icons";
 import "datatables.net-select";
 // DataTable.use(DataTablesCore);
 export default defineComponent({
@@ -114,6 +126,10 @@ export default defineComponent({
         IonCard,
         DynamicButton,
         BasicForm,
+        IonIcon,
+        IonFab,
+        IonFabButton,
+        IonFabList,
     },
     data() {
         return {
@@ -129,6 +145,22 @@ export default defineComponent({
             } as any,
             selectedButton: "all",
             isLoading: false,
+        };
+    },
+    setup() {
+        return {
+            chevronBackOutline,
+            checkmark,
+            grid,
+            chevronDownCircle,
+            chevronForwardCircle,
+            chevronUpCircle,
+            colorPalette,
+            document,
+            globe,
+            medkit,
+            add,
+            person,
         };
     },
     computed: {
