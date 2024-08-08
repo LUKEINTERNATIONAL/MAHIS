@@ -80,8 +80,9 @@ export default defineComponent({
     watch: {
         demographics: {
             async handler() {
+                await this.updateData();
+                await this.changeGraph("weight");
                 await this.displayWeightGraph();
-                await this.buildGraph();
             },
             deep: true,
         },
