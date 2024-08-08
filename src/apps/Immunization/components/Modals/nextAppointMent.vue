@@ -127,9 +127,15 @@ async function createModal(component: any, options: any) {
     return modal.present();
 }
 
-async function save() {
+const props = defineProps<{
+    patient_Id: string,
+}>()
 
+async function save() {
     const appointment_service = new Appointment();
+    if (props.patient_Id?.length > 0) {
+        appointment_service.setPatientID(props?.patient_Id)
+    }
     const appointmentDetails = await appointment_service.createAppointment();
     dismiss();
     if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
