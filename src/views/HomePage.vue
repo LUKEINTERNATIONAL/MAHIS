@@ -1,19 +1,48 @@
 <template>
     <ion-page>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33">
-            <div id="container">
-                <strong>Search your patient profile</strong>
-                <p>
-                    Use searchbar below to find your patient <br />
-                    profile and start the triage
-                </p>
-                <div class="centered-content">
-                    <!-- Your component goes here -->
-                    <ToolbarSearch />
+      <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14">
+        <div id="container">
+          <strong>Search your patient profile</strong>
+          <p>
+            Use searchbar below to find your patient <br />
+            profile and start the triage
+          </p>
+          <div class="centered-content">
+            <!-- Your component goes here -->
+            <ToolbarSearch />
+          </div>
+        </div>
+      </ion-content>
+      <ion-content :fullscreen="true" v-else-if="programID() == 14">
+        <div id="containertwo">
+          <div class="centered-content">
+            <ion-card class="section">
+              <ion-card-header> <ion-card-title class="cardTitle"> Today's patients waiting list </ion-card-title></ion-card-header>
+              <ion-card-content>
+                <div class="dueCardContent">
+                  <div class="dueCard" @click="openAllModal('All patients today')" style="border: 1px solid rgb(158, 207, 136)">
+                    <div class="statsValue">0</div>
+                    <div class="statsText">Total patients today</div>
+                  </div>
+                  <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)" @click="openPatientsListModal('Patients waiting for vitals')">
+                    <div class="statsValue">0</div>
+                    <div class="statsText">Waiting for vitals</div>
+                  </div>
+                  <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)" @click="openPatientsListModal('Patients waiting for consultation')">
+                    <div class="statsValue">0</div>
+                    <div class="statsText">Waiting for consultation</div>
+                  </div>
+                  <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)" @click="openPatientsListModal('Patients waiting for dispensation')">
+                    <div class="statsValue">0</div>
+                    <div class="statsText">Waiting for dispensation</div>
+                  </div>
                 </div>
-            </div>
-        </ion-content>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </ion-content>
         <ion-content class="content" v-if="programID() == 33">
             <div class="topStats">
                 <div>
@@ -164,9 +193,12 @@ import { resetDemographics } from "@/services/reset_data";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
+import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
+import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
+import { getBaseURL } from "@/utils/GeneralUti"
+import { setOfflineData } from "@/services/set_location";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
-import { getBaseURL } from "@/utils/GeneralUti";
 
 export default defineComponent({
     name: "Home",
@@ -313,6 +345,19 @@ export default defineComponent({
             const dataToPass = { title: name };
             createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
         },
+
+        openPatientsListModal(name: any) {
+            const dataToPass = { title: name };
+            createModal(OPDWaitingListModal, { class: "fullScreenModal" }, true, dataToPass);
+      },
+      openAllModal(name: any) {
+        const dataToPass = { title: name };
+        createModal(OPDAllPatientsModal, { class: "fullScreenModal" }, true, dataToPass);
+      },
+        async getImagePath() {
+            const BASE_URL = await getBaseURL()
+            this.base_url = BASE_URL + this.base_url
+        }
     },
 });
 </script>
@@ -489,6 +534,15 @@ ion-card {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+}
+#containertwo {
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 30%;
+  transform: translateY(-50%);
 }
 
 #container strong {

@@ -45,26 +45,15 @@ import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
-import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
-import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import { Treatment } from "@/apps/NCD/services/treatment";
-import { isEmpty } from "lodash";
-import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
-import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { useVitalsStore } from "@/stores/VitalsStore";
-import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
-import { WorkflowService } from "@/services/workflow_service";
+import {getFieldValue} from "@/services/data_helpers";
 export default defineComponent({
     name: "Home",
     components: {
@@ -121,6 +110,9 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
+      "Height Weight Reason"() {
+        return getFieldValue(this.vitals, "Height Weight Reason", "value");
+      },
     },
     async created() {
         // this.getData();
