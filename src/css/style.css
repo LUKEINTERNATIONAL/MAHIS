@@ -12,7 +12,14 @@
     --border-color: transparent;
 }
 .solid_bottom_border {
-    border-bottom: 1px solid #b3b3b3;
+    border-bottom: 1px solid #eee;
+}
+.display_center {
+    display: flex;
+    align-items: center;
+}
+.popover {
+    --bs-popover-max-width: none;
 }
 .ellipsis {
     text-overflow: ellipsis;

@@ -26,6 +26,9 @@ import { loadingController } from "@ionic/vue";
 import { AuthService } from "./services/auth_service";
 import Screentimeout from "@/composables/Screentimeout";
 import useFacility from "./composables/useFacility";
+import { useStatusStore } from "@/stores/StatusStore";
+import { storeToRefs } from "pinia";
+import { savePatientRecord } from "@/services/save_records";
 
 export default defineComponent({
     name: "App",
@@ -38,6 +41,7 @@ export default defineComponent({
         ConnectionError: defineAsyncComponent(() => import("@/components/ConnectionError.vue")),
     },
     setup() {
+        const status = useStatusStore();
         const apiOk = ref(true);
         const route = useRoute();
         const notConfigPage = ref(true);
@@ -71,6 +75,7 @@ export default defineComponent({
 
         watch(healthCheckInterval, (interval: any) => {
             apiOk.value = !interval;
+            status.setApiStatus(apiOk.value);
         });
 
         EventBus.on(EventChannels.SHOW_MODAL, (modal: any) => (activeModal.value = modal));
@@ -86,6 +91,7 @@ export default defineComponent({
                 // });
                 // if (confirm) location.reload();
                 toastSuccess("Connection restored");
+                await savePatientRecord();
             }
             if (res && res.status === 401 && route.name != "Login") {
                 router.push("/login");

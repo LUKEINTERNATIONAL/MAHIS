@@ -206,6 +206,45 @@ export default defineComponent({
         const data = await getVaccinesData();
         data.map((item: any) => {
             if (item.name == "missed_immunizations") {
+                if (this.title == "Client due today") {
+                    this.tableData = item.value.due_today_antigens.map((item: any) => {
+                        return [item.drug_name, item.due_count];
+                    });
+                    this.clientDetails = item.value.due_today_clients.map((item: any) => {
+                        return {
+                            given_name: item.table.given_name,
+                            family_name: item.table.family_name,
+                            patient_id: item.table.patient_id,
+                            birthdate: item.table.birthdate,
+                        };
+                    });
+                }
+                if (this.title == "Client due this week") {
+                    this.tableData = item.value.due_this_week_antigens.map((item: any) => {
+                        return [item.drug_name, item.due_count];
+                    });
+                    this.clientDetails = item.value.due_this_week_clients.map((item: any) => {
+                        return {
+                            given_name: item.table.given_name,
+                            family_name: item.table.family_name,
+                            patient_id: item.table.patient_id,
+                            birthdate: item.table.birthdate,
+                        };
+                    });
+                }
+                if (this.title == "Client due this month") {
+                    this.tableData = item.value.due_this_month_antigens.map((item: any) => {
+                        return [item.drug_name, item.due_count];
+                    });
+                    this.clientDetails = item.value.due_this_month_clients.map((item: any) => {
+                        return {
+                            given_name: item.table.given_name,
+                            family_name: item.table.family_name,
+                            patient_id: item.table.patient_id,
+                            birthdate: item.table.birthdate,
+                        };
+                    });
+                }
                 if (this.title == "Client overdue over 5yrs") {
                     this.tableData = item.value.over_five_missed_doses.map((item: any) => {
                         return [item.drug_name, item.missed_doses];

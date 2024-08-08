@@ -46,9 +46,7 @@
         <ion-content class="content" v-if="programID() == 33">
             <div class="topStats">
                 <div>
-                    <div
-                        :style="backgroundStyle"
-                    >
+                    <div :style="backgroundStyle">
                         <!-- :autoplay="4000" -->
                         <Carousel :autoplay="4000" :wrap-around="true" :itemsToShow="1.2" :transition="600" style="padding-top: 20px">
                             <Slide v-for="slide in totalStats" :key="slide">
@@ -100,7 +98,7 @@
                 </ion-card>
                 <ion-card class="section">
                     <ion-card-header>
-                        <ion-card-title class="cardTitle"> Today appointments({{ appointments?.length }}) </ion-card-title></ion-card-header
+                        <ion-card-title class="cardTitle">Today's appointments({{ appointments?.length }}) </ion-card-title></ion-card-header
                     >
                     <ion-card-content>
                         <div
@@ -199,6 +197,9 @@ import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
 import { getBaseURL } from "@/utils/GeneralUti"
 import { setOfflineData } from "@/services/set_location";
+import { setOfflineLocation } from "@/services/set_location";
+import { setOfflineRelationship } from "@/services/set_relationships";
+
 export default defineComponent({
     name: "Home",
     mixins: [SetUser, SetDemographics, SetPrograms],
@@ -232,7 +233,7 @@ export default defineComponent({
             reportData: "" as any,
             appointments: [] as any,
             programBtn: {} as any,
-            base_url:  '/images/backgroundImg.png',
+            base_url: "backgroundImg.png",
             totalStats: [
                 {
                     name: "Total vaccinated this year",
@@ -270,10 +271,10 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         backgroundStyle() {
             return {
-                background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${this.base_url})`,
-                backgroundSize: 'cover',
-                backgroundBlendMode: 'overlay',
-                height: '22.8vh'
+                background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(this.base_url)})`,
+                backgroundSize: "cover",
+                backgroundBlendMode: "overlay",
+                height: "22.8vh",
             };
         },
     },
@@ -289,13 +290,13 @@ export default defineComponent({
         },
     },
     async mounted() {
-        await setOfflineData();
+        await setOfflineLocation();
+        await setOfflineRelationship();
         resetDemographics();
         await this.setAppointments();
         this.setView();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
-        this.getImagePath()
     },
     methods: {
         async setAppointments() {
@@ -310,9 +311,9 @@ export default defineComponent({
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
         },
-        onMessage(event: MessageEvent) {
+        async onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);
-            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
+            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: sessionStorage.getItem("locationID") })) {
                 this.reportData = data.message;
                 console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
                 this.totalStats = [
