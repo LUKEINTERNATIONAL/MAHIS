@@ -16,10 +16,6 @@
       </ion-content>
       <ion-content :fullscreen="true" v-else-if="programID() == 14">
         <div id="containertwo">
-<!--          <strong>Program 14 Content</strong>-->
-<!--          <p>-->
-<!--            Content specific to program 14.-->
-<!--          </p>-->
           <div class="centered-content">
             <ion-card class="section">
               <ion-card-header> <ion-card-title class="cardTitle"> Today's patients waiting list </ion-card-title></ion-card-header>
@@ -27,17 +23,17 @@
                 <div class="dueCardContent">
                   <div class="dueCard" @click="openAllModal('All patients today')" style="border: 1px solid rgb(158, 207, 136)">
                     <div class="statsValue">0</div>
-                    <div class="statsText">All patients</div>
+                    <div class="statsText">Total patients today</div>
                   </div>
-                  <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)" @click="openPatientsListModal('Patients waiting for vitals')">
+                  <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)" @click="openPatientsListModal('Patients waiting for vitals')">
                     <div class="statsValue">0</div>
                     <div class="statsText">Waiting for vitals</div>
                   </div>
-                  <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)" @click="openPatientsListModal('Patients waiting for consultation')">
+                  <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)" @click="openPatientsListModal('Patients waiting for consultation')">
                     <div class="statsValue">0</div>
                     <div class="statsText">Waiting for consultation</div>
                   </div>
-                  <div class="dueCard"style="border: 1px solid rgb(0, 0, 255)" @click="openPatientsListModal('Patients waiting for dispensation')">
+                  <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)" @click="openPatientsListModal('Patients waiting for dispensation')">
                     <div class="statsValue">0</div>
                     <div class="statsText">Waiting for dispensation</div>
                   </div>
