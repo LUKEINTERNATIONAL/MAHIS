@@ -9,36 +9,23 @@
         <ion-content>
             <div class="container">
                 <h1 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h1>
-                <div style="width: 100%; align-items: center">
-                    <div style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
-                        <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
-                    </div>
-                    <div style="display: inline-block; vertical-align: top; margin-top: 10px; float: right">
-                        <ion-button class="addBtn" color="primary" @click="openAddStockModal()">
-                            <div>
-                                <div class="centerBigBtnContain">+ Add Product</div>
-                            </div>
-                        </ion-button>
-                    </div>
+                <div>
+                    <ion-row class="search_header">
+                        <ion-col class="sticky-column"></ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
+                        <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
+                        <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
+                        <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
+                        <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
+                        <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
+                        <ion-col style="max-width: 25px"></ion-col>
+                    </ion-row>
                 </div>
-
-                <DataTable :options="options" :data="reportData" class="display nowrap" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Delivery Date</th>
-                            <th>Batch No</th>
-                            <th>Product Name</th>
-                            <th>In</th>
-                            <th>Out</th>
-                            <th>Current Stock</th>
-                            <th>Expire date</th>
-                        </tr>
-                    </thead>
-                </DataTable>
             </div>
             <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal()">
                 <ion-fab-button color="primary"> <ion-icon :icon="add"></ion-icon> </ion-fab-button>
-                <ion-fab-list side="top"> </ion-fab-list>
             </ion-fab>
         </ion-content>
     </ion-page>
