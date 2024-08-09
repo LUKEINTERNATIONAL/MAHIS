@@ -3,28 +3,6 @@ import { icons } from "@/utils/svg";
 import _ from "lodash";
 const initialStock = [
     {
-        selectedData: {},
-        isFinishBtn: false,
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Batch No.*",
-                            iconRight: icons.scannerIcon,
-                            value: "",
-                            name: "batch",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            valueType: "text",
-                            validationFunctionName: "required",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
         data: {
             rowData: [
                 {
@@ -55,7 +33,27 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Quantity*",
+                            inputHeader: "Batch No.*",
+                            iconRight: icons.scannerIcon,
+                            value: "",
+                            name: "batch",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            valueType: "text",
+                            validationFunctionName: "required",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Manufacturer",
                             value: "",
                             name: "stock in",
                             eventType: "input",
@@ -74,7 +72,105 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Delivery date",
+                            inputHeader: "Expire date*",
+                            icon: icons.calenderPrimary,
+                            value: "",
+                            name: "expire date",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            required: true,
+                            isDatePopover: true,
+                            minDate: "",
+                            maxDate: "",
+                            validationFunctionName: "required",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Dosage Form",
+                            icon: icons.search,
+                            value: "",
+                            name: "product name",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            selectedID: "",
+                            validationFunctionName: "required",
+                            isSingleSelect: true,
+                            trackBy: "id",
+                            multiSelectData: [
+                                { id: 1, name: "vial" },
+                                { id: 2, name: "ampoule" },
+                                { id: 3, name: "tablet" },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "VVM stage",
+                            icon: icons.search,
+                            value: "",
+                            name: "product name",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            selectedID: "",
+                            validationFunctionName: "required",
+                            isSingleSelect: true,
+                            trackBy: "id",
+                            multiSelectData: [
+                                { id: 1, name: "1" },
+                                { id: 2, name: "2" },
+                                { id: 3, name: "3" },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: {},
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Stock Received*",
+                            value: "",
+                            name: "stock in",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            valueType: "text",
+                            validationFunctionName: "required",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Date Received:",
                             icon: icons.calenderPrimary,
                             value: "",
                             name: "delivery_date",
@@ -88,23 +184,20 @@ const initialStock = [
             ],
         },
     },
-
     {
+        selectedData: {},
+        isFinishBtn: false,
         data: {
             rowData: [
                 {
                     colData: [
                         {
-                            inputHeader: "Expire date*",
-                            icon: icons.calenderPrimary,
+                            inputHeader: "Unit doses",
                             value: "",
-                            name: "expire date",
+                            name: "stock in",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            required: true,
-                            isDatePopover: true,
-                            minDate: "",
-                            maxDate: "",
+                            valueType: "text",
                             validationFunctionName: "required",
                         },
                     ],
