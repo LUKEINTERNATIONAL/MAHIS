@@ -10,7 +10,6 @@
     </ion-row>
 </template>
 
-  
 <script lang="ts">
 import { IonRadio, IonRadioGroup, IonItem, IonList } from '@ionic/vue'
 import { defineComponent, PropType } from 'vue'
@@ -60,8 +59,12 @@ export default defineComponent({
             if (_.has(this.selectedOption, 'lotNumber')) {
                 return true;
             } else {
-                toastWarning("Select a batch number!");
-                return false;
+                if (this.checkDrugNameInt() == true) {
+                    return true;
+                } else {
+                    toastWarning("Select a batch number!");
+                    return false;
+                }
             }
         },
         performAction() {
@@ -119,6 +122,9 @@ export default defineComponent({
                     id: currentDrug.drug.drug_id,
                     lotNumber: 'Unknown',
                 })
+                return true
+            } else {
+                return false
             }
         },
     },

@@ -39,13 +39,13 @@
             </div>
         </div>
 
-        <ion-row v-if="show_select_batach">
+        <ion-row v-show="show_select_batach">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                 >Batch numbers<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
 
-        <div v-if="show_select_batach">
+        <div v-show="show_select_batach">
             <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
@@ -200,7 +200,7 @@ export default defineComponent({
                 {
                     concept_id: 11592,
                     drug_id: 1301,
-                    drug_name: "IPV",
+                    drug_name: "Albendazole (200mg tablet)",
                     status: "administered",
                     date_administered: "31/May/2024 15:33:44",
                     vaccine_batch_number: null,
@@ -223,6 +223,7 @@ export default defineComponent({
             showDateBtns: true as boolean,
             selected_date_: '',
             show_select_batach: false,
+            skip_validation: false,
         };
     },
     computed: {
@@ -316,7 +317,8 @@ export default defineComponent({
                 }
 
                 if (checkDrugName(data) == true) {
-                    this.show_select_batach = true;
+                    this.show_select_batach = false;
+                    this.skip_validation = true;
                 } 
             }
 
@@ -358,7 +360,9 @@ export default defineComponent({
                 this.triggerChildAction()
 
                 if (this.show_select_batach == false) {
-                    toastDanger("Please Update Stock for Selected Vaccine")
+                    if (this.skip_validation == false) {
+                        toastDanger("Please Update Stock for Selected Vaccine")
+                    } 
                 }
             }
             // this.validateBatchNumber();

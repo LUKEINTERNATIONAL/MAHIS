@@ -14,12 +14,12 @@
         <ion-row>
             <ion-label style="font-weight: 600px; font-size: 20px; margin: 10px; margin-left: 0px">{{ drugName }}</ion-label>
         </ion-row>
-        <ion-row>
+        <ion-row v-show="is_a_vaccine">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                 >Select Batch number<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
-        <div>
+        <div v-show="is_a_vaccine">
             <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
@@ -110,6 +110,7 @@ import {
 } from "@/services/data_helpers";
 import { useUserStore } from "@/stores/userStore";
 import lotNumberList from "./lotNumberList.vue"
+import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
 
 export default defineComponent({
     components: {
@@ -148,6 +149,7 @@ export default defineComponent({
                 },
             },
             selected_date_: '',
+            is_a_vaccine: true,
         };
     },
     computed: {
@@ -201,12 +203,15 @@ export default defineComponent({
             this.currentDrug = store.getCurrentSelectedDrug();
             this.drugName = this.currentDrug.drug.drug_name;
             this.batchNumber = this.currentDrug.drug.vaccine_batch_number ? this.currentDrug.drug.vaccine_batch_number : "";
+
+            if (checkDrugName(this.currentDrug.drug) == true) {
+                this.is_a_vaccine = false;
+                this.batchNumber = 'unknown';
+            }
         },
         showCPD() {
             this.showPD = true as boolean;
             this.showDateBtns = false as boolean;
-
-
         },
         dismiss() {
             modalController.dismiss();
@@ -233,7 +238,6 @@ export default defineComponent({
             this.batchNumber = input || this.tempScannedBatchNumber?.text || "";
         },
         ActionTriggered(selectedOption: any) {
-            console.log(selectedOption)
             const dta = {
                 batch_number: selectedOption.lotNumber,
                 date_administered: this.selected_date_,
