@@ -50,9 +50,10 @@ import administerVaccineModal from "@/apps/Immunization/components/Modals/admini
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { PatientService } from "@/services/patient_service";
-import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdminstredVaccine.vue"
-import { StockService } from '@/services/stock_service'
-import alert from "@/apps/Immunization/components/Modals/alert.vue"
+import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdminstredVaccine.vue";
+import { StockService } from '@/services/stock_service';
+import alert from "@/apps/Immunization/components/Modals/alert.vue";
+import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
 import { mapState } from "pinia";
 export default defineComponent({
     name: "Home",
@@ -152,7 +153,13 @@ export default defineComponent({
 
             if(data_.length == 0) {
                 if (this.checkIfAdminstredAndAskToVoid() == false) {
-                    createModal(alert, { class: "otherVitalsModal" })
+                    if(checkDrugName(data) == false) {
+                        createModal(alert, { class: "otherVitalsModal" })
+                    }
+
+                    if (checkDrugName(data) == true) {
+                        createModal(administerVaccineModal, { class: "otherVitalsModal" });
+                    } 
                 }
             }
 

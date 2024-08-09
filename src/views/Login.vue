@@ -101,6 +101,8 @@ import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
 import ProgramData from "@/Data/ProgramData";
+import { getUserLocation } from "@/services/userService"
+import { useUserStore } from "@/stores/userStore";
 
 export default defineComponent({
     name: "Home",
@@ -168,7 +170,9 @@ export default defineComponent({
                     //     throw "Local date does not match API date. Please Update your device's date";
                     // }
                     await this.auth.login(this.password);
+                
                     if (this.auth.checkUserPrograms(this.program.name)) {
+                        this.facilityB()
                         this.$router.push("/home");
                     } else {
                         toastDanger("You don't have permission to access the program.");
@@ -194,6 +198,11 @@ export default defineComponent({
         loginIcon() {
             return img("mw.png");
         },
+        async facilityB() {
+            const store = useUserStore();
+            const data = await getUserLocation();
+            store.setUserFacilityName(data.name);
+        }
     },
 });
 </script>

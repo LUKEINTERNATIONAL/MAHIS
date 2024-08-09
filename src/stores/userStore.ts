@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
+import { getUserLocation } from "@/services/userService"
 
 export const useUserStore = defineStore("userStore", {
     state: () => ({
         user: {} as any,
-        showUserProfileEdit: false as boolean
+        showUserProfileEdit: false as boolean,
+        userFacilityName: '',
     }),
     actions: {
         setUser(data: any): void {
@@ -17,6 +19,9 @@ export const useUserStore = defineStore("userStore", {
         },
         getShowUserProfileEdit(): boolean {
             return this.showUserProfileEdit
+        },
+        setUserFacilityName(name: string) {
+            this.userFacilityName = "Facility name: "+name
         }
     },
     persist: true,
