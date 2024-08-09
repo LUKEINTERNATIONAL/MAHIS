@@ -6,22 +6,121 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content>
+        <ion-content style="--background: #fff">
             <div class="container">
                 <h1 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h1>
-                <div>
+                <div style="width: 50vw; top: -10px; position: relative; margin-right: 10px">
+                    <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
+                </div>
+                <div class="drug_content">
                     <ion-row class="search_header">
-                        <ion-col class="sticky-column"></ion-col>
+                        <ion-col class="sticky-column"><h1>BCG</h1> </ion-col>
                     </ion-row>
                     <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
-                        <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
-                        <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
-                        <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
-                        <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
-                        <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
-                        <ion-col style="max-width: 25px"></ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Batch/Lot Number</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">34RT</ion-col>
                     </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Manufacturer</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">bundle</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Expiration date</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">20 Jan 2024</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Dosage Form </ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">vial</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage </ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">3</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">20 Jan 2024</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Issued</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Available</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Current Stock</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Unit Doses</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <div>
+                        <div>
+                            <DynamicButton color="danger" name="Discard Stock" />
+                            <DynamicButton color="success" name="Update Stock" />
+                        </div>
+                    </div>
+                </div>
+                <div class="drug_content">
+                    <ion-row class="search_header">
+                        <ion-col class="sticky-column"><h1>OPV0</h1> </ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Batch/Lot Number</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">34RT</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Manufacturer</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">bundle</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Expiration date</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">20 Jan 2024</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Dosage Form </ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">vial</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage </ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">3</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">20 Jan 2024</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Issued</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Available</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Current Stock</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <ion-row class="search_header">
+                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Unit Doses</ion-col>
+                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                    </ion-row>
+                    <div>
+                        <div>
+                            <DynamicButton color="danger" name="Discard Stock" />
+                            <DynamicButton color="success" name="Update Stock" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal()">
@@ -46,6 +145,7 @@ import {
     IonRow,
     IonCol,
     IonCard,
+    IonButton,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -74,6 +174,7 @@ import { createModal } from "@/utils/Alerts";
 import { StockService } from "@/services/stock_service";
 import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
+import { useSearchName } from "@/stores/SearchName";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
@@ -117,6 +218,7 @@ export default defineComponent({
         IonFab,
         IonFabButton,
         IonFabList,
+        IonButton,
     },
     data() {
         return {
@@ -152,7 +254,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useStockStore, ["stock"]),
-        ...mapState(useStartEndDate, ["startEndDate"]),
+        ...mapState(useSearchName, ["searchName"]),
     },
     $route: {
         async handler() {},
@@ -230,6 +332,18 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.contentBold {
+    font-weight: 700;
+}
+.container {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+.drug_content {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #f2f2f2;
+}
 .bigGroupButton {
     margin-top: 10px;
 }
@@ -443,10 +557,7 @@ export default defineComponent({
     margin-bottom: 10px;
 }
 ion-button {
-    height: 60px;
-    margin: 20px;
-    margin-left: 0px;
-    margin-right: 8px;
+    margin-right: 30px;
 }
 .addBtn {
     height: 50px;
