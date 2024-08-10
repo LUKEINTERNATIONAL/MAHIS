@@ -41,7 +41,7 @@
                 <TruncateText
                     style="margin-left: 10px;" 
                     class="date-value"
-                    :text=site
+                    :text=userFacilityName
                     :maxLines="1"
                 />
             </ion-col>
@@ -73,7 +73,7 @@ import { useProgramStore } from "@/stores/ProgramStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import TruncateText from '@/components/TruncateText.vue'
-import { getUserLocation } from "@/services/userService"
+import { useUserStore } from "@/stores/userStore";
 export default defineComponent({
     name: "Home",
     components: {
@@ -101,7 +101,6 @@ export default defineComponent({
             programName: "",
             showUserProfileModal: false,
             sessionDate: 'Date: '+HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
-            site: '',
         };
     },
     watch: {
@@ -114,10 +113,10 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useProgramStore, ["programs"]),
+        ...mapState(useUserStore, ["userFacilityName"]),
     },
     mounted() {
         this.updateData();
-        this.loadUserFacilityDetails()
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
@@ -140,10 +139,6 @@ export default defineComponent({
         modalClosed() {
            this.showUserProfileModal = false;
         },
-        async loadUserFacilityDetails() {
-            const data = await getUserLocation()
-            this.site = "Facility name: "+ data.name
-        }
     },
 });
 </script>
