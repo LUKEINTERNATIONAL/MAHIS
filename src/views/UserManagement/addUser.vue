@@ -54,7 +54,30 @@
                     </ion-label>
                 </div>
             </ion-col>
-            <ion-col></ion-col>
+
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Phone<span style="color: #b42318">*</span></ion-label
+            >
+                <BasicInputField
+                    :placeholder="'phone number'"
+                    :icon="phonePortraitOutline"
+                    :inputValue="''"
+                    @update:inputValue=""
+                />
+                <!-- <BasicInputField
+                    :placeholder="input_properties[3].placeHolder"
+                    :icon="phonePortraitOutline"
+                    :inputValue="user_name"
+                    @update:inputValue="input_properties[3].dataHandler"
+                /> -->
+
+                <!-- <div>
+                    <ion-label v-if="input_properties[3].show_error.value" class="error-label">
+                        {{ input_properties[3].error_message }}
+                    </ion-label>
+                </div> -->
+            </ion-col>
     </ion-row>
 
     <ion-row>
@@ -323,7 +346,8 @@ import {
     keyOutline,
     transgenderOutline,
     personOutline,
-    peopleOutline
+    peopleOutline,
+    phonePortraitOutline,
 } from "ionicons/icons"
 import { UserService } from "@/services/user_service"
 import { ProgramService } from "@/services/program_service"
@@ -713,7 +737,6 @@ const input_properties = [
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
-        type: 'text',
     },
     {
         placeHolder: 'firstname',
@@ -722,7 +745,6 @@ const input_properties = [
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
-        type: 'text',
     },
     {
         placeHolder: 'last name',
@@ -731,8 +753,15 @@ const input_properties = [
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
-        type: 'text',
     },
+    // {
+    //     placeHolder: 'phone number',
+    //     property_name: 'phone_number',
+    //     dataHandler: inputUpDated_fn4,
+    //     dataValue: ref(),
+    //     show_error: ref(false),
+    //     error_message: 'Input required, valid input',
+    // },
 ]
 
 const password_input_properties = [
@@ -842,6 +871,10 @@ function inputUpDated_fn2(event: any) {
 function inputUpDated_fn3(event: any) {
     const input = event.target.value
     input_properties[2].dataValue.value = input
+}
+function inputUpDated_fn4(event: any) {
+    // const input = event.target.value
+    // input_properties[2].dataValue.value = input
 }
 function passwordInputUpDated_fn1(event: any) {
     const input = event.target.value

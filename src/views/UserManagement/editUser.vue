@@ -54,7 +54,18 @@
                     </ion-label>
                 </div>
             </ion-col>
-            <ion-col></ion-col>
+
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Phone<span style="color: #b42318">*</span></ion-label
+            >
+                <BasicInputField
+                    :placeholder="'phone number'"
+                    :icon="phonePortraitOutline"
+                    :inputValue="''"
+                    @update:inputValue=""
+                />
+            </ion-col>
     </ion-row>
 
 
@@ -342,7 +353,8 @@ import {
     keyOutline,
     transgenderOutline,
     personOutline,
-    peopleOutline
+    peopleOutline,
+    phonePortraitOutline,
 } from "ionicons/icons";
 import { ref, onMounted, watch } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
