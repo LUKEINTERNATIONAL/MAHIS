@@ -2,7 +2,10 @@
     <ion-page>
         <Toolbar/>
         <ion-content :fullscreen="true">
-            <rawTable/>
+            <!-- <rawTable/> -->
+             <NavigationMenu/>
+             <MonthsPicker/>
+             <ReportTable/>
         </ion-content>
     </ion-page>
 </template>
@@ -12,7 +15,10 @@
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
-import rawTable from './rawTable.vue'
+import rawTable from './rawTable.vue';
+import MonthsPicker from'./MonthsPicker.vue';
+import NavigationMenu from './NavigationMenu.vue';
+import ReportTable from './ReportTable.vue';
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
@@ -26,6 +32,9 @@ export default defineComponent({
         Toolbar,
         IonRow,
         rawTable,
+        MonthsPicker,
+        NavigationMenu,
+        ReportTable,
     },
     data() {
         return {

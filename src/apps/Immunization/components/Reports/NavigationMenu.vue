@@ -1,0 +1,63 @@
+<template>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button v-if="canGoBack" :default-href="backHref"></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{ title }}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button v-if="canGoForward" @click="goForward">
+          <ion-icon :icon="arrowForward"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonIcon } from '@ionic/vue';
+import { arrowForward } from 'ionicons/icons';
+
+export default defineComponent({
+  name: 'NavigationMenu',
+  components: {
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonTitle,
+    IonButton,
+    IonIcon
+  },
+  props: {
+    title: {
+      type: String,
+      default: 'Navigation'
+    },
+    canGoBack: {
+      type: Boolean,
+      default: true
+    },
+    canGoForward: {
+      type: Boolean,
+      default: true
+    },
+    backHref: {
+      type: String,
+      default: '/'
+    }
+  },
+  setup() {
+    const goForward = () => {
+      // Implement your forward navigation logic here
+      console.log('Navigate forward');
+    };
+
+    return {
+      arrowForward,
+      goForward
+    };
+  }
+});
+</script>
