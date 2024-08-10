@@ -111,7 +111,7 @@ export default defineComponent({
                                 barcode: "",
                                 drug_id: getFieldValue(this.stock, "product name", "value").drug_id,
                                 expiry_date: getFieldValue(this.stock, "expire date", "value"),
-                                quantity: getFieldValue(this.stock, "stock in", "value"),
+                                quantity: getFieldValue(this.stock, "stock received", "value"),
                                 delivery_date: getFieldValue(this.stock, "delivery_date", "value") || HisDate.currentDate(),
                                 product_code: "",
                                 pack_size: "",
