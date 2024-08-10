@@ -1,6 +1,4 @@
 <template>
-    
-
     <ion-row>
         <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"

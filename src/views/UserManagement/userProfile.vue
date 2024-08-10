@@ -6,7 +6,6 @@
     import editUserModal from "./editUserModal.vue";
     import { useUserStore } from "@/stores/userStore";
     import { mapState } from "pinia";
-    import { Service } from "@/services/service";
 
     export default defineComponent({
         components: {
@@ -15,17 +14,29 @@
         data() {
             return {
                 isPopooverOpen: false,
-                user_id: Service.getUserID(),
+                user_id: this.getUser_Id(),
             }
         },
         computed: {
-            ...mapState(useUserStore, ["showUserProfileEdit"]),
+            ...mapState(useUserStore, ["showUserProfileEdit", "user_ID"]),
+        },
+        watch: {
+            user_ID: {
+                handler() {
+                    this.user_id = this.getUser_Id();
+                },
+                deep: true,
+            },
         },
         props: ["showModal"],
         methods: {
             modalClosed() {
                 this.$emit("closePopoover", false);
-            }
+            },
+            getUser_Id() {
+                const store = useUserStore();
+                return store.getUserId()
+            },
         }
     })
 </script>
