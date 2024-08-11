@@ -3,10 +3,10 @@
       <table class="custom-table">
         <colgroup>
           <col style="width: 20%;" />
-          <col style="width: 15%;" />
-          <col style="width: 15%;" />
-          <col style="width: 25%;" />
-          <col style="width: 25%;" />
+          <col style="width: 20%;" />
+          <col style="width: 20%;" />
+          <col style="width: 20%;" />
+          <col style="width: 20%;" />
         </colgroup>
         <thead>
           <tr>
