@@ -1,5 +1,6 @@
 <template>
   <ion-page>
+    <NavigationMenu/>
     <ion-content class="ion-padding">
       <table class="custom-table">
         <colgroup>
@@ -108,10 +109,11 @@
   <script lang="ts">
   import { defineComponent } from 'vue';
   import { IonContent , IonPage} from '@ionic/vue';
+  import NavigationMenu from './NavigationMenu.vue';
   
   export default defineComponent({
     name: 'TableComponent',
-    components: { IonContent, IonPage },
+    components: { IonContent, IonPage, NavigationMenu },
     data() {
       return {
         selectedSection: '', // To keep track of the selected section
