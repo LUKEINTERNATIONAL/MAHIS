@@ -91,8 +91,23 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useStockStore, ["stock"]),
     },
+    props: {
+        data: {
+            default: {} as any,
+        },
+    },
     async mounted() {
         this.resetData();
+        modifyFieldValue(this.stock, "product name", "value", this.data.drug_legacy_name);
+        modifyFieldValue(this.stock, "batch", "value", this.data.batch_number);
+        modifyFieldValue(this.stock, "manufacturer", "value", this.data.drug_legacy_name);
+        modifyFieldValue(this.stock, "expire date", "value", this.data.expiry_date);
+        modifyFieldValue(this.stock, "dosage forme", "value", this.data.drug_legacy_name);
+        modifyFieldValue(this.stock, "vvm stage", "value", this.data.drug_legacy_name);
+        modifyFieldValue(this.stock, "stock receive", "value", this.data.dispensed_quantity);
+        modifyFieldValue(this.stock, "delivery_date", "value", this.data.delivery_date);
+        modifyFieldValue(this.stock, "unit doses", "value", this.data.drug_legacy_name);
+
         await this.getDrugs();
     },
     setup() {
