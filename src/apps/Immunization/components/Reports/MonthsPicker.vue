@@ -47,6 +47,7 @@ export default defineComponent({
   },
   methods: {
     navigationMenu(url: string) {
+      this.initNavData()
       this.$router.push(url)
     },
     initNavData() {
