@@ -68,7 +68,7 @@ export default defineComponent({
     },
     initOwnNavData() {
       const store = EIRreportsStore()
-      store.setNavigationPayload('Pick Month', false, false, '/', '/')
+      store.setNavigationPayload('Pick Month', true, false, '/', 'home')
     },
   }
 });
