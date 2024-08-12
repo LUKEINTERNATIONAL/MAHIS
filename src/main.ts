@@ -9,6 +9,8 @@ import { createPinia } from "pinia";
 import piniaPluginPersistedState from "pinia-plugin-persistedstate";
 
 import VueDatePicker from "@vuepic/vue-datepicker";
+import VueAwesomePaginate from "vue-awesome-paginate";
+import "vue-awesome-paginate/dist/style.css";
 
 import "@vuepic/vue-datepicker/dist/main.css";
 import "vue3-easy-data-table/dist/style.css";
@@ -40,7 +42,7 @@ import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 
 const pinia = createPinia();
-const app = createApp(App).use(IonicVue).use(router).use(pinia);
+const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePaginate);
 
 app.component("VueDatePicker", VueDatePicker);
 app.component("EasyDataTable", Vue3EasyDataTable);
