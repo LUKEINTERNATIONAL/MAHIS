@@ -9,10 +9,10 @@ const initialName = [
                 {
                     colData: [
                         {
-                            inputHeader: "Product Name",
+                            inputHeader: "Search",
                             icon: icons.search,
                             value: "",
-                            name: "product name",
+                            name: "search",
                             eventType: "input",
                             alertsErrorMassage: "",
                             selectedID: "",
