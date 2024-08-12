@@ -33,7 +33,7 @@ export default defineComponent({
   props: {
     title: {
       type: String,
-      default: 'Navigation'
+      default: 'Months List'
     },
     canGoBack: {
       type: Boolean,

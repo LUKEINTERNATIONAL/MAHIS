@@ -1,11 +1,11 @@
 <template>
   <ion-list>
     <ion-card v-for="task in tasks" :key="task.month">
-      <ion-card-content>
+      <ion-card-content style="cursor: pointer;">
         <ion-item lines="none">
           <ion-label>
             <h2>{{ task.month }}</h2>
-            <p v-if="task.completed" class="completed-text">✓ Completed</p>
+            <!-- <p v-if="task.completed" class="completed-text">✓ Completed</p> -->
           </ion-label>
           <ion-note slot="end">{{ task.date }}</ion-note>
         </ion-item>
