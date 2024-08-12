@@ -1,5 +1,6 @@
 <template>
     <ion-list>
+      <ion-card>
       <ion-item v-for="task in tasks" :key="task.month">
         <ion-label>
           <h2>{{ task.month }}</h2>
@@ -7,12 +8,13 @@
         </ion-label>
         <ion-note slot="end">{{ task.date }}</ion-note>
       </ion-item>
+    </ion-card>
     </ion-list>
   </template>
   
   <script lang="ts">
   import { defineComponent } from 'vue';
-  import { IonList, IonItem, IonLabel, IonNote } from '@ionic/vue';
+  import { IonList, IonItem, IonLabel, IonNote, IonCard } from '@ionic/vue';
   
   interface Task {
     month: string;
@@ -41,7 +43,7 @@
   
   <style scoped>
   ion-list {
-    background-color: #e6f3ff;
+    background-color: inherit;
     border-radius: 10px;
     padding: 10px;
   }

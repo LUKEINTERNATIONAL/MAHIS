@@ -3,9 +3,9 @@
         <Toolbar/>
         <ion-content :fullscreen="true">
             <!-- <rawTable/> -->
-             <NavigationMenu/>
+             <NavigationMenu style="margin-top: 10px;"/>
              <MonthsPicker/>
-             <ReportTable/>
+             <ReportTable v-if="false"/>
         </ion-content>
     </ion-page>
 </template>
