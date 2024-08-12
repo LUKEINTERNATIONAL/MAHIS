@@ -171,10 +171,12 @@
   </script>
   
   
+
   <style scoped>
   .custom-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     background-color: #f0f0f0;
   }
   
@@ -194,8 +196,31 @@
     background-color: #f8f8f8;
   }
   
+  /* Make the second column line blue */
+  .custom-table th:nth-child(1),
+  .custom-table td:nth-child(1) {
+    border-right: 1px solid blue;
+  }
+  
+  /* Make the first and second row lines in the header blue, starting from the second column */
+  .custom-table thead tr:nth-child(1) th:not(:first-child),
+  .custom-table thead tr:nth-child(2) th:not(:first-child) {
+    border-bottom: 1px solid blue;
+  }
+  
+  /* Remove left border from the first column */
+  .custom-table th:first-child,
+  .custom-table td:first-child {
+    border-left: none;
+  }
+  
+  /* Remove top border from the first row */
+  .custom-table thead tr:first-child th {
+    border-top: none;
+  }
+  
   .custom-table .selected {
-    background-color: #c0c0ff; /* Change this to your desired highlight color */
+    background-color: #c0c0ff;
   }
   
   .editable-input {
@@ -208,8 +233,7 @@
   }
   
   .editable-input:focus {
-    background-color: #e0e0ff; /* Highlight color when the input is focused */
+    background-color: #e0e0ff;
   }
   </style>
-  
   
