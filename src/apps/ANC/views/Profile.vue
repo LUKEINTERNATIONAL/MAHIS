@@ -74,6 +74,7 @@ import calculateAge from "@/utils/Date";
 export default defineComponent({
     name: "Home",
     components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,

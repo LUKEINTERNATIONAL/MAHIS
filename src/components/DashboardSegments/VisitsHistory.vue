@@ -113,6 +113,7 @@
                         <span class="nextDate">06 September 2024</span>
                     </div>
                     <div class="noData" v-else>No next appointment was set</div>
+                    <div class="noData" v-else>ANC-Profile</div>
                 </div>
             </ion-col>
         </ion-row>
