@@ -12,65 +12,70 @@
                 <div style="width: 80vw; top: -10px; position: relative; margin-right: 10px">
                     <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
                 </div>
-                <div class="drug_content" v-for="(item, index) in reportData" :key="index">
-                    <ion-row class="search_header">
-                        <ion-col class="sticky-column"
-                            ><h1>{{ item.drug_legacy_name }}</h1>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Batch/Lot Number</ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.batch_number }}</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Manufacturer</ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">Zodiak</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Expiration date</ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.expiry_date) }}</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Dosage Form </ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">vial</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage </ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">3</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Issued</ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Available</ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dispensed_quantity }}</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Current Stock</ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage</ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
-                    </ion-row>
-                    <ion-row class="search_header">
-                        <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Unit Doses</ion-col>
-                        <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
-                    </ion-row>
-                    <div>
+                <div class="drug_container">
+                    <div class="drug_content" v-for="(item, index) in reportData" :key="index">
+                        <ion-row class="search_header">
+                            <ion-col class="">
+                                <span style="font-weight: 700; font-size: 14px; color: #939393">{{ item.drug_legacy_name }}</span>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Batch/Lot Number</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.batch_number }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Manufacturer</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">Zodiak</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Expiration date</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.expiry_date) }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Dosage Form </ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">vial</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage </ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">3</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Issued</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Available</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dispensed_quantity }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Current Stock</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Unit Doses</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                        </ion-row>
                         <div>
-                            <DynamicButton color="danger" name="Discard Stock" />
-                            <DynamicButton color="success" name="Update Stock" />
+                            <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px">Discard Stock</ion-button>
+                            <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openAddStockModal(item)"
+                                >Update Stock</ion-button
+                            >
                         </div>
                     </div>
                 </div>
+                <div class="example-one">
+                    <vue-awesome-paginate :total-items="100" :items-per-page="5" :max-pages-shown="2" v-model="currentPage" />
+                </div>
             </div>
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal()">
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')">
                 <ion-fab-button color="primary"> <ion-icon :icon="add"></ion-icon> </ion-fab-button>
             </ion-fab>
         </ion-content>
@@ -94,7 +99,7 @@ import {
     IonCard,
     IonButton,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { Service } from "@/services/service";
@@ -185,7 +190,10 @@ export default defineComponent({
         };
     },
     setup() {
+        const currentPage = ref(1);
+
         return {
+            currentPage,
             chevronBackOutline,
             checkmark,
             grid,
@@ -224,19 +232,15 @@ export default defineComponent({
             return HisDate.toStandardHisDisplayFormat(date);
         },
         async handleInputData(event: any) {
-            if (event.inputHeader == "Start date") {
-                this.startDate = HisDate.toStandardHisFormat(event.value);
+            if (event.inputHeader == "Search") {
+                await this.buildTableData(event.value);
             }
-            if (event.inputHeader == "End date") {
-                this.endDate = HisDate.toStandardHisFormat(event.value);
-            }
-            await this.buildTableData();
         },
-        async buildTableData() {
+        async buildTableData(drugName = "") {
             this.isLoading = true;
             try {
                 const stockService = new StockService();
-                this.reportData = await stockService.getItems("2000-01-01", this.endDate);
+                this.reportData = await stockService.getItems("2000-01-01", this.endDate, drugName);
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
@@ -247,19 +251,63 @@ export default defineComponent({
             this.selectedButton = button;
             await this.buildTableData();
         },
-        async openAddStockModal() {
-            const data: any = await createModal(AddStockModal, { class: "otherVitalsModal" });
-            if (data == "dismiss") {
+        async openAddStockModal(data: any) {
+            const response: any = await createModal(AddStockModal, { class: "otherVitalsModal" }, true, { data: data });
+            if (response == "dismiss") {
                 await this.buildTableData();
             }
         },
     },
 });
 </script>
-
+<style>
+.example-one .pagination-container {
+    column-gap: 10px;
+}
+.example-one .paginate-buttons {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: rgb(242, 242, 242);
+    border: 1px solid rgb(217, 217, 217);
+    color: black;
+}
+.example-one .paginate-buttons:hover {
+    background-color: #d8d8d8;
+}
+.example-one .active-page {
+    background-color: #3498db;
+    border: 1px solid #3498db;
+    color: white;
+}
+.example-one .active-page:hover {
+    background-color: #2988c8;
+}
+.example-one .back-button:active,
+.example-one .next-button:active {
+    background-color: #c4c4c4;
+}
+</style>
 <style scoped>
+.drug_container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 20px;
+}
+ion-row {
+    line-height: 10px;
+}
+.content {
+    font-size: 12px;
+    color: #939393;
+}
 .contentBold {
     font-weight: 700;
+    font-size: 12px;
+    color: gray;
 }
 .container {
     display: flex;
@@ -267,7 +315,8 @@ export default defineComponent({
     align-items: center;
 }
 .drug_content {
-    padding-bottom: 5px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
     border-bottom: 1px solid #f2f2f2;
 }
 .bigGroupButton {
@@ -483,7 +532,7 @@ export default defineComponent({
     margin-bottom: 10px;
 }
 ion-button {
-    margin-right: 30px;
+    margin-right: 10px;
 }
 .addBtn {
     height: 50px;
