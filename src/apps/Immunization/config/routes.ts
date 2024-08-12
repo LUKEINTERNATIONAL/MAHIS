@@ -1,7 +1,6 @@
 
-import EIPMReport from "@/apps/Immunization/components/Reports/EIPMReport.vue"
-import ReportTable from "@/apps/Immunization/components/Reports/ReportTable.vue";
-import { Component } from "ionicons/dist/types/stencil-public-runtime";
+import EIPMReport from "@/apps/Immunization/components/Reports/EIPMReport.vue";
+import EIR_Report from "@/apps/Immunization/components/Reports/EIR_Report.vue";
 export default [
     {
         path: "/EIPMReport",
@@ -9,8 +8,8 @@ export default [
         component: EIPMReport,
     },
     {
-        path: "/EIPMReport",
-        name: "EIPMReport1",
-        Component: ReportTable
+        path: "/EIRReport",
+        name: "EIRReport",
+        Component: EIR_Report,
     }
 ];

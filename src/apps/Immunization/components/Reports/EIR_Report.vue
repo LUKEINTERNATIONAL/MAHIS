@@ -1,4 +1,5 @@
 <template>
+  <ion-page>
     <ion-content class="ion-padding">
       <table class="custom-table">
         <colgroup>
@@ -100,16 +101,17 @@
         </tbody>
       </table>
     </ion-content>
+  </ion-page>
+
   </template>
-  
   
   <script lang="ts">
   import { defineComponent } from 'vue';
-  import { IonContent } from '@ionic/vue';
+  import { IonContent , IonPage} from '@ionic/vue';
   
   export default defineComponent({
     name: 'TableComponent',
-    components: { IonContent },
+    components: { IonContent, IonPage },
     data() {
       return {
         selectedSection: '', // To keep track of the selected section

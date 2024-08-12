@@ -9,11 +9,11 @@ import { defineComponent } from "vue";
 import { HMISReportService } from "@/apps/OPD/services/hmis_report_service";
 import { Service } from "@/services/service";
 import dayjs from "dayjs";
-import ReportTable from "@/components/DataViews/tables/ReportDataTable.vue";
+import EIRReport1 from "@/components/DataViews/tables/ReportDataTable.vue";
 import table, { ColumnInterface, RowInterface } from "@/components/DataViews/tables/ReportDataTable";
 
 export default defineComponent({
-    components: { ReportTable },
+    components: { EIRReport1 },
     data: function () {
         return {
             conditions: [] as any,

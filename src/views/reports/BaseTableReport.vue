@@ -93,7 +93,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import HisFooter from "@/components/HisDynamicNavFooter.vue";
-import ReportTable from "@/components/DataViews/tables/ReportDataTable.vue";
+import EIRReport1 from "@/components/DataViews/tables/ReportDataTable.vue";
 import { toCsv, toTablePDF } from "@/utils/Export";
 import { toExportableFormat, ColumnInterface, RowInterface } from "@/components/DataViews/tables/ReportDataTable";
 import HisStandardForm from "@/components/Forms/HisStandardForm.vue";
@@ -125,7 +125,7 @@ export default defineComponent({
     components: {
         HisStandardForm,
         IonHeader,
-        ReportTable,
+        EIRReport1,
         HisFooter,
         IonPage,
         IonContent,

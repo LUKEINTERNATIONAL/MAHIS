@@ -10,11 +10,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import ReportTable from "@/components/DataViews/tables/ReportDataTable.vue"
+import EIRReport1 from "@/components/DataViews/tables/ReportDataTable.vue"
 import table, { ColumnInterface, RowInterface } from "@/components/DataViews/tables/ReportDataTable"
 
 export default defineComponent({
-    components: { ReportTable },
+    components: { EIRReport1 },
     props: {
       clinicName: {
         type: String,

@@ -1,7 +1,7 @@
 <template>
   <ion-list>
     <ion-card v-for="task in tasks" :key="task.month">
-      <ion-card-content style="cursor: pointer;">
+      <ion-card-content style="cursor: pointer;" @click="navigationMenu('EIRReport')">
         <ion-item lines="none">
           <ion-label>
             <h2>{{ task.month }}</h2>
@@ -39,7 +39,12 @@ export default defineComponent({
         { month: 'May 2024', completed: true, date: '7/8/2024' },
       ] as Task[]
     };
-  }
+  },
+  methods: {
+    navigationMenu(url: string) {
+      this.$router.push(url)
+    }
+  },
 });
 </script>
 
