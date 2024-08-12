@@ -5,7 +5,7 @@ export const EIRreportsStore = defineStore("EIRreportsStore", {
         navigationPayload: {},
     }),
     actions: {
-        setNavigationPayload(title: string, canGoBack: string,canGoForward: string,  backHref: string, previousRoute: string): void{
+        setNavigationPayload(title: string, canGoBack: boolean, canGoForward: boolean,  backHref: string, previousRoute: string): void{
             const data = {
                 title: title,
                 canGoBack: canGoBack,
