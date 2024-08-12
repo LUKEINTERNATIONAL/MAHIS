@@ -5,7 +5,7 @@
         <ion-item lines="none">
           <ion-label>
             <h2>{{ task.month }}</h2>
-            <!-- <p v-if="task.completed" class="completed-text">✓ Completed</p> -->
+            <p v-if="task.completed" class="completed-text">✓ Completed</p>
           </ion-label>
           <ion-note slot="end">{{ task.date }}</ion-note>
         </ion-item>

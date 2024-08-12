@@ -1,11 +1,10 @@
 <template>
     <ion-page>
-        <Toolbar/>
+        <NavigationMenu/>
         <ion-content :fullscreen="true">
             <!-- <rawTable/> -->
-             <NavigationMenu style="margin-top: 10px;"/>
              <MonthsPicker/>
-             <ReportTable v-if="false"/>
+             <ReportTable v-if="true"/>
         </ion-content>
     </ion-page>
 </template>

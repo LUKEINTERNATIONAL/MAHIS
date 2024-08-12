@@ -41,7 +41,7 @@ export default defineComponent({
     },
     canGoForward: {
       type: Boolean,
-      default: true
+      default: false
     },
     backHref: {
       type: String,
