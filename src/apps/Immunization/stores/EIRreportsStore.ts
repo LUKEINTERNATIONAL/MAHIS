@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-export const useChangeStatusStore = defineStore("ChangeStatusStore", {
+export const EIRreportsStore = defineStore("EIRreportsStore", {
     state: () => ({
         navigationPayload: {},
         previousRoute: '',

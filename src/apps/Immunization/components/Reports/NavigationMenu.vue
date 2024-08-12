@@ -18,6 +18,8 @@
 import { defineComponent } from 'vue';
 import { IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonIcon } from '@ionic/vue';
 import { arrowForward } from 'ionicons/icons';
+import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { mapState } from "pinia";
 
 export default defineComponent({
   name: 'NavigationMenu',
@@ -29,6 +31,11 @@ export default defineComponent({
     IonTitle,
     IonButton,
     IonIcon
+  },
+  data() {
+      return {
+          backwardsPath: '',
+      }
   },
   props: {
     title: {
@@ -47,6 +54,18 @@ export default defineComponent({
       type: String,
       default: '/'
     }
+  },
+  computed: {
+    ...mapState(EIRreportsStore, ["previousRoute"]),
+      
+  },
+  watch: {
+    previousRoute: {
+          handler() {
+              this.backwardsPath = this.previousRoute;
+          },
+          deep: true,
+      },
   },
   setup() {
     const goForward = () => {
