@@ -52,7 +52,7 @@ export default defineComponent({
     },
     initNavData() {
       const store = EIRreportsStore()
-      store.setNavigationPayload('EIRE Report', true, false, '/', 'EIPMReport')
+      store.setNavigationPayload('EIR Report', true, false, '/', 'EIPMReport')
     },
   }
 });

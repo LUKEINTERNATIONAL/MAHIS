@@ -2,13 +2,13 @@
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-button  v-if="canGoBack" @click="goto(backwardsPath)">
+        <ion-button  v-if="can_GoBack" @click="goto(backwardsPath)">
           <ion-icon :icon="arrowBack"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title>{{ title }}</ion-title>
+      <ion-title>{{ comp_title }}</ion-title>
       <ion-buttons slot="end">
-        <ion-button v-if="canGoForward" @click="goForward">
+        <ion-button v-if="can_GoForward" @click="goForward">
           <ion-icon :icon="arrowForward"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -37,6 +37,10 @@ export default defineComponent({
   data() {
       return {
           backwardsPath: '',
+          comp_title: '',
+          can_GoBack: true,
+          can_GoForward: false,
+          back_Href: '/',
       }
   },
   props: {
@@ -58,7 +62,19 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(EIRreportsStore, ["navigationPayload"]), 
+    ...mapState(EIRreportsStore, ["navigationPayload"]),
+      
+  },
+  async mounted() {
+    this.initNavData()
+  },
+  watch: {
+    navigationPayload: {
+          handler() {
+              this.initNavData()
+          },
+          deep: true,
+      },
   },
   setup() {
     const goForward = () => {
@@ -75,6 +91,13 @@ export default defineComponent({
   methods: {
     goto(url: string) {
       this.$router.push(url)
+    },
+    initNavData() {
+      this.comp_title = this.navigationPayload.title
+      this.can_GoBack = this.navigationPayload.canGoBack
+      this.can_GoForward =  this.navigationPayload.canGoForward
+      this.back_Href = this.navigationPayload.backHref,
+      this.backwardsPath = this.navigationPayload.previousRoute
     }
   },
 });

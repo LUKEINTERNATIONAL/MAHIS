@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 export const EIRreportsStore = defineStore("EIRreportsStore", {
     state: () => ({
-        navigationPayload: {},
+        navigationPayload: {} as any,
     }),
     actions: {
         setNavigationPayload(title: string, canGoBack: boolean, canGoForward: boolean,  backHref: string, previousRoute: string): void{
