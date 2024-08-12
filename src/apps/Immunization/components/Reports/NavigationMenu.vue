@@ -2,7 +2,7 @@
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-back-button v-if="canGoBack" :default-href="backHref"></ion-back-button>
+        <ion-back-button v-if="canGoBack" @click="goto(backwardsPath)"></ion-back-button>
       </ion-buttons>
       <ion-title>{{ title }}</ion-title>
       <ion-buttons slot="end">
@@ -77,6 +77,11 @@ export default defineComponent({
       arrowForward,
       goForward
     };
-  }
+  },
+  methods: {
+    goto(url: string) {
+      this.$router.push(url)
+    }
+  },
 });
 </script>
