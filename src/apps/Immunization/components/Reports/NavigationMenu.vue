@@ -2,7 +2,9 @@
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-back-button v-if="canGoBack" @click="goto(backwardsPath)"></ion-back-button>
+        <ion-button  v-if="canGoBack" @click="goto(backwardsPath)">
+          <ion-icon :icon="arrowBack"></ion-icon>
+        </ion-button>
       </ion-buttons>
       <ion-title>{{ title }}</ion-title>
       <ion-buttons slot="end">
@@ -17,7 +19,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonIcon } from '@ionic/vue';
-import { arrowForward } from 'ionicons/icons';
+import { arrowForward, arrowBack } from 'ionicons/icons';
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { mapState } from "pinia";
 
@@ -74,6 +76,7 @@ export default defineComponent({
     };
 
     return {
+      arrowBack,
       arrowForward,
       goForward
     };
