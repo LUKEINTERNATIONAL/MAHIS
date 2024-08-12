@@ -58,16 +58,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(EIRreportsStore, ["previousRoute"]),
-      
-  },
-  watch: {
-    previousRoute: {
-          handler() {
-              this.backwardsPath = this.previousRoute;
-          },
-          deep: true,
-      },
+    ...mapState(EIRreportsStore, ["navigationPayload"]), 
   },
   setup() {
     const goForward = () => {

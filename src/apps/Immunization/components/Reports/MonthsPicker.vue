@@ -17,6 +17,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote } from '@ionic/vue';
+import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { mapState } from "pinia";
 
 interface Task {
   month: string;
@@ -40,11 +42,18 @@ export default defineComponent({
       ] as Task[]
     };
   },
+  computed: {
+    ...mapState(EIRreportsStore, ["navigationPayload"]), 
+  },
   methods: {
     navigationMenu(url: string) {
       this.$router.push(url)
-    }
-  },
+    },
+    initNavData() {
+      const store = EIRreportsStore()
+      
+    },
+  }
 });
 </script>
 
