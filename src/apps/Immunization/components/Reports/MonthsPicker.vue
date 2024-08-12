@@ -45,6 +45,18 @@ export default defineComponent({
   computed: {
     ...mapState(EIRreportsStore, ["navigationPayload"]), 
   },
+  async mounted() {
+    this.initOwnNavData()
+  },
+  watch: {
+    $route: {
+        async handler(data) {
+          if (data.name == "EIPMReport")
+          this.initOwnNavData()
+        },
+        deep: true,
+    },
+  },
   methods: {
     navigationMenu(url: string) {
       this.initNavData()
@@ -53,6 +65,10 @@ export default defineComponent({
     initNavData() {
       const store = EIRreportsStore()
       store.setNavigationPayload('EIR Report', true, false, '/', 'EIPMReport')
+    },
+    initOwnNavData() {
+      const store = EIRreportsStore()
+      store.setNavigationPayload('Pick Month', false, false, '/', '/')
     },
   }
 });
