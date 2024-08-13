@@ -82,7 +82,6 @@
               }"
             >
               <input
-                type="number"
                 v-model="row.outreach.lessThan1y"
                 class="editable-input"
               />
@@ -93,7 +92,6 @@
               }"
             >
               <input
-                type="number"
                 v-model="row.outreach.moreThan1y"
                 class="editable-input"
               />
@@ -122,37 +120,37 @@
           {
             label: 'OTD {some text}',
             fixed: { lessThan1y: 4, moreThan1y: 34 },
-            outreach: { lessThan1y: 23, moreThan1y: 23 },
+            outreach: { lessThan1y: 0, moreThan1y: 0 },
           },
           {
             label: 'Early {some text}',
             fixed: { lessThan1y: 23, moreThan1y: 23 },
-            outreach: { lessThan1y: 2, moreThan1y: 23 },
+            outreach: { lessThan1y: 0, moreThan1y: 0 },
           },
           {
             label: 'LLTM {some text}',
             fixed: { lessThan1y: 23, moreThan1y: 23 },
-            outreach: { lessThan1y: 23, moreThan1y: 23 },
+            outreach: { lessThan1y: 0, moreThan1y: 0 },
           },
           {
             label: 'GMPV {some text}',
             fixed: { lessThan1y: 10, moreThan1y: 1 },
-            outreach: { lessThan1y: 1, moreThan1y: 23 },
+            outreach: { lessThan1y: 0, moreThan1y: 0 },
           },
           {
             label: 'OPPV {some text}',
             fixed: { lessThan1y: 4, moreThan1y: 2 },
-            outreach: { lessThan1y: 3, moreThan1y: 23 },
+            outreach: { lessThan1y: 0, moreThan1y: 0 },
           },
           {
             label: 'OPPV {more text}',
             fixed: { lessThan1y: 10, moreThan1y: 23 },
-            outreach: { lessThan1y: 5, moreThan1y: 23 },
+            outreach: { lessThan1y: 0, moreThan1y: 0 },
           },
           {
             label: '{unclear text}',
             fixed: { lessThan1y: 9, moreThan1y: 23 },
-            outreach: { lessThan1y: 5, moreThan1y: 23 },
+            outreach: { lessThan1y: 0, moreThan1y: 0 },
           },
         ],
       };
@@ -199,13 +197,13 @@
   /* Make the second column line blue */
   .custom-table th:nth-child(1),
   .custom-table td:nth-child(1) {
-    border-right: 1px solid blue;
+    border-right: 1px solid #006401;
   }
   
   /* Make the first and second row lines in the header blue, starting from the second column */
   .custom-table thead tr:nth-child(1) th:not(:first-child),
   .custom-table thead tr:nth-child(2) th:not(:first-child) {
-    border-bottom: 1px solid blue;
+    border-bottom: 1px solid #006401;
   }
   
   /* Remove left border from the first column */
