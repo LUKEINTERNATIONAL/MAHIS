@@ -25,7 +25,7 @@
                         </ion-row>
                         <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Manufacturer</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">Zodiak</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.manufacture }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Expiration date</ion-col>
@@ -33,38 +33,36 @@
                         </ion-row>
                         <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Dosage Form </ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">vial</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dosage_form }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage </ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">3</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{}}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Issued</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Stock Available</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Issued</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dispensed_quantity }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Current Stock</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Available</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses wasted</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.doses_wasted }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Unit Doses</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">5</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Total Doses</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
                         </ion-row>
                         <div>
-                            <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px">Discard Stock</ion-button>
+                            <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px" @click="discardStock(item)"
+                                >Discard Stock</ion-button
+                            >
                             <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openAddStockModal(item)"
                                 >Update Stock</ion-button
                             >
@@ -72,7 +70,7 @@
                     </div>
                 </div>
                 <div class="example-one">
-                    <vue-awesome-paginate :total-items="100" :items-per-page="5" :max-pages-shown="2" v-model="currentPage" />
+                    <vue-awesome-paginate :total-items="100" :items-per-page="4" :max-pages-shown="2" v-model="currentPage" />
                 </div>
             </div>
             <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')">
@@ -235,6 +233,13 @@ export default defineComponent({
             if (event.inputHeader == "Search") {
                 await this.buildTableData(event.value);
             }
+        },
+        async discardStock(item: any) {
+            const stockService = new StockService();
+            await stockService.deleteItem(item.id, {
+                reason: "voided",
+            });
+            await this.buildTableData();
         },
         async buildTableData(drugName = "") {
             this.isLoading = true;
