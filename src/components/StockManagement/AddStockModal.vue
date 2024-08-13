@@ -85,6 +85,7 @@ export default defineComponent({
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
             showPD: false as boolean,
+            stockService: {} as any,
         };
     },
     computed: {
@@ -96,7 +97,11 @@ export default defineComponent({
             default: {} as any,
         },
     },
+    created() {
+        this.stockService = new StockService();
+    },
     async mounted() {
+        await this.handleWaste(7);
         this.resetData();
         modifyFieldValue(this.stock, "product name", "value", this.data.drug_legacy_name);
         modifyFieldValue(this.stock, "batch", "value", this.data.batch_number);
@@ -116,17 +121,21 @@ export default defineComponent({
     methods: {
         async createBatch() {
             if (validateInputFiledData(this.stock)) {
-                const stockService = new StockService();
+                const drug_id = getFieldValue(this.stock, "product name", "value").drug_id;
                 const data = [
                     {
                         batch_number: getFieldValue(this.stock, "batch", "value"),
                         location_id: "",
+                        vvm_stage: "",
                         items: [
                             {
                                 barcode: "",
-                                drug_id: getFieldValue(this.stock, "product name", "value").drug_id,
+                                drug_id: drug_id,
                                 expiry_date: getFieldValue(this.stock, "expire date", "value"),
-                                quantity: getFieldValue(this.stock, "stock received", "value"),
+                                unit_doses: getFieldValue(this.stock, "unit_doses", "value"),
+                                manufacture: getFieldValue(this.stock, "manufacture", "value"),
+                                dosage_form: getFieldValue(this.stock, "dosage_form", "value")?.name,
+                                quantity: getFieldValue(this.stock, "quantity", "value"),
                                 delivery_date: getFieldValue(this.stock, "delivery_date", "value") || HisDate.currentDate(),
                                 product_code: "",
                                 pack_size: "",
@@ -134,12 +143,25 @@ export default defineComponent({
                         ],
                     },
                 ];
-                await stockService.postItems(data);
+                const response = await this.stockService.postItems(data);
+                await this.handleWaste(response[0].items[0].id);
                 toastSuccess("Batch save successfully");
                 modalController.dismiss("dismiss");
             } else {
                 toastWarning("Batch not save");
                 return false;
+            }
+        },
+        async handleWaste(drug_id: any) {
+            const doses_wasted = getFieldValue(this.stock, "doses_wasted date", "value");
+            if (doses_wasted) {
+                const data = {
+                    reallocation_code: "MA2020",
+                    quantity: doses_wasted,
+                    date: HisDate.currentDate(),
+                    reason: "Incorrect data",
+                };
+                await this.stockService.disposeItems(drug_id, data);
             }
         },
         navigationMenu(url: any) {
