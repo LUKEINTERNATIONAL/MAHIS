@@ -174,16 +174,16 @@
   ::v-deep ion-content {
     --background: white;
   }
+  
   .custom-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    background-color:  white;
+    background-color: white;
   }
   
   .custom-table th,
   .custom-table td {
-    border: 1px solid #f0f0f0;
     padding: 8px;
     text-align: center;
     cursor: pointer;
@@ -191,6 +191,7 @@
   
   .custom-table th {
     background-color: #f3f3f3;
+    border: 1px solid #f0f0f0;
   }
   
   .custom-table tr:nth-child(even) {
@@ -218,6 +219,27 @@
   /* Remove top border from the first row */
   .custom-table thead tr:first-child th {
     border-top: none;
+  }
+  
+  /* Remove vertical borders from body cells */
+  .custom-table tbody td {
+    border-left: none;
+    border-right: none;
+  }
+  
+  /* Keep the vertical border for the first column */
+  .custom-table tbody td:first-child {
+    border-right: 1px solid #006401;
+  }
+  
+  /* Ensure horizontal borders remain for body rows */
+  .custom-table tbody td {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  /* Remove bottom border from the last row */
+  .custom-table tbody tr:last-child td {
+    border-bottom: none;
   }
   
   .custom-table .selected {
