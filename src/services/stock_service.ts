@@ -255,6 +255,9 @@ export class StockService extends Service {
     updateItem(batchID: number, vals: any) {
         return Service.putJson(`pharmacy/items/${batchID}`, vals);
     }
+    deleteItem(batchID: any, item: any) {
+        return Service.delete(`pharmacy/items/${batchID}`, item);
+    }
     relocateItems(batchID: number, items: any) {
         return Service.postJson(`pharmacy/items/${batchID}/reallocate`, items);
     }
