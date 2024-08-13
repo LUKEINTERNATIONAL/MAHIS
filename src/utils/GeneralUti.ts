@@ -159,3 +159,12 @@ function removeQuotes(str: string) {
     }
     return str;
 }
+
+export function getBaseURl() {
+    const baseURL = sessionStorage.baseURL
+    if (baseURL) {
+        let  websockerURL = removeQuotes(baseURL);
+        return websockerURL;
+    }
+    return ''
+}
