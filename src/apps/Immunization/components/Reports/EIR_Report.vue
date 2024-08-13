@@ -234,7 +234,7 @@
   
   /* Ensure horizontal borders remain for body rows */
   .custom-table tbody td {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #acabab;
   }
   
   /* Remove bottom border from the last row */
@@ -257,6 +257,7 @@
   
   .editable-input:focus {
     background-color: #e0e0ff;
+    border: 1px solid #006401;
   }
   </style>
   
