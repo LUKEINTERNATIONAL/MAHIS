@@ -171,27 +171,30 @@
   
 
   <style scoped>
+  ::v-deep ion-content {
+    --background: white;
+  }
   .custom-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    background-color: #f0f0f0;
+    background-color:  white;
   }
   
   .custom-table th,
   .custom-table td {
-    border: 1px solid #ddd;
+    border: 1px solid #f0f0f0;
     padding: 8px;
     text-align: center;
     cursor: pointer;
   }
   
   .custom-table th {
-    background-color: #e0e0e0;
+    background-color: #f3f3f3;
   }
   
   .custom-table tr:nth-child(even) {
-    background-color: #f8f8f8;
+    background-color: white;
   }
   
   /* Make the second column line blue */
