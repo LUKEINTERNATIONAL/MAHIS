@@ -55,11 +55,29 @@ const initialStock = [
                         {
                             inputHeader: "Manufacturer",
                             value: "",
-                            name: "manufacturer",
+                            name: "manufacture",
                             eventType: "input",
                             alertsErrorMassage: "",
                             valueType: "text",
                             validationFunctionName: "required",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Doses wasted",
+                            value: "",
+                            name: "doses_wasted",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            valueType: "text",
                         },
                     ],
                 },
@@ -98,7 +116,7 @@ const initialStock = [
                             inputHeader: "Dosage Form",
                             icon: icons.search,
                             value: "",
-                            name: "dosage form",
+                            name: "dosage_form",
                             eventType: "input",
                             alertsErrorMassage: "",
                             selectedID: "",
@@ -125,7 +143,7 @@ const initialStock = [
                             inputHeader: "VVM stage",
                             icon: icons.search,
                             value: "",
-                            name: "vvm stage",
+                            name: "vvm_stage",
                             eventType: "input",
                             alertsErrorMassage: "",
                             selectedID: "",
@@ -153,7 +171,7 @@ const initialStock = [
                         {
                             inputHeader: "Stock Received*",
                             value: "",
-                            name: "stock received",
+                            name: "quantity",
                             eventType: "input",
                             alertsErrorMassage: "",
                             valueType: "text",
@@ -192,9 +210,9 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Unit doses",
+                            inputHeader: "Number of shots",
                             value: "",
-                            name: "unit doses",
+                            name: "unit_doses",
                             eventType: "input",
                             alertsErrorMassage: "",
                             valueType: "text",
