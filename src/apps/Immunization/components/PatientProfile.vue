@@ -115,7 +115,7 @@
                 <div style="width: 100%; display: flex; justify-content: space-between; align-content: center">
                     <div class="vaccinesTitleText">Administer Vaccines</div>
                     <div class="vaccinesTitleDate">
-                        <span style="font-size:13px;">Next Appt. Date: </span><b>{{ nextApptDate }}</b>
+                        <span style="font-size:13px;">Next Appt. Date: </span><b>{{ nextAppointMentDate }}</b>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,6 @@ import missedVaccinesModal from "@/apps/Immunization/components/Modals/missedVac
 import { DrugOrderService } from "@/services/drug_order_service";
 import customVaccine from "@/apps/Immunization/components/customVaccine.vue";
 import { PatientPrintoutService } from "@/services/patient_printout_service";
-import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service"
 
 import {
     getFieldValue,
@@ -302,7 +301,6 @@ export default defineComponent({
             visits: [] as any,
             popoverOpen: false,
             event: null as any,
-            nextApptDate: '',
         };
     },
     computed: {
@@ -310,16 +308,20 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList",
+                "nonPharmalogicalTherapyAndOtherNotes",
+                "selectedMedicalAllergiesList"
+            ]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useAdministerVaccineStore, [
-            "currentMilestone",
-            "missedVaccineSchedules",
-            "overDueVaccinesCount",
-            "lastVaccinesGiven",
-            "lastVaccineGievenDate",
-            "vaccineReload",
-        ]),
+                "currentMilestone",
+                "missedVaccineSchedules",
+                "overDueVaccinesCount",
+                "lastVaccinesGiven",
+                "lastVaccineGievenDate",
+                "vaccineReload",
+                "nextAppointMentDate",
+            ]),
     },
     created() {
         this.getData();
@@ -329,7 +331,6 @@ export default defineComponent({
         this.loadCurrentMilestone();
         this.checkAge();
         await this.checkProtectedStatus();
-        await this.getAppointmentDate()
     },
     watch: {
         vitals: {
@@ -673,12 +674,7 @@ export default defineComponent({
         getLastVaccinesGivenDisplayDate() {
             return HisDate.toStandardHisDisplayFormat(this.lastVaccineGievenDate);
         },
-        async getAppointmentDate() {
-            const appointment_service = new Appointment();
-            const data = await appointment_service.getNextAppointment();
-            const appointmentDate = data.next_appointment_date ? HisDate.toStandardHisDisplayFormat(data.next_appointment_date) : ''
-            this.nextApptDate = appointmentDate
-        }
+
     },
 });
 </script>

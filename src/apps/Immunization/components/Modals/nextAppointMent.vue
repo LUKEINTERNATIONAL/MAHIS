@@ -96,17 +96,20 @@ import {
     modalController,
     IonBadge
 } from "@ionic/vue"
-import { ref, onMounted,computed, watch } from "vue"
-import HisDate from "@/utils/Date"
-import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore"
-import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service"
+import { ref, onMounted,computed, watch } from "vue";
+import HisDate from "@/utils/Date";
+import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
+import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service";
 import smsConfirmation from "@/apps/Immunization/components/Modals/smsConfirmation.vue";
 import { SmsService } from "@/apps/Immunization/services/sms_service";
 import { toastWarning } from "@/utils/Alerts";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { Service } from '@/services/service'
+import { Service } from '@/services/service';
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+
 const store = useImmunizationAppointMentStore()
 const user = useDemographicsStore();
+
 
 
 const date = ref()
@@ -142,6 +145,7 @@ async function save() {
         appointment_service.setPatientID(props?.patient_Id)
     }
     const appointmentDetails = await appointment_service.createAppointment();
+    setMilestoneReload()
     dismiss();
     
     if (!phoneNumber.value.includes("+")) {
@@ -161,6 +165,11 @@ async function save() {
             }
    }
 
+}
+
+async function setMilestoneReload() {
+    const store = useAdministerVaccineStore();
+    store.setVaccineReload(!store.getVaccineReload());
 }
 
 onMounted(async () => {
