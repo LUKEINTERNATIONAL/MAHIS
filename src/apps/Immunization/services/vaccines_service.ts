@@ -104,3 +104,16 @@ function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
 export async function voidVaccine(orderId: number, reason: string) {
     return Service.void(`orders/${orderId}?reason=${JSON.stringify(reason)}`, { reason });
 }
+
+export function checkDrugName(drug: any) {
+    if (isNameInList(drug.drug_name) == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isNameInList(name: string): boolean {
+    const nameList = ['Vit A', 'Albendazole (400mg tablet)', 'Albendazole (200mg tablet)'];
+    return nameList.some(listedName => listedName.toLowerCase().includes(name.toLowerCase()));
+}
