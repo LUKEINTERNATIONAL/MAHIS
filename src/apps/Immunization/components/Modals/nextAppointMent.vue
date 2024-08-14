@@ -57,7 +57,7 @@
 
         <ion-col style="text-align: right">
             <ion-button @click="save" class="btnText" fill="solid"  style="width: 130px">
-                saves
+                save
                 <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
             </ion-button>
         </ion-col>
