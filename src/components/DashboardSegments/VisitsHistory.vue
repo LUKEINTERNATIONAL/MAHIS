@@ -210,6 +210,7 @@ export default defineComponent({
             await this.setVitalsEncounters(encounters);
             await this.setPresentingComplainsEncounters(encounters);
             await this.setTreatmentEncounters(encounters);
+            await this.setANCProfileEncounters(encounters)
         },
         findEncounter(data: any, encounterType: any) {
             return data.find((obj: any) => obj.type && obj.type.name === encounterType);
@@ -221,6 +222,7 @@ export default defineComponent({
         },
         async setVitalsEncounters(data: any) {
             const observations = this.findEncounter(data, "VITALS")?.observations;
+            console.log("+++++trying+++",observations)
             this.vitals.weight = this.filterObs(observations, "Weight")?.[0]?.value_numeric ?? "";
             this.vitals.temperature = this.filterObs(observations, "Temperature")?.[0]?.value_numeric ?? "";
             this.vitals.pulse = this.filterObs(observations, "Pulse")?.[0]?.value_numeric ?? "";
@@ -229,10 +231,15 @@ export default defineComponent({
             this.vitals.systolic = this.filterObs(observations, "Systolic")?.[0]?.value_numeric ?? "";
             this.vitals.respirationRate = this.filterObs(observations, "Respiration rate")?.[0]?.value_numeric ?? "";
             this.vitals.diastolic = this.filterObs(observations, "Diastolic")?.[0]?.value_numeric ?? "";
+            
 
             if (this.vitals.weight && this.vitals.height) {
                 await this.setBMI(this.vitals.weight, this.vitals.height);
             }
+        },
+        async setANCProfileEncounters(data:any){
+            const observations = this.findEncounter(data, "OBSTETRIC HISTORY")?.observations;
+            console.log("########",observations)
         },
         async setTreatmentEncounters(data: any) {},
         async setPresentingComplainsEncounters(data: any) {

@@ -341,9 +341,7 @@ export default defineComponent({
                     children.push({ concept: "Mode of delivery", value, other });
 
                     const concept_id = await ConceptService.getConceptID("Mode of delivery", true);
-                    console.log(";;;;;;;;", concept_id);
                     const concept_other = await ConceptService.getConceptID("other", true);
-                    console.log(";;;;;;;;", concept_other);
                     const obs_datetime = ConceptService.getSessionDate();
                     const obs: any = children.map((child) => {
                         return {
