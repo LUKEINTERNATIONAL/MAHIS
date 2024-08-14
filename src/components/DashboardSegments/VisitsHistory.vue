@@ -238,7 +238,7 @@ export default defineComponent({
             }
         },
         async setANCProfileEncounters(data:any){
-            const observations = this.findEncounter(data, "OBSTETRIC HISTORY")?.observations;
+            const observations = this.findEncounter(data, "CURRENT PREGNANCY")?.observations;
             console.log("########",observations)
         },
         async setTreatmentEncounters(data: any) {},
