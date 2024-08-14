@@ -60,7 +60,7 @@
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
                         </ion-row>
                         <div>
-                            <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px" @click="discardStock(item)"
+                            <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px" @click="discardStock($event, item)"
                                 >Discard Stock</ion-button
                             >
                             <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openAddStockModal(item)"
@@ -127,7 +127,7 @@ import { useStartEndDate } from "@/stores/StartEndDate";
 import { useSearchName } from "@/stores/SearchName";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
-import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import {
     medkit,
     chevronBackOutline,
@@ -234,12 +234,17 @@ export default defineComponent({
                 await this.buildTableData(event.value);
             }
         },
-        async discardStock(item: any) {
-            const stockService = new StockService();
-            await stockService.deleteItem(item.id, {
-                reason: "voided",
+        async discardStock(e: any, item: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to void "${item.drug_legacy_name}", batch: ${item.batch_number} ?`, e, {
+                confirmBtnLabel: "Void",
             });
-            await this.buildTableData();
+            if (deleteConfirmed) {
+                const stockService = new StockService();
+                await stockService.deleteItem(item.id, {
+                    reason: "voided",
+                });
+                await this.buildTableData();
+            }
         },
         async buildTableData(drugName = "") {
             this.isLoading = true;
