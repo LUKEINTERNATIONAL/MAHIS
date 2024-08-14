@@ -133,6 +133,7 @@ export default defineComponent({
                                 drug_id: drug_id,
                                 expiry_date: getFieldValue(this.stock, "expire date", "value"),
                                 unit_doses: getFieldValue(this.stock, "unit_doses", "value"),
+                                vvm_stage: getFieldValue(this.stock, "vvm_stage", "value")?.name,
                                 manufacture: getFieldValue(this.stock, "manufacture", "value"),
                                 dosage_form: getFieldValue(this.stock, "dosage_form", "value")?.name,
                                 quantity: getFieldValue(this.stock, "quantity", "value"),
@@ -153,7 +154,7 @@ export default defineComponent({
             }
         },
         async handleWaste(drug_id: any) {
-            const doses_wasted = getFieldValue(this.stock, "doses_wasted date", "value");
+            const doses_wasted = getFieldValue(this.stock, "doses_wasted", "value");
             if (doses_wasted) {
                 const data = {
                     reallocation_code: "MA2020",
