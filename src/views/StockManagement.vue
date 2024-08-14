@@ -118,12 +118,6 @@ import { UserService } from "@/services/user_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
 import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
-import DataTable from "datatables.net-vue3";
-import DataTablesCore from "datatables.net";
-import "datatables.net-buttons";
-import "datatables.net-buttons/js/buttons.html5";
-import "datatables.net-responsive";
-import "datatables.net-buttons-dt";
 import DynamicButton from "@/components/DynamicButton.vue";
 import AddStockModal from "@/components/StockManagement/AddStockModal.vue";
 import { createModal } from "@/utils/Alerts";
@@ -148,9 +142,6 @@ import {
     add,
     person,
 } from "ionicons/icons";
-import "datatables.net-select";
-import { ar } from "date-fns/esm/locale";
-// DataTable.use(DataTablesCore);
 export default defineComponent({
     name: "Home",
     mixins: [SetUser],
@@ -167,7 +158,6 @@ export default defineComponent({
         IonCol,
         ImmunizationTrendsGraph,
         ImmunizationGroupGraph,
-        DataTable,
         IonCard,
         DynamicButton,
         BasicForm,
@@ -559,12 +549,4 @@ ion-button {
     height: 50px;
     align-items: center;
 }
-</style>
-<style>
-@import "datatables.net-dt";
-@import "datatables.net-buttons-dt";
-@import "datatables.net-responsive-dt";
-@import "datatables.net-select-dt";
-
-@import "bootstrap";
 </style>
