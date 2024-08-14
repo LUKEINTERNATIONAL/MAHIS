@@ -37,7 +37,7 @@
                         </ion-row>
                         <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage </ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{}}</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.vvm_stage }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
@@ -70,7 +70,13 @@
                     </div>
                 </div>
                 <div class="example-one">
-                    <vue-awesome-paginate :total-items="100" :items-per-page="4" :max-pages-shown="2" v-model="currentPage" />
+                    <vue-awesome-paginate
+                        :total-items="reportData[0]?.total_count"
+                        :items-per-page="4"
+                        :max-pages-shown="2"
+                        v-model="currentPage"
+                        @click="onClickHandler"
+                    />
                 </div>
             </div>
             <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')">
@@ -177,6 +183,7 @@ export default defineComponent({
             currentStock: [] as any,
             allStock: [] as any,
             outStock: [] as any,
+            filter: "" as any,
             startDate: HisDate.currentDate(),
             endDate: HisDate.currentDate(),
             options: {
@@ -226,12 +233,16 @@ export default defineComponent({
         await this.buildTableData();
     },
     methods: {
+        async onClickHandler(page: any) {
+            await this.buildTableData(page);
+        },
         formatDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
         async handleInputData(event: any) {
             if (event.inputHeader == "Search") {
-                await this.buildTableData(event.value);
+                this.filter = event.value;
+                await this.buildTableData();
             }
         },
         async discardStock(e: any, item: any) {
@@ -246,11 +257,11 @@ export default defineComponent({
                 await this.buildTableData();
             }
         },
-        async buildTableData(drugName = "") {
+        async buildTableData(page = 1) {
             this.isLoading = true;
             try {
                 const stockService = new StockService();
-                this.reportData = await stockService.getItems("2000-01-01", this.endDate, drugName);
+                this.reportData = await stockService.getItems("2000-01-01", this.endDate, this.filter, page);
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
