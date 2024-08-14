@@ -38,8 +38,4 @@ static async getConfigurations() {
      return super.getJson('configurations')
 }
 
-static async fetchphone(patientID: any) { 
-  return super.getJson('patient_phone', { "person_id": patientID })
-}
-
 }

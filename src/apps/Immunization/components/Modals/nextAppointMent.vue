@@ -57,7 +57,7 @@
 
         <ion-col style="text-align: right">
             <ion-button @click="save" class="btnText" fill="solid"  style="width: 130px">
-                saves
+                save
                 <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
             </ion-button>
         </ion-col>
@@ -102,12 +102,8 @@ import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMen
 import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service"
 import smsConfirmation from "@/apps/Immunization/components/Modals/smsConfirmation.vue";
 import { SmsService } from "@/apps/Immunization/services/sms_service";
-import { toastWarning } from "@/utils/Alerts";
-import { useDemographicsStore } from "@/stores/DemographicStore";
 import { Service } from '@/services/service'
 const store = useImmunizationAppointMentStore()
-const user = useDemographicsStore();
-
 
 const date = ref()
 const configsSms = ref(false);
@@ -115,7 +111,6 @@ const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
 const show_selected_date = ref(false)
 const currently_selected_date = ref()
 const appointment_count = ref(0)
-const phoneNumber = ref()
 
 function disablePastDates(date: any) {
     const today = new Date(Service.getSessionDate())
@@ -143,32 +138,23 @@ async function save() {
     }
     const appointmentDetails = await appointment_service.createAppointment();
     dismiss();
-    
-    if (!phoneNumber.value.includes("+")) {
-        toastWarning("Invalid phone number for sms reminder");
-        return;
-     }
-     
-   if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
+    if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
           if(configsSms.value){        
              createModal(smsConfirmation, {
                    componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1] },
                    class: "smsConfirmation"
-             });       
+             });        
         }
         else{
                await SmsService.appointment(appointmentDetails[0],appointmentDetails[1]);
             }
    }
-
 }
 
 onMounted(async () => {
+    store.clearAppointmentMent()    
     let data = await SmsService.getConfigurations();
-    let phone = await SmsService.fetchphone(user.demographics.patient_id);
-    configsSms.value = data.show_sms_popup; 
-    phoneNumber.value = phone.message;
-    store.clearAppointmentMent()      
+    configsSms.value = data.show_sms_popup;     
 })
 
 async function getAppointmentMents(date: any) {
