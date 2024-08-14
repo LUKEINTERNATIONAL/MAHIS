@@ -246,8 +246,8 @@ export class StockService extends Service {
     postItems(items: any) {
         return Service.postJson("/pharmacy/batches", items);
     }
-    getItems(start_date: any, end_date: any, drug_name = "") {
-        return Service.getJson("pharmacy/items", { start_date: start_date, end_date: end_date, drug_name: drug_name });
+    getItems(start_date: any, end_date: any, drug_name = "", page = 1) {
+        return Service.getJson("pharmacy/items", { start_date: start_date, end_date: end_date, drug_name: drug_name, page: page, page_size: 4 });
     }
     getItem(drugID: number) {
         return Service.getJson("pharmacy/items", { drug_id: drugID });
