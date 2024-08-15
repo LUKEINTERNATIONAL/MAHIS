@@ -73,6 +73,9 @@
                                         <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer"
                                             >Indicators And Performance Metrics</ion-item
                                         >
+                                        <ion-item @click="navigationMenu('immunizationOverDueReport')" class="list-content" style="cursor: pointer">
+                                            Overdue Report
+                                        </ion-item>
                                     </ion-list>
                                 </div>
                             </ion-accordion>
