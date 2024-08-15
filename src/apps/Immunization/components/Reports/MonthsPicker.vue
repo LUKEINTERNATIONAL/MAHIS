@@ -33,15 +33,7 @@ export default defineComponent({
   components: { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote },
   data() {
     return {
-      tasks: [
-        { month: 'Mar 2025', completed: false, date: '3/8/2024' },
-        { month: 'Dec 2024', completed: true, date: '5/8/2024' },
-        { month: 'Sep 2024', completed: true, date: '12/10/2016' },
-        { month: 'Aug 2024', completed: true, date: '10/10/2017' },
-        { month: 'Jul 2024', completed: false, date: '5/8/2024' },
-        { month: 'Jun 2024', completed: true, date: '3/1/2014' },
-        { month: 'May 2024', completed: true, date: '7/8/2024' },
-      ] as Task[]
+      tasks: [] as Task[]
     };
   },
   computed: {
@@ -77,7 +69,6 @@ export default defineComponent({
       const monthsArray = [] as any
       const data = await getMonthsList()
       data.forEach((month: any) => {
-        console.log(month)
         const aob = {
           month: month[1][0].replace('-', ' '), completed: true, date: month[0]
         }
