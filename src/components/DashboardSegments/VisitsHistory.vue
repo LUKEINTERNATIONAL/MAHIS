@@ -239,7 +239,7 @@ export default defineComponent({
         },
         async setANCProfileEncounters(data:any){
             const observations = this.findEncounter(data, "CURRENT PREGNANCY")?.observations;
-            console.log("########",observations)
+            console.log("########==>",observations)
         },
         async setTreatmentEncounters(data: any) {},
         async setPresentingComplainsEncounters(data: any) {

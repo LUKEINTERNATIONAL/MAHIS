@@ -314,16 +314,22 @@ export default defineComponent({
             ) {
                 if (
                     this.prevPregnancies.length > 0 
-                    //&&
-                    // this.lmnp.length > 0 &&
-                    // this.exisitingChronicHealthConditions.length > 0 &&
-                    // this.allegy.length > 0 &&
-                    // this.medicalHistory.length > 0 &&
-                    // this.Complications.length > 0 &&
+                    &&
+                    this.lmnp.length > 0 
+                    &&
+                    this.exisitingChronicHealthConditions.length > 0 
+                    &&
+                    this.allegy.length > 0 
+                    &&
+                    this.medicalHistory.length > 0 
+                    &&
+                    this.Complications.length > 0 
+                    // &&
                     // this.preterm.length > 0 
-                    //&&
-                    // this.Medication.length > 0 &&
-                    // this.dailyCaffeineIntake.length > 0
+                    &&
+                    this.Medication.length > 0 
+                    &&
+                    this.dailyCaffeineIntake.length > 0
                     //"preterm", "prevPregnancies", "Complications", "modeOfDelivery"
                 ) {
                     const userID: any = Service.getUserID();
@@ -331,12 +337,10 @@ export default defineComponent({
                     const encounter = await profile.createEncounter();
                     if (!encounter) return toastWarning("Unable to create profile encounter");
                     const patientStatus = await profile.saveObservationList(await this.buildProfile());
-                    console.log("===========> patient",patientStatus)
                     if (!patientStatus) return toastWarning("Unable to create profile information!");
                     await toastSuccess("Profile information have been created");
-                    // console.log(await this.buildProfile())
                 }
-                console.log("========>",await this.buildProfile())
+                // console.log("========>",await this.buildProfile())
 
                 const number = this.modeOfDelivery.length / 2;
                 const children = [];
