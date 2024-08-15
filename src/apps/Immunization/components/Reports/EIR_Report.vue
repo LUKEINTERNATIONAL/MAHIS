@@ -171,8 +171,8 @@
   
 
   <style scoped>
-  ::v-deep ion-content {
-    --background: white;
+  ::v-deep(ion-content) {
+      --background: white;
   }
   
   .custom-table {
