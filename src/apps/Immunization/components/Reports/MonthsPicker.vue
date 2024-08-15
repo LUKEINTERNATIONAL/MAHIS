@@ -20,6 +20,7 @@ import { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote } from '@i
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { mapState } from "pinia";
 import { getMonthsList } from "@/apps/Immunization/services/vaccines_service";
+import HisDate from "@/utils/Date";
 
 interface Task {
   month: string;
@@ -78,7 +79,7 @@ export default defineComponent({
       data.forEach((month: any) => {
         console.log(month)
         const aob = {
-          month: month[1][0].replace('-', ' '), completed: true, date: '7/8/2024'
+          month: month[1][0].replace('-', ' '), completed: true, date: month[0]
         }
         monthsArray.push(aob)
       })
