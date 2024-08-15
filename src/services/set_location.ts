@@ -1,4 +1,5 @@
 import { LocationService } from "@/services/location_service";
+import { getBaseURl } from "@/utils/GeneralUti";
 import db from "@/db";
 export async function setOfflineLocation() {
     const locationData = await getOfflineLocation();
@@ -36,7 +37,11 @@ export async function getVillages() {
 
 export async function getLocalVillages() {
     try {
-        const response = await fetch("/villages.json");
+        let baseURL = getBaseURl();
+        if (baseURL.length > 0) {
+            baseURL = '/' + baseURL;
+        }
+        const response = await fetch(`${baseURL}/villages.json`);
         if (!response.ok) {
             throw new Error(`Unable to retrieve configuration file from`);
         }
