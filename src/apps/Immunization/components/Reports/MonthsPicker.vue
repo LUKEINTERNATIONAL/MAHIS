@@ -19,6 +19,7 @@ import { defineComponent } from 'vue';
 import { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote } from '@ionic/vue';
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { mapState } from "pinia";
+import { getMonthsList } from "@/apps/Immunization/services/vaccines_service";
 
 interface Task {
   month: string;
@@ -46,6 +47,7 @@ export default defineComponent({
     ...mapState(EIRreportsStore, ["navigationPayload"]), 
   },
   async mounted() {
+    this.initMonths()
     this.initOwnNavData()
   },
   watch: {
@@ -70,6 +72,19 @@ export default defineComponent({
       const store = EIRreportsStore()
       store.setNavigationPayload('Pick Month', true, false, '/', 'home')
     },
+    async initMonths() {
+      const monthsArray = [] as any
+      const data = await getMonthsList()
+      data.forEach((month: any) => {
+        console.log(month)
+        const aob = {
+          month: month[1][0].replace('-', ' '), completed: true, date: '7/8/2024'
+        }
+        monthsArray.push(aob)
+      })
+
+      this.tasks = monthsArray
+    }
   }
 });
 </script>

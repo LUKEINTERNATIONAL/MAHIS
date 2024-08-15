@@ -117,3 +117,8 @@ function isNameInList(name: string): boolean {
     const nameList = ['Vit A', 'Albendazole (400mg tablet)', 'Albendazole (200mg tablet)'];
     return nameList.some(listedName => listedName.toLowerCase().includes(name.toLowerCase()));
 }
+
+export async function getMonthsList(): Promise<any> {
+    const data = await Service.getJson("immunization/months_picker");
+    return data
+}
