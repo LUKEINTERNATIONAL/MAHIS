@@ -263,7 +263,7 @@ export default defineComponent({
             await this.buildTableData();
         },
         async openAddStockModal(data: any) {
-            const response: any = await createModal(AddStockModal, { class: "otherVitalsModal" }, true, { data: data });
+            const response: any = await createModal(AddStockModal, { class: "otherVitalsModal largeModal" }, true, { data: data });
             if (response == "dismiss") {
                 await this.buildTableData();
             }
