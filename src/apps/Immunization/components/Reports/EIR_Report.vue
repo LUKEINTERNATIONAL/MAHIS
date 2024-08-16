@@ -149,21 +149,29 @@
         this.selectedSection = ''; // Reset section selection when column is selected
       },
       async initReport() {
-      const monthsArray = [] as any
       const data = await getVaccinesAdministered(this.start_date, this.end_date)
-      console.log(data)
-
+      data.less_than_one_year.forEach((item: any) => {this.fillCells(item, 'lessThan1y')})
+      data.greater_than_one_year.forEach((item: any) => {this.fillCells(item, 'moreThan1y')})
+      },
+      fillCells(AV: any, r_key: string) {
+        this.tableData.forEach((t_data: any) => {
+          if (t_data.drug.drug_id == AV.drug_inventory_id) {
+            if (r_key in t_data.fixed) {
+              let value =  t_data.fixed[r_key];
+              t_data.fixed[r_key] = value+1
+            }
+          }
+        })
       },
       async getDrugs() {
         const data = await getImmunizationDrugs()
         const items = [] as any 
         data.forEach((drug: any) => {
-          console.log(drug)
-
           const row_item = {
             label: drug.name,
             fixed: { lessThan1y: 0, moreThan1y: 0 },
             outreach: { lessThan1y: 0, moreThan1y: 0 },
+            drug: drug
           }
           items.push(row_item)
         })
