@@ -108,6 +108,9 @@
   import { defineComponent } from 'vue';
   import { IonContent , IonPage} from '@ionic/vue';
   import NavigationMenu from './NavigationMenu.vue';
+  import { mapState } from "pinia";
+  import { getVaccinesAdministered } from "@/apps/Immunization/services/vaccines_service";
+  import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
   
   export default defineComponent({
     name: 'TableComponent',
@@ -155,6 +158,21 @@
         ],
       };
     },
+    watch: {
+      $route: {
+          async handler(data) {
+            if (data.name == "EIRReport")
+            this.initReport()
+          },
+          deep: true,
+      },
+    },
+    computed: {
+      ...mapState(EIRreportsStore, ["start_date", "end_date"]), 
+    },
+    async mounted() {
+      this.initReport()
+  },
     methods: {
       selectSection(section: string) {
         this.selectedSection = section;
@@ -164,6 +182,12 @@
         this.selectedColumn = column;
         this.selectedSection = ''; // Reset section selection when column is selected
       },
+      async initReport() {
+      const monthsArray = [] as any
+      const data = await getVaccinesAdministered(this.start_date, this.end_date)
+      console.log(data)
+
+    }
     },
   });
   </script>

@@ -1,7 +1,7 @@
 <template>
   <ion-list>
     <ion-card v-for="task in tasks" :key="task.month">
-      <ion-card-content style="cursor: pointer;" @click="navigationMenu('EIRReport')">
+      <ion-card-content style="cursor: pointer;" @click="navigationMenu('EIRReport', task)">
         <ion-item lines="none">
           <ion-label>
             <h2>{{ task.month }}</h2>
@@ -26,6 +26,7 @@ interface Task {
   month: string;
   completed: boolean;
   date: string;
+  other: any
 }
 
 export default defineComponent({
@@ -53,13 +54,15 @@ export default defineComponent({
     },
   },
   methods: {
-    navigationMenu(url: string) {
-      this.initNavData()
+    navigationMenu(url: string, task: Task): void{
+      this.initNavData(task)
       this.$router.push(url)
     },
-    initNavData() {
+    initNavData(task: Task) {
       const store = EIRreportsStore()
       store.setNavigationPayload('EIR Report', true, false, '/', 'EIPMReport')
+      const dates = task.other[1][1].split(" to ")
+      store.setStartAndEndDates(dates[0],dates[1])
     },
     initOwnNavData() {
       const store = EIRreportsStore()
@@ -70,7 +73,7 @@ export default defineComponent({
       const data = await getMonthsList()
       data.forEach((month: any) => {
         const aob = {
-          month: month[1][0].replace('-', ' '), completed: true, date: month[0]
+          month: month[1][0].replace('-', ' '), completed: true, date: month[0], other: month
         }
         monthsArray.push(aob)
       })

@@ -122,3 +122,8 @@ export async function getMonthsList(): Promise<any> {
     const data = await Service.getJson("immunization/months_picker");
     return data
 }
+
+export async function getVaccinesAdministered(start_date: string, end_date: string): Promise<any> {
+    const data = await Service.getJson(`immunization/vaccines_administered`, {start_date: start_date, end_date: end_date})
+    return data
+}
