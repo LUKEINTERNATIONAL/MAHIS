@@ -119,7 +119,7 @@
       return {
         selectedSection: '', // To keep track of the selected section
         selectedColumn: '',  // To keep track of the selected column
-        tableData: [],
+        tableData: [] as any,
       };
     },
     watch: {
