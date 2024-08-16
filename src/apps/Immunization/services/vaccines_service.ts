@@ -7,6 +7,7 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import HisDate from "@/utils/Date";
 import { createModal } from "@/utils/Alerts";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
+import { ConceptService } from "@/services/concept_service"
 
 export async function getVaccinesSchedule() {
     const patient = new PatientService();
@@ -125,5 +126,10 @@ export async function getMonthsList(): Promise<any> {
 
 export async function getVaccinesAdministered(start_date: string, end_date: string): Promise<any> {
     const data = await Service.getJson(`immunization/vaccines_administered`, {start_date: start_date, end_date: end_date})
+    return data
+}
+
+export async function getImmunizationDrugs(): Promise<any> {
+    const data = await Service.getJson(`/immunization/drugs`)
     return data
 }

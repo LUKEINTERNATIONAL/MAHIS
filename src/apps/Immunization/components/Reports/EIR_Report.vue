@@ -109,7 +109,7 @@
   import { IonContent , IonPage} from '@ionic/vue';
   import NavigationMenu from './NavigationMenu.vue';
   import { mapState } from "pinia";
-  import { getVaccinesAdministered } from "@/apps/Immunization/services/vaccines_service";
+  import { getVaccinesAdministered, getImmunizationDrugs } from "@/apps/Immunization/services/vaccines_service";
   import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
   
   export default defineComponent({
@@ -119,49 +119,14 @@
       return {
         selectedSection: '', // To keep track of the selected section
         selectedColumn: '',  // To keep track of the selected column
-        tableData: [
-          {
-            label: 'OTD {some text}',
-            fixed: { lessThan1y: 4, moreThan1y: 34 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'Early {some text}',
-            fixed: { lessThan1y: 23, moreThan1y: 23 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'LLTM {some text}',
-            fixed: { lessThan1y: 23, moreThan1y: 23 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'GMPV {some text}',
-            fixed: { lessThan1y: 10, moreThan1y: 1 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'OPPV {some text}',
-            fixed: { lessThan1y: 4, moreThan1y: 2 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'OPPV {more text}',
-            fixed: { lessThan1y: 10, moreThan1y: 23 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: '{unclear text}',
-            fixed: { lessThan1y: 9, moreThan1y: 23 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-        ],
+        tableData: [],
       };
     },
     watch: {
       $route: {
           async handler(data) {
             if (data.name == "EIRReport")
+            this.getDrugs()
             this.initReport()
           },
           deep: true,
@@ -171,6 +136,7 @@
       ...mapState(EIRreportsStore, ["start_date", "end_date"]), 
     },
     async mounted() {
+      this.getDrugs()
       this.initReport()
   },
     methods: {
@@ -187,7 +153,22 @@
       const data = await getVaccinesAdministered(this.start_date, this.end_date)
       console.log(data)
 
-    }
+      },
+      async getDrugs() {
+        const data = await getImmunizationDrugs()
+        const items = [] as any 
+        data.forEach((drug: any) => {
+          console.log(drug)
+
+          const row_item = {
+            label: drug.name,
+            fixed: { lessThan1y: 0, moreThan1y: 0 },
+            outreach: { lessThan1y: 0, moreThan1y: 0 },
+          }
+          items.push(row_item)
+        })
+        this.tableData = items
+      }
     },
   });
   </script>
