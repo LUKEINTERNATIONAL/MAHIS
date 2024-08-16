@@ -83,6 +83,7 @@ export default defineComponent({
         EventBus.on(ApiBusEvents.BEFORE_API_REQUEST, () => nprogress.start());
 
         EventBus.on(ApiBusEvents.AFTER_API_REQUEST, async (res: any) => {
+            status.setApiStatus(apiOk.value);
             if (healthCheckInterval.value) {
                 clearInterval(healthCheckInterval.value);
                 healthCheckInterval.value = null;
