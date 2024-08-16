@@ -17,6 +17,26 @@
             </ion-col>
             <ion-col offset="0.1" size="7">
                 <div class="visitData">
+
+                    <!-- anc info -->
+                     <div v-if="Object.values(pregnancy).every((value) => value !== '')">
+                            <div style="max-width: 300px">
+                            <div class="heading">ANC PROFILE DATA</div>
+                            <div>
+                                <ion-row>
+                                    <ion-col class="contentTitle">Gravida</ion-col>
+                                    <ion-col class="contentTitle">Stillbirths</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{pregnancy.Gravida}}</ion-col>
+                                    <ion-col>{{pregnancy.Stillbirths}}</ion-col>
+                                </ion-row>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="noData" v-else>ANC Profile Data</div> 
+                     <!-- end of anc info -->
+
                     <div v-if="Object.values(vitals).every((value) => value !== '')">
                         <div style="max-width: 300px">
                             <div class="heading" style="margin-top: 0px">Anthropometric Measurements</div>
@@ -81,7 +101,6 @@
                         </div>
                     </div>
                     <div class="noData" v-else>No Vitals were recorded</div>
-
                     <div v-if="presentingComplaint?.length > 0">
                         <div class="heading">Complaints Presented</div>
                         <div style="display: flex; flex-wrap: wrap">
@@ -113,7 +132,7 @@
                         <span class="nextDate">06 September 2024</span>
                     </div>
                     <div class="noData" v-else>No next appointment was set</div>
-                    <div class="noData" v-else>ANC-Profile</div>
+                    <!-- <div class="noData" v-else>ANC-Profile</div> -->
                 </div>
             </ion-col>
         </ion-row>
@@ -168,6 +187,8 @@ export default defineComponent({
             vitals: {} as any,
             vitalsWeightHeight: {} as any,
             savedEncounters: [] as any,
+            pregnancy: {} as any
+
         };
     },
     watch: {
@@ -232,6 +253,7 @@ export default defineComponent({
             this.vitals.respirationRate = this.filterObs(observations, "Respiration rate")?.[0]?.value_numeric ?? "";
             this.vitals.diastolic = this.filterObs(observations, "Diastolic")?.[0]?.value_numeric ?? "";
             
+            
 
             if (this.vitals.weight && this.vitals.height) {
                 await this.setBMI(this.vitals.weight, this.vitals.height);
@@ -239,7 +261,9 @@ export default defineComponent({
         },
         async setANCProfileEncounters(data:any){
             const observations = this.findEncounter(data, "CURRENT PREGNANCY")?.observations;
-            console.log("########==>",observations)
+            console.log("########==>..|",observations)
+             const trying =this.pregnancy.Gravida = this.filterObs(observations, "Gravida")?.[0]?.value_text ?? "";
+             console.log("Lets see if working+++++..||",trying)
         },
         async setTreatmentEncounters(data: any) {},
         async setPresentingComplainsEncounters(data: any) {
