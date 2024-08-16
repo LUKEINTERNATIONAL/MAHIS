@@ -7,7 +7,6 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import HisDate from "@/utils/Date";
 import { createModal } from "@/utils/Alerts";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
-import { ConceptService } from "@/services/concept_service"
 
 export async function getVaccinesSchedule() {
     const patient = new PatientService();
