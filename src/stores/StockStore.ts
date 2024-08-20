@@ -119,17 +119,17 @@ const initialStock = [
                 {
                     name: "viral",
                     value: "viral",
-                    colSize: "3",
+                    colSize: "3.3",
                 },
                 {
                     name: "ampoule",
                     value: "ampoule",
-                    colSize: "3.5",
+                    colSize: "4.7",
                 },
                 {
                     name: "tablet",
                     value: "tablet",
-                    colSize: "3",
+                    colSize: "3.7",
                 },
             ],
         },
