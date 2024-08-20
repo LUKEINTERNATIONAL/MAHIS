@@ -34,7 +34,7 @@
                                     <ion-col>{{pregnancy.Gravida}}</ion-col>
                                     <ion-col>{{pregnancy.Stillbirths}}</ion-col>
                                     <ion-col>{{pregnancy['Abortions/Miscarriages']}}</ion-col> 
-                                    <ion-col>{{pregnancy['past pregnancies complications']}}</ion-col> 
+                                    <ion-col>{{pregnancy['test']}}</ion-col> 
                                 </ion-row>
                             </div>
                         </div>
@@ -268,8 +268,12 @@ export default defineComponent({
             this.pregnancy.Gravida = this.filterObs(observations, "Gravida")?.[0]?.value_text ?? "";
             this.pregnancy.Stillbirths = this.filterObs(observations, "Stillbirths")?.[0]?.value_text ?? "";
             this.pregnancy['Abortions/Miscarriages'] = this.filterObs(observations, "Abortions/Miscarriages")?.[0]?.value_text ?? "";
-           // this.pregnancy.Parity = this.filterObs(observations, "Parity")?.[0]?.value_text ?? "";
-           // this.pregnancy = await this.getConceptValues(this.filterObs(observations, "past pregnancies complications"), "coded");
+            console.log("lets seeee",observations)
+            // this.pregnancy
+        const test= await this.getConceptValues(this.filterObs(observations, "past pregnancies complications"), "coded");
+            
+        if(test)
+        this.pregnancy.test = test[0]
         },
         async setTreatmentEncounters(data: any) {},
         async setPresentingComplainsEncounters(data: any) {
