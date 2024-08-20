@@ -72,7 +72,7 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Doses wasted",
+                            inputHeader: "Wasted viral",
                             value: "",
                             name: "doses_wasted",
                             eventType: "input",
@@ -117,8 +117,8 @@ const initialStock = [
             },
             data: [
                 {
-                    name: "vial",
-                    value: "vial",
+                    name: "viral",
+                    value: "viral",
                     colSize: "3",
                 },
                 {
@@ -210,7 +210,7 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Number of shots",
+                            inputHeader: "No. of doses in a viral",
                             value: "",
                             name: "unit_doses",
                             eventType: "input",
