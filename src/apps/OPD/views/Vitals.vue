@@ -54,6 +54,7 @@ import { defineComponent } from "vue";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import {getFieldValue} from "@/services/data_helpers";
+import {validateField} from "@/services/validation_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -110,9 +111,6 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-      "Height Weight Reason"() {
-        return getFieldValue(this.vitals, "Height Weight Reason", "value");
-      },
     },
     async created() {
         // this.getData();
@@ -162,14 +160,14 @@ export default defineComponent({
       async saveData() {
         this.isLoading = true;
         try {
-          if (this.actionBtn != "Finish") {
-            if (this.vitals.validationStatus) {
+          if (this.actionBtn !== "Finish") {
+            const isValid = await this.validaterowData();
+            if (isValid) {
               await this.saveVitals();
               resetOPDPatientData();
               this.$router.push("OPDConsultationPlan");
             } else {
-              await this.validaterowData();
-              toastWarning("Please fill all required fields");
+              toastWarning("Please fill all required fields.");
             }
           } else {
             this.$router.push("OPDConsultationPlan");
@@ -181,40 +179,63 @@ export default defineComponent({
         }
       },
 
+
       async saveVitals() {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
             await vitalsInstance.onFinish(this.vitals);
         },
-        async validaterowData() {
-            const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            this.vitals.forEach((section: any, sectionIndex: any) => {
-                if (section?.data?.rowData) {
-                    section?.data?.rowData.forEach((col: any, colIndex: any) => {
-                        col.colData.some((input: any, inputIndex: any) => {
-                            const validateResult = vitalsInstance.validator(input);
-                            if (validateResult?.length > 0) {
-                                this.hasValidationErrors.push("false");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
-                                    validateResult.flat(Infinity)[0];
-                                return true;
-                            } else {
-                                this.hasValidationErrors.push("true");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-                            }
-
-                            return false;
-                        });
-                    });
+      async validaterowData() {
+        const userID: any = Service.getUserID();
+        const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+        this.hasValidationErrors = [];
+        this.vitals.forEach((section: any, sectionIndex: any) => {
+          if (section?.data?.rowData) {
+            section?.data?.rowData.forEach((col: any, colIndex: any) => {
+              col.colData.some((input: any, inputIndex: any) => {
+                const validateResult = vitalsInstance.validator(input);
+                if (validateResult?.length > 0) {
+                  this.hasValidationErrors.push("false");
+                  this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
+                  this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
+                      validateResult.flat(Infinity)[0];
+                  return true;
+                } else {
+                  this.hasValidationErrors.push("true");
+                  this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
+                  this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                 }
+                return false;
+              });
             });
 
-            this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
-        },
-        openModal() {
+          }
+
+          // Validate reason fields for checked checkboxes when saving data
+          if (section?.checkboxBtnContent?.data) {
+            section.checkboxBtnContent.data.forEach((checkbox: any) => {
+              if (checkbox.checked) {
+                const reasonField = section.checkboxBtnContent.inputFields?.find(
+                    (inputField: any) => inputField.name.includes("Reason")
+                );
+                const reasonValue = reasonField?.value?.toString().trim() || "";
+
+                if (reasonField && reasonField.required && !reasonValue) {
+                  this.hasValidationErrors.push("false");
+                  reasonField.alertsErrorMassage = "This field is required.";
+                } else {
+                  reasonField.alertsErrorMassage = "";
+                }
+              }
+            });
+          }
+        });
+        this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
+        return this.vitals.validationStatus;
+      },
+
+
+      openModal() {
             createModal(SaveProgressModal);
         },
     },

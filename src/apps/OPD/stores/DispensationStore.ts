@@ -24,6 +24,11 @@ export const useDispensationStore = defineStore("dispensation", {
         ],
     }),
     actions: {
+        setComment(index: number, comment: string) {
+            if (this.drugPrescriptions[index]) {
+                this.drugPrescriptions[index].comment = comment;
+            }
+        },
         resetStore() {
             this.drugPrescriptions = [];
             this.dispensedMedication = [];
@@ -82,6 +87,7 @@ export const useDispensationStore = defineStore("dispensation", {
         initializeReasonParameter() {
             this.drugPrescriptions.forEach((Element) => {
                 Element.reason = "";
+                Element.comment = "";
             });
         },
         getValidation(index: number) {

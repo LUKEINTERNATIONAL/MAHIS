@@ -1,26 +1,36 @@
 <template>
-    <ion-page>
-        <Toolbar />
-        <ion-content>
-            <div class="container">
-                <div style="display: flex; align-items: center" @click="nav('patientProfile')">
-                    <DynamicButton fill="clear" name="Back to profile" iconSlot="start" :icon="iconsContent.arrowLeft" />
-                </div>
-                <div class="title">
-                    <div class="demographics_title">Enrollment</div>
-                </div>
-            </div>
-            <div>
-                <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
-                    <Elligibility />
-                </ion-col>
-                <div class="footer" style="margin-right: 520px">
-                    <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
-                </div>
-            </div>
-        </ion-content>
-    </ion-page>
+  <ion-page>
+    <Toolbar />
+    <ion-content>
+      <div class="container">
+        <div class="title">
+          <div class="demographics_title">Enrollment</div>
+        </div>
+      </div>
+      <div>
+        <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
+          <Elligibility />
+        </ion-col>
+        <div class="footer" style="display: flex; justify-content: space-between; margin-right: 520px; margin-left: 520px;">
+          <DynamicButton
+              name="Cancel"
+              iconSlot="start"
+              :icon="iconsContent.arrowLeft"
+              @click="nav('patientProfile')"
+          />
+          <DynamicButton
+              name="Save"
+              iconSlot="end"
+              :icon="iconsContent.saveWhite"
+              @click="saveData()"
+          />
+        </div>
+      </div>
+    </ion-content>
+  </ion-page>
 </template>
+
+
 
 <script lang="ts">
 import {
@@ -128,11 +138,8 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
-        ...mapState(useANCenrollementStore, ["ANCNumber"]),
+        ...mapState(useANCenrollementStore, ["eligibility"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
 
@@ -141,41 +148,8 @@ export default defineComponent({
     },
 
     methods: {
-        setCurrentStep(name: any) {
-            this.currentStep = name;
-        },
-        nextStep() {
-            const currentIndex = this.steps.indexOf(this.currentStep);
-            if (currentIndex < this.steps.length - 1) {
-                this.currentStep = this.steps[currentIndex + 1];
-            }
-        },
-        previousStep() {
-            const currentIndex = this.steps.indexOf(this.currentStep);
-            if (currentIndex > 0) {
-                this.currentStep = this.steps[currentIndex - 1];
-            }
-        },
         async saveData() {
-            // await this.saveNcdNumber();
             this.$router.push("ANCHome");
-        },
-
-        async saveNcdNumber() {
-            const NCDNumber = getFieldValue(this.NCDNumber, "NCDNumber", "value");
-            const sitePrefix = await GlobalPropertyService.get("site_prefix");
-            const formattedNCDNumber = sitePrefix + "-NCD-" + NCDNumber;
-            const exists = await IdentifierService.ncdNumberExists(formattedNCDNumber);
-            if (exists) toastWarning("NCD number already exists", 5000);
-            else {
-                const patient = new PatientService();
-                patient.createNcdNumber(formattedNCDNumber);
-                const demographicsStore = useDemographicsStore();
-                demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
-                await this.saveEnrollment();
-                resetPatientData();
-                await UserService.setProgramUserActions();
-            }
         },
         openModal() {
             createModal(SaveProgressModal);
@@ -183,22 +157,11 @@ export default defineComponent({
         nav(url: any) {
             this.$router.push(url);
         },
-        setIconClass() {
-            this.iconListStatus = "inactive_icon";
-            this.iconGridStatus = "inactive_icon";
-            if (this.enrollmentDisplayType == "list") {
-                this.iconListStatus = "active_icon";
-            } else if (this.enrollmentDisplayType == "grid") {
-                this.iconGridStatus = "active_icon";
-            }
-        },
         async buildEnrollmentData() {
             return [
-                ...(await formatRadioButtonData(this.patientHistoryHIV)),
-                ...(await formatRadioButtonData(this.substance)),
-                ...(await formatCheckBoxData(this.enrollmentDiagnosis)),
-                ...(await formatCheckBoxData(this.patientHistory)),
-                ...(await formatCheckBoxData(this.patientHistoryHIV)),
+
+                ...(await formatCheckBoxData(this.eligibility)),
+
             ];
         },
         async saveEnrollment() {

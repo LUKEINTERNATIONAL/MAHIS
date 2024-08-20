@@ -9,7 +9,7 @@
                 :src="reportUrl"
                 width="100%"
                 height="700px"
-                frameborder="0"
+                frameborder="1"
             ></iframe>
           </ion-col>
         </ion-row>
@@ -56,12 +56,10 @@ export default defineComponent({
   }),
   mounted() {
     this.loadUserFacilityDetails();
-    console.log(this.loadUserFacilityDetails);
   },
   methods: {
     async loadUserFacilityDetails() {
       const data = await getUserLocation();
-      // this.facilityName = `Facility name: ${data.name}`;
       this.locationID = data.location_id;
       this.updateReportUrl();
     },

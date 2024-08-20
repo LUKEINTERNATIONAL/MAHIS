@@ -65,7 +65,6 @@ import { validateField } from "@/services/ANC/profile_validation_service";
 import Validation from "@/validations/StandardValidations";
 import HisDate from "@/utils/Date";
 import calculateAge from "@/utils/Date";
-
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
 //     return errorMassage
@@ -100,6 +99,7 @@ export default defineComponent({
         CurrentPregnancies,
         Medications,
         MedicalHistory,
+        BasicFooter
     },
     data() {
         return {
