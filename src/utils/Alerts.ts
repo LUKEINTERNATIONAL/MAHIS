@@ -2,45 +2,39 @@ import { toastController, modalController, popoverController } from "@ionic/vue"
 import ConfimationSheet from "@/components/DataViews/actionsheet/ConfirmationSheet.vue";
 import { NavBtnInterface } from "@/components/HisDynamicNavFooterInterface";
 import { icons } from "@/utils/svg";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 interface AlertConfirmationOtions {
     header?: string;
     confirmBtnLabel?: string;
     cancelBtnLabel?: string;
 }
 
-async function toast(message: string, color = "primary", duration = 2000, icon = "") {
-    const toast = await toastController.create({
-        message: message,
-        position: "top",
-        animated: true,
-        duration: duration,
-        color: color,
-        cssClass: "custom-toast",
-        icon: `data:image/svg+xml;utf8,` + icon,
-        keyboardClose: false,
-        buttons: [
-            {
-                text: "X",
-                role: "cancel",
-                handler: () => {
-                    console.log("Dismiss clicked");
-                },
-            },
-        ],
+export function toastWarning(message: string, duration = 3000) {
+    toast.warn(message, {
+        theme: "colored",
+        autoClose: duration,
+        transition: "zoom",
+        dangerouslyHTMLString: true,
     });
-    return toast.present();
 }
 
-export function toastWarning(message: string, duration = 2000) {
-    return toast(message, "warning", duration, icons.warningAlert);
+export function toastSuccess(message: string, duration = 3000) {
+    toast.success(message, {
+        theme: "colored",
+        autoClose: duration,
+        transition: "zoom",
+        dangerouslyHTMLString: true,
+    });
 }
 
-export function toastSuccess(message: string, duration = 1000) {
-    return toast(message, "success", duration, icons.successAlert);
-}
-
-export function toastDanger(message: string, duration = 2000) {
-    return toast(message, "danger", duration, icons.dangerAlert);
+export function toastDanger(message: string, duration = 3000) {
+    toast.error(message, {
+        theme: "colored",
+        autoClose: duration,
+        transition: "zoom",
+        dangerouslyHTMLString: true,
+    });
 }
 
 export function createAlert(message: string, header = "" as string, btns = [] as Array<NavBtnInterface>) {
