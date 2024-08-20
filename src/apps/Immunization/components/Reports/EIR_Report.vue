@@ -18,7 +18,7 @@
               @click="selectSection('fixed')"
               :class="{ 'selected': selectedSection === 'fixed' }"
             >
-              Fixed
+              Static
             </th>
             <th
               colspan="2"

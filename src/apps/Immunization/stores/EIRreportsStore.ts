@@ -7,13 +7,14 @@ export const EIRreportsStore = defineStore("EIRreportsStore", {
         end_date: '',
     }),
     actions: {
-        setNavigationPayload(title: string, canGoBack: boolean, canGoForward: boolean,  backHref: string, previousRoute: string): void{
+        setNavigationPayload(title: string, canGoBack: boolean, canGoForward: boolean,  backHref: string, previousRoute: string, subTxt=''): void{
             const data = {
                 title: title,
                 canGoBack: canGoBack,
                 canGoForward: canGoForward, 
                 backHref: backHref,
                 previousRoute: previousRoute,
+                subTxt: subTxt
             }
             
             this.navigationPayload = data

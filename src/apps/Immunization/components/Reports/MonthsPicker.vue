@@ -60,9 +60,10 @@ export default defineComponent({
     },
     initNavData(task: Task) {
       const store = EIRreportsStore()
-      store.setNavigationPayload('EIR Report', true, false, '/', 'EIPMReport')
       const dates = task.other[1][1].split(" to ")
       store.setStartAndEndDates(dates[0],dates[1])
+      const subText = task.other[1][0]
+      store.setNavigationPayload('EIR Monthly Report', true, false, '/', 'EIPMReport', subText as string)
     },
     initOwnNavData() {
       const store = EIRreportsStore()
