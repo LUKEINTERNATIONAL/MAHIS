@@ -38,7 +38,7 @@ export default defineComponent({
         Menu,
         ModalContainer: defineAsyncComponent(() => import("@/components/ModalContainer.vue")),
         FullScreenNotice: defineAsyncComponent(() => import("@/components/FullScreenModifier.vue")),
-        ConnectionError: defineAsyncComponent(() => import("@/components/ConnectionError.vue")),
+        // ConnectionError: defineAsyncComponent(() => import("@/components/ConnectionError.vue")),
     },
     setup() {
         const status = useStatusStore();
@@ -108,7 +108,7 @@ export default defineComponent({
                         ApiClient.healthCheck();
                     }
                 }, 2500);
-                toastWarning("Unable to reach api. You can fix the error below");
+                toastWarning("Unable to reach api");
             }
             nprogress.done();
         });
