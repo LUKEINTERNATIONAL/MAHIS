@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import NextAppointMent from "../components/Modals/nextAppointMent.vue";
 
 export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
     state: () => ({
@@ -18,6 +19,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         vaccineToBeVoided: {} as any,
         lotNumberData: [] as any,
         lastVaccineAdminstredOnschedule: [] as any,
+        nextAppointMentDate: "" as any,
     }),
     actions: {
         setVaccineSchedule(data: any) {
@@ -131,6 +133,9 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         },
         getLastVaccineAdminstredOnschedule() {
             return this.lastVaccineAdminstredOnschedule
+        },
+        setNextAppointMentDate(NextAppointMentDate: string): void {
+            this.nextAppointMentDate = NextAppointMentDate
         }
     },
     persist: true,

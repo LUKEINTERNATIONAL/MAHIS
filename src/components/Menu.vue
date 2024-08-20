@@ -1,11 +1,11 @@
 <template>
-    <ion-menu side="start" content-id="main">
+    <ion-menu side="start" content-id="main" @ionDidOpen="onMenuOpen">
         <ion-header>
             <ion-toolbar>
                 <ion-title>Menu</ion-title>
             </ion-toolbar>
         </ion-header>
-        <ion-content>
+        <ion-content style="--background: #fff">
             <ion-accordion-group expand="inset">
                 <ion-accordion value="first" @click="navigationMenu('home')" toggle-icon="">
                     <ion-item slot="header" color="light">
@@ -13,17 +13,22 @@
                     </ion-item>
                 </ion-accordion>
 
-                <ion-accordion value="fourth" @click="navigationMenu('stockManagement')" toggle-icon="">
+                <ion-accordion value="second" @click="navigationMenu('stockManagement')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Stock Management</ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="fifth" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
+                <ion-accordion value="third" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Schedule Immunization</ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="second">
+                <ion-accordion value="fifth" @click="navigationMenu('manageAppointMents')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Manage Appointments</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="fourth">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Reports</ion-label>
                     </ion-item>
@@ -80,7 +85,7 @@
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
-                <ion-accordion value="third" v-if="isSuperuser">
+                <ion-accordion value="sixth" v-if="isSuperuser">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Settings</ion-label>
                     </ion-item>
@@ -103,21 +108,16 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-item button @click="navigationMenu('users')" color="light">
-                                <ion-label>User Management</ion-label>
+                            <ion-item button @click="navigationMenu('users')">
+                                <ion-label class="header">User Management</ion-label>
                             </ion-item>
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
-                <ion-accordion value="six" toggle-icon="" toggle-icon-slot="start" :readonly="true">
+                <ion-accordion value="seventh" toggle-icon="" toggle-icon-slot="start" :readonly="true">
                     <ion-item slot="header" color="light">
                         <ion-label class="header" style="color: var(--ion-color-primary)" v-if="apiStatus">Online </ion-label>
                         <ion-label class="header" style="color: rgb(223, 78, 69)" v-if="!apiStatus">Offline</ion-label>
-                    </ion-item>
-                </ion-accordion>
-                <ion-accordion value="fifth" @click="navigationMenu('manageAppointMents')">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="header">Manage Appointments</ion-label>
                     </ion-item>
                 </ion-accordion>
             </ion-accordion-group>
@@ -127,7 +127,7 @@
 
 <script lang="ts">
 import { IonAccordion, IonAccordionGroup, IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController } from "@ionic/vue";
-import { defineComponent, ref, computed, onMounted, onUpdated } from "vue";
+import { defineComponent, ref, computed, onMounted, onUpdated, watch } from "vue";
 import { UserService } from "@/services/user_service";
 import { useRouter } from "vue-router";
 import { useStatusStore } from "@/stores/StatusStore";
@@ -163,7 +163,9 @@ export default defineComponent({
         const isSuperuser = computed(() => {
             return user_data.value?.roles.some((role: any) => role.role === "Superuser");
         });
-
+        async function onMenuOpen() {
+            await fetchUserData();
+        }
         function navigationMenu(url: string) {
             menuController.close();
             router.push(url).then(() => {
@@ -178,7 +180,20 @@ export default defineComponent({
             isSuperuser,
             user_data,
             navigationMenu,
+            onMenuOpen,
         };
     },
 });
 </script>
+<style scoped>
+ion-accordion {
+    margin: 0 auto;
+}
+
+ion-accordion.accordion-expanding,
+ion-accordion.accordion-expanded {
+    width: calc(100% - 32px);
+
+    margin: 16px auto;
+}
+</style>

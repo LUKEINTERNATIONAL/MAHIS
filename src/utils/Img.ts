@@ -1,18 +1,11 @@
+import { getBaseURl } from "@/utils/GeneralUti";
+
 export default function img(name: string) {
     let baseURL = getBaseURl();
     if (baseURL.length > 0) {
         baseURL = '/' + baseURL;
     }
     return `${baseURL}/images/${name}`;
-}
-
-export function getBaseURl() {
-    const baseURL = sessionStorage.baseURL
-    if (baseURL) {
-        let  websockerURL = removeQuotes(baseURL);
-        return websockerURL;
-    }
-    return ''
 }
 
 function removeQuotes(str: string) {

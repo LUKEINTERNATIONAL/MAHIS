@@ -96,14 +96,21 @@ import {
     modalController,
     IonBadge
 } from "@ionic/vue"
-import { ref, onMounted,computed, watch } from "vue"
-import HisDate from "@/utils/Date"
-import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore"
-import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service"
+import { ref, onMounted,computed, watch } from "vue";
+import HisDate from "@/utils/Date";
+import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
+import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service";
 import smsConfirmation from "@/apps/Immunization/components/Modals/smsConfirmation.vue";
 import { SmsService } from "@/apps/Immunization/services/sms_service";
-import { Service } from '@/services/service'
+import { toastWarning } from "@/utils/Alerts";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { Service } from '@/services/service';
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+
 const store = useImmunizationAppointMentStore()
+const user = useDemographicsStore();
+
+
 
 const date = ref()
 const configsSms = ref(false);
@@ -111,6 +118,7 @@ const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
 const show_selected_date = ref(false)
 const currently_selected_date = ref()
 const appointment_count = ref(0)
+const phoneNumber = ref()
 
 function disablePastDates(date: any) {
     const today = new Date(Service.getSessionDate())
@@ -137,24 +145,39 @@ async function save() {
         appointment_service.setPatientID(props?.patient_Id)
     }
     const appointmentDetails = await appointment_service.createAppointment();
+    setMilestoneReload()
     dismiss();
-    if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
+    
+    if (!phoneNumber.value.includes("+")) {
+        toastWarning("Invalid phone number for sms reminder");
+        return;
+     }
+     
+   if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
           if(configsSms.value){        
              createModal(smsConfirmation, {
                    componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1] },
                    class: "smsConfirmation"
-             });        
+             });       
         }
         else{
                await SmsService.appointment(appointmentDetails[0],appointmentDetails[1]);
             }
    }
+
+}
+
+async function setMilestoneReload() {
+    const store = useAdministerVaccineStore();
+    store.setVaccineReload(!store.getVaccineReload());
 }
 
 onMounted(async () => {
-    store.clearAppointmentMent()    
     let data = await SmsService.getConfigurations();
-    configsSms.value = data.show_sms_popup;     
+    let phone = await SmsService.fetchphone(user.demographics.patient_id);
+    configsSms.value = data.show_sms_popup; 
+    phoneNumber.value = phone.message;
+    store.clearAppointmentMent()      
 })
 
 async function getAppointmentMents(date: any) {
