@@ -108,55 +108,55 @@ const initialStock = [
         },
     },
     {
-        data: {
-            rowData: [
+        radioBtnContent: {
+            header: {
+                title: "Dosage Form*",
+                selectedValue: "",
+                name: "dosage_form",
+                alertsErrorMassage: "",
+            },
+            data: [
                 {
-                    colData: [
-                        {
-                            inputHeader: "Dosage Form",
-                            icon: icons.search,
-                            value: "",
-                            name: "dosage_form",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            selectedID: "",
-                            validationFunctionName: "required",
-                            isSingleSelect: true,
-                            trackBy: "id",
-                            multiSelectData: [
-                                { id: 1, name: "vial" },
-                                { id: 2, name: "ampoule" },
-                                { id: 3, name: "tablet" },
-                            ],
-                        },
-                    ],
+                    name: "vial",
+                    value: "vial",
+                    colSize: "3",
+                },
+                {
+                    name: "ampoule",
+                    value: "ampoule",
+                    colSize: "3.5",
+                },
+                {
+                    name: "tablet",
+                    value: "tablet",
+                    colSize: "3",
                 },
             ],
         },
     },
     {
-        data: {
-            rowData: [
+        radioBtnContent: {
+            header: {
+                title: "VVM stage*",
+                selectedValue: "",
+                name: "vvm_stage",
+                alertsErrorMassage: "",
+            },
+            data: [
                 {
-                    colData: [
-                        {
-                            inputHeader: "VVM stage",
-                            icon: icons.search,
-                            value: "",
-                            name: "vvm_stage",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            selectedID: "",
-                            validationFunctionName: "required",
-                            isSingleSelect: true,
-                            trackBy: "id",
-                            multiSelectData: [
-                                { id: 1, name: "1" },
-                                { id: 2, name: "2" },
-                                { id: 3, name: "3" },
-                            ],
-                        },
-                    ],
+                    name: "1",
+                    value: "1",
+                    colSize: "2.5",
+                },
+                {
+                    name: "2",
+                    value: "2",
+                    colSize: "2.5",
+                },
+                {
+                    name: "3",
+                    value: "3",
+                    colSize: "2.5",
                 },
             ],
         },
