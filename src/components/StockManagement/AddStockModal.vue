@@ -224,7 +224,7 @@ export default defineComponent({
                 name: filter,
                 page: 1,
                 page_size: 10,
-                concept_set: "OPD Medication",
+                concept_set: "Immunizations",
             });
             modifyFieldValue(this.stock, "product name", "multiSelectData", drugs);
         },
