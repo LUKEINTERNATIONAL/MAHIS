@@ -105,7 +105,6 @@ export default defineComponent({
         this.stockService = new StockService();
     },
     async mounted() {
-        console.log("🚀 ~ modifyFieldValue ~  this.data:", this.data);
         this.resetData();
         if (this.data) {
             this.modifyFieldValue();
@@ -154,9 +153,9 @@ export default defineComponent({
                                 drug_id: drug_id,
                                 expiry_date: getFieldValue(this.stock, "expire date", "value"),
                                 unit_doses: getFieldValue(this.stock, "unit_doses", "value"),
-                                vvm_stage: getFieldValue(this.stock, "vvm_stage", "value")?.name,
+                                vvm_stage: getRadioSelectedValue(this.stock, "vvm_stage"),
                                 manufacture: getFieldValue(this.stock, "manufacture", "value"),
-                                dosage_form: getFieldValue(this.stock, "dosage_form", "value")?.name,
+                                dosage_form: getRadioSelectedValue(this.stock, "dosage_form"),
                                 quantity: getFieldValue(this.stock, "quantity", "value"),
                                 delivery_date: getFieldValue(this.stock, "delivery_date", "value") || HisDate.currentDate(),
                                 product_code: "",
