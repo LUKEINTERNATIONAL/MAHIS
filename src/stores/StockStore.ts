@@ -3,28 +3,6 @@ import { icons } from "@/utils/svg";
 import _ from "lodash";
 const initialStock = [
     {
-        selectedData: {},
-        isFinishBtn: false,
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Batch No.*",
-                            iconRight: icons.scannerIcon,
-                            value: "",
-                            name: "batch",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            valueType: "text",
-                            validationFunctionName: "required",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
         data: {
             rowData: [
                 {
@@ -55,9 +33,10 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Quantity*",
+                            inputHeader: "Batch No.*",
+                            iconRight: icons.scannerIcon,
                             value: "",
-                            name: "stock in",
+                            name: "batch",
                             eventType: "input",
                             alertsErrorMassage: "",
                             valueType: "text",
@@ -74,21 +53,37 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Delivery date",
-                            icon: icons.calenderPrimary,
+                            inputHeader: "Manufacturer",
                             value: "",
-                            name: "delivery_date",
+                            name: "manufacture",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            required: true,
-                            isDatePopover: true,
+                            valueType: "text",
+                            validationFunctionName: "required",
                         },
                     ],
                 },
             ],
         },
     },
-
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Doses wasted",
+                            value: "",
+                            name: "doses_wasted",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            valueType: "text",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
     {
         data: {
             rowData: [
@@ -105,6 +100,122 @@ const initialStock = [
                             isDatePopover: true,
                             minDate: "",
                             maxDate: "",
+                            validationFunctionName: "required",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Dosage Form",
+                            icon: icons.search,
+                            value: "",
+                            name: "dosage_form",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            selectedID: "",
+                            validationFunctionName: "required",
+                            isSingleSelect: true,
+                            trackBy: "id",
+                            multiSelectData: [
+                                { id: 1, name: "vial" },
+                                { id: 2, name: "ampoule" },
+                                { id: 3, name: "tablet" },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "VVM stage",
+                            icon: icons.search,
+                            value: "",
+                            name: "vvm_stage",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            selectedID: "",
+                            validationFunctionName: "required",
+                            isSingleSelect: true,
+                            trackBy: "id",
+                            multiSelectData: [
+                                { id: 1, name: "1" },
+                                { id: 2, name: "2" },
+                                { id: 3, name: "3" },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: {},
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Stock Received*",
+                            value: "",
+                            name: "quantity",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            valueType: "text",
+                            validationFunctionName: "required",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Date Received:",
+                            icon: icons.calenderPrimary,
+                            value: "",
+                            name: "delivery_date",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            required: true,
+                            isDatePopover: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: {},
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Number of shots",
+                            value: "",
+                            name: "unit_doses",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            valueType: "text",
                             validationFunctionName: "required",
                         },
                     ],

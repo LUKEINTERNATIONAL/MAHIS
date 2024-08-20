@@ -29,6 +29,10 @@ export class Appointment extends AppEncounterService {
         return providerID
     }
 
+    async setPatientID(patientID: string): Promise<void> {
+        this.patientID = patientID as any
+    }
+
     async createAppointment() {
         const _appointment_ = [] as any
         const store = useImmunizationAppointMentStore()

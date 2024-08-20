@@ -65,7 +65,7 @@ export class Service {
     }
 
     static async getJson(url: string, params = {} as Record<string, any>) {
-        const transformedUrl =   `${url}?${Url.parameterizeObjToString(params)}`;
+        const transformedUrl = `${url}?${Url.parameterizeObjToString(params)}`;
         return this.jsonResponseHandler(ApiClient.get(transformedUrl));
     }
 
@@ -79,6 +79,9 @@ export class Service {
 
     static async void(url: string, reason: Record<string, string>) {
         return this.jsonResponseHandler(ApiClient.remove(url, reason));
+    }
+    static async delete(url: string, data: any) {
+        return this.jsonResponseHandler(ApiClient.remove(url, data));
     }
 
     static async getThirdpartyApps() {

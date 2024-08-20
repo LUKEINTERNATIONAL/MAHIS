@@ -82,7 +82,7 @@ import {
     AsyncTableRowHandler,
     TableRowParser,
 } from "@/components/DataViews/tables/ReportDataTable";
-import ReportTable from "@/components/DataViews/tables/ReportDataTable.vue";
+import ReportTable  from "@/components/DataViews/tables/ReportDataTable.vue";
 import { IonCol, IonRow, IonPage, IonHeader, IonContent, IonToolbar, IonChip, IonFooter } from "@ionic/vue";
 import { toCsv, toTablePDF } from "@/utils/Export";
 import { Service } from "@/services/service";

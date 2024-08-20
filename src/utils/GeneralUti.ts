@@ -1,3 +1,14 @@
+import * as fs from 'fs';
+import { promisify } from 'util';
+export interface Config {
+    host: string;
+    port: string;
+    protocol: string;
+    thirdpartyapps: string;
+    otherApps: Array<any>;
+    baseURL: string;
+    [key: string]: any;
+}
 
 export function areFieldsValid(propertiesArray: any[]) {
     let foundInvalidEntry = false;
@@ -62,4 +73,98 @@ export function isSameDate(date1: Date, date2: Date) {
     return date1.getFullYear() === date2.getFullYear() &&
            date1.getMonth() === date2.getMonth() &&
            date1.getDate() === date2.getDate();
+}
+
+const configPaths = ["/mahis/config.json"];
+
+export async function getFileConfig2(): Promise<Config> {
+    for (const path of configPaths) {
+        try {
+            const response = await fetch(path);
+            if (!response.ok) {
+                throw new Error(`Unable to retrieve configuration file from ${path}`);
+            }
+            const { apiURL, apiPort, apiProtocol, appConf, baseURL, apps, thirdpartyApps, platformProfiles, otherApps, websockerURL } = await response.json();
+            sessionStorage.setItem("apiURL", apiURL);
+            sessionStorage.setItem("apiPort", apiPort);
+            sessionStorage.setItem("apiProtocol", apiProtocol);
+            sessionStorage.setItem("appConf", JSON.stringify(appConf));
+            sessionStorage.setItem("apps", JSON.stringify(apps));
+            // sessionStorage.setItem("app", JSON.stringify({ programID: 29, applicationName: "PATIENT REGISTRATION PROGRAM" }));
+            sessionStorage.setItem("thirdpartyApps", JSON.stringify(thirdpartyApps));
+            sessionStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
+            sessionStorage.setItem("otherApps", JSON.stringify(otherApps));
+            sessionStorage.setItem("baseURL", JSON.stringify(baseURL));
+            sessionStorage.setItem("websockerURL", JSON.stringify(websockerURL))
+            return {
+                host: apiURL,
+                port: apiPort,
+                protocol: apiProtocol,
+                thirdpartyapps: thirdpartyApps,
+                otherApps,
+                baseURL: baseURL,
+            };
+        } catch (e) {
+            console.error(`Error reading config from ${path}:`, e);
+            if (path === configPaths[configPaths.length - 1]) {
+                throw new Error('All API Configuration file attempts failed. Please check console log for more details');
+            }
+        }
+    }
+
+    // This line should never be reached due to the throw in the loop,
+    // but TypeScript requires a return statement here
+    throw new Error('Unexpected error occurred');
+}
+
+async function readConfigValueAsync(): Promise<Config> {
+    for (const path of configPaths) {
+        try {
+            const response = await fetch(path);
+            if (!response.ok) {
+                throw new Error(`Unable to retrieve configuration file from ${path}`);
+            }
+            const { baseURL } = await response.json();
+            return baseURL;
+        } catch (e) {
+            console.error(`Error reading config from ${path}:`, e);
+            if (path === configPaths[configPaths.length - 1]) {
+                throw new Error('All API Configuration file attempts failed. Please check console log for more details');
+            }
+        }
+    }
+    // This line should never be reached due to the throw in the loop,
+    // but TypeScript requires a return statement here
+    throw new Error('Unexpected error occurred');
+}
+
+export async function getBaseURL() {
+    const baseURL = await readConfigValueAsync()
+    console.log('Base URL (async):', baseURL);
+    return baseURL;
+}
+
+export function getWebsockerURL() {
+    const webST = sessionStorage.websockerURL
+    if (webST) {
+        let  websockerURL = removeQuotes(webST);
+        return websockerURL;
+    }
+    return ''
+}
+
+function removeQuotes(str: string) {
+    if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
+      return str.substring(1, str.length - 1);
+    }
+    return str;
+}
+
+export function getBaseURl() {
+    const baseURL = sessionStorage.baseURL
+    if (baseURL) {
+        let  websockerURL = removeQuotes(baseURL);
+        return websockerURL;
+    }
+    return ''
 }
