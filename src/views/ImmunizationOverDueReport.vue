@@ -72,10 +72,12 @@ import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import "datatables.net-select";
+import { PatientService } from "@/services/patient_service";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser],
+    mixins: [SetUser, SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -133,9 +135,10 @@ export default defineComponent({
         });
     }, 
     methods: {
-        handleFollowUp(id: any){
-            //Implement followup logic here 
-            console.log(`Implement follow-up logic with id: ${id}`);
+        async handleFollowUp(id: any){
+            const patientData  = await PatientService.findByID(id);
+            this.setDemographics(patientData);
+            this.$router.push("patientProfile");
         },
         async handleInputData(event: any){
             if(event.inputHeader == "Start date") {
