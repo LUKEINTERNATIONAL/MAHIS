@@ -29,6 +29,7 @@
                                     <ion-col class="contentTitle">Live births</ion-col>
                                     <ion-col class="contentTitle">Pregnancies complications</ion-col>
                                     <ion-col class="contentTitle">Past surgeries</ion-col>
+                                    <ion-col class="contentTitle">Other notes</ion-col>
                                 </ion-row>
                                 <!-- <ion-row></ion-row> -->
                                 <ion-row>
@@ -36,7 +37,8 @@
                                     <ion-col>{{pregnancy.Stillbirths}}</ion-col>
                                     <ion-col>{{pregnancy['Abortions/Miscarriages']}}</ion-col> 
                                     <ion-col>{{pregnancy.test}}</ion-col>
-                                    <ion-col>{{pregnancy.surgeries}}</ion-col> 
+                                    <ion-col>{{pregnancy.surgeries}}</ion-col>
+                                    <ion-col>{{pregnancy['Other notes']}}</ion-col>  
                                 </ion-row>
                                 <!-- <ion-row></ion-row> -->
                                 <ion-row>
@@ -44,13 +46,43 @@
                                     <ion-col class="contentTitle">Chronic conditions</ion-col>
                                     <ion-col class="contentTitle">lnmp</ion-col>
                                     <ion-col class="contentTitle">Lmnp Date</ion-col>
-                                    <ion-col class="contentTitle">Lione</ion-col>
+                                    <ion-col class="contentTitle">lmnp Gestation Age</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col>{{pregnancy.allergies}}</ion-col>
                                     <ion-col>{{pregnancy.chronic}}</ion-col>
                                     <ion-col>{{pregnancy.lnmp}}</ion-col>
-                                    <!-- <ion-col>{{pregnancy.lmnpDate}}</ion-col> -->
+                                    <ion-col>{{pregnancy.lmnpGestationAge}}</ion-col>
+                                </ion-row>
+
+                                <ion-row>
+                                    <ion-col class="contentTitle">Ultrasound done</ion-col>
+                                    <ion-col class="contentTitle">Gestation age by Palpation</ion-col>
+                                    <ion-col class="contentTitle">Gestation used</ion-col>
+                                    <ion-col class="contentTitle">Tetanus doses</ion-col>
+                                    <ion-col class="contentTitle">Medications currently prescribed</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{pregnancy.Ultrasound}}</ion-col>
+                                    <ion-col>{{pregnancy.Gestation}}</ion-col>
+                                    <ion-col>{{pregnancy.gestationUsed }}</ion-col>
+                                    <ion-col>{{pregnancy.tetanus}}</ion-col>
+                                    <ion-col>{{pregnancy.prescription}}</ion-col>
+                                </ion-row>
+
+                                                                <ion-row>
+                                    <ion-col class="contentTitle">Daily caffeine intake</ion-col>
+                                    <ion-col class="contentTitle">Recently quit tobacco products</ion-col>
+                                    <ion-col class="contentTitle">Exposure to second hand smoke</ion-col>
+                                    <ion-col class="contentTitle">Tetanus doses</ion-col>
+                                    <ion-col class="contentTitle">Medications currently prescribed</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{pregnancy.caffeine}}</ion-col>
+                                    <ion-col>{{pregnancy.tobacco}}</ion-col>
+                                    <ion-col>{{pregnancy.smoke}}</ion-col>
+                                    <ion-col>{{}}</ion-col>
+                                    <ion-col>{{}}</ion-col>
                                 </ion-row>
                             </div>
                         </div>
@@ -285,15 +317,22 @@ export default defineComponent({
             this.pregnancy.Stillbirths = this.filterObs(observations, "Stillbirths")?.[0]?.value_text ?? "";
             this.pregnancy['Abortions/Miscarriages'] = this.filterObs(observations, "Abortions/Miscarriages")?.[0]?.value_text ?? "";
             console.log("lets seeee",observations);
-            // const test= await this.getConceptValues(this.filterObs(observations, "past pregnancies complications"), "coded")          
-            // if(test)
-            // this.pregnancy.test = test[0]
             this.pregnancy.test = (await this.getConceptValues(this.filterObs(observations, "past pregnancies complications"), "coded"))?.[0];
             this.pregnancy.surgeries = (await this.getConceptValues(this.filterObs(observations, "Does the woman have any past surgeries done?"), "coded"))?.[0];
+            // this.pregnancy['Other notes'] = this.filterObs(observations, "Other notes")?.[0]?.value_text ?? "";
             this.pregnancy.allergies = (await this.getConceptValues(this.filterObs(observations, "Does the woman have any allergies?"), "coded"))?.[0];
-            this.pregnancy.chronic = (await this.getConceptValues(this.filterObs(observations, "chronic conditions"), "coded"))?.[0];
+           // this.pregnancy.chronic = (await this.getConceptValues(this.filterObs(observations, "chronic conditions"), "coded"))?.[0];
             this.pregnancy.lnmp = (await this.getConceptValues(this.filterObs(observations, "LNMP Known?"), "coded"))?.[0];
             //this.pregnancy.lmnpDate = this.filterObs(observations, "lmnpDate")?.[0]?.value_text ?? "";
+            //this.pregnancy.lmnpGestationAge = this.filterObs(observations, "lmnpGestationAge")?.[0]?.value_text ?? "";
+            this.pregnancy.Ultrasound = (await this.getConceptValues(this.filterObs(observations, "Ultrasound done?"), "coded"))?.[0];
+            this.pregnancy.Gestation = (await this.getConceptValues(this.filterObs(observations, "Gestation"), "coded"))?.[0];
+            this.pregnancy.gestationUsed = (await this.getConceptValues(this.filterObs(observations, "Gestation age to be used"), "coded"))?.[0];
+            this.pregnancy.tetanus = (await this.getConceptValues(this.filterObs(observations, "The woman received tetanus doses for immunization?"), "coded"))?.[0];
+            this.pregnancy.prescription = (await this.getConceptValues(this.filterObs(observations, "Which medications is the woman currently prescribed?"), "coded"))?.[0];
+            this.pregnancy.caffeine = (await this.getConceptValues(this.filterObs(observations, "Daily caffeine use"), "coded"))?.[0];
+            this.pregnancy.tobacco = (await this.getConceptValues(this.filterObs(observations, "Recently quit tobacco products"), "coded"))?.[0];
+            this.pregnancy.smoke = (await this.getConceptValues(this.filterObs(observations, "Exposure to second hand smoke"), "coded"))?.[0];
 
 
         },
