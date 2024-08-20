@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { promisify } from 'util';
+import { Service } from "@/services/service";
 export interface Config {
     host: string;
     port: string;
@@ -167,4 +168,13 @@ export function getBaseURl() {
         return websockerURL;
     }
     return ''
+}
+
+export function isEIRProgram(program_id: number): boolean {
+    const programId: any = Service.getProgramID();
+    if (program_id == programId) {
+        return true;
+    } else {
+        return false;
+    }
 }

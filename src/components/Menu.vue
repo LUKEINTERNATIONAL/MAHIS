@@ -34,7 +34,7 @@
                     </ion-item>
                     <div class="ion-padding" slot="content">
                         <ion-accordion-group>
-                            <ion-accordion value="first">
+                            <ion-accordion value="first" v-if="psudoIsEIRProgram(14)">
                                 <ion-item slot="header">
                                     <ion-label class="header">OPD Reports</ion-label>
                                 </ion-item>
@@ -47,7 +47,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="second">
+                            <ion-accordion value="second" v-if="psudoIsEIRProgram(32)">
                                 <ion-item slot="header">
                                     <ion-label class="header">NCD Reports</ion-label>
                                 </ion-item>
@@ -58,7 +58,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="third">
+                            <ion-accordion value="third" v-if="psudoIsEIRProgram(12)">
                                 <ion-item slot="header">
                                     <ion-label class="header">ANC Reports</ion-label>
                                 </ion-item>
@@ -69,14 +69,14 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="fourth">
+                            <ion-accordion value="fourth" v-if="psudoIsEIRProgram(33)">
                                 <ion-item slot="header">
                                     <ion-label class="header">EIR Reports</ion-label>
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
                                         <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer"
-                                            >Indicators And Performance Metrics</ion-item
+                                            >EPI Monthly Report</ion-item
                                         >
                                     </ion-list>
                                 </div>
@@ -131,6 +131,7 @@ import { UserService } from "@/services/user_service";
 import { useRouter } from "vue-router";
 import { useStatusStore } from "@/stores/StatusStore";
 import { storeToRefs } from "pinia";
+import { isEIRProgram } from "@/utils/GeneralUti";
 
 export default defineComponent({
     name: "Menu",
@@ -182,6 +183,11 @@ export default defineComponent({
             onMenuOpen,
         };
     },
+    methods: {
+        psudoIsEIRProgram(program_id: number): boolean {
+            return isEIRProgram(program_id)
+        },
+  }
 });
 </script>
 <style scoped>
