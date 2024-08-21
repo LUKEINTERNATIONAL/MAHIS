@@ -42,7 +42,6 @@ import {
 import { defineComponent } from 'vue';
 import { icons } from '@/utils/svg';
 
-
 export default defineComponent({
 name: 'Menu',
 components:{
@@ -57,21 +56,20 @@ components:{
   data() {
 return {
     iconsContent: icons,
-    qrCodeData: null,
-    extractedDetails: null
+    qrCodeData: '' as string | null,
+    extractedDetails: null as Record<string, string> | null,
     };
 },
 methods:{
     onDecode(content: any) {
         this.qrCodeData = content;
         this.extractedDetails = this.extractDetails(this.qrCodeData);
+        this.nav('./manual');
     },
-    extractDetails(inputString) {
+    extractDetails(inputString: string) {
         const parts = inputString.split("~");
-        console.log(parts);
         const idNumber = parts[1].slice(6, 14).trim();
         const dob = parts[9];
-
         const sex = parts[8];
         const lastName = parts[4];
         const firstName = parts[6];
@@ -89,7 +87,10 @@ methods:{
       // Test data similar to your QR code input
       const testData = "03~I<MWI0SAX855JA6<<<<<<<<<<<<<<<~8707121M3307124MWI<<<<<<<<<<<6~BOLOKONYA<<MWAYANJANA<MAZIKO<<~BOLOKONYA~SAX855JA~MWAYANJANA~MAZIKO~Male~12 Jul 1987~19 Jul 2017~";
       this.onDecode(testData);
-    }
+    },
+    nav(url: any) {
+            this.$router.push(url);
+    },
 }
 });
 </script>
