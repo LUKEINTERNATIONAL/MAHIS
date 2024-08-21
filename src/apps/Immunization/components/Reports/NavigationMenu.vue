@@ -7,6 +7,7 @@
         </ion-button>
       </ion-buttons>
       <ion-title>{{ comp_title }}</ion-title>
+      <ion-title style="font-size: 17px;">{{ navSubTitle }}</ion-title>
       <ion-buttons slot="end">
         <ion-button v-if="can_GoForward" @click="goForward">
           <ion-icon :icon="arrowForward"></ion-icon>
@@ -41,6 +42,7 @@ export default defineComponent({
           can_GoBack: true,
           can_GoForward: false,
           back_Href: '/',
+          navSubTitle: '',
       }
   },
   props: {
@@ -98,6 +100,7 @@ export default defineComponent({
       this.can_GoForward =  this.navigationPayload.canGoForward
       this.back_Href = this.navigationPayload.backHref,
       this.backwardsPath = this.navigationPayload.previousRoute
+      this.navSubTitle = this.navigationPayload.subTxt
     }
   },
 });

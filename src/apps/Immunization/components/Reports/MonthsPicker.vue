@@ -1,7 +1,7 @@
 <template>
   <ion-list>
     <ion-card v-for="task in tasks" :key="task.month">
-      <ion-card-content style="cursor: pointer;" @click="navigationMenu('EIRReport')">
+      <ion-card-content style="cursor: pointer;" @click="navigationMenu('EIRReport', task)">
         <ion-item lines="none">
           <ion-label>
             <h2>{{ task.month }}</h2>
@@ -19,11 +19,14 @@ import { defineComponent } from 'vue';
 import { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote } from '@ionic/vue';
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { mapState } from "pinia";
+import { getMonthsList } from "@/apps/Immunization/services/vaccines_service";
+import HisDate from "@/utils/Date";
 
 interface Task {
   month: string;
   completed: boolean;
   date: string;
+  other: any
 }
 
 export default defineComponent({
@@ -31,21 +34,14 @@ export default defineComponent({
   components: { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote },
   data() {
     return {
-      tasks: [
-        { month: 'Mar 2025', completed: false, date: '3/8/2024' },
-        { month: 'Dec 2024', completed: true, date: '5/8/2024' },
-        { month: 'Sep 2024', completed: true, date: '12/10/2016' },
-        { month: 'Aug 2024', completed: true, date: '10/10/2017' },
-        { month: 'Jul 2024', completed: false, date: '5/8/2024' },
-        { month: 'Jun 2024', completed: true, date: '3/1/2014' },
-        { month: 'May 2024', completed: true, date: '7/8/2024' },
-      ] as Task[]
+      tasks: [] as Task[]
     };
   },
   computed: {
     ...mapState(EIRreportsStore, ["navigationPayload"]), 
   },
   async mounted() {
+    this.initMonths()
     this.initOwnNavData()
   },
   watch: {
@@ -58,18 +54,33 @@ export default defineComponent({
     },
   },
   methods: {
-    navigationMenu(url: string) {
-      this.initNavData()
+    navigationMenu(url: string, task: Task): void{
+      this.initNavData(task)
       this.$router.push(url)
     },
-    initNavData() {
+    initNavData(task: Task) {
       const store = EIRreportsStore()
-      store.setNavigationPayload('EIR Report', true, false, '/', 'EIPMReport')
+      const dates = task.other[1][1].split(" to ")
+      store.setStartAndEndDates(dates[0],dates[1])
+      const subText = task.other[1][0]
+      store.setNavigationPayload('EIR Monthly Report', true, false, '/', 'EIPMReport', subText as string)
     },
     initOwnNavData() {
       const store = EIRreportsStore()
       store.setNavigationPayload('Pick Month', true, false, '/', 'home')
     },
+    async initMonths() {
+      const monthsArray = [] as any
+      const data = await getMonthsList()
+      data.forEach((month: any) => {
+        const aob = {
+          month: month[1][0].replace('-', ' '), completed: true, date: month[0], other: month
+        }
+        monthsArray.push(aob)
+      })
+
+      this.tasks = monthsArray
+    }
   }
 });
 </script>
