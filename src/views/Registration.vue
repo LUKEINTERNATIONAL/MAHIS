@@ -428,8 +428,8 @@ export default defineComponent({
         async validateBirthData() {
             if (this.checkUnderNine) {
                 const result = this.checkWeightForAge(
-                    getFieldValue(this.birthRegistration, "Weight", "value"),
-                    HisDate.getAgeInYears(this.birthdate)
+                    HisDate.getAgeInYears(this.birthdate),
+                    getFieldValue(this.birthRegistration, "Weight", "value")
                 );
                 console.log("🚀 ~ validateBirthData ~ result:", result);
                 if (!result) {
