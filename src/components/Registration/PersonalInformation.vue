@@ -154,7 +154,7 @@ export default defineComponent({
                 modifyFieldValue(this.guardianInformation, "relationship", "validationFunctionName", "");
                 modifyFieldValue(this.guardianInformation, "relationship", "alertsErrorMassage", "");
             }
-            validateInputFiledData(this.guardianInformation);
+            // validateInputFiledData(this.guardianInformation);
         },
         setGuardingInfo(event: any) {
             const updateGuardianInfo = (value: boolean) => modifyFieldValue(this.guardianInformation, "guardianNationalID", "displayNone", value);
