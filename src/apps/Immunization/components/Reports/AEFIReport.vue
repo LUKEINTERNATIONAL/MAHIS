@@ -3,7 +3,7 @@
         <NavigationMenu/>
         <ion-content :fullscreen="true">
             <!-- <rawTable/> -->
-             <MonthsPicker :fowardRoute="'EIRReport1777'"/>
+            <MonthsPicker :fowardRoute="'AEFIReportTemplate'" :backwardRoute="'AEFIReport'" :reportName="'AEFI Monthly Report'"/>
         </ion-content>
     </ion-page>
 </template>
