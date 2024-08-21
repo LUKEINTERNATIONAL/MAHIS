@@ -39,7 +39,11 @@ import { useImmunizationStore } from "../store/immunizationStore";
 import { useIntimatePartnerStore } from "../store/intimatePartnerStore";
 import { useDewormingStore } from "../store/dewormingStore";
 import { Service } from "@/services/service";
-import { ImmunizationService, MedicationDispensedService } from "@/services/anc_treatment_service";
+import {
+  DiagnosisTreatmentService,
+  ImmunizationService,
+  MedicationDispensedService
+} from "@/services/anc_treatment_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { resetPatientData } from "@/services/reset_data";
@@ -222,26 +226,33 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
-        async saveData() {
+        saveData() {
             this.saveDiagnosis();
-            this.saveMedicationDispensed();
-            this.saveCouselling();
-            this.saveImmunisation();
-            this.saveIntimatePartner();
-            this.saveDeworming();
-            toastSuccess("Treament and Diagnosis saved successfully");
-            resetPatientData();
-            //this.$router.push('counselling');
+            // this.saveMedicationDispensed();
+            // this.saveCouselling();
+            // this.saveImmunisation();
+            // this.saveIntimatePartner();
+            // this.saveDeworming();
+            // resetPatientData();
+            // this.$router.push('ANCHome');
         },
         validationRules(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
         async saveDiagnosis() {
+          if (this.diagnoses.length > 0) {
+            const userID: any = Service.getUserID();
+            const medicationDispensed = new DiagnosisTreatmentService(this.demographics.patient_id, userID);
+            const encounter = await medicationDispensed.createEncounter();
+            if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
+            const patientStatus = await medicationDispensed.saveObservationList(await this.buildDiagnosis());
+            if (!patientStatus) return toastWarning("Unable to create medication dispensed!");
+            toastSuccess("Diagnosis saved");
+
+          }
             console.log(await this.buildDiagnosis());
         },
         async saveMedicationDispensed() {
-            const fields: any = ["folicAcidPrescription"]; //'ironPrescription',
-            if (await this.validationRules(this.folicAcid, fields)) {
                 if (this.folicAcid.length > 0) {
                     const userID: any = Service.getUserID();
                     const medicationDispensed = new MedicationDispensedService(this.demographics.patient_id, userID);
@@ -249,10 +260,8 @@ export default defineComponent({
                     if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
                     const patientStatus = await medicationDispensed.saveObservationList(await this.buildMedicationDispensed());
                     if (!patientStatus) return toastWarning("Unable to create medication dispensed!");
-                    toastSuccess("Medication Dispensed has been created");
-                }
-            } else {
-                await toastWarning("Please complete all required fields");
+                    toastSuccess("Medication Dispensed saved");
+
             }
             console.log(await this.buildMedicationDispensed());
         },
