@@ -3,7 +3,8 @@
         <div class="header"> National id scanner</div>
         <div class="camera">
             <qrcode-stream @decode="onDecode"></qrcode-stream>
-            <p v-if="qrCodeData">Scanned QR Code: {{ qrCodeData }}</p>
+            <p v-if="extractedDetails">Scanned QR Code: {{ extractedDetails }}</p>
+            <button @click="simulateScan">Simulate QR Code Scan</button>
         </div>
         <ion-row>
             <ion-col>
@@ -29,23 +30,18 @@
 </template>
 
 <script lang="ts">
-import { 
-      IonContent, 
-      IonHeader,
-      IonItem,
-      IonList,
-      IonTitle, 
-      IonToolbar, 
-      IonMenu,
-      modalController 
-  } from '@ionic/vue';
+import {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonTitle,
+    IonToolbar,
+    IonMenu
+} from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { checkmark,pulseOutline } from 'ionicons/icons';
-import { ref } from 'vue';
 import { icons } from '@/utils/svg';
 
-import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
-import { createModal } from '@/utils/Alerts'
 
 export default defineComponent({
 name: 'Menu',
@@ -62,12 +58,38 @@ components:{
 return {
     iconsContent: icons,
     qrCodeData: null,
+    extractedDetails: null
     };
 },
 methods:{
     onDecode(content: any) {
-      this.qrCodeData = content;
+        this.qrCodeData = content;
+        this.extractedDetails = this.extractDetails(this.qrCodeData);
     },
+    extractDetails(inputString) {
+        const parts = inputString.split("~");
+        console.log(parts);
+        const idNumber = parts[1].slice(6, 14).trim();
+        const dob = parts[9];
+
+        const sex = parts[8];
+        const lastName = parts[4];
+        const firstName = parts[6];
+        const middleName = parts[7];
+      return {
+        idNumber,
+        sex,
+        dob,
+        firstName,
+        middleName,
+        lastName
+      };
+    },
+    simulateScan() {
+      // Test data similar to your QR code input
+      const testData = "03~I<MWI0SAX855JA6<<<<<<<<<<<<<<<~8707121M3307124MWI<<<<<<<<<<<6~BOLOKONYA<<MWAYANJANA<MAZIKO<<~BOLOKONYA~SAX855JA~MWAYANJANA~MAZIKO~Male~12 Jul 1987~19 Jul 2017~";
+      this.onDecode(testData);
+    }
 }
 });
 </script>
