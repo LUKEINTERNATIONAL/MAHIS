@@ -159,6 +159,11 @@ const initialStock = [
                     value: "3",
                     colSize: "2.5",
                 },
+                {
+                    name: "4",
+                    value: "4",
+                    colSize: "2.5",
+                },
             ],
         },
     },
