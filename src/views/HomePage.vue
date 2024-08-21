@@ -251,9 +251,8 @@ export default defineComponent({
             async handler(data) {
                 if (data.name == "Home") resetDemographics();
                 await this.setAppointments();
-                // cannot subscribe more than once
-                // const wsService = new WebSocketService();
-                // wsService.setMessageHandler(this.onMessage);
+                const wsService = new WebSocketService();
+                wsService.setMessageHandler(this.onMessage);
             },
             deep: true,
         },
