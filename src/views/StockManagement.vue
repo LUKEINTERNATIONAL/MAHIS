@@ -8,7 +8,7 @@
         <Toolbar />
         <ion-content style="--background: #fff">
             <div class="container">
-                <h1 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h1>
+                <h4 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h4>
                 <div style="width: 80vw; top: -10px; position: relative; margin-right: 10px">
                     <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
                 </div>
@@ -16,7 +16,7 @@
                     <div class="drug_content" v-for="(item, index) in reportData" :key="index">
                         <ion-row class="search_header">
                             <ion-col class="">
-                                <span style="font-weight: 700; font-size: 14px; color: #939393">{{ item.drug_legacy_name }}</span>
+                                <span style="font-weight: 700; font-size: 16px; color: #939393">{{ item.drug_legacy_name }}</span>
                             </ion-col>
                         </ion-row>
                         <ion-row class="search_header">
@@ -44,6 +44,14 @@
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Received</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses wasted</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.doses_wasted }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Issued</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dispensed_quantity }}</ion-col>
                         </ion-row>
@@ -51,14 +59,7 @@
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Available</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
                         </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses wasted</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.doses_wasted }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Total Doses</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
-                        </ion-row>
+
                         <div>
                             <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px" @click="discardStock($event, item)"
                                 >Discard Stock</ion-button
@@ -302,7 +303,7 @@ export default defineComponent({
 </style>
 <style scoped>
 .drug_container {
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     flex-wrap: wrap;
     gap: 30px;
@@ -312,13 +313,14 @@ ion-row {
     line-height: 10px;
 }
 .content {
-    font-size: 12px;
+    font-size: 14px;
     color: #939393;
 }
 .contentBold {
     font-weight: 700;
-    font-size: 12px;
+    font-size: 14px;
     color: gray;
+    line-height: 16px;
 }
 .container {
     display: flex;

@@ -201,16 +201,34 @@ export default defineComponent({
 
         async getVaccineAdverseEffects() {
             const vaccineEffect = await ConceptService.getConceptSet("Vaccine adverse effects");
-            modifyFieldValue(this.vaccineAdverseEffects, "Vaccine adverse effects", "multiSelectData", vaccineEffect);
+            const data: any = [];
+            vaccineEffect.forEach((item: any) => {
+                data.push({
+                    name: item.name,
+                    value: item.name,
+                    checked: false,
+                    colSize: "12",
+                });
+            });
+            useFollowUpStoreStore().setVaccineAdverseEffects([
+                {
+                    checkboxBtnContent: {
+                        header: {
+                            name: "Vaccine adverse effects",
+                        },
+                        data: data,
+                    },
+                },
+            ]);
         },
         async saveData() {
-            if ((await this.createGuardian()) || (await this.saveVaccineAdverseEffects())) modalController.dismiss();
+            if ((await this.createGuardian()) && (await this.saveVaccineAdverseEffects())) modalController.dismiss();
         },
         async saveVaccineAdverseEffects() {
             if (this.demographics.patient_id) {
                 const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
                 const drugNames = lastVaccine.map((item: any) => item.drug.name).join(",");
-                const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects, HisDate.currentDate, drugNames);
+                const vaccineAdverseEffects = await formatCheckBoxData(this.vaccineAdverseEffects);
                 const userID: any = Service.getUserID();
                 if (vaccineAdverseEffects.length > 0) {
                     const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
