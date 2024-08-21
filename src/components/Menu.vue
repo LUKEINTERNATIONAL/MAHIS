@@ -34,7 +34,7 @@
                     </ion-item>
                     <div class="ion-padding" slot="content">
                         <ion-accordion-group>
-                            <ion-accordion value="first" v-if="psudoIsEIRProgram(14)">
+                            <ion-accordion value="first" v-if="programAttri[2].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">OPD Reports</ion-label>
                                 </ion-item>
@@ -47,7 +47,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="second" v-if="psudoIsEIRProgram(32)">
+                            <ion-accordion value="second" v-if="programAttri[1].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">NCD Reports</ion-label>
                                 </ion-item>
@@ -58,7 +58,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="third" v-if="psudoIsEIRProgram(12)">
+                            <ion-accordion value="third" v-if="programAttri[0].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">ANC Reports</ion-label>
                                 </ion-item>
@@ -69,7 +69,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-list v-if="psudoIsEIRProgram(33)">
+                            <ion-list v-if="programAttri[3].showReports">
                                 <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer"
                                     >EPI Monthly Report</ion-item
                                 >
@@ -136,7 +136,8 @@ import { UserService } from "@/services/user_service";
 import { useRouter } from "vue-router";
 import { useStatusStore } from "@/stores/StatusStore";
 import { storeToRefs } from "pinia";
-import { isEIRProgram } from "@/utils/GeneralUti";
+import { useUserStore } from "@/stores/userStore";
+import { mapState } from "pinia";
 
 export default defineComponent({
     name: "Menu",
@@ -153,8 +154,39 @@ export default defineComponent({
     },
     data() {
         return {
-            
+            programAttri: [
+                {
+                    programId: 12,
+                    showReports: false,
+                },
+                {
+                    programId: 32,
+                    showReports: false,
+                },
+                {
+                    programId: 14,
+                    showReports: false,
+                },
+                {
+                    programId: 33,
+                    showReports: false,
+                }
+            ],   
         }
+    },
+    watch: {
+        currentProgramId: {
+            async handler(data) {
+                this.showPogramReports();
+            },
+            deep: true,
+        },
+    },
+    async mounted() {
+        this.showPogramReports();
+    },
+    computed: {
+        ...mapState(useUserStore, ["currentProgramId"]),
     },
     setup() {
         const router = useRouter();
@@ -184,7 +216,6 @@ export default defineComponent({
                 }
             });
         }
-
         return {
             apiStatus,
             isSuperuser,
@@ -194,8 +225,14 @@ export default defineComponent({
         };
     },
     methods: {
-        psudoIsEIRProgram(program_id: number): boolean {
-            return isEIRProgram(program_id)
+        showPogramReports(): void {
+            this.programAttri.forEach((PA: any) => {
+                if (PA.programId == this.currentProgramId) {
+                    PA.showReports = true
+                } else {
+                    PA.showReports = false
+                }
+            })
         },
   }
 });

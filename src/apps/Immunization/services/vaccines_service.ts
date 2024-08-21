@@ -56,7 +56,7 @@ function mapToOrders(): any[] {
             instructions: "",
             dose: 1,
             frequency: "Unknown",
-            batch_number: drug.batch_number,
+            batch_number:drug.batch_number || 'Unknown',
             prn: 0,
         };
     });
