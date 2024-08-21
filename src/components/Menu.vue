@@ -151,6 +151,11 @@ export default defineComponent({
         IonTitle,
         IonToolbar,
     },
+    data() {
+        return {
+            
+        }
+    },
     setup() {
         const router = useRouter();
         const user_data = ref<any>(null);
