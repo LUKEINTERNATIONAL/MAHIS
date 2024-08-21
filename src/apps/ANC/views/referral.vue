@@ -111,10 +111,9 @@ export default defineComponent ({
           if (!patientStatus) return toastWarning("Unable to create patient referral details!");
           toastSuccess("Referral details have been created");
         }
-        this.$router.push("ANCHome");
-
-
       console.log(await this.buildReferral());
+
+
     },
   },
 });

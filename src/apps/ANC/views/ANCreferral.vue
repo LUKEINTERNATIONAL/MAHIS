@@ -97,7 +97,7 @@ export default defineComponent ({
     markWizard(){},
     saveData(){
     this.saveReferral();
-    // this.$router.push("ANChome");
+    this.$router.push("ANChome");
 
     },
     async saveReferral() {

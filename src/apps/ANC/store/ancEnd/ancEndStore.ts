@@ -114,6 +114,7 @@ const initialANCend=[
                             eventType: 'input',
                             minDate:"",
                             maxDate:"",
+                            valueType:"text",
                             inputWidth: "82%",
                             isDatePopover:true,
                             placeholder:"Pick date",
@@ -151,32 +152,6 @@ const initialANCend=[
 
         }
 
-    },
-    {
-        classDash: 'dashed_bottom_border',
-        selectdData: [],
-        isFinishBtn: false,
-        radioBtnContent:{
-            header:{
-                title: 'Client record will no longer be  viewed?',
-                selectedValue: '',
-                name:'Client record will no longer be  viewed',
-                displayNone:true,
-                class:"bold"
-            },
-            data:[
-                {
-                    name: 'Yes',
-                    value: 'yes',
-                    colSize: "7",
-                },
-                {
-                    name:  'No',
-                    value: 'no',
-                    colSize: "7",
-                },
-            ]
-        }
     },
     {
         childName:"ANC pregnancy outcome",
