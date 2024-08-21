@@ -152,6 +152,7 @@ import Districts from "@/views/Mixin/SetDistricts.vue";
 import { useWebWorkerFn } from "@vueuse/core";
 import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
+import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -363,52 +364,56 @@ export default defineComponent({
             const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
             const isOtherSelected = selectedLandmark?.name === "Other";
 
-            if (isOtherSelected) {
-                currentFields.push("Other (specify)");
-            }
-            if (
-                (await this.validations(this.personInformation, fields)) &&
-                (await this.validations(this.currentLocation, currentFields)) &&
-                (await this.validateBirthData()) &&
-                this.validateGaudiarnInfo()
-            ) {
-                this.disableSaveBtn = true;
-                this.isLoading = true;
-                if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-                const offlinePatientID = Date.now();
-                await db.collection("patientRecords").add({
-                    offlinePatientID: offlinePatientID,
-                    serverPatientID: "",
-                    personInformation: toRaw(this.personInformation[0].selectedData),
-                    guardianInformation: toRaw(this.guardianInformation[0].selectedData),
-                    birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
-                    otherPersonInformation: {
-                        nationalID: this.validatedNationalID(),
-                        birthID: this.validatedBirthID(),
-                        relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
-                    },
-                    saveStatusPersonInformation: "pending",
-                    saveStatusGuardianInformation: "pending",
-                    saveStatusBirthRegistration: "pending",
-                    date_created: "",
-                    creator: "",
-                });
-                await savePatientRecord();
-                toastSuccess("Successfully Created Patient");
-                await db
-                    .collection("patientRecords")
-                    .doc({ offlinePatientID: offlinePatientID })
-                    .get()
-                    .then(async (document: any) => {
-                        if (document.serverPatientID) {
-                            await this.findPatient(document.serverPatientID);
-                        } else {
-                            await this.setOfflineData(document);
-                        }
-                    });
-            } else {
-                toastWarning("Please complete all required fields");
-            }
+            const ddeInstance = new PatientDemographicsExchangeService();
+            console.log("🚀 ~ createPatient ~ toRaw(this.personInformation[0].selectedData):", toRaw(this.personInformation[0].selectedData));
+            const duplicatePatients = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
+            console.log("🚀 ~ createPatient ~ duplicatePatients:", duplicatePatients);
+            // if (isOtherSelected) {
+            //     currentFields.push("Other (specify)");
+            // }
+            // if (
+            //     (await this.validations(this.personInformation, fields)) &&
+            //     (await this.validations(this.currentLocation, currentFields)) &&
+            //     (await this.validateBirthData()) &&
+            //     this.validateGaudiarnInfo()
+            // ) {
+            //     this.disableSaveBtn = true;
+            //     this.isLoading = true;
+            //     if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
+            //     const offlinePatientID = Date.now();
+            //     await db.collection("patientRecords").add({
+            //         offlinePatientID: offlinePatientID,
+            //         serverPatientID: "",
+            //         personInformation: toRaw(this.personInformation[0].selectedData),
+            //         guardianInformation: toRaw(this.guardianInformation[0].selectedData),
+            //         birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
+            //         otherPersonInformation: {
+            //             nationalID: this.validatedNationalID(),
+            //             birthID: this.validatedBirthID(),
+            //             relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
+            //         },
+            //         saveStatusPersonInformation: "pending",
+            //         saveStatusGuardianInformation: "pending",
+            //         saveStatusBirthRegistration: "pending",
+            //         date_created: "",
+            //         creator: "",
+            //     });
+            //     await savePatientRecord();
+            //     toastSuccess("Successfully Created Patient");
+            //     await db
+            //         .collection("patientRecords")
+            //         .doc({ offlinePatientID: offlinePatientID })
+            //         .get()
+            //         .then(async (document: any) => {
+            //             if (document.serverPatientID) {
+            //                 await this.findPatient(document.serverPatientID);
+            //             } else {
+            //                 await this.setOfflineData(document);
+            //             }
+            //         });
+            // } else {
+            //     toastWarning("Please complete all required fields");
+            // }
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
