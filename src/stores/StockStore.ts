@@ -53,7 +53,7 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Manufacturer",
+                            inputHeader: "Manufacturer*",
                             value: "",
                             name: "manufacture",
                             eventType: "input",
@@ -78,6 +78,7 @@ const initialStock = [
                             eventType: "input",
                             alertsErrorMassage: "",
                             valueType: "text",
+                            validationFunctionName: "isNumber",
                         },
                     ],
                 },
@@ -137,7 +138,7 @@ const initialStock = [
     {
         radioBtnContent: {
             header: {
-                title: "VVM stage*",
+                title: "VVM stage",
                 selectedValue: "",
                 name: "vvm_stage",
                 alertsErrorMassage: "",
@@ -162,8 +163,6 @@ const initialStock = [
         },
     },
     {
-        selectedData: {},
-        isFinishBtn: false,
         data: {
             rowData: [
                 {
@@ -174,8 +173,7 @@ const initialStock = [
                             name: "quantity",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            valueType: "text",
-                            validationFunctionName: "required",
+                            validationFunctionName: "isNumber",
                         },
                     ],
                 },
@@ -203,20 +201,18 @@ const initialStock = [
         },
     },
     {
-        selectedData: {},
-        isFinishBtn: false,
         data: {
             rowData: [
                 {
                     colData: [
                         {
-                            inputHeader: "No. of doses in a viral",
+                            inputHeader: "No. of doses in a viral*",
                             value: "",
                             name: "unit_doses",
                             eventType: "input",
                             alertsErrorMassage: "",
                             valueType: "text",
-                            validationFunctionName: "required",
+                            validationFunctionName: "isNumber",
                         },
                     ],
                 },
