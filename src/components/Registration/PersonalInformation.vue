@@ -212,6 +212,11 @@ export default defineComponent({
         validateDuration() {
             this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = false;
             this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "";
+            if (this.personInformation[7].data.rowData[0].colData[0].value > 110) {
+                this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = true;
+                this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "Estimated age is more than 110";
+                return false;
+            }
             if (!this.personInformation[7].data.rowData[0].colData[0].unitsData.value) {
                 this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = true;
                 this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "Estimation Units Required";
