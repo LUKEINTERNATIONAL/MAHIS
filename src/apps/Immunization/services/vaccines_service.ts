@@ -105,6 +105,10 @@ export async function voidVaccine(orderId: number, reason: string) {
     return Service.void(`orders/${orderId}?reason=${JSON.stringify(reason)}`, { reason });
 }
 
+export async function voidVaccineEncounter(encounterId: number, reason: string) {
+    return Service.void(`/encounters/${encounterId}`, { reason });
+} 
+
 export function checkDrugName(drug: any) {
     if (isNameInList(drug.drug_name) == true) {
         return true;

@@ -1,7 +1,7 @@
 <template>
   <ion-list>
     <ion-card v-for="task in tasks" :key="task.month">
-      <ion-card-content style="cursor: pointer;" @click="navigationMenu('EIRReport', task)">
+      <ion-card-content style="cursor: pointer;" @click="navigationMenu(foward_Route, task)">
         <ion-item lines="none">
           <ion-label>
             <h2>{{ task.month }}</h2>
@@ -20,7 +20,6 @@ import { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote } from '@i
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { mapState } from "pinia";
 import { getMonthsList } from "@/apps/Immunization/services/vaccines_service";
-import HisDate from "@/utils/Date";
 
 interface Task {
   month: string;
@@ -34,15 +33,22 @@ export default defineComponent({
   components: { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote },
   data() {
     return {
-      tasks: [] as Task[]
+      tasks: [] as Task[],
+      foward_Route: '',
     };
   },
   computed: {
     ...mapState(EIRreportsStore, ["navigationPayload"]), 
   },
   async mounted() {
+    this.foward_Route = this.$props.fowardRoute
     this.initMonths()
     this.initOwnNavData()
+  },
+  props: {
+    fowardRoute: {
+      default: 'home',
+    },
   },
   watch: {
     $route: {
@@ -52,11 +58,18 @@ export default defineComponent({
         },
         deep: true,
     },
+    fowardRoute: {
+        async handler(data) {
+          this.foward_Route = this.$props.fowardRoute
+        },
+        deep: true,
+    },
   },
   methods: {
     navigationMenu(url: string, task: Task): void{
-      this.initNavData(task)
-      this.$router.push(url)
+      console.log("navigationMenu333333333: ", url)
+      // this.initNavData(task)
+      // this.$router.push(url)
     },
     initNavData(task: Task) {
       const store = EIRreportsStore()
@@ -70,7 +83,7 @@ export default defineComponent({
       store.setNavigationPayload('Pick Month', true, false, '/', 'home')
     },
     async initMonths() {
-      const monthsArray = [] as any
+      const monthsArray = [] as anyfoward_Route
       const data = await getMonthsList()
       data.forEach((month: any) => {
         const aob = {

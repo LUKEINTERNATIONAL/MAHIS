@@ -3,7 +3,7 @@
         <NavigationMenu/>
         <ion-content :fullscreen="true">
             <!-- <rawTable/> -->
-             <MonthsPicker :fowardRoute="'EIRReport'"/>
+             <MonthsPicker :fowardRoute="'EIRReport1777'"/>
         </ion-content>
     </ion-page>
 </template>

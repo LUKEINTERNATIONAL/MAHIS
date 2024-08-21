@@ -69,23 +69,29 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-list v-if="programAttri[3].showReports">
-                                <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer"
-                                    >EPI Monthly Report</ion-item
-                                >
-                            </ion-list>
-                            <!-- <ion-accordion value="fourth" v-if="psudoIsEIRProgram(33)">
+                            <ion-accordion value="fourth" v-if="programAttri[3].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">EIR Reports</ion-label>
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
-                                        <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer"
-                                            >EPI Monthly Report</ion-item
+                                        <ion-item
+                                            @click="navigationMenu('EIPMReport')"
+                                            class="list-content"
+                                            style="cursor: pointer"
                                         >
+                                            EPI Monthly Report
+                                        </ion-item>
+                                        <ion-item
+                                            @click="navigationMenu('AEFIReport')"
+                                            class="list-content"
+                                            style="cursor: pointer"
+                                        >
+                                            Adverse Events Following Immunization - AEFI
+                                        </ion-item>
                                     </ion-list>
                                 </div>
-                            </ion-accordion> -->
+                            </ion-accordion>
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
