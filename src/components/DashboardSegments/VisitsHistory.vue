@@ -51,13 +51,14 @@
                                 <br/>
                                 <ion-row>
                                     <ion-col class="contentTitle">LNMP</ion-col>
-                                    <!-- <ion-col class="contentTitle">Lmnp Date</ion-col>
-                                    <ion-col class="contentTitle">lmnp Gestation Age</ion-col> -->
+                                    <ion-col class="contentTitle">LIVE BIRTHS</ion-col>
+                                    <ion-col class="contentTitle">PARITY</ion-col>
                                     <ion-col class="contentTitle">OTHER ALLERGIES</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col>{{pregnancy.lnmp}}</ion-col>
-                                    <!-- <ion-col>{{pregnancy.lmnpGestationAge}}</ion-col> -->
+                                    <ion-col>{{pregnancy.LiveBirths}}</ion-col>
+                                    <ion-col>{{pregnancy.Parity}}</ion-col>
                                     <ion-col>{{pregnancy.Other}}</ion-col> 
                                 </ion-row>
                                 <br/>
@@ -328,6 +329,8 @@ export default defineComponent({
             const observations = this.findEncounter(data, "CURRENT PREGNANCY")?.observations;
             this.pregnancy.Gravida = this.filterObs(observations, "Gravida")?.[0]?.value_text ?? "";
             this.pregnancy.Stillbirths = this.filterObs(observations, "Stillbirths")?.[0]?.value_text ?? "";
+            //this.pregnancy.LiveBirths = this.filterObs(observations, "LiveBirths")?.[0]?.value_text ?? "";
+            //this.pregnancy.Parity = this.filterObs(observations, "Parity")?.[0]?.value_text ?? "";
             this.pregnancy['Abortions/Miscarriages'] = this.filterObs(observations, "Abortions/Miscarriages")?.[0]?.value_text ?? "";
             console.log("lets seeee",observations);
             this.pregnancy.test = (await this.getConceptValues(this.filterObs(observations, "past pregnancies complications"), "coded"))?.[0];
