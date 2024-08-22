@@ -1,5 +1,7 @@
 <template>
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
+    <CheckInConfirmationModal :closeModalFunc="closeCheckInModal" :onYes="handleCheckInYes" :onNo="handleCheckInNo"  :isOpen="checkInModalOpen" :title="`Do you want to check in the patient?`" />
+
     <ion-searchbar
         @ionInput="handleInput"
         placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
@@ -24,7 +26,7 @@
                 <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
                 <ion-col style="max-width: 25px"></ion-col>
             </ion-row>
-            <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
+            <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openCheckInModal(item)">
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                     item.person.names[0].given_name + " " + item.person.names[0].family_name
                 }}</ion-col>
@@ -139,6 +141,7 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
 import Pagination from "./Pagination.vue";
 import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
 import db from "@/db";
 
 export default defineComponent({
@@ -159,6 +162,7 @@ export default defineComponent({
         IonCol,
         Pagination,
         RoleSelectionModal,
+        CheckInConfirmationModal
     },
     setup() {
         return { checkmark, add };
@@ -175,6 +179,8 @@ export default defineComponent({
             searchText: "",
             paginationSize: 7,
             isRoleSelectionModalOpen: false,
+            checkInModalOpen:false,
+            selectedPatient: {} as any
         };
     },
     watch: {
@@ -292,6 +298,7 @@ export default defineComponent({
             let url = "/patientProfile";
             this.$router.push(url);
         },
+        
         async openNewPage(url: any, item: any) {
             this.popoverOpen = false;
             this.setDemographics(item);
@@ -436,6 +443,24 @@ export default defineComponent({
                 ],
             };
         },
+closeCheckInModal(){
+    this.checkInModalOpen=false
+},
+        handleCheckInNo(){
+            this.openNewPage('patientProfile', this.selectedPatient);
+            this.toggleCheckInModal();
+        },
+        handleCheckInYes(){
+            // console.log(this.selectedPatient)
+        },
+        toggleCheckInModal(){
+            this.checkInModalOpen=!this.checkInModalOpen
+        },
+openCheckInModal(item:any){
+this.checkInModalOpen=true;
+this.selectedPatient = item;
+
+}
     },
 });
 </script>
