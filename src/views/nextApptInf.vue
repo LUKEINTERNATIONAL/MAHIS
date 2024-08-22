@@ -91,6 +91,7 @@
       },
       openNextVaccineAppoinment(patientId: string) {
         const dataToPass = { patient_Id: patientId };
+        console.log("handleReschedule: " +dataToPass.patient_Id)
         createModal(nextAppointMent, { class: "otherVitalsModal" }, false, dataToPass);
       },
       async openClientProfile(patientID: any) {

@@ -8,15 +8,10 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 700">Appointments</h1>
+                <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 700">Immunuzation Appointments</h1>
 
                 <ion-row style="width: 50%;">
-                    <ion-col>
-                        <ion-button @click="selectAppointMentDate()" class="btnText" fill="solid">Select Start Date</ion-button>
-                    </ion-col>
-                    <ion-col>
-                        <ion-button @click="selectAppointMentDate()" class="btnText" fill="solid">Select End Date</ion-button>
-                    </ion-col>
+                    <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
                 </ion-row>
 
                 <nextApptInf v-for="person in people" :key="person.person_id" :person="person"/>
@@ -37,11 +32,12 @@ import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import "datatables.net-select";
-
+import BasicForm from "@/components/BasicForm.vue";
 import { AppointmentService } from "@/services/appointment_service";
 import selectAppointMentDate from "@/apps/Immunization/components/Modals/SelectAppointMentDate.vue";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
 import { mapState } from "pinia";
+import { useStartEndDate } from "@/stores/StartEndDate";
 
 import nextApptInf from "./nextApptInf.vue"
 import {
@@ -80,6 +76,7 @@ export default defineComponent({
         IonCardContent,
         IonButton,
         nextApptInf,
+        BasicForm,
     },
     data() {
         return {
@@ -92,6 +89,8 @@ export default defineComponent({
             appointments: [] as any,
             selectDate: '',
             people: [] as any,
+            startDate: HisDate.currentDate(),
+            endDate: HisDate.currentDate(),
         }
     },
     setup() {
@@ -112,6 +111,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useImmunizationAppointMentStore, ["selectedAppointmentMentForAppointmentsPage"]),
+        ...mapState(useStartEndDate, ["startEndDate"]),
     },
     watch: {
         selectedAppointmentMentForAppointmentsPage: {
@@ -151,6 +151,16 @@ export default defineComponent({
         },
         selectAppointMentDate() {
             // createModal(selectAppointMentDate, { class: "otherVitalsModal" }, false);
+        },
+        async handleInputData(event: any) {
+            if (event.inputHeader == "Start date") {
+                this.startDate = HisDate.toStandardHisFormat(event.value);
+            }
+            if (event.inputHeader == "End date") {
+                this.endDate = HisDate.toStandardHisFormat(event.value);
+            }
+
+            // await this.buildTableData();
         },
     }
 })

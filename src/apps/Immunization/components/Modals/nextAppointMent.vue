@@ -132,10 +132,7 @@ const props = defineProps<{
 }>();
 
 async function save() {
-    const appointment_service = new Appointment();
-    if (props.patient_Id?.length > 0) {
-        appointment_service.setPatientID(props?.patient_Id);
-    }
+    const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
     const appointmentDetails = await appointment_service.createAppointment();
     setMilestoneReload();
     dismiss();
