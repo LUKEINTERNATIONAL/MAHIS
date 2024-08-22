@@ -886,6 +886,10 @@ export const useRegistrationStore = defineStore("registrationStore", {
             const data = _.cloneDeep(initialGuardianInformation);
             return [...data];
         },
+    },getters: {
+        personInformationGetter: (state) => {
+            return state.personInformation;
+        },
     },
     persist: true,
 });

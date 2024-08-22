@@ -41,6 +41,7 @@ import {
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { icons } from '@/utils/svg';
+import { useRegistrationStore } from '@/stores/registrationStore';
 
 export default defineComponent({
 name: 'Menu',
@@ -60,17 +61,149 @@ return {
     extractedDetails: null as Record<string, string> | null,
     };
 },
+computed: {
+        personalInformation() {
+            const registrationStore = useRegistrationStore();
+            return registrationStore.personInformation;
+        },
+    },
 methods:{
     onDecode(content: any) {
         this.qrCodeData = content;
         this.extractedDetails = this.extractDetails(this.qrCodeData);
+        const registrationStore = useRegistrationStore();
+
+            // Assuming the personal information in the store matches the structure of extractedDetails
+            registrationStore.setPersonalInformation([
+                {
+                    selectedData: [],
+                    isFinishBtn: false,
+                    data: {
+                        rowData: [
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: "National ID",
+                                        iconRight: this.iconsContent.scannerIcon,
+                                        icon: this.iconsContent.nationalID,
+                                        value: this.extractedDetails.idNumber,
+                                        name: "nationalID",
+                                        eventType: "input",
+                                        alertsErrorMassage: "",
+                                        required: true,
+                                        placeholder: "__-__-__-__",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
+                {
+                    data: {
+                        rowData: [
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: "First name*",
+                                        icon: this.iconsContent.fullName,
+                                        value: this.extractedDetails.firstName,
+                                        name: "firstname",
+                                        eventType: "input",
+                                        alertsErrorMassage: "",
+                                        required: true,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
+                {
+                    data: {
+                        rowData: [
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: "Last name*",
+                                        icon: this.iconsContent.fullName,
+                                        value: this.extractedDetails.lastName,
+                                        name: "lastname",
+                                        eventType: "input",
+                                        alertsErrorMassage: "",
+                                        required: true,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
+                {
+                    data: {
+                        rowData: [
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: "Middle name",
+                                        icon: this.iconsContent.fullName,
+                                        value: this.extractedDetails.middleName,
+                                        name: "middleName",
+                                        eventType: "input",
+                                        alertsErrorMassage: "",
+                                        required: true,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
+                {
+                    data: {
+                        rowData: [
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: "Date of birth*",
+                                        icon: this.iconsContent.calenderPrimary,
+                                        value: this.extractedDetails.dob,
+                                        name: "birthdate",
+                                        eventType: "input",
+                                        alertsErrorMassage: "",
+                                        required: true,
+                                        isDatePopover: true,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
+                {
+                    radioBtnContent: {
+                        header: {
+                            title: "Gender*",
+                            selectedValue: this.extractedDetails.sex,
+                            name: "gender",
+                            alertsErrorMassage: "",
+                        },
+                        data: [
+                            {
+                                name: "Male",
+                                value: "M",
+                                colSize: "4",
+                            },
+                            {
+                                name: "Female",
+                                value: "F",
+                            },
+                        ],
+                    },
+                },
+            ]);
         this.nav('./manual');
     },
     extractDetails(inputString: string) {
         const parts = inputString.split("~");
         const idNumber = parts[1].slice(6, 14).trim();
-        const dob = parts[9];
-        const sex = parts[8];
+        const dob = new Date(parts[9]);
+        const sex = parts[8].charAt(0);
         const lastName = parts[4];
         const firstName = parts[6];
         const middleName = parts[7];
