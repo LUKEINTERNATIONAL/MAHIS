@@ -195,6 +195,9 @@ export default defineComponent({
                     pack_size: "",
                     reason: "Mistake Entirely",
                     pharmacy_batch_id: this.data.pharmacy_batch_id,
+                    reallocation_code: "MA2020",
+                    date: HisDate.currentDate(),
+                    waste_reason: "Something wrong with the drug",
                 };
                 try {
                     await this.stockService.updateItem(this.data.id, data);
