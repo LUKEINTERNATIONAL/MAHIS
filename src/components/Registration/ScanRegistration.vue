@@ -7,27 +7,30 @@
 
 <script setup lang="ts">
 import ScannerReader from '@/components/ScannerReader.vue';
-import { useRegistrationStore } from '@/stores/registrationStore';
+import { useRegistrationStore } from '@/stores/RegistrationStore';
 import { modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 
+const $router = useRouter();
 const status = useRegistrationStore();
 const { personInformation } = storeToRefs(status);
 
 
 const onDecode = async (content: string) => {
-    console.log('******* Scanned Content *******', content);
     const extractedDetails = await extractDetails(content);
-    const registrationStore = useRegistrationStore();
-
-    modifyFieldValue(personInformation, "nationalID", "value", extractedDetails.idNumber);
-    modifyFieldValue(personInformation, "firstname", "value", extractedDetails.firstName);
-    modifyFieldValue(personInformation, "middleName", "value", extractedDetails.middleName || "");
-    modifyFieldValue(personInformation, "lastname", "value", extractedDetails.lastName);
-    modifyFieldValue(personInformation, "birthdate", "value", extractedDetails.dob);
-    modifyRadioValue(personInformation, "gender", "selectedValue", extractedDetails.sex);
-    useRouter().push('/registration/manual');
+   try{
+    modifyFieldValue(personInformation.value, "nationalID", "value", extractedDetails.idNumber);
+    modifyFieldValue(personInformation.value, "firstname", "value", extractedDetails.firstName);
+    modifyFieldValue(personInformation.value, "middleName", "value", extractedDetails.middleName || "");
+    modifyFieldValue(personInformation.value, "lastname", "value", extractedDetails.lastName);
+    modifyFieldValue(personInformation.value, "birthdate", "value", extractedDetails.dob);
+    modifyRadioValue(personInformation.value, "gender", "selectedValue", extractedDetails.sex);
+   }catch(e){
+       console.log(e);
+       return;
+   }
+   $router.push('/registration/manual');
     // a service call will be done here
 };
 
