@@ -4,6 +4,11 @@
         @ionInput="handleInput"
         placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
         class="searchField"
+        :search-icon="search"
+        show-cancel-button="always"
+        cancel-button-text="Camera"
+        :cancel-button-icon="camera"
+        @ionCancel="openCheckPaitentNationalIDModal"
     ></ion-searchbar>
 
     <ion-popover
@@ -120,7 +125,7 @@ import {
 } from "@ionic/vue";
 import { defineComponent, onMounted } from "vue";
 import { PatientService } from "@/services/patient_service";
-import { checkmark, add, search } from "ionicons/icons";
+import { checkmark, add, camera, search } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
@@ -161,7 +166,7 @@ export default defineComponent({
         RoleSelectionModal,
     },
     setup() {
-        return { checkmark, add };
+        return { checkmark, add, search, camera };
     },
     data() {
         return {
@@ -205,7 +210,6 @@ export default defineComponent({
                 await this.searchDemographicPayload(this.searchText);
             }
         },
-
         async setID(scannedID: any) {
             const sitePrefix = await this.globalPropertyStore.sitePrefix;
             return {

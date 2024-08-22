@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import { promisify } from 'util';
 export interface Config {
     host: string;

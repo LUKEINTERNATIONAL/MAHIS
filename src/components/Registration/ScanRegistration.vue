@@ -1,127 +1,64 @@
 <template>
-    <ion-page >
-     <ion-content>
-    <div class="content">
+    <div class="flex flex-col gap-2 mx-4 my-2">
         <div class="header"> National id scanner</div>
-        <div class="camera">
-            <qrcode-stream @decode="onDecode"></qrcode-stream>
-            <p v-if="extractedDetails">Scanned QR Code: {{ extractedDetails }}</p>
-            <button @click="simulateScan">Simulate QR Code Scan</button>
-        </div>
-        <ion-row>
-            <ion-col>
-                <ion-card class="scan_card">
-                    <div class="tree_dots">...</div>
-                    <div class="scan_status">
-                        Scanning in progress...
-                    </div>
-                </ion-card>
-            </ion-col>
-            <ion-col>
-                <div class="scan_instraction">
-                    To have the successful Scanning
-                    <ul class="checklist">
-                        <li>Find the lighter place</li>
-                        <li>Put the National ID in the center of the screen</li>
-                        <li>Focus the camera on National ID</li>
-                    </ul>
-                </div>
-            </ion-col>
-        </ion-row>
+        <ScannerReader @scannerData="onDecode" class="w-fit" />
     </div>
-</ion-content>
-</ion-page>
 </template>
 
-<script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonTitle,
-    IonToolbar,
-    IonMenu
-} from '@ionic/vue';
-import { defineComponent } from 'vue';
-import { icons } from '@/utils/svg';
+<script setup lang="ts">
+import ScannerReader from '@/components/ScannerReader.vue';
 import { useRegistrationStore } from '@/stores/registrationStore';
-import { modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
-import { mapState } from "pinia";
+import { modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
 
-export default defineComponent({
-name: 'scan',
-components:{
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonMenu,
-    IonTitle,
-    IonToolbar,
-},
-  data() {
-return {
-    iconsContent: icons,
-    qrCodeData: '' as string | null,
-    extractedDetails: null as Record<string, string> | null,
-    };
-},
-computed: {
-    ...mapState(useRegistrationStore, ["personInformation"]),
-},
-methods:{
-    onDecode(content: any) {
-        this.qrCodeData = content;
-        this.extractedDetails = this.extractDetails(this.qrCodeData);
-        const registrationStore = useRegistrationStore();
+const status = useRegistrationStore();
+const { personInformation } = storeToRefs(status);
 
-            modifyFieldValue(this.personInformation, "nationalID", "value", this.extractedDetails.idNumber);
-            modifyFieldValue(this.personInformation, "firstname", "value", this.extractedDetails.firstName);
-            modifyFieldValue(this.personInformation, "middleName", "value", this.extractedDetails.middle_name?this.extractedDetails.middle_name:"");
-            modifyFieldValue(this.personInformation, "lastname", "value", this.extractedDetails.lastName);
-            modifyFieldValue(this.personInformation, "birthdate", "value", this.extractedDetails.dob);
-            modifyRadioValue(this.personInformation, "gender", "selectedValue", this.extractedDetails.sex);
-        this.nav('/registration/manual');
-    },
-    extractDetails(inputString: string) {
-        const parts = inputString.split("~");
-        const idNumber = parts[1].slice(6, 14).trim();
-        const dob = parts[9];
-        const sex = parts[8].charAt(0);
-        const lastName = parts[4];
-        const firstName = parts[6];
-        const middleName = parts[7];
-      return {
+
+const onDecode = async (content: string) => {
+    console.log('******* Scanned Content *******', content);
+    const extractedDetails = await extractDetails(content);
+    const registrationStore = useRegistrationStore();
+
+    modifyFieldValue(personInformation, "nationalID", "value", extractedDetails.idNumber);
+    modifyFieldValue(personInformation, "firstname", "value", extractedDetails.firstName);
+    modifyFieldValue(personInformation, "middleName", "value", extractedDetails.middleName || "");
+    modifyFieldValue(personInformation, "lastname", "value", extractedDetails.lastName);
+    modifyFieldValue(personInformation, "birthdate", "value", extractedDetails.dob);
+    modifyRadioValue(personInformation, "gender", "selectedValue", extractedDetails.sex);
+    useRouter().push('/registration/manual');
+    // a service call will be done here
+};
+
+const extractDetails = async (inputString: string) => {
+    const parts = inputString.split("~");
+    const idNumber = parts[1].slice(6, 14).trim();
+    const dob = parts[9];
+    const sex = parts[8].charAt(0);
+    const lastName = parts[4];
+    const firstName = parts[6];
+    const middleName = parts[7];
+    return {
         idNumber,
         sex,
         dob,
         firstName,
         middleName,
         lastName
-      };
-    },
-    simulateScan() {
-      // Test data similar to your QR code input
-      const testData = "03~I<MWI0SAX855JA6<<<<<<<<<<<<<<<~8707121M3307124MWI<<<<<<<<<<<6~BOLOKONYA<<MWAYANJANA<MAZIKO<<~BOLOKONYA~SAX855JA~MWAYANJANA~MAZIKO~Male~12 Jul 1987~19 Jul 2017~";
-      const testData2 ="03~I<MWI0VYMDKZ9D5<<<<<<<<<<<<<<<~9606106M3206102MWI<<<<<<<<<<<2~KAYANGE<<PETROS<<<<<<<<<<<<<<<~KAYANGE~VYMDKZ9D~PETROS~~Male~10 Jun 1996~21 Oct 2018~";
-      this.onDecode(testData2);
-    },
-    nav(url: any) {
-            this.$router.push(url);
-    },
+    };
 }
-});
 </script>
 
 <style scoped>
-    .content{
-        margin: 0 auto;
-        width: 844px;
-        width: 47vw;
-        align-items: center;
-    }
-.header{
+.content {
+    margin: 0 auto;
+    width: 844px;
+    width: 47vw;
+    align-items: center;
+}
+
+.header {
     color: var(--text_color, #00190E);
     text-align: center;
     /* h1 */
@@ -133,22 +70,25 @@ methods:{
     margin-top: 50px;
     margin-bottom: 20px;
 }
-.camera{
+
+.camera {
     align-items: center;
     width: 45vw;
     height: 350px;
     margin: 0 auto;
-    border-radius:16px ;
+    border-radius: 16px;
 }
-.tree_dots{
+
+.tree_dots {
     font-size: 30px;
     font-weight: 700;
     color: #000;
     text-align: center;
     padding-top: 20px;
-    padding-bottom:10px;
+    padding-bottom: 10px;
 }
-.scan_status{
+
+.scan_status {
     color: var(--text_color, #00190E);
     text-align: center;
     /* title-xs */
@@ -156,10 +96,12 @@ methods:{
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 150%; /* 24px */
+    line-height: 150%;
+    /* 24px */
     padding-bottom: 50px;
 }
-.scan_card{
+
+.scan_card {
     display: flex;
     width: 392px;
     height: 149px;
@@ -170,7 +112,8 @@ methods:{
     gap: 8px;
     flex-shrink: 0;
 }
-.scan_instraction{
+
+.scan_instraction {
     display: flex;
     width: 392px;
     padding: 16px;
@@ -185,19 +128,21 @@ methods:{
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 150%; /* 21px */
+    line-height: 150%;
+    /* 21px */
 }
+
 .checklist {
     list-style-type: none;
     padding-left: 0;
 }
 
 .checklist li:before {
-    content: "\2713"; /* Unicode character for a check mark */
-    color: green; /* Change the color of the check mark if needed */
-    margin-right: 5px; /* Add some spacing between the check mark and the text */
+    content: "\2713";
+    /* Unicode character for a check mark */
+    color: green;
+    /* Change the color of the check mark if needed */
+    margin-right: 5px;
+    /* Add some spacing between the check mark and the text */
 }
 </style>
-
-
-
