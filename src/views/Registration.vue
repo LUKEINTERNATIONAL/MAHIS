@@ -149,6 +149,8 @@ import { PatientProgramService } from "@/services/patient_program_service";
 import { resetDemographics } from "@/services/reset_data";
 import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
+import PersonMatchView from "@/components/PersonMatchView.vue";
+import { createModal } from "@/utils/Alerts";
 import { useWebWorkerFn } from "@vueuse/core";
 import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
@@ -176,6 +178,7 @@ export default defineComponent({
     data() {
         return {
             iconListStatus: "active_icon",
+            deduplicationData: "active_icon",
             iconGridStatus: "inactive_icon",
             iconsContent: icons,
             demographic: true,
@@ -366,8 +369,9 @@ export default defineComponent({
 
             const ddeInstance = new PatientDemographicsExchangeService();
             console.log("🚀 ~ createPatient ~ toRaw(this.personInformation[0].selectedData):", toRaw(this.personInformation[0].selectedData));
-            const duplicatePatients = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
-            console.log("🚀 ~ createPatient ~ duplicatePatients:", duplicatePatients);
+            this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
+            console.log("🚀 ~ createPatient ~ duplicatePatients:", this.deduplicationData);
+            createModal(PersonMatchView, { class: "otherVitalsModal" }, true, { deduplicationData: this.deduplicationData });
             // if (isOtherSelected) {
             //     currentFields.push("Other (specify)");
             // }
