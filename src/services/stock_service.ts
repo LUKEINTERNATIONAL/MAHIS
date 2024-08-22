@@ -246,14 +246,17 @@ export class StockService extends Service {
     postItems(items: any) {
         return Service.postJson("/pharmacy/batches", items);
     }
-    getItems(start_date: any, end_date: any) {
-        return Service.getJson("pharmacy/items", { paginate: false, start_date: start_date, end_date: end_date });
+    getItems(start_date: any, end_date: any, drug_name = "", page = 1) {
+        return Service.getJson("pharmacy/items", { start_date: start_date, end_date: end_date, drug_name: drug_name, page: page, page_size: 4 });
     }
     getItem(drugID: number) {
         return Service.getJson("pharmacy/items", { drug_id: drugID });
     }
     updateItem(batchID: number, vals: any) {
         return Service.putJson(`pharmacy/items/${batchID}`, vals);
+    }
+    deleteItem(batchID: any, item: any) {
+        return Service.delete(`pharmacy/items/${batchID}`, item);
     }
     relocateItems(batchID: number, items: any) {
         return Service.postJson(`pharmacy/items/${batchID}/reallocate`, items);

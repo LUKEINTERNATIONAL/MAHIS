@@ -146,7 +146,7 @@
     <ion-row>
         <ion-col size="6">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Traditional Authority(TA)(s)<span style="color: #b42318">*</span></ion-label
+                >TA(s)<span style="color: #b42318">*</span></ion-label
             >
             <VueMultiselect
                 v-model="selected_TAz"

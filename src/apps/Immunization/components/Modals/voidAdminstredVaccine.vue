@@ -41,7 +41,7 @@
     import { IonContent, IonRow, IonItem, IonList, IonRadio, IonRadioGroup, modalController } from "@ionic/vue";
     import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
     import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
-    import { voidVaccine } from "@/apps/Immunization/services/vaccines_service";
+    import { voidVaccine, voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
     import _ from 'lodash';
     export default defineComponent({
         components: {
@@ -109,7 +109,7 @@
                     try {
                         const store = useAdministerVaccineStore();
                         const AdministrdVaccine = store.getVaccineToBeVoided();
-                        await voidVaccine(AdministrdVaccine.drug.order_id, this.selectedOption.name)
+                        await voidVaccineEncounter(AdministrdVaccine.drug.encounter_id, this.selectedOption.name)
                         toastSuccess("Vaccine was successfully voided!");
                         store.setVaccineReload(!store.getVaccineReload());
                         modalController.dismiss({voided: true});
