@@ -4,6 +4,7 @@ import HomePage from "../views/HomePage.vue";
 import stockManagement from "../views/StockManagement.vue";
 import scheduleImmunization from "../views/ScheduleImmunizationSessions.vue";
 import manageAppointMents from "../views/ManageAppointMents.vue";
+import Scan from "../components/Registration/ScanRegistration.vue"
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
 import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
@@ -65,7 +66,7 @@ const routes: Array<RouteRecordRaw> = [
         component: setSmsConfig,
     },
     {
-        path: "/registration/:registrationType",
+        path: "/registration/manual",
         name: "registration",
         component: PatientRegistration,
         props: true,
@@ -79,6 +80,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/clinicaldays",
         name: "clinicaldays",
         component: clinicaldays,
+    },
+    {
+        path: "/registration/scan",
+        name: "scan",
+        component: Scan,
     },
     ...NCD,
     ...OPD,

@@ -1,4 +1,6 @@
 <template>
+    <ion-page >
+     <ion-content>
     <div class="content">
         <div class="header"> National id scanner</div>
         <div class="camera">
@@ -27,6 +29,8 @@
             </ion-col>
         </ion-row>
     </div>
+</ion-content>
+</ion-page>
 </template>
 
 <script lang="ts">
@@ -42,9 +46,11 @@ import {
 import { defineComponent } from 'vue';
 import { icons } from '@/utils/svg';
 import { useRegistrationStore } from '@/stores/registrationStore';
+import { modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
+import { mapState } from "pinia";
 
 export default defineComponent({
-name: 'Menu',
+name: 'scan',
 components:{
     IonContent,
     IonHeader,
@@ -62,147 +68,26 @@ return {
     };
 },
 computed: {
-        personalInformation() {
-            const registrationStore = useRegistrationStore();
-            return registrationStore.personInformation;
-        },
-    },
+    ...mapState(useRegistrationStore, ["personInformation"]),
+},
 methods:{
     onDecode(content: any) {
         this.qrCodeData = content;
         this.extractedDetails = this.extractDetails(this.qrCodeData);
         const registrationStore = useRegistrationStore();
 
-            // Assuming the personal information in the store matches the structure of extractedDetails
-            registrationStore.setPersonalInformation([
-                {
-                    selectedData: [],
-                    isFinishBtn: false,
-                    data: {
-                        rowData: [
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: "National ID",
-                                        iconRight: this.iconsContent.scannerIcon,
-                                        icon: this.iconsContent.nationalID,
-                                        value: this.extractedDetails.idNumber,
-                                        name: "nationalID",
-                                        eventType: "input",
-                                        alertsErrorMassage: "",
-                                        required: true,
-                                        placeholder: "__-__-__-__",
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                },
-                {
-                    data: {
-                        rowData: [
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: "First name*",
-                                        icon: this.iconsContent.fullName,
-                                        value: this.extractedDetails.firstName,
-                                        name: "firstname",
-                                        eventType: "input",
-                                        alertsErrorMassage: "",
-                                        required: true,
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                },
-                {
-                    data: {
-                        rowData: [
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: "Last name*",
-                                        icon: this.iconsContent.fullName,
-                                        value: this.extractedDetails.lastName,
-                                        name: "lastname",
-                                        eventType: "input",
-                                        alertsErrorMassage: "",
-                                        required: true,
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                },
-                {
-                    data: {
-                        rowData: [
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: "Middle name",
-                                        icon: this.iconsContent.fullName,
-                                        value: this.extractedDetails.middleName,
-                                        name: "middleName",
-                                        eventType: "input",
-                                        alertsErrorMassage: "",
-                                        required: true,
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                },
-                {
-                    data: {
-                        rowData: [
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: "Date of birth*",
-                                        icon: this.iconsContent.calenderPrimary,
-                                        value: this.extractedDetails.dob,
-                                        name: "birthdate",
-                                        eventType: "input",
-                                        alertsErrorMassage: "",
-                                        required: true,
-                                        isDatePopover: true,
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                },
-                {
-                    radioBtnContent: {
-                        header: {
-                            title: "Gender*",
-                            selectedValue: this.extractedDetails.sex,
-                            name: "gender",
-                            alertsErrorMassage: "",
-                        },
-                        data: [
-                            {
-                                name: "Male",
-                                value: "M",
-                                colSize: "4",
-                            },
-                            {
-                                name: "Female",
-                                value: "F",
-                            },
-                        ],
-                    },
-                },
-            ]);
-        this.nav('./manual');
+            modifyFieldValue(this.personInformation, "nationalID", "value", this.extractedDetails.idNumber);
+            modifyFieldValue(this.personInformation, "firstname", "value", this.extractedDetails.firstName);
+            modifyFieldValue(this.personInformation, "middleName", "value", this.extractedDetails.middle_name?this.extractedDetails.middle_name:"");
+            modifyFieldValue(this.personInformation, "lastname", "value", this.extractedDetails.lastName);
+            modifyFieldValue(this.personInformation, "birthdate", "value", this.extractedDetails.dob);
+            modifyRadioValue(this.personInformation, "gender", "selectedValue", this.extractedDetails.sex);
+        this.nav('/registration/manual');
     },
     extractDetails(inputString: string) {
         const parts = inputString.split("~");
         const idNumber = parts[1].slice(6, 14).trim();
-        const dob = new Date(parts[9]);
+        const dob = parts[9];
         const sex = parts[8].charAt(0);
         const lastName = parts[4];
         const firstName = parts[6];
@@ -219,7 +104,8 @@ methods:{
     simulateScan() {
       // Test data similar to your QR code input
       const testData = "03~I<MWI0SAX855JA6<<<<<<<<<<<<<<<~8707121M3307124MWI<<<<<<<<<<<6~BOLOKONYA<<MWAYANJANA<MAZIKO<<~BOLOKONYA~SAX855JA~MWAYANJANA~MAZIKO~Male~12 Jul 1987~19 Jul 2017~";
-      this.onDecode(testData);
+      const testData2 ="03~I<MWI0VYMDKZ9D5<<<<<<<<<<<<<<<~9606106M3206102MWI<<<<<<<<<<<2~KAYANGE<<PETROS<<<<<<<<<<<<<<<~KAYANGE~VYMDKZ9D~PETROS~~Male~10 Jun 1996~21 Oct 2018~";
+      this.onDecode(testData2);
     },
     nav(url: any) {
             this.$router.push(url);
