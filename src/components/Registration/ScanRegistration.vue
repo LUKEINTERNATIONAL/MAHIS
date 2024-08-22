@@ -1,75 +1,17 @@
 <template>
-    <div class="content">
+    <div class="flex flex-col gap-2 mx-4 my-2">
         <div class="header"> National id scanner</div>
-        <div class="camera">
-            <qrcode-stream @decode="onDecode"></qrcode-stream>
-            <p v-if="qrCodeData">Scanned QR Code: {{ qrCodeData }}</p>
-        </div>
-        <ion-row>
-            <ion-col>
-                <ion-card class="scan_card">
-                    <div class="tree_dots">...</div>
-                    <div class="scan_status">
-                        Scanning in progress...
-                    </div>
-                </ion-card>
-            </ion-col>
-            <ion-col>
-                <div class="scan_instraction">
-                    To have the successful Scanning
-                    <ul class="checklist">
-                        <li>Find the lighter place</li>
-                        <li>Put the National ID in the center of the screen</li>
-                        <li>Focus the camera on National ID</li>
-                    </ul>
-                </div>
-            </ion-col>
-        </ion-row>
+        <ScannerReader @scannerData="onDecode" class="w-fit" />
     </div>
 </template>
 
-<script lang="ts">
-import { 
-      IonContent, 
-      IonHeader,
-      IonItem,
-      IonList,
-      IonTitle, 
-      IonToolbar, 
-      IonMenu,
-      modalController 
-  } from '@ionic/vue';
-import { defineComponent } from 'vue';
-import { checkmark,pulseOutline } from 'ionicons/icons';
-import { ref } from 'vue';
-import { icons } from '@/utils/svg';
+<script setup lang="ts">
+import ScannerReader from '@/components/ScannerReader.vue';
 
-import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
-import { createModal } from '@/utils/Alerts'
-
-export default defineComponent({
-name: 'Menu',
-components:{
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonMenu,
-    IonTitle,
-    IonToolbar,
-},
-  data() {
-return {
-    iconsContent: icons,
-    qrCodeData: null,
-    };
-},
-methods:{
-    onDecode(content: any) {
-      this.qrCodeData = content;
-    },
-}
-});
+const onDecode = async(content: string) => {
+    console.log('******* Scanned Content *******', content);
+    // a service call will be done here
+};
 </script>
 
 <style scoped>

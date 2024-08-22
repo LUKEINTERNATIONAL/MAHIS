@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div v-if="registrationType == 'scan'">
-                <ScanRegistration />
+                <ScanRegistration class='flex w-[80vw]'/>
             </div>
             <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991">
                 <div v-if="registrationDisplayType == 'grid'" class="flex-container">
