@@ -359,7 +359,26 @@ export default defineComponent({
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
-
+        async possibleDuplicates() {
+            const ddeInstance = new PatientDemographicsExchangeService();
+            this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
+            if (this.deduplicationData.length > 0) {
+                const response: any = await createModal(PersonMatchView, { class: "fullScreenModal" }, true, {
+                    to_be_registered: toRaw(this.personInformation[0].selectedData),
+                    deduplicationData: this.deduplicationData,
+                });
+                if (response != "dismiss" && response != "back") {
+                    const result = await ddeInstance.importPatient(response?.person?.id);
+                    await this.findPatient(result.patient_id);
+                    return true;
+                } else if (response == "back") {
+                    return true;
+                }
+                return false;
+            } else {
+                return true;
+            }
+        },
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
@@ -367,57 +386,57 @@ export default defineComponent({
             const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
             const isOtherSelected = selectedLandmark?.name === "Other";
 
-            const ddeInstance = new PatientDemographicsExchangeService();
-            console.log("🚀 ~ createPatient ~ toRaw(this.personInformation[0].selectedData):", toRaw(this.personInformation[0].selectedData));
-            this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
-            console.log("🚀 ~ createPatient ~ duplicatePatients:", this.deduplicationData);
-            createModal(PersonMatchView, { class: "otherVitalsModal" }, true, { deduplicationData: this.deduplicationData });
-            // if (isOtherSelected) {
-            //     currentFields.push("Other (specify)");
-            // }
-            // if (
-            //     (await this.validations(this.personInformation, fields)) &&
-            //     (await this.validations(this.currentLocation, currentFields)) &&
-            //     (await this.validateBirthData()) &&
-            //     this.validateGaudiarnInfo()
-            // ) {
-            //     this.disableSaveBtn = true;
-            //     this.isLoading = true;
-            //     if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-            //     const offlinePatientID = Date.now();
-            //     await db.collection("patientRecords").add({
-            //         offlinePatientID: offlinePatientID,
-            //         serverPatientID: "",
-            //         personInformation: toRaw(this.personInformation[0].selectedData),
-            //         guardianInformation: toRaw(this.guardianInformation[0].selectedData),
-            //         birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
-            //         otherPersonInformation: {
-            //             nationalID: this.validatedNationalID(),
-            //             birthID: this.validatedBirthID(),
-            //             relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
-            //         },
-            //         saveStatusPersonInformation: "pending",
-            //         saveStatusGuardianInformation: "pending",
-            //         saveStatusBirthRegistration: "pending",
-            //         date_created: "",
-            //         creator: "",
-            //     });
-            //     await savePatientRecord();
-            //     toastSuccess("Successfully Created Patient");
-            //     await db
-            //         .collection("patientRecords")
-            //         .doc({ offlinePatientID: offlinePatientID })
-            //         .get()
-            //         .then(async (document: any) => {
-            //             if (document.serverPatientID) {
-            //                 await this.findPatient(document.serverPatientID);
-            //             } else {
-            //                 await this.setOfflineData(document);
-            //             }
-            //         });
-            // } else {
-            //     toastWarning("Please complete all required fields");
-            // }
+            if (isOtherSelected) {
+                currentFields.push("Other (specify)");
+            }
+            if (
+                (await this.validations(this.personInformation, fields)) &&
+                (await this.validations(this.currentLocation, currentFields)) &&
+                (await this.validateBirthData()) &&
+                this.validateGaudiarnInfo()
+            ) {
+                this.disableSaveBtn = true;
+                this.isLoading = true;
+                if (await this.possibleDuplicates()) {
+                    this.disableSaveBtn = false;
+                    this.isLoading = false;
+                    return;
+                }
+                if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
+                const offlinePatientID = Date.now();
+                await db.collection("patientRecords").add({
+                    offlinePatientID: offlinePatientID,
+                    serverPatientID: "",
+                    personInformation: toRaw(this.personInformation[0].selectedData),
+                    guardianInformation: toRaw(this.guardianInformation[0].selectedData),
+                    birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
+                    otherPersonInformation: {
+                        nationalID: this.validatedNationalID(),
+                        birthID: this.validatedBirthID(),
+                        relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
+                    },
+                    saveStatusPersonInformation: "pending",
+                    saveStatusGuardianInformation: "pending",
+                    saveStatusBirthRegistration: "pending",
+                    date_created: "",
+                    creator: "",
+                });
+                await savePatientRecord();
+                toastSuccess("Successfully Created Patient");
+                await db
+                    .collection("patientRecords")
+                    .doc({ offlinePatientID: offlinePatientID })
+                    .get()
+                    .then(async (document: any) => {
+                        if (document.serverPatientID) {
+                            await this.findPatient(document.serverPatientID);
+                        } else {
+                            await this.setOfflineData(document);
+                        }
+                    });
+            } else {
+                toastWarning("Please complete all required fields");
+            }
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
