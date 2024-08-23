@@ -1,6 +1,6 @@
 describe('My First Test', () => {
-  it('Visits the app root url', () => {
+  it('Login happy path', () => {
     cy.visit('/')
-    cy.contains('#container', 'Ready to create an app?')
+    cy.url().should('include', '/login');
   })
 })

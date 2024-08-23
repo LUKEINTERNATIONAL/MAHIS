@@ -34,3 +34,4 @@ package-lock.json
 public/config.json
 stats.html
 android/app/build.gradle
+tests/e2e/videos/
