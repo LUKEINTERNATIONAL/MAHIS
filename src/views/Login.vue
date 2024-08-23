@@ -17,6 +17,7 @@
                                 placeholder="Enter Username"
                                 class="input-fields"
                                 required
+                                cy-test="username-input"
                                 ><ion-label slot="end"> <ion-icon :icon="person" @click="togglePasswordVisibility"></ion-icon> </ion-label
                             ></ion-input>
                             <ion-input
@@ -29,6 +30,7 @@
                                 placeholder="Enter Password"
                                 class="input-fields"
                                 required
+                                cy-test="password-input"
                             >
                                 <ion-label slot="end">
                                     <ion-icon :icon="showPassword ? eye : eyeOff" @click="showPassword = !showPassword"></ion-icon>
@@ -51,6 +53,7 @@
                                 @search-change="$emit('search-change', $event)"
                                 track-by="program_id"
                                 :options="multiSelectData"
+                                cy-test="program-select"
                             />
                         </span>
 
@@ -59,6 +62,7 @@
                             style="--background: var(--ion-color-primary); font-size: var(--ion-button-font)"
                             @click="doLogin"
                             class="login-button"
+                            cy-test="login-button"
                         >
                             Login
                         </ion-button>
