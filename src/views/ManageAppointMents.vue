@@ -10,8 +10,16 @@
             <div class="container">
                 <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 700">Immunuzation Appointments</h1>
 
-                <ion-row style="width: 50%;">
-                    <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
+                <ion-row class="ion-align-items-center">
+                    <ion-col class="ion-no-padding">
+                        <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
+                    </ion-col>
+                    <ion-col size="auto" class="ion-no-padding ion-padding-start">
+                        <ion-button style="margin-top: 2rem; margin-right: 1rem; font-size: 23px;">
+                        <ion-icon :icon="refreshOutline" slot="start"></ion-icon>
+                        Reload
+                        </ion-button>
+                    </ion-col>
                 </ion-row>
 
                 <nextApptInf v-for="person in people" :key="person.person_id" :person="person"/>
@@ -21,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonButton, IonMenuButton, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard } from "@ionic/vue";
+import { IonContent, IonHeader, IonButton, IonMenuButton, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard, IonIcon } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -38,8 +46,8 @@ import selectAppointMentDate from "@/apps/Immunization/components/Modals/SelectA
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
 import { mapState } from "pinia";
 import { useStartEndDate } from "@/stores/StartEndDate";
-
 import nextApptInf from "./nextApptInf.vue"
+import { refreshOutline } from 'ionicons/icons';
 import {
     medkit,
     chevronBackOutline,
@@ -77,6 +85,7 @@ export default defineComponent({
         IonButton,
         nextApptInf,
         BasicForm,
+        IonIcon,
     },
     data() {
         return {
@@ -107,6 +116,7 @@ export default defineComponent({
             medkit,
             add,
             person,
+            refreshOutline,
         };
     },
     computed: {
