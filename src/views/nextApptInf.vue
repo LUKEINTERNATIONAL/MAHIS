@@ -115,6 +115,7 @@
       async openVoidModal() {
         const modal = await modalController.create({
             component: voidReason,
+            cssClass: "otherVitalsModal",
             componentProps: {
                 
             },

@@ -19,18 +19,15 @@
         </ion-list>
     </ion-row>
     <div class="saveBtn">
-        <ion-row>
-            <ion-col>
+        <ion-row class="ion-justify-content-between">
+            <ion-col size="auto">
                 <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
                     Cancel
-                    <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                 </ion-button>
             </ion-col>
-
-            <ion-col>
-                <ion-button @click="voidVaccine1" class="btnText" fill="solid" style="width: 130px; text-align: right;">
+            <ion-col size="auto">
+                <ion-button @click="voidVaccine1" class="btnText" fill="solid" style="width: 130px">
                     Void
-                    <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                 </ion-button>
             </ion-col>
         </ion-row>

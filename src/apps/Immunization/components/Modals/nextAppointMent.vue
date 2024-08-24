@@ -102,8 +102,6 @@ import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import {  voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
 
-
-
 const user = useDemographicsStore();
 
 const date = ref();
