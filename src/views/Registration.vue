@@ -155,6 +155,7 @@ import { useWebWorkerFn } from "@vueuse/core";
 import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
+import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -196,6 +197,7 @@ export default defineComponent({
     },
     props: ["registrationType"],
     computed: {
+        ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["socialHistory"]),
         ...mapState(useRegistrationStore, ["homeLocation"]),
@@ -376,7 +378,7 @@ export default defineComponent({
                 }
                 return false;
             } else {
-                return true;
+                return false;
             }
         },
         async createPatient() {
@@ -397,11 +399,14 @@ export default defineComponent({
             ) {
                 this.disableSaveBtn = true;
                 this.isLoading = true;
-                if (await this.possibleDuplicates()) {
-                    this.disableSaveBtn = false;
-                    this.isLoading = false;
-                    return;
+                if (this.globalPropertyStore.dde_enabled) {
+                    if (await this.possibleDuplicates()) {
+                        this.disableSaveBtn = false;
+                        this.isLoading = false;
+                        return;
+                    }
                 }
+
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const offlinePatientID = Date.now();
                 await db.collection("patientRecords").add({
