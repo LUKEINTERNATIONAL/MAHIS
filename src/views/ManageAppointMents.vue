@@ -42,7 +42,6 @@ import "datatables.net-buttons-dt";
 import "datatables.net-select";
 import BasicForm from "@/components/BasicForm.vue";
 import { AppointmentService } from "@/services/appointment_service";
-import selectAppointMentDate from "@/apps/Immunization/components/Modals/SelectAppointMentDate.vue";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
 import { mapState } from "pinia";
 import { useStartEndDate } from "@/stores/StartEndDate";
@@ -96,7 +95,6 @@ export default defineComponent({
             } as any,
             reportData: [] as any,
             appointments: [] as any,
-            selectDate: '',
             people: [] as any,
             startDate: HisDate.currentDate(),
             endDate: HisDate.currentDate(),
@@ -143,7 +141,7 @@ export default defineComponent({
     },
     methods: {
         async initDate(date: string) {
-            this.selectDate = date;
+            this.startDate = date;
         },
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
@@ -151,7 +149,7 @@ export default defineComponent({
         async getAppointments() {
             this.people.length = 0;
             this.isLoading = true;
-            const appointments = await AppointmentService.getDailiyAppointments(this.selectDate);
+            const appointments = await AppointmentService.getDailiyAppointments(this.startDate, this.endDate);
             appointments.forEach((client: any) => {
                     const apptOb = {
                         person_id: client.person_id,
@@ -162,14 +160,11 @@ export default defineComponent({
                         gender: client.gender,
                         ageDob: this.formatBirthdate(client.birthdate),
                         village: client.city_village,
-                        appointmentDate: "2024-09-03"
+                        appointmentDate: HisDate.toStandardHisDisplayFormat(client.appointment_date)
                     }
                     this.people.push(apptOb)
             })
             this.isLoading = false;
-        },
-        selectAppointMentDate() {
-            // createModal(selectAppointMentDate, { class: "otherVitalsModal" }, false);
         },
         async handleInputData(event: any) {
             if (event.inputHeader == "Start date") {
@@ -177,9 +172,8 @@ export default defineComponent({
             }
             if (event.inputHeader == "End date") {
                 this.endDate = HisDate.toStandardHisFormat(event.value);
-                await this.initDate(this.endDate);
-                await this.loadPageInf()
             }
+            await this.loadPageInf()
         },
         async loadPageInf() {
             await this.getAppointments();
