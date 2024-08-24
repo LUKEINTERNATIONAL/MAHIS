@@ -101,7 +101,8 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 
-const store = useImmunizationAppointMentStore();
+
+
 const user = useDemographicsStore();
 
 const date = ref();
@@ -135,6 +136,7 @@ async function save() {
     const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
     const appointmentDetails = await appointment_service.createAppointment();
     setMilestoneReload();
+    setAppointmentMentsReload();
     dismiss();
 
     if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
@@ -154,7 +156,13 @@ async function setMilestoneReload() {
     store.setVaccineReload(!store.getVaccineReload());
 }
 
+async function setAppointmentMentsReload() {
+    const store = useImmunizationAppointMentStore();
+    store.setAppointmentsReload(!store.getAppointmentsReload());
+}
+
 onMounted(async () => {
+    const store = useImmunizationAppointMentStore();
     let data = await SmsService.getConfigurations();
     configsSms.value = data.show_sms_popup;
     store.clearAppointmentMent();
@@ -185,6 +193,7 @@ async function DateUpdated(date: any) {
 }
 
 function getCounter(date: any) {
+    const store = useImmunizationAppointMentStore();
     const _selectedAppointments = store.getAppointmentMents();
 
     // Normalize the input date to midnight

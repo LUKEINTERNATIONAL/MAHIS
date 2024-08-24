@@ -8,14 +8,14 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 700">Immunuzation Appointments</h1>
+                <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 700">Appointments</h1>
 
                 <ion-row class="ion-align-items-center">
                     <ion-col class="ion-no-padding">
                         <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
                     </ion-col>
                     <ion-col size="auto" class="ion-no-padding ion-padding-start">
-                        <ion-button style="margin-top: 2rem; margin-right: 1rem; font-size: 23px;">
+                        <ion-button style="margin-top: 2rem; margin-right: 1rem; font-size: 23px;" @click="loadPageInf()">
                         <ion-icon :icon="refreshOutline" slot="start"></ion-icon>
                         Reload
                         </ion-button>
@@ -120,7 +120,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useImmunizationAppointMentStore, ["selectedAppointmentMentForAppointmentsPage"]),
+        ...mapState(useImmunizationAppointMentStore, ["selectedAppointmentMentForAppointmentsPage", "AppointmentsReload"]),
         ...mapState(useStartEndDate, ["startEndDate"]),
     },
     watch: {
@@ -130,10 +130,15 @@ export default defineComponent({
             },
             deep: true,
         },
+        AppointmentsReload: {
+            handler() {
+                this.loadPageInf();
+            },
+            deep: true,
+        },
     },
     async mounted() {
-        await this.initDate(HisDate.currentDate());
-        await this.getAppointments();
+        this.loadPageInf()
     },
     methods: {
         async initDate(date: string) {
@@ -143,6 +148,7 @@ export default defineComponent({
             return HisDate.getBirthdateAge(birthdate);
         },
         async getAppointments() {
+            this.people.length = 0;
             this.isLoading = true;
             const appointments = await AppointmentService.getDailiyAppointments(this.selectDate);
             appointments.forEach((client: any) => {
@@ -172,6 +178,10 @@ export default defineComponent({
 
             // await this.buildTableData();
         },
+        async loadPageInf() {
+            await this.initDate(HisDate.currentDate());
+            await this.getAppointments();
+        }
     }
 })
 </script>
