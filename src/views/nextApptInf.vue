@@ -2,32 +2,34 @@
     <ion-card>
       <ion-card-content>
         <ion-grid>
-          <ion-row>
-            <ion-col size="6">
-              <strong>Name:</strong> {{ person.name }}
-            </ion-col>
-            <ion-col size="6">
-              <strong>Gender:</strong> {{ person.gender }}
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="6">
-              <strong>Age/DOB:</strong> {{ person.ageDob }}
-            </ion-col>
-            <ion-col size="6">
-              <strong>Village:</strong> {{ person.village }}
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="12">
-              <strong>Appointment Date:</strong> {{ person.appointmentDate }}
-            </ion-col>
-          </ion-row>
-          <ion-row class="divider">
-            <ion-col size="12">
-              <div class="line"></div>
-            </ion-col>
-          </ion-row>
+          <span style="cursor: pointer;" @click="openClientProfile(person.npid)">
+            <ion-row>
+              <ion-col size="6">
+                <strong>Name:</strong> {{ person.name }}
+              </ion-col>
+              <ion-col size="6">
+                <strong>Gender:</strong> {{ person.gender }}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <strong>Age/DOB:</strong> {{ person.ageDob }}
+              </ion-col>
+              <ion-col size="6">
+                <strong>Village:</strong> {{ person.village }}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <strong>Appointment Date:</strong> {{ person.appointmentDate }}
+              </ion-col>
+            </ion-row>
+            <ion-row class="divider">
+              <ion-col size="12">
+                <div class="line"></div>
+              </ion-col>
+            </ion-row>
+          </span>
           <ion-row class="actions">
             <ion-col size="12">
               <div class="button-container">

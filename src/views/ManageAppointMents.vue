@@ -154,6 +154,7 @@ export default defineComponent({
             appointments.forEach((client: any) => {
                     const apptOb = {
                         person_id: client.person_id,
+                        npid: client.npid,
                         appointment_id: 103,
                         name: client.given_name.concat(' ',client.given_name),
                         gender: client.gender,
