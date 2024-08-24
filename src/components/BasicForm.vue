@@ -258,8 +258,8 @@
                             @ionChange="handleInput(contentData, al, $event, 'updateCheckbox')"
                             :label-placement="al.labelPlacement || 'end'"
                         >
-                            <span style="line-height: 1">
-                                <p class="checkbox_header">{{ al.name }}</p>
+                            <span style="">
+                                <p class="checkbox_header" style="margin-bottom: 0px">{{ al.name }}</p>
                                 <p v-if="al.example" class="small_font">{{ al.example }}</p>
                             </span>
                         </ion-checkbox>

@@ -9,11 +9,13 @@ export class Appointment extends AppEncounterService {
     patientID: number
     providerID: number
 
-    constructor() {
-        const patientID = Appointment.getPatientID()
+    constructor()
+    constructor(patientID: number)
+    constructor(patientID?: number) {
+        const actualPatientID = patientID !== undefined ? patientID : Appointment.getPatientID()
         const providerID = Appointment.getProviderID()
-        super(patientID, 7, providerID)
-        this.patientID = patientID
+        super(actualPatientID, 7, providerID)
+        this.patientID = actualPatientID
         this.providerID = providerID
     }
 
