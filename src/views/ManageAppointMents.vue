@@ -34,12 +34,6 @@ import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import HisDate from "@/utils/Date";
-import DataTable from "datatables.net-vue3";
-import "datatables.net-buttons";
-import "datatables.net-buttons/js/buttons.html5";
-import "datatables.net-responsive";
-import "datatables.net-buttons-dt";
-import "datatables.net-select";
 import BasicForm from "@/components/BasicForm.vue";
 import { AppointmentService } from "@/services/appointment_service";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
@@ -77,7 +71,6 @@ export default defineComponent({
         IonRow,
         IonCol,
         IonCard,
-        DataTable,
         IonCardHeader,
         IonCardTitle,
         IonCardContent,
@@ -221,14 +214,4 @@ export default defineComponent({
     display: flex;
     justify-content: center;
 }
-
-</style>
-
-<style>
-@import "datatables.net-dt";
-@import "datatables.net-buttons-dt";
-@import "datatables.net-responsive-dt";
-@import "datatables.net-select-dt";
-
-@import "bootstrap";
 </style>
