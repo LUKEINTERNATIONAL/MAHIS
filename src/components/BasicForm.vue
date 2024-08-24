@@ -83,6 +83,9 @@
                                 :hide-selected="true"
                                 :close-on-select="false"
                                 :openDirection="col.openDirection || 'bottom'"
+                                :prevent-autofocus="true"
+                                tabindex="-1"
+                                class="no-focus"
                                 tag-placeholder=""
                                 placeholder=""
                                 selectLabel=""
@@ -107,6 +110,9 @@
                                 :hide-selected="false"
                                 :close-on-select="true"
                                 :openDirection="col.openDirection || 'bottom'"
+                                :prevent-autofocus="true"
+                                tabindex="-1"
+                                class="no-focus"
                                 tag-placeholder=""
                                 placeholder=""
                                 selectLabel=""
@@ -299,6 +305,9 @@
                                 @update:model-value="handleInput(contentData, checkboxInput, $event, 'updateMultiselect')"
                                 :close-on-select="true"
                                 openDirection="bottom"
+                                :prevent-autofocus="true"
+                                tabindex="-1"
+                                class="no-focus"
                                 tag-placeholder=""
                                 placeholder=""
                                 selectLabel=""
@@ -395,7 +404,7 @@ export default defineComponent({
             this.event = event;
             if (inputType == "updateInput") {
                 this.validateData(data, col, event.target.value);
-                modifyFieldValue(data, col.name, "value", event.target.value?.trim());
+                modifyFieldValue(data, col.name, "value", event?.target?.value?.trim());
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateMultiselect") {
@@ -479,6 +488,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.no-focus {
+    outline: none;
+}
+
+.no-focus:focus {
+    outline: none;
+}
 ._padding {
     padding-bottom: 18px;
     padding-top: 18px;
