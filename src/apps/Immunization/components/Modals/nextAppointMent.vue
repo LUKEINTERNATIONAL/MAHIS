@@ -100,6 +100,7 @@ import { toastWarning } from "@/utils/Alerts";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import {  voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
 
 
 
@@ -130,9 +131,11 @@ async function createModal(component: any, options: any) {
 
 const props = defineProps<{
     patient_Id: string;
+    encounter_Id: string;
 }>();
 
 async function save() {
+    await voidApt()
     const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
     const appointmentDetails = await appointment_service.createAppointment();
     setMilestoneReload();
@@ -159,6 +162,15 @@ async function setMilestoneReload() {
 async function setAppointmentMentsReload() {
     const store = useImmunizationAppointMentStore();
     store.setAppointmentsReload(!store.getAppointmentsReload());
+}
+
+async function voidApt() {
+    try {
+        await voidVaccineEncounter(props.encounter_Id as any, 'Rescheduled' as string)
+        await voidVaccineEncounter(props.encounter_Id as any, 'Rescheduled' as string)
+    } catch (error) {
+        
+    }
 }
 
 onMounted(async () => {

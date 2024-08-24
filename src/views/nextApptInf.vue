@@ -57,7 +57,7 @@
   import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
   import { PatientService } from "@/services/patient_service";
   import SetDemographics from "@/views/Mixin/SetDemographics.vue";
-  import { voidVaccine, voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
+  import {  voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
   import _ from 'lodash';
   import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
   import { modalController } from '@ionic/vue';
@@ -95,13 +95,13 @@
     },
     methods: {
       handleReschedule() {
-        this.openNextVaccineAppoinment(this.person.person_id)
+        this.openNextVaccineAppoinment(this.person.person_id, this.person.encounter_id)
       },
       handleRemove() {
         this.voidAppoinment()
       },
-      openNextVaccineAppoinment(patientId: string) {
-        const dataToPass = { patient_Id: patientId };
+      openNextVaccineAppoinment(patientId: string, encounter_id: string) {
+        const dataToPass = { patient_Id: patientId, encounter_Id: encounter_id};
         createModal(nextAppointMent, { class: "otherVitalsModal" }, false, dataToPass);
       },
       async openClientProfile(patientID: any) {
