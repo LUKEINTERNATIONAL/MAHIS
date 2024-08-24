@@ -7,6 +7,8 @@ export const useUserStore = defineStore("userStore", {
         user_ID: '',
         showUserProfileEdit: false as boolean,
         userFacilityName: '',
+        currentUserProgram: {} as any,
+        currentProgramId: 0 as number,
     }),
     actions: {
         setUser(data: any): void {
@@ -28,6 +30,10 @@ export const useUserStore = defineStore("userStore", {
         getUserId() {
             return this.user_ID
         },
+        setCurrentUserProgram(programData: any) {
+            this.currentUserProgram = programData
+            this.currentProgramId = programData.program_id
+        }
     },
     persist: true,
 });
