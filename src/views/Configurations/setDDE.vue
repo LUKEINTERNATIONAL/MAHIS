@@ -6,7 +6,62 @@
                 <ion-card class="registration_ion_card">
                     <div class="card_content">
                         <div class="card_hearder">Set DDE</div>
-                        <ion-toggle :checked="true" :enable-on-off-labels="true">Enable DDE</ion-toggle>
+                        <ion-toggle :enable-on-off-labels="true" v-model="globalPropertyStore.dde_enabled">Enable DDE</ion-toggle>
+                    </div>
+                </ion-card>
+            </div>
+            <div class="positionCenter" v-if="globalPropertyStore.dde_enabled">
+                <ion-card class="registration_ion_card">
+                    <div class="card_content">
+                        <div class="card_hearder">{{ DDE.title }}</div>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row class="ddeStatusHeader">Location ID</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.id }}</ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row class="ddeStatusHeader">Estimated days left</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.avg }}</ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row class="ddeStatusHeader">Unassigned</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.unassigned }}</ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row class="ddeStatusHeader">Assigned</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.assigned }}</ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row class="ddeStatusHeader">Average consumption per day</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.daysLeft }}</ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row class="ddeStatusHeader">Last update</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.lastUpdated }}</ion-row>
+                            </ion-col>
+                        </ion-row>
                     </div>
                 </ion-card>
             </div>
@@ -26,13 +81,15 @@ import { getFieldValue, getRadioSelectedValue, modifyFieldValue } from "@/servic
 import { validateField } from "@/services/validation_service";
 import dayjs from "dayjs";
 import { Service } from "@/services/service";
-import { calculator } from "ionicons/icons";
+import { calculator, search } from "ionicons/icons";
 import BasicForm from "@/components/BasicForm.vue";
 import Toolbar from "@/components/Toolbar.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { icons } from "@/utils/svg";
 import FacilityInformationBar from "@/components/FacilityInformationBar.vue";
+import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
+import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 export default defineComponent({
     name: "Menu",
     components: {
@@ -55,22 +112,54 @@ export default defineComponent({
         return {
             cardData: {} as any,
             inputField: "" as any,
+            isDDEEnabled: true as any,
             setName: "" as any,
             initialPersonalData: [] as any,
             iconsContent: icons,
             apiDate: "" as string,
             date: "" as string,
+            DDE: {} as any,
         };
     },
     computed: {
         ...mapState(useConfigStore, ["sessionDate"]),
+        ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
+    },
+    watch: {
+        isDDEEnabled: {
+            async handler() {
+                await this.setDDEStatus();
+            },
+            deep: true,
+        },
     },
     async mounted() {
         this.apiDate = await Service.getApiDate();
+        this.ddeData();
         this.date = getFieldValue(this.sessionDate, "sessionDate", "value");
     },
 
     methods: {
+        async setDDEStatus() {
+            const dde = useGlobalPropertyStore();
+            await dde.setGlobalProperty("dde_enabled", this.isDDEEnabled);
+            console.log("ddd", this.isDDEEnabled);
+        },
+        async ddeData() {
+            const data = await PatientDemographicsExchangeService.getRemainingNpids();
+            const stats = data["npid_status"][0];
+            const unassigned = stats["unassigned"];
+            const avg = stats["avg_consumption_rate_per_day"] || 1;
+            this.DDE = {
+                id: stats["location_id"],
+                avg: avg,
+                unassigned: stats["unassigned"],
+                assigned: stats["assigned"],
+                daysLeft: Math.floor(unassigned / avg),
+                lastUpdated: dayjs(stats["date_last_updated"]).format("DD/MMM/YYYY HH:mm:ss"),
+                title: stats["location_name"] + " DDE NPID Status",
+            };
+        },
         openModal() {
             createModal(DispositionModal);
         },
@@ -110,6 +199,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.ddeStatusContent {
+    font-weight: 700;
+    font-size: 16px;
+    padding: 2px;
+}
+.ddeStatusHeader {
+    font-size: 16px;
+    padding: 2px;
+}
 .demographics_title {
     font-weight: 700;
     font-size: 24px;
@@ -125,7 +223,7 @@ export default defineComponent({
 }
 .positionCenter {
     width: 100%;
-    height: 100%;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
