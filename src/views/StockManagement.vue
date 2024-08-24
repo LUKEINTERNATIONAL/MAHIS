@@ -32,14 +32,6 @@
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.expiry_date) }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Dosage Form </ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dosage_form }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage </ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.vvm_stage }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
                         </ion-row>
@@ -209,7 +201,9 @@ export default defineComponent({
         ...mapState(useSearchName, ["searchName"]),
     },
     $route: {
-        async handler() {},
+        async handler() {
+            await this.buildTableData();
+        },
         deep: true,
     },
     watch: {
