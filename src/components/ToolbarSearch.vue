@@ -298,7 +298,7 @@ export default defineComponent({
             this.offlineFilteredPatients = [];
 
             // DDE enabled search
-            if (this.ddeEnabled && payload.given_name && payload.family_name && payload.gender) {
+            if (this.globalPropertyStore.dde_enabled && payload.given_name && payload.family_name && payload.gender) {
                 return (this.patients = await this.ddeInstance.searchDemographics(payload));
             }
             // Regular search
