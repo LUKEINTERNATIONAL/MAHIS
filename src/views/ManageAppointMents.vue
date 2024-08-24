@@ -138,6 +138,7 @@ export default defineComponent({
         },
     },
     async mounted() {
+        await this.initDate(HisDate.currentDate());
         this.loadPageInf()
     },
     methods: {
@@ -176,12 +177,11 @@ export default defineComponent({
             }
             if (event.inputHeader == "End date") {
                 this.endDate = HisDate.toStandardHisFormat(event.value);
+                await this.initDate(this.endDate);
+                await this.loadPageInf()
             }
-
-            // await this.buildTableData();
         },
         async loadPageInf() {
-            await this.initDate(HisDate.currentDate());
             await this.getAppointments();
         }
     }
