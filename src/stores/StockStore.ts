@@ -17,7 +17,7 @@ const initialStock = [
                             selectedID: "",
                             validationFunctionName: "required",
                             isSingleSelect: true,
-                            trackBy: "concept_id",
+                            trackBy: "drug_id",
                             multiSelectData: [],
                         },
                     ],
@@ -72,12 +72,11 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Wasted viral",
+                            inputHeader: "Doses Received*",
                             value: "",
-                            name: "doses_wasted",
+                            name: "quantity",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            valueType: "text",
                             validationFunctionName: "isNumber",
                         },
                     ],
@@ -91,88 +90,12 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Expire date*",
-                            icon: icons.calenderPrimary,
+                            inputHeader: "Doses Wasted",
                             value: "",
-                            name: "expire date",
+                            name: "doses_wasted",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            required: true,
-                            isDatePopover: true,
-                            minDate: "",
-                            maxDate: "",
-                            validationFunctionName: "required",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        radioBtnContent: {
-            header: {
-                title: "Dosage Form*",
-                selectedValue: "",
-                name: "dosage_form",
-                alertsErrorMassage: "",
-            },
-            data: [
-                {
-                    name: "viral",
-                    value: "viral",
-                    colSize: "3.3",
-                },
-                {
-                    name: "ampoule",
-                    value: "ampoule",
-                    colSize: "4.7",
-                },
-                {
-                    name: "tablet",
-                    value: "tablet",
-                    colSize: "3.7",
-                },
-            ],
-        },
-    },
-    {
-        radioBtnContent: {
-            header: {
-                title: "VVM stage",
-                selectedValue: "",
-                name: "vvm_stage",
-                alertsErrorMassage: "",
-            },
-            data: [
-                {
-                    name: "1",
-                    value: "1",
-                    colSize: "2.5",
-                },
-                {
-                    name: "2",
-                    value: "2",
-                    colSize: "2.5",
-                },
-                {
-                    name: "3",
-                    value: "3",
-                    colSize: "2.5",
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Stock Received*",
-                            value: "",
-                            name: "quantity",
-                            eventType: "input",
-                            alertsErrorMassage: "",
+                            valueType: "text",
                             validationFunctionName: "isNumber",
                         },
                     ],
@@ -206,13 +129,17 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "No. of doses in a viral*",
+                            inputHeader: "Expire date*",
+                            icon: icons.calenderPrimary,
                             value: "",
-                            name: "unit_doses",
+                            name: "expire date",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            valueType: "text",
-                            validationFunctionName: "isNumber",
+                            required: true,
+                            isDatePopover: true,
+                            minDate: "",
+                            maxDate: "",
+                            validationFunctionName: "required",
                         },
                     ],
                 },
