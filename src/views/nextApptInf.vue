@@ -57,6 +57,12 @@
   import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
   import { PatientService } from "@/services/patient_service";
   import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+  import { voidVaccine, voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
+  import _ from 'lodash';
+  import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+  import { modalController } from '@ionic/vue';
+  import voidReason from '@/apps/Immunization/components/Modals/voidReason.vue';
+  import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
   
   export default defineComponent({
     name: 'PersonCard',
@@ -69,6 +75,11 @@
       IonCol,
       IonButton,
       IonIcon,
+    },
+    data() {
+      return {
+        
+      }
     },
     props: {
       person: {
@@ -87,9 +98,7 @@
         this.openNextVaccineAppoinment(this.person.person_id)
       },
       handleRemove() {
-        console.log('Remove clicked for:', this.person.name);
-        console.log('Person ID:', this.person.person_id);
-        console.log('Appointment ID:', this.person.appointment_id);
+        this.voidAppoinment()
       },
       openNextVaccineAppoinment(patientId: string) {
         const dataToPass = { patient_Id: patientId };
@@ -100,6 +109,35 @@
         this.setDemographics(patientData[0]);
         this.$router.push("patientProfile");
       },
+      async voidAppoinment() {
+        await this.openVoidModal()
+      },
+      async openVoidModal() {
+        const modal = await modalController.create({
+            component: voidReason,
+            componentProps: {
+                
+            },
+        });
+
+        modal.onDidDismiss().then(async (data) => {
+            if (data && data.data) {
+              try {
+                await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
+                await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
+                this.setAppointmentMentsReload()
+              } catch (error) {
+                this.setAppointmentMentsReload()
+              }
+            }
+        });
+
+        await modal.present();
+      },
+      async setAppointmentMentsReload() {
+        const store = useImmunizationAppointMentStore();
+        store.setAppointmentsReload(!store.getAppointmentsReload());
+    }
     },
   });
   </script>

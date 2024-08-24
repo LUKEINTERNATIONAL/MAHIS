@@ -2,10 +2,10 @@
     <ion-row class="centered-content">
         <div class="text-container">
             <div>
-                Do you want to void this vaccine?
+                Do you want to void this?
             </div>
             <div>
-                Please specify reason for voiding this administered vaccine?
+                Please specify reason for voiding?
             </div>
         </div>
     </ion-row>
@@ -21,14 +21,14 @@
     <div class="saveBtn">
         <ion-row>
             <ion-col>
-                <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
+                <ion-button @click="cancel" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
                     Cancel
                     <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                 </ion-button>
             </ion-col>
 
             <ion-col>
-                <ion-button @click="voidVaccine1" class="btnText" fill="solid" style="width: 130px; text-align: right;">
+                <ion-button @click="voidRe" class="btnText" fill="solid" style="width: 130px; text-align: right;">
                     Void
                     <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                 </ion-button>
@@ -36,12 +36,11 @@
         </ion-row>
     </div>
 </template>
+
 <script lang="ts">
     import { defineComponent } from "vue";
-    import { IonContent, IonRow, IonItem, IonList, IonRadio, IonRadioGroup, modalController } from "@ionic/vue";
-    import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+    import { IonCol, IonRow, IonItem, IonList, IonRadio, IonRadioGroup, modalController, IonButton } from "@ionic/vue";
     import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-    import { voidVaccine, voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
     import _ from 'lodash';
     export default defineComponent({
         components: {
@@ -50,6 +49,8 @@
             IonList,
             IonRadio,
             IonRadioGroup,
+            IonButton,
+            IonCol,
         },
         data() {
             return {
@@ -92,8 +93,11 @@
                 this.selectedOption = ev.detail.value
                 // console.log('Current value:', JSON.stringify(ev.detail.value));
             },
-            dismiss() {
+            cancel() {
                 modalController.dismiss();
+            },
+            dismiss() {
+                modalController.dismiss(this.selectedOption);
             },
             checkIfSelected() {
                 if ( _.has(this.selectedOption, 'name') == true) {
@@ -103,19 +107,10 @@
                     return false;
                 }
             }, 
-            async voidVaccine1() {
+            voidRe() {
                 if (this.checkIfSelected() == true) {
-
-                    try {
-                        const store = useAdministerVaccineStore();
-                        const AdministrdVaccine = store.getVaccineToBeVoided();
-                        await voidVaccineEncounter(AdministrdVaccine.drug.encounter_id, this.selectedOption.name)
-                        toastSuccess("Vaccine was successfully voided!");
-                        store.setVaccineReload(!store.getVaccineReload());
-                        modalController.dismiss({voided: true});
-                    } catch (error) {
-                        
-                    }
+                    this.$emit('void-item', this.selectedOption);
+                    this.dismiss();
                 }
             }
         }

@@ -156,6 +156,7 @@ export default defineComponent({
                         person_id: client.person_id,
                         npid: client.npid,
                         appointment_id: 103,
+                        encounter_id: client.encounter_id,
                         name: client.given_name.concat(' ',client.given_name),
                         gender: client.gender,
                         ageDob: this.formatBirthdate(client.birthdate),
