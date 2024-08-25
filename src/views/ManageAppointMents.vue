@@ -294,7 +294,7 @@ export default defineComponent({
     overflow-y: auto;
 }
 .pagination-controls {
-    margin-top: 20px;
+    margin-top: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
