@@ -170,7 +170,7 @@ export default defineComponent({
                 current_traditional_authority: "",
                 current_village: "",
                 landmark: "",
-                cell_phone_number: this.guardianPhoneNumber,
+                cell_phone_number: `+${this.receivedData[0].dialCode}${this.guardianPhoneNumber}`,
                 national_id: getFieldValue(this.guardianInformation, "guardianNationalID", "value"),
             };
         },
@@ -193,7 +193,6 @@ export default defineComponent({
           const sampleNumber = country.examplePhoneNumber.replace(/\s+/g, '');
           const userphone = `+${this.receivedData[0].dialCode}${value}`;   
           return !isEmpty(value) && (userphone.length !== sampleNumber.length) ? "Not a valid phone number" : null;
-
         },
     },
 });
