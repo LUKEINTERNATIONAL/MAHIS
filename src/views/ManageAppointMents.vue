@@ -231,7 +231,7 @@ export default defineComponent({
                         npid: client.npid,
                         appointment_id: 103,
                         encounter_id: client.encounter_id,
-                        name: client.given_name.concat(' ',client.given_name),
+                        name: client.given_name.concat(' ',client.family_name),
                         gender: client.gender,
                         ageDob: this.formatBirthdate(client.birthdate),
                         village: client.city_village,
@@ -309,22 +309,11 @@ export default defineComponent({
     background-color: #8c8c8c8c;
     color: #fff;
 }
-.initialsBox {
-    width: 50px;
-    height: 50px;
-    left: 31px;
-    top: 122px;
-    align-items: center;
-    border-radius: 50%;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
 .appointment-list {
     overflow-y: auto;
 }
 .pagination-controls {
-    margin-top: 5px;
+    margin-top: 0px;
     display: flex;
     justify-content: center;
     align-items: center;
