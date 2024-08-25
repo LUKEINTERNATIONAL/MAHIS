@@ -629,3 +629,9 @@ ion-footer {
 .Toastify__toast-body > div:last-child {
     font-size: 12px;
 }
+.vti__dropdown-list {
+    z-index: 10;
+}
+.vue-tel-input {
+    height: 56px;
+}
