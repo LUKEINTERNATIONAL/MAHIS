@@ -4,7 +4,7 @@
             <ion-col style="margin-left: -3px">
                 <div class="om">Administer Vaccine</div>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="6" style="text-align: right">
                 <ion-label class="lbl-tl" style="font-size: 13">
                     Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label
                 >
