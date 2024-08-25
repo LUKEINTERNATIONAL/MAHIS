@@ -21,6 +21,12 @@
                             :inputValue="search_text"
                             @update:inputValue="searchTextUpdated"
                         />
+
+                        <div>
+                            <ion-label v-if="search_txt_error" class="error-label">
+                                {{ 'only letters allowed' }}
+                            </ion-label>
+                        </div>
                     </ion-col>
                 </ion-row>
 
@@ -129,7 +135,8 @@ export default defineComponent({
     },
     data() {
         return {
-            search_text: ''
+            search_text: '',
+            search_txt_error: false,
         }
     },
     setup() {
@@ -224,22 +231,26 @@ export default defineComponent({
         async getAppointments() {
             this.people.length = 0;
             this.isLoading = true;
-            const appointments = await AppointmentService.getDailiyAppointments(this.startDate, this.endDate, this.search_text);
-            appointments.forEach((client: any) => {
-                    const apptOb = {
-                        person_id: client.person_id,
-                        npid: client.npid,
-                        appointment_id: 103,
-                        encounter_id: client.encounter_id,
-                        name: client.given_name.concat(' ',client.family_name),
-                        gender: client.gender,
-                        ageDob: this.formatBirthdate(client.birthdate),
-                        village: client.city_village,
-                        appointmentDate: HisDate.toStandardHisDisplayFormat(client.appointment_date)
-                    }
-                    this.people.push(apptOb)
-            })
-            this.isLoading = false;
+            try {
+                const appointments = await AppointmentService.getDailiyAppointments(this.startDate, this.endDate, this.search_text);
+                appointments.forEach((client: any) => {
+                        const apptOb = {
+                            person_id: client.person_id,
+                            npid: client.npid,
+                            appointment_id: 103,
+                            encounter_id: client.encounter_id,
+                            name: client.given_name.concat(' ',client.family_name),
+                            gender: client.gender,
+                            ageDob: this.formatBirthdate(client.birthdate),
+                            village: client.city_village,
+                            appointmentDate: HisDate.toStandardHisDisplayFormat(client.appointment_date)
+                        }
+                        this.people.push(apptOb)
+                })
+                this.isLoading = false; 
+            } catch (error) {
+                this.isLoading = false;
+            }
         },
         async handleInputData(event: any) {
             if (event.inputHeader == "Start date") {
@@ -273,9 +284,20 @@ export default defineComponent({
         searchTextUpdated(event: any) {
             const reason = event.target.value
             this.search_text = reason
-            setTimeout(() => {
-                this.loadPageInf();
-            }, 500);
+
+            if (this.isValidString(this.search_text) == true) {
+                this.search_txt_error = false
+                setTimeout(() => {
+                    this.loadPageInf();
+                }, 500);
+            } else {
+                this.search_txt_error = true
+            }
+
+        },
+        isValidString(input: string) {
+            const regex = /^[a-zA-Z\s]*$/;
+            return regex.test(input);
         }
     }
 })
@@ -349,5 +371,10 @@ export default defineComponent({
 }
 .loading-text {
     margin-top: 10px;
+}
+.error-label {
+    color: #b42318;
+    text-transform: none;
+    float: right;
 }
 </style>
