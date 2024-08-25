@@ -9,7 +9,7 @@
                     <ion-label class="previousLabel">Personal information</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content" style="padding-bottom: 200px">
-                    <PersonalInformation :editable="true" />
+                    <PersonalInformation ref="personalComponent" :editable="true" :receivedData="dataToPass"/>
                 </div>
             </ion-accordion>
             <ion-accordion value="second" toggle-icon-slot="start" class="custom_card">
@@ -18,7 +18,7 @@
                 </ion-item>
                 <div class="ion-padding" slot="content" style="padding-bottom: 200px">
                     <div class="">
-                        <GuardianInformation :editable="true" />
+                        <GuardianInformation ref="guardianComponent" :editable="true" :receivedData="dataToPass"/>
                     </div>
                 </div>
             </ion-accordion>
@@ -113,7 +113,17 @@ import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
-
+import 'intl-tel-input/build/css/intlTelInput.css';
+import intlTelInput from 'intl-tel-input';
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $refs: {
+      personalComponent: InstanceType<typeof PersonalInformation>;
+      guardianComponent: InstanceType<typeof GuardianInformation>;
+    };
+  }
+}
+const iti = ref()
 export default defineComponent({
     name: "Home",
     username: "",
@@ -152,12 +162,18 @@ export default defineComponent({
     data() {
         return {
             popoverOpen: false,
+            countries: [] as any,    
+            dataToPass: [] as any
         };
     },
     computed: {
         ...mapState(useFollowUpStoreStore, ["changeGuardianInfo", "vaccineAdverseEffects", "protectedAtBirth"]),
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
         ...mapState(useRegistrationStore, ["personInformation", "socialHistory", "homeLocation", "currentLocation", "guardianInformation"]),
+    },
+    async mounted() { 
+        this.loadCountries();
+        this.trigger();    
     },
     watch: {
         demographics: {
@@ -169,6 +185,61 @@ export default defineComponent({
         return { notificationsOutline, personCircleOutline, createOutline, clipboardOutline, calendarOutline };
     },
     methods: {
+        trigger(){       
+            setTimeout(() => { this.test() },1000); 
+        },
+        test(){
+           
+           const updatePhoneInformation = (elementID: string, dataKey: any) => {
+           const ionInput = document.getElementById(elementID);
+           const inputElement = ionInput?.querySelector('input');
+           if (inputElement instanceof HTMLInputElement) {
+           iti.value = intlTelInput(inputElement, {
+             //utilsScript: "./node_modules/intl-tel-input/build/js/utils.js",
+             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.js",
+             containerClass: "w-full",
+             separateDialCode: true,
+             initialCountry: "mw",
+             placeholderNumberType: "MOBILE",   
+           });
+   
+           const updatePlaceholder = async () => {
+             const countryData = iti.value.getSelectedCountryData();
+             const countryiso2 = countryData.iso2.toUpperCase();
+             const country = this.countries.find((c: { iso2: any; }) => c.iso2 === countryiso2);
+             const sampleNumber = country.examplePhoneNumber.replace(country.dialCode, "").trim();
+             inputElement.setAttribute("placeholder",sampleNumber);
+             this.dataToPass = [countryData,this.countries];
+             if (elementID === "phoneNumber") {
+                  this.$refs.personalComponent.handleInputData(dataKey);
+             }else if (elementID === "guardianPhoneNumber")
+             {
+                this.$refs.guardianComponent.handleInputData(dataKey);
+             }
+          
+           };
+   
+           updatePlaceholder();
+           inputElement.addEventListener("countrychange", updatePlaceholder);        
+           
+            } else {
+               //console.error("Could not find the input element");
+           }
+       };
+            ["phoneNumber", "guardianPhoneNumber"].forEach((id) => {
+            if (id === "phoneNumber") {
+               updatePhoneInformation(id, this.personInformation[4]);
+                 } else if (id === "guardianPhoneNumber") {
+               updatePhoneInformation(id, this.guardianInformation[4]);
+               }
+           });
+           
+           },
+          async loadCountries(){
+            const response = await fetch('/countryphones.json');
+            const data = await response.json();
+            this.countries =  data.countries; 
+        },
         getAttributes(item: any, name: any) {
             return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;
         },
@@ -215,7 +286,7 @@ export default defineComponent({
                 middle_name: getFieldValue(this.personInformation, "middleName", "value"),
                 gender: getRadioSelectedValue(this.personInformation, "gender"),
                 birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
-                cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
+                cell_phone_number: `+${this.dataToPass[0].dialCode}${getFieldValue(this.personInformation, "phoneNumber", "value")}`,
                 birthdate_estimated: false,
                 home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
                 home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
@@ -240,7 +311,7 @@ export default defineComponent({
                 given_name: getFieldValue(this.guardianInformation, "guardianFirstname", "value"),
                 family_name: getFieldValue(this.guardianInformation, "guardianLastname", "value"),
                 middle_name: getFieldValue(this.guardianInformation, "guardianMiddleName", "value"),
-                cell_phone_number: getFieldValue(this.guardianInformation, "guardianPhoneNumber", "value"),
+                cell_phone_number: `+${this.dataToPass[0].dialCode}${getFieldValue(this.guardianInformation, "guardianPhoneNumber", "value")}`,
                 gender: "",
                 birthdate: "",
                 birthdate_estimated: false,

@@ -2,6 +2,7 @@
     <h6 v-if="inputHeader" :class="bold">{{ removeAsterisk(inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span></h6>
     <div class="" :style="'width:' + inputWidth">
         <ion-input
+            :id="id"
             v-if="input == 'input'"
             @ionInput="handleInput"
             @ionBlur="handleBlur"
@@ -115,6 +116,10 @@ export default defineComponent({
             default: "",
         },
         bold: {
+            type: String,
+            default: "",
+        },
+        id: {
             type: String,
             default: "",
         },

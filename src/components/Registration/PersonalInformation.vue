@@ -19,7 +19,7 @@ import { calculator } from "ionicons/icons";
 import Validation from "@/validations/StandardValidations";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-
+import { isEmpty } from "lodash";
 export default defineComponent({
     name: "Menu",
     components: {
@@ -37,7 +37,7 @@ export default defineComponent({
             cardData: {} as any,
             inputField: "" as any,
             setName: "" as any,
-            initialPersonalData: [] as any,
+            initialPersonalData: [] as any   
         };
     },
     watch: {
@@ -52,6 +52,10 @@ export default defineComponent({
         editable: {
             default: false as any,
         },
+        receivedData: {
+      type: [] as any, 
+      required: true
+    }
     },
     computed: {
         ...mapState(useRegistrationStore, ["personInformation"]),
@@ -88,10 +92,11 @@ export default defineComponent({
     async mounted() {
         this.buildCards();
         this.setData();
-        this.setData();
+        this.setData();    
     },
 
     methods: {
+        
         setData() {
             if (this.editable) {
                 modifyFieldValue(this.personInformation, "firstname", "value", this.patient.person.names[0].given_name);
@@ -129,13 +134,23 @@ export default defineComponent({
         async handleInputData(event: any) {
             if (event?.col?.name == "Estimate Age" && !event?.col?.checked) {
                 modifyFieldValue(this.personInformation, "estimation", "displayNone", true);
-            } else {
-                // modifyFieldValue(this.personInformation,'birthdate','disabled',true)
+            } else if (event.name == "phoneNumber") {
+                 const message = this.validatePhone(event.value)
+                this.personInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
+                return true               
             }
             // Estimated age
             this.validationRules(event);
             this.calculateDoB(event);
             this.setGuardingInfo(event);
+        },
+        validatePhone(value:any){
+          const countryiso2 = this.receivedData[0].iso2.toUpperCase();
+          const country = this.receivedData[1].find((c: { iso2: any; }) => c.iso2 === countryiso2);
+          const sampleNumber = country.examplePhoneNumber.replace(/\s+/g, '');
+          const userphone = `+${this.receivedData[0].dialCode}${value}`;  
+          return !isEmpty(value) && (userphone.length !== sampleNumber.length) ? "Not a valid phone number" : null;
+
         },
         setGuardingFormRules(age: any) {
             if (age < 14) {
@@ -247,4 +262,11 @@ export default defineComponent({
 .gender_title {
     margin-top: 30px;
 }
+.iti {
+  --iti-path-flags-1x: url('../node_modules/intl-tel-input/build/img/flags.webp');
+  --iti-path-flags-2x: url('../node_modules/intl-tel-input/build/img/flags@2x.webp');
+  --iti-path-globe-1x: url('../node_modules/intl-tel-input/build/img/globe.webp');
+  --iti-path-globe-2x: url('../node_modules/intl-tel-input/build/imgß/globe@2x.webp');
+}
+
 </style>

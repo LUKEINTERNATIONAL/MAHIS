@@ -18,7 +18,7 @@ import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/servic
 import { validateField } from "@/services/validation_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
 import { RelationshipService } from "@/services/relationship_service";
-
+import { isEmpty } from "lodash";
 export default defineComponent({
     name: "Menu",
     mixins: [Relationship],
@@ -84,6 +84,10 @@ export default defineComponent({
         editable: {
             default: false as any,
         },
+        receivedData: {
+      type: [] as any, 
+      required: true
+    }
     },
     async mounted() {
         await this.setRelationShip();
@@ -91,6 +95,7 @@ export default defineComponent({
         this.setData();
     },
     methods: {
+
         async setData() {
             if (this.editable) {
                 const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
@@ -174,8 +179,21 @@ export default defineComponent({
             return validateField(this.guardianInformation, event.name, (this as any)[event.name]);
         },
         async handleInputData(event: any) {
+            if (event.name == "guardianPhoneNumber") {
+                 const message = this.validatePhone(event.value)
+                this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
+                return true               
+            }
             this.validationRules(event);
             this.buildGuardianInformation();
+        },
+        validatePhone(value:any){
+          const countryiso2 = this.receivedData[0].iso2.toUpperCase();
+          const country = this.receivedData[1].find((c: { iso2: any; }) => c.iso2 === countryiso2);
+          const sampleNumber = country.examplePhoneNumber.replace(/\s+/g, '');
+          const userphone = `+${this.receivedData[0].dialCode}${value}`;   
+          return !isEmpty(value) && (userphone.length !== sampleNumber.length) ? "Not a valid phone number" : null;
+
         },
     },
 });

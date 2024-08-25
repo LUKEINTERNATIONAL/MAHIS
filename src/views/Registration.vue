@@ -31,6 +31,7 @@
                         :icon="grid"
                         @click="setDisplayType('grid')"
                     ></ion-icon>
+
                 </div>
             </div>
             <div v-if="registrationType == 'scan'">
@@ -38,8 +39,10 @@
             </div>
             <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991">
                 <div v-if="registrationDisplayType == 'grid'" class="flex-container">
+                    <input ref="phoneNumberInput" id="phoneNumber" />
                     <div class="flex-item">
-                        <PersonalInformation />
+                        <PersonalInformation ref="personalComponent" :receivedData="dataToPass"/>
+                       
                     </div>
                     <div class="flex-item">
                         <CurrentLocation />
@@ -48,14 +51,14 @@
                     </div>
                     <div class="flex-item">
                         <HomeLocation />
-                        <GuardianInformation />
+                        <GuardianInformation ref="guardianComponent" :receivedData="dataToPass" />
                     </div>
                 </div>
             </div>
 
             <div v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
                 <div v-if="currentStep == 'Personal Information'">
-                    <PersonalInformation />
+                    <PersonalInformation ref="personalComponent" :receivedData="dataToPass" />
                 </div>
                 <div v-if="currentStep == 'Location'">
                     <div style="justify-content: center">
@@ -68,7 +71,7 @@
                     <BirthRegistration v-if="checkUnderFive" />
                 </div>
                 <div v-if="currentStep == 'Guardian Information'">
-                    <GuardianInformation />
+                    <GuardianInformation ref="guardianComponent" :receivedData="dataToPass" />
                 </div>
             </div>
         </ion-content>
@@ -112,7 +115,7 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonBreadcrumb, IonBreadcrumbs, IonIcon } from "@ionic/vue";
-import { defineComponent, toRaw } from "vue";
+import { defineComponent, toRaw, ref } from "vue";
 import { arrowForwardCircle, grid, list } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -152,6 +155,17 @@ import Districts from "@/views/Mixin/SetDistricts.vue";
 import { useWebWorkerFn } from "@vueuse/core";
 import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
+import 'intl-tel-input/build/css/intlTelInput.css';
+import intlTelInput from 'intl-tel-input';
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $refs: {
+      personalComponent: InstanceType<typeof PersonalInformation>;
+      guardianComponent: InstanceType<typeof GuardianInformation>;
+    };
+  }
+}
+const iti = ref()
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -188,6 +202,8 @@ export default defineComponent({
             checkUnderSixWeeks: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             disableSaveBtn: false,
+            countries: [] as any,    
+            dataToPass: [] as any
         };
     },
     props: ["registrationType"],
@@ -227,7 +243,7 @@ export default defineComponent({
             return getFieldValue(this.guardianInformation, "guardianMiddleName", "value");
         },
         guardianPhoneNumber() {
-            return getFieldValue(this.guardianInformation, "guardianPhoneNumber", "value");
+            return `+${this.dataToPass[0].dialCode}${getFieldValue(this.guardianInformation, "guardianPhoneNumber", "value")}`
         },
         relationship() {
             return getFieldValue(this.guardianInformation, "relationship", "value");
@@ -245,12 +261,13 @@ export default defineComponent({
             return getFieldValue(this.currentLocation, "Other (specify)", "value");
         },
     },
-
     async mounted() {
         resetDemographics();
         this.setIconClass();
         this.disableNationalIDInput();
-        this.checkAge();
+        this.checkAge();   
+        this.loadCountries();
+        this.trigger();    
     },
     watch: {
         personInformation: {
@@ -264,6 +281,7 @@ export default defineComponent({
                 this.checkAge();
                 this.disableNationalIDInput();
             },
+            
             deep: true,
         },
         $route: {
@@ -277,8 +295,64 @@ export default defineComponent({
     },
     setup() {
         return { arrowForwardCircle, grid, list };
+        
     },
     methods: {
+        trigger(){       
+            setTimeout(() => { this.test() },1000); 
+        },
+        test(){
+           
+           const updatePhoneInformation = (elementID: string, dataKey: any, refName: any) => {
+           const ionInput = document.getElementById(elementID);
+           const inputElement = ionInput?.querySelector('input');
+           if (inputElement instanceof HTMLInputElement) {
+           iti.value = intlTelInput(inputElement, {
+             //utilsScript: "./node_modules/intl-tel-input/build/js/utils.js",
+             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.js",
+             containerClass: "w-full",
+             separateDialCode: true,
+             initialCountry: "mw",
+             placeholderNumberType: "MOBILE",   
+           });
+   
+           const updatePlaceholder = async () => {
+             const countryData = iti.value.getSelectedCountryData();
+             const countryiso2 = countryData.iso2.toUpperCase();
+             const country = this.countries.find((c: { iso2: any; }) => c.iso2 === countryiso2);
+             const sampleNumber = country.examplePhoneNumber.replace(country.dialCode, "").trim();
+             inputElement.setAttribute("placeholder",sampleNumber);
+             this.dataToPass = [countryData,this.countries];
+             if (elementID === "phoneNumber") {
+                  this.$refs.personalComponent.handleInputData(dataKey);
+             }else if (elementID === "guardianPhoneNumber")
+             {
+                this.$refs.guardianComponent.handleInputData(dataKey);
+             }
+          
+           };
+   
+           updatePlaceholder();
+           inputElement.addEventListener("countrychange", updatePlaceholder);        
+           
+            } else {
+               //console.error("Could not find the input element");
+           }
+       };
+            ["phoneNumber", "guardianPhoneNumber"].forEach((id) => {
+            if (id === "phoneNumber") {
+               updatePhoneInformation(id, this.personInformation[4],"personalComponent");
+                 } else if (id === "guardianPhoneNumber") {
+               updatePhoneInformation(id, this.guardianInformation[4],"guardianComponent");
+               }
+           });
+           
+           },
+          async loadCountries(){
+            const response = await fetch('/countryphones.json');
+            const data = await response.json();
+            this.countries =  data.countries; 
+        },
         programID() {
             return Service.getProgramID();
         },
@@ -327,6 +401,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
+            
             if (this.checkUnderFive || this.checkUnderOne)
                 this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
@@ -334,12 +409,14 @@ export default defineComponent({
             if (currentIndex < this.steps.length - 1) {
                 this.currentStep = this.steps[currentIndex + 1];
             }
+          this.trigger();
         },
         previousStep() {
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex > 0) {
                 this.currentStep = this.steps[currentIndex - 1];
             }
+            this.trigger();
         },
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
@@ -367,10 +444,10 @@ export default defineComponent({
                 currentFields.push("Other (specify)");
             }
             if (
-                (await this.validations(this.personInformation, fields)) &&
-                (await this.validations(this.currentLocation, currentFields)) &&
-                (await this.validateBirthData()) &&
-                this.validateGaudiarnInfo()
+                //(await this.validations(this.personInformation, fields)) &&
+                //(await this.validations(this.currentLocation, currentFields)) &&
+                (await this.validateBirthData()) //&&
+                //this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
                 this.isLoading = true;
@@ -525,6 +602,7 @@ export default defineComponent({
             else return "";
         },
         async buildPersonalInformation() {
+
             const closestLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value")?.name;
             const otherLandmark = getFieldValue(this.currentLocation, "Other (specify)", "value");
             const landmark = closestLandmark === "Other" ? otherLandmark : closestLandmark;
@@ -545,7 +623,7 @@ export default defineComponent({
                 current_traditional_authority: this.current_traditional_authority,
                 current_village: this.current_village,
                 landmark: landmark,
-                cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
+                cell_phone_number: `+${this.dataToPass[0].dialCode}${getFieldValue(this.personInformation, "phoneNumber", "value")}`,
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
                 marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
                 religion: getFieldValue(this.socialHistory, "religion", "value")?.name,
@@ -669,5 +747,6 @@ ion-footer {
     border-radius: 5px;
     box-sizing: border-box;
 }
+
 </style>
 @/services/SaveRecords/save_registration

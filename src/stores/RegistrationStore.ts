@@ -91,6 +91,7 @@ const initialPersonalInformation = [
                             inputHeader: "Phone number",
                             icon: icons.phone,
                             value: "",
+                              id: "phoneNumber",
                             name: "phoneNumber",
                             eventType: "input",
                             alertsErrorMassage: "",
@@ -796,6 +797,7 @@ const initialGuardianInformation = [
         },
     },
     {
+
         data: {
             rowData: [
                 {
@@ -805,6 +807,7 @@ const initialGuardianInformation = [
                             icon: icons.phone,
                             value: "",
                             name: "guardianPhoneNumber",
+                            id: "guardianPhoneNumber",
                             eventType: "input",
                             alertsErrorMassage: "",
                             validationFunctionName: "isMWPhoneNumber",
