@@ -449,9 +449,10 @@ export default defineComponent({
                 (await this.validateBirthData()) //&&
                 //this.validateGaudiarnInfo()
             ) {
-                this.disableSaveBtn = true;
-                this.isLoading = true;
-                if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
+                 console.log(this.guardianInformation[0].selectedData,".........greta")
+                //this.disableSaveBtn = true;
+                //this.isLoading = true;
+                /*if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const offlinePatientID = Date.now();
                 await db.collection("patientRecords").add({
                     offlinePatientID: offlinePatientID,
@@ -482,7 +483,7 @@ export default defineComponent({
                         } else {
                             await this.setOfflineData(document);
                         }
-                    });
+                    }); */
             } else {
                 toastWarning("Please complete all required fields");
             }

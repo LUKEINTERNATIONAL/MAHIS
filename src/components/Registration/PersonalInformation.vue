@@ -53,9 +53,9 @@ export default defineComponent({
             default: false as any,
         },
         receivedData: {
-      type: [] as any, 
-      required: true
-    }
+           type: [] as any, 
+         required: true
+       }
     },
     computed: {
         ...mapState(useRegistrationStore, ["personInformation"]),

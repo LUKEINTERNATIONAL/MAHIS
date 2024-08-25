@@ -1,7 +1,6 @@
 <template>
     <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
 </template>
-
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu } from "@ionic/vue";
 import { defineComponent } from "vue";
