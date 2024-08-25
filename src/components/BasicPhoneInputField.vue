@@ -12,9 +12,10 @@
             :placeholder="placeholder"
             :type="inputType"
             :disabled="disabled"
-            :preferredCountries="['mw', 'gb']"
+            :preferredCountries="['mw']"
             :defaultCountry="'mw'"
-            :options="options"
+            :inputOptions="{ showDialCode: true }"
+            mode="international"
         >
         </vue-tel-input>
     </div>
