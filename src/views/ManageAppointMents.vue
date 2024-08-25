@@ -21,16 +21,42 @@
                         </ion-button>
                     </ion-col>
                 </ion-row>
+                <div class="appointment-list" :style="{ height: listHeight + 'px' }">
+                    <nextApptInf v-for="person in paginatedPeople" :key="person.person_id" :person="person"/>
+                </div>
 
-                <nextApptInf v-for="person in people" :key="person.person_id" :person="person"/>
+                <div v-if="people.length > 0" class="pagination-controls">
+                    <div class="items-per-page">
+                        <ion-label>Items per page:</ion-label>
+                        <ion-select v-model="itemsPerPage" @ionChange="changeItemsPerPage">
+                            <ion-select-option :value="10">10</ion-select-option>
+                            <ion-select-option :value="20">20</ion-select-option>
+                            <ion-select-option :value="50">50</ion-select-option>
+                        </ion-select>
+                    </div>
+                    <ion-button @click="prevPage" :disabled="currentPage === 1">
+                        <ion-icon :icon="chevronBackOutline" slot="start"></ion-icon>
+                        Previous
+                    </ion-button>
+                    <ion-select v-model="currentPage" @ionChange="changePage">
+                        <ion-icon :icon="bookOutline" slot="start"></ion-icon>
+                        <ion-select-option v-for="page in totalPages" :key="page" :value="page">
+                            Page {{ page }}
+                        </ion-select-option>
+                    </ion-select>
+                    <ion-button @click="nextPage" :disabled="currentPage === totalPages">
+                        Next
+                        <ion-icon :icon="chevronForwardOutline" slot="end"></ion-icon>
+                    </ion-button>
+                </div>
             </div>
         </ion-content>
     </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonButton, IonMenuButton, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard, IonIcon } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { IonContent, IonHeader, IonButton, IonMenuButton, IonLabel, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard, IonIcon, IonSelect, IonSelectOption } from "@ionic/vue";
+import { defineComponent, ref, computed, onMounted, onUnmounted } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import HisDate from "@/utils/Date";
@@ -54,6 +80,8 @@ import {
     globe,
     add,
     person,
+    chevronForwardOutline, 
+    bookOutline,
 } from "ionicons/icons";
 
 export default defineComponent({
@@ -78,23 +106,51 @@ export default defineComponent({
         nextApptInf,
         BasicForm,
         IonIcon,
-    },
-    data() {
-        return {
-            isLoading: false,
-            options: {
-                responsive: true,
-                select: false,
-            } as any,
-            reportData: [] as any,
-            appointments: [] as any,
-            people: [] as any,
-            startDate: HisDate.currentDate(),
-            endDate: HisDate.currentDate(),
-        }
+        IonSelect,
+        IonSelectOption,
+        IonLabel
     },
     setup() {
+        const isLoading = ref(false);
+        const people = ref([]) as any;
+        const startDate = ref(HisDate.currentDate());
+        const endDate = ref(HisDate.currentDate());
+        const currentPage = ref(1);
+        const itemsPerPage = ref(10);
+        const listHeight = ref(0);
+
+        const totalPages = computed(() => Math.ceil(people.value.length / itemsPerPage.value));
+
+        const paginatedPeople = computed(() => {
+            const start = (currentPage.value - 1) * itemsPerPage.value;
+            const end = start + itemsPerPage.value;
+            return people.value.slice(start, end);
+        });
+
+        const updateListHeight = () => {
+            const screenHeight = window.innerHeight;
+            const otherElementsHeight = 300;
+            listHeight.value = screenHeight - otherElementsHeight;
+        };
+
+        onMounted(() => {
+            updateListHeight();
+            window.addEventListener('resize', updateListHeight);
+        });
+
+        onUnmounted(() => {
+            window.removeEventListener('resize', updateListHeight);
+        });
+
         return {
+            isLoading,
+            people,
+            startDate,
+            endDate,
+            currentPage,
+            totalPages,
+            paginatedPeople,
+            listHeight,
             chevronBackOutline,
             checkmark,
             grid,
@@ -105,9 +161,12 @@ export default defineComponent({
             document,
             globe,
             medkit,
+            itemsPerPage,
             add,
             person,
             refreshOutline,
+            chevronForwardOutline,
+            bookOutline,
         };
     },
     computed: {
@@ -170,7 +229,24 @@ export default defineComponent({
         },
         async loadPageInf() {
             await this.getAppointments();
-        }
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
+        changePage(event: CustomEvent) {
+            this.currentPage = event.detail.value;
+        },
+        changeItemsPerPage(event: CustomEvent) {
+            this.itemsPerPage = event.detail.value;
+            this.currentPage = 1;
+        },
     }
 })
 </script>
@@ -213,5 +289,46 @@ export default defineComponent({
     align-items: center;
     display: flex;
     justify-content: center;
+}
+.appointment-list {
+    overflow-y: auto;
+}
+.pagination-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.pagination-controls ion-select {
+    --padding-start: 8px;
+    --padding-end: 8px;
+}
+
+.items-per-page {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.items-per-page ion-select {
+    width: 70px;
+}
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+}
+.loading-text {
+    margin-top: 10px;
 }
 </style>
