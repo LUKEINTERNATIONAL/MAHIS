@@ -2,41 +2,45 @@
     <ion-card>
       <ion-card-content>
         <ion-grid>
-          <span style="cursor: pointer;" @click="openClientProfile(person.npid)">
-            <ion-row>
-              <ion-col size="6">
-                <strong>Name:</strong> {{ person.name }}
-              </ion-col>
-              <ion-col size="6">
-                <strong>Gender:</strong> {{ person.gender }}
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col size="6">
-                <strong>Age/DOB:</strong> {{ person.ageDob }}
-              </ion-col>
-              <ion-col size="6">
-                <strong>Village:</strong> {{ person.village }}
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col size="12">
-                <strong>Appointment Date:</strong> {{ person.appointmentDate }}
-              </ion-col>
-            </ion-row>
-            <ion-row class="divider">
-              <ion-col size="12">
-                <div class="line"></div>
-              </ion-col>
-            </ion-row>
-          </span>
+          <ion-row>
+            <ion-col size="6">
+              <strong>Name:</strong> {{ person.name }}
+            </ion-col>
+            <ion-col size="6">
+              <strong>Gender:</strong> {{ person.gender }}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <strong>Age/DOB:</strong> {{ person.ageDob }}
+            </ion-col>
+            <ion-col size="6">
+              <strong>Village:</strong> {{ person.village }}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <strong>Appointment Date:</strong> {{ person.appointmentDate }}
+            </ion-col>
+          </ion-row>
+          <ion-row class="divider">
+            <ion-col size="12">
+              <div class="line"></div>
+            </ion-col>
+          </ion-row>
           <ion-row class="actions">
             <ion-col size="12">
               <div class="button-container">
+                <ion-button @click="openClientProfile(person.npid)" color="primary" fill="outline" size="small">
+                  <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
+                  Patient Profile
+                </ion-button>
+
                 <ion-button @click="handleReschedule" color="primary" fill="outline" size="small">
                   <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
                   Reschedule
                 </ion-button>
+                
                 <ion-button @click="handleRemove" color="danger" fill="outline" size="small">
                   <ion-icon :icon="trashOutline" slot="start"></ion-icon>
                   Remove
