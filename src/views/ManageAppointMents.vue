@@ -8,7 +8,21 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 700">Appointments</h1>
+                
+                <ion-row>
+                    <ion-col>
+                        <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 700">Appointments</h1>
+                    </ion-col>
+
+                    <ion-col size="4" style="margin-top: 15px;">
+                        <BasicInputField
+                            :placeholder="''"
+                            :icon="searchOutline"
+                            :inputValue="search_text"
+                            @update:inputValue="searchTextUpdated"
+                        />
+                    </ion-col>
+                </ion-row>
 
                 <ion-row class="ion-align-items-center">
                     <ion-col class="ion-no-padding">
@@ -67,6 +81,7 @@ import { mapState } from "pinia";
 import { useStartEndDate } from "@/stores/StartEndDate";
 import nextApptInf from "./nextApptInf.vue"
 import { refreshOutline } from 'ionicons/icons';
+import BasicInputField from "@/components/BasicInputField.vue"
 import {
     medkit,
     chevronBackOutline,
@@ -82,6 +97,7 @@ import {
     person,
     chevronForwardOutline, 
     bookOutline,
+    searchOutline,
 } from "ionicons/icons";
 
 export default defineComponent({
@@ -108,7 +124,13 @@ export default defineComponent({
         IonIcon,
         IonSelect,
         IonSelectOption,
-        IonLabel
+        IonLabel,
+        BasicInputField
+    },
+    data() {
+        return {
+            search_text: ''
+        }
     },
     setup() {
         const isLoading = ref(false);
@@ -167,6 +189,7 @@ export default defineComponent({
             refreshOutline,
             chevronForwardOutline,
             bookOutline,
+            searchOutline,
         };
     },
     computed: {
@@ -201,7 +224,7 @@ export default defineComponent({
         async getAppointments() {
             this.people.length = 0;
             this.isLoading = true;
-            const appointments = await AppointmentService.getDailiyAppointments(this.startDate, this.endDate);
+            const appointments = await AppointmentService.getDailiyAppointments(this.startDate, this.endDate, this.search_text);
             appointments.forEach((client: any) => {
                     const apptOb = {
                         person_id: client.person_id,
@@ -247,6 +270,13 @@ export default defineComponent({
             this.itemsPerPage = event.detail.value;
             this.currentPage = 1;
         },
+        searchTextUpdated(event: any) {
+            const reason = event.target.value
+            this.search_text = reason
+            setTimeout(() => {
+                this.loadPageInf();
+            }, 500);
+        }
     }
 })
 </script>

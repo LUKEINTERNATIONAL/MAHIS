@@ -9,8 +9,8 @@ export class AppointmentService extends AppEncounterService {
         return AppEncounterService.getJson(`/programs/${this.programID}/patients/${this.patientID}/next_appointment_date`, { date: this.date });
     }
 
-    static async getDailiyAppointments(date: any, end_date = '') {
+    static async getDailiyAppointments(date: any, end_date = '', srch_text = '') {
         const programID = AppEncounterService.getProgramID();
-        return AppEncounterService.getJson(`/programs/${programID}/booked_appointments`, { date, end_date, paginate: false });
+        return AppEncounterService.getJson(`/programs/${programID}/booked_appointments`, { date, end_date, srch_text, paginate: false });
     }
 }
