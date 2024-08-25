@@ -158,7 +158,7 @@ export default defineComponent({
 
         const updateListHeight = () => {
             const screenHeight = window.innerHeight;
-            const otherElementsHeight = 300;
+            const otherElementsHeight = 310;
             listHeight.value = screenHeight - otherElementsHeight;
         };
 
