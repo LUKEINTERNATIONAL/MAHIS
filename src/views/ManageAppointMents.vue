@@ -46,29 +46,35 @@
                 </div>
 
                 <div v-if="people.length > 0" class="pagination-controls">
-                    <div class="items-per-page">
-                        <ion-label>Items per page:</ion-label>
-                        <ion-select v-model="itemsPerPage" @ionChange="changeItemsPerPage">
-                            <ion-select-option :value="10">10</ion-select-option>
-                            <ion-select-option :value="20">20</ion-select-option>
-                            <ion-select-option :value="50">50</ion-select-option>
-                        </ion-select>
-                    </div>
-                    <ion-button @click="prevPage" :disabled="currentPage === 1">
-                        <ion-icon :icon="chevronBackOutline" slot="start"></ion-icon>
-                        Previous
-                    </ion-button>
-                    <ion-select v-model="currentPage" @ionChange="changePage">
-                        <ion-icon :icon="bookOutline" slot="start"></ion-icon>
-                        <ion-select-option v-for="page in totalPages" :key="page" :value="page">
-                            Page {{ page }}
-                        </ion-select-option>
-                    </ion-select>
-                    <ion-button @click="nextPage" :disabled="currentPage === totalPages">
-                        Next
-                        <ion-icon :icon="chevronForwardOutline" slot="end"></ion-icon>
-                    </ion-button>
-                </div>
+    <ion-button class="nav-button" @click="prevPage" :disabled="currentPage === 1">
+        <ion-icon :icon="chevronBackOutline" slot="icon-only"></ion-icon>
+    </ion-button>
+    
+    <div class="pagination-info">
+        <div class="items-per-page">
+            <ion-label style="margin-left: 20px;">Items per page:</ion-label>
+            <ion-select v-model="itemsPerPage" @ionChange="changeItemsPerPage" interface="popover">
+                <ion-select-option :value="10">10</ion-select-option>
+                <ion-select-option :value="20">20</ion-select-option>
+                <ion-select-option :value="50">50</ion-select-option>
+            </ion-select>
+        </div>
+        
+        <div class="page-counter">
+            Showing {{ startIndex }} - {{ endIndex }} of {{ people.length }}
+        </div>
+        
+        <ion-select v-model="currentPage" @ionChange="changePage" interface="popover">
+            <ion-select-option v-for="page in totalPages" :key="page" :value="page">
+                Page {{ page }}
+            </ion-select-option>
+        </ion-select>
+    </div>
+    
+    <ion-button class="nav-button" @click="nextPage" :disabled="currentPage === totalPages">
+        <ion-icon :icon="chevronForwardOutline" slot="icon-only"></ion-icon>
+    </ion-button>
+</div>
             </div>
         </ion-content>
     </ion-page>
@@ -202,6 +208,12 @@ export default defineComponent({
     computed: {
         ...mapState(useImmunizationAppointMentStore, ["selectedAppointmentMentForAppointmentsPage", "AppointmentsReload"]),
         ...mapState(useStartEndDate, ["startEndDate"]),
+        startIndex() {
+            return (this.currentPage - 1) * this.itemsPerPage + 1;
+        },
+        endIndex() {
+            return Math.min(this.startIndex + this.itemsPerPage - 1, this.people.length);
+        }
     },
     watch: {
         selectedAppointmentMentForAppointmentsPage: {
@@ -337,24 +349,53 @@ export default defineComponent({
 .pagination-controls {
     margin-top: 0px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    flex-wrap: wrap;
 }
 
-.pagination-controls ion-select {
-    --padding-start: 8px;
-    --padding-end: 8px;
+.pagination-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+    justify-content: center;
 }
 
 .items-per-page {
     display: flex;
     align-items: center;
     gap: 10px;
+    white-space: nowrap;
 }
 
 .items-per-page ion-select {
     width: 70px;
+}
+
+.page-counter {
+    white-space: nowrap;
+}
+
+.nav-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+}
+
+@media (max-width: 768px) {
+    .pagination-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .pagination-info {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .nav-button {
+        width: 100%;
+    }
 }
 .spinner-overlay {
     position: fixed;
