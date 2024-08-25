@@ -32,7 +32,7 @@
             <ion-col size="12">
               <div class="button-container">
                 <ion-button @click="openClientProfile(person.npid)" color="primary" fill="outline" size="small">
-                  <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
+                  <ion-icon :icon="personCircleOutline" slot="start"></ion-icon>
                   Patient Profile
                 </ion-button>
 
@@ -56,7 +56,7 @@
   <script lang="ts">
   import { defineComponent } from 'vue';
   import { IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonButton, IonIcon } from '@ionic/vue';
-  import { calendarOutline, trashOutline } from 'ionicons/icons';
+  import { calendarOutline, trashOutline, personCircleOutline } from 'ionicons/icons';
   import { createModal } from "@/utils/Alerts";
   import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
   import { PatientService } from "@/services/patient_service";
@@ -95,6 +95,7 @@
       return {
         calendarOutline,
         trashOutline,
+        personCircleOutline
       };
     },
     methods: {
