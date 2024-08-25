@@ -20,22 +20,6 @@
                             </ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Batch/Lot Number</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.batch_number }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Manufacturer</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.manufacture }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Expiration date</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.expiry_date) }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Received</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
                         </ion-row>
@@ -53,12 +37,9 @@
                         </ion-row>
 
                         <div>
-                            <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px" @click="discardStock($event, item)"
-                                >Discard Stock</ion-button
-                            >
-                            <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openAddStockModal(item)"
-                                >Update Stock</ion-button
-                            >
+                            <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openMoreDetailsModal(item)">
+                                More Details Stock
+                            </ion-button>
                         </div>
                     </div>
                 </div>
@@ -113,6 +94,7 @@ import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
 import DynamicButton from "@/components/DynamicButton.vue";
 import AddStockModal from "@/components/StockManagement/AddStockModal.vue";
+import StockManagementModal from "@/components/Modal/StockManagementModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { StockService } from "@/services/stock_service";
 import { useStockStore } from "@/stores/StockStore";
@@ -246,7 +228,13 @@ export default defineComponent({
             this.isLoading = true;
             try {
                 const stockService = new StockService();
-                this.reportData = await stockService.getItems("2000-01-01", this.endDate, this.filter, page);
+                this.reportData = await stockService.getItems({
+                    start_date: "2000-01-01",
+                    end_date: this.endDate,
+                    drug_name: this.filter,
+                    page: page,
+                    page_size: 4,
+                });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
@@ -257,8 +245,14 @@ export default defineComponent({
             this.selectedButton = button;
             await this.buildTableData();
         },
+        async openMoreDetailsModal(data: any) {
+            const response: any = await createModal(StockManagementModal, { class: "fullScreenModal" }, true, { data: data });
+            if (response == "dismiss") {
+                await this.buildTableData();
+            }
+        },
         async openAddStockModal(data: any) {
-            const response: any = await createModal(AddStockModal, { class: "otherVitalsModal largeModal" }, true, { data: data });
+            const response: any = await createModal(AddStockModal, { class: "fullScreenModal" }, true, { data: data });
             if (response == "dismiss") {
                 await this.buildTableData();
             }
