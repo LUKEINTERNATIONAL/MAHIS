@@ -143,11 +143,13 @@ async function save() {
     }
     const appointmentDetails = await appointment_service.createAppointment();
     dismiss();
-    
+
+/*
     if (!phoneNumber.value.includes("+")) {
         toastWarning("Invalid phone number for sms reminder");
         return;
      }
+*/
      
    if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
           if(configsSms.value){        
@@ -165,9 +167,9 @@ async function save() {
 
 onMounted(async () => {
     let data = await SmsService.getConfigurations();
-    let phone = await SmsService.fetchphone(user.demographics.patient_id);
+    //let phone = await SmsService.fetchphone(user.demographics.patient_id);
     configsSms.value = data.show_sms_popup; 
-    phoneNumber.value = phone.message;
+    //phoneNumber.value = phone.message;
     store.clearAppointmentMent()      
 })
 
