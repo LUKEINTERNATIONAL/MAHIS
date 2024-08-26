@@ -100,8 +100,8 @@ import { toastWarning } from "@/utils/Alerts";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import {  voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
 
-const store = useImmunizationAppointMentStore();
 const user = useDemographicsStore();
 
 const date = ref();
@@ -129,12 +129,15 @@ async function createModal(component: any, options: any) {
 
 const props = defineProps<{
     patient_Id: string;
+    encounter_Id: string;
 }>();
 
 async function save() {
+    await voidApt()
     const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
     const appointmentDetails = await appointment_service.createAppointment();
     setMilestoneReload();
+    setAppointmentMentsReload();
     dismiss();
 
     if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
@@ -154,7 +157,22 @@ async function setMilestoneReload() {
     store.setVaccineReload(!store.getVaccineReload());
 }
 
+async function setAppointmentMentsReload() {
+    const store = useImmunizationAppointMentStore();
+    store.setAppointmentsReload(!store.getAppointmentsReload());
+}
+
+async function voidApt() {
+    try {
+        await voidVaccineEncounter(props.encounter_Id as any, 'Rescheduled' as string)
+        await voidVaccineEncounter(props.encounter_Id as any, 'Rescheduled' as string)
+    } catch (error) {
+        
+    }
+}
+
 onMounted(async () => {
+    const store = useImmunizationAppointMentStore();
     let data = await SmsService.getConfigurations();
     configsSms.value = data.show_sms_popup;
     store.clearAppointmentMent();
@@ -185,6 +203,7 @@ async function DateUpdated(date: any) {
 }
 
 function getCounter(date: any) {
+    const store = useImmunizationAppointMentStore();
     const _selectedAppointments = store.getAppointmentMents();
 
     // Normalize the input date to midnight

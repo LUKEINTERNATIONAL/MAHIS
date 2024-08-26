@@ -31,10 +31,16 @@
           <ion-row class="actions">
             <ion-col size="12">
               <div class="button-container">
+                <ion-button @click="openClientProfile(person.npid)" color="primary" fill="outline" size="small">
+                  <ion-icon :icon="personCircleOutline" slot="start"></ion-icon>
+                  Patient Profile
+                </ion-button>
+
                 <ion-button @click="handleReschedule" color="primary" fill="outline" size="small">
                   <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
                   Reschedule
                 </ion-button>
+                
                 <ion-button @click="handleRemove" color="danger" fill="outline" size="small">
                   <ion-icon :icon="trashOutline" slot="start"></ion-icon>
                   Remove
@@ -50,11 +56,17 @@
   <script lang="ts">
   import { defineComponent } from 'vue';
   import { IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonButton, IonIcon } from '@ionic/vue';
-  import { calendarOutline, trashOutline } from 'ionicons/icons';
+  import { calendarOutline, trashOutline, personCircleOutline } from 'ionicons/icons';
   import { createModal } from "@/utils/Alerts";
   import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
   import { PatientService } from "@/services/patient_service";
   import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+  import {  voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
+  import _ from 'lodash';
+  import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+  import { modalController } from '@ionic/vue';
+  import voidReason from '@/apps/Immunization/components/Modals/voidReason.vue';
+  import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
   
   export default defineComponent({
     name: 'PersonCard',
@@ -68,6 +80,11 @@
       IonButton,
       IonIcon,
     },
+    data() {
+      return {
+        
+      }
+    },
     props: {
       person: {
         type: Object,
@@ -78,20 +95,18 @@
       return {
         calendarOutline,
         trashOutline,
+        personCircleOutline
       };
     },
     methods: {
       handleReschedule() {
-        this.openNextVaccineAppoinment(this.person.person_id)
+        this.openNextVaccineAppoinment(this.person.person_id, this.person.encounter_id)
       },
       handleRemove() {
-        console.log('Remove clicked for:', this.person.name);
-        console.log('Person ID:', this.person.person_id);
-        console.log('Appointment ID:', this.person.appointment_id);
+        this.voidAppoinment()
       },
-      openNextVaccineAppoinment(patientId: string) {
-        const dataToPass = { patient_Id: patientId };
-        console.log("handleReschedule: " +dataToPass.patient_Id)
+      openNextVaccineAppoinment(patientId: string, encounter_id: string) {
+        const dataToPass = { patient_Id: patientId, encounter_Id: encounter_id};
         createModal(nextAppointMent, { class: "otherVitalsModal" }, false, dataToPass);
       },
       async openClientProfile(patientID: any) {
@@ -99,6 +114,36 @@
         this.setDemographics(patientData[0]);
         this.$router.push("patientProfile");
       },
+      async voidAppoinment() {
+        await this.openVoidModal()
+      },
+      async openVoidModal() {
+        const modal = await modalController.create({
+            component: voidReason,
+            cssClass: "otherVitalsModal",
+            componentProps: {
+                
+            },
+        });
+
+        modal.onDidDismiss().then(async (data) => {
+            if (data && data.data) {
+              try {
+                await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
+                await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
+                this.setAppointmentMentsReload()
+              } catch (error) {
+                this.setAppointmentMentsReload()
+              }
+            }
+        });
+
+        await modal.present();
+      },
+      async setAppointmentMentsReload() {
+        const store = useImmunizationAppointMentStore();
+        store.setAppointmentsReload(!store.getAppointmentsReload());
+    }
     },
   });
   </script>

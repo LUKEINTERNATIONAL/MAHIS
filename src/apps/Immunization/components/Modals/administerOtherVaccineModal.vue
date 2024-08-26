@@ -83,18 +83,15 @@
             </div>
 
             <div class="saveBtn" v-if="!showDateBtns">
-                <ion-row>
-                    <ion-col>
+                <ion-row class="ion-justify-content-between">
+                    <ion-col size="auto">
                         <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
-                            Cancel
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
+                        Cancel
                         </ion-button>
                     </ion-col>
-
-                    <ion-col>
+                    <ion-col size="auto">
                         <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px">
-                            save
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
+                        Save
                         </ion-button>
                     </ion-col>
                 </ion-row>
@@ -435,11 +432,9 @@ h5 {
     display: flex;
     justify-content: space-between;
     margin: 20px;
-    width: 330px;
     align-items: center;
 }
 .btnContent {
-    display: flex;
     justify-content: center;
     line-height: 60px;
 }
