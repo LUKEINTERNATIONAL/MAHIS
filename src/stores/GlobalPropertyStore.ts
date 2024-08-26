@@ -24,7 +24,7 @@ export const useGlobalPropertyStore = defineStore("globalPropertyStore", {
         async setGlobalProperty(prop: any, val: any) {
             await Service.postJson("global_properties", {
                 property: prop,
-                property_value: val.toString(),
+                property_value: val,
             });
             await this.loadGlobalProperty();
         },
