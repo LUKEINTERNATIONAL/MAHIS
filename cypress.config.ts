@@ -5,6 +5,7 @@ export default defineConfig({
         supportFile: "tests/e2e/support/e2e.{js,jsx,ts,tsx}",
         specPattern: "tests/e2e/specs/**/*.cy.{js,jsx,ts,tsx}",
         videosFolder: "tests/e2e/videos",
+        fixturesFolder: "tests/e2e/fixtures",
         screenshotsFolder: "tests/e2e/screenshots",
         baseUrl: "http://localhost:5173/mahis/",
         setupNodeEvents(on, config) {

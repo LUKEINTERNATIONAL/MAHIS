@@ -35,3 +35,4 @@ public/config.json
 stats.html
 android/app/build.gradle
 tests/e2e/videos/
+tests/e2e/screenshots/
