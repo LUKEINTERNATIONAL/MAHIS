@@ -25,13 +25,11 @@
              </ion-card>
            </router-link>
          </ion-col>
-
         <ion-col>
             <router-link to="/symptomsFollowUp">
             <ion-card color="secondary">
     <ion-card-header>
       <ion-card-title>Symptoms and follow up</ion-card-title>
-     
     </ion-card-header>
 
     <ion-card-content>  <img src="../../public/icons/symptom.png" alt="Profile Icon"/></ion-card-content>
@@ -52,18 +50,9 @@
   </ion-card>
 </router-link>
         </ion-col>
-        <ion-col>
-            <router-link to="/counselling">
-            <ion-card color="secondary">
-    <ion-card-header>
-      <ion-card-title>Counselling</ion-card-title>
-    
-    </ion-card-header>
 
-    <ion-card-content>  <img src="../../public/icons/conversation.png" alt="Profile Icon"/> </ion-card-content>
-  </ion-card>
-  </router-link>
-        </ion-col>
+
+
         <ion-col>
             <router-link to="/ANCtreatment">
             <ion-card color="secondary">
@@ -76,10 +65,34 @@
   </ion-card>
 </router-link>
         </ion-col>
+         <ion-col>
+           <router-link to="/labTests">
+             <ion-card color="secondary">
+               <ion-card-header>
+                 <ion-card-title>Lab tests and imaging</ion-card-title>
+
+               </ion-card-header>
+
+               <ion-card-content>  <img src="../../public/icons/candidate.png" alt="Profile Icon"/> </ion-card-content>
+             </ion-card>
+           </router-link>
+         </ion-col>
  
        </ion-row>
 
        <ion-row>
+         <ion-col>
+           <router-link to="/counselling">
+             <ion-card color="secondary">
+               <ion-card-header>
+                 <ion-card-title>Counselling</ion-card-title>
+
+               </ion-card-header>
+
+               <ion-card-content>  <img src="../../public/icons/conversation.png" alt="Profile Icon"/> </ion-card-content>
+             </ion-card>
+           </router-link>
+         </ion-col>
         <ion-col>
             <router-link to="ANCreferral">
             <ion-card color="secondary">
@@ -103,18 +116,6 @@
   </ion-card>
    </router-link>
         </ion-col>
-         <ion-col>
-           <router-link to="/labTests">
-             <ion-card color="secondary">
-               <ion-card-header>
-                 <ion-card-title>Lab tests and imaging</ion-card-title>
-
-               </ion-card-header>
-
-               <ion-card-content>  <img src="../../public/icons/candidate.png" alt="Profile Icon"/> </ion-card-content>
-             </ion-card>
-           </router-link>
-         </ion-col>
        </ion-row>
     </ion-grid>
 </template>

@@ -25,7 +25,7 @@
                                     <ion-col class="demoContent">{{ demographics?.mrn }}</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col size="4">Gendar:</ion-col>
+                                    <ion-col size="4">Gender:</ion-col>
                                     <ion-col class="demoContent">{{ covertGender(demographics?.gender) }}</ion-col>
                                 </ion-row>
                                 <ion-row>
@@ -38,20 +38,19 @@
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
-                        <div style="margin-left: 10px">
-                            <DynamicButton
-                                class=""
-                                style="margin-bottom: 5px; width: 96%; height: 45px"
-                                @click="setProgram(btn)"
-                                v-for="(btn, index) in programBtn"
-                                :key="index"
-                                :name="btn.actionName"
-                                :fill="activeProgramID != btn.program_id ? 'outline' : 'solid'"
-                                :color="activeProgramID == btn.program_id ? 'success' : ''"
-                            />
-                        </div>
+                      <div style="margin-left: 10px">
+                        <DynamicButton
+                            v-for="(btn, index) in filteredProgramBtn"
+                            :key="index"
+                            :name="btn.actionName"
+                            style="margin-bottom: 5px; width: 96%; height: 45px"
+                            :fill="activeProgramID != btn.program_id ? 'outline' : 'solid'"
+                            :color="activeProgramID == btn.program_id ? 'success' : ''"
+                            @click="setProgram(btn)"
+                        />
+                      </div>
 
-                        <ion-card style="margin-bottom: 20px; background-color: #fff">
+                      <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
                                 <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
                                     <ion-item slot="header" color="white">

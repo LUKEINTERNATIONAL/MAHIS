@@ -3,37 +3,8 @@ import { icons } from "@/utils/svg";
 
 export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingStore", {
     state: () => ({
-        preEclampsia: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Pre-eclampsia risk",
-                        selectedValue: "",
-                        class: "bold",
-                        name: "Pre-eclampsia risk",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
 
-                            colSize: "2.5",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-
-                            colSize: "2.5",
-                        },
-                    ],
-                },
-            },
-        ],
-
-        preEclampsiaCounselling: [
+        gdm: [
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -44,40 +15,6 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
                         name: "Pre-eclampsia counselling",
                         class: "bold",
                         selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-
-                            colSize: "2.5",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-
-                            colSize: "2.5",
-                        },
-                    ],
-                },
-            },
-        ],
-
-        aspirin: [
-
-        ] as any,
-
-        gdm: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Risk of gestational mellitus (GDM)",
-                        selectedValue: "",
-                        class: "bold",
-                        name: "GDM",
                     },
                     data: [
                         {
@@ -295,13 +232,13 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         //         {
         //           name: "Yes",
         //           value: "yes",
-
+        //
         //           colSize: "2.5",
         //         },
         //         {
         //           name: "No",
         //           value: "no",
-
+        //
         //           colSize: "2.5",
         //         },
         //       ],
@@ -326,13 +263,13 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         //         {
         //           name: "Yes",
         //           value: "yes",
-
+        //
         //           colSize: "2.5",
         //         },
         //         {
         //           name: "No",
         //           value: "no",
-
+        //
         //           colSize: "2.5",
         //         },
         //       ],
@@ -356,13 +293,13 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         //         {
         //           name: "Yes",
         //           value: "yes",
-
+        //
         //           colSize: "2.5",
         //         },
         //         {
         //           name: "No",
         //           value: "no",
-
+        //
         //           colSize: "2.5",
         //         },
         //       ],
@@ -371,6 +308,88 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         // ],
 
         birth: [
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Counselling conducted on seeking care?",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "Counselling on seeking care",
+                    },
+                    data: [
+                        {
+                            name: "Yes",
+                            value: "yes",
+
+                            colSize: "2.5",
+                        },
+                        {
+                            name: "No",
+                            value: "no",
+
+                            colSize: "2.5",
+                        },
+                    ],
+                },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Counseling on ANC contact schedule?",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "Counseling on ANC contact",
+                    },
+                    data: [
+                        {
+                            name: "Yes",
+                            value: "yes",
+
+                            colSize: "2.5",
+                        },
+                        {
+                            name: "No",
+                            value: "no",
+
+                            colSize: "2.5",
+                        },
+                    ],
+                },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title:
+                            "Counsel to immediately go to hospital if severe danger signs are present",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "Counsel to immediately go to hospital",
+                    },
+                    data: [
+                        {
+                            name: "Yes",
+                            value: "yes",
+
+                            colSize: "2.5",
+                        },
+                        {
+                            name: "No",
+                            value: "no",
+
+                            colSize: "2.5",
+                        },
+                    ],
+                },
+            },
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -660,15 +679,15 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         ],
     }),
     actions: {
-        setPreEclampsia(data: any) {
-            this.preEclampsia = data;
-        },
-        setPreEclampsiaCounselling(data: any) {
-            this.preEclampsiaCounselling = data;
-        },
-        setAspirin(data: any) {
-            this.aspirin = data;
-        },
+        // setPreEclampsia(data: any) {
+        //     this.preEclampsia = data;
+        // },
+        // setPreEclampsiaCounselling(data: any) {
+        //     this.preEclampsiaCounselling = data;
+        // },
+        // setAspirin(data: any) {
+        //     this.aspirin = data;
+        // },
         setAspirinReason(data: any) {
             // this.aspirinReason = data
         },

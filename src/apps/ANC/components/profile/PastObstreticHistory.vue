@@ -6,7 +6,6 @@
               <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
              <basic-form :contentData="preterm"></basic-form>
             <basic-form :contentData="Complications"></basic-form>
-
             </ion-card-content>
         </ion-card>
     </div>
@@ -93,7 +92,7 @@ export default defineComponent({
         Gravida(){ return getFieldValue(this.prevPregnancies, 'Gravida','value')},
         LiveBirths(){ return getFieldValue(this.prevPregnancies, 'LiveBirths','value')},
         Parity(){ return getFieldValue(this.prevPregnancies, 'Parity','value')},
-        Abortions(){ return getFieldValue(this.prevPregnancies, 'Abortions','value')},
+        "Abortions/Miscarriages"(){ return getFieldValue(this.prevPregnancies, 'Abortions/Miscarriages','value')},
   },
     created() {
         this.modeOfDelieveryRef = {...this.modeOfDelivery[0],...this.modeOfDelivery[1]}
@@ -227,10 +226,10 @@ export default defineComponent({
         }
       },
       calculateLiveBirths(event:any){
-        if (event.name === 'Gravida' || event.name === 'Abortions') {
+        if (event.name === 'Gravida' || event.name === 'Abortions/Miscarriages') {
           let errorMessage: any = "";
           const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
-          const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
+          const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions/Miscarriages', 'value'));
           if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
             const liveBirthsValue = (gravidaValue)-abortionsValue
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', liveBirthsValue);

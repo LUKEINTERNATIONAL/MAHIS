@@ -9,9 +9,10 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             checkboxBtnContent:
                 {
                     header:{
-                        title: '',
+                        title: 'Respiratory exam findings',
                         selectedValue: '',
-                        name:'Respiratory exam findings'
+                        name:'Respiratory exam findings',
+                        class:"bold"
                     },
                     data:[
                         {
@@ -115,8 +116,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     },
                     data:[
                         {
-                            name: 'Other',
-                            value: 'Other',
+                            name: 'Other findings',
+                            value: 'Other findings',
                             checked: false,
                             labelPlacement: 'start',
                             colSize: '6',
@@ -138,11 +139,11 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             colData: [
                                 {
                                     displayNone: true,
-                                    inputHeader: 'Specify',
+                                    inputHeader: 'Specify other respiratory findings',
                                     unit: '',
                                     icon: icons.editPen,
                                     value: '',
-                                    name: 'Other notes',
+                                    name: 'Other respiratory findings notes',
                                     valueType: 'text',
                                     required: true,
                                     eventType: 'input',
@@ -162,25 +163,22 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Is pallor present?',
                             selectedValue: '',
-                            name:'Pallor?'
+                            name:'Pallor?',
+                            class:'bold'
                         },
                         data:[
                             {
-                                value: 'Y',
+                                value: 'Yes',
                                 name: 'Yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '2',
 
                             },
                             {
                                 value: 'No',
                                 name: 'No',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '2.5',
 
                             },
                         ]
@@ -196,9 +194,10 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                 checkboxBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Breast examinations results',
                             selectedValue: '',
-                            name: 'Breast exam'
+                            name: 'Breast exam',
+                            class:"bold"
                         },
                         data:[
                             {
@@ -393,31 +392,26 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Cervical examination done?',
                             selectedValue: '',
-                            name:'Cervical exam'
+                            name:'Cervical exam',
+                            class:"bold"
                         },
                         data:[
                             {
                                 value: 'yes',
                                 name: 'Yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '2.5',
 
                             },
                             {
                                 value: 'no',
                                 name: 'No',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '2.5',
 
                             }
                         ]
                     }
-
-
             },
             {
                 sectionHeader: '',
@@ -427,7 +421,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 colData: [
                                     {   displayNone:true,
-                                        inputHeader: 'Cervical dilation',
+                                        inputHeader: 'Cervical findings',
                                         unit: 'cm',
                                         icon:'',
                                         value: '',
@@ -453,9 +447,10 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                 checkboxBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Vaginal inspection',
                             selectedValue: '',
-                            name: 'Vaginal inspection'
+                            name: 'Vaginal inspection',
+                            class:"bold"
                         },
                         data:[
                             {
@@ -683,17 +678,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 value: 'yes',
                                 name: 'Yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '2.5',
 
                             },
                             {
                                 value: 'no',
                                 name: 'No',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '2.5',
 
                             }
                         ]
@@ -717,39 +708,31 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 value: 'pitting ankle oedema',
                                 name: 'Pitting ankle oedema',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between'
 
                             },
                             {
                                 value: 'leg swelling',
                                 name: 'Leg swelling',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between'
 
                             },
                             {
                                 value: 'oedema of the hands and feet',
                                 name: 'Oedema of the hands and feet',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between'
+
 
                             },
                             {
                                 value: 'pitting lower back oedema',
                                 name: 'Pitting lower back oedema',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between'
+
 
                             },
                         ]
                     }
-
-
             },
             {
                 selectdData: [],
@@ -761,39 +744,34 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             selectedValue: '',
                             name:'Oedema severity',
                             displayNone:true,
+                            class:"bold"
 
                         },
                         data:[
                             {
                                 value: '+',
                                 name: '+',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between'
 
                             },
                             {
                                 value: '++',
                                 name: '++',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between'
+
 
                             },
                             {
                                 value: '+++',
                                 name: '+++',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between'
+
 
                             },
                             {
                                 value: '++++',
                                 name: '++++',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between'
 
                             },
                         ]

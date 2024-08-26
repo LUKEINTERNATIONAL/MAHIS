@@ -57,16 +57,6 @@ const initialANCend=[
                     colSize: "4.01",
                 },
                 {
-                    name: "False pregnancy",
-                    value: "False pregnancy",
-                    colSize: "4.01",
-                },
-                {
-                    name:"Wrong entry",
-                    value: "Wrong entry",
-                    colSize: "4.01",
-                },
-                {
                     name:  "Other outcome",
                     value: "Other outcome",
                     colSize: "4.01",
@@ -343,6 +333,6 @@ export const useAncEndStore = defineStore('ancEndStore',{
                return [...data]; // Return a copy of the initial state
            }
     },
-    // persist:true
+    persist:true
 })
 
