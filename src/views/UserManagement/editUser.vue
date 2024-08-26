@@ -1,6 +1,4 @@
 <template>
-    
-
     <ion-row>
         <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
@@ -56,7 +54,18 @@
                     </ion-label>
                 </div>
             </ion-col>
-            <ion-col></ion-col>
+
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Phone<span style="color: #b42318">*</span></ion-label
+            >
+                <BasicInputField
+                    :placeholder="'phone number'"
+                    :icon="phonePortraitOutline"
+                    :inputValue="''"
+                    @update:inputValue=""
+                />
+            </ion-col>
     </ion-row>
 
 
@@ -93,7 +102,7 @@
         <ion-row v-if="isSuperUser">
             <ion-col size="6" v-if="false">
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                    >Find and select District(s)<span style="color: #b42318">*</span></ion-label
+                    >District(s)<span style="color: #b42318">*</span></ion-label
                 >
                 <VueMultiselect
                     v-model="selected_Districts"
@@ -123,7 +132,7 @@
 
             <ion-col size="6">
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Find and select facility name<span style="color: #b42318">*</span></ion-label
+                    >Facility name<span style="color: #b42318">*</span></ion-label
                 >
                 <VueMultiselect
                     v-model="selected_location"
@@ -154,7 +163,7 @@
         <ion-row>
         <ion-col size="6">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Find and select Traditional Authority (TA)<span style="color: #b42318">*</span></ion-label
+                >TA(s)<span style="color: #b42318">*</span></ion-label
             >
             <VueMultiselect
                 v-model="selected_TAz"
@@ -183,7 +192,7 @@
         </ion-col>
         <ion-col size="6">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Find and select village(s)<span style="color: #b42318">*</span></ion-label
+                >Village(s)<span style="color: #b42318">*</span></ion-label
             >
             <VueMultiselect
                 v-model="selected_villages"
@@ -215,7 +224,7 @@
         <ion-row v-if="isSuperUser">
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Find and select facility Role(s)<span style="color: #b42318">*</span></ion-label
+                    >Role(s)<span style="color: #b42318">*</span></ion-label
                 >
                 <ListPicker
                     :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -236,7 +245,7 @@
         <ion-row v-if="isSuperUser">
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Find and select facility Program(s)<span style="color: #b42318">*</span></ion-label
+                    >Program(s)<span style="color: #b42318">*</span></ion-label
                 >
                 <ListPicker
                     :multiSelection="list_picker_prperties[1].multi_Selection"
@@ -344,7 +353,8 @@ import {
     keyOutline,
     transgenderOutline,
     personOutline,
-    peopleOutline
+    peopleOutline,
+    phonePortraitOutline,
 } from "ionicons/icons";
 import { ref, onMounted, watch } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";

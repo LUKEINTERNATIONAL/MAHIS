@@ -8,31 +8,13 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                <h1 style="width: 100%; text-align: center; font-weight: 700">Appointments</h1>
+                <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 700">Immunuzation Appointments</h1>
 
                 <ion-row style="width: 50%;">
-                    <ion-col>
-                        <ion-button @click="selectAppointMentDate()" class="btnText" fill="solid">Select Start Date</ion-button>
-                    </ion-col>
-                    <ion-col>
-                        <ion-button @click="selectAppointMentDate()" class="btnText" fill="solid">Select End Date</ion-button>
-                    </ion-col>
+                    <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
                 </ion-row>
 
-                <DataTable ref="dataTable" :options="options" :data="reportData" class="display nowrap" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Gender</th>
-                            <th>Age/DOB</th>
-                            <th>Village</th>
-                            <th>Appointment Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </DataTable>
-
-
+                <nextApptInf v-for="person in people" :key="person.person_id" :person="person"/>
             </div>
         </ion-content>
     </ion-page>
@@ -45,21 +27,19 @@ import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import HisDate from "@/utils/Date";
 import DataTable from "datatables.net-vue3";
-import DataTablesCore from "datatables.net";
 import "datatables.net-buttons";
 import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import "datatables.net-select";
-import { createModal } from "@/utils/Alerts";
-import { PatientService } from "@/services/patient_service";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import BasicForm from "@/components/BasicForm.vue";
 import { AppointmentService } from "@/services/appointment_service";
-import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import selectAppointMentDate from "@/apps/Immunization/components/Modals/SelectAppointMentDate.vue";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
 import { mapState } from "pinia";
-import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
+import { useStartEndDate } from "@/stores/StartEndDate";
+
+import nextApptInf from "./nextApptInf.vue"
 import {
     medkit,
     chevronBackOutline,
@@ -77,7 +57,7 @@ import {
 
 export default defineComponent({
     name: "Home",
-    mixins: [SetDemographics],
+    
     components: {
         IonContent,
         IonHeader,
@@ -94,7 +74,9 @@ export default defineComponent({
         IonCardHeader,
         IonCardTitle,
         IonCardContent,
-        IonButton
+        IonButton,
+        nextApptInf,
+        BasicForm,
     },
     data() {
         return {
@@ -106,6 +88,9 @@ export default defineComponent({
             reportData: [] as any,
             appointments: [] as any,
             selectDate: '',
+            people: [] as any,
+            startDate: HisDate.currentDate(),
+            endDate: HisDate.currentDate(),
         }
     },
     setup() {
@@ -126,6 +111,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useImmunizationAppointMentStore, ["selectedAppointmentMentForAppointmentsPage"]),
+        ...mapState(useStartEndDate, ["startEndDate"]),
     },
     watch: {
         selectedAppointmentMentForAppointmentsPage: {
@@ -136,82 +122,45 @@ export default defineComponent({
         },
     },
     async mounted() {
-        await this.initDate(HisDate.currentDate())
+        await this.initDate(HisDate.currentDate());
+        await this.getAppointments();
     },
     methods: {
         async initDate(date: string) {
             this.selectDate = date;
-            await this.buildTableData().then(() => {
-                const table = (this.$refs.dataTable as any).dt;
-                table.on("click", ".edit-btn", (e: Event) => {
-                    const id = (e.target as HTMLElement).getAttribute("data-id");
-                    this.handleEdit(id);
-                });
-                table.on("click", ".delete-btn", (e: Event) => {
-                    const id = (e.target as HTMLElement).getAttribute("data-id");
-                    this.handleDelete(id);
-                });
-            });
-        },
-        handleEdit(id: any) {
-            this.openNextVaccineAppoinment(id)
-        },
-
-        handleDelete(id: any) {
-            // Implement delete logic here
-            console.log(`Deleting item with id: ${id} kkkkkkkk`);
-        },
-        async openClientProfile(patientID: any) {
-            const patientData = await PatientService.findByNpid(patientID);
-            this.setDemographics(patientData[0]);
-            this.$router.push("patientProfile");
         },
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
         },
         async getAppointments() {
-            const filteredData = [] as any;
+            this.isLoading = true;
             const appointments = await AppointmentService.getDailiyAppointments(this.selectDate);
             appointments.forEach((client: any) => {
-                    const tableItem = {
+                    const apptOb = {
+                        person_id: client.person_id,
+                        appointment_id: 103,
                         name: client.given_name.concat(' ',client.given_name),
                         gender: client.gender,
-                        age_dob: this.formatBirthdate(client.birthdate),
+                        ageDob: this.formatBirthdate(client.birthdate),
                         village: client.city_village,
-                        person_id: client.person_id,
+                        appointmentDate: "2024-09-03"
                     }
-                    filteredData.push(tableItem)
-            }) 
-            return filteredData
-        },
-        async buildTableData() {
-            this.isLoading = true;
-            try {
-                const appointments = await this.getAppointments()
-                this.reportData = appointments.map((item: any) => {
-                    return [
-                        item.name,
-                        item.gender,
-                        item.age_dob,
-                        item.village,
-                        HisDate.toStandardHisDisplayFormat(this.selectDate),
-                        `<button class="btn btn-sm btn-primary edit-btn" data-id="${item.person_id}">Reschedule</button>
-                         <button class="btn btn-sm btn-danger delete-btn" data-id="${item.person_id}">Cancel</button>`,
-                    ];
-                });
-                DataTable.use(DataTablesCore);
-            } catch (error) {
-                toastWarning("An error occurred while loading data.");
-            } finally {
-                this.isLoading = false;
-            }
+                    this.people.push(apptOb)
+            })
+            this.isLoading = false;
         },
         selectAppointMentDate() {
-            createModal(selectAppointMentDate, { class: "otherVitalsModal" }, false);
+            // createModal(selectAppointMentDate, { class: "otherVitalsModal" }, false);
         },
-        openNextVaccineAppoinment(patientId: string) {
-            const dataToPass = { patient_Id: patientId };
-            createModal(nextAppointMent, { class: "otherVitalsModal" }, false, dataToPass);
+        async handleInputData(event: any) {
+            if (event.inputHeader == "Start date") {
+                this.startDate = HisDate.toStandardHisFormat(event.value);
+            }
+            if (event.inputHeader == "End date") {
+                this.endDate = HisDate.toStandardHisFormat(event.value);
+            }
+
+            // await this.buildTableData();
         },
     }
 })

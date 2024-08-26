@@ -6,63 +6,105 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content>
+        <ion-content style="--background: #fff">
             <div class="container">
-                <h1 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h1>
-                <div style="width: 100%; align-items: center">
-                    <div class="bigGroupButton" style="display: inline-block; vertical-align: top">
-                        <ion-button :color="selectedButton === 'all' ? 'tertiary' : 'secondary'" @click="selectButton('all')">
-                            <div>
-                                <div class="centerBigBtnContain bigBtnHeader">{{ allStock.length }}</div>
-                                <div class="centerBigBtnContain">All Stock</div>
-                            </div>
-                        </ion-button>
-                        <ion-button :color="selectedButton === 'current' ? 'tertiary' : 'secondary'" @click="selectButton('current')">
-                            <div>
-                                <div class="centerBigBtnContain bigBtnHeader">{{ currentStock.length }}</div>
-                                <div class="centerBigBtnContain">Current Stock</div>
-                            </div>
-                        </ion-button>
-                        <ion-button :color="selectedButton === 'out' ? 'tertiary' : 'secondary'" @click="selectButton('out')">
-                            <div>
-                                <div class="centerBigBtnContain bigBtnHeader">{{ outStock.length }}</div>
-                                <div class="centerBigBtnContain">Out of Stock</div>
-                            </div>
-                        </ion-button>
-                    </div>
-                    <div style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
-                        <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
-                    </div>
-                    <div style="display: inline-block; vertical-align: top; margin-top: 10px; float: right">
-                        <ion-button class="addBtn" color="primary" @click="openAddStockModal()">
-                            <div>
-                                <div class="centerBigBtnContain">+ Add Product</div>
-                            </div>
-                        </ion-button>
+                <h4 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h4>
+                <div style="width: 80vw; top: -10px; position: relative; margin-right: 10px">
+                    <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
+                </div>
+                <div class="drug_container">
+                    <div class="drug_content" v-for="(item, index) in reportData" :key="index">
+                        <ion-row class="search_header">
+                            <ion-col class="">
+                                <span style="font-weight: 700; font-size: 16px; color: #939393">{{ item.drug_legacy_name }}</span>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Batch/Lot Number</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.batch_number }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Manufacturer</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.manufacture }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Expiration date</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.expiry_date) }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Dosage Form </ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dosage_form }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage </ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.vvm_stage }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Received</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses wasted</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.doses_wasted }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Issued</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dispensed_quantity }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Available</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
+                        </ion-row>
+
+                        <div>
+                            <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px" @click="discardStock($event, item)"
+                                >Discard Stock</ion-button
+                            >
+                            <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openAddStockModal(item)"
+                                >Update Stock</ion-button
+                            >
+                        </div>
                     </div>
                 </div>
-
-                <DataTable :options="options" :data="reportData" class="display nowrap" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Delivery Date</th>
-                            <th>Batch No</th>
-                            <th>Product Name</th>
-                            <th>In</th>
-                            <th>Out</th>
-                            <th>Current Stock</th>
-                            <th>Expire date</th>
-                        </tr>
-                    </thead>
-                </DataTable>
+                <div class="example-one">
+                    <vue-awesome-paginate
+                        :total-items="reportData[0]?.total_count"
+                        :items-per-page="4"
+                        :max-pages-shown="2"
+                        v-model="currentPage"
+                        @click="onClickHandler"
+                    />
+                </div>
             </div>
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')">
+                <ion-fab-button color="primary"> <ion-icon :icon="add"></ion-icon> </ion-fab-button>
+            </ion-fab>
         </ion-content>
     </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard } from "@ionic/vue";
-import { defineComponent } from "vue";
+import {
+    IonIcon,
+    IonFab,
+    IonFabButton,
+    IonFabList,
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonButton,
+} from "@ionic/vue";
+import { defineComponent, ref, computed } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { Service } from "@/services/service";
@@ -77,23 +119,30 @@ import { UserService } from "@/services/user_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
 import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
-import DataTable from "datatables.net-vue3";
-import DataTablesCore from "datatables.net";
-import "datatables.net-buttons";
-import "datatables.net-buttons/js/buttons.html5";
-import "datatables.net-responsive";
-import "datatables.net-buttons-dt";
 import DynamicButton from "@/components/DynamicButton.vue";
 import AddStockModal from "@/components/StockManagement/AddStockModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { StockService } from "@/services/stock_service";
 import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
+import { useSearchName } from "@/stores/SearchName";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
-import { toastSuccess, toastWarning } from "@/utils/Alerts";
-import "datatables.net-select";
-// DataTable.use(DataTablesCore);
+import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import {
+    medkit,
+    chevronBackOutline,
+    checkmark,
+    grid,
+    chevronDownCircle,
+    chevronForwardCircle,
+    chevronUpCircle,
+    colorPalette,
+    document,
+    globe,
+    add,
+    person,
+} from "ionicons/icons";
 export default defineComponent({
     name: "Home",
     mixins: [SetUser],
@@ -110,10 +159,14 @@ export default defineComponent({
         IonCol,
         ImmunizationTrendsGraph,
         ImmunizationGroupGraph,
-        DataTable,
         IonCard,
         DynamicButton,
         BasicForm,
+        IonIcon,
+        IonFab,
+        IonFabButton,
+        IonFabList,
+        IonButton,
     },
     data() {
         return {
@@ -121,6 +174,7 @@ export default defineComponent({
             currentStock: [] as any,
             allStock: [] as any,
             outStock: [] as any,
+            filter: "" as any,
             startDate: HisDate.currentDate(),
             endDate: HisDate.currentDate(),
             options: {
@@ -131,9 +185,28 @@ export default defineComponent({
             isLoading: false,
         };
     },
+    setup() {
+        const currentPage = ref(1);
+
+        return {
+            currentPage,
+            chevronBackOutline,
+            checkmark,
+            grid,
+            chevronDownCircle,
+            chevronForwardCircle,
+            chevronUpCircle,
+            colorPalette,
+            document,
+            globe,
+            medkit,
+            add,
+            person,
+        };
+    },
     computed: {
         ...mapState(useStockStore, ["stock"]),
-        ...mapState(useStartEndDate, ["startEndDate"]),
+        ...mapState(useSearchName, ["searchName"]),
     },
     $route: {
         async handler() {},
@@ -151,45 +224,35 @@ export default defineComponent({
         await this.buildTableData();
     },
     methods: {
-        async handleInputData(event: any) {
-            if (event.inputHeader == "Start date") {
-                this.startDate = HisDate.toStandardHisFormat(event.value);
-            }
-            if (event.inputHeader == "End date") {
-                this.endDate = HisDate.toStandardHisFormat(event.value);
-            }
-            await this.buildTableData();
+        async onClickHandler(page: any) {
+            await this.buildTableData(page);
         },
-        async buildTableData() {
+        formatDate(date: any) {
+            return HisDate.toStandardHisDisplayFormat(date);
+        },
+        async handleInputData(event: any) {
+            if (event.inputHeader == "Search") {
+                this.filter = event.value;
+                await this.buildTableData();
+            }
+        },
+        async discardStock(e: any, item: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to void "${item.drug_legacy_name}", batch: ${item.batch_number} ?`, e, {
+                confirmBtnLabel: "Void",
+            });
+            if (deleteConfirmed) {
+                const stockService = new StockService();
+                await stockService.deleteItem(item.id, {
+                    reason: "voided",
+                });
+                await this.buildTableData();
+            }
+        },
+        async buildTableData(page = 1) {
             this.isLoading = true;
             try {
                 const stockService = new StockService();
-                const data = await stockService.getItems(this.startDate, this.endDate);
-
-                let filteredData = data;
-                this.allStock = data;
-                this.currentStock = data.filter((item: any) => item.current_quantity !== 0);
-                this.outStock = data.filter((item: any) => item.current_quantity === 0);
-
-                if (this.selectedButton === "current") {
-                    filteredData = this.currentStock;
-                } else if (this.selectedButton === "out") {
-                    filteredData = this.outStock;
-                }
-
-                this.reportData = filteredData.map((item: any) => {
-                    return [
-                        HisDate.toStandardHisDisplayFormat(item.delivery_date),
-                        item.batch_number,
-                        item.drug_legacy_name,
-                        item.delivered_quantity,
-                        item.dispensed_quantity,
-                        item.current_quantity,
-                        HisDate.toStandardHisDisplayFormat(item.expiry_date),
-                    ];
-                });
-
-                DataTable.use(DataTablesCore);
+                this.reportData = await stockService.getItems("2000-01-01", this.endDate, this.filter, page);
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
@@ -200,17 +263,75 @@ export default defineComponent({
             this.selectedButton = button;
             await this.buildTableData();
         },
-        async openAddStockModal() {
-            const data: any = await createModal(AddStockModal, { class: "otherVitalsModal" });
-            if (data == "dismiss") {
+        async openAddStockModal(data: any) {
+            const response: any = await createModal(AddStockModal, { class: "otherVitalsModal largeModal" }, true, { data: data });
+            if (response == "dismiss") {
                 await this.buildTableData();
             }
         },
     },
 });
 </script>
-
+<style>
+.example-one .pagination-container {
+    column-gap: 10px;
+}
+.example-one .paginate-buttons {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: rgb(242, 242, 242);
+    border: 1px solid rgb(217, 217, 217);
+    color: black;
+}
+.example-one .paginate-buttons:hover {
+    background-color: #d8d8d8;
+}
+.example-one .active-page {
+    background-color: #3498db;
+    border: 1px solid #3498db;
+    color: white;
+}
+.example-one .active-page:hover {
+    background-color: #2988c8;
+}
+.example-one .back-button:active,
+.example-one .next-button:active {
+    background-color: #c4c4c4;
+}
+</style>
 <style scoped>
+.drug_container {
+    /* display: flex; */
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 20px;
+}
+ion-row {
+    line-height: 10px;
+}
+.content {
+    font-size: 14px;
+    color: #939393;
+}
+.contentBold {
+    font-weight: 700;
+    font-size: 14px;
+    color: gray;
+    line-height: 16px;
+}
+.container {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+.drug_content {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f2f2f2;
+}
 .bigGroupButton {
     margin-top: 10px;
 }
@@ -424,21 +545,10 @@ export default defineComponent({
     margin-bottom: 10px;
 }
 ion-button {
-    height: 60px;
-    margin: 20px;
-    margin-left: 0px;
-    margin-right: 8px;
+    margin-right: 10px;
 }
 .addBtn {
     height: 50px;
     align-items: center;
 }
-</style>
-<style>
-@import "datatables.net-dt";
-@import "datatables.net-buttons-dt";
-@import "datatables.net-responsive-dt";
-@import "datatables.net-select-dt";
-
-@import "bootstrap";
 </style>
