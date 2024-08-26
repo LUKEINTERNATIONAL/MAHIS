@@ -25,7 +25,7 @@
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
                     <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.inputDisplayNone" :size="col.colSize">
                         <BasicInputField
-                            v-if="!col.isDatePopover && !col.isMultiSelect && !col.isSingleSelect && !col.isChangeUnits"
+                            v-if="!col.isDatePopover && !col.isMultiSelect && !col.isSingleSelect && !col.isChangeUnits && !col.isPhoneInput"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
                             :bold="col.class"
@@ -43,6 +43,26 @@
                             @clicked:inputValue="handleInput(contentData, col, $event, 'clickedInput')"
                             :popOverData="col.popOverData"
                             @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
+                            @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
+                            :InnerActionBtnPropeties="col.InnerBtn"
+                        />
+                        <BasicPhoneInputField
+                            v-if="col.isPhoneInput"
+                            :inputHeader="col.inputHeader"
+                            :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
+                            :bold="col.class"
+                            :unit="col.unit"
+                            :input="col.input"
+                            :disabled="col.disabled"
+                            :icon="col.icon"
+                            :placeholder="col.placeholder"
+                            :iconRight="col.iconRight"
+                            :leftText="col.leftText"
+                            :inputWidth="col.inputWidth"
+                            :inputValue="col.value"
+                            :eventType="col.eventType"
+                            @update:inputValue="handleInput(contentData, col, $event, 'updateValue')"
+                            :popOverData="col.popOverData"
                             @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
                             :InnerActionBtnPropeties="col.InnerBtn"
                         />
@@ -332,6 +352,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
+import BasicPhoneInputField from "@/components/BasicPhoneInputField.vue";
 import BasicInputChangeUnits from "@/components/BasicInputChangeUnits.vue";
 import DateInputField from "@/components/DateInputField.vue";
 import DynamicButton from "./DynamicButton.vue";
@@ -362,6 +383,7 @@ export default defineComponent({
         DateInputField,
         VueMultiselect,
         BasicInputChangeUnits,
+        BasicPhoneInputField,
     },
     data() {
         return {
@@ -396,6 +418,11 @@ export default defineComponent({
             if (inputType == "updateInput") {
                 this.validateData(data, col, event.target.value);
                 modifyFieldValue(data, col.name, "value", event.target.value?.trim());
+                this.$emit("update:inputValue", col);
+            }
+            if (inputType == "updateValue") {
+                this.validateData(data, col, event);
+                modifyFieldValue(data, col.name, "value", event);
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateMultiselect") {
