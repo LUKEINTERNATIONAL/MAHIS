@@ -202,6 +202,7 @@ export default defineComponent({
             const store = useUserStore();
             const data = await getUserLocation();
             store.setUserFacilityName(data.name);
+            store.setCurrentUserProgram(this.program)
         }
     },
 });

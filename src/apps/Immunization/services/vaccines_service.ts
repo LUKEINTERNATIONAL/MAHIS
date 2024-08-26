@@ -56,7 +56,7 @@ function mapToOrders(): any[] {
             instructions: "",
             dose: 1,
             frequency: "Unknown",
-            batch_number: drug.batch_number,
+            batch_number:drug.batch_number || 'Unknown',
             prn: 0,
         };
     });
@@ -105,6 +105,10 @@ export async function voidVaccine(orderId: number, reason: string) {
     return Service.void(`orders/${orderId}?reason=${JSON.stringify(reason)}`, { reason });
 }
 
+export async function voidVaccineEncounter(encounterId: number, reason: string) {
+    return Service.void(`/encounters/${encounterId}`, { reason });
+} 
+
 export function checkDrugName(drug: any) {
     if (isNameInList(drug.drug_name) == true) {
         return true;
@@ -116,4 +120,19 @@ export function checkDrugName(drug: any) {
 function isNameInList(name: string): boolean {
     const nameList = ['Vit A', 'Albendazole (400mg tablet)', 'Albendazole (200mg tablet)'];
     return nameList.some(listedName => listedName.toLowerCase().includes(name.toLowerCase()));
+}
+
+export async function getMonthsList(): Promise<any> {
+    const data = await Service.getJson("immunization/months_picker");
+    return data
+}
+
+export async function getVaccinesAdministered(start_date: string, end_date: string): Promise<any> {
+    const data = await Service.getJson(`immunization/vaccines_administered`, {start_date: start_date, end_date: end_date})
+    return data
+}
+
+export async function getImmunizationDrugs(): Promise<any> {
+    const data = await Service.getJson(`/immunization/drugs`)
+    return data
 }

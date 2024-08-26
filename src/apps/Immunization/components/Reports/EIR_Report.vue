@@ -18,7 +18,7 @@
               @click="selectSection('fixed')"
               :class="{ 'selected': selectedSection === 'fixed' }"
             >
-              Fixed
+              Static
             </th>
             <th
               colspan="2"
@@ -108,6 +108,9 @@
   import { defineComponent } from 'vue';
   import { IonContent , IonPage} from '@ionic/vue';
   import NavigationMenu from './NavigationMenu.vue';
+  import { mapState } from "pinia";
+  import { getVaccinesAdministered, getImmunizationDrugs } from "@/apps/Immunization/services/vaccines_service";
+  import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
   
   export default defineComponent({
     name: 'TableComponent',
@@ -116,45 +119,26 @@
       return {
         selectedSection: '', // To keep track of the selected section
         selectedColumn: '',  // To keep track of the selected column
-        tableData: [
-          {
-            label: 'OTD {some text}',
-            fixed: { lessThan1y: 4, moreThan1y: 34 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'Early {some text}',
-            fixed: { lessThan1y: 23, moreThan1y: 23 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'LLTM {some text}',
-            fixed: { lessThan1y: 23, moreThan1y: 23 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'GMPV {some text}',
-            fixed: { lessThan1y: 10, moreThan1y: 1 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'OPPV {some text}',
-            fixed: { lessThan1y: 4, moreThan1y: 2 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: 'OPPV {more text}',
-            fixed: { lessThan1y: 10, moreThan1y: 23 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-          {
-            label: '{unclear text}',
-            fixed: { lessThan1y: 9, moreThan1y: 23 },
-            outreach: { lessThan1y: 0, moreThan1y: 0 },
-          },
-        ],
+        tableData: [] as any,
       };
     },
+    watch: {
+      $route: {
+          async handler(data) {
+            if (data.name == "EIRReport")
+            this.getDrugs()
+            this.initReport()
+          },
+          deep: true,
+      },
+    },
+    computed: {
+      ...mapState(EIRreportsStore, ["start_date", "end_date"]), 
+    },
+    async mounted() {
+      this.getDrugs()
+      this.initReport()
+  },
     methods: {
       selectSection(section: string) {
         this.selectedSection = section;
@@ -164,6 +148,35 @@
         this.selectedColumn = column;
         this.selectedSection = ''; // Reset section selection when column is selected
       },
+      async initReport() {
+      const data = await getVaccinesAdministered(this.start_date, this.end_date)
+      data.less_than_one_year.forEach((item: any) => {this.fillCells(item, 'lessThan1y')})
+      data.greater_than_one_year.forEach((item: any) => {this.fillCells(item, 'moreThan1y')})
+      },
+      fillCells(AV: any, r_key: string) {
+        this.tableData.forEach((t_data: any) => {
+          if (t_data.drug.drug_id == AV.drug_inventory_id) {
+            if (r_key in t_data.fixed) {
+              let value =  t_data.fixed[r_key];
+              t_data.fixed[r_key] = value+1
+            }
+          }
+        })
+      },
+      async getDrugs() {
+        const data = await getImmunizationDrugs()
+        const items = [] as any 
+        data.forEach((drug: any) => {
+          const row_item = {
+            label: drug.name,
+            fixed: { lessThan1y: 0, moreThan1y: 0 },
+            outreach: { lessThan1y: 0, moreThan1y: 0 },
+            drug: drug
+          }
+          items.push(row_item)
+        })
+        this.tableData = items
+      }
     },
   });
   </script>
@@ -171,8 +184,8 @@
   
 
   <style scoped>
-  ::v-deep ion-content {
-    --background: white;
+  ::v-deep(ion-content) {
+      --background: white;
   }
   
   .custom-table {
