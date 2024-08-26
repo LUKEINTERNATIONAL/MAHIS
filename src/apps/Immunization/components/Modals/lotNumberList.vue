@@ -1,12 +1,14 @@
 <template>
     <ion-row>
-        <ion-list style="width: 100%;">
-            <ion-radio-group :compareWith="compareWith" @ionChange="handleChange($event)" value="start">
-                <ion-item v-for="lotnumber in lotNumbers" :key="lotnumber.id">
-                    <ion-radio :value="lotnumber">{{ lotnumber.lotNumber }}</ion-radio>
-                </ion-item>
-            </ion-radio-group>
-        </ion-list>
+        <ion-card class="shadowless-card" style="width: 100%; padding: 0;">
+            <ion-list>
+                <ion-radio-group :compareWith="compareWith" @ionChange="handleChange($event)" value="start">
+                    <ion-item v-for="lotnumber in lotNumbers" :key="lotnumber.id">
+                        <ion-radio :value="lotnumber">{{ lotnumber.lotNumber }}</ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+            </ion-list>
+        </ion-card>
     </ion-row>
 </template>
 
@@ -130,3 +132,10 @@ export default defineComponent({
     },
 });
 </script>
+<style scoped>
+.shadowless-card {
+    box-shadow: none;
+    border: none;
+    background: none;
+}
+</style>

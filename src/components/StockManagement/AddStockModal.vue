@@ -45,6 +45,7 @@ import { PatientService } from "@/services/patient_service";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
+    modifyCheckboxValue,
     getRadioSelectedValue,
     getFieldValue,
     modifyRadioValue,
@@ -105,7 +106,6 @@ export default defineComponent({
         this.stockService = new StockService();
     },
     async mounted() {
-        console.log("🚀 ~ modifyFieldValue ~  this.data:", this.data);
         this.resetData();
         if (this.data) {
             this.modifyFieldValue();
@@ -124,11 +124,11 @@ export default defineComponent({
             modifyFieldValue(this.stock, "product name", "value", { id: "", name: this.data.drug_legacy_name });
             modifyFieldValue(this.stock, "batch", "value", this.data.batch_number);
             modifyFieldValue(this.stock, "manufacture", "value", this.data.manufacture);
-            modifyFieldValue(this.stock, "doses_wasted", "value", this.data.doses_wasted);
+            modifyFieldValue(this.stock, "doses_wasted", "value", this.data.doses_wasted / this.data.unit_doses);
             modifyFieldValue(this.stock, "expire date", "value", this.data.expiry_date);
-            modifyFieldValue(this.stock, "dosage_form", "value", { id: "", name: this.data.dosage_form });
-            modifyFieldValue(this.stock, "vvm_stage", "value", { id: "", name: this.data.vvm_stage });
-            modifyFieldValue(this.stock, "quantity", "value", this.data.delivered_quantity);
+            modifyRadioValue(this.stock, "dosage_form", "selectedValue", this.data.dosage_form);
+            modifyRadioValue(this.stock, "vvm_stage", "selectedValue", this.data.vvm_stage);
+            modifyFieldValue(this.stock, "quantity", "value", this.data.delivered_quantity / this.data.unit_doses);
             modifyFieldValue(this.stock, "delivery_date", "value", this.data.delivery_date);
             modifyFieldValue(this.stock, "unit_doses", "value", this.data.unit_doses);
         },
@@ -154,9 +154,9 @@ export default defineComponent({
                                 drug_id: drug_id,
                                 expiry_date: getFieldValue(this.stock, "expire date", "value"),
                                 unit_doses: getFieldValue(this.stock, "unit_doses", "value"),
-                                vvm_stage: getFieldValue(this.stock, "vvm_stage", "value")?.name,
+                                vvm_stage: getRadioSelectedValue(this.stock, "vvm_stage"),
                                 manufacture: getFieldValue(this.stock, "manufacture", "value"),
-                                dosage_form: getFieldValue(this.stock, "dosage_form", "value")?.name,
+                                dosage_form: getRadioSelectedValue(this.stock, "dosage_form"),
                                 quantity: getFieldValue(this.stock, "quantity", "value"),
                                 delivery_date: getFieldValue(this.stock, "delivery_date", "value") || HisDate.currentDate(),
                                 product_code: "",
@@ -175,24 +175,34 @@ export default defineComponent({
             }
         },
         async updateBatch() {
-            if (validateInputFiledData(this.stock)) {
-                const batch_number = getFieldValue(this.stock, "batch", "value");
+            const unit_doses = getFieldValue(this.stock, "unit_doses", "value");
+            const doses_wasted = getFieldValue(this.stock, "doses_wasted", "value");
+            const delivered_quantity = getFieldValue(this.stock, "quantity", "value");
+            if (validateInputFiledData(this.stock) && delivered_quantity > doses_wasted * unit_doses + this.data.dispensed_quantity) {
                 const data = {
+                    batch_number: getFieldValue(this.stock, "batch", "value"),
+                    doses_wasted: doses_wasted * unit_doses,
+                    drug_id: getFieldValue(this.stock, "product name", "value").drug_id,
                     expiry_date: getFieldValue(this.stock, "expire date", "value"),
-                    unit_doses: getFieldValue(this.stock, "unit_doses", "value"),
-                    vvm_stage: getFieldValue(this.stock, "vvm_stage", "value")?.name,
+                    unit_doses: unit_doses,
+                    vvm_stage: getRadioSelectedValue(this.stock, "vvm_stage"),
                     manufacture: getFieldValue(this.stock, "manufacture", "value"),
-                    dosage_form: getFieldValue(this.stock, "dosage_form", "value")?.name,
-                    delivered_quantity: getFieldValue(this.stock, "quantity", "value"),
+                    dosage_form: getRadioSelectedValue(this.stock, "dosage_form"),
+                    delivered_quantity: delivered_quantity * unit_doses,
+                    current_quantity: delivered_quantity * unit_doses - (doses_wasted * unit_doses + this.data.dispensed_quantity),
                     delivery_date: getFieldValue(this.stock, "delivery_date", "value") || HisDate.currentDate(),
                     product_code: "",
                     pack_size: "",
                     reason: "Mistake Entirely",
+                    pharmacy_batch_id: this.data.pharmacy_batch_id,
                 };
-                const response = await this.stockService.updateItem(this.data.id, data);
-                // await this.handleWaste(response[0].items[0].id);
-                toastSuccess("Batch save successfully");
-                modalController.dismiss("dismiss");
+                try {
+                    await this.stockService.updateItem(this.data.id, data);
+                    toastSuccess("Batch save successfully");
+                    modalController.dismiss("dismiss");
+                } catch (error: any) {
+                    toastWarning(error);
+                }
             } else {
                 toastWarning("Batch not save");
                 return false;
@@ -200,12 +210,13 @@ export default defineComponent({
         },
         async handleWaste(drug_id: any) {
             const doses_wasted = getFieldValue(this.stock, "doses_wasted", "value");
+            const unit_doses = getFieldValue(this.stock, "unit_doses", "value");
             if (doses_wasted) {
                 const data = {
                     reallocation_code: "MA2020",
-                    quantity: doses_wasted,
+                    quantity: doses_wasted * unit_doses,
                     date: HisDate.currentDate(),
-                    reason: "Incorrect data",
+                    reason: "Something wrong with the drug",
                 };
                 await this.stockService.disposeItems(drug_id, data);
             }
@@ -224,7 +235,7 @@ export default defineComponent({
                 name: filter,
                 page: 1,
                 page_size: 10,
-                concept_set: "OPD Medication",
+                concept_set: "Immunizations",
             });
             modifyFieldValue(this.stock, "product name", "multiSelectData", drugs);
         },
