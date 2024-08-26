@@ -21,7 +21,8 @@
                 <ion-card-header> <ion-card-title class="sectionTitle"> Summary of required doses </ion-card-title></ion-card-header>
                 <ion-card-content>
                     <div class="dueCardContent">
-                        <DataTable :options="options" :data="tableData" class="display nowrap" width="100%">
+                        <DataTable :options="options" :data="tableData" 
+                            class="display nowrap" width="100%" @click="handleRowClick" >
                             <thead>
                                 <tr>
                                     <th>Vaccine</th>
@@ -188,7 +189,7 @@ export default defineComponent({
             batch_number_error_message: "Enter a valid batch number",
             vaccine_name_error_message: "Enter a valid valid vaccine name",
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
-
+            selectedRow: null as any,
             showDateBtns: true as boolean,
         };
     },
@@ -208,67 +209,27 @@ export default defineComponent({
             if (item.name == "missed_immunizations") {
                 if (this.title == "Client due today") {
                     this.tableData = item.value.due_today_antigens.map((item: any) => {
-                        return [item.drug_name, item.due_count];
-                    });
-                    this.clientDetails = item.value.due_today_clients.map((item: any) => {
-                        return {
-                            given_name: item.table.given_name,
-                            family_name: item.table.family_name,
-                            patient_id: item.table.patient_id,
-                            birthdate: item.table.birthdate,
-                        };
+                        return [item.drug_name, item.clients.length, item.clients];
                     });
                 }
                 if (this.title == "Client due this week") {
                     this.tableData = item.value.due_this_week_antigens.map((item: any) => {
-                        return [item.drug_name, item.due_count];
-                    });
-                    this.clientDetails = item.value.due_this_week_clients.map((item: any) => {
-                        return {
-                            given_name: item.table.given_name,
-                            family_name: item.table.family_name,
-                            patient_id: item.table.patient_id,
-                            birthdate: item.table.birthdate,
-                        };
+                        return [item.drug_name, item.clients.length, item.clients];
                     });
                 }
                 if (this.title == "Client due this month") {
                     this.tableData = item.value.due_this_month_antigens.map((item: any) => {
-                        return [item.drug_name, item.due_count];
-                    });
-                    this.clientDetails = item.value.due_this_month_clients.map((item: any) => {
-                        return {
-                            given_name: item.table.given_name,
-                            family_name: item.table.family_name,
-                            patient_id: item.table.patient_id,
-                            birthdate: item.table.birthdate,
-                        };
+                        return [item.drug_name, item.clients.length, item.clients];
                     });
                 }
                 if (this.title == "Client overdue over 5yrs") {
                     this.tableData = item.value.over_five_missed_doses.map((item: any) => {
-                        return [item.drug_name, item.missed_doses];
-                    });
-                    this.clientDetails = item.value.over_five_missed_visits.map((item: any) => {
-                        return {
-                            given_name: item.client.table.given_name,
-                            family_name: item.client.table.family_name,
-                            patient_id: item.client.table.patient_id,
-                            birthdate: item.client.table.birthdate,
-                        };
+                        return [item.drug_name, item.clients.length, item.clients];
                     });
                 }
                 if (this.title == "Client overdue under 5yrs") {
                     this.tableData = item.value.under_five_missed_doses.map((item: any) => {
-                        return [item.drug_name, item.missed_doses];
-                    });
-                    this.clientDetails = item.value.under_five_missed_visits.map((item: any) => {
-                        return {
-                            given_name: item.client.table.given_name,
-                            family_name: item.client.table.family_name,
-                            patient_id: item.client.table.patient_id,
-                            birthdate: item.client.table.birthdate,
-                        };
+                        return [item.drug_name, item.clients.length, item.clients];
                     });
                 }
             }
@@ -304,6 +265,28 @@ export default defineComponent({
             const patientData = await PatientService.findByID(patientID);
             this.setDemographics(patientData);
             this.$router.push("patientProfile");
+        },
+        handleRowClick(event: Event){
+            const target = event.target as HTMLElement;
+            const row = target.closest("tr");
+
+            if(row) {
+                const rowIndex = Array.from(row.parentNode?.children || []).indexOf(row)
+                const selectedData = this.tableData[rowIndex];
+                this.selectedRow = {
+                    vaccine: selectedData[0],
+                    quantity: selectedData[1]
+                }
+
+                this.clientDetails = selectedData[2].map((item: any) => {
+                        return {
+                            given_name: item.table.given_name,
+                            family_name: item.table.family_name,
+                            patient_id: item.table.patient_id,
+                            birthdate: item.table.birthdate,
+                        };
+                });
+            }
         },
         getAge(dateOfBirth: string): string {
             return HisDate.calculateDisplayAge(dateOfBirth);
