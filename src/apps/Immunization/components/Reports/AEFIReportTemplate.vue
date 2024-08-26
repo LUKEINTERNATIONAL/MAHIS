@@ -9,6 +9,20 @@
       </ion-row>
 
       <table>
+        <colgroup>
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+          <col style="width: 9.09%;" />
+        </colgroup>
+
         <thead>
           <tr>
             <th>Cases</th>
@@ -124,6 +138,10 @@ th, td {
   border-bottom: 1px solid #006401;
 }
 
+thead th {
+  background-color: #f3f3f3;
+}
+
 th:nth-child(1),
 td:nth-child(1) {
   border-right: 1px solid #006401;
@@ -132,6 +150,7 @@ td:nth-child(1) {
 #hugo {
   border-right: 0px;
   text-align: left;
+  background-color: #f3f3f3;
 }
 
 tbody td:first-child {
