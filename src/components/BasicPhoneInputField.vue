@@ -4,7 +4,7 @@
         <vue-tel-input
             class="custom"
             v-if="input == 'input'"
-            @onInput="handleInput"
+            @input="handleInput"
             @onBlur="handleBlur"
             @click="handleClick"
             fill="outline"
@@ -59,6 +59,9 @@ export default defineComponent({
             showAsterisk: false,
         };
     },
+    mounted() {
+        this.phone = this.inputValue;
+    },
 
     props: {
         placeholder: {
@@ -67,7 +70,7 @@ export default defineComponent({
         },
         inputValue: {
             type: String,
-            default: "mmmm",
+            default: "",
         },
         icon: {
             type: String,

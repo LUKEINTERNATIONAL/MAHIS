@@ -61,7 +61,7 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
-                            @update:inputValue="handleInput(contentData, col, $event, 'updateValue')"
+                            @update:inputValue="handleInput(contentData, col, $event, 'updateInput')"
                             :popOverData="col.popOverData"
                             @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
                             :InnerActionBtnPropeties="col.InnerBtn"
