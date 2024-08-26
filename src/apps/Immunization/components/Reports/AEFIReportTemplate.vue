@@ -18,7 +18,7 @@
         <tbody>
           <template v-for="category in categories" :key="category.name">
             <tr>
-              <td colspan="11"><strong>{{ category.name }}</strong></td>
+              <td colspan="11" id="hugo"><strong>{{ category.name }}</strong></td>
             </tr>
             <tr v-for="case_ in category.cases" :key="case_.name">
               <td>{{ case_.name }}</td>
@@ -118,9 +118,33 @@ table {
 }
 
 th, td {
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #006401;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+  border-right: 1px solid #006401;
+}
+
+#hugo {
+  border-right: 0px;
   text-align: left;
+}
+
+tbody td:first-child {
+  border-right: 1px solid #006401;
+}
+
+tbody td {
+  border-left: none;
+  border-right: none;
+}
+
+tbody td {
+  border-bottom: 1px solid #acabab;
 }
 
 th {
@@ -128,6 +152,6 @@ th {
 }
 
 tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
 }
 </style>
