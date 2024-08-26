@@ -10,7 +10,7 @@
                     </div>
                 </ion-card>
             </div>
-            <div class="positionCenter" v-if="globalPropertyStore.dde_enabled">
+            <div class="positionCenter" v-if="globalPropertyStore.dde_enabled == 'true'">
                 <ion-card class="registration_ion_card">
                     <div class="card_content">
                         <div class="card_hearder">{{ DDE.title }}</div>
@@ -126,7 +126,7 @@ export default defineComponent({
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
     },
     watch: {
-        isDDEEnabled: {
+        globalPropertyStore: {
             async handler() {
                 await this.setDDEStatus();
             },
@@ -142,8 +142,8 @@ export default defineComponent({
     methods: {
         async setDDEStatus() {
             const dde = useGlobalPropertyStore();
-            await dde.setGlobalProperty("dde_enabled", this.isDDEEnabled);
-            console.log("ddd", this.isDDEEnabled);
+            await dde.setGlobalProperty("dde_enabled", this.globalPropertyStore.dde_enabled);
+            console.log("ddd", this.globalPropertyStore.dde_enabled);
         },
         async ddeData() {
             const data = await PatientDemographicsExchangeService.getRemainingNpids();
