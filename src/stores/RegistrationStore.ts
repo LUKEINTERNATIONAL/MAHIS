@@ -92,6 +92,7 @@ const initialPersonalInformation = [
                             icon: icons.phone,
                             value: "",
                             name: "phoneNumber",
+                            isPhoneInput: true,
                             eventType: "input",
                             alertsErrorMassage: "",
                             required: true,
@@ -618,9 +619,7 @@ const initialCurrentLocation = [
                                     name: "Other",
                                 },
                             ],
-
                         },
-
                     ],
                 },
             ],
@@ -635,7 +634,7 @@ const initialCurrentLocation = [
                     colData: [
                         {
                             class: "",
-                            displayNone:true,
+                            displayNone: true,
                             inputHeader: "Specify Landmark*",
                             value: "",
                             icon: icons.editPen,
@@ -803,6 +802,7 @@ const initialGuardianInformation = [
                         {
                             inputHeader: "Phone number",
                             icon: icons.phone,
+                            isPhoneInput: true,
                             value: "",
                             name: "guardianPhoneNumber",
                             eventType: "input",
