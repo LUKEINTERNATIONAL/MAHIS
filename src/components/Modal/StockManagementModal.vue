@@ -22,35 +22,35 @@
                             </ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Batch/Lot Number</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Batch/Lot Number</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.batch_number }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Manufacturer</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Manufacturer</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.manufacture }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Expiration date</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Expiration date</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.expiry_date) }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Date received</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Received</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Doses Received</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses wasted</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Doses wasted</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.doses_wasted }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Issued</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Doses Issued</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dispensed_quantity }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Available</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Doses Available</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
                         </ion-row>
 
