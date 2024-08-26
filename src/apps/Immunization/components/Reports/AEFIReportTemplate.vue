@@ -1,139 +1,133 @@
 <template>
-    <ion-page>
-      <NavigationMenu/>
-      <ion-content class="ion-padding">
+  <ion-page>
+    <ion-content class="ion-padding">
+      
+      <ion-row>
+        <ion-col>
+            <h1 style="width: 100%; text-align: left; font-weight: 400">Adverse Events Following Immunization - AEFI</h1>
+        </ion-col>
+      </ion-row>
 
-      </ion-content>
-    </ion-page>
-  
-    </template>
-    
-    <script lang="ts">
-    import { defineComponent } from 'vue';
-    import { IonContent , IonPage} from '@ionic/vue';
-    import NavigationMenu from './NavigationMenu.vue';
-    import { mapState } from "pinia";
-    import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
-    
-    export default defineComponent({
-      name: 'TableComponent',
-      components: { IonContent, IonPage, NavigationMenu },
-      data() {
-        return {
+      <table>
+        <thead>
+          <tr>
+            <th>Cases</th>
+            <th v-for="vaccine in vaccines" :key="vaccine">{{ vaccine }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="category in categories" :key="category.name">
+            <tr>
+              <td colspan="11"><strong>{{ category.name }}</strong></td>
+            </tr>
+            <tr v-for="case_ in category.cases" :key="case_.name">
+              <td>{{ case_.name }}</td>
+              <td v-for="vaccine in vaccines" :key="vaccine">
+                {{ case_.data[vaccine] }}
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </ion-content>
+  </ion-page>
+</template>
 
-        };
-      },
-      watch: {
-        $route: {
-            async handler(data) {
-              //if (data.name == "EIRReport")
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { IonContent, IonPage, IonRow, IonCol } from '@ionic/vue';
 
+export default defineComponent({
+  name: 'TableComponent',
+  components: { IonContent, IonPage, IonRow, IonCol },
+  data() {
+    return {
+      vaccines: ['BCG', 'OPV', 'IPV', 'DPT-HepB-Hib', 'PCV', 'ROTA', 'Measles/MR', 'TT/Td', 'MV', 'HPV'],
+      categories: [
+        {
+          name: 'Minor AEFIs',
+          cases: [
+            {
+              name: 'Bacteria abscesses',
+              data: { BCG: 0, OPV: 0, IPV: 4, 'DPT-HepB-Hib': 4, PCV: 4, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
             },
-            deep: true,
+            {
+              name: 'Severe local reaction',
+              data: { BCG: 0, OPV: 0, IPV: 1, 'DPT-HepB-Hib': 1, PCV: 1, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            },
+            {
+              name: 'Lymphadenitis',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            },
+            {
+              name: 'Sepsis',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            }
+          ] as any
         },
-      },
-      computed: {
-        
-      },
-      async mounted() {
+        {
+          name: 'Serious AEFIs',
+          cases: [
+            {
+              name: 'High fever >38°c',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 1, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            },
+            {
+              name: 'Death',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            },
+            {
+              name: 'Encephalopathy',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            },
+            {
+              name: 'Seizures',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            },
+            {
+              name: 'Paralysis',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            },
+            {
+              name: 'Significant Disability',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            },
+            {
+              name: 'Birth Defect',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            },
+            {
+              name: 'Toxic Shock syndrome',
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            }
+          ] as any
+        }
+      ]
+    };
+  },
+});
+</script>
 
-    },
-      methods: {
+<style scoped>
+  ::v-deep(ion-content) {
+      --background: white;
+  }
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-      },
-    });
-    </script>
-    
-    
-  
-    <style scoped>
-    ::v-deep(ion-content) {
-        --background: white;
-    }
-    
-    .custom-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      background-color: white;
-    }
-    
-    .custom-table th,
-    .custom-table td {
-      padding: 8px;
-      text-align: center;
-      cursor: pointer;
-    }
-    
-    .custom-table th {
-      background-color: #f3f3f3;
-      border: 1px solid #f0f0f0;
-    }
-    
-    .custom-table tr:nth-child(even) {
-      background-color: white;
-    }
-    
-    /* Make the second column line blue */
-    .custom-table th:nth-child(1),
-    .custom-table td:nth-child(1) {
-      border-right: 1px solid #006401;
-    }
-    
-    /* Make the first and second row lines in the header blue, starting from the second column */
-    .custom-table thead tr:nth-child(1) th:not(:first-child),
-    .custom-table thead tr:nth-child(2) th:not(:first-child) {
-      border-bottom: 1px solid #006401;
-    }
-    
-    /* Remove left border from the first column */
-    .custom-table th:first-child,
-    .custom-table td:first-child {
-      border-left: none;
-    }
-    
-    /* Remove top border from the first row */
-    .custom-table thead tr:first-child th {
-      border-top: none;
-    }
-    
-    /* Remove vertical borders from body cells */
-    .custom-table tbody td {
-      border-left: none;
-      border-right: none;
-    }
-    
-    /* Keep the vertical border for the first column */
-    .custom-table tbody td:first-child {
-      border-right: 1px solid #006401;
-    }
-    
-    /* Ensure horizontal borders remain for body rows */
-    .custom-table tbody td {
-      border-bottom: 1px solid #acabab;
-    }
-    
-    /* Remove bottom border from the last row */
-    .custom-table tbody tr:last-child td {
-      border-bottom: none;
-    }
-    
-    .custom-table .selected {
-      background-color: #c0c0ff;
-    }
-    
-    .editable-input {
-      width: 100%;
-      border: none;
-      background-color: transparent;
-      text-align: center;
-      outline: none;
-      font-size: 14px;
-    }
-    
-    .editable-input:focus {
-      background-color: #e0e0ff;
-      border: 1px solid #006401;
-    }
-    </style>
-    
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+</style>

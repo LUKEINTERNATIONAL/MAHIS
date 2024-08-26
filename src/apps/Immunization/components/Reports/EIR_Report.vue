@@ -2,6 +2,12 @@
   <ion-page>
     <NavigationMenu/>
     <ion-content class="ion-padding">
+      <ion-row>
+        <ion-col>
+            <h1 style="width: 100%; text-align: left; font-weight: 400">Immunisation</h1>
+        </ion-col>
+      </ion-row>
+
       <table class="custom-table">
         <colgroup>
           <col style="width: 20%;" />
@@ -100,21 +106,26 @@
         </tbody>
       </table>
     </ion-content>
+
+    <ion-content class="ion-padding">
+      <AEFIReportTemplate/>
+    </ion-content>
   </ion-page>
 
   </template>
   
   <script lang="ts">
   import { defineComponent } from 'vue';
-  import { IonContent , IonPage} from '@ionic/vue';
+  import { IonContent , IonPage, IonRow, IonCol } from '@ionic/vue';
   import NavigationMenu from './NavigationMenu.vue';
   import { mapState } from "pinia";
   import { getVaccinesAdministered, getImmunizationDrugs } from "@/apps/Immunization/services/vaccines_service";
   import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+  import AEFIReportTemplate from "./AEFIReportTemplate.vue"
   
   export default defineComponent({
     name: 'TableComponent',
-    components: { IonContent, IonPage, NavigationMenu },
+    components: { IonContent, IonPage, NavigationMenu, AEFIReportTemplate,  IonRow, IonCol },
     data() {
       return {
         selectedSection: '', // To keep track of the selected section
