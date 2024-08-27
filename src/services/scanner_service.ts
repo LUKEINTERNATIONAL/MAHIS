@@ -1,58 +1,89 @@
-import {
-  Barcode,
-  BarcodeFormat,
-  BarcodeScanner,
-} from "@capacitor-mlkit/barcode-scanning";
+import { Barcode, BarcodeFormat, BarcodeScanner } from "@capacitor-mlkit/barcode-scanning";
 import { alertController } from "@ionic/vue";
 
 export class ScannerService {
-  isSupported = false;
-  barcodes: Barcode[] = [];
+    isSupported = false;
+    barcodes: Barcode[] = [];
 
-  constructor(source: Barcode[]) {
-    BarcodeScanner.isSupported().then((result) => {
-      this.isSupported = result.supported;
-    });
-    this.barcodes = source;
-  }
-
-  async scan(): Promise<void> {
-    const granted = await this.requestPermissions();
-    if (!granted) {
-      this.presentAlert();
-      return;
+    constructor() {
+        this.initialize();
     }
-    const { barcodes } = await BarcodeScanner.scan({
-      formats: [
-        BarcodeFormat.QrCode,
-        BarcodeFormat.Code128,
-        BarcodeFormat.Code39,
-        BarcodeFormat.Code93,
-        BarcodeFormat.Codabar,
-        BarcodeFormat.DataMatrix,
-        BarcodeFormat.Ean13,
-        BarcodeFormat.Ean8,
-        BarcodeFormat.Itf,
-        BarcodeFormat.UpcA,
-        BarcodeFormat.UpcE,
-      ],
-    });
-    this.barcodes.push(...barcodes);
-    console.log("*******************", barcodes[barcodes.length - 1].rawValue);
-  }
 
-  async requestPermissions(): Promise<boolean> {
-    const { camera } = await BarcodeScanner.requestPermissions();
-    return camera === "granted" || camera === "limited";
-  }
+    private async initialize() {
+        console.log("Checking if barcode scanning is supported...");
+        const result = await BarcodeScanner.isSupported();
+        console.log("BarcodeScanner.isSupported() result:", JSON.stringify(result));
+        this.isSupported = result.supported;
+        const { supported } = await BarcodeScanner.isSupported();
+        this.isSupported = supported;
 
-  async presentAlert(): Promise<void> {
-    const alert = await alertController.create({
-      header: "Permission denied",
-      message:
-        "Please grant camera permission to use the Barcode and QRCode scanner.",
-      buttons: ["OK"],
-    });
-    await alert.present();
-  }
+        // if (this.isSupported) {
+        await this.ensureGoogleBarcodeScannerModule();
+        // }
+    }
+
+    private async ensureGoogleBarcodeScannerModule() {
+        const { available } = await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
+        if (!available) {
+            console.log("Google Barcode Scanner module is not available. Installing...");
+            try {
+                await BarcodeScanner.installGoogleBarcodeScannerModule();
+                console.log("Google Barcode Scanner module installed successfully.");
+            } catch (error) {
+                console.error("Failed to install Google Barcode Scanner module:", error);
+                await this.presentAlert("Installation Failed", "Failed to install Google Barcode Scanner module. Please try again later.");
+            }
+        }
+    }
+
+    async scan() {
+        // if (!this.isSupported) {
+        //     await this.presentAlert("Not Supported", "Barcode scanning is not supported on this device.");
+        //     return;
+        // }
+
+        const granted = await this.requestPermissions();
+        if (!granted) {
+            await this.presentAlert("Permission Denied", "Please grant camera permission to use the Barcode and QRCode scanner.");
+            return;
+        }
+
+        try {
+            const { barcodes } = await BarcodeScanner.scan({
+                formats: [
+                    BarcodeFormat.QrCode,
+                    BarcodeFormat.Code128,
+                    BarcodeFormat.Code39,
+                    BarcodeFormat.Code93,
+                    BarcodeFormat.Codabar,
+                    BarcodeFormat.DataMatrix,
+                    BarcodeFormat.Ean13,
+                    BarcodeFormat.Ean8,
+                    BarcodeFormat.Itf,
+                    BarcodeFormat.UpcA,
+                    BarcodeFormat.UpcE,
+                ],
+            });
+            this.barcodes.push(...barcodes);
+            console.log("*******************", barcodes[barcodes.length - 1].rawValue);
+            return barcodes[barcodes.length - 1].rawValue;
+        } catch (error) {
+            console.error("Error during scan:", error);
+            await this.presentAlert("Scan Error", "An error occurred during the scan. Please try again.");
+        }
+    }
+
+    async requestPermissions(): Promise<boolean> {
+        const { camera } = await BarcodeScanner.requestPermissions();
+        return camera === "granted" || camera === "limited";
+    }
+
+    async presentAlert(header: string, message: string): Promise<void> {
+        const alert = await alertController.create({
+            header,
+            message,
+            buttons: ["OK"],
+        });
+        await alert.present();
+    }
 }
