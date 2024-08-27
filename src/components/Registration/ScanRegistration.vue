@@ -106,7 +106,8 @@ export default defineComponent({
     methods: {
         async scannedData() {
             const data = await new ScannerService();
-            console.log("🚀 ~ scannedData ~ data.scan():", data.scan());
+
+            console.log("🚀 ~ scannedData ~ data.scan():", JSON.stringify(await data.scan()));
         },
         nav(url: any) {
             this.$router.push(url);

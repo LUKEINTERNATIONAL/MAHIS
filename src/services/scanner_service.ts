@@ -12,9 +12,9 @@ export class ScannerService {
     private async initialize() {
         console.log("Checking if barcode scanning is supported...");
         const result = await BarcodeScanner.isSupported();
-        console.log("BarcodeScanner.isSupported() result:", JSON.stringify(result));
         this.isSupported = result.supported;
         const { supported } = await BarcodeScanner.isSupported();
+        console.log("BarcodeScanner.isSupported() result:", supported);
         this.isSupported = supported;
 
         // if (this.isSupported) {
