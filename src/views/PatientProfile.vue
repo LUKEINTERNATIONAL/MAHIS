@@ -15,7 +15,7 @@
                                     </div>
                                     <div style="width: 100%">
                                         <div style="display: flex; justify-content: end; height: 20px; top: -10px; position: relative">
-                                            <DynamicButton name="Edit" fill="clear" iconSlot="start" :icon="iconsContent.editFade" />
+                                            <DynamicButton name="Edit" fill="clear" @click="openPIM()" iconSlot="start" :icon="iconsContent.editFade" />
                                         </div>
                                         <div class="p_name">{{ demographics?.name }}</div>
                                     </div>
@@ -438,6 +438,9 @@ export default defineComponent({
     },
 
     methods: {
+        openPIM() {
+            createModal(personalInformationModal, { class: "otherVitalsModal largeModal" });
+        },
         checkAge() {
             if (this.demographics?.birthdate) {
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.demographics?.birthdate) >= 14 ? true : false;
@@ -480,9 +483,9 @@ export default defineComponent({
                 },
             ];
         },
-        openPIM() {
-            createModal(personalInformationModal, { class: "otherVitalsModal" });
-        },
+        // openPIM() {
+        //     createModal(personalInformationModal, { class: "otherVitalsModal" });
+        // },
         convertToDisplayDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
