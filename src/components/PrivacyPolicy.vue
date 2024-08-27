@@ -33,7 +33,7 @@
       };
     },
     mounted() {
-      this.pdfUrl = "../../mahis/public/assets/MaHIS_Privacy_Policy.pdf";
+      this.pdfUrl = "/assets/MaHIS_Privacy_Policy.pdf";
     },
    
   };
