@@ -106,6 +106,25 @@ export default defineComponent({
                     }
 
                     if (col.colData[0].inputHeader == "Height*") {
+                        const height = col.colData[0].value;
+                                if (height < 140) {
+                                const existingAlert = this.vitals[0].alerts.find(
+                                    (alert: any) => alert.value === "Below critical height threshold"
+                                );
+
+                                if (!existingAlert) {
+                                    this.vitals[0].alerts.push({
+                                        backgroundColor: "#FFD700",
+                                        textColor: "#000000",      
+                                        value: "Below critical height threshold",
+                                    });
+                                     }
+                                } else {
+                                this.vitals[0].alerts = this.vitals[0].alerts.filter(
+                                    (alert: any) => alert.value !== "Below critical height threshold"
+                                );
+                            }
+
                         const isHeightValid =
                             this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
                         this.BMI = isHeightValid ? this.setBMI(col.colData[1].value, col.colData[0].value) : {};
