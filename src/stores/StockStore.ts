@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import HisDate from "@/utils/Date";
 import _ from "lodash";
 const initialStock = [
     {
@@ -109,7 +110,7 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Date Received:",
+                            inputHeader: "Date Received*",
                             icon: icons.calenderPrimary,
                             value: "",
                             name: "delivery_date",
@@ -117,6 +118,7 @@ const initialStock = [
                             alertsErrorMassage: "",
                             required: true,
                             isDatePopover: true,
+                            validationFunctionName: "required",
                         },
                     ],
                 },
@@ -137,7 +139,7 @@ const initialStock = [
                             alertsErrorMassage: "",
                             required: true,
                             isDatePopover: true,
-                            minDate: "",
+                            minDate: HisDate.currentDate(),
                             maxDate: "",
                             validationFunctionName: "required",
                         },
