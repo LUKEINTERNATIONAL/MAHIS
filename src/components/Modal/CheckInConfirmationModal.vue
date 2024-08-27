@@ -1,28 +1,18 @@
 <template>
   <ion-modal  :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
-    <!-- <ion-header>
-      <ion-toolbar>
-        <ion-title>
-          <b>Select role</b>
-        </ion-title>
-        <ion-buttons slot="end">
-          <ion-button @click="closeModal">
-            <ion-icon slot="icon-only" :icon="closeOutline()"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header> -->
-    <ion-content style=" --height: fit-content;">
-      <div>
-        <ion-title style="color:black">{{title}}</ion-title>
-      </div>
-      <div>
+   <ion-content>
+      <ion-title style="color:black">{{title}}</ion-title>
+      <div style="display:flex;">
         <DynamicButton
+            expand="block"
             @click="onYes()"
             name="Yes"
+            :style="`flex:1`"
         />
         <DynamicButton
+            expand="block"
             @click="onNo()"
+            :style="`flex:1`"
             name="No"
             fill="clear"
         />
@@ -85,21 +75,6 @@ export default defineComponent({
         required: true
     }
   },
-  data() {
-    return {
-      buttonStyle: {
-        background: 'rgba(224, 255, 255, 0.3)',
-        backdropFilter: 'blur(5px)',
-        color: 'white',
-        borderRadius: '5px',
-        padding: '10px',
-        width: '80%',
-        margin: '10px auto',
-        display: 'block',
-        textAlign: 'center',
-      }
-    };
-  },
   methods: {
     closeOutline() {
       return closeOutline;
@@ -109,7 +84,6 @@ export default defineComponent({
       this.closeModalFunc();
     },
     confirm(test:string) {
-
       this.closeModal();
     }
   }
@@ -131,18 +105,13 @@ ion-header {
 
 ion-title {
   color: var(--ion-color-light);
+
 }
 
 ion-content {
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  /* flex-direction: column; */
+  /* border: black solid 8px; */
 
-.button-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
 }
 </style>

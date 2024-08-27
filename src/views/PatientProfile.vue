@@ -29,12 +29,19 @@
             <ion-card style="margin-bottom: 20px; background-color: #fff">
               <ion-card-content>
                 <div style="display: flex; justify-content: space-between">
-                  <DynamicButton
+                  <!-- <DynamicButton
                     name="Checkin Patient"
                     @click="toggleCheckInModal()"
                     fill="clear"
                     iconSlot="start"
                     :icon="checkboxOutline"
+                  /> -->
+                  <DynamicButton
+                    name="Checkin Patient"
+                    @click="toggleCheckInModal()"
+                    fill="clear"
+                    iconSlot="start"
+                    :icon="closeCircleOutline"
                   />
                   <DynamicButton
                     name="Edit"
@@ -450,6 +457,7 @@ import {
   add,
   person,
   checkboxOutline,
+  closeCircleOutline
 } from "ionicons/icons";
 
 import { modalController } from "@ionic/vue";
@@ -619,6 +627,7 @@ export default defineComponent({
       add,
       person,
       checkboxOutline,
+      closeCircleOutline
     };
   },
 
