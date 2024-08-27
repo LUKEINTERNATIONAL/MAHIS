@@ -11,6 +11,7 @@ import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
 import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
+import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
 import NCD from "@/apps/NCD/config/routes";
@@ -79,6 +80,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/clinicaldays",
         name: "clinicaldays",
         component: clinicaldays,
+    },
+    {
+        path: "/privacypolicy",
+        name: "privacypolicy",
+        component: PrivacyPolicyView,
     },
     ...NCD,
     ...OPD,
