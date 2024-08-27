@@ -58,6 +58,9 @@ export default defineComponent({
   computed: {
     ...mapState(useDemographicsStore, ["demographics"]),
   },
+  mounted(){
+
+  },
   methods: {
     navigationMenu(url: any) {
       menuController.close();
@@ -69,6 +72,9 @@ export default defineComponent({
     async setGestationAgeEncounter(data:any)
     {
       const observations=this.findEncounter(data,"ANC PROGRAM")?.observations;
+
+      console.log({observations});
+
       this.gestationAge.lmnpGestationAge=this.findEncounter(observations,"lmnpGestationAge")?.[0]?.value_text ?? "";
     },
     covertGender(gender: any) {
