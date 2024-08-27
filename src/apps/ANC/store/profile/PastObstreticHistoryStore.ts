@@ -107,23 +107,76 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             title: "Was last live birth preterm?",
             selectedValue: "",
             name: "Was last live birth preterm?",
-            displayNone: true,
+            // displayNone: true,
           },
           data: [
             {
-              name: "Last live birth was preterm",
-              value: "Preterm pregnancy - less than 28 weeks",
-              colSize: "9",
+              name: "Yes",
+              value: "Yes",
+              colSize: "2.5",
+
             },
             {
-              name: "Last live birth was not preterm/ Last live birth was full term",
-              value: "Preterm pregnancy - 28 to 34 weeks",
-              colSize: "9",
+              name: "No",
+              value: "No",
+              colSize: "2.5",
+
+            },
+          ],
+        },
+      },
+      {
+        selectedData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+          header: {
+            class: "bold",
+            title: "Was last live birth was full term full term (8 to 34 weeks)",
+            selectedValue: "",
+            name: "Last live birth preterm was full term",
+            // displayNone: true,
+          },
+          data: [
+            {
+              name: "Yes",
+              value: "Yes",
+              colSize: "2.5",
+
             },
             {
-              name: "Last live birth had congenital abnormalities",
-              value: "Preterm premature rupture of membranes (PPROM)",
-              colSize: "9",
+              name: "No",
+              value: "No",
+              colSize: "2.5",
+
+            },
+          ],
+        },
+      },
+      {
+        selectedData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+          header: {
+            class: "bold",
+            title: "Last live birth had congenital abnormalities??",
+            selectedValue: "",
+            name: "Last live birth had congenital abnormalities",
+            // displayNone: true,
+          },
+          data: [
+            {
+              name: "Yes",
+              value: "Yes",
+              colSize: "2.5",
+
+            },
+            {
+              name: "No",
+              value: "No",
+              colSize: "2.5",
+
             },
           ],
         },

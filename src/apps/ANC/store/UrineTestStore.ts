@@ -13,6 +13,7 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         title: "Select whether:",
                         selectedValue: "",
                         name: "Urine test status",
+                        class:"bold"
                     },
                     data: [
                         {

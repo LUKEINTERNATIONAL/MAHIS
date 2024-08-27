@@ -325,7 +325,7 @@ const initialMedicalHistory = [
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
-                title: "Does the woman have any past surgeries done?",
+                title: "Does the woman have any past medical and surgical?",
                 selectedValue: "",
                 class: "bold",
                 name: "Does the woman have any past surgeries done?",
@@ -1086,6 +1086,29 @@ const initialChronicConditions = [
     },
     {
         childName: "chronic conditions",
+        classDash: "dashed_bottom_border",
+        sideColSize: 0.5,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "ART number",
+                            value: "",
+                            name: "Art number",
+                            eventType: "blur",
+                            valueType: "text",
+                            inputWidth: "50%",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        childName: "chronic conditions",
         sideColSize: 0.5,
         db_data: [],
         classDash: "dashed_bottom_border",
@@ -1567,5 +1590,5 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             return [...data];
         },
     },
-    persist: true,
+    // persist: true,
 });
