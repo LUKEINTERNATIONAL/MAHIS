@@ -4,6 +4,7 @@ import HomePage from "../views/HomePage.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
 import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
+import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
@@ -54,6 +55,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/clinicaldays",
         name: "clinicaldays",
         component: clinicaldays,
+    },
+    {
+        path: "/privacypolicy",
+        name: "privacypolicy",
+        component: PrivacyPolicyView,
     },
     ...NCD,
     ...OPD,
