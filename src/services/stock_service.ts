@@ -250,7 +250,7 @@ export class StockService extends Service {
         return Service.getJson("pharmacy/items", filters);
     }
     getItem(drugID: number) {
-        return Service.getJson("pharmacy/items", { drug_id: drugID });
+        return Service.getJson("pharmacy/items", { drug_id: drugID, display_details: "true" });
     }
     updateItem(batchID: number, vals: any) {
         return Service.putJson(`pharmacy/items/${batchID}`, vals);
