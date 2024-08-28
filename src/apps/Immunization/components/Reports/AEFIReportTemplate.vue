@@ -1,6 +1,5 @@
 <template>
-  <ion-page>
-    <ion-content class="ion-padding">
+
       
       <ion-row>
         <ion-col>
@@ -43,8 +42,7 @@
           </template>
         </tbody>
       </table>
-    </ion-content>
-  </ion-page>
+
 </template>
 
 <script lang="ts">
