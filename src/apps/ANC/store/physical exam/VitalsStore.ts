@@ -483,6 +483,64 @@ const initialVitals = [
                     colSize: "6",
                     justify: "space-between",
                 },
+                {
+                    name: "BP",
+                    value: "Blood Pressure",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Severe pre-eclampsia",
+            },
+            data: [
+                {
+                    name: "Urine",
+                    value: "Urine",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Oedema",
+                    value: "Oedema",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Severe pre-eclampsia",
+            },
+            data: [
+                {
+                    name: "PIH",
+                    value: "PIH",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
             ],
         },
     },
