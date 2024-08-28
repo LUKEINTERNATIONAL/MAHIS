@@ -79,7 +79,7 @@ router.beforeEach((to, from, next) => {
     modalController.getTop().then((v) => (v ? modalController.dismiss() : null));
     alertController.getTop().then((v) => (v ? alertController.dismiss() : null));
     toastController.getTop().then((v) => (v ? toastController.dismiss() : null));
-    const whitelistedUri = ["/login", "/settings/host"];
+    const whitelistedUri = ["/login", "/settings/host", "/privacypolicy"];
     if (!sessionStorage.getItem("apiKey") && !whitelistedUri.includes(to.path)) {
         next("/login");
     }
