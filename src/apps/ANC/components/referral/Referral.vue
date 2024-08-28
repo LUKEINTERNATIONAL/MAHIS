@@ -55,6 +55,7 @@ export default defineComponent({
     mounted(){
         const  referralInfo =useReferralStore()
         this.handleReferral()
+        this.handletreatment()
       this.validaterowData({})
 
     },
@@ -62,6 +63,7 @@ export default defineComponent({
         referralInfo:{
             handler(){
                 this.handleReferral()
+                this.handletreatment()
             },
             deep:true
         }
@@ -72,11 +74,22 @@ export default defineComponent({
 
       },
     methods:{
+        navigationMenu(url: any) {
+            menuController.close();
+            this.$router.push(url);
+        },
         handleReferral(){
             if(getRadioSelectedValue(this.referralInfo,'referalOption') == 'yes'){
                 modifyRadioValue(this.referralInfo,'referralOutcome','displayNone',false)
             }else{
                 modifyRadioValue(this.referralInfo,'referralOutcome','displayNone',true)
+            }
+          },
+        handletreatment(){
+            if(getRadioSelectedValue(this.referralInfo,'Any treatment given before referral') == 'yes'){
+                modifyRadioValue(this.referralInfo,'treatment','displayNone',false)
+            }else{
+                modifyRadioValue(this.referralInfo,'treatment','displayNone',true)
             }
         },
 

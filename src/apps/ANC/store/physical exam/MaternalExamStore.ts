@@ -475,39 +475,39 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     }
 
             },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: '',
-                            name: 'Vaginal inspection'
-                        },
-                        data:[
-                            {
-                                name: 'Evidence of amniotic fluid',
-                                value: 'evidence of amniotic fluid',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
+        //    {
+            //    selectdData: [],
+            //    classDash: 'dashed_bottom_border',
+            //    checkboxBtnContent:
+                   // {
+                     //   header:{
+                      //      title: '',
+                      //      selectedValue: '',
+                      //      name: 'Vaginal inspection'
+                      //  },
+                     //   data:[
+                    //       {
+                        //        name: 'Evidence of amniotic fluid',
+                       //         value: 'evidence of amniotic fluid',
+                      //          checked: false,
+                     //           labelPlacement: 'start',
+                    //            colSize: '6',
+                   //             justify: 'space-between'
+        
+                  //          },
+                           // {
+                           //     name: 'Genital pain',
+                           //     value: 'genital pain',
+                           //     checked: false,
+                           //     labelPlacement: 'start',
+                           //     colSize: '6',
+                           //     justify: 'space-between'
 
-                            },
-                            {
-                                name: 'Genital pain',
-                                value: 'genital pain',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
+                          //  },
+                       // ]
+                   // }
 
-                            },
-                        ]
-                    }
-
-            },
+            // },
             {
                 selectdData: [],
                 classDash: 'dashed_bottom_border',
@@ -618,6 +618,15 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                         },
                         data:[
                             {
+                                name: 'Genital pain',
+                                value: 'genital pain',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between'
+        
+                            },
+                            {
                                 name: 'Other',
                                 value: 'Other',
                                 checked: false,
@@ -630,6 +639,29 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     }
 
             },
+            {
+                isFinishBtn: false,
+                sectionHeader: "",
+                data: {
+                  rowData: [
+                    {
+                      colData: [
+                        {
+                          class: "bold",
+                          inputHeader: "Amniotic fluid level",
+                          value: "",
+                          name: "Amniotic fluid",
+                          icon: icons.editPen,
+                          required: true,
+                          valueType: "text",
+                          eventType: "input",
+                          alertsErrorMassage: "",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
             {
                 isFinishBtn: false,
                 sectionHeader: '',
