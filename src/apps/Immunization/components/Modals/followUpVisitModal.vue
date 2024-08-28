@@ -231,8 +231,7 @@ export default defineComponent({
         async saveVaccineAdverseEffects() {
             if (this.demographics.patient_id) {
                 const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-                const drugNames = lastVaccine.map((item: any) => item.drug.name).join(",");
-                const vaccineAdverseEffects = await formatCheckBoxData(this.vaccineAdverseEffects, HisDate.currentDate, drugNames);
+                const vaccineAdverseEffects = await formatCheckBoxData(this.vaccineAdverseEffects, HisDate.currentDate(), lastVaccine);
                 const userID: any = Service.getUserID();
                 if (vaccineAdverseEffects.length > 0) {
                     const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
