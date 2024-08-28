@@ -105,15 +105,17 @@ export default defineComponent({
     },
     methods: {
         async scannedData() {
+            // await scannerService.startScan(1.65);
             const data = await new ScannerService();
-
-            console.log("🚀 ~ scannedData ~ data.scan():", JSON.stringify(await data.scan()));
+            console.log("🚀 ~ scannedData ~ data:", data.startScan());
+            // await this.onDecode(await data.scan());
         },
         nav(url: any) {
             this.$router.push(url);
         },
-        async onDecode(content: string) {
+        async onDecode(content: any) {
             const extractedDetails = await this.extractDetails(content);
+            console.log("🚀 ~ onDecode ~ extractedDetails:", JSON.stringify(extractedDetails));
             try {
                 modifyFieldValue(this.personInformation, "nationalID", "value", extractedDetails.idNumber);
                 modifyFieldValue(this.personInformation, "firstname", "value", extractedDetails.firstName);
