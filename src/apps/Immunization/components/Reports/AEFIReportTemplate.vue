@@ -61,11 +61,11 @@ export default defineComponent({
           cases: [
             {
               name: 'Bacteria abscesses',
-              data: { BCG: 0, OPV: 0, IPV: 4, 'DPT-HepB-Hib': 4, PCV: 4, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
             },
             {
               name: 'Severe local reaction',
-              data: { BCG: 0, OPV: 0, IPV: 1, 'DPT-HepB-Hib': 1, PCV: 1, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
             },
             {
               name: 'Lymphadenitis',
@@ -82,7 +82,7 @@ export default defineComponent({
           cases: [
             {
               name: 'High fever >38°c',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 1, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
             },
             {
               name: 'Death',
