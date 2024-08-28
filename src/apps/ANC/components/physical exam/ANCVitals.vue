@@ -18,17 +18,13 @@ import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
 import { mapState } from "pinia";
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-import { arePropertiesNotEmpty } from "@/utils/Objects";
 import HisDate from "@/utils/Date";
-import DynamicButton from "@/components/DynamicButton.vue";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/ANC/anc_vitals_service";
-import StandardValidations from "@/validations/StandardValidations";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
-import { getCheckboxSelectedValue, modifyCheckboxInputField, modifyCheckboxValue, modifyFieldValue } from "@/services/data_helpers";
+import { modifyCheckboxInputField, modifyCheckboxValue, modifyFieldValue } from "@/services/data_helpers";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
 import { isEmpty } from "lodash";
@@ -288,6 +284,8 @@ export default defineComponent({
             this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
         },
         async setBMI(weight: any, height: any) {
+            if(height < 140) this.heightAlert();
+
             if (this.demographics.gender && this.demographics.birthdate && weight && height) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
@@ -308,6 +306,22 @@ export default defineComponent({
             vitals.index = "BMI " + this.BMI?.index ?? "";
             vitals.value = this.BMI?.result ?? "";
         },
+        async heightAlert(){
+            const existingAlert = this.vitals[0].alerts.find((alert: any) => alert.value === "Below critical height threshold");
+
+            if (!existingAlert) 
+            {
+                this.vitals[0].alerts.push({
+                    backgroundColor: "#FFD700", 
+                    textColor: "#b42318",       
+                    value: "Below critical height threshold",
+                });
+            }     
+            else 
+            {
+                this.vitals[0].alerts = this.vitals[0].alerts.filter((alert: any) => alert.value !== "Below critical height threshold");
+            }
+        },
         async updateBP(systolic: any, diastolic: any) {
             const vitals = this.vitals[2]?.alerts[0] ?? [];
             const bpColor = this.BPStatus?.colors ?? [];
@@ -316,6 +330,7 @@ export default defineComponent({
             vitals.textColor = bpColor[1];
             vitals.index = systolic + "/" + diastolic;
             vitals.value = this.BPStatus?.value ?? "";
+            console.log(vitals);
         },
         async updateTemperateRate(name: any, index: any, obj: any, objNumber: any) {
             const filteredArray = this.vitals[objNumber]?.alerts?.filter((item: any) => item.name !== name);
