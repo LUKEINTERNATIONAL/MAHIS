@@ -1,4 +1,3 @@
-import { promisify } from 'util';
 export interface Config {
     host: string;
     port: string;
@@ -74,7 +73,12 @@ export function isSameDate(date1: Date, date2: Date) {
            date1.getDate() === date2.getDate();
 }
 
-const configPaths = ["/mahis/config.json"];
+let baseURL = getBaseURl();
+if (baseURL.length > 0) {
+        baseURL = '/' + baseURL;
+    };
+
+const configPaths = [`${baseURL}/config.json`];
 
 export async function getFileConfig2(): Promise<Config> {
     for (const path of configPaths) {
@@ -93,7 +97,6 @@ export async function getFileConfig2(): Promise<Config> {
             sessionStorage.setItem("thirdpartyApps", JSON.stringify(thirdpartyApps));
             sessionStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
             sessionStorage.setItem("otherApps", JSON.stringify(otherApps));
-            sessionStorage.setItem("baseURL", JSON.stringify(baseURL));
             sessionStorage.setItem("websockerURL", JSON.stringify(websockerURL))
             return {
                 host: apiURL,
@@ -137,12 +140,6 @@ async function readConfigValueAsync(): Promise<Config> {
     throw new Error('Unexpected error occurred');
 }
 
-export async function getBaseURL() {
-    const baseURL = await readConfigValueAsync()
-    console.log('Base URL (async):', baseURL);
-    return baseURL;
-}
-
 export function getWebsockerURL() {
     const webST = sessionStorage.websockerURL
     if (webST) {
@@ -160,10 +157,7 @@ function removeQuotes(str: string) {
 }
 
 export function getBaseURl() {
-    const baseURL = sessionStorage.baseURL
-    if (baseURL) {
-        let  websockerURL = removeQuotes(baseURL);
-        return websockerURL;
-    }
-    return ''
+    let fromViteConfig_BaseURL = import.meta.env.BASE_URL
+    fromViteConfig_BaseURL = fromViteConfig_BaseURL.replace('/', '');
+    return fromViteConfig_BaseURL
 }
