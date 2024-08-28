@@ -148,6 +148,7 @@ import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { DispensationService } from "@/apps/OPD/services/dispensation_service";
 import { Service } from "@/services/service";
+import { DrugOrderService } from "@/services/drug_order_service";
 const usedemographics_store = useDemographicsStore();
 const demographics = computed(() => usedemographics_store.demographics);
 const dispensationStore = useDispensationStore();
@@ -167,6 +168,8 @@ await fetchMedication();
 onMounted(fetchMedication);
 
 async function fetchMedication(){
+   const data = await DrugOrderService.getDrugOrderHistory(demographics.value.patient_id);
+   console.log({data})
   dispensationStore.resetStore();
   const previousTreatment = new PreviousTreatment();
   const { previousDrugPrescriptions } =
