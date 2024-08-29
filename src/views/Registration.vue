@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div v-if="(registrationDisplayType == 'list') || screenWidth <= 991">
+            <div v-if="registrationDisplayType == 'list' || screenWidth <= 991">
                 <div v-if="currentStep == 'Personal Information'">
                     <PersonalInformation />
                 </div>
@@ -72,7 +72,7 @@
         <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
             <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" :disabledValue="disableSaveBtn" @click="createPatient()" />
         </div>
-        <ion-footer v-if="(registrationDisplayType == 'list') || screenWidth <= 991">
+        <ion-footer v-if="registrationDisplayType == 'list' || screenWidth <= 991">
             <div class="footer position_content">
                 <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="nav('/home')" />
                 <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
@@ -119,7 +119,6 @@ import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
-import ScanRegistration from "@/components/Registration/ScanRegistration.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
 import { PatientService } from "@/services/patient_service";
@@ -158,7 +157,6 @@ export default defineComponent({
         CurrentLocation,
         HomeLocation,
         SocialHistory,
-        ScanRegistration,
         BirthRegistration,
     },
     data() {
@@ -258,7 +256,7 @@ export default defineComponent({
         $route: {
             async handler(data) {
                 this.currentStep = "Personal Information";
-                await resetPatientData();
+                // await resetPatientData();
                 if (data.name == "registration") resetDemographics();
             },
             deep: true,
@@ -420,7 +418,6 @@ export default defineComponent({
                     getFieldValue(this.birthRegistration, "Weight", "value"),
                     HisDate.getAgeInYears(this.birthdate)
                 );
-                console.log("🚀 ~ validateBirthData ~ result:", result);
                 if (!result) {
                     const confirm = await alertConfirmation(
                         `Do you want to continue with this weight (${getFieldValue(
@@ -429,7 +426,6 @@ export default defineComponent({
                             "value"
                         )}) for age (${HisDate.getAgeInYears(this.birthdate)})`
                     );
-                    console.log("🚀 ~ validateBirthData ~ confirm:", confirm);
                     if (confirm) return true;
                     else return false;
                 }
