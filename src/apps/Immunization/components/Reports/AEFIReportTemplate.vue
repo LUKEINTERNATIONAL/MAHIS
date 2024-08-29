@@ -8,35 +8,25 @@
       </ion-row>
 
       <table>
-        <colgroup>
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
+        <colgroup v-for="(vaccine, index) in vaccines" :key="index">
+          <col :style="{ width: (100 / vaccines.length) + '%' }" />
         </colgroup>
 
         <thead>
           <tr>
             <th>Cases</th>
-            <th v-for="vaccine in vaccines" :key="vaccine">{{ vaccine }}</th>
+            <th v-for="vaccine in vaccines" :key="vaccine">{{ vaccine.name }}</th>
           </tr>
         </thead>
         <tbody>
           <template v-for="category in categories" :key="category.name">
             <tr>
-              <td colspan="11" id="hugo"><strong>{{ category.name }}</strong></td>
+              <td :colspan="vaccines.length+1" id="hugo"><strong>{{ category.name }}</strong></td>
             </tr>
             <tr v-for="case_ in category.cases" :key="case_.name">
               <td>{{ case_.name }}</td>
-              <td v-for="vaccine in vaccines" :key="vaccine">
-                {{ case_.data[vaccine] }}
+              <td v-for="vaccine in case_.data" :key="vaccine">
+                {{ vaccine.count }}
               </td>
             </tr>
           </template>
@@ -55,7 +45,8 @@ export default defineComponent({
   components: { IonContent, IonPage, IonRow, IonCol },
   data() {
     return {
-      vaccines: ['BCG', 'OPV', 'IPV', 'DPT-HepB-Hib', 'PCV', 'ROTA', 'Measles/MR', 'TT/Td', 'MV', 'HPV'],
+      // vaccines: ['BCG', 'OPV', 'IPV', 'DPT-HepB-Hib', 'PCV', 'ROTA', 'Measles/MR', 'TT/Td', 'MV', 'HPV'] as any,
+      vaccines: [] as any,
       categories: [
         {
           name: 'Minor AEFIs',
@@ -82,10 +73,24 @@ export default defineComponent({
   },
   methods: {
     async initReport() {
-      this.categories[0].cases = await this.getAEFIKnownList(this.categories[0].name);
-      this.categories[1].cases = await this.getAEFIKnownList(this.categories[1].name);
+      this.vaccines = await this.UnderFiveImmunizations()
+      this.categories[0].cases = await this.getAEFIKnownList(this.categories[0].name, this.vaccines);
+      this.categories[1].cases = await this.getAEFIKnownList(this.categories[1].name, this.vaccines);
     },
-    async getAEFIKnownList(concept_set_name: string) {
+    async UnderFiveImmunizations() {
+      const data: any = [];
+      const UFIs = await ConceptService.getConceptSet('Under five immunizations');
+      UFIs.forEach((item: any) => {
+        data.push(
+          {
+            concept_id: item.concept_id,
+            name: item.name,
+          }
+        )
+      })
+      return data
+    }, 
+    async getAEFIKnownList(concept_set_name: string, vaccines: any) {
       const data: any = [];
       const vaccineEffect = await ConceptService.getConceptSet(concept_set_name);
       vaccineEffect.forEach((item: any) => {
@@ -98,10 +103,15 @@ export default defineComponent({
         //   colSize: "12",
         // });
 
+
+        const updatedVaccines = vaccines.map((vaccine: any) => ({
+          ...vaccine,
+          count: 0,
+        }));
         data.push(
           {
             name: item.name,
-            data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+            data: updatedVaccines
           }
         )
 
