@@ -154,7 +154,7 @@ export default defineComponent({
                 toastSuccess("Immunization session saved successfully");
                 modalController.dismiss("dismiss");
             } else {
-                toastWarning("Batch not save");
+                toastWarning("Immunization session not saved");
                 return false;
             }
         },
