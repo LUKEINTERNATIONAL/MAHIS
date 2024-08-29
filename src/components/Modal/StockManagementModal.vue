@@ -5,10 +5,12 @@
             <ion-spinner name="bubbles"></ion-spinner>
             <div class="loading-text">Please wait...</div>
         </div>
-        <Toolbar />
+        <ion-header style="display: flex; justify-content: space-between">
+            <ion-title class="modalTitle">Stock Management</ion-title>
+            <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="iconsContent.cancel"></ion-icon>
+        </ion-header>
         <ion-content style="--background: #fff">
             <div class="container">
-                <h4 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h4>
                 <div style="width: 80vw; top: -10px; position: relative; margin-right: 10px">
                     <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
                 </div>
@@ -18,6 +20,22 @@
                             <ion-col class="">
                                 <span style="font-weight: 700; font-size: 16px; color: #939393">{{ item.drug_legacy_name }}</span>
                             </ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Batch/Lot Number</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.batch_number }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Manufacturer</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.manufacture }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Expiration date</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.expiry_date) }}</ion-col>
+                        </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Date received</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
                             <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Doses Received</ion-col>
@@ -37,9 +55,12 @@
                         </ion-row>
 
                         <div>
-                            <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openMoreDetailsModal(item)">
-                                More Details Stock
-                            </ion-button>
+                            <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px" @click="discardStock($event, item)"
+                                >Discard Stock</ion-button
+                            >
+                            <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openAddStockModal(item)"
+                                >Update Stock</ion-button
+                            >
                         </div>
                     </div>
                 </div>
@@ -53,9 +74,6 @@
                     />
                 </div>
             </div>
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')">
-                <ion-fab-button color="primary"> <ion-icon :icon="add"></ion-icon> </ion-fab-button>
-            </ion-fab>
         </ion-content>
     </ion-page>
 </template>
@@ -76,6 +94,7 @@ import {
     IonCol,
     IonCard,
     IonButton,
+    modalController,
 } from "@ionic/vue";
 import { defineComponent, ref, computed } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -94,7 +113,6 @@ import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
 import DynamicButton from "@/components/DynamicButton.vue";
 import AddStockModal from "@/components/StockManagement/AddStockModal.vue";
-import StockManagementModal from "@/components/Modal/StockManagementModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { StockService } from "@/services/stock_service";
 import { useStockStore } from "@/stores/StockStore";
@@ -103,6 +121,7 @@ import { useSearchName } from "@/stores/SearchName";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import { icons } from "@/utils/svg";
 import {
     medkit,
     chevronBackOutline,
@@ -144,6 +163,7 @@ export default defineComponent({
     },
     data() {
         return {
+            iconsContent: icons,
             reportData: [] as any,
             currentStock: [] as any,
             allStock: [] as any,
@@ -178,6 +198,11 @@ export default defineComponent({
             person,
         };
     },
+    props: {
+        data: {
+            default: {} as any,
+        },
+    },
     computed: {
         ...mapState(useStockStore, ["stock"]),
         ...mapState(useSearchName, ["searchName"]),
@@ -200,6 +225,9 @@ export default defineComponent({
         await this.buildTableData();
     },
     methods: {
+        dismiss() {
+            modalController.dismiss("dismiss");
+        },
         async onClickHandler(page: any) {
             await this.buildTableData(page);
         },
@@ -231,9 +259,10 @@ export default defineComponent({
                 this.reportData = await stockService.getItems({
                     start_date: "2000-01-01",
                     end_date: this.endDate,
-                    drug_name: this.filter,
+                    _drug_name: this.data.drug_legacy_name,
                     page: page,
                     page_size: 4,
+                    display_details: "true",
                 });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
@@ -244,12 +273,6 @@ export default defineComponent({
         async selectButton(button: any) {
             this.selectedButton = button;
             await this.buildTableData();
-        },
-        async openMoreDetailsModal(data: any) {
-            const response: any = await createModal(StockManagementModal, { class: "fullScreenModal" }, true, { data: data });
-            if (response == "dismiss") {
-                await this.buildTableData();
-            }
         },
         async openAddStockModal(data: any) {
             const response: any = await createModal(AddStockModal, { class: "fullScreenModal" }, true, { data: data });

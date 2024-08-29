@@ -11,9 +11,9 @@ export interface Config {
 export function areFieldsValid(propertiesArray: any[]) {
     let foundInvalidEntry = false;
 
-    propertiesArray.forEach(property => {
+    propertiesArray.forEach((property) => {
         if (property.skip_validation) {
-            return true; 
+            return true;
         }
         const value = property.dataValue?.value;
 
@@ -37,21 +37,21 @@ export function areFieldsValid(propertiesArray: any[]) {
 }
 
 export function isInputTextValid(txt: string): boolean {
-    const trimmedText = txt.trim()
+    const trimmedText = txt.trim();
     const regex = /^[a-zA-Z\s\t]{2,}$/; // Minimum 2 characters
-    return regex.test(trimmedText)
+    return regex.test(trimmedText);
 }
 
-export function isInputValid(txt: string): boolean{
-    const trimmedText = txt.trim()
+export function isInputValid(txt: string): boolean {
+    const trimmedText = txt.trim();
     const regex = /^[a-zA-Z0-9\s\t]{2,}$/; // Minimum 2 characters
-    return regex.test(trimmedText)
+    return regex.test(trimmedText);
 }
 
 export function isPasswordValid(txt: string): boolean {
-    const trimmedText = txt.trim()
-    const regex = /^(?!.*\s)[a-zA-Z0-9@#$%^&+=*!-]{4,}$/
-    return regex.test(trimmedText)
+    const trimmedText = txt.trim();
+    const regex = /^(?!.*\s)[a-zA-Z0-9@#$%^&+=*!-]{4,}$/;
+    return regex.test(trimmedText);
 }
 
 export function getFieldsValuesObj(properties_array: any[]) {
@@ -59,7 +59,7 @@ export function getFieldsValuesObj(properties_array: any[]) {
 
     properties_array.forEach((property: any) => {
         resultObject[property.property_name] = property.dataValue.value; // Assuming each property has a 'property_name' and a 'value'
-    })
+    });
     return resultObject;
 }
 
@@ -68,15 +68,13 @@ export function combineArrays<T>(...arrays: T[][]): T[] {
 }
 
 export function isSameDate(date1: Date, date2: Date) {
-    return date1.getFullYear() === date2.getFullYear() &&
-           date1.getMonth() === date2.getMonth() &&
-           date1.getDate() === date2.getDate();
+    return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
 }
 
 let baseURL = getBaseURl();
 if (baseURL.length > 0) {
-        baseURL = '/' + baseURL;
-    };
+    baseURL = "/" + baseURL;
+}
 
 const configPaths = [`${baseURL}/config.json`];
 
@@ -87,7 +85,8 @@ export async function getFileConfig2(): Promise<Config> {
             if (!response.ok) {
                 throw new Error(`Unable to retrieve configuration file from ${path}`);
             }
-            const { apiURL, apiPort, apiProtocol, appConf, baseURL, apps, thirdpartyApps, platformProfiles, otherApps, websockerURL } = await response.json();
+            const { apiURL, apiPort, apiProtocol, appConf, baseURL, apps, thirdpartyApps, platformProfiles, otherApps, websockerURL } =
+                await response.json();
             sessionStorage.setItem("apiURL", apiURL);
             sessionStorage.setItem("apiPort", apiPort);
             sessionStorage.setItem("apiProtocol", apiProtocol);
@@ -97,7 +96,7 @@ export async function getFileConfig2(): Promise<Config> {
             sessionStorage.setItem("thirdpartyApps", JSON.stringify(thirdpartyApps));
             sessionStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
             sessionStorage.setItem("otherApps", JSON.stringify(otherApps));
-            sessionStorage.setItem("websockerURL", JSON.stringify(websockerURL))
+            sessionStorage.setItem("websockerURL", JSON.stringify(websockerURL));
             return {
                 host: apiURL,
                 port: apiPort,
@@ -109,14 +108,14 @@ export async function getFileConfig2(): Promise<Config> {
         } catch (e) {
             console.error(`Error reading config from ${path}:`, e);
             if (path === configPaths[configPaths.length - 1]) {
-                throw new Error('All API Configuration file attempts failed. Please check console log for more details');
+                throw new Error("All API Configuration file attempts failed. Please check console log for more details");
             }
         }
     }
 
     // This line should never be reached due to the throw in the loop,
     // but TypeScript requires a return statement here
-    throw new Error('Unexpected error occurred');
+    throw new Error("Unexpected error occurred");
 }
 
 async function readConfigValueAsync(): Promise<Config> {
@@ -131,33 +130,33 @@ async function readConfigValueAsync(): Promise<Config> {
         } catch (e) {
             console.error(`Error reading config from ${path}:`, e);
             if (path === configPaths[configPaths.length - 1]) {
-                throw new Error('All API Configuration file attempts failed. Please check console log for more details');
+                throw new Error("All API Configuration file attempts failed. Please check console log for more details");
             }
         }
     }
     // This line should never be reached due to the throw in the loop,
     // but TypeScript requires a return statement here
-    throw new Error('Unexpected error occurred');
+    throw new Error("Unexpected error occurred");
 }
 
 export function getWebsockerURL() {
-    const webST = sessionStorage.websockerURL
+    const webST = sessionStorage.websockerURL;
     if (webST) {
-        let  websockerURL = removeQuotes(webST);
+        let websockerURL = removeQuotes(webST);
         return websockerURL;
     }
-    return ''
+    return "";
 }
 
 function removeQuotes(str: string) {
     if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
-      return str.substring(1, str.length - 1);
+        return str.substring(1, str.length - 1);
     }
     return str;
 }
 
 export function getBaseURl() {
-    let fromViteConfig_BaseURL = import.meta.env.BASE_URL
-    fromViteConfig_BaseURL = fromViteConfig_BaseURL.replace('/', '');
-    return fromViteConfig_BaseURL
+    let fromViteConfig_BaseURL = import.meta.env.BASE_URL;
+    fromViteConfig_BaseURL = fromViteConfig_BaseURL.replace("/", "");
+    return fromViteConfig_BaseURL;
 }
