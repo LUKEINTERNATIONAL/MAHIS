@@ -48,6 +48,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { IonContent, IonPage, IonRow, IonCol } from '@ionic/vue';
+import { ConceptService } from "@/services/concept_service";
 
 export default defineComponent({
   name: 'TableComponent',
@@ -58,65 +59,57 @@ export default defineComponent({
       categories: [
         {
           name: 'Minor AEFIs',
-          cases: [
-            {
-              name: 'Bacteria abscesses',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Severe local reaction',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Lymphadenitis',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Sepsis',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            }
-          ] as any
+          cases: [] as any
         },
         {
           name: 'Serious AEFIs',
-          cases: [
-            {
-              name: 'High fever >38°c',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Death',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Encephalopathy',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Seizures',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Paralysis',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Significant Disability',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Birth Defect',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Toxic Shock syndrome',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            }
-          ] as any
+          cases: [] as any
         }
       ]
     };
   },
+  watch: {
+    $route: {
+        async handler(data) {
+          if (data.name == "EIRReport")
+          await this.initReport()
+        },
+        deep: true,
+    },
+  },
+  async mounted() {
+    await this.initReport()
+  },
+  methods: {
+    async initReport() {
+      this.categories[0].cases = await this.getAEFIKnownList(this.categories[0].name);
+      this.categories[1].cases = await this.getAEFIKnownList(this.categories[1].name);
+    },
+    async getAEFIKnownList(concept_set_name: string) {
+      const data: any = [];
+      const vaccineEffect = await ConceptService.getConceptSet(concept_set_name);
+      vaccineEffect.forEach((item: any) => {
+
+        // ({
+        //   concept_id: item.concept_id,
+        //   name: item.name,
+        //   value: item.name,
+        //   checked: false,
+        //   colSize: "12",
+        // });
+
+        data.push(
+          {
+            name: item.name,
+            data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
+          }
+        )
+
+      })
+      data.sort((a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name));
+      return data
+    }
+  }
 });
 </script>
 
