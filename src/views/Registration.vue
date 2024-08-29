@@ -382,6 +382,7 @@ export default defineComponent({
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
+                (await validateInputFiledData(this.homeLocation)) &&
                 (await this.validateBirthData()) &&
                 this.validateGaudiarnInfo()
             ) {
@@ -689,4 +690,3 @@ ion-footer {
     box-sizing: border-box;
 }
 </style>
-@/services/SaveRecords/save_registration
