@@ -62,43 +62,46 @@ export class ScannerService {
         }
     }
 
-    async startScan(initialZoomRatio: number = 1.0) {
-        // if (!this.isSupported) {
-        //     await this.presentAlert("Not Supported", "Barcode scanning is not supported on this device.");
-        //     return;
-        // }
-
+    async startScan(initialZoomRatio: number = 3.6): Promise<Barcode[]> {
         const granted = await this.requestPermissions();
         if (!granted) {
             await this.presentAlert("Permission Denied", "Please grant camera permission to use the Barcode and QRCode scanner.");
-            return;
+            return [];
         }
 
-        try {
-            this.scanListener = await BarcodeScanner.addListener("barcodeScanned", async (result) => {
-                console.log("Scanned barcode:", result.barcode);
-                this.barcodes.push(result.barcode);
-                // Emit an event or call a callback function with the result
-            });
+        return new Promise((resolve, reject) => {
+            try {
+                this.scanListener = BarcodeScanner.addListener("barcodeScanned", (result: any) => {
+                    const scannedBarcodes = result.barcode.displayValue; // Assuming barcodes are here
+                    this.barcodes = scannedBarcodes;
+                    console.log("Scanned barcode:", scannedBarcodes);
+                    this.stopScan();
+                    resolve(this.barcodes); // Resolve the promise with the scanned barcodes
+                });
 
-            await BarcodeScanner.startScan({
-                formats: this.getSupportedFormats(),
-            });
-            // Get zoom ratio limits
-            const { zoomRatio: minZoom } = await BarcodeScanner.getMinZoomRatio();
-            const { zoomRatio: maxZoom } = await BarcodeScanner.getMaxZoomRatio();
-            this.minZoomRatio = minZoom;
-            this.maxZoomRatio = maxZoom;
-            this.currentZoomRatio = Math.max(this.minZoomRatio, Math.min(initialZoomRatio, this.maxZoomRatio));
+                BarcodeScanner.startScan({
+                    formats: this.getSupportedFormats(),
+                })
+                    .then(async () => {
+                        const { zoomRatio: minZoom } = await BarcodeScanner.getMinZoomRatio();
+                        const { zoomRatio: maxZoom } = await BarcodeScanner.getMaxZoomRatio();
+                        this.minZoomRatio = minZoom;
+                        this.maxZoomRatio = maxZoom;
+                        this.currentZoomRatio = Math.max(this.minZoomRatio, Math.min(initialZoomRatio, this.maxZoomRatio));
 
-            // Prepare UI for scanning
-            await this.prepareScanningUI();
-            await this.setZoomRatio(this.currentZoomRatio);
-        } catch (error) {
-            console.error("Error starting scan:", error);
-            await this.presentAlert("Scan Error", "An error occurred while starting the scan. Please try again.");
-            this.restoreUI();
-        }
+                        await this.prepareScanningUI();
+                        await this.setZoomRatio(this.currentZoomRatio);
+                    })
+                    .catch((error) => {
+                        console.error("Error starting scan:", error);
+                        this.restoreUI();
+                        reject(error); // Reject promise if starting the scan fails
+                    });
+            } catch (error) {
+                console.error("Error during scanning:", error);
+                reject(error);
+            }
+        });
     }
 
     async setZoomRatio(zoomRatio: number) {
