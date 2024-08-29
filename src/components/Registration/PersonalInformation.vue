@@ -11,13 +11,12 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
 import BasicCard from "../BasicCard.vue";
 import HisDate from "@/utils/Date";
-import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
+import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
 import dayjs from "dayjs";
 import { Service } from "@/services/service";
-import { calculator } from "ionicons/icons";
 import Validation from "@/validations/StandardValidations";
-import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { validateInputFiledData } from "@/services/group_validation";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
@@ -47,6 +46,14 @@ export default defineComponent({
             },
             deep: true,
         },
+        // $route:{
+        //     handler(data: any) {
+        //         console.log("lllllllll",data.path)
+        //         if()
+        //         this.buildCards();
+        //     },
+        //     deep: true,
+        // }
     },
     props: {
         editable: {
@@ -54,6 +61,7 @@ export default defineComponent({
         },
     },
     computed: {
+        
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
@@ -93,6 +101,7 @@ export default defineComponent({
 
     methods: {
         setData() {
+            
             if (this.editable) {
                 modifyFieldValue(this.personInformation, "firstname", "value", this.patient.person.names[0].given_name);
                 modifyFieldValue(this.personInformation, "middleName", "value", this.patient.person.names[0].middle_name);
