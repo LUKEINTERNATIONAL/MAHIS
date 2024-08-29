@@ -132,6 +132,11 @@ export async function getVaccinesAdministered(start_date: string, end_date: stri
     return data
 }
 
+export async function getAefiReport(start_date: string, end_date: string): Promise<any> {
+    const data = await Service.getJson(`immunization/aefi_report`, {start_date: start_date, end_date: end_date})
+    return data
+}
+
 export async function getImmunizationDrugs(): Promise<any> {
     const data = await Service.getJson(`/immunization/drugs`)
     return data

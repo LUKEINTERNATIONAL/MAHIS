@@ -39,6 +39,9 @@
 import { defineComponent } from 'vue';
 import { IonContent, IonPage, IonRow, IonCol } from '@ionic/vue';
 import { ConceptService } from "@/services/concept_service";
+import { mapState } from "pinia";
+import { getAefiReport } from "@/apps/Immunization/services/vaccines_service";
+import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 
 export default defineComponent({
   name: 'TableComponent',
@@ -68,6 +71,9 @@ export default defineComponent({
         deep: true,
     },
   },
+  computed: {
+    ...mapState(EIRreportsStore, ["start_date", "end_date"]), 
+  },
   async mounted() {
     await this.initReport()
   },
@@ -76,11 +82,49 @@ export default defineComponent({
       this.vaccines = await this.UnderFiveImmunizations()
       this.categories[0].cases = await this.getAEFIKnownList(this.categories[0].name, this.vaccines);
       this.categories[1].cases = await this.getAEFIKnownList(this.categories[1].name, this.vaccines);
+      await this.initAefiReport(this.categories)
+    },
+    async initAefiReport(categories: any) {
+      // const data = await getAefiReport(this.start_date, this.end_date)
+      const data = await getAefiReport('2024-08-28', '2024-08-28')
+      // 
+
+      categories.forEach((category: any) => {
+        // console.log(category)
+        category.cases.forEach((caseItem: any) => {
+          data.data.forEach((item: any) => {
+            // console.log(item.concept_id)
+            if (caseItem.concept_id == item.concept_id) {
+              item.drugs.forEach((drug: any) => {
+
+                // console.log(drug.drug_inventory_id)
+
+                // console.log(caseItem.data)
+
+                // caseItem.data.forEach((d_d: any) => {
+                //   // drug_inventory_id
+                //   console.log("kkkkkkkkkkkkkkkk::   ",d_d.drug_inventory_id)
+                //   console.log("QQQQQQQQQQQQQQQQQQQQQ::   ",drug.drug_inventory_id)
+                //   if (d_d.drug_inventory_id == drug.drug_inventory_id) {
+                //     console.log(d_d)
+
+                //   }
+                //   // console.log(d_d)
+                // })
+
+              })
+              
+            }
+          })
+        });
+      });
+
     },
     async UnderFiveImmunizations() {
       const data: any = [];
       const UFIs = await ConceptService.getConceptSet('Under five immunizations');
       UFIs.forEach((item: any) => {
+        console.log(item)
         data.push(
           {
             concept_id: item.concept_id,
@@ -110,6 +154,7 @@ export default defineComponent({
         }));
         data.push(
           {
+            concept_id: item.concept_id,
             name: item.name,
             data: updatedVaccines
           }
