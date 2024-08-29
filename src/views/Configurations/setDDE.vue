@@ -142,8 +142,7 @@ export default defineComponent({
     methods: {
         async setDDEStatus() {
             const dde = useGlobalPropertyStore();
-            await dde.setGlobalProperty("dde_enabled", this.globalPropertyStore.dde_enabled);
-            console.log("ddd", this.globalPropertyStore.dde_enabled);
+            await dde.setGlobalProperty("dde_enabled", `${this.globalPropertyStore.dde_enabled}`);
         },
         async ddeData() {
             const data = await PatientDemographicsExchangeService.getRemainingNpids();
