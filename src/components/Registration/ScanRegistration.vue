@@ -15,34 +15,18 @@
         </ion-header>
         <ion-content style="--background: #fff">
             <div class="flex flex-col gap-2 mx-4 my-2">
-                <div class="header">National id scanner</div>
+                <div class="header">National id scanning</div>
                 <!-- <ScannerReader @scannerData="onDecode" class="w-fit" /> -->
                 <div class="flex flex-col gap-2 items-center justify-center mt-6 w-full">
                     <input
-                        v-if="platform === 'web'"
                         ref="barcodeInput"
                         autocomplete="off"
                         type="text"
                         class="w-full ml-4 p-2 rounded-lg bg-white"
                         style="width: 80vw; margin-left: 8px"
-                        placeholder="Enter barcode here"
+                        placeholder="Enter QR-code here"
                         v-model="barcode"
                     />
-                    <div v-else>
-                        <ion-button @click="scannedData()" expand="full" size="large">Scan National ID</ion-button>
-                    </div>
-                    <ion-row class="w-fit">
-                        <ion-col>
-                            <div class="scan_instraction">
-                                To have the successful Scanning
-                                <ul class="checklist">
-                                    <li>Find the lighter place</li>
-                                    <li>Put the National ID in the center of the screen</li>
-                                    <li>Focus the camera on National ID</li>
-                                </ul>
-                            </div>
-                        </ion-col>
-                    </ion-row>
                 </div>
             </div>
         </ion-content>
@@ -54,13 +38,8 @@ import { defineComponent, ref } from "vue";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
-// import ScannerReader from "@/components/ScannerReader.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
-import { modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 import { mapState, mapActions } from "pinia";
-import { Capacitor } from "@capacitor/core";
-import { Barcode } from "@capacitor-mlkit/barcode-scanning";
-import { ScannerService } from "@/services/scanner_service";
 
 export default defineComponent({
     name: "Menu",
@@ -96,57 +75,10 @@ export default defineComponent({
     computed: {
         ...mapState(useRegistrationStore, ["personInformation"]),
     },
-    mounted() {
-        if (Capacitor.isNativePlatform()) {
-            this.platform = "phone";
-        } else {
-            this.platform = "web";
-        }
-    },
+    mounted() {},
     methods: {
-        async scannedData() {
-            // await scannerService.startScan(1.65);
-            const data = await new ScannerService();
-            console.log("🚀 ~ scannedData ~ data:", data.startScan());
-            // await this.onDecode(await data.scan());
-        },
         nav(url: any) {
             this.$router.push(url);
-        },
-        async onDecode(content: any) {
-            const extractedDetails = await this.extractDetails(content);
-            console.log("🚀 ~ onDecode ~ extractedDetails:", JSON.stringify(extractedDetails));
-            try {
-                modifyFieldValue(this.personInformation, "nationalID", "value", extractedDetails.idNumber);
-                modifyFieldValue(this.personInformation, "firstname", "value", extractedDetails.firstName);
-                modifyFieldValue(this.personInformation, "middleName", "value", extractedDetails.middleName || "");
-                modifyFieldValue(this.personInformation, "lastname", "value", extractedDetails.lastName);
-                modifyFieldValue(this.personInformation, "birthdate", "value", extractedDetails.dob);
-                modifyRadioValue(this.personInformation, "gender", "selectedValue", extractedDetails.sex);
-            } catch (e) {
-                console.log(e);
-                return;
-            }
-            this.$router.push("/registration/manual");
-        },
-        extractDetails(inputString: string) {
-            {
-                const parts = inputString.split("~");
-                const idNumber = parts[1].slice(6, 14).trim();
-                const dob = parts[9];
-                const sex = parts[8].charAt(0);
-                const lastName = parts[4];
-                const firstName = parts[6];
-                const middleName = parts[7];
-                return {
-                    idNumber,
-                    sex,
-                    dob,
-                    firstName,
-                    middleName,
-                    lastName,
-                };
-            }
         },
     },
 });
