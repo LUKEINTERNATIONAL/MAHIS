@@ -166,7 +166,6 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
-import { getBaseURL } from "@/utils/GeneralUti";
 
 export default defineComponent({
     name: "Home",
