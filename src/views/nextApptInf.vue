@@ -54,7 +54,7 @@
   </template>
   
   <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { ref,createApp,defineComponent } from 'vue';
   import { IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonButton, IonIcon } from '@ionic/vue';
   import { calendarOutline, trashOutline, personCircleOutline } from 'ionicons/icons';
   import { createModal } from "@/utils/Alerts";
@@ -67,7 +67,6 @@
   import { modalController } from '@ionic/vue';
   import voidReason from '@/apps/Immunization/components/Modals/voidReason.vue';
   import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
-  
   export default defineComponent({
     name: 'PersonCard',
     mixins: [SetDemographics],
@@ -92,10 +91,13 @@
       },
     },
     setup() {
+      
+      const modalNextAppointment = ref<InstanceType<typeof nextAppointMent> | any>(null);
       return {
         calendarOutline,
         trashOutline,
-        personCircleOutline
+        personCircleOutline,
+        modalNextAppointment
       };
     },
     methods: {
@@ -117,7 +119,14 @@
       async voidAppoinment() {
         await this.openVoidModal()
       },
+      setupComponentInstance() {
+      if (!this.modalNextAppointment) {
+           const instance = createApp(nextAppointMent).mount(document.createElement('div'));
+           this.modalNextAppointment = instance;
+       }
+    },
       async openVoidModal() {
+
         const modal = await modalController.create({
             component: voidReason,
             cssClass: "otherVitalsModal",
@@ -129,16 +138,33 @@
         modal.onDidDismiss().then(async (data) => {
             if (data && data.data) {
               try {
-                await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
-                await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
-                this.setAppointmentMentsReload()
+                //await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
+               // await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
+                //this.setAppointmentMentsReload()
               } catch (error) {
-                this.setAppointmentMentsReload()
+                //this.setAppointmentMentsReload()
               }
             }
-        });
 
+        });
+        
         await modal.present();
+        console.log(".............KKKKKKppp")
+        this.setupComponentInstance();
+        
+      },
+      async smsNextAppointment(person: any){
+        
+            const appointmentDetails = {
+              patient_Id: this.person.person_id,
+              encounter_Id: this.person.encounter_id,
+            };
+
+            // Directly call smspost on the stored instance
+            if (this.modalNextAppointment) {
+              (this.modalNextAppointment as any).smspost2(appointmentDetails);
+            }
+
       },
       async setAppointmentMentsReload() {
         const store = useImmunizationAppointMentStore();
