@@ -28,6 +28,7 @@ export class SmsService extends Service {
       "sms_api_key": Configdata.apiKey,
       "sms_reminder": Configdata.smsReminder,
       "next_appointment_message": Configdata.reminderMessage,
+      "cancel_appointment_message": Configdata.cancelMessage,
       "next_appointment_reminder_period": Configdata.reminderPeriod,
       "sms_activation": Configdata.smsActivation,
       "show_sms_popup": Configdata.smsPopup

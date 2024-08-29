@@ -101,7 +101,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import {  voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
-
+import { RelationshipService } from "@/services/relationship_service";
 const user = useDemographicsStore();
 
 const date = ref();
@@ -110,7 +110,7 @@ const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
 const show_selected_date = ref(false);
 const currently_selected_date = ref();
 const appointment_count = ref(0);
-const phoneNumber = ref();
+const phoneNumbers = ref<string[]>([]);
 
 function disablePastDates(date: any) {
     const today = new Date(Service.getSessionDate());
@@ -132,13 +132,25 @@ const props = defineProps<{
     encounter_Id: string;
 }>();
 
+
 async function save() {
     await voidApt()
+    await getMobilePhones()
     const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
     const appointmentDetails = await appointment_service.createAppointment();
     setMilestoneReload();
     setAppointmentMentsReload();
     dismiss();
+    smspost(appointmentDetails);
+   
+}
+
+async function smspost(appointmentDetails:any){
+
+    if (phoneNumbers.value.length == 0){ 
+        toastWarning("No phone numbers available for sms reminder!");
+        return;
+    }
 
     if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
         if (configsSms.value) {
@@ -150,6 +162,7 @@ async function save() {
             await SmsService.appointment(appointmentDetails[0], appointmentDetails[1]);
         }
     }
+
 }
 
 async function setMilestoneReload() {
@@ -173,20 +186,36 @@ async function voidApt() {
 
 onMounted(async () => {
     const store = useImmunizationAppointMentStore();
-    let data = await SmsService.getConfigurations();
-    configsSms.value = data.show_sms_popup;
     store.clearAppointmentMent();
+    await getfacilityConfiguration();    
 });
+
 
 async function getAppointmentMents(date: any) {
     const appointment_service = new Appointment();
     const res = await appointment_service.getDailiyAppointments(HisDate.toStandardHisFormat(date));
     appointment_count.value = res.length + 1;
-    console.log(res);
 }
 
 function dismiss() {
     modalController.dismiss();
+}
+async function getfacilityConfiguration() {
+    let data = await SmsService.getConfigurations();
+    configsSms.value = data.show_sms_popup;
+}
+
+async function getMobilePhones(){
+    const guardianData = await RelationshipService.getRelationships(user.demographics.patient_id);
+    if(guardianData.length > 0){ 
+        const phone = guardianData[0].relation.person_attributes.find((x: any) => x.type.name == "Cell Phone Number")
+        if(phone){ phoneNumbers.value.push(phone.value); }
+    }
+    
+    if (user.demographics.phone){
+        phoneNumbers.value.push(user.demographics.phone)
+    }
+
 }
 
 async function DateUpdated(date: any) {

@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData" :editable="editable"  @update:selected="handleInputData" @update:inputValue="handleInputData" @countryChanged="handleCountryChange"></basic-card>
 </template>
 
 <script lang="ts">
@@ -19,7 +19,6 @@ import { calculator } from "ionicons/icons";
 import Validation from "@/validations/StandardValidations";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-
 export default defineComponent({
     name: "Menu",
     components: {
@@ -38,6 +37,7 @@ export default defineComponent({
             inputField: "" as any,
             setName: "" as any,
             initialPersonalData: [] as any,
+            selectedCountry: [] as any,
         };
     },
     watch: {
@@ -129,13 +129,21 @@ export default defineComponent({
         async handleInputData(event: any) {
             if (event?.col?.name == "Estimate Age" && !event?.col?.checked) {
                 modifyFieldValue(this.personInformation, "estimation", "displayNone", true);
-            } else {
-                // modifyFieldValue(this.personInformation,'birthdate','disabled',true)
+            } else if (event.name == "phoneNumber") {
+                const message = await Validation.validateMobilePhone(event.value,this.selectedCountry);
+                this.personInformation[4].data.rowData[0].colData[0].alertsErrorMassage = null;
+                if(!message.includes("+")){
+                    this.personInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
+                }  
+                return true 
             }
             // Estimated age
             this.validationRules(event);
             this.calculateDoB(event);
             this.setGuardingInfo(event);
+        },
+        async handleCountryChange(country: any) {
+            this.selectedCountry = country.event
         },
         setGuardingFormRules(age: any) {
             if (age < 14) {
