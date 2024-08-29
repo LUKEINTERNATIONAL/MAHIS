@@ -15,7 +15,7 @@
                 <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="dismiss()"> Cancel </ion-button>
             </ion-col>
             <ion-col>
-                <DynamicButton @click="createBatch()" name="Save changes" fill="solid" style="float: right; margin: 2%; width: 130px" />
+                <DynamicButton @click="createImmunizationSession()" name="Save changes" fill="solid" style="float: right; margin: 2%; width: 130px" />
             </ion-col>
         </ion-row>
     </ion-footer>
@@ -70,8 +70,10 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import { PersonService } from "@/services/person_service";
 import { PatientRegistrationService } from "@/services/patient_registration_service";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
-import { StockService } from "@/services/stock_service";
+import { ImmunizationSessionService } from "@/services/immunization_session_service";
 import { DrugService } from "@/services/drug_service";
+import { UserService } from "@/services/user_service";
+import { useSearchName } from "@/stores/SearchName";
 
 export default defineComponent({
     components: {
@@ -107,36 +109,49 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useImmunizationSessionsStore, ["immunizationSessions"]),
     },
+    props:{
+        data: {
+            default: {} as any,
+        },
+    },
     async mounted() {
         this.resetData();
+        if (this.data){
+            this.modifyFieldValue();
+        }
+        
         await this.getDrugs();
+        await this.getAssignees();
     },
     setup() {
         return { checkmark, pulseOutline };
     },
     methods: {
-        async createBatch() {
+        modifyFieldValue(){
+            modifyFieldValue(this.immunizationSessions, "vaccines","value", {id: "", name: this.data.drug_legacy_name});
+            modifyFieldValue(this.immunizationSessions, "assignees", "value", {id: this.data.user_id, username: this.data.username });
+        },
+        async createImmunizationSession() {
             if (validateInputFiledData(this.immunizationSessions)) {
-                const stockService = new StockService();
+                
+                const drug_id = getFieldValue(this.immunizationSessions, "vaccines", "value").drug_id;
+                const user_id = getFieldValue(this.immunizationSessions, "assignees","value").id
                 const data = [
                     {
-                        batch_number: getFieldValue(this.immunizationSessions, "batch", "value"),
-                        location_id: "",
-                        items: [
-                            {
-                                barcode: "",
-                                drug_id: getFieldValue(this.immunizationSessions, "product name", "value").drug_id,
-                                expiry_date: getFieldValue(this.immunizationSessions, "expire date", "value"),
-                                quantity: getFieldValue(this.immunizationSessions, "immunizationSessions in", "value"),
-                                delivery_date: getFieldValue(this.immunizationSessions, "delivery_date", "value") || HisDate.currentDate(),
-                                product_code: "",
-                                pack_size: "",
-                            },
-                        ],
+                        session_name: getFieldValue(this.immunizationSessions,"batch", "value"),
+                        start_date: getFieldValue(this.immunizationSessions, "start date", "value"),
+                        end_date: getFieldValue(this.immunizationSessions, "end date", "value"),
+                        session_type: getFieldValue(this.immunizationSessions, "product name", "value").name,
+                        repeat: getFieldValue(this.immunizationSessions, "repeat", "value" ).name,
+                        target: getFieldValue(this.immunizationSessions, "target", "value"),
+                        drug_id: drug_id,
+                        user_id: user_id,
                     },
                 ];
-                await stockService.postItems(data);
-                toastSuccess("Batch save successfully");
+
+                const immunizationSessionService = new ImmunizationSessionService();
+                await immunizationSessionService.postSessions(data);
+                toastSuccess("Immunization session saved successfully");
                 modalController.dismiss("dismiss");
             } else {
                 toastWarning("Batch not save");
@@ -157,13 +172,31 @@ export default defineComponent({
                 name: filter,
                 page: 1,
                 page_size: 10,
-                concept_set: "OPD Medication",
+                concept_set: "Immunizations",
             });
-            // modifyFieldValue(this.stock, "product name", "multiSelectData", drugs);
+            modifyFieldValue(this.immunizationSessions, "vaccines", "multiSelectData", drugs);
         },
 
+        async getAssignees(filter: any = ""){
+            const assignees = await UserService.getUsersByRole({
+                role: "Health Surveillance"
+            });
+
+            const modifiedAssignees = assignees.map((assignee: any) => {
+                return {
+                    ...assignee,
+                    name: assignee.username,
+                    id: assignee.user_id,
+                    // Remove the username key if needed:
+                    // username: undefined,
+                };
+            });
+
+            modifyFieldValue(this.immunizationSessions, "assignees", "multiSelectData", modifiedAssignees);
+
+        },
         handleInputData(event: any) {
-            this.getDrugs(" ");
+            //this.getDrugs(" ");
         },
 
         dismiss() {
