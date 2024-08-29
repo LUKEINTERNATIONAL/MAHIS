@@ -33,10 +33,7 @@
                     ></ion-icon>
                 </div>
             </div>
-            <div v-if="registrationType == 'scan'">
-                <ScanRegistration />
-            </div>
-            <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991">
+            <div class="center_content" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
                 <div v-if="registrationDisplayType == 'grid'" class="flex-container">
                     <div class="flex-item">
                         <PersonalInformation />
@@ -53,7 +50,7 @@
                 </div>
             </div>
 
-            <div v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
+            <div v-if="registrationDisplayType == 'list' || screenWidth <= 991">
                 <div v-if="currentStep == 'Personal Information'">
                     <PersonalInformation />
                 </div>
@@ -75,7 +72,7 @@
         <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
             <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" :disabledValue="disableSaveBtn" @click="createPatient()" />
         </div>
-        <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
+        <ion-footer v-if="registrationDisplayType == 'list' || screenWidth <= 991">
             <div class="footer position_content">
                 <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="nav('/home')" />
                 <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
@@ -122,13 +119,9 @@ import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
-import ScanRegistration from "@/components/Registration/ScanRegistration.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
-import { PatientRegistrationService } from "@/services/patient_registration_service";
 import { PatientService } from "@/services/patient_service";
-import { RelationsService } from "@/services/relations_service";
-import { SocialHistoryService } from "@/services/social_history_service";
 import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { resetPatientData } from "@/services/reset_data";
@@ -137,21 +130,20 @@ import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
-import { UserService } from "@/services/user_service";
 import { isEmpty } from "lodash";
-import { LocationService } from "@/services/location_service";
 import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegistrationStore";
-import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
-import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
-import { AppEncounterService } from "@/services/app_encounter_service";
+import { formatInputFiledData } from "@/services/formatServerData";
+import { validateInputFiledData } from "@/services/group_validation";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
-import { PatientProgramService } from "@/services/patient_program_service";
 import { resetDemographics } from "@/services/reset_data";
 import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
+<<<<<<< HEAD
 import PersonMatchView from "@/components/PersonMatchView.vue";
 import { createModal } from "@/utils/Alerts";
 import { useWebWorkerFn } from "@vueuse/core";
+=======
+>>>>>>> 09203fe43891f7906a32f7422751b47f222cb4e2
 import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
@@ -173,7 +165,6 @@ export default defineComponent({
         CurrentLocation,
         HomeLocation,
         SocialHistory,
-        ScanRegistration,
         BirthRegistration,
     },
     data() {
@@ -275,7 +266,7 @@ export default defineComponent({
         $route: {
             async handler(data) {
                 this.currentStep = "Personal Information";
-                await resetPatientData();
+                // await resetPatientData();
                 if (data.name == "registration") resetDemographics();
             },
             deep: true,

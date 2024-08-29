@@ -222,13 +222,16 @@ export default defineComponent({
             ]);
         },
         async saveData() {
-            if ((await this.createGuardian()) && (await this.saveVaccineAdverseEffects())) modalController.dismiss();
+            const guardianCreated = await this.createGuardian();
+            const vaccineAdverseEffectsSaved = await this.saveVaccineAdverseEffects();
+            if (guardianCreated && vaccineAdverseEffectsSaved) {
+                modalController.dismiss();
+            }
         },
         async saveVaccineAdverseEffects() {
             if (this.demographics.patient_id) {
                 const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-                const drugNames = lastVaccine.map((item: any) => item.drug.name).join(",");
-                const vaccineAdverseEffects = await formatCheckBoxData(this.vaccineAdverseEffects);
+                const vaccineAdverseEffects = await formatCheckBoxData(this.vaccineAdverseEffects, HisDate.currentDate(), lastVaccine);
                 const userID: any = Service.getUserID();
                 if (vaccineAdverseEffects.length > 0) {
                     const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
