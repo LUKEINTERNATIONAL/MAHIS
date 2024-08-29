@@ -191,6 +191,7 @@ export default defineComponent({
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
             selectedRow: null as any,
             showDateBtns: true as boolean,
+            data: {} as any,
         };
     },
     props: {
@@ -204,9 +205,44 @@ export default defineComponent({
     },
     async mounted() {
         this.isLoading = true;
-        const data = await getVaccinesData();
+        this.data = await getVaccinesData();
 
-        data.map((item: any) => {
+        this.processData();
+
+        this.isLoading = false;
+    },
+    watch: {
+        batchNumber: {
+            handler() {
+                this.validateBatchNumber();
+            },
+            deep: true,
+        },
+        tempScannedBatchNumber: {
+            handler() {
+                if (this.tempScannedBatchNumber != null) {
+                    this.batchNumber = this.tempScannedBatchNumber.text;
+                    this.validateBatchNumber();
+                }
+            },
+        },
+        vaccineName: {
+            handler() {
+                this.validateVaccineName();
+            },
+        },
+    },
+    setup() {
+        return { person, pulseOutline, clipboardOutline };
+    },
+    methods: {
+        async openClientProfile(patientID: any) {
+            const patientData = await PatientService.findByID(patientID);
+            this.setDemographics(patientData);
+            this.$router.push("patientProfile");
+        },
+        processData( ){
+            this.data.map((item: any) => {
             if (item.name == "missed_immunizations") {
                 const uniqueClients = new Set<number>();
 
@@ -246,37 +282,6 @@ export default defineComponent({
                 }
             }
         });
-        this.isLoading = false;
-    },
-    watch: {
-        batchNumber: {
-            handler() {
-                this.validateBatchNumber();
-            },
-            deep: true,
-        },
-        tempScannedBatchNumber: {
-            handler() {
-                if (this.tempScannedBatchNumber != null) {
-                    this.batchNumber = this.tempScannedBatchNumber.text;
-                    this.validateBatchNumber();
-                }
-            },
-        },
-        vaccineName: {
-            handler() {
-                this.validateVaccineName();
-            },
-        },
-    },
-    setup() {
-        return { person, pulseOutline, clipboardOutline };
-    },
-    methods: {
-        async openClientProfile(patientID: any) {
-            const patientData = await PatientService.findByID(patientID);
-            this.setDemographics(patientData);
-            this.$router.push("patientProfile");
         },
         handleRowClick(event: Event){
             const target = event.target as HTMLElement;
@@ -285,19 +290,28 @@ export default defineComponent({
             if(row) {
                 const rowIndex = Array.from(row.parentNode?.children || []).indexOf(row)
                 const selectedData = this.tableData[rowIndex];
-                this.selectedRow = {
-                    vaccine: selectedData[0],
-                    quantity: selectedData[1]
-                }
 
-                this.clientDetails = selectedData[2].map((item: any) => {
-                        return {
-                            given_name: item.table.given_name,
-                            family_name: item.table.family_name,
-                            patient_id: item.table.patient_id,
-                            birthdate: item.table.birthdate,
-                        };
-                });
+                //Check if the row is already selected
+                if(this.selectedRow && this.selectedRow.vaccine === selectedData[0] && 
+                    this.selectedRow.quantity === selectedData[1]){
+                        this.selectedRow = null;
+                        this.processData();
+                }else {
+                    this.selectedRow = {
+                        vaccine: selectedData[0],
+                        quantity: selectedData[1]
+                    }
+
+                    this.clientDetails = selectedData[2].map((item: any) => {
+                            return {
+                                given_name: item.table.given_name,
+                                family_name: item.table.family_name,
+                                patient_id: item.table.patient_id,
+                                birthdate: item.table.birthdate,
+                            };
+                    });
+                }
+               
             }
         },
         getAge(dateOfBirth: string): string {
