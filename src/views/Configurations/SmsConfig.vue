@@ -257,7 +257,7 @@ export default defineComponent({
         async onSubmit(){
             try {
                 const configs = await SmsService.setConfigurations(this.configData);
-                this.updateConfigData(configs);
+                this.updateConfigData(configs.message);
 
                 toastSuccess("Successfully updated configuration file");
             } catch (e) {
