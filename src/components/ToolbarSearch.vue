@@ -150,7 +150,6 @@ import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import DeviceDetection from "@/views/Mixin/DeviceDetection.vue";
 import { scannedData, extractDetails } from "@/services/national_id";
 import db from "@/db";
-<<<<<<< HEAD
 import { Patient } from "@/interfaces/patient";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { isEmpty } from "lodash";
@@ -158,10 +157,8 @@ import { IncompleteEntityError, BadRequestError } from "@/services/service";
 import { alertConfirmation, toastDanger, toastSuccess, toastWarning, createModal } from "@/utils/Alerts";
 import { isUnknownOrEmpty, isValueEmpty } from "@/utils/Strs";
 import PersonField from "@/utils/HisFormHelpers/PersonFieldHelper";
-=======
 import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 
->>>>>>> 09203fe43891f7906a32f7422751b47f222cb4e2
 export default defineComponent({
     name: "Home",
     mixins: [SetDemographics, DeviceDetection, SetPersonInformation],

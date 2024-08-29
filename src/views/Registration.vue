@@ -138,12 +138,9 @@ import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { resetDemographics } from "@/services/reset_data";
 import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
-<<<<<<< HEAD
 import PersonMatchView from "@/components/PersonMatchView.vue";
 import { createModal } from "@/utils/Alerts";
 import { useWebWorkerFn } from "@vueuse/core";
-=======
->>>>>>> 09203fe43891f7906a32f7422751b47f222cb4e2
 import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";

@@ -12,11 +12,8 @@ import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
 import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
-<<<<<<< HEAD
 import setDDE from "@/views/Configurations/setDDE.vue";
-=======
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
->>>>>>> 09203fe43891f7906a32f7422751b47f222cb4e2
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
 import NCD from "@/apps/NCD/config/routes";
