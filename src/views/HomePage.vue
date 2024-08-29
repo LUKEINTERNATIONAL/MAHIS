@@ -166,7 +166,6 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
-import { getBaseURL } from "@/utils/GeneralUti";
 
 export default defineComponent({
     name: "Home",
@@ -251,9 +250,8 @@ export default defineComponent({
             async handler(data) {
                 if (data.name == "Home") resetDemographics();
                 await this.setAppointments();
-                // cannot subscribe more than once
-                // const wsService = new WebSocketService();
-                // wsService.setMessageHandler(this.onMessage);
+                const wsService = new WebSocketService();
+                wsService.setMessageHandler(this.onMessage);
             },
             deep: true,
         },

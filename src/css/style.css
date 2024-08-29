@@ -693,3 +693,9 @@ ion-footer {
     width: 24px;
     height: 24px;
 }
+.vti__dropdown-list {
+    z-index: 10;
+}
+.vue-tel-input {
+    height: 56px;
+}
