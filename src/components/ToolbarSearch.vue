@@ -1,15 +1,17 @@
 <template>
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
-    <ion-searchbar
-        @ionInput="handleInput"
-        placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
-        class="searchField"
-        :search-icon="search"
-        show-cancel-button="always"
-        cancel-button-text="Camera"
-        :cancel-button-icon="camera"
-        @ionCancel="openCheckPaitentNationalIDModal"
-    ></ion-searchbar>
+    <div style="display: flex; align-items: center">
+        <ion-searchbar
+            @ionInput="handleInput"
+            placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
+            class="searchField"
+        ></ion-searchbar>
+        <div v-if="isMobile">
+            <ion-button @click="scanCode()">
+                <ion-icon slot="icon-only" color="secondary" :icon="camera"></ion-icon>
+            </ion-button>
+        </div>
+    </div>
 
     <ion-popover
         :is-open="popoverOpen"
@@ -121,7 +123,9 @@ import {
     IonPopover,
     popoverController,
     IonRow,
+    IonButton,
     IonCol,
+    isPlatform,
 } from "@ionic/vue";
 import { defineComponent, onMounted } from "vue";
 import { PatientService } from "@/services/patient_service";
@@ -144,11 +148,14 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
 import Pagination from "./Pagination.vue";
 import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import DeviceDetection from "@/views/Mixin/DeviceDetection.vue";
+import { scannedData, extractDetails } from "@/services/national_id";
 import db from "@/db";
+import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 
 export default defineComponent({
     name: "Home",
-    mixins: [SetDemographics],
+    mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
     components: {
         IonContent,
         IonHeader,
@@ -164,6 +171,7 @@ export default defineComponent({
         IonCol,
         Pagination,
         RoleSelectionModal,
+        IonButton,
     },
     setup() {
         return { checkmark, add, search, camera };
@@ -198,6 +206,15 @@ export default defineComponent({
         this.offlinePatients = await db.collection("patientRecords").get();
     },
     methods: {
+        async scanCode() {
+            const dataScanned: any = await scannedData();
+            const dataExtracted: any = await extractDetails(dataScanned);
+            if (await this.searchByMWNationalID(dataExtracted.idNumber)) {
+            } else {
+                await this.setPersonInformation(dataExtracted);
+                this.$router.push("/registration/manual");
+            }
+        },
         programID() {
             return Service.getProgramID();
         },
@@ -270,8 +287,11 @@ export default defineComponent({
                 const nationalID = await PatientService.findByOtherID(28, searchText);
                 if (nationalID.length > 0) {
                     this.patients.push(...nationalID);
+                    this.openNewPage("patientProfile", this.patients[0]);
+                    return true;
                 }
             }
+            return false;
         },
         callswipeleft() {
             const handElement = document.getElementById("hand");
