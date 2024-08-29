@@ -4,8 +4,8 @@ import { Service } from "@/services/service";
 export const useGlobalPropertyStore = defineStore("globalPropertyStore", {
     state: () => ({
         globalPropertyStore: {
-            sitePrefix: false,
-            dde_enabled: false,
+            sitePrefix: false as any,
+            dde_enabled: false as any,
         },
     }),
     actions: {
