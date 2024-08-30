@@ -67,7 +67,8 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import { modalController } from '@ionic/vue';
 import voidReason from '@/apps/Immunization/components/Modals/voidReason.vue';
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
-
+import smsConfirmation from "@/apps/Immunization/components/Modals/smsConfirmation.vue";
+import { SmsService } from "@/apps/Immunization/services/sms_service";
 export default defineComponent({
   name: 'PersonCard',
   mixins: [SetDemographics],
@@ -127,23 +128,35 @@ export default defineComponent({
       });
 
       modal.onDidDismiss().then(async (data) => {
+
           if (data && data.data) {
             try {
-              await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
-              await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
-              this.setAppointmentMentsReload()
+                 await voidVaccineEncounter(this.person.encounter_id, data.data.name as string)
+                 let config = await SmsService.getConfigurations();
+                 if(config.show_sms_popup){ await this.smsmodal(this.person) }else{ this.setAppointmentMentsReload(); }
             } catch (error) {
-              this.setAppointmentMentsReload()
+                this.setAppointmentMentsReload()
             }
           }
       });
 
       await modal.present();
-    },
-    async setAppointmentMentsReload() {
+  },
+  async setAppointmentMentsReload() {
       const store = useImmunizationAppointMentStore();
       store.setAppointmentsReload(!store.getAppointmentsReload());
-  }
+  },
+  async smsmodal(person:any) {
+
+    const modal = await createModal(smsConfirmation, {
+                componentProps: { patient: person.person_id, date: person.appointmentDate, modalaction: 'cancelAppointment' },
+                class: "smsConfirmation",
+            });
+
+        modal.onDidDismiss().then(async (data:any) => {
+          this.setAppointmentMentsReload();
+        })
+     }
   },
 });
 </script>

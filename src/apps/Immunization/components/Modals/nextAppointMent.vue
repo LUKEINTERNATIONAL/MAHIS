@@ -154,10 +154,12 @@ async function smspost(appointmentDetails:any){
 
     if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
         if (configsSms.value) {
-            createModal(smsConfirmation, {
-                componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1] },
+
+            const modal = await createModal(smsConfirmation, {
+                componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1],  modalaction:'saveAppointment' },
                 class: "smsConfirmation",
             });
+
         } else {
             await SmsService.appointment(appointmentDetails[0], appointmentDetails[1]);
         }

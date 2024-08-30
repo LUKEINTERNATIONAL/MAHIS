@@ -14,12 +14,19 @@ export class SmsService extends Service {
       this.programID = ObservationService.getProgramID();
   }
 
-   static async appointment(patientID: number, AppointmentDate: Date) { 
+   static async appointment(patientID: number, AppointmentDate: any) { 
       return super.postJson('send_sms', {
         "person_id": patientID,
         "appointment_date": AppointmentDate,
     })
   }
+
+  static async cancelappointment(patientID: number, AppointmentDate: any) { 
+    return super.postJson('cancel_appointment', {
+      "person_id": patientID,
+      "appointment_date": AppointmentDate,
+  })
+}
 
 
   static async setConfigurations(Configdata: any) { 
