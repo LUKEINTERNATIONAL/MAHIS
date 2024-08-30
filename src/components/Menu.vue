@@ -70,7 +70,16 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="fourth" v-if="programAttri[3].showReports">
+
+                            <ion-item
+                                @click="navigationMenu('EIPMReport')"
+                                class="list-content"
+                                style="cursor: pointer"
+                            >
+                                EPI Monthly Report
+                            </ion-item>
+
+                            <!-- <ion-accordion value="fourth" v-if="programAttri[3].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">EIR Reports</ion-label>
                                 </ion-item>
@@ -92,7 +101,7 @@
                                         </ion-item>
                                     </ion-list>
                                 </div>
-                            </ion-accordion>
+                            </ion-accordion> -->
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
