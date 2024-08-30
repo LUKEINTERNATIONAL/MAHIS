@@ -182,16 +182,16 @@ export default defineComponent({
         ...mapState(useStockStore, ["stock"]),
         ...mapState(useSearchName, ["searchName"]),
     },
-    $route: {
-        async handler() {
-            await this.buildTableData();
-        },
-        deep: true,
-    },
     watch: {
         stock: {
             async handler() {
                 // await this.buildTableData();
+            },
+            deep: true,
+        },
+        $route: {
+            async handler() {
+                await this.buildTableData();
             },
             deep: true,
         },
