@@ -52,7 +52,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   inputHeader: "Abortions/Miscarriages*",
                   value: "",
                   icon: icons.editPen,
-                  name: "Abortions/Miscarriages",
+                  name: "Abortions",
                   required: true,
                   valueType: "text",
                   eventType: "input",
