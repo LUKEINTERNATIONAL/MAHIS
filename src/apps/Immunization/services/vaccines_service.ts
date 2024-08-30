@@ -137,6 +137,11 @@ export async function getAefiReport(start_date: string, end_date: string): Promi
     return data
 }
 
+export async function getunderfiveImmunizationsDrugs() {
+    const data = await Service.getJson(`immunization/under_five_immunizations_drugs`)
+    return data
+}
+
 export async function getImmunizationDrugs(): Promise<any> {
     const data = await Service.getJson(`/immunization/drugs`)
     return data

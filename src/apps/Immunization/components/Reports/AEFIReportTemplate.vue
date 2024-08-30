@@ -40,8 +40,34 @@ import { defineComponent } from 'vue';
 import { IonContent, IonPage, IonRow, IonCol } from '@ionic/vue';
 import { ConceptService } from "@/services/concept_service";
 import { mapState } from "pinia";
-import { getAefiReport } from "@/apps/Immunization/services/vaccines_service";
+import { getAefiReport, getunderfiveImmunizationsDrugs } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+interface Category {
+  cases: Case[];
+}
+
+interface Case {
+  concept_id: number;
+  data: DrugData[];
+}
+
+interface DrugData {
+  drug_id: number;
+  count: number;
+}
+
+interface Item {
+  concept_id: number;
+  drugs: Drug[];
+}
+
+interface Drug {
+  drug_inventory_id: number;
+}
+
+interface AefiReportData {
+  data: Item[];
+}
 
 export default defineComponent({
   name: 'TableComponent',
@@ -84,70 +110,47 @@ export default defineComponent({
       this.categories[1].cases = await this.getAEFIKnownList(this.categories[1].name, this.vaccines);
       await this.initAefiReport(this.categories)
     },
-    async initAefiReport(categories: any) {
-      // const data = await getAefiReport(this.start_date, this.end_date)
-      const data = await getAefiReport('2024-08-28', '2024-08-28')
-      // 
+    async initAefiReport(categories: Category[]): Promise<void> {
+    try {
+      const data = await getAefiReport(this.start_date, this.end_date);
 
-      categories.forEach((category: any) => {
-        // console.log(category)
-        category.cases.forEach((caseItem: any) => {
-          data.data.forEach((item: any) => {
-            // console.log(item.concept_id)
-            if (caseItem.concept_id == item.concept_id) {
-              item.drugs.forEach((drug: any) => {
+      // Create a map for faster lookup
+      const conceptDrugCountMap = new Map<number, Map<number, number>>();
 
-                // console.log(drug.drug_inventory_id)
-
-                // console.log(caseItem.data)
-
-                // caseItem.data.forEach((d_d: any) => {
-                //   // drug_inventory_id
-                //   console.log("kkkkkkkkkkkkkkkk::   ",d_d.drug_inventory_id)
-                //   console.log("QQQQQQQQQQQQQQQQQQQQQ::   ",drug.drug_inventory_id)
-                //   if (d_d.drug_inventory_id == drug.drug_inventory_id) {
-                //     console.log(d_d)
-
-                //   }
-                //   // console.log(d_d)
-                // })
-
-              })
-              
-            }
-          })
+      // Process data and build the map
+      data.data.forEach((item: any) => {
+        const drugCountMap = conceptDrugCountMap.get(item.concept_id) || new Map<number, number>();
+        item.drugs.forEach((drug: any) => {
+          drugCountMap.set(drug.drug_inventory_id, (drugCountMap.get(drug.drug_inventory_id) || 0) + 1);
         });
+        conceptDrugCountMap.set(item.concept_id, drugCountMap);
       });
 
-    },
+      // Update categories
+      categories.forEach(category => {
+        category.cases.forEach(caseItem => {
+          const drugCountMap = conceptDrugCountMap.get(caseItem.concept_id);
+          if (drugCountMap) {
+            caseItem.data.forEach(d_d => {
+              d_d.count += drugCountMap.get(d_d.drug_id) || 0;
+            });
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error in initAefiReport:', error);
+    }
+  },
     async UnderFiveImmunizations() {
       const data: any = [];
-      const UFIs = await ConceptService.getConceptSet('Under five immunizations');
-      UFIs.forEach((item: any) => {
-        console.log(item)
-        data.push(
-          {
-            concept_id: item.concept_id,
-            name: item.name,
-          }
-        )
-      })
+      const UFIs = await getunderfiveImmunizationsDrugs()
+      UFIs.forEach((item: any) => {data.push(item)})
       return data
     }, 
     async getAEFIKnownList(concept_set_name: string, vaccines: any) {
       const data: any = [];
       const vaccineEffect = await ConceptService.getConceptSet(concept_set_name);
       vaccineEffect.forEach((item: any) => {
-
-        // ({
-        //   concept_id: item.concept_id,
-        //   name: item.name,
-        //   value: item.name,
-        //   checked: false,
-        //   colSize: "12",
-        // });
-
-
         const updatedVaccines = vaccines.map((vaccine: any) => ({
           ...vaccine,
           count: 0,
@@ -159,7 +162,6 @@ export default defineComponent({
             data: updatedVaccines
           }
         )
-
       })
       data.sort((a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name));
       return data
