@@ -234,6 +234,7 @@ export default defineComponent({
                     drug_name: this.filter,
                     page: page,
                     page_size: 4,
+                    display_details: "true",
                 });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
