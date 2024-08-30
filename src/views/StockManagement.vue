@@ -182,16 +182,16 @@ export default defineComponent({
         ...mapState(useStockStore, ["stock"]),
         ...mapState(useSearchName, ["searchName"]),
     },
-    $route: {
-        async handler() {
-            await this.buildTableData();
-        },
-        deep: true,
-    },
     watch: {
         stock: {
             async handler() {
                 // await this.buildTableData();
+            },
+            deep: true,
+        },
+        $route: {
+            async handler() {
+                await this.buildTableData();
             },
             deep: true,
         },
@@ -234,6 +234,7 @@ export default defineComponent({
                     drug_name: this.filter,
                     page: page,
                     page_size: 4,
+                    display_details: "true",
                 });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
