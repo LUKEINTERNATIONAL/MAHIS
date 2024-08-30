@@ -25,17 +25,21 @@
 </template>
 
 <script lang="ts">
+import { getBaseURl } from "@/utils/GeneralUti";
 export default {
   name: "PrivacyPolicy",
   data() {
     return {
-      pdfUrl: null,
+      pdfUrl: '',
     };
   },
   mounted() {
-    this.pdfUrl = "../../mahis/public/assets/MaHIS_Privacy_Policy.pdf";
+    let baseURL = getBaseURl();
+    if (baseURL.length > 0) {
+        baseURL = baseURL;
+    }
+    this.pdfUrl = `../../${baseURL}/public/assets/MaHIS_Privacy_Policy.pdf`;
   },
- 
 };
 </script>
 

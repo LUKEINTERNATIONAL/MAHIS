@@ -191,6 +191,7 @@ export default defineComponent({
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
             selectedRow: null as any,
             showDateBtns: true as boolean,
+            data: {} as any,
         };
     },
     props: {
@@ -204,36 +205,10 @@ export default defineComponent({
     },
     async mounted() {
         this.isLoading = true;
-        const data = await getVaccinesData();
-        data.map((item: any) => {
-            if (item.name == "missed_immunizations") {
-                if (this.title == "Client due today") {
-                    this.tableData = item.value.due_today_antigens.map((item: any) => {
-                        return [item.drug_name, item.clients.length, item.clients];
-                    });
-                }
-                if (this.title == "Client due this week") {
-                    this.tableData = item.value.due_this_week_antigens.map((item: any) => {
-                        return [item.drug_name, item.clients.length, item.clients];
-                    });
-                }
-                if (this.title == "Client due this month") {
-                    this.tableData = item.value.due_this_month_antigens.map((item: any) => {
-                        return [item.drug_name, item.clients.length, item.clients];
-                    });
-                }
-                if (this.title == "Client overdue over 5yrs") {
-                    this.tableData = item.value.over_five_missed_doses.map((item: any) => {
-                        return [item.drug_name, item.clients.length, item.clients];
-                    });
-                }
-                if (this.title == "Client overdue under 5yrs") {
-                    this.tableData = item.value.under_five_missed_doses.map((item: any) => {
-                        return [item.drug_name, item.clients.length, item.clients];
-                    });
-                }
-            }
-        });
+        this.data = await getVaccinesData();
+
+        this.processData();
+
         this.isLoading = false;
     },
     watch: {
@@ -266,6 +241,49 @@ export default defineComponent({
             this.setDemographics(patientData);
             this.$router.push("patientProfile");
         },
+        processData( ){
+            this.data.map((item: any) => {
+            if (item.name == "missed_immunizations") {
+                const uniqueClients = new Set<number>();
+                this.clientDetails = []; //Ressetting client details
+
+                const processAntigensClients = (antigens: any[]) => {
+                    return antigens.map((antigen: any) => {
+                        antigen.clients.map((client: any) => {
+                            if (!uniqueClients.has(client.table.patient_id)){
+                                uniqueClients.add(client.table.patient_id);
+
+                                this.clientDetails.push({
+                                    given_name: client.table.given_name,
+                                    family_name: client.table.family_name,
+                                    patient_id: client.table.patient_id,
+                                    birthdate: client.table.birthdate
+                                });
+                            }
+                        });
+                        
+                        return [antigen.drug_name, antigen.clients.length, antigen.clients];
+                    });
+                };
+
+                if (this.title == "Client due today") {
+                    this.tableData = processAntigensClients(item.value.due_today_antigens);
+                }
+                if (this.title == "Client due this week") {
+                    this.tableData = processAntigensClients(item.value.due_this_week_antigens);
+                }
+                if (this.title == "Client due this month") {
+                    this.tableData = processAntigensClients(item.value.due_this_month_antigens);
+                }
+                if (this.title == "Client overdue over 5yrs") {
+                    this.tableData = processAntigensClients(item.value.over_five_missed_doses);
+                }
+                if (this.title == "Client overdue under 5yrs") {
+                    this.tableData = processAntigensClients(item.value.under_five_missed_doses);
+                }
+            }
+        });
+        },
         handleRowClick(event: Event){
             const target = event.target as HTMLElement;
             const row = target.closest("tr");
@@ -273,19 +291,28 @@ export default defineComponent({
             if(row) {
                 const rowIndex = Array.from(row.parentNode?.children || []).indexOf(row)
                 const selectedData = this.tableData[rowIndex];
-                this.selectedRow = {
-                    vaccine: selectedData[0],
-                    quantity: selectedData[1]
-                }
 
-                this.clientDetails = selectedData[2].map((item: any) => {
-                        return {
-                            given_name: item.table.given_name,
-                            family_name: item.table.family_name,
-                            patient_id: item.table.patient_id,
-                            birthdate: item.table.birthdate,
-                        };
-                });
+                //Check if the row is already selected
+                if(this.selectedRow && this.selectedRow.vaccine === selectedData[0] && 
+                    this.selectedRow.quantity === selectedData[1]){
+                        this.selectedRow = null;
+                        this.processData();
+                }else {
+                    this.selectedRow = {
+                        vaccine: selectedData[0],
+                        quantity: selectedData[1]
+                    }
+
+                    this.clientDetails = selectedData[2].map((item: any) => {
+                            return {
+                                given_name: item.table.given_name,
+                                family_name: item.table.family_name,
+                                patient_id: item.table.patient_id,
+                                birthdate: item.table.birthdate,
+                            };
+                    });
+                }
+               
             }
         },
         getAge(dateOfBirth: string): string {
