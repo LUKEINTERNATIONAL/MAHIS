@@ -14,7 +14,6 @@
                                   :placeholder="'Gateway url'"
                                   @update:inputValue ="handleInputData($event,'url')"
                                   :icon="createOutline"
-                                  inputType="password" 
                               />
                           </ion-col>
                       </ion-row>
