@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import HisDate from "@/utils/Date";
 import _ from "lodash";
 const initialStock = [
     {
@@ -17,7 +18,7 @@ const initialStock = [
                             selectedID: "",
                             validationFunctionName: "required",
                             isSingleSelect: true,
-                            trackBy: "concept_id",
+                            trackBy: "drug_id",
                             multiSelectData: [],
                         },
                     ],
@@ -72,13 +73,52 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Wasted vial",
+                            inputHeader: "Doses Received*",
+                            value: "",
+                            name: "quantity",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            validationFunctionName: "isNumber",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Doses Wasted",
                             value: "",
                             name: "doses_wasted",
                             eventType: "input",
                             alertsErrorMassage: "",
                             valueType: "text",
                             validationFunctionName: "isNumber",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Date Received*",
+                            icon: icons.calenderPrimary,
+                            value: "",
+                            name: "delivery_date",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            required: true,
+                            isDatePopover: true,
+                            validationFunctionName: "required",
                         },
                     ],
                 },
@@ -99,125 +139,9 @@ const initialStock = [
                             alertsErrorMassage: "",
                             required: true,
                             isDatePopover: true,
-                            minDate: "",
+                            minDate: HisDate.currentDate(),
                             maxDate: "",
                             validationFunctionName: "required",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        radioBtnContent: {
-            header: {
-                title: "Dosage Form*",
-                selectedValue: "",
-                name: "dosage_form",
-                alertsErrorMassage: "",
-            },
-            data: [
-                {
-                    name: "vial",
-                    value: "vial",
-                    colSize: "3.3",
-                },
-                {
-                    name: "ampoule",
-                    value: "ampoule",
-                    colSize: "4.7",
-                },
-                {
-                    name: "tablet",
-                    value: "tablet",
-                    colSize: "3.7",
-                },
-            ],
-        },
-    },
-    {
-        radioBtnContent: {
-            header: {
-                title: "VVM stage",
-                selectedValue: "",
-                name: "vvm_stage",
-                alertsErrorMassage: "",
-            },
-            data: [
-                {
-                    name: "1",
-                    value: "1",
-                    colSize: "2.5",
-                },
-                {
-                    name: "2",
-                    value: "2",
-                    colSize: "2.5",
-                },
-                {
-                    name: "3",
-                    value: "3",
-                    colSize: "2.5",
-                },
-                {
-                    name: "4",
-                    value: "4",
-                    colSize: "2.5",
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Stock Received*",
-                            value: "",
-                            name: "quantity",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            validationFunctionName: "isNumber",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Date Received:",
-                            icon: icons.calenderPrimary,
-                            value: "",
-                            name: "delivery_date",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                            isDatePopover: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "No. of doses in a vial*",
-                            value: "",
-                            name: "unit_doses",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            valueType: "text",
-                            validationFunctionName: "isNumber",
                         },
                     ],
                 },

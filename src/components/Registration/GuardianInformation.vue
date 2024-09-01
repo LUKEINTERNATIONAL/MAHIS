@@ -18,6 +18,7 @@ import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/servic
 import { validateField } from "@/services/validation_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
 import { RelationshipService } from "@/services/relationship_service";
+import { Service } from "@/services/service";
 export default defineComponent({
     name: "Menu",
     mixins: [Relationship],
@@ -92,6 +93,11 @@ export default defineComponent({
     },
     methods: {
         async setData() {
+            if (Service.getProgramID() == 33) {
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to client *");
+            } else {
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient *");
+            }
             if (this.editable) {
                 const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
                 modifyFieldValue(
