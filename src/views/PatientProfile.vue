@@ -491,7 +491,7 @@ export default defineComponent({
             return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
         },
         programAccess(programName: string): boolean {
-            const accessPrograms: any = sessionStorage.getItem("userPrograms");
+            const accessPrograms: any = localStorage.getItem("userPrograms");
             const programs: any = JSON.parse(accessPrograms);
             if (programs.some((program: any) => program.name === programName)) {
                 return true;

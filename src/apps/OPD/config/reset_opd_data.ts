@@ -24,7 +24,7 @@ import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExaminati
 //import { useVitalsStore } from "../stores/OpdVitalsStore";
 
 export async function resetOPDPatientData() {
-    sessionStorage.setItem("saveProgressStatus", "false");
+    localStorage.setItem("saveProgressStatus", "false");
     const opdVitals = useVitalsStore();
     const vitals = useVitalsStore();
     const investigations = useInvestigationStore();
@@ -40,25 +40,21 @@ export async function resetOPDPatientData() {
     const pastMedicalHistoryStore = usePastMedicalHistoryStore();
     const OPDDiagnosisStore = useOPDDiagnosisStore();
 
-    const levelOfConsciousness = useLevelOfConsciousnessStore()
-    const pregnancy = usePregnancyStore()
-    const physicalExamination = usePhysicalExaminationStore()
-    const allegy = useAllegyStore()
-
+    const levelOfConsciousness = useLevelOfConsciousnessStore();
+    const pregnancy = usePregnancyStore();
+    const physicalExamination = usePhysicalExaminationStore();
+    const allegy = useAllegyStore();
 
     levelOfConsciousness.reset();
-    pregnancy.setPregnancy(pregnancy.getPregnancy())
+    pregnancy.setPregnancy(pregnancy.getPregnancy());
     pastMedicalHistoryStore.setPastMedicalHistory(pastMedicalHistoryStore.getInitial());
     physicalExamination.setPhysicalExamStore(physicalExamination.getInitial());
     //allegy.selectedMedicalAllergiesList(allegy)
 
-    
     opdVitals.$reset();
-
 
     presentingComplaintsStore.setPresentingComplaints(presentingComplaintsStore.getInitial());
 
-    
     OPDDiagnosisStore.setOPDDiagnosis(OPDDiagnosisStore.getInitial());
 
     vitals.setVitals(vitals.getInitialVitals());
