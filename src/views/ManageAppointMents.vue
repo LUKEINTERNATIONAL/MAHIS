@@ -148,6 +148,7 @@ export default defineComponent({
     setup() {
         const isLoading = ref(false);
         const people = ref([]) as any;
+        const people_cpy = ref([]) as any;
         const startDate = ref(HisDate.currentDate());
         const endDate = ref(HisDate.currentDate());
         const currentPage = ref(1);
@@ -180,6 +181,7 @@ export default defineComponent({
         return {
             isLoading,
             people,
+            people_cpy,
             startDate,
             endDate,
             currentPage,
@@ -244,7 +246,7 @@ export default defineComponent({
             this.people.length = 0;
             this.isLoading = true;
             try {
-                const appointments = await AppointmentService.getDailiyAppointments(this.startDate, this.endDate, this.search_text);
+                const appointments = await AppointmentService.getDailiyAppointments(this.startDate, this.endDate, '');
                 appointments.forEach((client: any) => {
                         const apptOb = {
                             person_id: client.person_id,
@@ -259,7 +261,8 @@ export default defineComponent({
                         }
                         this.people.push(apptOb)
                 })
-                this.isLoading = false; 
+                this.isLoading = false;
+                this.people_cpy = this.people
             } catch (error) {
                 this.isLoading = false;
             }
@@ -299,9 +302,7 @@ export default defineComponent({
 
             if (this.isValidString(this.search_text) == true) {
                 this.search_txt_error = false
-                setTimeout(() => {
-                    this.loadPageInf();
-                }, 500);
+                this.searchFirstLastName(this.search_text)
             } else {
                 this.search_txt_error = true
             }
@@ -310,6 +311,16 @@ export default defineComponent({
         isValidString(input: string) {
             const regex = /^[a-zA-Z\s]*$/;
             return regex.test(input);
+        },
+        searchFirstLastName(srch_str: string) {
+            const people_array_tem = [] as any
+            const nameRegex = new RegExp(srch_str, 'i');
+            this.people_cpy.forEach((person: any) => {
+                if (nameRegex.test(person.name) == true) {
+                    people_array_tem.push(person)
+                }
+            })
+            this.people = people_array_tem;
         }
     }
 })
