@@ -160,3 +160,14 @@ export function getBaseURl() {
     fromViteConfig_BaseURL = fromViteConfig_BaseURL.replace("/", "");
     return fromViteConfig_BaseURL;
 }
+
+export function compareDates(currentDateStr: string, nextAppointmentDateStr: string) {
+    const currentDate = new Date(currentDateStr);
+    const nextAppointmentDate = new Date(nextAppointmentDateStr);
+    currentDate.setHours(0, 0, 0, 0);
+    nextAppointmentDate.setHours(0, 0, 0, 0);
+    if (nextAppointmentDate < currentDate) {
+      return false;
+    }
+    return true;
+}
