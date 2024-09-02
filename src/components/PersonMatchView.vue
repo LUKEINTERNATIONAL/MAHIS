@@ -108,6 +108,7 @@ export default defineComponent({
         selectedResult: {} as any,
         iconsContent: icons,
         isAnyAccordionOpen: true,
+        isLoading: false,
     }),
     methods: {
         updateAccordionState(event: CustomEvent) {
