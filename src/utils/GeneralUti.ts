@@ -87,16 +87,16 @@ export async function getFileConfig2(): Promise<Config> {
             }
             const { apiURL, apiPort, apiProtocol, appConf, baseURL, apps, thirdpartyApps, platformProfiles, otherApps, websockerURL } =
                 await response.json();
-            sessionStorage.setItem("apiURL", apiURL);
-            sessionStorage.setItem("apiPort", apiPort);
-            sessionStorage.setItem("apiProtocol", apiProtocol);
-            sessionStorage.setItem("appConf", JSON.stringify(appConf));
-            sessionStorage.setItem("apps", JSON.stringify(apps));
-            // sessionStorage.setItem("app", JSON.stringify({ programID: 29, applicationName: "PATIENT REGISTRATION PROGRAM" }));
-            sessionStorage.setItem("thirdpartyApps", JSON.stringify(thirdpartyApps));
-            sessionStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
-            sessionStorage.setItem("otherApps", JSON.stringify(otherApps));
-            sessionStorage.setItem("websockerURL", JSON.stringify(websockerURL));
+            localStorage.setItem("apiURL", apiURL);
+            localStorage.setItem("apiPort", apiPort);
+            localStorage.setItem("apiProtocol", apiProtocol);
+            localStorage.setItem("appConf", JSON.stringify(appConf));
+            localStorage.setItem("apps", JSON.stringify(apps));
+            // localStorage.setItem("app", JSON.stringify({ programID: 29, applicationName: "PATIENT REGISTRATION PROGRAM" }));
+            localStorage.setItem("thirdpartyApps", JSON.stringify(thirdpartyApps));
+            localStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
+            localStorage.setItem("otherApps", JSON.stringify(otherApps));
+            localStorage.setItem("websockerURL", JSON.stringify(websockerURL));
             return {
                 host: apiURL,
                 port: apiPort,
@@ -140,7 +140,7 @@ async function readConfigValueAsync(): Promise<Config> {
 }
 
 export function getWebsockerURL() {
-    const webST = sessionStorage.websockerURL;
+    const webST = localStorage.websockerURL;
     if (webST) {
         let websockerURL = removeQuotes(webST);
         return websockerURL;

@@ -88,7 +88,7 @@ export default defineComponent({
         ...mapState(useRegistrationStore, ["addVillage", "currentLocation", "homeLocation"]),
     },
     mounted() {
-        if (sessionStorage.getItem("activeLocation") == "current") {
+        if (localStorage.getItem("activeLocation") == "current") {
             this.districtType = "current_district";
             this.TAType = "current_traditional_authority";
             this.VillageType = "current_village";
@@ -134,7 +134,7 @@ export default defineComponent({
                 modifyFieldValue(this.location, this.VillageType, "value", { name: villageValue });
 
                 modifyFieldValue(this.addVillage, "Village", "value", "");
-                if (sessionStorage.getItem("activeLocation") == "current") {
+                if (localStorage.getItem("activeLocation") == "current") {
                     modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsErrorMassage", false);
                     modifyFieldValue(this.currentLocation, "current_village", "alertsErrorMassage", false);
                 } else {

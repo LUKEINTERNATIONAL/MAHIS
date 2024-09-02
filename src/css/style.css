@@ -513,6 +513,7 @@ ion-accordion {
     width: 60vw;
     padding: 10px;
     text-align: left;
+    max-width: 800px;
 }
 .search_card {
     width: 1290px;

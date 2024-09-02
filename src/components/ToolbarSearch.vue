@@ -328,9 +328,9 @@ export default defineComponent({
 
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
-            const userProgramsData: any = sessionStorage.getItem("userPrograms");
+            const userProgramsData: any = localStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
-            const roleData: any = sessionStorage.getItem("userRoles");
+            const roleData: any = localStorage.getItem("userRoles");
             const roles: any = JSON.parse(roleData);
             UserService.setProgramUserActions();
 
