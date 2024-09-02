@@ -548,7 +548,6 @@ export default defineComponent({
             const closestLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value")?.name;
             const otherLandmark = getFieldValue(this.currentLocation, "Other (specify)", "value");
             const landmark = closestLandmark === "Other" ? otherLandmark : closestLandmark;
-
             this.personInformation[0].selectedData = {
                 given_name: getFieldValue(this.personInformation, "firstname", "value"),
                 middle_name: getFieldValue(this.personInformation, "middleName", "value"),

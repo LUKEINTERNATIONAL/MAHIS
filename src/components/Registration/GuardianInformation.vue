@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData" @countryChanged="handleCountryChange"></basic-card>
 </template>
 
 <script lang="ts">
@@ -19,7 +19,6 @@ import { validateField } from "@/services/validation_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
 import { RelationshipService } from "@/services/relationship_service";
 import { Service } from "@/services/service";
-
 export default defineComponent({
     name: "Menu",
     mixins: [Relationship],
@@ -58,6 +57,7 @@ export default defineComponent({
             cardData: {} as any,
             inputField: "" as any,
             setName: "" as any,
+            selectedCountry: [] as any,
         };
     },
     computed: {
@@ -100,7 +100,6 @@ export default defineComponent({
             }
             if (this.editable) {
                 const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
-
                 modifyFieldValue(
                     this.guardianInformation,
                     "guardianNationalID",
@@ -180,8 +179,20 @@ export default defineComponent({
             return validateField(this.guardianInformation, event.name, (this as any)[event.name]);
         },
         async handleInputData(event: any) {
+            if (event.name == "guardianPhoneNumber") {
+                const message = await Validation.validateMobilePhone(event.value,this.selectedCountry);
+                this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = null;
+                if(!message.includes("+")){
+                    this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
+                }  
+                return true 
+            }
             this.validationRules(event);
             this.buildGuardianInformation();
+
+        },
+        async handleCountryChange(country: any) {
+            this.selectedCountry = country.event
         },
     },
 });
