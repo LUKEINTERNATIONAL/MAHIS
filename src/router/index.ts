@@ -12,6 +12,7 @@ import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
 import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
+import setDDE from "@/views/Configurations/setDDE.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
@@ -35,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/stockManagement",
         name: "stockManagement",
         component: stockManagement,
+    },
+    {
+        path: "/setDDE",
+        name: "setDDE",
+        component: setDDE,
     },
     {
         path: "/scheduleImmunization",

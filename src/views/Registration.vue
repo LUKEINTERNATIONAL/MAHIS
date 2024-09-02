@@ -138,8 +138,13 @@ import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { resetDemographics } from "@/services/reset_data";
 import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
+import PersonMatchView from "@/components/PersonMatchView.vue";
+import { createModal } from "@/utils/Alerts";
+import { useWebWorkerFn } from "@vueuse/core";
 import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
+import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
+import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -162,6 +167,7 @@ export default defineComponent({
     data() {
         return {
             iconListStatus: "active_icon",
+            deduplicationData: "active_icon",
             iconGridStatus: "inactive_icon",
             iconsContent: icons,
             demographic: true,
@@ -179,6 +185,7 @@ export default defineComponent({
     },
     props: ["registrationType"],
     computed: {
+        ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["socialHistory"]),
         ...mapState(useRegistrationStore, ["homeLocation"]),
@@ -342,7 +349,26 @@ export default defineComponent({
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
-
+        async possibleDuplicates() {
+            const ddeInstance = new PatientDemographicsExchangeService();
+            this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
+            if (this.deduplicationData.length > 0) {
+                const response: any = await createModal(PersonMatchView, { class: "fullScreenModal" }, true, {
+                    to_be_registered: toRaw(this.personInformation[0].selectedData),
+                    deduplicationData: this.deduplicationData,
+                });
+                if (response != "dismiss" && response != "back") {
+                    const result = await ddeInstance.importPatient(response?.person?.id);
+                    await this.findPatient(result.patient_id);
+                    return true;
+                } else if (response == "back") {
+                    return true;
+                }
+                return false;
+            } else {
+                return false;
+            }
+        },
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
@@ -356,11 +382,20 @@ export default defineComponent({
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
+                (await validateInputFiledData(this.homeLocation)) &&
                 (await this.validateBirthData()) &&
                 this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
                 this.isLoading = true;
+                if (this.globalPropertyStore.dde_enabled) {
+                    if (await this.possibleDuplicates()) {
+                        this.disableSaveBtn = false;
+                        this.isLoading = false;
+                        return;
+                    }
+                }
+
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const offlinePatientID = Date.now();
                 await db.collection("patientRecords").add({
@@ -655,4 +690,3 @@ ion-footer {
     box-sizing: border-box;
 }
 </style>
-@/services/SaveRecords/save_registration
