@@ -2,6 +2,7 @@
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
     <div style="display: flex; align-items: center">
         <ion-searchbar
+            :value="searchValue"
             @ionInput="handleInput"
             placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
             class="searchField"
@@ -193,6 +194,7 @@ export default defineComponent({
             showPopover: true,
             page: 1,
             searchText: "",
+            searchValue: "",
             paginationSize: 7,
             isRoleSelectionModalOpen: false,
             localPatient: {} as any, // Patient found without dde
@@ -277,7 +279,9 @@ export default defineComponent({
         async scanCode() {
             const dataScanned: any = await scannedData();
             const dataExtracted: any = await extractDetails(dataScanned);
-            if (await this.searchByMWNationalID(dataExtracted.idNumber)) {
+            if (await this.searchByNpid(dataExtracted + "$")) {
+                this.searchValue = dataExtracted;
+            } else if (await this.searchByMWNationalID(dataExtracted.idNumber)) {
             } else {
                 await this.setPersonInformation(dataExtracted);
                 this.$router.push("/registration/manual");
@@ -335,11 +339,15 @@ export default defineComponent({
             if (/.+\$$/i.test(`${searchText}`)) {
                 searchText = `${searchText || ""}`.replace(/\$/gi, "");
                 const idData = await PatientService.findByNpid(searchText as any);
-                if (idData.length > 0) this.patients.push(...idData);
-
-                if (this.patients.length == 1) {
-                    this.openNewPage("patientProfile", this.patients[0]);
-                    this.popoverOpen = false;
+                if (idData.length > 0) {
+                    this.patients.push(...idData);
+                    if (this.patients.length == 1) {
+                        this.openNewPage("patientProfile", this.patients[0]);
+                        this.popoverOpen = false;
+                    }
+                    return true;
+                } else {
+                    return false;
                 }
             }
         },
@@ -359,11 +367,11 @@ export default defineComponent({
         async searchByMWNationalID(searchText: any) {
             if (Validation.isMWNationalID(searchText) == null) {
                 const nationalID = await PatientService.findByOtherID(28, searchText);
-                if (nationalID.length > 0) {
+                if (nationalID && nationalID.length > 0) {
                     this.patients.push(...nationalID);
                     this.openNewPage("patientProfile", this.patients[0]);
                     return true;
-                }
+                } else return false;
             }
             return false;
         },
