@@ -11,7 +11,7 @@
         :onYes="handleCheckInYes"
         :onNo="handleCheckInNo"
         :isOpen="isEnrollmentModalOpen"
-        :title="`Are you sure you want to Enroll the patient in ANC Program?`"
+        :title="enrollModalTitle"
       />
       <PatientProfile v-if="activeProgramID == 33" />
       <div
@@ -569,6 +569,8 @@ export default defineComponent({
       alerts: [] as any,
       isEnrollmentModalOpen: false,
       enrolledPrograms: [],
+      programToEnroll:0,
+      enrollModalTitle:"",
       colors: {
         Low: ["#B9E6FE", "#026AA2", "#9ADBFE"],
         Normal: ["#DDEEDD", "#016302", "#BBDDBC"],
@@ -743,7 +745,7 @@ export default defineComponent({
       this.isEnrollmentModalOpen = !this.isEnrollmentModalOpen;
     },
     async handleCheckInYes() {
-      await ProgramService.enrollPatient(this.demographics.patient_id);
+      await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, (new Date()).toString());
       await this.refreshPrograms();
       this.toggleEnrollmentModal();
       return this.$router.push("ANCHome");
@@ -752,13 +754,22 @@ export default defineComponent({
       this.toggleEnrollmentModal();
     },
     handleProgramClick(btn: any) {
-      if (btn.actionName == "+ Enroll in ANC Program") {
+
+      const lower = (title:string)=> title.toLowerCase().replace(/\s+/g, '');
+
+
+      if (lower(btn.actionName) == lower("+ Enroll in ANC Program" )||
+         lower(btn.actionName) == lower("+ Enroll in PNC Program") ||
+         lower(btn.actionName) == lower("+ Enroll in Labour and delivery program")
+         ) {
         const found: any = this.enrolledPrograms.find(
           (p: any) => p.id == btn.program_id
         );
 
         if (!found) {
           this.isEnrollmentModalOpen = true;
+          this.enrollModalTitle = `Are you sure you want to Enroll the patient in ${btn.name}`;
+          this.programToEnroll = btn.program_id;
           return;
         }
         return this.$router.push("ANCHome");
@@ -770,7 +781,6 @@ export default defineComponent({
       const found: any = this.enrolledPrograms.find(
         (p: any) => p.id == btn.program_id
       );
-
       if (found) return `Start ${btn.name}`;
 
       return btn.actionName;
@@ -780,8 +790,6 @@ export default defineComponent({
       const programs = await ProgramService.getPatientPrograms(
         this.demographics.patient_id
       );
-
-      console.log({programs});
       this.enrolledPrograms = programs.map((p: any) => ({
         name: p.program.name,
         id: p.program_id,
