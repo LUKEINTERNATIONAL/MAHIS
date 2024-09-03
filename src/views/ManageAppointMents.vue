@@ -36,10 +36,10 @@
                     </ion-col>
                 </ion-row>
                 <ion-row class="ion-align-items-center">
-                        <ion-button style="margin-left: 1rem; font-size: 20px;" @click="loadPageInf()">
+                    <ion-button style="margin-left: 1rem; font-size: 20px;" @click="loadPageInf()">
                         <ion-icon :icon="refreshOutline" slot="start"></ion-icon>
                         Reload
-                        </ion-button>
+                    </ion-button>
                 </ion-row>
                 <div class="appointment-list" :style="{ height: listHeight + 'px' }">
                     <nextApptInf v-for="person in paginatedPeople" :key="person.person_id" :person="person"/>
