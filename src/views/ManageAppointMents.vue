@@ -8,27 +8,29 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                
-                <ion-row>
-                    <ion-col>
-                        <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 600">Appointments</h1>
-                    </ion-col>
 
-                    <ion-col size="4" style="margin-top: 15px;">
-                        <BasicInputField
-                            :placeholder="''"
-                            :icon="searchOutline"
-                            :inputValue="search_text"
-                            @update:inputValue="searchTextUpdated"
-                        />
+                <ion-grid style="margin: 0px;">
+                    <ion-row class="responsive-row">
+                        <ion-col size="12" size-md="auto">
+                            <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 600">Appointments</h1>
+                        </ion-col>
 
-                        <div>
-                            <ion-label v-if="search_txt_error" class="error-label">
-                                {{ 'only letters allowed' }}
-                            </ion-label>
-                        </div>
-                    </ion-col>
-                </ion-row>
+                        <ion-col size="12" size-md="auto">
+                            <BasicInputField
+                                :placeholder="''"
+                                :icon="searchOutline"
+                                :inputValue="search_text"
+                                @update:inputValue="searchTextUpdated"
+                            />
+
+                            <div>
+                                <ion-label v-if="search_txt_error" class="error-label">
+                                    {{ 'only letters allowed' }}
+                                </ion-label>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
 
                 <ion-grid style="margin: 0px;">
                     <ion-row class="responsive-row">
