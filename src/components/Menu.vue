@@ -98,6 +98,14 @@
                                         >
                                             Adverse Events Following Immunization - AEFI
                                         </ion-item>
+
+                                        <ion-item
+                                            @click="navigationMenu('immunizationOverDueReport')"
+                                            class="list-content"
+                                            style="cursor: pointer"
+                                        >
+                                            Immunization Over-Due Report
+                                        </ion-item>
                                     </ion-list>
                                 </div>
                             </ion-accordion> -->
