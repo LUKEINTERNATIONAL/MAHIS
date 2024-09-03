@@ -225,6 +225,9 @@ export default defineComponent({
         },
         async getAppointments() {
             this.people.length = 0;
+            // Reset pagination controls
+            this.currentPage = 1;
+            this.itemsPerPage = 10;
             try {
                 const store = useImmunizationAppointMentStore()
                 const appointments = await AppointmentService.getDailiyAppointments(store.getStartEndDate().startDate, store.getStartEndDate().endDate, '');
