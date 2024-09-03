@@ -168,8 +168,7 @@ await fetchMedication();
 onMounted(fetchMedication);
 
 async function fetchMedication(){
-   const data = await DrugOrderService.getDrugOrderHistory(demographics.value.patient_id);
-   console.log({data})
+  
   dispensationStore.resetStore();
   const previousTreatment = new PreviousTreatment();
   const { previousDrugPrescriptions } =
