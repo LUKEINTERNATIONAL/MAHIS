@@ -1,6 +1,6 @@
 <template>
   <ion-card>
-    <ion-card-content>
+    <ion-card-content style="padding: 2px;">
       <ion-grid>
         <ion-row>
           <ion-col size="6">
@@ -33,7 +33,7 @@
             <div class="button-container">
               <ion-button @click="openClientProfile(person.npid)" color="primary" fill="outline" size="small">
                 <ion-icon :icon="personCircleOutline" slot="start"></ion-icon>
-                Patient Profile
+                Profile
               </ion-button>
 
               <ion-button @click="handleReschedule" color="primary" fill="outline" size="small">
@@ -163,8 +163,8 @@ export default defineComponent({
 
 <style scoped>
 .divider {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .line {

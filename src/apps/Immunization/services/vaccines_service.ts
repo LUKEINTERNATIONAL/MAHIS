@@ -7,6 +7,7 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import HisDate from "@/utils/Date";
 import { createModal } from "@/utils/Alerts";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
+import { ObservationService } from "@/services/observation_service";
 
 export async function getVaccinesSchedule() {
     const patient = new PatientService();
@@ -21,6 +22,7 @@ export async function saveVaccineAdministeredDrugs() {
     const userId: any = Service.getUserID();
     const programId: any = Service.getProgramID();
     const patient = new PatientService();
+    const drugs = [] as any;
     if (!isEmpty(store.getAdministeredVaccines())) {
         try {
             const drugOrders = mapToOrders();
@@ -28,6 +30,7 @@ export async function saveVaccineAdministeredDrugs() {
             const encounter = await prescriptionService.createEncounter();
             if (!encounter) return toastWarning("Unable to create immunization encounter");
             const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId);
+            await createObForEachDrugAdminstred(encounter)
             if (!drugOrder) return toastWarning("Unable register vaccine!");
             toastSuccess("Vaccine registred successfully");
             store.setVaccineReload(!store.getVaccineReload());
@@ -60,6 +63,17 @@ function mapToOrders(): any[] {
             prn: 0,
         };
     });
+}
+
+async function createObForEachDrugAdminstred(encounter: any) {
+    const store = useAdministerVaccineStore();
+    store.getAdministeredVaccines().map(async (drug: any) => {
+        await ObservationService.saveObs(encounter.encounter_id, {
+            concept_id: 2876,
+            value_text: drug.drug_.drug.drug_name,
+            obs_datetime: encounter.encounter_datetime,
+        });
+    })
 }
 
 function calculateExpireDate(startDate: string | Date, duration: any) {

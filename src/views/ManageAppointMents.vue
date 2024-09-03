@@ -8,80 +8,84 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                
-                <ion-row>
-                    <ion-col>
-                        <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 700">Appointments</h1>
-                    </ion-col>
 
-                    <ion-col size="4" style="margin-top: 15px;">
-                        <BasicInputField
-                            :placeholder="''"
-                            :icon="searchOutline"
-                            :inputValue="search_text"
-                            @update:inputValue="searchTextUpdated"
-                        />
+                <ion-grid style="margin: 0px;">
+                    <ion-row class="responsive-row">
+                        <ion-col size="12" size-md="auto">
+                            <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 600; line-height: 10px;">Appointments</h1>
+                        </ion-col>
 
-                        <div>
-                            <ion-label v-if="search_txt_error" class="error-label">
-                                {{ 'only letters allowed' }}
-                            </ion-label>
-                        </div>
-                    </ion-col>
-                </ion-row>
+                        <ion-col size="12" size-md="auto">
+                            <BasicInputField
+                                :placeholder="''"
+                                :icon="searchOutline"
+                                :inputValue="search_text"
+                                @update:inputValue="searchTextUpdated"
+                            />
 
-                <ion-row class="ion-align-items-center">
-                    <ion-col class="ion-no-padding">
+                            <div>
+                                <ion-label v-if="search_txt_error" class="error-label">
+                                    {{ 'only letters allowed' }}
+                                </ion-label>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+                <ion-grid style="margin: 0px;">
+                    <ion-row class="responsive-row">
+                    <ion-col size="12" size-md="auto">
                         <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
                     </ion-col>
-                    <ion-col size="auto" class="ion-no-padding ion-padding-start">
-                        <ion-button style="margin-top: 2rem; margin-right: 1rem; font-size: 23px;" @click="loadPageInf()">
+                    <ion-col size="12" size-md="auto">
+                        <ion-button expand="block" @click="loadPageInf()" style="font-size: 20px;">
                         <ion-icon :icon="refreshOutline" slot="start"></ion-icon>
                         Reload
                         </ion-button>
                     </ion-col>
-                </ion-row>
+                    </ion-row>
+                </ion-grid>
                 <div class="appointment-list" :style="{ height: listHeight + 'px' }">
                     <nextApptInf v-for="person in paginatedPeople" :key="person.person_id" :person="person"/>
                 </div>
 
                 <div v-if="people.length > 0" class="pagination-controls">
-    <ion-button class="nav-button" @click="prevPage" :disabled="currentPage === 1">
-        <ion-icon :icon="chevronBackOutline" slot="icon-only"></ion-icon>
-    </ion-button>
+                <ion-button class="nav-button" @click="prevPage" :disabled="currentPage === 1">
+                    <ion-icon :icon="chevronBackOutline" slot="icon-only"></ion-icon>
+                </ion-button>
     
-    <div class="pagination-info">
-        <div class="items-per-page">
-            <ion-label style="margin-left: 20px;">Items per page:</ion-label>
-            <ion-select v-model="itemsPerPage" @ionChange="changeItemsPerPage" interface="popover">
-                <ion-select-option :value="10">10</ion-select-option>
-                <ion-select-option :value="20">20</ion-select-option>
-                <ion-select-option :value="50">50</ion-select-option>
-            </ion-select>
-        </div>
-        
-        <div class="page-counter">
-            Showing {{ startIndex }} - {{ endIndex }} of {{ people.length }}
-        </div>
-        
-        <ion-select v-model="currentPage" @ionChange="changePage" interface="popover">
-            <ion-select-option v-for="page in totalPages" :key="page" :value="page">
-                Page {{ page }}
-            </ion-select-option>
-        </ion-select>
-    </div>
-    
-    <ion-button class="nav-button" @click="nextPage" :disabled="currentPage === totalPages">
-        <ion-icon :icon="chevronForwardOutline" slot="icon-only"></ion-icon>
-    </ion-button>
-</div>
+                <div class="pagination-info">
+                    <div class="items-per-page">
+                        <ion-label style="margin-left: 20px;">Items per page:</ion-label>
+                        <ion-select v-model="itemsPerPage" @ionChange="changeItemsPerPage" interface="popover">
+                            <ion-select-option :value="10">10</ion-select-option>
+                            <ion-select-option :value="20">20</ion-select-option>
+                            <ion-select-option :value="50">50</ion-select-option>
+                        </ion-select>
+                    </div>
+                    
+                    <div class="page-counter">
+                        Showing {{ startIndex }} - {{ endIndex }} of {{ people.length }}
+                    </div>
+                    
+                    <ion-select v-model="currentPage" @ionChange="changePage" interface="popover">
+                        <ion-select-option v-for="page in totalPages" :key="page" :value="page">
+                            Page {{ page }}
+                        </ion-select-option>
+                    </ion-select>
+                </div>
+                
+                <ion-button class="nav-button" @click="nextPage" :disabled="currentPage === totalPages">
+                    <ion-icon :icon="chevronForwardOutline" slot="icon-only"></ion-icon>
+                </ion-button>
+            </div>
             </div>
         </ion-content>
     </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonButton, IonMenuButton, IonLabel, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard, IonIcon, IonSelect, IonSelectOption } from "@ionic/vue";
+import { IonContent, IonHeader, IonButton, IonMenuButton, IonLabel, IonGrid, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard, IonIcon, IonSelect, IonSelectOption } from "@ionic/vue";
 import { defineComponent, ref, computed, onMounted, onUnmounted } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -137,7 +141,8 @@ export default defineComponent({
         IonSelect,
         IonSelectOption,
         IonLabel,
-        BasicInputField
+        BasicInputField,
+        IonGrid,
     },
     data() {
         return {
@@ -396,7 +401,7 @@ export default defineComponent({
 @media (max-width: 768px) {
     .pagination-controls {
         flex-direction: column;
-        gap: 10px;
+        gap: 80px;
     }
     
     .pagination-info {
