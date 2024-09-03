@@ -185,6 +185,7 @@ export default defineComponent({
         };
     },
     computed: {
+        ...mapState(useImmunizationAppointMentStore, ["selectedAppointmentMentForAppointmentsPage", "AppointmentsReload"]),
         ...mapState(useStartEndDate, ["startEndDate"]),
         startIndex() {
             return (this.currentPage - 1) * this.itemsPerPage + 1;
@@ -209,7 +210,7 @@ export default defineComponent({
         $route: {
           async handler(data) {
             if (data.name == "ManageAppointMentsTemplate") {
-
+                this.loadPageInf();
             }
           },
           deep: true,

@@ -43,7 +43,7 @@
               
               <ion-button @click="handleRemove" color="danger" fill="outline" size="small">
                 <ion-icon :icon="trashOutline" slot="start"></ion-icon>
-                Remove
+                Cancel
               </ion-button>
             </div>
           </ion-col>
