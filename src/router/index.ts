@@ -3,7 +3,6 @@ import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import stockManagement from "../views/StockManagement.vue";
 import scheduleImmunization from "../views/ScheduleImmunizationSessions.vue";
-import immunizationOverDueReport from "../views/ImmunizationOverDueReport.vue";
 import manageAppointMents from "../views/ManageAppointMents.vue";
 import ManageAppointMentsTemplate from "../views/ManageAppointMentsTemplate.vue";
 import Scan from "../components/Registration/ScanRegistration.vue";
@@ -48,11 +47,6 @@ const routes: Array<RouteRecordRaw> = [
         path: "/scheduleImmunization",
         name: "scheduleImmunization",
         component: scheduleImmunization,
-    },
-    {
-       path: "/immunizationOverDueReport",
-       name: "immunizationOverDueReport",
-       component: immunizationOverDueReport,
     },
     {
         path: "/manageAppointMents",
