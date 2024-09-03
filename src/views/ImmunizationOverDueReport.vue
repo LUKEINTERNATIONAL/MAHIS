@@ -29,7 +29,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Date Of Birth</th>
-                            <th>Missed Doses</th>
+                            <th>Missed Dose</th>
                             <th>Action</th>
                         </tr>
                     </thead>
