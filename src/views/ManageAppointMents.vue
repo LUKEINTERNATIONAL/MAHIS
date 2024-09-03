@@ -34,12 +34,12 @@
                     <ion-col class="ion-no-padding">
                         <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
                     </ion-col>
-                    <ion-col size="auto" class="ion-no-padding ion-padding-start">
-                        <ion-button style="margin-top: 2rem; margin-right: 1rem; font-size: 23px;" @click="loadPageInf()">
+                </ion-row>
+                <ion-row class="ion-align-items-center">
+                        <ion-button style="margin-left: 1rem; font-size: 20px;" @click="loadPageInf()">
                         <ion-icon :icon="refreshOutline" slot="start"></ion-icon>
                         Reload
                         </ion-button>
-                    </ion-col>
                 </ion-row>
                 <div class="appointment-list" :style="{ height: listHeight + 'px' }">
                     <nextApptInf v-for="person in paginatedPeople" :key="person.person_id" :person="person"/>
