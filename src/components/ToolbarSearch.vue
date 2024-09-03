@@ -283,7 +283,7 @@ export default defineComponent({
                 this.searchValue = dataScanned;
             } else if (await this.searchByMWNationalID(dataExtracted.idNumber)) {
                 this.searchValue = dataScanned.idNumber;
-            } else {
+            } else if (dataExtracted) {
                 await this.setPersonInformation(dataExtracted);
                 this.$router.push("/registration/manual");
             }
@@ -341,7 +341,7 @@ export default defineComponent({
             if (/.+\$$/i.test(`${searchText}`)) {
                 searchText = `${searchText || ""}`.replace(/\$/gi, "");
                 const idData = await PatientService.findByNpid(searchText as any);
-                if (idData.length > 0) {
+                if (idData && idData.length > 0) {
                     this.patients.push(...idData);
                     if (this.patients.length == 1) {
                         this.openNewPage("patientProfile", this.patients[0]);
