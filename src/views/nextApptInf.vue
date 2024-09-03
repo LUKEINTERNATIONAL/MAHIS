@@ -1,12 +1,21 @@
 <template>
   <ion-card>
     <ion-card-content style="padding: 2px;">
+        <ion-button 
+          style="position: absolute; top: 10px; right: 10px; --padding-start: 8px; --padding-end: 8px; --padding-top: 4px; --padding-bottom: 4px; --box-shadow: none;" 
+          @click="openClientProfile(person.npid)" 
+          color="primary" 
+          fill="clear" 
+          size="small"
+        >
+          <ion-icon :icon="eyeOutline" style="font-size: 24px;"></ion-icon>
+        </ion-button>
       <ion-grid>
         <ion-row>
           <ion-col size="6">
             <strong>Name:</strong> {{ person.name }}
           </ion-col>
-          <ion-col size="6">
+          <ion-col size="5">
             <strong>Gender:</strong> {{ person.gender }}
           </ion-col>
         </ion-row>
@@ -31,10 +40,7 @@
         <ion-row class="actions">
           <ion-col size="12">
             <div class="button-container">
-              <ion-button @click="openClientProfile(person.npid)" color="primary" fill="outline" size="small">
-                <ion-icon :icon="personCircleOutline" slot="start"></ion-icon>
-                Profile
-              </ion-button>
+
 
               <ion-button @click="handleReschedule" color="primary" fill="outline" size="small">
                 <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
@@ -56,7 +62,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonButton, IonIcon } from '@ionic/vue';
-import { calendarOutline, trashOutline, personCircleOutline } from 'ionicons/icons';
+import { calendarOutline, trashOutline, personCircleOutline, eyeOutline } from 'ionicons/icons';
 import { createModal } from "@/utils/Alerts";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 import { PatientService } from "@/services/patient_service";
@@ -96,7 +102,8 @@ export default defineComponent({
     return {
       calendarOutline,
       trashOutline,
-      personCircleOutline
+      personCircleOutline,
+      eyeOutline,
     };
   },
   methods: {
