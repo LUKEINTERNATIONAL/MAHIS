@@ -30,17 +30,19 @@
                     </ion-col>
                 </ion-row>
 
-                <ion-row class="ion-align-items-center">
-                    <ion-col class="ion-no-padding">
+                <ion-grid>
+                    <ion-row class="responsive-row">
+                    <ion-col size="12" size-md="auto">
                         <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
                     </ion-col>
-                </ion-row>
-                <ion-row class="ion-align-items-center">
-                    <ion-button style="margin-left: 1rem; font-size: 20px;" @click="loadPageInf()">
+                    <ion-col size="12" size-md="auto">
+                        <ion-button expand="block" @click="loadPageInf()">
                         <ion-icon :icon="refreshOutline" slot="start"></ion-icon>
                         Reload
-                    </ion-button>
-                </ion-row>
+                        </ion-button>
+                    </ion-col>
+                    </ion-row>
+                </ion-grid>
                 <div class="appointment-list" :style="{ height: listHeight + 'px' }">
                     <nextApptInf v-for="person in paginatedPeople" :key="person.person_id" :person="person"/>
                 </div>
@@ -81,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonButton, IonMenuButton, IonLabel, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard, IonIcon, IonSelect, IonSelectOption } from "@ionic/vue";
+import { IonContent, IonHeader, IonButton, IonMenuButton, IonLabel, IonGrid, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard, IonIcon, IonSelect, IonSelectOption } from "@ionic/vue";
 import { defineComponent, ref, computed, onMounted, onUnmounted } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -137,7 +139,8 @@ export default defineComponent({
         IonSelect,
         IonSelectOption,
         IonLabel,
-        BasicInputField
+        BasicInputField,
+        IonGrid,
     },
     data() {
         return {
