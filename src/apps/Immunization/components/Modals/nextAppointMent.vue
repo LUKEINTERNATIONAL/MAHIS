@@ -100,8 +100,8 @@ import { toastWarning } from "@/utils/Alerts";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
-
-const store = useImmunizationAppointMentStore();
+import {  voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
+import { RelationshipService } from "@/services/relationship_service";
 const user = useDemographicsStore();
 
 const date = ref();
@@ -110,7 +110,7 @@ const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
 const show_selected_date = ref(false);
 const currently_selected_date = ref();
 const appointment_count = ref(0);
-const phoneNumber = ref();
+const phoneNumbers = ref<string[]>([]);
 
 function disablePastDates(date: any) {
     const today = new Date(Service.getSessionDate());
@@ -129,27 +129,42 @@ async function createModal(component: any, options: any) {
 
 const props = defineProps<{
     patient_Id: string;
+    encounter_Id: string;
 }>();
 
+
 async function save() {
-    const appointment_service = new Appointment();
-    if (props.patient_Id?.length > 0) {
-        appointment_service.setPatientID(props?.patient_Id);
-    }
+    await voidApt()
+    await getMobilePhones()
+    const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
     const appointmentDetails = await appointment_service.createAppointment();
     setMilestoneReload();
+    setAppointmentMentsReload();
     dismiss();
+    smspost(appointmentDetails);
+   
+}
+
+async function smspost(appointmentDetails:any){
+
+    if (phoneNumbers.value.length == 0){ 
+        toastWarning("No phone numbers available for sms reminder!");
+        return;
+    }
 
     if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
         if (configsSms.value) {
-            createModal(smsConfirmation, {
-                componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1] },
+
+            const modal = await createModal(smsConfirmation, {
+                componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1],  modalaction:'saveAppointment' },
                 class: "smsConfirmation",
             });
+
         } else {
             await SmsService.appointment(appointmentDetails[0], appointmentDetails[1]);
         }
     }
+
 }
 
 async function setMilestoneReload() {
@@ -157,21 +172,52 @@ async function setMilestoneReload() {
     store.setVaccineReload(!store.getVaccineReload());
 }
 
+async function setAppointmentMentsReload() {
+    const store = useImmunizationAppointMentStore();
+    store.setAppointmentsReload(!store.getAppointmentsReload());
+}
+
+async function voidApt() {
+    try {
+        await voidVaccineEncounter(props.encounter_Id as any, 'Rescheduled' as string)
+        await voidVaccineEncounter(props.encounter_Id as any, 'Rescheduled' as string)
+    } catch (error) {
+        
+    }
+}
+
 onMounted(async () => {
-    let data = await SmsService.getConfigurations();
-    configsSms.value = data.show_sms_popup;
+    const store = useImmunizationAppointMentStore();
     store.clearAppointmentMent();
+    await getfacilityConfiguration();    
 });
+
 
 async function getAppointmentMents(date: any) {
     const appointment_service = new Appointment();
     const res = await appointment_service.getDailiyAppointments(HisDate.toStandardHisFormat(date));
     appointment_count.value = res.length + 1;
-    console.log(res);
 }
 
 function dismiss() {
     modalController.dismiss();
+}
+async function getfacilityConfiguration() {
+    let data = await SmsService.getConfigurations();
+    configsSms.value = data.show_sms_popup;
+}
+
+async function getMobilePhones(){
+    const guardianData = await RelationshipService.getRelationships(user.demographics.patient_id);
+    if(guardianData.length > 0){ 
+        const phone = guardianData[0].relation.person_attributes.find((x: any) => x.type.name == "Cell Phone Number")
+        if(phone){ phoneNumbers.value.push(phone.value); }
+    }
+    
+    if (user.demographics.phone){
+        phoneNumbers.value.push(user.demographics.phone)
+    }
+
 }
 
 async function DateUpdated(date: any) {
@@ -188,6 +234,7 @@ async function DateUpdated(date: any) {
 }
 
 function getCounter(date: any) {
+    const store = useImmunizationAppointMentStore();
     const _selectedAppointments = store.getAppointmentMents();
 
     // Normalize the input date to midnight

@@ -166,7 +166,6 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
-import { getBaseURL } from "@/utils/GeneralUti";
 
 export default defineComponent({
     name: "Home",
@@ -281,7 +280,7 @@ export default defineComponent({
         },
         async onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);
-            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: sessionStorage.getItem("locationID") })) {
+            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: localStorage.getItem("locationID") })) {
                 this.reportData = data.message;
                 console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
                 this.totalStats = [

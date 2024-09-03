@@ -126,24 +126,24 @@ export class AuthService {
     }
 
     startSession() {
-        sessionStorage.setItem("apiKey", this.token);
-        sessionStorage.setItem("username", this.username);
-        sessionStorage.setItem("userID", this.userID.toString());
-        sessionStorage.setItem("userRoles", JSON.stringify(this.roles));
-        sessionStorage.setItem("userPrograms", JSON.stringify(this.programs));
-        sessionStorage.setItem("sessionDate", this.sessionDate);
-        sessionStorage.setItem("APIVersion", this.systemVersion);
-        sessionStorage.setItem("locationID", this.locationID);
+        localStorage.setItem("apiKey", this.token);
+        localStorage.setItem("username", this.username);
+        localStorage.setItem("userID", this.userID.toString());
+        localStorage.setItem("userRoles", JSON.stringify(this.roles));
+        localStorage.setItem("userPrograms", JSON.stringify(this.programs));
+        localStorage.setItem("sessionDate", this.sessionDate);
+        localStorage.setItem("APIVersion", this.systemVersion);
+        localStorage.setItem("locationID", this.locationID);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
     }
     checkUserPrograms(selectedProgram: any) {
-        const accessPrograms: any = sessionStorage.getItem("userPrograms");
+        const accessPrograms: any = localStorage.getItem("userPrograms");
         const programs = JSON.parse(accessPrograms);
         console.log("🚀 ~ AuthService ~ checkUserPrograms ~ programs:", programs);
         return programs.some((program: any) => program.name === selectedProgram);
     }
     clearSession() {
-        sessionStorage.clear();
+        localStorage.clear();
     }
 
     requestLogin(password: string) {
@@ -196,10 +196,10 @@ export class AuthService {
              * by checking presence of apiDate. We update ApiDate
              * if found else we update SessionDate.
              */
-            if (sessionStorage.getItem("apiDate")) {
-                sessionStorage.setItem("apiDate", date);
+            if (localStorage.getItem("apiDate")) {
+                localStorage.setItem("apiDate", date);
             } else {
-                sessionStorage.setItem("sessionDate", date);
+                localStorage.setItem("sessionDate", date);
             }
         }, interval);
     }
@@ -228,7 +228,7 @@ export class AuthService {
     }
 
     getAppConf(confKey: "promptFullScreenDialog" | "showUpdateNotifications" | "enableVersionLocking" | "dataCaching") {
-        const conf: any = sessionStorage.getItem("appConf");
+        const conf: any = localStorage.getItem("appConf");
         if (conf) {
             try {
                 const confObj = JSON.parse(conf);

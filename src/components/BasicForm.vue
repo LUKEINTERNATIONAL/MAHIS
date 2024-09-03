@@ -25,7 +25,7 @@
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
                     <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.inputDisplayNone" :size="col.colSize">
                         <BasicInputField
-                            v-if="!col.isDatePopover && !col.isMultiSelect && !col.isSingleSelect && !col.isChangeUnits"
+                            v-if="!col.isDatePopover && !col.isMultiSelect && !col.isSingleSelect && !col.isChangeUnits && !col.isPhoneInput"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
                             :bold="col.class"
@@ -43,6 +43,27 @@
                             @clicked:inputValue="handleInput(contentData, col, $event, 'clickedInput')"
                             :popOverData="col.popOverData"
                             @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
+                            @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
+                            :InnerActionBtnPropeties="col.InnerBtn"
+                        />
+                        <BasicPhoneInputField
+                            v-if="col.isPhoneInput"
+                            :inputHeader="col.inputHeader"
+                            :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
+                            :bold="col.class"
+                            :unit="col.unit"
+                            :input="col.input"
+                            :disabled="col.disabled"
+                            :icon="col.icon"
+                            :placeholder="col.placeholder"
+                            :iconRight="col.iconRight"
+                            :leftText="col.leftText"
+                            :inputWidth="col.inputWidth"
+                            :inputValue="col.value"
+                            :eventType="col.eventType"
+                            @update:inputValue="handleInput(contentData, col, $event, 'updateInput')"
+                            @countryChanged="handleInput(contentData, col, $event,'countryChanged')"
+                            :popOverData="col.popOverData"
                             @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
                             :InnerActionBtnPropeties="col.InnerBtn"
                         />
@@ -83,6 +104,9 @@
                                 :hide-selected="true"
                                 :close-on-select="false"
                                 :openDirection="col.openDirection || 'bottom'"
+                                :prevent-autofocus="true"
+                                tabindex="-1"
+                                class="no-focus"
                                 tag-placeholder=""
                                 placeholder=""
                                 selectLabel=""
@@ -107,6 +131,9 @@
                                 :hide-selected="false"
                                 :close-on-select="true"
                                 :openDirection="col.openDirection || 'bottom'"
+                                :prevent-autofocus="true"
+                                tabindex="-1"
+                                class="no-focus"
                                 tag-placeholder=""
                                 placeholder=""
                                 selectLabel=""
@@ -299,6 +326,9 @@
                                 @update:model-value="handleInput(contentData, checkboxInput, $event, 'updateMultiselect')"
                                 :close-on-select="true"
                                 openDirection="bottom"
+                                :prevent-autofocus="true"
+                                tabindex="-1"
+                                class="no-focus"
                                 tag-placeholder=""
                                 placeholder=""
                                 selectLabel=""
@@ -332,6 +362,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
+import BasicPhoneInputField from "@/components/BasicPhoneInputField.vue";
 import BasicInputChangeUnits from "@/components/BasicInputChangeUnits.vue";
 import DateInputField from "@/components/DateInputField.vue";
 import DynamicButton from "./DynamicButton.vue";
@@ -340,7 +371,6 @@ import HisDate from "@/utils/Date";
 import VueMultiselect from "vue-multiselect";
 import { createModal } from "@/utils/Alerts";
 import Validation from "@/validations/StandardValidations";
-
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -351,6 +381,7 @@ import {
     modifyGroupedRadioValue,
     modifyUnitsValue,
 } from "@/services/data_helpers";
+import { countBy } from "lodash";
 
 export default defineComponent({
     components: {
@@ -362,6 +393,7 @@ export default defineComponent({
         DateInputField,
         VueMultiselect,
         BasicInputChangeUnits,
+        BasicPhoneInputField,
     },
     data() {
         return {
@@ -391,11 +423,16 @@ export default defineComponent({
             this.options.push(tag);
             this.value.push(tag);
         },
-        handleInput(data: any, col: any, event: any, inputType: any) {
+        async handleInput(data: any, col: any, event: any, inputType: any) {
             this.event = event;
             if (inputType == "updateInput") {
                 this.validateData(data, col, event.target.value);
-                modifyFieldValue(data, col.name, "value", event.target.value?.trim());
+                modifyFieldValue(data, col.name, "value", event?.target?.value?.trim());
+                this.$emit("update:inputValue", col);
+            }
+            if (inputType == "updateValue") {
+                this.validateData(data, col, event);
+                modifyFieldValue(data, col.name, "value", event);
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateMultiselect") {
@@ -450,6 +487,14 @@ export default defineComponent({
                 modifyCheckboxValue(data, col.name, "checked", event.detail.checked, this.initialData);
                 this.$emit("update:inputValue", { col, event });
             }
+            if (inputType == "countryChanged") {
+                 const message = await Validation.validateMobilePhone(col.value,event);
+                 modifyFieldValue(data, col.name, "alertsErrorMassage", null);
+                if(!message.includes("+")){
+                    modifyFieldValue(data, col.name, "alertsErrorMassage", message);
+                }  
+                this.$emit("countryChanged", { col, event });
+            }
         },
         validateData(data: any, col: any, value: any) {
             if (col.validationFunctionName) {
@@ -479,6 +524,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.no-focus {
+    outline: none;
+}
+
+.no-focus:focus {
+    outline: none;
+}
 ._padding {
     padding-bottom: 18px;
     padding-top: 18px;

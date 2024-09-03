@@ -446,8 +446,8 @@ const initialVitals = [
             },
             data: [
                 {
-                    name: "Vomiting",
-                    value: "Vomiting",
+                    name: "PIH",
+                    value: "PIH",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -483,9 +483,47 @@ const initialVitals = [
                     colSize: "6",
                     justify: "space-between",
                 },
+                {
+                    name: "Blood Pressure",
+                    value: "Blood Pressure",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
             ],
         },
     },
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Severe pre-eclampsia",
+            },
+            data: [
+                {
+                    name: "Urine Protein",
+                    value: "Urine Protein",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Oedema",
+                    value: "Oedema",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+
 ] as any;
 
 // const initialRespiration=[

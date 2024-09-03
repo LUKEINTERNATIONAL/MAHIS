@@ -36,8 +36,14 @@ function isFloatingPointNumber(val: any): null | string[] {
 
 function isMWPhoneNumber(val: any) {
     //Regex source: https://gist.github.com/kwalter94/1861f1f0fa192382a75a445ad70f07ec
-    const validation = /^(\+?265|0)(((8[89]|9[89])\d{7})|(1\d{6})|(2\d{8})|(31\d{8}))$/;
-    return !isEmpty(val) && !val.match(validation) ? "Not a valid phone number" : null;
+    if(val.includes("+265")){
+        val = val.replace(/\s+/g, '')
+        const validation = /^(\+?265|0)(((8[89]|9[89])\d{7})|(1\d{6})|(2\d{8})|(31\d{8}))$/;
+       return !isEmpty(val) && !val.match(validation) ? "Not a valid phone number" : null;
+    }else{
+        return null;
+    }
+    
 }
 
 function isMWNationalID(nationalId: any): null | string {
@@ -151,6 +157,36 @@ function validateFBS(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 70, 126);
 }
 
+async function validateMobilePhone(val: any, countryData: any) {
+    try {
+        const response = await fetch('/countryphones.json');
+        const data = await response.json();
+        const country = data.countries.find((c: { iso2: string }) => c.iso2 === countryData.iso2);
+        
+        if (!country) {
+            return "Country not found";
+        }
+
+        const sampleNumber = country.examplePhoneNumber;
+        let result = !isEmpty(val) && (val.replace(/\s+/g, '').length !== sampleNumber.replace(/\s+/g, '').length) ? "Not a valid phone number" : null;
+        if (result == null){ result = formatToExample(val, sampleNumber); }
+        return result
+    } catch (error) {
+        return `Error fetching or processing data: ${error}`;
+    }
+}
+
+function formatToExample(value: string, exampleNumber: string): string {
+    const digits = value.replace(/\s+/g, '');
+    let digitIndex = 0;
+
+    return exampleNumber.split('').map(char => {
+        if (char === ' ') return ' ';
+        return digitIndex < digits.length ? digits[digitIndex++] : '';
+    }).join('');
+}
+
+
 export default {
     validateRBS,
     validateFBS,
@@ -177,4 +213,5 @@ export default {
     checkMinMax,
     isDate,
     isNameWithSlush,
+    validateMobilePhone
 } as any;

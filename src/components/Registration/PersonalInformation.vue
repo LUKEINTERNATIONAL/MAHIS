@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData" :editable="editable"  @update:selected="handleInputData" @update:inputValue="handleInputData" @countryChanged="handleCountryChange"></basic-card>
 </template>
 
 <script lang="ts">
@@ -11,15 +11,13 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
 import BasicCard from "../BasicCard.vue";
 import HisDate from "@/utils/Date";
-import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
+import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
 import dayjs from "dayjs";
 import { Service } from "@/services/service";
-import { calculator } from "ionicons/icons";
 import Validation from "@/validations/StandardValidations";
-import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { validateInputFiledData } from "@/services/group_validation";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-
 export default defineComponent({
     name: "Menu",
     components: {
@@ -38,6 +36,7 @@ export default defineComponent({
             inputField: "" as any,
             setName: "" as any,
             initialPersonalData: [] as any,
+            selectedCountry: [] as any,
         };
     },
     watch: {
@@ -47,6 +46,14 @@ export default defineComponent({
             },
             deep: true,
         },
+        // $route:{
+        //     handler(data: any) {
+        //         console.log("lllllllll",data.path)
+        //         if()
+        //         this.buildCards();
+        //     },
+        //     deep: true,
+        // }
     },
     props: {
         editable: {
@@ -54,6 +61,7 @@ export default defineComponent({
         },
     },
     computed: {
+        
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
@@ -93,6 +101,7 @@ export default defineComponent({
 
     methods: {
         setData() {
+            
             if (this.editable) {
                 modifyFieldValue(this.personInformation, "firstname", "value", this.patient.person.names[0].given_name);
                 modifyFieldValue(this.personInformation, "middleName", "value", this.patient.person.names[0].middle_name);
@@ -129,13 +138,21 @@ export default defineComponent({
         async handleInputData(event: any) {
             if (event?.col?.name == "Estimate Age" && !event?.col?.checked) {
                 modifyFieldValue(this.personInformation, "estimation", "displayNone", true);
-            } else {
-                // modifyFieldValue(this.personInformation,'birthdate','disabled',true)
+            } else if (event.name == "phoneNumber") {
+                const message = await Validation.validateMobilePhone(event.value,this.selectedCountry);
+                this.personInformation[4].data.rowData[0].colData[0].alertsErrorMassage = null;
+                if(!message.includes("+")){
+                    this.personInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
+                }  
+                return true 
             }
             // Estimated age
             this.validationRules(event);
             this.calculateDoB(event);
             this.setGuardingInfo(event);
+        },
+        async handleCountryChange(country: any) {
+            this.selectedCountry = country.event
         },
         setGuardingFormRules(age: any) {
             if (age < 14) {
