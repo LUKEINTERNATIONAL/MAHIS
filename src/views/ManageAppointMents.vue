@@ -12,7 +12,7 @@
                 <ion-grid style="margin: 0px;">
                     <ion-row class="responsive-row">
                         <ion-col size="12" size-md="auto">
-                            <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 600">Appointments</h1>
+                            <h1 style="width: 100%; text-align: left; margin-left:10px; font-weight: 600; line-height: 10px;">Appointments</h1>
                         </ion-col>
 
                         <ion-col size="12" size-md="auto">
