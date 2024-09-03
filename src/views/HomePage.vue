@@ -195,7 +195,7 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
 import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
-import { getBaseURL } from "@/utils/GeneralUti"
+import {getBaseURl} from "@/utils/GeneralUti";
 import { setOfflineData } from "@/services/set_location";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
@@ -226,6 +226,7 @@ export default defineComponent({
         Slide,
         Pagination,
         Navigation,
+      getBaseURl,
     },
     data() {
         return {

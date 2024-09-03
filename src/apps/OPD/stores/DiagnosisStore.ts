@@ -3,6 +3,7 @@ import { icons } from "@/utils/svg";
 import _ from "lodash";
 const initialOPDdiagnosis = [
     {
+        childName:"Primary diagnosis",
         selectedData: [],
         isFinishBtn: false,
         data: {
@@ -10,6 +11,7 @@ const initialOPDdiagnosis = [
                 {
                     colData: [
                         {
+                            // displayNone:true,
                             inputHeader: "Primary Diagnosis*",
                             value: "",
                             name: "primaryDiagnosis",
@@ -25,7 +27,29 @@ const initialOPDdiagnosis = [
                             // inputFieldDisplayNone: true,
                             // colSize: 0,
                         },
+                    ],
+                    btns: [
                         {
+                            name: "Add",
+                            fill: "clear",
+                            btn_col_size: 3,
+                            icon: icons.plus,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        childName:"Primary diagnosis",
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            // displayNone:true,
                             inputHeader: "Secondary Diagnosis",
                             icon: icons.search,
                             isMultiSelect: true,
@@ -63,8 +87,8 @@ export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
         },
         getInitial() {
             const data = _.cloneDeep(initialOPDdiagnosis);
-            return [...data]; // Return a copy of the initial state
+            return [...data];
         },
     },
-    persist: true,
+    // persist: true,
 });

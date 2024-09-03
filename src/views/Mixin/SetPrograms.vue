@@ -32,7 +32,7 @@ export default defineComponent({
     userRole: "" as any,
     ready: false,
     userRoleSettings: {} as any,
-    programBtn: [] as any[], // Ensure this is an array
+    programBtn: [] as any[],
     activeProgramID: "" as any,
   }),
   computed: {
