@@ -129,8 +129,8 @@ export default defineComponent({
       $route: {
           async handler(data) {
             if (data.name == "EIRReport")
-            this.getDrugs()
-            this.initReport()
+            await this.getDrugs()
+            await this.initReport()
           },
           deep: true,
       },
@@ -139,8 +139,8 @@ export default defineComponent({
       ...mapState(EIRreportsStore, ["start_date", "end_date"]), 
     },
     async mounted() {
-      this.getDrugs()
-      this.initReport()
+      await this.getDrugs()
+      await this.initReport()
   },
     methods: {
       selectSection(section: string) {

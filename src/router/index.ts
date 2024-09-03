@@ -12,6 +12,7 @@ import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
 import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
+import setDDE from "@/views/Configurations/setDDE.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
@@ -35,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/stockManagement",
         name: "stockManagement",
         component: stockManagement,
+    },
+    {
+        path: "/setDDE",
+        name: "setDDE",
+        component: setDDE,
     },
     {
         path: "/scheduleImmunization",
@@ -112,7 +118,7 @@ router.beforeEach((to, from, next) => {
     alertController.getTop().then((v) => (v ? alertController.dismiss() : null));
     toastController.getTop().then((v) => (v ? toastController.dismiss() : null));
     const whitelistedUri = ["/login", "/settings/host"];
-    if (!sessionStorage.getItem("apiKey") && !whitelistedUri.includes(to.path)) {
+    if (!localStorage.getItem("apiKey") && !whitelistedUri.includes(to.path)) {
         next("/login");
     }
     next();

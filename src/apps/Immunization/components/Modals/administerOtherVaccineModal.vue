@@ -344,6 +344,7 @@ export default defineComponent({
                 batch_number: selectedOption.lotNumber,
                 date_administered: this.selected_date_,
                 drug_id: this.currentDrugOb.drug_id,
+                drug_: this.currentDrugOb
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);

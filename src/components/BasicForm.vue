@@ -62,6 +62,7 @@
                             :inputValue="col.value"
                             :eventType="col.eventType"
                             @update:inputValue="handleInput(contentData, col, $event, 'updateInput')"
+                            @countryChanged="handleInput(contentData, col, $event,'countryChanged')"
                             :popOverData="col.popOverData"
                             @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
                             :InnerActionBtnPropeties="col.InnerBtn"
@@ -370,7 +371,6 @@ import HisDate from "@/utils/Date";
 import VueMultiselect from "vue-multiselect";
 import { createModal } from "@/utils/Alerts";
 import Validation from "@/validations/StandardValidations";
-
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -381,6 +381,7 @@ import {
     modifyGroupedRadioValue,
     modifyUnitsValue,
 } from "@/services/data_helpers";
+import { countBy } from "lodash";
 
 export default defineComponent({
     components: {
@@ -422,7 +423,7 @@ export default defineComponent({
             this.options.push(tag);
             this.value.push(tag);
         },
-        handleInput(data: any, col: any, event: any, inputType: any) {
+        async handleInput(data: any, col: any, event: any, inputType: any) {
             this.event = event;
             if (inputType == "updateInput") {
                 this.validateData(data, col, event.target.value);
@@ -485,6 +486,14 @@ export default defineComponent({
                 this.validateData(data, col, event.detail.checked);
                 modifyCheckboxValue(data, col.name, "checked", event.detail.checked, this.initialData);
                 this.$emit("update:inputValue", { col, event });
+            }
+            if (inputType == "countryChanged") {
+                 const message = await Validation.validateMobilePhone(col.value,event);
+                 modifyFieldValue(data, col.name, "alertsErrorMassage", null);
+                if(!message.includes("+")){
+                    modifyFieldValue(data, col.name, "alertsErrorMassage", message);
+                }  
+                this.$emit("countryChanged", { col, event });
             }
         },
         validateData(data: any, col: any, value: any) {
