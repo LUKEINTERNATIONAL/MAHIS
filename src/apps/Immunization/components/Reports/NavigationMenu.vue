@@ -69,6 +69,7 @@ export default defineComponent({
   },
   async mounted() {
     this.initNavData()
+    this.comp_title = this.title
   },
   watch: {
     navigationPayload: {
