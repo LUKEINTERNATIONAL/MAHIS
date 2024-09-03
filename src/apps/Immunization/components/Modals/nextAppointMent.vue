@@ -208,16 +208,19 @@ async function getfacilityConfiguration() {
 }
 
 async function getMobilePhones(){
-    const guardianData = await RelationshipService.getRelationships(user.demographics.patient_id);
-    if(guardianData.length > 0){ 
-        const phone = guardianData[0].relation.person_attributes.find((x: any) => x.type.name == "Cell Phone Number")
-        if(phone){ phoneNumbers.value.push(phone.value); }
+    try {
+        const guardianData = await RelationshipService.getRelationships(user.demographics.patient_id);
+        if(guardianData.length > 0){ 
+            const phone = guardianData[0].relation.person_attributes.find((x: any) => x.type.name == "Cell Phone Number")
+            if(phone){ phoneNumbers.value.push(phone.value); }
+        }
+        
+        if (user.demographics.phone){
+            phoneNumbers.value.push(user.demographics.phone)
+        }
+    } catch (error) {
+        
     }
-    
-    if (user.demographics.phone){
-        phoneNumbers.value.push(user.demographics.phone)
-    }
-
 }
 
 async function DateUpdated(date: any) {
