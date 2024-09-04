@@ -10,6 +10,24 @@
                     <ToolbarSearch />
                 </ion-buttons>
                 <div class="notifaction_person" slot="end">
+                    <ion-buttons
+                        v-if="apiStatus"
+                        style="cursor: pointer; margin-right: 15px; color: #74ff15"
+                        slot="end"
+                        class="iconFont"
+                        id="popover-button"
+                    >
+                        <ion-icon :icon="iconsContent.wifiOn"></ion-icon>
+                    </ion-buttons>
+                    <ion-buttons
+                        v-if="!apiStatus"
+                        style="cursor: pointer; margin-right: 15px; color: #f00"
+                        slot="end"
+                        class="iconFont"
+                        id="popover-button"
+                    >
+                        <ion-icon :icon="iconsContent.WifiOff"></ion-icon>
+                    </ion-buttons>
                     <ion-buttons style="cursor: pointer; margin-right: 5px" slot="end" class="iconFont">
                         <ion-icon :icon="notificationsOutline"></ion-icon>
                         <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
@@ -73,10 +91,12 @@ import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
 import userProfile from "@/views/UserManagement/userProfile.vue";
 import { useProgramStore } from "@/stores/ProgramStore";
+import { useStatusStore } from "@/stores/StatusStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import TruncateText from "@/components/TruncateText.vue";
 import { useUserStore } from "@/stores/userStore";
+import { icons } from "@/utils/svg";
 export default defineComponent({
     name: "Home",
     components: {
@@ -99,6 +119,7 @@ export default defineComponent({
     data() {
         return {
             popoverOpen: false,
+            iconsContent: icons,
             event: null as any,
             locationName: "",
             programName: "",
@@ -116,6 +137,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useProgramStore, ["programs"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
         ...mapState(useUserStore, ["userFacilityName"]),
     },
     mounted() {
