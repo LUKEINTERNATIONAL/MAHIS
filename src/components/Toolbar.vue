@@ -3,9 +3,17 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title style="cursor: pointer" @click="nav('/home')"
-                    ><b>MaHIS</b><small>({{ programs.program.applicationName }})</small></ion-title
-                >
+                <ion-title style="cursor: pointer; line-height: 20px;" @click="nav('/home')">
+                    <b>MaHIS</b><small> ({{ programs.program.applicationName }})</small>
+                </ion-title>
+                <ion-title style="cursor: pointer; line-height: 20px;" @click="nav('/home')">
+                    <small class="facility-name">
+                        {{ userFacilityName }}
+                    </small>
+                    <small>
+                        | {{ sessionDate }}
+                    </small>
+                </ion-title>
                 <ion-buttons slot="end" class="search-input-desktop" style="max-width: 800px">
                     <ToolbarSearch />
                 </ion-buttons>
@@ -33,7 +41,7 @@
             </ion-buttons>
         </div>
     </ion-header>
-    <ion-header>
+    <!-- <ion-header>
         <ion-toolbar color="dark" class="compact-toolbar">
             <ion-grid class="ion-no-padding content_width" style="margin-top: -3px">
                 <ion-row class="ion-align-items-center">
@@ -46,7 +54,7 @@
                 </ion-row>
             </ion-grid>
         </ion-toolbar>
-    </ion-header>
+    </ion-header> -->
 
     <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed" />
 </template>
@@ -103,7 +111,7 @@ export default defineComponent({
             locationName: "",
             programName: "",
             showUserProfileModal: false,
-            sessionDate: "Date: " + HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
+            sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
         };
     },
     watch: {
@@ -202,14 +210,18 @@ export default defineComponent({
     --min-height: 11px;
 }
 
-.facility-name,
-.date-label {
-    font-size: 14px;
-    margin: 0;
-    color: #838688;
-}
 .date-value {
-    color: #838688;
+    color: #ffffff;
     font-size: 14px;
+}
+@media (max-width: 500px) {
+    .facility-name {
+        display: inline-block;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: bottom;
+    }
 }
 </style>
