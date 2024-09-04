@@ -38,42 +38,23 @@ import {
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
-import { iconBloodPressure } from "@/utils/SvgDynamicColor";
-import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useImmunizationSessionsStore } from "@/stores/ScheduleImmunizationSession";
 import { mapState } from "pinia";
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-import { arePropertiesNotEmpty } from "@/utils/Objects";
-import HisDate from "@/utils/Date";
+import { toastWarning, toastSuccess } from "@/utils/Alerts";
 import BasicInputField from "@/components/BasicInputField.vue";
-import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
-import { Service } from "@/services/service";
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
-import { ObservationService } from "@/services/observation_service";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
-import { PatientService } from "@/services/patient_service";
 import {
-    modifyCheckboxInputField,
-    getCheckboxSelectedValue,
-    getRadioSelectedValue,
     getFieldValue,
-    modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
-import { RelationsService } from "@/services/relations_service";
 import DynamicButton from "@/components/DynamicButton.vue";
-import { ConceptService } from "@/services/concept_service";
-import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
-import { AppEncounterService } from "@/services/app_encounter_service";
-import { PersonService } from "@/services/person_service";
-import { PatientRegistrationService } from "@/services/patient_registration_service";
-import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { validateInputFiledData } from "@/services/group_validation";
 import { ImmunizationSessionService } from "@/services/immunization_session_service";
 import { DrugService } from "@/services/drug_service";
 import { UserService } from "@/services/user_service";
-import { useSearchName } from "@/stores/SearchName";
 
 export default defineComponent({
     components: {
@@ -116,10 +97,10 @@ export default defineComponent({
     },
     async mounted() {
         this.resetData();
-        if (this.data){
+        const objectIsEmpty = typeof this.data == "object" && this.isObjectEmpty(this.data);
+        if (!objectIsEmpty){
             this.modifyFieldValue();
         }
-        
         await this.getDrugs();
         await this.getAssignees();
     },
@@ -127,6 +108,9 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        isObjectEmpty(obj: object): boolean {
+            return Object.keys(obj).length === 0 && obj.constructor === Object;
+        },
         modifyFieldValue(){
             modifyFieldValue(this.immunizationSessions, "vaccines","value", {id: "", name: this.data.drug_legacy_name});
             modifyFieldValue(this.immunizationSessions, "assignees", "value", {id: this.data.user_id, username: this.data.username });

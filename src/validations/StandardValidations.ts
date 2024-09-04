@@ -12,7 +12,9 @@ function validateSeries(conditions: Array<any>) {
     }
 }
 
-function required(value: any): null | String {
+type FieldValue = "string" | "number" | "boolean" | "object" | "array";
+
+function required(value: FieldValue): null | String {
     return isEmpty(value) ? "Value is required" : null;
 }
 
