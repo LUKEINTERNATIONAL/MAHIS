@@ -144,50 +144,6 @@ const initialImmunizationSessions = [
         },
     },
     {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Target",
-                            value: "",
-                            name: "target",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-
-    {
-        selectedData: {},
-        isFinishBtn: false,
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Vaccines",
-                            icon: icons.search,
-                            value: [],
-                            name: "vaccines",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            selectedID: "",
-                            validationFunctionName: "required",
-                            isMultiSelect: true,
-                            trackBy: "drug_id",
-                            multiSelectData: [],
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
         selectedData: {},
         isFinishBtn: false,
         data: {
