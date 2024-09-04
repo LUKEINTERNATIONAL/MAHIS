@@ -5,6 +5,13 @@
               <h1 style="width: 100%; text-align: left; font-weight: 400">Immunisation</h1>
           </ion-col>
         </ion-row>
+
+        <ion-fab slot="fixed" horizontal="end" vertical="top" @click="exXport">
+          <ion-fab-button>
+            <ion-icon :icon="fileTray"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+
   
         <table class="custom-table">
           <colgroup>
@@ -109,20 +116,22 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonContent , IonPage, IonRow, IonCol } from '@ionic/vue';
+import { IonContent , IonPage, IonRow, IonCol, IonFab, IonFabButton, } from '@ionic/vue';
 import NavigationMenu from './NavigationMenu.vue';
 import { mapState } from "pinia";
 import { getVaccinesAdministered, getImmunizationDrugs } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { add, fileTray } from 'ionicons/icons';
 
 export default defineComponent({
     name: 'TableComponent',
-    components: { IonContent, IonPage, NavigationMenu,  IonRow, IonCol },
+    components: { IonContent, IonPage, IonFab, IonFabButton, NavigationMenu,  IonRow, IonCol },
     data() {
       return {
         selectedSection: '', // To keep track of the selected section
         selectedColumn: '',  // To keep track of the selected column
         tableData: [] as any,
+        fileTray,
       };
     },
     watch: {
@@ -179,6 +188,32 @@ export default defineComponent({
           items.push(row_item)
         })
         this.tableData = items
+      },
+      async exXport() {
+        const navigator_ = navigator as any
+        console.log(this.tableData)
+
+        const csvData = new Blob(['dominic'], { type: "text/csv;charset=utf-8;" });
+        const reportTitle = `qaXport`;
+        if (navigator_.msSaveBlob) {
+          navigator_.msSaveBlob(csvData, 'exportFilename');
+        } else {
+          //In FF link must be added to DOM to be clicked
+          const link = document.createElement("a");
+          link.href = window.URL.createObjectURL(csvData);
+          link.setAttribute("download", `${reportTitle}.csv`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      },
+      generateCSVString(IDSRConditionsObj: any) {
+        let CSVString = `Diseases/Events/Conditions, #,\n`
+        for(const condition of IDSRConditionsObj) {
+          const row = `${condition.name},${condition.total},\n`
+          CSVString+=row
+        }
+        return {CSVString}
       }
     },
   });
