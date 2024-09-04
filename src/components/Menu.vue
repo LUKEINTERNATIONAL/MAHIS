@@ -78,6 +78,14 @@
                                 EPI Monthly Report
                             </ion-item>
 
+                            <ion-item
+                                @click="navigationMenu('OverDueReport')"
+                                class="list-content"
+                                style="cursor: pointer"
+                            >
+                                EIR Overdue Report
+                            </ion-item>
+
                             <!-- <ion-accordion value="fourth" v-if="programAttri[3].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">EIR Reports</ion-label>
