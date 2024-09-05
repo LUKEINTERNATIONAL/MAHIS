@@ -144,50 +144,6 @@ const initialImmunizationSessions = [
         },
     },
     {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Target",
-                            value: "",
-                            name: "target",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-
-    {
-        selectedData: {},
-        isFinishBtn: false,
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Vaccines",
-                            icon: icons.search,
-                            value: "",
-                            name: "vaccines",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            selectedID: "",
-                            validationFunctionName: "required",
-                            isSingleSelect: true,
-                            trackBy: "id",
-                            multiSelectData: [],
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
         selectedData: {},
         isFinishBtn: false,
         data: {
@@ -197,14 +153,14 @@ const initialImmunizationSessions = [
                         {
                             inputHeader: "Assignees",
                             icon: icons.search,
-                            value: "",
+                            value: [],
                             name: "assignees",
                             eventType: "input",
                             alertsErrorMassage: "",
                             selectedID: "",
                             validationFunctionName: "required",
-                            isSingleSelect: true,
-                            trackBy: "id",
+                            isMultiSelect: true,
+                            trackBy: "user_id",
                             multiSelectData: [],
                         },
                     ],

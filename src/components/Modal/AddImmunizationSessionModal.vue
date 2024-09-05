@@ -1,12 +1,10 @@
 <template>
     <ion-header>
-        <ion-title class="modalTitle">Create Immunization Session</ion-title>
+        <ion-title class="modalTitle">Create Immunization Session Schedule</ion-title>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
         <div style="padding-bottom: 200px">
-            <div>
-                <basic-form :contentData="immunizationSessions" @update:inputValue="handleInputData" @search-change="getDrugs"></basic-form>
-            </div>
+            <basic-form :contentData="immunizationSessions" @update:inputValue="handleInputData" @search-change="getAssignees"></basic-form>
         </div>
     </ion-content>
     <ion-footer collapse="fade" class="ion-no-border">
@@ -15,7 +13,7 @@
                 <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="dismiss()"> Cancel </ion-button>
             </ion-col>
             <ion-col>
-                <DynamicButton @click="createImmunizationSession()" name="Save changes" fill="solid" style="float: right; margin: 2%; width: 130px" />
+                <DynamicButton @click="createImmunizationSessionSchedule()" name="Save changes" fill="solid" style="float: right; margin: 2%; width: 130px" />
             </ion-col>
         </ion-row>
     </ion-footer>
@@ -37,43 +35,28 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
-import { icons } from "@/utils/svg";
-import { iconBloodPressure } from "@/utils/SvgDynamicColor";
-import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useImmunizationSessionsStore } from "@/stores/ScheduleImmunizationSession";
 import { mapState } from "pinia";
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-import { arePropertiesNotEmpty } from "@/utils/Objects";
-import HisDate from "@/utils/Date";
+import { toastWarning, toastSuccess } from "@/utils/Alerts";
 import BasicInputField from "@/components/BasicInputField.vue";
-import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
-import { Service } from "@/services/service";
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
-import { ObservationService } from "@/services/observation_service";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
-import { PatientService } from "@/services/patient_service";
 import {
-    modifyCheckboxInputField,
-    getCheckboxSelectedValue,
-    getRadioSelectedValue,
     getFieldValue,
-    modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
-import { RelationsService } from "@/services/relations_service";
 import DynamicButton from "@/components/DynamicButton.vue";
-import { ConceptService } from "@/services/concept_service";
-import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
-import { AppEncounterService } from "@/services/app_encounter_service";
-import { PersonService } from "@/services/person_service";
-import { PatientRegistrationService } from "@/services/patient_registration_service";
-import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
-import { ImmunizationSessionService } from "@/services/immunization_session_service";
-import { DrugService } from "@/services/drug_service";
+import { validateInputFiledData } from "@/services/group_validation";
 import { UserService } from "@/services/user_service";
-import { useSearchName } from "@/stores/SearchName";
+import { SessionScheduleService } from "@/services/session_schedule_service";
+import { SessionSchedule } from "@/types";
+import { RouteLocationRaw } from "vue-router";
+import { 
+    IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR, 
+    IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS 
+} from "@/utils/Constants";
 
 export default defineComponent({
     components: {
@@ -92,114 +75,79 @@ export default defineComponent({
         DynamicButton,
         IonFooter,
     },
-    data() {
-        return {
-            iconsContent: icons,
-            BMI: {} as any,
-            BPStatus: {} as any,
-            vValidations: "" as any,
-            relationships: "" as any,
-            hasValidationErrors: [] as any,
-            vitalsInstance: {} as any,
-            validationStatus: { heightWeight: false, bloodPressure: false } as any,
-            showPD: false as boolean,
-        };
-    },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useImmunizationSessionsStore, ["immunizationSessions"]),
     },
     props:{
         data: {
-            default: {} as any,
+            type: Object,
+            default: {},
         },
     },
     async mounted() {
         this.resetData();
-        if (this.data){
+        const objectIsEmpty = typeof this.data == "object" && this.isObjectEmpty(this.data);
+        if (!objectIsEmpty){
             this.modifyFieldValue();
         }
-        
-        await this.getDrugs();
         await this.getAssignees();
     },
     setup() {
         return { checkmark, pulseOutline };
     },
     methods: {
-        modifyFieldValue(){
-            modifyFieldValue(this.immunizationSessions, "vaccines","value", {id: "", name: this.data.drug_legacy_name});
+        isObjectEmpty(obj: object): boolean {
+            return Object.keys(obj).length === 0 && obj.constructor === Object;
+        },
+        modifyFieldValue(): void {
             modifyFieldValue(this.immunizationSessions, "assignees", "value", {id: this.data.user_id, username: this.data.username });
         },
-        async createImmunizationSession() {
+        async createImmunizationSessionSchedule(): Promise<void>{
             if (validateInputFiledData(this.immunizationSessions)) {
-                
-                const drug_id = getFieldValue(this.immunizationSessions, "vaccines", "value").drug_id;
-                const user_id = getFieldValue(this.immunizationSessions, "assignees","value").id
-                const data = [
-                    {
+                const user_id : number = getFieldValue(this.immunizationSessions, "assignees","value").id
+                const data: SessionSchedule = {
                         session_name: getFieldValue(this.immunizationSessions,"batch", "value"),
                         start_date: getFieldValue(this.immunizationSessions, "start date", "value"),
                         end_date: getFieldValue(this.immunizationSessions, "end date", "value"),
                         session_type: getFieldValue(this.immunizationSessions, "product name", "value").name,
                         repeat: getFieldValue(this.immunizationSessions, "repeat", "value" ).name,
                         target: getFieldValue(this.immunizationSessions, "target", "value"),
-                        drug_id: drug_id,
-                        user_id: user_id,
-                    },
-                ];
+                        user_ids: [user_id],
+                    }
 
-                const immunizationSessionService = new ImmunizationSessionService();
-                await immunizationSessionService.postSessions(data);
-                toastSuccess("Immunization session saved successfully");
+                const sessionSchedule = new SessionScheduleService();
+                await sessionSchedule.create(data);
+                toastSuccess(IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS);
                 modalController.dismiss("dismiss");
             } else {
-                toastWarning("Immunization session not saved");
-                return false;
+                toastWarning(IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR);
             }
         },
-        navigationMenu(url: any) {
+        navigationMenu(url: RouteLocationRaw): void {
             menuController.close();
             this.$router.push(url);
         },
-        resetData() {
-            const rest = useImmunizationSessionsStore();
-            // rest.setStock(rest.getInitialStock());
+        resetData(): void {
+            useImmunizationSessionsStore().$reset();
         },
-        async getDrugs(filter: any = "") {
-            // modifyFieldValue(this.stock, "product name", "value", "");
-            const drugs = await DrugService.getDrugs({
-                name: filter,
-                page: 1,
-                page_size: 10,
-                concept_set: "Immunizations",
-            });
-            modifyFieldValue(this.immunizationSessions, "vaccines", "multiSelectData", drugs);
-        },
-
-        async getAssignees(filter: any = ""){
+        async getAssignees(_filter: any = ""){
             const assignees = await UserService.getUsersByRole({
                 role: "Health Surveillance"
             });
-
             const modifiedAssignees = assignees.map((assignee: any) => {
                 return {
                     ...assignee,
                     name: assignee.username,
-                    id: assignee.user_id,
-                    // Remove the username key if needed:
-                    // username: undefined,
+                    id: assignee.user_id
                 };
             });
-
             modifyFieldValue(this.immunizationSessions, "assignees", "multiSelectData", modifiedAssignees);
-
         },
-        handleInputData(event: any) {
-            //this.getDrugs(" ");
+        handleInputData(event: Object) {
+            console.log(event);
         },
-
-        dismiss() {
+        dismiss(): void {
             modalController.dismiss();
         },
     },
@@ -207,10 +155,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.OtherVitalsTitle {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    color: #00190e;
-}
 </style>
