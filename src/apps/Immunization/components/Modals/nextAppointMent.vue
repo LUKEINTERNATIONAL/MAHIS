@@ -154,11 +154,15 @@ async function smspost(appointmentDetails:any){
 
     if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
         if (configsSms.value) {
+            
+            const modal = await modalController.create({
+                    component: smsConfirmation,
+               componentProps: { 
+                         date: appointmentDetails[1],
+                      patient: appointmentDetails[0],
+                  modalaction: 'saveAppointment' } });
 
-            const modal = await createModal(smsConfirmation, {
-                componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1],  modalaction:'saveAppointment' },
-                class: "smsConfirmation",
-            });
+           await modal.present();
 
         } else {
             await SmsService.appointment(appointmentDetails[0], appointmentDetails[1]);
@@ -166,6 +170,7 @@ async function smspost(appointmentDetails:any){
     }
 
 }
+
 
 async function setMilestoneReload() {
     const store = useAdministerVaccineStore();
