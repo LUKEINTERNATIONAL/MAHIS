@@ -8,7 +8,7 @@
         <Toolbar />
         <ion-content style="--background: #fff">
             <div class="container">
-                <h4 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h4>
+                <h4 style="width: 100%; text-align: center; font-weight: 700">Inventory Management</h4>
                 <div style="width: 80vw; top: -10px; position: relative; margin-right: 10px">
                     <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
                 </div>

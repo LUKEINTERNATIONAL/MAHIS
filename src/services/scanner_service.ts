@@ -75,8 +75,10 @@ export class ScannerService {
                     const scannedBarcodes = result.barcode.displayValue; // Assuming barcodes are here
                     this.barcodes = scannedBarcodes;
                     console.log("Scanned barcode:", scannedBarcodes);
-                    this.stopScan();
-                    resolve(this.barcodes); // Resolve the promise with the scanned barcodes
+                    if (scannedBarcodes) {
+                        this.stopScan();
+                        resolve(this.barcodes); // Resolve the promise with the scanned barcodes
+                    }
                 });
 
                 BarcodeScanner.startScan({
