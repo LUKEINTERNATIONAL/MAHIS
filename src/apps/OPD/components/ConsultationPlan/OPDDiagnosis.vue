@@ -167,9 +167,8 @@ export default defineComponent({
       },
 
       async addNewRow() {
-            // console.log("==>1",await this.validaterowData())
             if (await this.validaterowData()) {
-                
+
                 if (this.buildDiagnosis()) {
                     console.log("==>1",this.buildDiagnosis())
                     this.search_item = false;
@@ -186,7 +185,6 @@ export default defineComponent({
       buildDiagnosis() {
         const diagnosis = [];
 
-        // Handle primary diagnosis
         if (this.primaryDiagnosisField.value?.name) {
           diagnosis.push({
             actionBtn: true,
@@ -202,7 +200,6 @@ export default defineComponent({
           });
         }
 
-        // Handle secondary diagnoses
         if (this.secondaryDiagnosisField.value) {
           this.secondaryDiagnosisField.value.forEach((item: any) => {
             diagnosis.push({
@@ -219,8 +216,23 @@ export default defineComponent({
             });
           });
         }
+        // if (this.secondaryDiagnosisField.value) {
+        //   this.secondaryDiagnosisField.value.forEach((item: any) => {
+        //     diagnosis.push({
+        //       actionBtn: true,
+        //       btn: ["delete"],
+        //       name: item.name,
+        //       id: item.concept_id,
+        //       display: [item.name, "Attempted/ Differential Diagnosis"],
+        //       data: {
+        //         concept_id: 10201,
+        //         value_coded: item.concept_id,
+        //         obs_datetime: Service.getSessionDate(),
+        //       },
+        //     });
+        //   });
+        // }
 
-        // Combine primary and secondary diagnoses into one list
         this.OPDdiagnosis[0].selectedData = [...this.OPDdiagnosis[0].selectedData, ...diagnosis];
         return true;
       },
@@ -238,7 +250,7 @@ export default defineComponent({
         },
         openPopover(e: any) {
             this.event = e;
-            this.popoverOpen = true; 
+            this.popoverOpen = true;
         },
         async handleInputData(col: any) {
             await this.getDiagnosis(col.value);
@@ -271,7 +283,6 @@ export default defineComponent({
         const removedItems = originalData.filter((item: any) => item.display[0] === diagnosisToRemove);
         this.OPDdiagnosis[0].selectedData = filteredData;
 
-        // Handle UI update for primary diagnosis
         if (removedItems[0].data.concept_id === 6542) {
           modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone", false);
           modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "colSize", "");
