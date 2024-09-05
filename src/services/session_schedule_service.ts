@@ -10,13 +10,16 @@ export class SessionScheduleService extends Service {
         super();
     }
 
+    private ENDPOINT: string = "eir/schedule";
+    private CREATE_ENDPOINT: string = "eir/session_schedule";
+
     /**
      * @method create create a session schedule
      * @param session {SessionSchedule}
      * @returns @typeof Service
      */
     async create(session: SessionSchedule): Promise<Service> {
-        return Service.postJson("eir/session-schedules", session);
+        return Service.postJson(this.CREATE_ENDPOINT, session);
     }
 
     /**
@@ -25,7 +28,7 @@ export class SessionScheduleService extends Service {
      * @returns @typeof Service
      */
     async get(sessionId: number): Promise<Service> {
-        return Service.getJson("eir/session-schedules", { session_id: sessionId });
+        return Service.getJson(this.ENDPOINT, { session_id: sessionId });
     }
 
     /**
@@ -38,13 +41,13 @@ export class SessionScheduleService extends Service {
      * @returns @typeof Service
      */
     async getSessions(
-        start_date: Date,
-        end_date: Date,
+        start_date: string = '',
+        end_date: string = '',
         session_name: string = "",
         page: number = 1,
         perPage: number = 10
     ): Promise<Service> {
-        return Service.getJson("eir/session-schedules", {
+        return Service.getJson(this.ENDPOINT, {
             start_date: start_date,
             end_date: end_date,
             session_name: session_name,
