@@ -1,16 +1,27 @@
 <template>
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
     <div style="display: flex; align-items: center">
-        <ion-searchbar
+        <ion-input
             @ionInput="handleInput"
+            fill="outline"
+            :value="searchValue"
             placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
             class="searchField"
-        ></ion-searchbar>
-        <div v-if="isMobile">
-            <ion-button @click="scanCode()">
-                <ion-icon slot="icon-only" color="secondary" :icon="camera"></ion-icon>
-            </ion-button>
-        </div>
+        >
+            <ion-label style="display: flex" slot="start">
+                <ion-icon :icon="search" style="color: #000" aria-hidden="true"></ion-icon>
+            </ion-label>
+            <ion-label style="display: flex" slot="end">
+                <ion-buttons style="cursor: pointer; color: #74ff15" slot="end" class="iconFont">
+                    <ion-icon :icon="iconContent.addPerson" @click="nav('registration/manual')" aria-hidden="true"></ion-icon>
+                </ion-buttons>
+            </ion-label>
+            <ion-label style="display: flex" slot="end" v-if="isMobile">
+                <ion-buttons style="cursor: pointer; color: #74ff15" slot="end" class="iconFont">
+                    <ion-icon :icon="iconContent.scan" @click="scanCode()" aria-hidden="true"></ion-icon>
+                </ion-buttons>
+            </ion-label>
+        </ion-input>
     </div>
 
     <ion-popover
@@ -125,6 +136,7 @@ import {
     IonRow,
     IonButton,
     IonCol,
+    IonInput,
     isPlatform,
 } from "@ionic/vue";
 import { defineComponent, onMounted } from "vue";
@@ -158,6 +170,7 @@ import { alertConfirmation, toastDanger, toastSuccess, toastWarning, createModal
 import { isUnknownOrEmpty, isValueEmpty } from "@/utils/Strs";
 import PersonField from "@/utils/HisFormHelpers/PersonFieldHelper";
 import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
+import { icons } from "@/utils/svg";
 
 export default defineComponent({
     name: "Home",
@@ -178,12 +191,14 @@ export default defineComponent({
         Pagination,
         RoleSelectionModal,
         IonButton,
+        IonInput,
     },
     setup() {
         return { checkmark, add, search, camera };
     },
     data() {
         return {
+            iconContent: icons,
             ddeInstance: {} as any,
             popoverOpen: false,
             event: null,
@@ -193,6 +208,7 @@ export default defineComponent({
             showPopover: true,
             page: 1,
             searchText: "",
+            searchValue: "",
             paginationSize: 7,
             isRoleSelectionModalOpen: false,
             localPatient: {} as any, // Patient found without dde
@@ -274,14 +290,21 @@ export default defineComponent({
         this.offlinePatients = await db.collection("patientRecords").get();
     },
     methods: {
+        nav(url: any) {
+            this.$router.push(url);
+        },
         async scanCode() {
             const dataScanned: any = await scannedData();
             const dataExtracted: any = await extractDetails(dataScanned);
-            if (await this.searchByMWNationalID(dataExtracted.idNumber)) {
-            } else {
+            if (await this.searchByNpid(dataScanned + "$")) {
+                this.searchValue = dataScanned;
+            } else if (dataExtracted && (await this.searchByMWNationalID(dataExtracted?.idNumber))) {
+                this.searchValue = dataScanned?.idNumber;
+            } else if (dataExtracted) {
                 await this.setPersonInformation(dataExtracted);
                 this.$router.push("/registration/manual");
             }
+            this.searchValue = dataScanned;
         },
         programID() {
             return Service.getProgramID();
@@ -335,11 +358,15 @@ export default defineComponent({
             if (/.+\$$/i.test(`${searchText}`)) {
                 searchText = `${searchText || ""}`.replace(/\$/gi, "");
                 const idData = await PatientService.findByNpid(searchText as any);
-                if (idData.length > 0) this.patients.push(...idData);
-
-                if (this.patients.length == 1) {
-                    this.openNewPage("patientProfile", this.patients[0]);
-                    this.popoverOpen = false;
+                if (idData && idData.length > 0) {
+                    this.patients.push(...idData);
+                    if (this.patients.length == 1) {
+                        this.openNewPage("patientProfile", this.patients[0]);
+                        this.popoverOpen = false;
+                    }
+                    return true;
+                } else {
+                    return false;
                 }
             }
         },
@@ -359,11 +386,11 @@ export default defineComponent({
         async searchByMWNationalID(searchText: any) {
             if (Validation.isMWNationalID(searchText) == null) {
                 const nationalID = await PatientService.findByOtherID(28, searchText);
-                if (nationalID.length > 0) {
+                if (nationalID && nationalID.length > 0) {
                     this.patients.push(...nationalID);
                     this.openNewPage("patientProfile", this.patients[0]);
                     return true;
-                }
+                } else return false;
             }
             return false;
         },

@@ -18,20 +18,24 @@ export async function scannedData() {
 }
 export async function extractDetails(inputString: string) {
     {
-        const parts = inputString.split("~");
-        const idNumber = parts[1].slice(6, 14).trim();
-        const dob = parts[9];
-        const sex = parts[8].charAt(0);
-        const lastName = parts[4];
-        const firstName = parts[6];
-        const middleName = parts[7];
-        return {
-            idNumber,
-            sex,
-            dob,
-            firstName,
-            middleName,
-            lastName,
-        };
+        try {
+            const parts = inputString.split("~");
+            const idNumber = parts[1].slice(6, 14).trim();
+            const dob = parts[9];
+            const sex = parts[8].charAt(0);
+            const lastName = parts[4];
+            const firstName = parts[6];
+            const middleName = parts[7];
+            return {
+                idNumber,
+                sex,
+                dob,
+                firstName,
+                middleName,
+                lastName,
+            };
+        } catch (error) {
+            return "";
+        }
     }
 }

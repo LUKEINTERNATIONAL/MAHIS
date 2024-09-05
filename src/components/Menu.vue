@@ -13,11 +13,6 @@
                     </ion-item>
                 </ion-accordion>
 
-                <ion-accordion value="second" @click="navigationMenu('stockManagement')" toggle-icon="">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="header">Stock Management</ion-label>
-                    </ion-item>
-                </ion-accordion>
                 <ion-accordion value="third" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Schedule Immunization</ion-label>
@@ -26,6 +21,11 @@
                 <ion-accordion value="fifth" @click="navigationMenu('manageAppointMents')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Manage Appointments</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="second" @click="navigationMenu('stockManagement')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Inventory Management </ion-label>
                     </ion-item>
                 </ion-accordion>
                 <ion-accordion value="fourth">
@@ -70,11 +70,7 @@
                                 </div>
                             </ion-accordion>
 
-                            <ion-item
-                                @click="navigationMenu('EIPMReport')"
-                                class="list-content"
-                                style="cursor: pointer"
-                            >
+                            <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer">
                                 EPI Monthly Report
                             </ion-item>
 
@@ -141,12 +137,6 @@
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
-                <ion-accordion value="seventh" toggle-icon="" toggle-icon-slot="start" :readonly="true">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="header" style="color: var(--ion-color-primary)" v-if="apiStatus">Online </ion-label>
-                        <ion-label class="header" style="color: rgb(223, 78, 69)" v-if="!apiStatus">Offline</ion-label>
-                    </ion-item>
-                </ion-accordion>
             </ion-accordion-group>
         </ion-content>
     </ion-menu>
@@ -157,8 +147,6 @@ import { IonAccordion, IonAccordionGroup, IonContent, IonHeader, IonItem, IonLis
 import { defineComponent, ref, computed, onMounted, onUpdated, watch } from "vue";
 import { UserService } from "@/services/user_service";
 import { useRouter } from "vue-router";
-import { useStatusStore } from "@/stores/StatusStore";
-import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/userStore";
 import { mapState } from "pinia";
 
@@ -193,9 +181,9 @@ export default defineComponent({
                 {
                     programId: 33,
                     showReports: false,
-                }
-            ],   
-        }
+                },
+            ],
+        };
     },
     watch: {
         currentProgramId: {
@@ -214,8 +202,6 @@ export default defineComponent({
     setup() {
         const router = useRouter();
         const user_data = ref<any>(null);
-        const status = useStatusStore();
-        const { apiStatus } = storeToRefs(status);
         onMounted(async () => {
             await fetchUserData();
         });
@@ -240,7 +226,6 @@ export default defineComponent({
             });
         }
         return {
-            apiStatus,
             isSuperuser,
             user_data,
             navigationMenu,
@@ -251,13 +236,13 @@ export default defineComponent({
         showPogramReports(): void {
             this.programAttri.forEach((PA: any) => {
                 if (PA.programId == this.currentProgramId) {
-                    PA.showReports = true
+                    PA.showReports = true;
                 } else {
-                    PA.showReports = false
+                    PA.showReports = false;
                 }
-            })
+            });
         },
-  }
+    },
 });
 </script>
 <style scoped>
