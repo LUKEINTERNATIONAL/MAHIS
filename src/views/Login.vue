@@ -169,7 +169,7 @@ export default defineComponent({
                     // }
                     await this.auth.login(this.password);
 
-                    if (true) {
+                    if (this.auth.checkUserPrograms(this.program.name)) {
                         this.facilityB();
                         this.$router.push("/home");
                     } else {
