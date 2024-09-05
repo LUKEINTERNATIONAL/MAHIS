@@ -1,17 +1,27 @@
 <template>
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
     <div style="display: flex; align-items: center">
-        <ion-searchbar
-            :value="searchValue"
+        <ion-input
             @ionInput="handleInput"
+            fill="outline"
+            :value="searchValue"
             placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
             class="searchField"
-        ></ion-searchbar>
-        <div v-if="isMobile">
-            <ion-button @click="scanCode()">
-                <ion-icon slot="icon-only" color="secondary" :icon="camera"></ion-icon>
-            </ion-button>
-        </div>
+        >
+            <ion-label style="display: flex" slot="start">
+                <ion-icon :icon="search" style="color: #000" aria-hidden="true"></ion-icon>
+            </ion-label>
+            <ion-label style="display: flex" slot="end">
+                <ion-buttons style="cursor: pointer; color: #74ff15" slot="end" class="iconFont">
+                    <ion-icon :icon="iconContent.addPerson" @click="nav('registration/manual')" aria-hidden="true"></ion-icon>
+                </ion-buttons>
+            </ion-label>
+            <ion-label style="display: flex" slot="end" v-if="isMobile">
+                <ion-buttons style="cursor: pointer; color: #74ff15" slot="end" class="iconFont">
+                    <ion-icon :icon="iconContent.scan" @click="scanCode()" aria-hidden="true"></ion-icon>
+                </ion-buttons>
+            </ion-label>
+        </ion-input>
     </div>
 
     <ion-popover
@@ -126,6 +136,7 @@ import {
     IonRow,
     IonButton,
     IonCol,
+    IonInput,
     isPlatform,
 } from "@ionic/vue";
 import { defineComponent, onMounted } from "vue";
@@ -159,6 +170,7 @@ import { alertConfirmation, toastDanger, toastSuccess, toastWarning, createModal
 import { isUnknownOrEmpty, isValueEmpty } from "@/utils/Strs";
 import PersonField from "@/utils/HisFormHelpers/PersonFieldHelper";
 import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
+import { icons } from "@/utils/svg";
 
 export default defineComponent({
     name: "Home",
@@ -179,12 +191,14 @@ export default defineComponent({
         Pagination,
         RoleSelectionModal,
         IonButton,
+        IonInput,
     },
     setup() {
         return { checkmark, add, search, camera };
     },
     data() {
         return {
+            iconContent: icons,
             ddeInstance: {} as any,
             popoverOpen: false,
             event: null,
@@ -276,6 +290,9 @@ export default defineComponent({
         this.offlinePatients = await db.collection("patientRecords").get();
     },
     methods: {
+        nav(url: any) {
+            this.$router.push(url);
+        },
         async scanCode() {
             const dataScanned: any = await scannedData();
             const dataExtracted: any = await extractDetails(dataScanned);
