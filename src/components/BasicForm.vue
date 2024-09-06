@@ -314,7 +314,7 @@
                             :eventType="checkboxInput.eventType"
                             :minDate="checkboxInput.minDate"
                             :maxDate="checkboxInput.maxDate"
-                            :disabled="col.disabled"
+                            :disabled="checkboxInput.disabled"
                             @update:dateValue="handleInput(contentData, checkboxInput, $event, 'updateDate')"
                         />
                         <div v-if="checkboxInput.isMultiSelect">

@@ -110,7 +110,7 @@ export default defineComponent({
         };
     },
     computed: {
-        
+        ...mapState(useStartEndDate, ["startEndDate"]),
     },
     $route: {
         async handler() {},
