@@ -52,9 +52,12 @@
                                   class="custom"
                                   v-model="configData.reminderMessage"
                                   :value="configData.reminderMessage"
+                                  label="Reminder Message" 
+                                  label-placement="floating"
                                   @ionInput="handleInputData($event,'reminderMessage')"
-                                  @change="handleInputKeyUp($event,'reminder_preview')"
+                                  @ionBlur="handleInputKeyUp($event,'reminder_preview')"
                                   @input="handleInputDatachange($event,'reminder_preview')"
+                                  @ionFocus="handleInputDatachange($event,'reminder_preview')"
                                   :placeholder="'Add Reminder message'"
                                   :auto-grow="true"
                                   fill="outline"
@@ -68,9 +71,12 @@
                                   class="custom"
                                   v-model="configData.cancelMessage"
                                   :value="configData.cancelMessage"
+                                  label="Appointment Message" 
+                                  label-placement="floating"
                                   @ionInput="handleInputData($event,'cancelMessage')"
-                                  @change="handleInputKeyUp($event,'appointment_preview')"
+                                  @ionBlur="handleInputKeyUp($event,'appointment_preview')"
                                   @input="handleInputDatachange($event,'appointment_preview')"
+                                  @ionFocus="handleInputDatachange($event,'appointment_preview')"
                                   :placeholder="'Add Cancel appointment message'"
                                   :auto-grow="true"
                                   fill="outline"
@@ -263,7 +269,7 @@ export default defineComponent({
             this.configData[field] = event.target.value
         },
         handleInputKeyUp(event:any,elementid:any){
-
+             console.log(elementid,"........ppp")
             const previewElement = document.getElementById(elementid);
            if (previewElement) {
               previewElement.innerHTML = "";
@@ -274,7 +280,7 @@ export default defineComponent({
 
             const previewElement = document.getElementById(elementid);
            if (previewElement) {
-              previewElement.innerHTML = `${event.target.value} ${HisDate.currentDisplayDate()}`;
+              previewElement.innerHTML = `<b>Preview of the message to be sent</b> </br>${event.target.value} ${HisDate.currentDisplayDate()}`;
             }
 
         },
