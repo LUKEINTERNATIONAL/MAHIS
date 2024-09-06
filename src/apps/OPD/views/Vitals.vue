@@ -54,6 +54,7 @@ import { defineComponent } from "vue";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import {getFieldValue} from "@/services/data_helpers";
+import HisDate from "@/utils/Date";
 export default defineComponent({
     name: "Home",
     components: {
@@ -186,35 +187,49 @@ export default defineComponent({
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
             await vitalsInstance.onFinish(this.vitals);
         },
-        async validaterowData() {
-            const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            this.vitals.forEach((section: any, sectionIndex: any) => {
-                if (section?.data?.rowData) {
-                    section?.data?.rowData.forEach((col: any, colIndex: any) => {
-                        col.colData.some((input: any, inputIndex: any) => {
-                            const validateResult = vitalsInstance.validator(input);
-                            if (validateResult?.length > 0) {
-                                this.hasValidationErrors.push("false");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
-                                    validateResult.flat(Infinity)[0];
-                                return true;
-                            } else {
-                                this.hasValidationErrors.push("true");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-                            }
+      async validaterowData() {
+        const userID: any = Service.getUserID();
+        const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+        const age = HisDate.getAgeInYears(this.demographics?.birthdate);
 
-                            return false;
-                        });
-                    });
+        this.vitals.forEach((section: any, sectionIndex: any) => {
+          if (section?.data?.rowData) {
+            section?.data?.rowData.forEach((col: any, colIndex: any) => {
+              col.colData.some((input: any, inputIndex: any) => {
+                if (input.name === "Respiratory rate" && age <= 5) {
+                  const validateResult = vitalsInstance.validator(input);
+                  if (validateResult?.length > 0) {
+                    this.hasValidationErrors.push("false");
+                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
+                    return true;
+                  } else {
+                    this.hasValidationErrors.push("true");
+                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
+                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                  }
+                } else {
+                  const validateResult = vitalsInstance.validator(input);
+                  if (validateResult?.length > 0) {
+                    this.hasValidationErrors.push("false");
+                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
+                    return true;
+                  } else {
+                    this.hasValidationErrors.push("true");
+                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
+                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                  }
                 }
-            });
 
-            this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
-        },
-        openModal() {
+                return false;
+              });
+            });
+          }
+        });
+
+        this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
+      },
+
+      openModal() {
             createModal(SaveProgressModal);
         },
     },
