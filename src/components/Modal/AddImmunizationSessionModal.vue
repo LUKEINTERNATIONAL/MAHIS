@@ -5,7 +5,7 @@
     <ion-loading v-show="isSaving" trigger="open-loading" message="Saving, please wait..."> </ion-loading>
     <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
         <div style="padding-bottom: 200px">
-            <basic-form :contentData="immunizationSessions" @update:inputValue="handleInputData" @search-change="getAssignees"></basic-form>
+            <basic-form :contentData="immunizationSessions" @search-change="getAssignees"></basic-form>
         </div>
     </ion-content>
     <ion-footer collapse="fade" class="ion-no-border">
@@ -35,7 +35,7 @@ import {
     IonFooter,
     IonLoading
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useImmunizationSessionsStore } from "@/stores/ScheduleImmunizationSession";
@@ -84,13 +84,13 @@ export default defineComponent({
     },
     data() {
         return{
-            isSaving: <boolean>false
+            isSaving: false as boolean
         }
     },
     props:{
         data: {
-            type: Object,
-            default: {},
+            type: Object as PropType<Record<string, unknown>>,
+            default: () => ({}),
         },
     },
     async mounted() {
@@ -114,6 +114,7 @@ export default defineComponent({
         async createImmunizationSessionSchedule(): Promise<void>{
             if (validateInputFiledData(this.immunizationSessions)) {
                 this.isSaving = true;
+                const immunizationSessionStore = useImmunizationSessionsStore();
                 const assignees = getFieldValue(this.immunizationSessions, "assignees","value").map((assignee: User) => assignee.user_id)
                 const data: SessionSchedule = {
                         session_name: getFieldValue(this.immunizationSessions,"batch", "value"),
@@ -127,11 +128,12 @@ export default defineComponent({
 
                 const sessionSchedule = new SessionScheduleService();
                 await sessionSchedule.create(data);
-                toastSuccess(IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS);
+                data ? toastSuccess(IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS) : toastWarning(IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR);
                 this.isSaving = false;
+                immunizationSessionStore.resetFieldValues();
                 modalController.dismiss("dismiss");
             } else {
-                toastWarning(IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR);
+                toastWarning("Please make sure to fill all required fields");
                 this.isSaving = false;
             }
         },
@@ -142,7 +144,7 @@ export default defineComponent({
         resetData(): void {
             useImmunizationSessionsStore().$reset();
         },
-        async getAssignees(_filter: any = ""){
+        async getAssignees(_filter: any = ""): Promise<void> {
             const assignees = await UserService.getUsersByRole({
                 role: "Health Surveillance"
             });
@@ -154,9 +156,6 @@ export default defineComponent({
                 };
             });
             modifyFieldValue(this.immunizationSessions, "assignees", "multiSelectData", modifiedAssignees);
-        },
-        handleInputData(event: Object) {
-            console.log(event);
         },
         dismiss(): void {
             modalController.dismiss();

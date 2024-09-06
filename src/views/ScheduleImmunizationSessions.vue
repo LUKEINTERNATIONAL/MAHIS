@@ -323,8 +323,8 @@ export default defineComponent({
             deep: true,
         },
     },
-    async mounted() {
-        await this.getSessionSchedules();
+    mounted() {
+        this.getSessionSchedules();
     },
     methods: {
         handleEdit(id: any) {
@@ -344,10 +344,15 @@ export default defineComponent({
             await this.buildTableData();
         },
         async getSessionSchedules() : Promise<void>{
-            const sessionService = new SessionScheduleService();
+            try{
+                const sessionService = new SessionScheduleService();
             const data: any = await sessionService.getSessions();
             this.schedules = data;
             console.log(data);
+            console.log("what")
+            }catch(exception: any){
+                console.log(exception)
+            }
         },
         async buildTableData() {
             this.isLoading = true;
