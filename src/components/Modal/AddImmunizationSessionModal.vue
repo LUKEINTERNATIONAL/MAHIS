@@ -2,6 +2,7 @@
     <ion-header>
         <ion-title class="modalTitle">Create Immunization Session Schedule</ion-title>
     </ion-header>
+    <ion-loading v-show="isSaving" trigger="open-loading" message="Saving, please wait..."> </ion-loading>
     <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
         <div style="padding-bottom: 200px">
             <basic-form :contentData="immunizationSessions" @update:inputValue="handleInputData" @search-change="getAssignees"></basic-form>
@@ -32,6 +33,7 @@ import {
     IonInput,
     modalController,
     IonFooter,
+    IonLoading
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
@@ -51,7 +53,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import { validateInputFiledData } from "@/services/group_validation";
 import { UserService } from "@/services/user_service";
 import { SessionScheduleService } from "@/services/session_schedule_service";
-import { SessionSchedule } from "@/types";
+import { SessionSchedule, User } from "@/types";
 import { RouteLocationRaw } from "vue-router";
 import { 
     IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR, 
@@ -74,10 +76,16 @@ export default defineComponent({
         customDatePicker,
         DynamicButton,
         IonFooter,
+        IonLoading,
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useImmunizationSessionsStore, ["immunizationSessions"]),
+    },
+    data() {
+        return{
+            isSaving: <boolean>false
+        }
     },
     props:{
         data: {
@@ -105,7 +113,8 @@ export default defineComponent({
         },
         async createImmunizationSessionSchedule(): Promise<void>{
             if (validateInputFiledData(this.immunizationSessions)) {
-                const user_id : number = getFieldValue(this.immunizationSessions, "assignees","value").id
+                this.isSaving = true;
+                const assignees = getFieldValue(this.immunizationSessions, "assignees","value").map((assignee: User) => assignee.user_id)
                 const data: SessionSchedule = {
                         session_name: getFieldValue(this.immunizationSessions,"batch", "value"),
                         start_date: getFieldValue(this.immunizationSessions, "start date", "value"),
@@ -113,15 +122,17 @@ export default defineComponent({
                         session_type: getFieldValue(this.immunizationSessions, "product name", "value").name,
                         repeat: getFieldValue(this.immunizationSessions, "repeat", "value" ).name,
                         target: getFieldValue(this.immunizationSessions, "target", "value"),
-                        user_ids: [user_id],
+                        assignees: assignees,
                     }
 
                 const sessionSchedule = new SessionScheduleService();
                 await sessionSchedule.create(data);
                 toastSuccess(IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS);
+                this.isSaving = false;
                 modalController.dismiss("dismiss");
             } else {
                 toastWarning(IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR);
+                this.isSaving = false;
             }
         },
         navigationMenu(url: RouteLocationRaw): void {
