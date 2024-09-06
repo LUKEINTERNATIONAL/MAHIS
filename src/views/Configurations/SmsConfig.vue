@@ -269,7 +269,6 @@ export default defineComponent({
             this.configData[field] = event.target.value
         },
         handleInputKeyUp(event:any,elementid:any){
-             console.log(elementid,"........ppp")
             const previewElement = document.getElementById(elementid);
            if (previewElement) {
               previewElement.innerHTML = "";
@@ -288,7 +287,6 @@ export default defineComponent({
             try {
                 const configs = await SmsService.setConfigurations(this.configData);
                 this.updateConfigData(configs.message);
-
                 toastSuccess("Successfully updated configuration file");
             } catch (e) {
                 toastWarning(`${e}`);
