@@ -71,7 +71,7 @@
                                   class="custom"
                                   v-model="configData.cancelMessage"
                                   :value="configData.cancelMessage"
-                                  label="Appointment Message" 
+                                  label="Cancel appointment Message" 
                                   label-placement="floating"
                                   @ionInput="handleInputData($event,'cancelMessage')"
                                   @ionBlur="handleInputKeyUp($event,'appointment_preview')"
