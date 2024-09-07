@@ -59,20 +59,21 @@
     };
   },
     methods: {
-      dismissModal() {
-        modalController.dismiss();
-      },
+  async dismissModal() {
+    await modalController.dismiss();
+   },
       async sendSMS() {
 
         try {
                if(this.modalaction == "saveAppointment") { 
-                // await SmsService.appointment(this.patient,this.formattedDate);
+                 await SmsService.appointment(this.patient,this.formattedDate);
                }
                else{ 
-                 console.log(this.formattedDate,"...........good") 
-                 // await SmsService.cancelappointment(this.patient,this.formattedDate);
+                 await SmsService.cancelappointment(this.patient,this.formattedDate);
                }
-              this.dismissModal();
+
+               this.dismissModal();
+
         } catch (error) {
           console.error("Failed to send SMS:", error);
         }
