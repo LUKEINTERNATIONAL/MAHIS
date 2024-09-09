@@ -9,33 +9,38 @@
             profile and start the triage
           </p>
           <div class="centered-content">
-            <!-- Your component goes here -->
             <ToolbarSearch />
           </div>
         </div>
       </ion-content>
       <ion-content :fullscreen="true" v-else-if="programID() == 14">
         <div id="containertwo">
-          <div class="centered-content">
+          <div class="centered-content OPDDueCardWrapper">
             <ion-card class="section">
-              <ion-card-header> <ion-card-title class="cardTitle"> Today's patients waiting list </ion-card-title></ion-card-header>
+              <ion-card-header>
+                <ion-card-title class="cardTitle">Today's patients waiting list</ion-card-title>
+              </ion-card-header>
               <ion-card-content>
-                <div class="dueCardContent">
-                  <div class="dueCard" @click="openAllModal('All patients today')" style="border: 1px solid rgb(158, 207, 136)">
-                    <div class="statsValue">0</div>
-                    <div class="statsText">Total patients today</div>
+                <div class="OPDDueCardContent">
+                  <div class="OPDDueCard" @click="openAllModal('All patients today')" :style="dueCardStyle('success')">
+                    <ion-icon :icon="people" class="dueCardIcon"></ion-icon>
+                    <div class="OPDStatsValue">0</div>
+                    <div class="OPDStatsText">Total patients today</div>
                   </div>
-                  <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)" @click="openPatientsListModal('Patients waiting for vitals')">
-                    <div class="statsValue">0</div>
-                    <div class="statsText">Waiting for vitals</div>
+                  <div class="OPDDueCard" @click="openPatientsListModal('Patients waiting for vitals')" :style="dueCardStyle('success')">
+                    <ion-icon :icon="thermometer" class="dueCardIcon"></ion-icon>
+                    <div class="OPDStatsValue">0</div>
+                    <div class="OPDStatsText">Waiting for vitals</div>
                   </div>
-                  <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)" @click="openPatientsListModal('Patients waiting for consultation')">
-                    <div class="statsValue">0</div>
-                    <div class="statsText">Waiting for consultation</div>
+                  <div class="OPDDueCard" @click="openPatientsListModal('Patients waiting for consultation')" :style="dueCardStyle('success')">
+                    <ion-icon :icon="clipboard" class="dueCardIcon"></ion-icon>
+                    <div class="OPDStatsValue">0</div>
+                    <div class="OPDStatsText">Waiting for consultation</div>
                   </div>
-                  <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)" @click="openPatientsListModal('Patients waiting for dispensation')">
-                    <div class="statsValue">0</div>
-                    <div class="statsText">Waiting for dispensation</div>
+                  <div class="OPDDueCard" @click="openPatientsListModal('Patients waiting for dispensation')" :style="dueCardStyle('success')">
+                    <ion-icon :icon="medkit" class="dueCardIcon"></ion-icon>
+                    <div class="OPDStatsValue">0</div>
+                    <div class="OPDStatsText">Waiting for dispensation</div>
                   </div>
                 </div>
               </ion-card-content>
@@ -173,18 +178,18 @@ import { AppointmentService } from "@/services/appointment_service";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { PatientService } from "@/services/patient_service";
 import {
-    medkit,
-    chevronBackOutline,
-    checkmark,
-    grid,
-    chevronDownCircle,
-    chevronForwardCircle,
-    chevronUpCircle,
-    colorPalette,
-    document,
-    globe,
-    add,
-    person,
+  medkit,
+  chevronBackOutline,
+  checkmark,
+  grid,
+  chevronDownCircle,
+  chevronForwardCircle,
+  chevronUpCircle,
+  colorPalette,
+  document,
+  globe,
+  add,
+  person, clipboard, thermometer, people,
 } from "ionicons/icons";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import DueModal from "@/components/DashboardModal/DueModal.vue";
@@ -195,7 +200,7 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
 import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
-import { getBaseURL } from "@/utils/GeneralUti"
+import {getBaseURl} from "@/utils/GeneralUti";
 import { setOfflineData } from "@/services/set_location";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
@@ -226,6 +231,7 @@ export default defineComponent({
         Slide,
         Pagination,
         Navigation,
+      getBaseURl,
     },
     data() {
         return {
@@ -264,6 +270,9 @@ export default defineComponent({
             medkit,
             add,
             person,
+           people,
+          thermometer,
+          clipboard,
         };
     },
     computed: {
@@ -299,7 +308,22 @@ export default defineComponent({
         wsService.setMessageHandler(this.onMessage);
     },
     methods: {
-        async setAppointments() {
+      dueCardStyle(type: 'success' | 'warning' | 'info' | 'danger') {
+        const colors = {
+          success: "rgb(158, 207, 136)",
+          warning: "rgb(239, 221, 121)",
+          info: "rgb(144, 202, 249)",
+          danger: "rgb(241, 154, 154)",
+        };
+
+        return {
+          border: `1px solid ${colors[type]}`,
+          padding: "20px",
+          margin: "10px",
+        };
+      },
+
+      async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
             if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
@@ -313,7 +337,7 @@ export default defineComponent({
         },
         async onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);
-            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: sessionStorage.getItem("locationID") })) {
+            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: localStorage.getItem("locationID") })) {
                 this.reportData = data.message;
                 console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
                 this.totalStats = [
@@ -361,8 +385,77 @@ export default defineComponent({
     },
 });
 </script>
-
 <style scoped>
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.OPDDueCardWrapper {
+  padding: 20px;
+}
+
+.OPDDueCardContent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.OPDDueCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  text-align: center;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-basis: calc(100% / 2 - 40px);
+  max-width: 300px;
+}
+
+
+@media (min-width: 0px) {
+  .OPDDueCard {
+    flex-basis: calc(100% / 2 - 40px);
+  }
+
+  #containertwo {
+    top: 50% !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .OPDDueCard {
+    flex-basis: calc(100% / 4 - 40px);
+  }
+
+  #containertwo {
+    top: 30%;
+  }
+}
+
+.dueCardIcon {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.OPDStatsValue {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.OPDStatsText {
+  font-size: 1rem;
+  color: #555;
+}
+
+
 .totalStats {
     padding-bottom: 2vw;
     border-radius: 5px;
@@ -532,7 +625,7 @@ ion-card {
     position: absolute;
     left: 0;
     right: 0;
-    top: 50%;
+    top: 30%;
     transform: translateY(-50%);
 }
 #containertwo {

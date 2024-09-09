@@ -9,13 +9,16 @@
             @click="handleClick"
             fill="outline"
             v-model="phone"
+            v-on:country-changed="handleCountryChanged"
             :placeholder="placeholder"
             :type="inputType"
             :disabled="disabled"
             :preferredCountries="['mw']"
             :defaultCountry="'mw'"
-            :inputOptions="{ showDialCode: true }"
+            :inputOptions="{ showDialCode: true,}"
+            :dropdownOptions="{ showSearchBox: true, showFlags:true,showDialCodeInList: true, searchBoxPlaceholder: 'Search here...'}"
             mode="international"
+            
         >
         </vue-tel-input>
     </div>
@@ -37,6 +40,7 @@ import { caretDownSharp } from "ionicons/icons";
 import { VueTelInput } from "vue-tel-input";
 import { size } from "lodash";
 import "vue-tel-input/vue-tel-input.css";
+import { getElement } from "ionicons/dist/types/stencil-public-runtime";
 export default defineComponent({
     name: "HisFormElement",
     components: {
@@ -57,6 +61,7 @@ export default defineComponent({
             selectedText: "" as any,
             filteredData: [] as any,
             showAsterisk: false,
+            country: [{"dialCode": "265","iso2": "MW","name": "Malawi"}] as any
         };
     },
     mounted() {
@@ -124,6 +129,10 @@ export default defineComponent({
         },
     },
     methods: {
+        handleCountryChanged(country: any) {
+            this.country = country
+            this.$emit("countryChanged", this.country);   
+        },
         handleClick(event: any) {
             // if (this.popOverData?.data) this.setEvent(event);
             this.$emit("clicked:inputValue", event);
@@ -132,7 +141,7 @@ export default defineComponent({
             this.$emit("update:passedinputValue", this.$props.inputValue);
         },
         handleInput(event: any) {
-            if (this.popOverData?.data) this.setEvent(event);
+            //if (this.popOverData?.data) this.setEvent(event);
             this.$emit("update:inputValue", event);
         },
         handleBlur(event: any) {
@@ -185,5 +194,8 @@ h6 {
 }
 .custom {
     --background: #fff;
+}
+.custom >>> .vti__input {
+  background-color: #f0f0f0;
 }
 </style>

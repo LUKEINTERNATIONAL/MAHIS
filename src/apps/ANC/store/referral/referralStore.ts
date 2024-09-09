@@ -60,7 +60,9 @@ export const useReferralStore = defineStore('referralStore',{
                         },
                     ]
                 }
-            },
+            }, 
+            
+            
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -86,6 +88,34 @@ export const useReferralStore = defineStore('referralStore',{
                     ]
                 }
             },
+            {
+                sectionHeader: "",
+                classDash: "dashed_bottom_border",
+                header: {
+                    selectedValue: "",
+                },
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    class:"bold",
+                                    displayNone:true,
+                                    inputHeader: "treatment",
+                                    unit: "",
+                                    icon: "",
+                                    value: "",
+                                    name: "treatment",
+                                    valueType: "number",
+                                    eventType: "input",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            
+            
             
             {   
                classDash: 'dashed_bottom_border',
@@ -315,7 +345,7 @@ export const useReferralStore = defineStore('referralStore',{
                 }
 
             },
-
+            
         ] as any,
     }),
         actions:{

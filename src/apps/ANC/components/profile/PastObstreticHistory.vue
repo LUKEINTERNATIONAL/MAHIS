@@ -5,7 +5,9 @@
               <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
               <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
              <basic-form :contentData="preterm"></basic-form>
-            <basic-form :contentData="Complications"></basic-form>
+              <div v-if="alertMessage" class="alert-message">
+                {{ alertMessage }}
+              </div>
             </ion-card-content>
         </ion-card>
     </div>
@@ -78,6 +80,7 @@ export default defineComponent({
         modeOfDeliveryInstance: {} as any,
         currentSection: 0,
         inputField: '' as any,
+        alertMessage: '' as string,
         
 
     };
@@ -102,6 +105,7 @@ export default defineComponent({
       // this.prevPregnanciesInstance.setModeOfDelivery([])
       this.handleOther()
       this.handleDynamic()
+      this.handleGravida(event)
       this.validaterowData({})
 
     },
@@ -130,6 +134,9 @@ export default defineComponent({
               // }
               this.prevPregnanciesInstance.setModeOfDelivery(liveBirths)
             }
+            this.handleGravida(val)
+            this.handleOther()
+
 
           },
 
@@ -142,12 +149,6 @@ export default defineComponent({
         },
         deep:true
       },
-      Complications:{
-        handler(){
-          this.handleOther() 
-        },
-        deep:true,
-      }
     },
     setup() {
       return { checkmark,pulseOutline };
@@ -155,11 +156,11 @@ export default defineComponent({
     methods:{
       handleOther(){
          
-                  if(getCheckboxSelectedValue(this.Complications,'Other')?.value =='other'){
+                  if(getCheckboxSelectedValue(this.prevPregnancies,'Other')?.value =='other'){
 
-                    modifyFieldValue(this.Complications,'Other notes','displayNone',false)
+                    modifyFieldValue(this.prevPregnancies,'Other notes','displayNone',false)
                   }else{
-                    modifyFieldValue(this.Complications,'Other notes','displayNone',true)
+                    modifyFieldValue(this.prevPregnancies,'Other notes','displayNone',true)
                   }
                    const checkBoxes=['Asphyxia','Does not know','Pre-eclampsia',
                                      'Eclampsia','Puerperal Sepsis',
@@ -168,14 +169,14 @@ export default defineComponent({
                                      'Heavy bleeding','Macrosomia',
                                      'Perineal tear (3rd or 4th degree)','Other',]
 
-                if (getCheckboxSelectedValue(this.Complications, 'None')?.checked) {
+                if (getCheckboxSelectedValue(this.prevPregnancies, 'None')?.checked) {
                   checkBoxes.forEach((checkbox) => {
-                      modifyCheckboxValue(this.Complications, checkbox, 'checked', false);
-                      modifyCheckboxValue(this.Complications, checkbox, 'disabled', true);
+                      modifyCheckboxValue(this.prevPregnancies, checkbox, 'checked', false);
+                      modifyCheckboxValue(this.prevPregnancies, checkbox, 'disabled', true);
                   });
                   } else {
                   checkBoxes.forEach((checkbox) => {
-                      modifyCheckboxValue(this.Complications, checkbox, 'disabled', false);
+                      modifyCheckboxValue(this.prevPregnancies, checkbox, 'disabled', false);
                   });
               }
 
@@ -239,10 +240,43 @@ export default defineComponent({
                modifyRadioValue(this.prevPregnancies,'Was last live birth preterm?','displayNone', true)
              }
           } else {
-            // If either Gravida or Abortions is NaN, set LiveBirths to null
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', null);          }
         }
       },
+      handleGravida(event: any) {
+        const gravida = getFieldValue(this.prevPregnancies, 'Gravida', 'value');
+        const alertMessage = "First pregnancy, take note";
+        const existingAlert = this.prevPregnancies[0].alerts.findIndex(
+            (alert: any) => alert.value === alertMessage
+        );
+        if (gravida == 1) {
+          modifyRadioValue(this.prevPregnancies, 'Was last live birth preterm?', 'displayNone', true);
+          modifyRadioValue(this.prevPregnancies, 'Last live birth had congenital abnormalities', 'displayNone', true);
+          modifyRadioValue(this.prevPregnancies, 'Last live birth preterm was full term', 'displayNone', true);
+          modifyCheckboxValue(this.prevPregnancies, 'past pregnancies complications', 'displayNone', true);
+          if (existingAlert === -1) {
+            this.prevPregnancies[0].alerts.push({
+              backgroundColor: "#FFD700",
+              status: "info",
+              icon: "info-circle",
+              textColor: "#000000",
+              value: alertMessage,
+              name: "Gravida",
+            });
+          }
+        } else {
+          modifyRadioValue(this.prevPregnancies, 'Was last live birth preterm?', 'displayNone', false);
+          modifyRadioValue(this.prevPregnancies, 'Last live birth preterm was full term', 'displayNone', false);
+          modifyRadioValue(this.prevPregnancies, 'Last live birth had congenital abnormalities', 'displayNone', false);
+          modifyCheckboxValue(this.prevPregnancies, 'past pregnancies complications', 'displayNone', false);
+
+          if (existingAlert !== -1) {
+            this.prevPregnancies[0].alerts.splice(existingAlert, 1);
+          }
+        }
+
+        this.$forceUpdate();
+      }
 
     },
 });
@@ -258,7 +292,7 @@ export default defineComponent({
 
 .section {
   width: 100%;
-  max-width: 1300px; 
+  max-width: 1300px;
   margin-bottom: 20px;
 }
 
@@ -272,7 +306,7 @@ ion-card {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 500px; 
+  max-width: 500px;
 }
 
 @media (max-width: 1500px) {

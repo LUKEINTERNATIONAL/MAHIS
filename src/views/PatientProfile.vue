@@ -673,6 +673,20 @@ export default defineComponent({
           value: "Administer medications!",
           name: "",
           index: "Patient is hypertensive",
+        convertToDisplayDate(date: any) {
+            return HisDate.toStandardHisDisplayFormat(date);
+        },
+        getSessionDate() {
+            return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
+        },
+        programAccess(programName: string): boolean {
+            const accessPrograms: any = localStorage.getItem("userPrograms");
+            const programs: any = JSON.parse(accessPrograms);
+            if (programs.some((program: any) => program.name === programName)) {
+                return true;
+            } else {
+                return false;
+            }
         },
       ];
     },

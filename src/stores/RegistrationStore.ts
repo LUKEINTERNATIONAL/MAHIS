@@ -380,7 +380,7 @@ const initialHomeLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Home district",
+                            inputHeader: "Home district *",
                             popOver: true,
                             icon: icons.search,
                             value: "",
@@ -393,6 +393,7 @@ const initialHomeLocation = [
                             multiSelectData: [],
                             id: "",
                             idName: "district_id",
+                            validationFunctionName: "required",
                         },
                     ],
                 },
@@ -405,7 +406,7 @@ const initialHomeLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Home traditional authority",
+                            inputHeader: "Home traditional authority *",
                             icon: icons.search,
                             value: "",
                             name: "home_traditional_authority",
@@ -418,6 +419,7 @@ const initialHomeLocation = [
                             multiSelectData: [],
                             idName: "district_id",
                             displayNone: true,
+                            validationFunctionName: "required",
                         },
                     ],
                     btns: [
@@ -439,7 +441,7 @@ const initialHomeLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Home village",
+                            inputHeader: "Home village *",
                             icon: icons.search,
                             value: "",
                             name: "home_village",
@@ -452,6 +454,7 @@ const initialHomeLocation = [
                             multiSelectData: [],
                             idName: "traditional_authority_id",
                             displayNone: true,
+                            validationFunctionName: "required",
                         },
                     ],
                     btns: [

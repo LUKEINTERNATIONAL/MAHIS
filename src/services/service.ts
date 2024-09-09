@@ -131,35 +131,35 @@ export class Service {
     }
 
     static getApiVersion() {
-        return sessionStorage.getItem("APIVersion") || "-";
+        return localStorage.getItem("APIVersion") || "-";
     }
 
     static getUserID(): null | number {
-        const userID = sessionStorage.getItem("userID");
+        const userID = localStorage.getItem("userID");
         return userID ? parseInt(userID) : null;
     }
 
     static getUserLocation() {
-        return sessionStorage.getItem("userLocation");
+        return localStorage.getItem("userLocation");
     }
 
     static getLocationName() {
-        return sessionStorage.getItem("locationName");
+        return localStorage.getItem("locationName");
     }
 
     static getSessionDate() {
-        return sessionStorage.getItem("sessionDate") || "";
+        return localStorage.getItem("sessionDate") || "";
     }
 
     static getCachedApiDate() {
-        return sessionStorage.getItem("apiDate");
+        return localStorage.getItem("apiDate");
     }
 
     static async setSessionDate(sessionDate: string) {
         const apiDate = await this.getApiDate();
         if (apiDate) {
-            sessionStorage.setItem("apiDate", apiDate);
-            sessionStorage.setItem("sessionDate", sessionDate);
+            localStorage.setItem("apiDate", apiDate);
+            localStorage.setItem("sessionDate", sessionDate);
             return;
         }
         throw "Unable to set api date";
@@ -168,25 +168,25 @@ export class Service {
     static async resetSessionDate() {
         const apiDate = await this.getApiDate();
         if (apiDate) {
-            sessionStorage.removeItem("apiDate");
-            sessionStorage.setItem("sessionDate", apiDate);
+            localStorage.removeItem("apiDate");
+            localStorage.setItem("sessionDate", apiDate);
             return;
         }
         throw "Unable to reset session date";
     }
 
     static isBDE() {
-        const apiDate = sessionStorage.getItem("apiDate");
-        const sessionDate = sessionStorage.getItem("sessionDate");
+        const apiDate = localStorage.getItem("apiDate");
+        const sessionDate = localStorage.getItem("sessionDate");
         return apiDate && apiDate != sessionDate;
     }
 
     static getSiteUUID() {
-        return sessionStorage.siteUUID || "";
+        return localStorage.siteUUID || "";
     }
 
     static getProgramName() {
-        let app: any = sessionStorage.getItem("app");
+        let app: any = localStorage.getItem("app");
         app = JSON.parse(app);
 
         if ("applicationName" in app) return app.applicationName;
@@ -195,11 +195,11 @@ export class Service {
     }
 
     static getSuspendedProgram() {
-        return sessionStorage.getItem("suspendedApp") || "";
+        return localStorage.getItem("suspendedApp") || "";
     }
 
     static getProgramID() {
-        let app: any = sessionStorage.getItem("app");
+        let app: any = localStorage.getItem("app");
         app = JSON.parse(app);
 
         if ("programID" in app) return app.programID;
@@ -208,13 +208,13 @@ export class Service {
     }
 
     static getUserRoles() {
-        const roles = sessionStorage.getItem("userRoles");
+        const roles = localStorage.getItem("userRoles");
         const roleObj = roles ? JSON.parse(roles) : [];
         return roleObj[0].role;
     }
 
     static getUserName() {
-        return sessionStorage.username;
+        return localStorage.username;
     }
 
     static getCoreVersion() {

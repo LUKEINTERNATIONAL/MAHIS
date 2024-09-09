@@ -5,7 +5,6 @@ export class DrugService extends Service {
         super()
     }
 
-    
     static getDrugs(params={} as Record<string, string | number>) {
         return super.getJson('/drugs', params)
     }
