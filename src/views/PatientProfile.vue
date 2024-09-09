@@ -6,14 +6,15 @@
         class="displayNoneDesktop"
         v-if="activeProgramID !== 33 && activeProgramID != ''"
       />
-      <AncEnrollmentModal
-        :closeModalFunc="closeEnrollmentModal"
+      <CheckInConfirmationModal
+        :closeModalFunc="closeCheckInModal"
         :onYes="handleCheckInYes"
         :onNo="handleCheckInNo"
-        :isOpen="isEnrollmentModalOpen"
-        :title="enrollModalTitle"
+        :isOpen="checkInModalOpen"
+        :title="`Are you sure you want to check in the patient?`"
       />
       <PatientProfile v-if="activeProgramID == 33" />
+
       <div
         class="content_manager"
         v-if="activeProgramID !== 33 && activeProgramID != ''"
@@ -27,6 +28,28 @@
           >
             <ion-card style="margin-bottom: 20px; background-color: #fff">
               <ion-card-content>
+                <div style="display: flex; justify-content: space-between">
+                  <!-- <DynamicButton
+                    name="Checkin Patient"
+                    @click="toggleCheckInModal()"
+                    fill="clear"
+                    iconSlot="start"
+                    :icon="checkboxOutline"
+                  /> -->
+                  <DynamicButton
+                    name="Checkin Patient"
+                    @click="toggleCheckInModal()"
+                    fill="clear"
+                    iconSlot="start"
+                    :icon="closeCircleOutline"
+                  />
+                  <DynamicButton
+                    name="Edit"
+                    fill="clear"
+                    iconSlot="start"
+                    :icon="iconsContent.editFade"
+                  />
+                </div>
                 <div class="p_name_image">
                   <div
                     :class="
@@ -42,22 +65,6 @@
                     ></ion-icon>
                   </div>
                   <div style="width: 100%">
-                    <div
-                      style="
-                        display: flex;
-                        justify-content: end;
-                        height: 20px;
-                        top: -10px;
-                        position: relative;
-                      "
-                    >
-                      <DynamicButton
-                        name="Edit"
-                        fill="clear"
-                        iconSlot="start"
-                        :icon="iconsContent.editFade"
-                      />
-                    </div>
                     <div class="p_name">{{ demographics?.name }}</div>
                   </div>
                 </div>
@@ -66,7 +73,7 @@
                   <ion-col class="demoContent">{{ demographics?.mrn }}</ion-col>
                 </ion-row>
                 <ion-row>
-                  <ion-col size="4">Gender:</ion-col>
+                  <ion-col size="4">Gendar:</ion-col>
                   <ion-col class="demoContent">{{
                     covertGender(demographics?.gender)
                   }}</ion-col>
@@ -85,14 +92,17 @@
             </ion-card>
             <div style="margin-left: 10px">
               <DynamicButton
-                v-for="(btn, index) in filteredProgramBtn"
-                :key="index"
-                :name="checkProgram(btn)"
+                class=""
                 style="margin-bottom: 5px; width: 96%; height: 45px"
+                @click="handleProgramClick(btn)"
+                v-for="(btn, index) in programBtn"
+                :id="btn.name === 'OPD Program' ? 'patient-profile-opd' : ''"
+                :key="index"
+                :name="btn.actionName"
                 :fill="activeProgramID != btn.program_id ? 'outline' : 'solid'"
                 :color="activeProgramID == btn.program_id ? 'success' : ''"
-                @click="handleProgramClick(btn)"
               />
+              <OPDPopover :isOpen="popoverOpen" />
             </div>
 
             <ion-card style="margin-bottom: 20px; background-color: #fff">
@@ -446,6 +456,8 @@ import {
   globe,
   add,
   person,
+  checkboxOutline,
+  closeCircleOutline
 } from "ionicons/icons";
 
 import { modalController } from "@ionic/vue";
@@ -476,8 +488,6 @@ import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { ObservationService } from "@/services/observation_service";
 import { useVitalsStore } from "@/stores/VitalsStore";
-import AncEnrollmentModal from "@/components/Modal/AncEnrollmentModal.vue";
-
 import {
   modifyCheckboxInputField,
   getCheckboxSelectedValue,
@@ -496,10 +506,12 @@ import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeigh
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
+import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
+import OPDPopover from "@/components/Popovers/Opdpopover.vue";
+
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
-import { ProgramService } from "@/services/program_service";
 export default defineComponent({
   mixins: [SetPrograms],
   components: {
@@ -547,7 +559,8 @@ export default defineComponent({
     DiagnosesHistory,
     LabTestsHistory,
     Programs,
-    AncEnrollmentModal,
+    CheckInConfirmationModal,
+    OPDPopover,
   },
   data() {
     return {
@@ -567,16 +580,14 @@ export default defineComponent({
       vitals: [] as any,
       NCDUserAction: [] as any,
       alerts: [] as any,
-      isEnrollmentModalOpen: false,
-      enrolledPrograms: [],
-      programToEnroll:0,
-      enrollModalTitle:"",
       colors: {
         Low: ["#B9E6FE", "#026AA2", "#9ADBFE"],
         Normal: ["#DDEEDD", "#016302", "#BBDDBC"],
         PreHigh: ["#FEDF89", "#B54708", "#FED667"],
         High: ["#FECDCA", "#B42318", "#FDA19B"],
       } as any,
+      checkInModalOpen: false,
+      popoverOpen: false,
     };
   },
   computed: {
@@ -589,7 +600,6 @@ export default defineComponent({
     this.checkAge();
     const patient = new PatientService();
     this.visits = await PatientService.getPatientVisits(patient.getID(), false);
-    await this.refreshPrograms();
     this.setAlerts();
     await this.updateData();
   },
@@ -603,7 +613,6 @@ export default defineComponent({
   },
   setup() {
     const modal = ref();
-
     return {
       chevronBackOutline,
       checkmark,
@@ -617,6 +626,8 @@ export default defineComponent({
       medkit,
       add,
       person,
+      checkboxOutline,
+      closeCircleOutline
     };
   },
 
@@ -673,20 +684,6 @@ export default defineComponent({
           value: "Administer medications!",
           name: "",
           index: "Patient is hypertensive",
-        convertToDisplayDate(date: any) {
-            return HisDate.toStandardHisDisplayFormat(date);
-        },
-        getSessionDate() {
-            return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
-        },
-        programAccess(programName: string): boolean {
-            const accessPrograms: any = localStorage.getItem("userPrograms");
-            const programs: any = JSON.parse(accessPrograms);
-            if (programs.some((program: any) => program.name === programName)) {
-                return true;
-            } else {
-                return false;
-            }
         },
       ];
     },
@@ -715,6 +712,31 @@ export default defineComponent({
     dismiss() {
       modalController.dismiss();
     },
+    closeCheckInModal(){
+   this.checkInModalOpen = false;
+    },
+    toggleCheckInModal() {
+      this.checkInModalOpen = !this.checkInModalOpen;
+    },
+    handleCheckInYes() {
+      console.log("yes");
+      this.toggleCheckInModal();
+    },
+    handleCheckInNo() {
+      this.toggleCheckInModal();
+    },
+
+    togglePopover() {
+      this.popoverOpen = !this.popoverOpen;
+    },
+
+    handleProgramClick(btn: any) {
+      if (btn.name == "OPD Program") {
+        this.togglePopover();
+        return;
+      }
+      this.setProgram(btn);
+    },
     async updateData() {
       const array = [
         "Height",
@@ -726,7 +748,6 @@ export default defineComponent({
         "SP02",
         "Respiratory rate",
       ];
-
       // An array to store all promises
       const promises = array.map(async (item) => {
         const dd = await ObservationService.getFirstValueNumber(
@@ -751,63 +772,6 @@ export default defineComponent({
     },
     formatBirthdate() {
       return HisDate.getBirthdateAge(this.demographics?.birthdate);
-    },
-    closeEnrollmentModal() {
-      this.isEnrollmentModalOpen = false;
-    },
-    toggleEnrollmentModal() {
-      this.isEnrollmentModalOpen = !this.isEnrollmentModalOpen;
-    },
-    async handleCheckInYes() {
-      await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, (new Date()).toString());
-      await this.refreshPrograms();
-      this.toggleEnrollmentModal();
-      return this.$router.push("ANCHome");
-    },
-    handleCheckInNo() {
-      this.toggleEnrollmentModal();
-    },
-    handleProgramClick(btn: any) {
-
-      const lower = (title:string)=> title.toLowerCase().replace(/\s+/g, '');
-
-
-      if (lower(btn.actionName) == lower("+ Enroll in ANC Program" )||
-         lower(btn.actionName) == lower("+ Enroll in PNC Program") ||
-         lower(btn.actionName) == lower("+ Enroll in Labour and delivery program")
-         ) {
-        const found: any = this.enrolledPrograms.find(
-          (p: any) => p.id == btn.program_id
-        );
-
-        if (!found) {
-          this.isEnrollmentModalOpen = true;
-          this.enrollModalTitle = `Are you sure you want to Enroll the patient in ${btn.name}`;
-          this.programToEnroll = btn.program_id;
-          return;
-        }
-        return this.$router.push("ANCHome");
-      }
-      this.setProgram(btn);
-    },
-
-    checkProgram(btn: any) {
-      const found: any = this.enrolledPrograms.find(
-        (p: any) => p.id == btn.program_id
-      );
-      if (found) return `Start ${btn.name}`;
-
-      return btn.actionName;
-    },
-
-    async refreshPrograms() {
-      const programs = await ProgramService.getPatientPrograms(
-        this.demographics.patient_id
-      );
-      this.enrolledPrograms = programs.map((p: any) => ({
-        name: p.program.name,
-        id: p.program_id,
-      }));
     },
   },
 });

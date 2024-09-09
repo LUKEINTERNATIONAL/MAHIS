@@ -90,13 +90,25 @@ export default defineComponent({
       await UserService.setProgramUserActions();
       this.$router.push(url);
     },
-    async setProgramInfo() {
-      let program: any = sessionStorage.getItem("app");
-      program = JSON.parse(program);
-      this.activeProgramID = program.programID;
-      this.programBtn = await UserService.userProgramData(this.demographics.patient_id);
-      const programStore = useProgramStore();
-      programStore.setProgramInformation({ program: program, programBtn: this.programBtn });
+    methods: {
+        async setProgram(program: any) {      
+        
+            sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
+            await this.setProgramInfo();
+            if (this.demographics.patient_id) await this.nav(program.url);
+        },
+        async nav(url: any) {
+            await UserService.setProgramUserActions();
+            this.$router.push(url);
+        },
+        async setProgramInfo() {
+            let program: any = sessionStorage.getItem("app");
+            program = JSON.parse(program);
+            this.activeProgramID = program.programID;
+            this.programBtn = await UserService.userProgramData(this.demographics.patient_id);
+            const programStore = useProgramStore();
+            programStore.setProgramInformation({ program: program, programBtn: this.programBtn });
+        },
     },
   },
 });
