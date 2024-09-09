@@ -1,4 +1,4 @@
-package com.lukeInternational.MaHIS;
+package com.mohmw.MAHIS;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -8,6 +8,8 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -42,10 +44,13 @@ import { DiagnosisTreatmentService, ImmunizationService, MedicationDispensedServ
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { resetPatientData } from "@/services/reset_data";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "Treatment",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -174,16 +179,11 @@ export default defineComponent({
             "GDM",
             "diabetes",
             "anaemia",
-            "hypertensionReason",
         ]),
         ...mapState(useMedicationDispensedStore, ["iron"]),
         ...mapState(useDiagnosisCounsellingStore, [
-            "preEclampsia",
-            "aspirin",
-            "gdm",
             "gdmCounselling",
             "hivRisk",
-            "aspirin",
             "gdm",
             "gdmCounselling",
             "hivRisk",
@@ -217,7 +217,6 @@ export default defineComponent({
         async saveData() {
             this.saveDiagnosis();
             this.saveMedicationDispensed();
-            this.saveCouselling();
             this.saveImmunisation();
             this.saveIntimatePartner();
             this.saveDeworming();
@@ -248,9 +247,6 @@ export default defineComponent({
             // }
             console.log(await this.buildMedicationDispensed());
         },
-        async saveCouselling() {
-            console.log(await this.buildCouselling());
-        },
         async saveImmunisation() {
             if (this.HepB1.length > 0) {
                 const userID: any = Service.getUserID();
@@ -277,7 +273,6 @@ export default defineComponent({
                 ...(await formatRadioButtonData(this.hyper)),
                 ...(await formatRadioButtonData(this.hiv)),
                 ...(await formatInputFiledData(this.hiv)),
-                ...(await formatInputFiledData(this.hypertensionReason)),
                 ...(await formatRadioButtonData(this.hepatitisB)),
                 ...(await formatRadioButtonData(this.hepatitisC)),
                 ...(await formatRadioButtonData(this.syphilis)),
@@ -294,25 +289,25 @@ export default defineComponent({
                 // ...(await formatRadioButtonData(this.calcium)),
             ];
         },
-        async buildCouselling() {
-            return [
-                ...(await formatRadioButtonData(this.preEclampsia)),
-                // ...(await formatRadioButtonData(this.preEclampsiaCounselling)),
-                ...(await formatRadioButtonData(this.aspirin)),
-                ...(await formatRadioButtonData(this.gdm)),
-                ...(await formatRadioButtonData(this.gdmCounselling)),
-                ...(await formatRadioButtonData(this.hivRisk)),
-                ...(await formatRadioButtonData(this.prEp)),
-                //   ...(await formatRadioButtonData(this.seekingCare)),
-                //  ...(await formatRadioButtonData(this.dangerSigns)),
-                ...(await formatRadioButtonData(this.birth)),
-                ...(await formatRadioButtonData(this.modeOfTransport)),
-                ...(await formatRadioButtonData(this.intrapartum)),
-                ...(await formatRadioButtonData(this.birthPlace)),
-                ...(await formatRadioButtonData(this.postpartum)),
-                ...(await formatRadioButtonData(this.breastFeeding)),
-            ];
-        },
+        // async buildCouselling() {
+        //     return [
+        //         ...(await formatRadioButtonData(this.preEclampsia)),
+        //         // ...(await formatRadioButtonData(this.preEclampsiaCounselling)),
+        //         ...(await formatRadioButtonData(this.aspirin)),
+        //         ...(await formatRadioButtonData(this.gdm)),
+        //         ...(await formatRadioButtonData(this.gdmCounselling)),
+        //         ...(await formatRadioButtonData(this.hivRisk)),
+        //         ...(await formatRadioButtonData(this.prEp)),
+        //         //   ...(await formatRadioButtonData(this.seekingCare)),
+        //         //  ...(await formatRadioButtonData(this.dangerSigns)),
+        //         ...(await formatRadioButtonData(this.birth)),
+        //         ...(await formatRadioButtonData(this.modeOfTransport)),
+        //         ...(await formatRadioButtonData(this.intrapartum)),
+        //         ...(await formatRadioButtonData(this.birthPlace)),
+        //         ...(await formatRadioButtonData(this.postpartum)),
+        //         ...(await formatRadioButtonData(this.breastFeeding)),
+        //     ];
+        // },
         async buildImmunisation() {
             return [
                 ...(await formatRadioButtonData(this.ttDoses)),

@@ -40,7 +40,8 @@
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
-                                        <ion-item style="cursor: pointer" @click="navigationMenu('MoHReports')" class="list-content">MoH</ion-item>
+                                      <ion-item style="cursor: pointer" @click="navigationMenu('FacilityReports')" class="list-content">Facility Reports</ion-item>
+                                      <ion-item style="cursor: pointer" @click="navigationMenu('MoHReports')" class="list-content">MoH</ion-item>
                                         <ion-item style="cursor: pointer" @click="navigationMenu('ClinicalReports')" class="list-content"
                                             >Clinical Reports</ion-item
                                         >
@@ -69,20 +70,35 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-list v-if="programAttri[3].showReports">
-                                <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer"
-                                    >EPI Monthly Report</ion-item
-                                >
-                            </ion-list>
-                            <!-- <ion-accordion value="fourth" v-if="psudoIsEIRProgram(33)">
+
+                            <ion-item
+                                @click="navigationMenu('EIPMReport')"
+                                class="list-content"
+                                style="cursor: pointer"
+                            >
+                                EPI Monthly Report
+                            </ion-item>
+
+                            <!-- <ion-accordion value="fourth" v-if="programAttri[3].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">EIR Reports</ion-label>
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
-                                        <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer"
-                                            >EPI Monthly Report</ion-item
+                                        <ion-item
+                                            @click="navigationMenu('EIPMReport')"
+                                            class="list-content"
+                                            style="cursor: pointer"
                                         >
+                                            EPI Monthly Report
+                                        </ion-item>
+                                        <ion-item
+                                            @click="navigationMenu('AEFIReport')"
+                                            class="list-content"
+                                            style="cursor: pointer"
+                                        >
+                                            Adverse Events Following Immunization - AEFI
+                                        </ion-item>
                                     </ion-list>
                                 </div>
                             </ion-accordion> -->
