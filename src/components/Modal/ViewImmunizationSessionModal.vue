@@ -1,12 +1,15 @@
 <template>
         <ion-header>
             <ion-toolbar>
-                <ion-title>Immunization Sessioon Title</ion-title>
+                <ion-title>Immunization Session</ion-title>
                 <ion-buttons slot="end">
-                    <ion-button :strong="true">Confirm</ion-button>
+                    <ion-button :strong="true">
+                        <ion-icon :name="close"/>
+                    </ion-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
+        {{ props.data }}
         <ion-content>
                 <ion-card-header>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -159,10 +162,17 @@
 </template>
 
 <script lang="ts" setup>
-import { IonContent, IonHeader, IonModal, IonCardHeader, IonCardTitle, IonButton, IonPage, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
+import { IonContent, IonHeader, IonCardHeader, IonCardTitle, IonButton, IonPage, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
 
-import { ellipsisVertical, add } from 'ionicons/icons';
+import { ellipsisVertical, close } from 'ionicons/icons';
 import { ref, defineExpose } from 'vue';
+
+const props = defineProps({
+    data: {
+        type: Object,
+        default: false
+    }
+})
 
 const isOpen = ref<boolean>(false);
 const svgIconHeight = ref<number>(50);

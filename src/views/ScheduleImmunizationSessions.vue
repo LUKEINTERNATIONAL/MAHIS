@@ -12,7 +12,7 @@
                 <div style="display: flex; justify-content: space-between">
                     <div
                         style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
-                        <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
+                        <basic-form :contentData="startEndDate"></basic-form>
                     </div>
                     <div style="display: inline-block; vertical-align: top; margin-top: 10px; float: right">
                         <ion-button @click="openModal()">
@@ -27,37 +27,61 @@
                         Schedules</ion-card-title>
                     <div class="flex-between">
                         <div>
-                            <VCalendar :attributes="attributes" :expanded="true" @dayclick="onCalendarDayClick" />
-
+                            <div v-if="!isLoading" class="calendar-container">
+                                <VCalendar :is-dark="false" :attributes="attributes" :expanded="true" @dayclick="onCalendarDayClick" />
+                            </div>
+                            <ion-list v-else>
+                                <ion-item v-for="i in 3" :key="i">
+                                    <ion-thumbnail slot="start">
+                                        <ion-skeleton-text :animated="true"></ion-skeleton-text>
+                                    </ion-thumbnail>
+                                    <ion-label>
+                                        <h3>
+                                            <ion-skeleton-text :animated="true" style="width: 80%;"></ion-skeleton-text>
+                                        </h3>
+                                        <p>
+                                            <ion-skeleton-text :animated="true" style="width: 60%;"></ion-skeleton-text>
+                                        </p>
+                                        <p>
+                                            <ion-skeleton-text :animated="true" style="width: 30%;"></ion-skeleton-text>
+                                        </p>
+                                    </ion-label>
+                                </ion-item>
+                            </ion-list>
                         </div>
-                        <ion-card class="w-full" style="margin-top: 0px;">
-                            <ion-list v-for="schedule in displaySchedules" v-bind:key="schedule.id">
-                                <ion-card-header>
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <ion-card v-if="displaySchedules.length > 0" class="w-full ion-hide-sm-down"
+                            style="margin-top: 0px;">
+                            <ion-list v-for="schedule, index in displaySchedules" v-bind:key="schedule.id">
+
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <ion-card-header>
                                         <ion-card-title style="text-transform: uppercase; font-size: 22px;">
-                                            (1) Immunization Session A for Example Y
+                                            ({{ index + 1 }}) {{ schedule.session_name }}
                                         </ion-card-title>
+                                        <ion-card-subtitle>
+                                            Scheduled from: {{ schedule.start_date }} to {{ schedule.end_date }}
+                                        </ion-card-subtitle>
+                                    </ion-card-header>
 
-                                        <ion-button id="popover-trigger" slot="end" fill="clear">
-                                            <ion-icon slot="icon-only" :icon="ellipsisVertical"></ion-icon>
-                                        </ion-button>
+                                    <ion-button id="popover-trigger" slot="end" fill="clear">
+                                        <ion-icon slot="icon-only" :icon="ellipsisVertical"></ion-icon>
+                                    </ion-button>
 
-                                        <ion-popover trigger="popover-trigger" dismiss-on-select="true">
-                                            <ion-content>
-                                                <ion-list>
-                                                    <ion-item button>
-                                                        <ion-label>Edit</ion-label>
-                                                    </ion-item>
-                                                    <ion-item button>
-                                                        <ion-label>Delete</ion-label>
-                                                    </ion-item>
-                                                </ion-list>
-                                            </ion-content>
-                                        </ion-popover>
-                                    </div>
-                                </ion-card-header>
+                                    <ion-popover trigger="popover-trigger" dismiss-on-select="true">
+                                        <ion-content>
+                                            <ion-list>
+                                                <ion-item button>
+                                                    <ion-label>Edit</ion-label>
+                                                </ion-item>
+                                                <ion-item button>
+                                                    <ion-label>Delete</ion-label>
+                                                </ion-item>
+                                            </ion-list>
+                                        </ion-content>
+                                    </ion-popover>
+                                </div>
 
-                                <ion-card-content class="-mt-40 ion-hide-sm-down">
+                                <ion-card-content class="-mt-40">
                                     <ion-list :inset="true">
                                         <ion-item>
                                             <div slot="start" class="icon-color">
@@ -107,7 +131,7 @@
 
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Target</h3>
-                                                <p>50 people (Under 5)</p>
+                                                <p>{{ schedule.target }} people (Under 5)</p>
                                             </ion-label>
                                         </ion-item>
                                         <ion-item>
@@ -127,8 +151,11 @@
                                                 </svg>
                                             </div>
                                             <ion-label>
-                                                <h3 class="ion-label-h3">Administered Vaccines</h3>
-                                                <p>Astrazeneca A, Covid B, Influenza C</p>
+                                                <h3 class="ion-label-h3">Vaccines</h3>
+                                                <p>
+                                                    {{ schedule.vaccines.map((vaccine: any) => vaccine.name).join(', ')
+                                                    }}
+                                                </p>
                                             </ion-label>
                                         </ion-item>
                                         <ion-item>
@@ -149,7 +176,7 @@
 
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Session type</h3>
-                                                <p>Routine (repeat daily)</p>
+                                                <p>{{ schedule.session_type }} ({{ schedule.repeat_type }} repeat)</p>
                                             </ion-label>
                                         </ion-item>
                                         <ion-item>
@@ -167,14 +194,17 @@
                                             </div>
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Assignees</h3>
-                                                <p>Jonathan Doe, Janet Doe, John Doe, Father Doe</p>
+                                                <p>
+                                                    {{ schedule.assignees.map((assignee: any) => `${assignee.given_name}
+                                                    ${assignee.family_name}`).join(', ') }}
+                                                </p>
                                             </ion-label>
                                         </ion-item>
                                     </ion-list>
                                 </ion-card-content>
                             </ion-list>
                         </ion-card>
-                        <ion-card v-if="displaySchedules.length == 0" class="w-full">
+                        <ion-card v-if="displaySchedules.length == 0" class="w-full ion-hide-sm-down">
                             <ion-card-content
                                 style="display: flex; padding-top: 10px; justify-content: center; align-items: center; flex-direction: column;">
                                 <img height="70" style="width: auto; object-fit: cover;"
@@ -191,7 +221,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonCardHeader, IonCardTitle, IonButton, IonPage, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
+import { IonContent, IonHeader, IonMenuButton, IonSkeletonText, IonCardHeader, IonCardTitle, IonButton, IonPage, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -200,8 +230,6 @@ import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/Immuni
 import { mapState } from "pinia";
 import SetUser from "@/views/Mixin/SetUser.vue";
 import HisDate from "@/utils/Date";
-import DataTable from "datatables.net-vue3";
-import DataTablesCore from "datatables.net";
 import "datatables.net-buttons";
 import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-responsive";
@@ -209,17 +237,14 @@ import "datatables.net-buttons-dt";
 import DynamicButton from "@/components/DynamicButton.vue";
 import AddImmunizationSessionModal from "@/components/Modal/AddImmunizationSessionModal.vue";
 import { createModal } from "@/utils/Alerts";
-import { StockService } from "@/services/stock_service";
-import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
 import BasicForm from "@/components/BasicForm.vue";
-import { toastWarning } from "@/utils/Alerts";
 import { ellipsisVertical, add } from 'ionicons/icons';
 import "datatables.net-select";
+import { Capacitor } from '@capacitor/core';
 import { SessionScheduleService } from "@/services/session_schedule_service";
 import { SessionSchedule } from "@/types";
 import ViewImmunizationSessionModal from "@/components/Modal/ViewImmunizationSessionModal.vue";
-import { CalendarDay } from "@vuepic/vue-datepicker";
 
 export default defineComponent({
     name: "Home",
@@ -245,10 +270,10 @@ export default defineComponent({
         IonCardContent,
         ImmunizationTrendsGraph,
         ImmunizationGroupGraph,
-        DataTable,
         IonCard,
         DynamicButton,
         BasicForm,
+        IonSkeletonText,
         ViewImmunizationSessionModal
     },
     data() {
@@ -288,7 +313,6 @@ export default defineComponent({
         return { add, ellipsisVertical }
     },
     computed: {
-        ...mapState(useStockStore, ["stock"]),
         ...mapState(useStartEndDate, ["startEndDate"]),
     },
     $route: {
@@ -304,38 +328,47 @@ export default defineComponent({
     },
     async mounted() {
         this.getSessionSchedules();
-        // await createModal(ViewImmunizationSessionModal, { class: "otherVitalsModal largeModal" });
     },
     methods: {
-        handleEdit(id: any) {
-            console.log(`Editing item with id: ${id}`);
-        },
-
-        handleDelete(id: any) {
-            console.log(`Deleting item with id: ${id}`);
-        },
-        async handleInputData(event: any) {
-            if (event.inputHeader == "Start date") {
-                this.startDate = HisDate.toStandardHisFormat(event.value);
-            }
-            if (event.inputHeader == "End date") {
-                this.endDate = HisDate.toStandardHisFormat(event.value);
-            }
-            await this.buildTableData();
-        },
-        onCalendarDayClick(calendarDay: any, event: MouseEvent) {
-            calendarDay.attributes.forEach((attribute: { description: string; }) => {
+        async onCalendarDayClick(calendarDay: any, event: MouseEvent) {
+            let hasOverlap = false;
+            calendarDay.attributes.forEach((attribute: { description: string }) => {
                 this.schedules
                     .filter((schedule) => schedule.session_name === attribute.description)
                     .forEach((schedule) => {
-                        if (!this.displaySchedules.some((s: { session_name: string }) => s.session_name === schedule.session_name)) {
+                        const overlappingSchedule = this.displaySchedules.find((s: { session_name: string, start_date: string, end_date: string }) =>
+                            s.session_name === schedule.session_name &&
+                            (new Date(s.start_date) <= new Date(schedule.end_date)) &&
+                            (new Date(s.end_date) >= new Date(schedule.start_date))
+                        );
+
+                        if (overlappingSchedule) {
+                            hasOverlap = true;
+                        } else {
+                            this.displaySchedules = [];
                             this.displaySchedules.push(schedule);
                         }
                     });
             });
-        }
-        ,
+
+            if (hasOverlap) {
+                calendarDay.attributes.forEach((attribute: { description: string }) => {
+                    this.schedules
+                        .filter((schedule) => schedule.session_name === attribute.description)
+                        .forEach((schedule) => {
+                            if (!this.displaySchedules.some((s: { session_name: string }) => s.session_name === schedule.session_name)) {
+                                this.displaySchedules.push(schedule);
+                            }
+                        });
+                });
+            }
+            const platform = Capacitor.getPlatform();
+            if (true) {
+                await createModal(ViewImmunizationSessionModal, { class: "otherVitalsModal largeModal", data: this.displaySchedules });
+            }
+        },
         async getSessionSchedules(): Promise<void> {
+            this.isLoading = true;
             try {
                 const sessionService = new SessionScheduleService();
                 const data: any = await sessionService.getSessions();
@@ -346,21 +379,21 @@ export default defineComponent({
                         highlight: {
                             start: {
                                 fillMode: 'light',
-                                contentStyle: { color: '#016302' },
+                                contentStyle: { color: this.getUniqueColor() },
                             },
                             base: {
                                 fillMode: 'light',
                                 contentStyle: { color: '#fff' },
-                                style: { background: '#016302' },
+                                style: { background: this.getUniqueColor() },
                             },
                             end: {
                                 fillMode: 'light',
-                                contentStyle: { color: '#016302' },
+                                contentStyle: { color: this.getUniqueColor() },
                             },
                         },
-                        color: "green",
+                        color: this.getUniqueColor(),
                         content: {
-                            color: "green"
+                            color: this.getUniqueColor()
                         },
                         dates: {
                             start: item.start_date,
@@ -372,57 +405,26 @@ export default defineComponent({
                     },)
                 })
                 this.schedules = data;
+                this.isLoading = false;
             } catch (exception: any) {
-                console.log(exception)
-            }
-        },
-        async buildTableData() {
-            this.isLoading = true;
-            try {
-                const stockService = new StockService();
-                const data = await stockService.getItems(this.startDate, this.endDate);
-
-                let filteredData = data;
-                this.allStock = data;
-                this.currentStock = data.filter((item: any) => item.current_quantity !== 0);
-                this.outStock = data.filter((item: any) => item.current_quantity === 0);
-
-                if (this.selectedButton === "current") {
-                    filteredData = this.currentStock;
-                } else if (this.selectedButton === "out") {
-                    filteredData = this.outStock;
-                }
-
-                this.reportData = filteredData.map((item: any) => {
-                    return [
-                        HisDate.toStandardHisDisplayFormat(item.delivery_date),
-                        HisDate.toStandardHisDisplayFormat(item.expiry_date),
-                        item.batch_number,
-                        item.delivered_quantity,
-                        item.dispensed_quantity,
-                        item.current_quantity,
-                        item.drug_legacy_name,
-                        item.current_quantity,
-                        `<button class="btn btn-sm btn-primary edit-btn" data-id="${item.id}">Edit</button>
-                 <button class="btn btn-sm btn-danger delete-btn" data-id="${item.id}">Delete</button>`,
-                    ];
-                });
-
-                DataTable.use(DataTablesCore);
-            } catch (error) {
-                toastWarning("An error occurred while loading data.");
-            } finally {
+                console.error(exception)
                 this.isLoading = false;
             }
         },
-        async selectButton(button: any) {
-            this.selectedButton = button;
-            await this.buildTableData();
+        getUniqueColor() {
+            const existingColors = new Set(this.attributes.map((attribute: { color: string; }) => attribute.color));
+            const colors = <string[]>['gray', 'red', 'green', 'purple', 'orange', 'teal', 'pink', 'indigo'];
+            for (const color of colors) {
+                if (!existingColors.has(color)) {
+                    return color;
+                }
+            }
+            return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
         },
         async openModal() {
             const data: any = await createModal(AddImmunizationSessionModal, { class: "otherVitalsModal largeModal" });
             if (data == "dismiss") {
-                await this.buildTableData();
+                await this.getSessionSchedules();
             }
         },
     },
@@ -430,6 +432,55 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.calendar-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .calendar-container {
+    max-width: 100%;
+    width: 100%;
+    padding: 0;
+  }
+}
+
+.calendar-container ::v-deep  .vc-header {
+    margin-bottom: 10px;
+}
+
+.calendar-container ::v-deep  .vc-header button {
+  background-color: transparent;
+  font-size: 22px;
+  background-image: none;
+}
+
+.calendar-container ::v-deep .vc-container {
+    width: 100%;
+}
+
+.calendar-container ::v-deep .vc-weeks {
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-container ::v-deep .vc-day {
+    padding: 10px;
+}
+
+.calendar-container ::v-deep .vc-header {
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.calendar-container ::v-deep .vc-header-label {
+    font-size: 18px;
+}
+
+.calendar-container ::v-deep .vc-arrow {
+    font-size: 20px;
+}
+
 .content-container {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -747,12 +798,4 @@ ion-button {
     height: 50px;
     align-items: center;
 }
-</style>
-<style>
-@import "datatables.net-dt";
-@import "datatables.net-buttons-dt";
-@import "datatables.net-responsive-dt";
-@import "datatables.net-select-dt";
-
-@import "bootstrap";
 </style>
