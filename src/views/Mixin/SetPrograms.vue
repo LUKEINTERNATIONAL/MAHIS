@@ -20,7 +20,6 @@ import {
 } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
-
 export default defineComponent({
   components: {
     IonIcon,
@@ -32,19 +31,11 @@ export default defineComponent({
     userRole: "" as any,
     ready: false,
     userRoleSettings: {} as any,
-    programBtn: [] as any[],
+    programBtn: {} as any,
     activeProgramID: "" as any,
   }),
   computed: {
     ...mapState(useDemographicsStore, ["demographics"]),
-    filteredProgramBtn() {
-      return this.programBtn.filter((btn) => {
-        if (btn.program_id === 12 && this.demographics.gender !== "F") {
-          return false;
-        }
-        return true;
-      });
-    },
   },
   setup() {
     return {
@@ -82,7 +73,7 @@ export default defineComponent({
   },
   methods: {
     async setProgram(program: any) {
-      sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
+      localStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
       await this.setProgramInfo();
       if (this.demographics.patient_id) await this.nav(program.url);
     },
@@ -91,7 +82,7 @@ export default defineComponent({
       this.$router.push(url);
     },
     async setProgramInfo() {
-      let program: any = sessionStorage.getItem("app");
+      let program: any = localStorage.getItem("app");
       program = JSON.parse(program);
       this.activeProgramID = program.programID;
       this.programBtn = await UserService.userProgramData(this.demographics.patient_id);
