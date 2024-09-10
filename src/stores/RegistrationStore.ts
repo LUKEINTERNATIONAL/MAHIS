@@ -50,10 +50,10 @@ const initialPersonalInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Last name*",
+                            inputHeader: "Middle name",
                             icon: icons.fullName,
                             value: "",
-                            name: "lastname",
+                            name: "middleName",
                             eventType: "input",
                             alertsErrorMassage: "",
                             required: true,
@@ -69,10 +69,10 @@ const initialPersonalInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Middle name",
+                            inputHeader: "Last name*",
                             icon: icons.fullName,
                             value: "",
-                            name: "middleName",
+                            name: "lastname",
                             eventType: "input",
                             alertsErrorMassage: "",
                             required: true,
