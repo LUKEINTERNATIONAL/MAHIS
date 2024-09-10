@@ -72,7 +72,7 @@ export default defineComponent({
         // await this.setProgramInfo();
     },
     methods: {
-        async setProgram(program: any) {      
+        async   setProgram(program: any) {      
         
             sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
             await this.setProgramInfo();
