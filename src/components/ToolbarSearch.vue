@@ -303,6 +303,7 @@ export default defineComponent({
             } else if (dataExtracted) {
                 await this.setPersonInformation(dataExtracted);
                 this.$router.push("/registration/manual");
+                return;
             }
             this.searchValue = dataScanned;
         },
