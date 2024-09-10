@@ -4,7 +4,7 @@
             <ion-col style="margin-left: -3px">
                 <div class="om">Administer Vaccine</div>
             </ion-col>
-            <ion-col size="6" style="text-align: right">
+            <ion-col size="6">
                 <ion-label class="lbl-tl" style="font-size: 13">
                     Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label
                 >
@@ -61,16 +61,18 @@
             </div>
 
             <div class="saveBtn" v-if="!showDateBtns">
-                <ion-row justify-content-between>
-                    <ion-col size="auto">
-                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px;">
+                <ion-row>
+                    <ion-col>
+                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
                             Cancel
+                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                         </ion-button>
                     </ion-col>
 
-                    <ion-col size="auto" class="ion-text-end" style="margin-left: auto;">
-                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px;">
-                            Save
+                    <ion-col>
+                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px">
+                            save
+                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                         </ion-button>
                     </ion-col>
                 </ion-row>
@@ -240,7 +242,6 @@ export default defineComponent({
                 batch_number: selectedOption.lotNumber,
                 date_administered: this.selected_date_,
                 drug_id: this.currentDrug.drug.drug_id,
-                drug_: this.currentDrug,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
@@ -347,9 +348,11 @@ h5 {
     display: flex;
     justify-content: space-between;
     margin: 20px;
+    width: 330px;
     align-items: center;
 }
 .btnContent {
+    display: flex;
     justify-content: center;
     line-height: 60px;
 }

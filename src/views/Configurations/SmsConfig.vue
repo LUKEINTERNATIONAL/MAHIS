@@ -25,7 +25,6 @@
                                   :placeholder="'Gateway API Key'"
                                   @update:inputValue ="handleInputData($event,'apiKey')"
                                   :icon="createOutline"
-                                  inputType="password" 
                               />
                           </ion-col>
                       </ion-row>
@@ -54,19 +53,6 @@
                                   :value="configData.reminderMessage"
                                   @ionInput="handleInputData($event,'reminderMessage')"
                                   :placeholder="'Add Reminder message'"
-                                  :auto-grow="true"
-                                  fill="outline"
-                              ></ion-textarea>
-                          </ion-col>
-                      </ion-row>
-                      <ion-row class="form-row" v-if="configData.smsReminder">
-                          <ion-col>
-                              <ion-textarea
-                                  class="custom"
-                                  v-model="configData.cancelMessage"
-                                  :value="configData.cancelMessage"
-                                  @ionInput="handleInputData($event,'cancelMessage')"
-                                  :placeholder="'Add Cancel appointment message'"
                                   :auto-grow="true"
                                   fill="outline"
                               ></ion-textarea>
@@ -172,7 +158,6 @@ interface ConfigData {
     url: string;
     apiKey: string;
     reminderMessage: string;
-    cancelMessage: string;
     reminderPeriod: string;
     smsReminder: boolean;
     smsActivation: boolean;
@@ -204,7 +189,6 @@ export default defineComponent({
                     url: "",
                   apiKey: "",
          reminderMessage: "",
-         cancelMessage: "",
             reminderPeriod: "",
             smsReminder: false,
             smsActivation: false,
@@ -237,7 +221,6 @@ export default defineComponent({
             this.configData.apiKey = data.sms_api_key;
             this.configData.smsReminder = data.sms_reminder;
             this.configData.reminderMessage = data.next_appointment_message;
-            this.configData.cancelMessage = data.cancel_appointment_message;
             this.configData.reminderPeriod = data.next_appointment_reminder_period;
             this.configData.smsActivation = data.sms_activation;
             this.configData.smsPopup = data.show_sms_popup;
@@ -258,7 +241,7 @@ export default defineComponent({
         async onSubmit(){
             try {
                 const configs = await SmsService.setConfigurations(this.configData);
-                this.updateConfigData(configs.message);
+                this.updateConfigData(configs);
 
                 toastSuccess("Successfully updated configuration file");
             } catch (e) {

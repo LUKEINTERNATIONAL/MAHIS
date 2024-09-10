@@ -8,8 +8,6 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
-                :backUrl="userRoleSettings.url"
-                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -58,7 +56,7 @@ import { LabOrder } from "@/apps/NCD/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import { useMedicalFollowUpStore } from "../store/symptomsFollowUp/medicalFollowUp";
+import { useMedicalFollowUpStore } from "../store/symptomsFollowUp/medicalFollowUpStore";
 import { usePersistentBehaviourStore } from "../store/symptomsFollowUp/persistentBehaviourStore";
 import { usePersistentSymptomsStore } from "../store/symptomsFollowUp/persistentSymptomsStore";
 import { useIpvStore } from "../store/symptomsFollowUp/ipvStore";
@@ -69,12 +67,9 @@ import {CurrentPhysiologicalSymptomsInstance, FetalMovementInstance, IntimatePar
 import { resetPatientData } from "@/services/reset_data";
 import { validateField } from "@/services/ANC/symptoms_validation";
 import BasicFooter from "@/components/BasicFooter.vue";
-import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "Home",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
+    components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -110,51 +105,51 @@ export default defineComponent({
                     number: 1,
                     last_step: "",
                 },
-                // {
-                //     title: "Persistent behaviours",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 2,
-                //     last_step: "",
-                // },
-                // {
-                //     title: "Persistent symptoms",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 3,
-                //     last_step: "",
-                // },
-                // {
-                //     title: "Current physiological symptoms",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 4,
-                //     last_step: "",
-                // },
-                // {
-                //     title: "Intimate partner violence(IPV)",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 5,
-                //     last_step: "",
-                // },
-                // {
-                //     title: "Fatal Movement",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 6,
-                //     last_step: "last_step",
-                // },
+                {
+                    title: "Persistent behaviours",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 2,
+                    last_step: "",
+                },
+                {
+                    title: "Persistent symptoms",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 3,
+                    last_step: "",
+                },
+                {
+                    title: "Current physiological symptoms",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 4,
+                    last_step: "",
+                },
+                {
+                    title: "Intimate partner violence(IPV)",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 5,
+                    last_step: "",
+                },
+                {
+                    title: "Fatal Movement",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 6,
+                    last_step: "last_step",
+                },
             ],
             StepperData: [
                 {
@@ -162,31 +157,31 @@ export default defineComponent({
                     component: "MedicalFollowUp",
                     value: "1",
                 },
-                // {
-                //     title: "Persistent behaviours",
-                //     component: "PersistentBehaviour",
-                //     value: "2",
-                // },
-                // {
-                //     title: "Persistent symptoms",
-                //     component: "PersistentSymptoms",
-                //     value: "3",
-                // },
-                // {
-                //     title: "Current physiological symptoms",
-                //     component: "CurrentPhysiologicalSymptoms",
-                //     value: "4",
-                // },
-                // {
-                //     title: "Intimate partner violence(IPV)",
-                //     component: "Ipv",
-                //     value: "5",
-                // },
-                // {
-                //     title: "Fetal Movement",
-                //     component: "FatalMovement",
-                //     value: "6",
-                // },
+                {
+                    title: "Persistent behaviours",
+                    component: "PersistentBehaviour",
+                    value: "2",
+                },
+                {
+                    title: "Persistent symptoms",
+                    component: "PersistentSymptoms",
+                    value: "3",
+                },
+                {
+                    title: "Current physiological symptoms",
+                    component: "CurrentPhysiologicalSymptoms",
+                    value: "4",
+                },
+                {
+                    title: "Intimate partner violence(IPV)",
+                    component: "Ipv",
+                    value: "5", 
+                },
+                {
+                    title: "Fetal Movement",
+                    component: "FatalMovement",
+                    value: "6",
+                },
             ],
             isOpen: false,
             iconsContent: icons,

@@ -101,7 +101,7 @@ import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
 import ProgramData from "@/Data/ProgramData";
-import { getUserLocation } from "@/services/userService";
+import { getUserLocation } from "@/services/userService"
 import { useUserStore } from "@/stores/userStore";
 
 export default defineComponent({
@@ -140,7 +140,9 @@ export default defineComponent({
             showPassword: false,
         };
     },
-    computed: {},
+    computed: {
+
+    },
     setup() {
         return { eye, person, eyeOff };
     },
@@ -148,7 +150,7 @@ export default defineComponent({
         this.auth = new AuthService();
     },
     async mounted() {
-        const auth = new AuthService();
+        const auth = new AuthService()
         await auth.loadConfig();
         await this.getPrograms();
     },
@@ -168,9 +170,9 @@ export default defineComponent({
                     //     throw "Local date does not match API date. Please Update your device's date";
                     // }
                     await this.auth.login(this.password);
-
+                
                     if (this.auth.checkUserPrograms(this.program.name)) {
-                        this.facilityB();
+                        this.facilityB()
                         this.$router.push("/home");
                     } else {
                         toastDanger("You don't have permission to access the program.");
@@ -187,7 +189,7 @@ export default defineComponent({
             }
         },
         handleInput(event: any) {
-            localStorage.setItem("app", JSON.stringify({ programID: event.program_id, applicationName: event.name }));
+            sessionStorage.setItem("app", JSON.stringify({ programID: event.program_id, applicationName: event.name }));
         },
         togglePasswordVisibility() {
             if (!this.togglePasswordVisibility) return true;
@@ -200,8 +202,8 @@ export default defineComponent({
             const store = useUserStore();
             const data = await getUserLocation();
             store.setUserFacilityName(data.name);
-            store.setCurrentUserProgram(this.program);
-        },
+            store.setCurrentUserProgram(this.program)
+        }
     },
 });
 </script>

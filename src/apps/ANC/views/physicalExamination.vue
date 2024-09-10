@@ -8,8 +8,6 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
-                :backUrl="userRoleSettings.url"
-                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -67,12 +65,9 @@ import { useFetalPresentationStore } from "../store/physical exam/FetalPresantat
 import { usePresentingSigns } from "../store/physical exam/PresentingSignsStore";
 import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
-import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "PhysicalExam",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
+    components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -117,7 +112,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Abdominal examination",
+                    title: "Fetal assessment",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -126,12 +121,21 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Presenting signs for IPV",
+                    title: "Fetal presentation",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
                     number: 4,
+                    last_step: "",
+                },
+                {
+                    title: "Presenting signs for IPV",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 5,
                     last_step: "last_step",
                 },
             ],
@@ -147,14 +151,19 @@ export default defineComponent({
                     value: "2",
                 },
                 {
-                    title: "Abdominal examination",
-                    component: "AbdominalExamination",
+                    title: "Fetal assessment",
+                    component: "FetalAssessment",
                     value: "3",
+                },
+                {
+                    title: "Fetal presentation",
+                    component: "FetalPresentation",
+                    value: "4",
                 },
                 {
                     title: "Presenting signs or conditions for IPV ",
                     component: "PresentingSigns",
-                    value: "4",
+                    value: "5",
                 },
             ],
             isOpen: false,

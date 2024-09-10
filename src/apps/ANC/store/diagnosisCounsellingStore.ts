@@ -3,8 +3,37 @@ import { icons } from "@/utils/svg";
 
 export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingStore", {
     state: () => ({
+        preEclampsia: [
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Pre-eclampsia risk",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "Pre-eclampsia risk",
+                    },
+                    data: [
+                        {
+                            name: "Yes",
+                            value: "yes",
 
-        gdm: [
+                            colSize: "2.5",
+                        },
+                        {
+                            name: "No",
+                            value: "no",
+
+                            colSize: "2.5",
+                        },
+                    ],
+                },
+            },
+        ],
+
+        preEclampsiaCounselling: [
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -15,6 +44,164 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
                         name: "Pre-eclampsia counselling",
                         class: "bold",
                         selectedValue: "",
+                    },
+                    data: [
+                        {
+                            name: "Yes",
+                            value: "yes",
+
+                            colSize: "2.5",
+                        },
+                        {
+                            name: "No",
+                            value: "no",
+
+                            colSize: "2.5",
+                        },
+                    ],
+                },
+            },
+        ],
+
+        aspirin: [
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "",
+                radioBtnContent: {
+                    header: {
+                        title: "Aspirin provided?",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "Aspirin provided",
+                    },
+                    data: [
+                        {
+                            name: "Yes",
+                            value: "yes",
+
+                            colSize: "2.5",
+                        },
+                        {
+                            name: "No",
+                            value: "no",
+
+                            colSize: "2.5",
+                        },
+                    ],
+                },
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: "",
+                classDash: "dashed_bottom_border _padding",
+
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: "Amount of daily aspirin provided until delivery",
+                                    value: "",
+                                    name: "Amount of daily aspirin provided",
+                                    required: true,
+                                    unit: "mg",
+                                    eventType: "input",
+                                    alertsErrorMassage: "",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            // ],
+
+            // aspirinReason:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                sectionHeader: "",
+                classDash: "",
+                radioBtnContent: {
+                    header: {
+                        title: "Reason aspirin not prescribed",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "aspirin not prescribed",
+                        displayNone: true,
+                    },
+                    data: [
+                        {
+                            name: "Side effects",
+                            value: "side effects",
+
+                            colSize: "7",
+                        },
+                        {
+                            name: "Stock-out",
+                            value: "stock-out",
+
+                            colSize: "7",
+                        },
+                        {
+                            name: "Gestational less than 13 weeks",
+                            value: "gestational less than 13 weeks",
+
+                            colSize: "7",
+                        },
+                        {
+                            name: "Allergy to medication",
+                            value: "allergy to medication",
+
+                            colSize: "7",
+                        },
+                        {
+                            name: "Other",
+                            value: "other",
+
+                            colSize: "7",
+                        },
+                    ],
+                },
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: "",
+
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: "specify",
+                                    unit: "",
+                                    icon: icons.editPen,
+                                    value: "",
+                                    name: "Specify",
+                                    required: true,
+                                    eventType: "input",
+                                    inputWidth: "85%",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        ] as any,
+
+        gdm: [
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Risk of gestational mellitus (GDM)",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "GDM",
                     },
                     data: [
                         {
@@ -232,13 +419,13 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         //         {
         //           name: "Yes",
         //           value: "yes",
-        //
+
         //           colSize: "2.5",
         //         },
         //         {
         //           name: "No",
         //           value: "no",
-        //
+
         //           colSize: "2.5",
         //         },
         //       ],
@@ -263,13 +450,13 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         //         {
         //           name: "Yes",
         //           value: "yes",
-        //
+
         //           colSize: "2.5",
         //         },
         //         {
         //           name: "No",
         //           value: "no",
-        //
+
         //           colSize: "2.5",
         //         },
         //       ],
@@ -293,13 +480,13 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         //         {
         //           name: "Yes",
         //           value: "yes",
-        //
+
         //           colSize: "2.5",
         //         },
         //         {
         //           name: "No",
         //           value: "no",
-        //
+
         //           colSize: "2.5",
         //         },
         //       ],
@@ -308,88 +495,6 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         // ],
 
         birth: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Counselling conducted on seeking care?",
-                        selectedValue: "",
-                        class: "bold",
-                        name: "Counselling on seeking care",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-
-                            colSize: "2.5",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-
-                            colSize: "2.5",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Counseling on ANC contact schedule?",
-                        selectedValue: "",
-                        class: "bold",
-                        name: "Counseling on ANC contact",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-
-                            colSize: "2.5",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-
-                            colSize: "2.5",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title:
-                            "Counsel to immediately go to hospital if severe danger signs are present",
-                        selectedValue: "",
-                        class: "bold",
-                        name: "Counsel to immediately go to hospital",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-
-                            colSize: "2.5",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-
-                            colSize: "2.5",
-                        },
-                    ],
-                },
-            },
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -679,15 +784,15 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         ],
     }),
     actions: {
-        // setPreEclampsia(data: any) {
-        //     this.preEclampsia = data;
-        // },
-        // setPreEclampsiaCounselling(data: any) {
-        //     this.preEclampsiaCounselling = data;
-        // },
-        // setAspirin(data: any) {
-        //     this.aspirin = data;
-        // },
+        setPreEclampsia(data: any) {
+            this.preEclampsia = data;
+        },
+        setPreEclampsiaCounselling(data: any) {
+            this.preEclampsiaCounselling = data;
+        },
+        setAspirin(data: any) {
+            this.aspirin = data;
+        },
         setAspirinReason(data: any) {
             // this.aspirinReason = data
         },

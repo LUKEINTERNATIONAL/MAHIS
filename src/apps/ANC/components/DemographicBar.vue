@@ -10,8 +10,10 @@
       <li>
         Birthday: <b>{{ formatBirthdate() }} </b>
       </li>
-      <li>Gestation age: <b>{{gestationAge.lmnpGestationAge}}</b></li>
-<!--      <li>EDD: <b>Unknown </b></li>-->
+      <li>Category: <b>ANC </b></li>
+<!--      <li>-->
+<!--        Sex: <b>{{ demographics.gender }}</b>-->
+<!--      </li>-->
     </ul>
     <ul class="second_bar_list mobile position_content">
       <li>
@@ -19,9 +21,6 @@
       </li>
       <li>
         MRN: <b>{{ demographics.mrn }}</b>
-      </li>
-      <li>
-        Gestation Age: <b>{{gestationAge.lmnpGestationAge}}</b>
       </li>
       <li><ion-icon :icon="ellipsisVerticalSharp"></ion-icon></li>
     </ul>
@@ -48,34 +47,17 @@ export default defineComponent({
     IonIcon,
   },
   setup() {
-    return {
-      ellipsisVerticalSharp,
-      gestationAge:[] as any,
-    };
+    return { ellipsisVerticalSharp };
   },
   data: () => ({}),
 
   computed: {
     ...mapState(useDemographicsStore, ["demographics"]),
   },
-  mounted(){
-
-  },
   methods: {
     navigationMenu(url: any) {
       menuController.close();
       this.$router.push(url);
-    },
-    findEncounter(data: any, encounterType: any) {
-      return data.find((obj: any) => obj.type && obj.type.name === encounterType);
-    },
-    async setGestationAgeEncounter(data:any)
-    {
-      const observations=this.findEncounter(data,"ANC PROGRAM")?.observations;
-
-      console.log({observations});
-
-      this.gestationAge.lmnpGestationAge=this.findEncounter(observations,"lmnpGestationAge")?.[0]?.value_text ?? "";
     },
     covertGender(gender: any) {
       return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";

@@ -3,15 +3,7 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper
-                stepperTitle="Profile"
-                :wizardData="wizardData"
-                @updateStatus="markWizard"
-                :StepperData="StepperData"
-                :backUrl="userRoleSettings.url"
-                :backBtn="userRoleSettings.btnName"
-
-            />
+            <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
     </ion-page>
@@ -73,9 +65,6 @@ import { validateField } from "@/services/ANC/profile_validation_service";
 import Validation from "@/validations/StandardValidations";
 import HisDate from "@/utils/Date";
 import calculateAge from "@/utils/Date";
-import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetEncounter from "@/views/Mixin/SetEncounter.vue";
-
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -84,9 +73,7 @@ import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 // }
 export default defineComponent({
     name: "Home",
-   mixins: [SetUserRole, SetEncounter],
-
-  components: {
+    components: {
         BasicFooter,
         IonContent,
         IonHeader,

@@ -1,206 +1,180 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
-import _ from "lodash";
 
-const initialFetalAssesment=[
-    {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
-        isFinishBtn: false,
-        sectionHeader: "",
-
-        header: {
-            name: "Symphysis-fundal height",
-            selectedValue: "",
-        },
-
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Symphysis-fundal height (SFH)*",
-                            unit: "cm",
-                            icon: icons.height,
-                            value: "",
-                            name: "Symphysis-fundal height",
-                            valueType: "number",
-                            required: true,
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-
-    {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-            header: {
-                title: "Is number of fetuses known?",
-                selectedValue: "",
-                name: "Number of fetuses known",
-                class:"bold"
-            },
-            data: [
-                {
-                    value: "yes",
-                    name: "Yes",
-                    colSize: "2",
-                },
-                {
-                    value: "no",
-                    name: "No",
-                    colSize: "2",
-                },
-            ],
-        },
-    },
-    {
-        sectionHeader: "",
-        classDash: "dashed_bottom_border",
-        header: {
-            selectedValue: "",
-        },
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            class:"bold",
-                            displayNone:true,
-                            inputHeader: "Number of fetuses",
-                            unit: "",
-                            icon: "",
-                            value: "",
-                            name: "Number of fetuses",
-                            valueType: "number",
-                            eventType: "input",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-            header: {
-                title: "Fetal heartbeat present?",
-                selectedValue: "",
-                name: "Fetal heartbeat",
-                class:"bold",
-                displayNext:"Yes"
-
-            },
-            data: [
-                {
-                    value: "yes",
-                    name: "Yes",
-                    colSize: "2",
-                },
-                {
-                    value: "no",
-                    name: "No",
-                    colSize: "2",
-                },
-            ],
-        },
-    },
-    {
-        sectionHeader: "",
-        classDash: "dashed_bottom_border",
-        header: {
-            selectedValue: "",
-        },
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            class:"bold",
-                            displayNone:true,
-                            inputHeader: "Fetal rate",
-                            unit: "BMP",
-                            icon: icons.systolicPressure,
-                            value: "",
-                            name: "Fetal heart rate",
-                            valueType: "number",
-                            eventType: "input",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        sectionHeader: "",
-        classDash: "dashed_bottom_border",
-        header: {
-            selectedValue: "",
-        },
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            class:"bold",
-                            displayNone: true,
-                            inputHeader: "Repeated fetal rate",
-                            unit: "BMP",
-                            icon: icons.systolicPressure,
-                            value: "",
-                            name: "Repeated fetal rate",
-                            valueType: "number",
-                            eventType: "input",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-            header: {
-                title: "Fetal heart rate regularity ",
-                selectedValue: "",
-                name: "Fetal heart rate regularity",
-                class:"bold",
-                displayNone:true
-            },
-            data: [
-                {
-                    value: "Regular",
-                    name: "Regular",
-                    colSize: "7",
-                },
-                {
-                    value: "Irregular",
-                    name: "Irregular",
-                    colSize: "7",
-                },
-            ],
-        },
-    },
-] as any;
 export const useFetalAssessment = defineStore("fetalAssessment", {
     state: () => ({
-        fetalAssessment: [...initialFetalAssesment] as any,
+        fetalAssessment: [
+            {
+                selectdData: [],
+                classDash: "dashed_bottom_border",
+                isFinishBtn: false,
+                sectionHeader: "",
+
+                header: {
+                    name: "Symphysis-fundal height",
+                    selectedValue: "",
+                },
+
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: "Symphysis-fundal height (SFH)*",
+                                    unit: "cm",
+                                    icon: icons.height,
+                                    value: "",
+                                    name: "Symphysis-fundal height",
+                                    valueType: "number",
+                                    required: true,
+                                    eventType: "input",
+                                    alertsErrorMassage: "",
+                                    inputWidth: "55%",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+
+            {
+                selectdData: [],
+                classDash: "",
+                radioBtnContent: {
+                    header: {
+                        title: "Is number of fetuses known?",
+                        selectedValue: "",
+                        name: "Number of fetuses known",
+                    },
+                    data: [
+                        {
+                            value: "yes",
+                            name: "Yes",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            value: "no",
+                            name: "No",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                    ],
+                },
+            },
+            {
+                sectionHeader: "",
+                classDash: "dashed_bottom_border",
+                header: {
+                    selectedValue: "",
+                },
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: "Number of fetuses",
+                                    unit: "",
+                                    icon: "",
+                                    value: "",
+                                    name: "Number of fetuses",
+                                    valueType: "number",
+                                    eventType: "input",
+                                    inputWidth: "55%",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            {
+                selectdData: [],
+                classDash: "",
+                radioBtnContent: {
+                    header: {
+                        title: "Fetal heartbeat present?",
+                        selectedValue: "",
+                        name: "Fetal heartbeat",
+                    },
+                    data: [
+                        {
+                            value: "yes",
+                            name: "Yes",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            value: "no",
+                            name: "No",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                    ],
+                },
+            },
+            {
+                sectionHeader: "",
+                classDash: "",
+                header: {
+                    selectedValue: "",
+                },
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: "Fetal rate",
+                                    unit: "BMP",
+                                    icon: icons.systolicPressure,
+                                    value: "",
+                                    name: "Fetal heart rate",
+                                    valueType: "number",
+                                    eventType: "input",
+                                    inputWidth: "55%",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            {
+                sectionHeader: "",
+                classDash: "dashed_bottom_border",
+                header: {
+                    selectedValue: "",
+                },
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: "Repeated fetal rate",
+                                    unit: "BMP",
+                                    icon: icons.systolicPressure,
+                                    value: "",
+                                    name: "Repeated fetal rate",
+                                    valueType: "number",
+                                    eventType: "input",
+                                    inputWidth: "55%",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        ],
     }),
     actions: {
         setFetalAssessment(data: any) {
             this.fetalAssessment = data;
         },
-        getInitialFetalAssesment(){
-            const data= _.cloneDeep(initialFetalAssesment);
-            return[...data]
-        }
     },
-    // persist: true,
+    persist: true,
 });

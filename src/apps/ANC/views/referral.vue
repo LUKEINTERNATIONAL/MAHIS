@@ -9,8 +9,6 @@
           @updateStatus="markWizard"
           @finishBtn="saveData()"
           :StepperData="StepperData"
-          :backUrl="userRoleSettings.url"
-          :backBtn="userRoleSettings.btnName"
       ></Stepper>
     </ion-content>
   </ion-page>
@@ -36,14 +34,11 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { resetPatientData } from "@/services/reset_data";
 import {ConfirmPregnancyService} from "@/apps/ANC/service/confirm_pregnancy_service";
 import {ReferralService} from "@/apps/ANC/service/referral_service";
-import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 
 
 export default defineComponent ({
   name : "Home",
-  mixins: [SetUserRole, SetEncounter],
   components : {
     IonContent,
     IonHeader,
@@ -116,9 +111,10 @@ export default defineComponent ({
           if (!patientStatus) return toastWarning("Unable to create patient referral details!");
           toastSuccess("Referral details have been created");
         }
+        this.$router.push("ANCHome");
+
+
       console.log(await this.buildReferral());
-
-
     },
   },
 });

@@ -292,7 +292,6 @@ export default defineComponent({
         },
         async saveEnrollment() {
             const data: any = await this.buildEnrollmentData();
-            
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();

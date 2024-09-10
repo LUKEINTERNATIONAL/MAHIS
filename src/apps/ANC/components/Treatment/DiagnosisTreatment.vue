@@ -7,6 +7,47 @@
             </ion-card-content>
     </ion-card>
 
+    <ion-card class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hypertension"> </basic-form>
+                <basic-form :contentData="preEclampsia"> </basic-form>
+                <basic-form :contentData="hyper"> </basic-form>
+                <basic-form :contentData="hypertensionReason"> </basic-form>
+            </ion-card-content>
+    </ion-card>
+
+    <ion-card  class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hiv"> </basic-form>
+                <basic-form :contentData="hivReason"> </basic-form>
+                <basic-form :contentData="hepatitisB"> </basic-form>
+                <basic-form :contentData="hepatitisReason"> </basic-form>
+            </ion-card-content>
+    </ion-card>
+
+    <ion-card class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hepatitisC"> </basic-form>
+                <basic-form :contentData="syphilis"> </basic-form>
+                <basic-form :contentData="syphilisTesting"> </basic-form>
+                <basic-form :contentData="tbScreening"> </basic-form>
+            </ion-card-content>
+    </ion-card>
+
+    <ion-card  class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>  
+                <basic-form :contentData="ASB"> </basic-form>
+                <basic-form :contentData="asbReason"> </basic-form>
+                <basic-form :contentData="GDM"> </basic-form>
+                <basic-form :contentData="diabetes"> </basic-form>
+                <basic-form :contentData="anaemia"> </basic-form>
+            </ion-card-content>
+    </ion-card>
+
     </div>
 
 
@@ -74,7 +115,11 @@ export default defineComponent ({
         return { checkmark,pulseOutline };
     },
     computed:{
-      ...mapState(useDiagnosisStore,["diagnoses"]),
+        ...mapState(useDiagnosisStore, ["diagnoses"]),
+        ...mapState(useDiagnosisStore, ["hypertensionReason"]),
+        ...mapState(useDiagnosisStore, ["hivReason"]),
+        ...mapState(useDiagnosisStore, ["hepatitisReason"]),
+        ...mapState(useDiagnosisStore, ["asbReason"]),
         ...mapState(useDiagnosisStore, ["hypertension"]),
         ...mapState(useDiagnosisStore, ["preEclampsia"]),
         ...mapState(useDiagnosisStore, ["hyper"]),
@@ -91,9 +136,14 @@ export default defineComponent ({
 
     },
     mounted(){
+      this.handleHyperOther()
       this. handledeHiv()
       this.handleCounselHiv()
+      this.handleHperB()
+      this.handleasbReason()
+      this.handleOtherasb()
       this. handleNone()
+      this.handleHyper()
     },
     watch:{
       diagnoses:{
@@ -104,6 +154,7 @@ export default defineComponent ({
       },
       hypertensionReason:{
         handler(){
+          this.handleHyperOther()
         },
         deep:true
       },
@@ -113,6 +164,20 @@ export default defineComponent ({
           this.handleCounselHiv()
         },deep:true
       },
+      hepatitisReason:{
+        handler(){
+          this.handleHperB()
+          this.handleHyper()
+        },
+        deep:true
+      },
+      asbReason:{
+        handler(){
+          this.handleasbReason()
+          this.handleOtherasb()
+        },
+        deep:true
+      }
 
     },
     methods :{
@@ -126,20 +191,20 @@ export default defineComponent ({
         this.currentSection--;
       }
     },
-    // handleHyper(){
-    //   if(getRadioSelectedValue(this.hypertensionReason,'Counselling on hypertension')=='No'){
-    //     modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',false)
-    //   }else{
-    //     modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',true)
-    //   }
-    // },
-    // handleHyperOther(){
-    //   if(getRadioSelectedValue(this.hypertensionReason,'hypertension')=='other'){
-    //     modifyFieldValue(this.hypertensionReason,'other','displayNone',false)
-    //   }else{
-    //     modifyFieldValue(this.hypertensionReason,'other','displayNone',true)
-    //   }
-    // },
+    handleHyper(){
+      if(getRadioSelectedValue(this.hypertensionReason,'Counselling on hypertension')=='No'){
+        modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',false)
+      }else{
+        modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',true)
+      }
+    },
+    handleHyperOther(){
+      if(getRadioSelectedValue(this.hypertensionReason,'hypertension')=='other'){
+        modifyFieldValue(this.hypertensionReason,'other','displayNone',false)
+      }else{
+        modifyFieldValue(this.hypertensionReason,'other','displayNone',true)
+      }
+    },
     handledeHiv(){
       if(getRadioSelectedValue(this.hiv,'counselling on HIV not provided')=='other'){
         modifyFieldValue(this.hiv,'hiv Counselling','displayNone',false)
@@ -154,27 +219,27 @@ export default defineComponent ({
         modifyRadioValue(this.hiv,'hiv','displaNone',true)
       }
     },
-    // handleHperB(){
-    //   if(getRadioSelectedValue(this.hepatitisReason,'hepatitis B')=='other'){
-    //     modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',false)
-    //   }else{
-    //      modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',true)
-    //   }
-    // },
-    // handleasbReason(){
-    //   if(getRadioSelectedValue(this.asbReason,'SevenDay')=='no'){
-    //     modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',false)
-    //   }else{
-    //     modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',true)
-    //   }
-    // },
-    // handleOtherasb(){
-    //   if(getRadioSelectedValue(this.asbReason,'SevenDayReason')=='other'){
-    //     modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',false)
-    //   }else{
-    //     modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',true)
-    //   }
-    // },
+    handleHperB(){
+      if(getRadioSelectedValue(this.hepatitisReason,'hepatitis B')=='other'){
+        modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',false)
+      }else{
+         modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',true)
+      }
+    },
+    handleasbReason(){
+      if(getRadioSelectedValue(this.asbReason,'SevenDay')=='no'){
+        modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',false)
+      }else{
+        modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',true)
+      }
+    },
+    handleOtherasb(){
+      if(getRadioSelectedValue(this.asbReason,'SevenDayReason')=='other'){
+        modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',false)
+      }else{
+        modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',true)
+      }
+    },
     handleNone(){
         const checkBoxes=['Hypertension','Pre-eclampsia','HIV','Hepatitis B','Hepatitis C','Syphilis',]
 

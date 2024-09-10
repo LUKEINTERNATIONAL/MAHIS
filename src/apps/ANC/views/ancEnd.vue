@@ -3,11 +3,7 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Pregnancy outcome"
-                     :wizardData="wizardData" @updateStatus="markWizard"
-                     :StepperData="StepperData"
-                     :backUrl="userRoleSettings.url"
-                     :backBtn="userRoleSettings.btnName" />
+            <Stepper stepperTitle="Pregnancy outcome" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
     </ion-page>
@@ -57,13 +53,8 @@ import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { useAncEndStore } from "../store/ancEnd/ancEndStore";
 import { resetPatientData } from "@/services/reset_data";
-import {ReferralService} from "@/apps/ANC/service/referral_service";
-import {AncEndService} from "@/services/ANC/anc_end_service";
-import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "Home",
-  mixins: [SetUserRole, SetEncounter],
     components: {
         IonContent,
         IonHeader,
@@ -125,29 +116,31 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
-        saveData() {
-            this.saveAncEnd();
+        async saveData() {
+            this.saveAncEnd;
             resetPatientData();
             this.$router.push("ANCHome");
         },
 
         async buildAncEnd() {
-            return [...(await formatRadioButtonData(this.ancInfo)),
-              ...(await formatInputFiledData(this.ancInfo))];
+            return [...(await formatRadioButtonData(this.ancInfo)), ...(await formatInputFiledData(this.ancInfo))];
         },
 
         async saveAncEnd() {
-          if (this.ancInfo.length > 0) {
-            const userID: any = Service.getUserID();
-            const ANCpregnancyOutcome = new AncEndService(this.demographics.patient_id, userID);
-            const encounter = await ANCpregnancyOutcome.createEncounter();
-            if (!encounter) return toastWarning("Unable to create ANC pregnancy outcome encounter");
-            const patientStatus = await ANCpregnancyOutcome.saveObservationList(await this.buildAncEnd());
-            if (!patientStatus) return toastWarning("Unable to create pregnancy outcome details for ANC!");
-            toastSuccess("ANC pregnancy outcome saved");
-          }
-          console.log(await this.buildAncEnd())
-
+            const data: any = await this.buildAncEnd();
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const ancEndInstance = new AncEndInstance();
+                ancEndInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Anc End data saved successfully");
+            } else {
+                toastWarning("Could not find all concepts");
+            }
+        },
+        getFormatedData(data: any) {
+            return data.map((item: any) => {
+                return item?.data;
+            });
         },
     },
 });

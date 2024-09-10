@@ -45,16 +45,26 @@ import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useInvestigationStore } from "@/stores/InvestigationStore";
+import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
+import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
+import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import { defineComponent } from "vue";
-import { useVitalsStore } from "@/stores/VitalsStore";
-import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
-import {getFieldValue} from "@/services/data_helpers";
+import { Diagnosis } from "@/apps/NCD/services/diagnosis";
+import { Treatment } from "@/apps/NCD/services/treatment";
+import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
+import { defineComponent } from "vue";
+import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
+import { useVitalsStore } from "@/stores/VitalsStore";
+import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
+import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
+import { WorkflowService } from "@/services/workflow_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -111,9 +121,6 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-      "Height Weight Reason"() {
-        return getFieldValue(this.vitals, "Height Weight Reason", "value");
-      },
     },
     async created() {
         // this.getData();
@@ -189,49 +196,35 @@ export default defineComponent({
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
             await vitalsInstance.onFinish(this.vitals);
         },
-      async validaterowData() {
-        const userID: any = Service.getUserID();
-        const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-        const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+        async validaterowData() {
+            const userID: any = Service.getUserID();
+            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            this.vitals.forEach((section: any, sectionIndex: any) => {
+                if (section?.data?.rowData) {
+                    section?.data?.rowData.forEach((col: any, colIndex: any) => {
+                        col.colData.some((input: any, inputIndex: any) => {
+                            const validateResult = vitalsInstance.validator(input);
+                            if (validateResult?.length > 0) {
+                                this.hasValidationErrors.push("false");
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
+                                    validateResult.flat(Infinity)[0];
+                                return true;
+                            } else {
+                                this.hasValidationErrors.push("true");
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                            }
 
-        this.vitals.forEach((section: any, sectionIndex: any) => {
-          if (section?.data?.rowData) {
-            section?.data?.rowData.forEach((col: any, colIndex: any) => {
-              col.colData.some((input: any, inputIndex: any) => {
-                if (input.name === "Respiratory rate" && age <= 5) {
-                  const validateResult = vitalsInstance.validator(input);
-                  if (validateResult?.length > 0) {
-                    this.hasValidationErrors.push("false");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
-                    return true;
-                  } else {
-                    this.hasValidationErrors.push("true");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-                  }
-                } else {
-                  const validateResult = vitalsInstance.validator(input);
-                  if (validateResult?.length > 0) {
-                    this.hasValidationErrors.push("false");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
-                    return true;
-                  } else {
-                    this.hasValidationErrors.push("true");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-                  }
+                            return false;
+                        });
+                    });
                 }
-
-                return false;
-              });
             });
-          }
-        });
 
-        this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
-      },
-
-      openModal() {
+            this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
+        },
+        openModal() {
             createModal(SaveProgressModal);
         },
     },

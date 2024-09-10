@@ -367,8 +367,6 @@ import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import VueMultiselect from "vue-multiselect"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
 import { isEmpty } from "lodash"
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { DrugOrderService } from "@/services/drug_order_service";
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
@@ -420,7 +418,6 @@ const frequencyErrMsg = ref('Select frequency')
 const show_error_msg_for_frequency = ref(false)
 const drugErrMsg = ref('Select drug')
 const show_error_msg_for_drug = ref(false)
-const demographics = computed(() => useDemographicsStore().demographics);
 
 const selected_pres_method = ref()
 const selected_frequency = ref()
@@ -432,13 +429,18 @@ function routeListUpdated(data: any) {
     selected_pres_method.value = data
 }
 
-watch(demographics,async function(newValue, oldValue){
-    selectedMedicalDrugsList.value.splice(0, selectedMedicalDrugsList.value.length);
-    console.log({selectedMedicalDrugsList})
-    await prepareData();
+onMounted(async () => {
+    const previousTreatment = new PreviousTreatment();
+    const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters();
+    PreviuosSelectedMedicalDrugsList.value = previousDrugPrescriptions;
+    FirstPreviousNotes.value = Object.entries(previousClinicalNotes)[0];
+    const [, ...restEntries] = Object.entries(previousClinicalNotes);
+    RestOfPreviousNotes.value = restEntries;
+    FirstPreviousAllegies.value = Object.entries(previousDrugAllergies)[0];
+    const [, ...restEntriesAllegies] = Object.entries(previousDrugAllergies);
+    RestOfPreviousAllegies.value = restEntriesAllegies;
+    route_list.value = await getDrugRouteList()
 });
-
-onMounted(prepareData);
 
 watch(
     () => drugName.value,
@@ -446,6 +448,7 @@ watch(
         validatedDrugName();
     }
 );
+
 
 watch(
     () => dose.value,
@@ -460,56 +463,6 @@ watch(
         validateDuration();
     }
 );
-
-async function prepareData (){
-//    loadDrugs()
-    const previousTreatment = new PreviousTreatment();
-    const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters();
-    PreviuosSelectedMedicalDrugsList.value = previousDrugPrescriptions;
-    FirstPreviousNotes.value = Object.entries(previousClinicalNotes)[0];
-    const [, ...restEntries] = Object.entries(previousClinicalNotes);
-    RestOfPreviousNotes.value = restEntries;
-    FirstPreviousAllegies.value = Object.entries(previousDrugAllergies)[0];
-    const [, ...restEntriesAllegies] = Object.entries(previousDrugAllergies);
-    RestOfPreviousAllegies.value = restEntriesAllegies;
-    route_list.value = await getDrugRouteList();
-}
-
-// async function loadDrugs (){
-//     const data = await DrugOrderService.getDrugOrderHistory(demographics.value.patient_id);
-//    console.log({data})
-//     //     const drugString = {
-//     //     drugName: drugName.value,
-//     //     dose: dose.value,
-//     //     frequency: selected_frequency.value.label,
-//     //     frequency_code: selected_frequency.value.code,
-//     //     duration: duration.value,
-//     //     prescription: generatedPrescriptionDate,
-//     //     drug_id: drug_id.value,
-//     //     units: units.value,
-//     //     route_concept_id: selected_pres_method.value.concept_id,
-//     //     route_name: selected_pres_method.value.name,
-//     //     highlightbackground: highlightbackground
-//     // };
-    
-
-//     // for(let i=0;i<data.length; i++){
-//     //     selectedMedicalDrugsList.value.push({
-//     //     drugName: data[i].dosage_struct.drug_name,
-//     //     dose: data[i].dose,
-//     //     frequency: data[i].frequency,
-//     //     frequency_code:data[i].frequency,
-//     //     duration: duration.value,
-//     //     prescription: generatedPrescriptionDate,
-//     //     drug_id: drug_id.value,
-//     //     units: units.value,
-//     //     route_concept_id: selected_pres_method.value.concept_id,
-//     //     route_name: selected_pres_method.value.name,
-//     //     highlightbackground: highlightbackground
-//     //     });
-//     // }
-// }
-
 
 function validateRoute() {
     if (isEmpty(selected_pres_method.value) == true) {
@@ -614,6 +567,9 @@ function frequencyDropDownUpdated(event: any) {
 
 async function saveData() {
     const are_fieldsValid = await areFieldsValid();
+    
+    console.log({are_fieldsValid})
+
     if (!are_fieldsValid) {
         toastWarning("Please enter correct data values", 4000);
         return;
@@ -641,21 +597,6 @@ async function saveData() {
         route_name: selected_pres_method.value.name,
         highlightbackground: highlightbackground
     };
-
-
-    console.log({
-        drugName: drugName.value,
-        dose: dose.value,
-        frequency: selected_frequency.value.label,
-        frequency_code: selected_frequency.value.code,
-        duration: duration.value,
-        prescription: generatedPrescriptionDate,
-        drug_id: drug_id.value,
-        units: units.value,
-        route_concept_id: selected_pres_method.value.concept_id,
-        route_name: selected_pres_method.value.name,
-        highlightbackground: highlightbackground
-    })
     
     selectedMedicalDrugsList.value.push(drugString);
     drugName.value = "";
@@ -668,9 +609,6 @@ async function saveData() {
     selected_pres_method.value = ref()
     saveStateValuesState();
 }
-
-
-
 
 async function FindDrugName(text: any) {
     const searchText = text

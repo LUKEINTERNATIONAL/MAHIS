@@ -12,40 +12,49 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Select fetal presentation',
+                            title: '',
                             selectedValue: '',
-                            name:'Fetal presentation',
-                            class:"bold"
+                            name:'Fetal presentation'
                         },
                         data:[
                             {
                                 value: 'Unknown presentation',
                                 name: 'Unknown',
-                                colSize: '4',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'Cephalic',
                                 name: 'Cephalic',
-                                colSize: '8',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'Pelvic',
                                 name: 'Pelvic',
-                                colSize: '4',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'Transverse',
                                 name: 'Transverse',
-                                colSize: '8',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'other',
                                 name: 'Other',
-                                colSize: '4',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                         ]
@@ -95,6 +104,6 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
             this.fetalPresentation = data
         }
     },
-    // persist:true,
+    persist:true,
 
 })

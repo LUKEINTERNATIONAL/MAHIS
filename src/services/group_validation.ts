@@ -32,7 +32,7 @@ export function validateRadioButtonData(data: any) {
 export function validateInputFiledData(data: any) {
     let validationMsg = [] as any;
     data?.map((item: any) => {
-        item?.data?.rowData[0]?.colData.map((element: any) => {
+        item.data.rowData[0].colData.map((element: any) => {
             let value = "";
             if (element.isSingleSelect) {
                 value = element?.value?.name;

@@ -121,7 +121,4 @@ export default defineComponent({
         };
     },
 });
-
-//   "apiURL": "154.66.124.72",
-//   "apiPort": "3004",
 </script>

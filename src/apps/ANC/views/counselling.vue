@@ -8,8 +8,6 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
-                :backUrl="userRoleSettings.url"
-                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -66,13 +64,9 @@ import {PhysiologicalCounsellingService} from "@/apps/ANC/service/physiological_
 import {DietCounsellingService} from "@/apps/ANC/service/diet_counselling_service";
 import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
-import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "Home",
-  mixins: [SetUserRole, SetEncounter],
-
-  components: {
+    components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -124,27 +118,8 @@ export default defineComponent({
                     icon: false,
                     disabled: false,
                     number: 3,
-                    last_step: "",
+                    last_step: "last_step",
                 },
-              {
-                title: "Clinical counselling",
-                class: "common_step",
-                checked: "",
-                icon: false,
-                disabled: false,
-                number: 4,
-                last_step: "",
-              },
-              {
-                title: "Preventative counselling",
-                class: "common_step",
-                checked: "",
-                icon: false,
-                disabled: false,
-                number: 5,
-                last_step: "last_step",
-              },
-
             ],
             StepperData: [
                 {
@@ -162,16 +137,6 @@ export default defineComponent({
                     component: "DietCounselling",
                     value: "3",
                 },
-              {
-                title: "Clinical counselling",
-                component: "ClinicalCounselling",
-                value: "4",
-              },
-              {
-                title: "Preventative counselling",
-                component: "DiagnosisCounselling",
-                value: "5",
-              },
             ],
             isOpen: false,
             iconsContent: icons,
