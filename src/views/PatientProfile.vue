@@ -754,7 +754,8 @@ export default defineComponent({
           this.programToEnroll = btn.program_id;
           return;
         }
-        return this.$router.push("ANCHome");
+    
+        return this.$router.push(btn.url);
       }
       this.setProgram(btn);
     },
