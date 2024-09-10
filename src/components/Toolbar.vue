@@ -34,45 +34,48 @@
         </div>
     </ion-header>
     <ion-header>
-    <ion-toolbar color="dark" class="compact-toolbar">
-        <ion-grid class="ion-no-padding content_width" style="margin-top: -3px;">
-        <ion-row class="ion-align-items-center">
-            <ion-col size="6">
-                <TruncateText
-                    style="margin-left: 10px;" 
-                    class="date-value"
-                    :text=userFacilityName
-                    :maxLines="1"
-                />
-            </ion-col>
-            <ion-col size="6" class="ion-text-right">
-                <TruncateText
-                    style="margin-right: 10px;" 
-                    class="date-value"
-                    :text=sessionDate
-                    :maxLines="1"
-                />
-            </ion-col>
-        </ion-row>
-        </ion-grid>
-    </ion-toolbar>
+        <ion-toolbar color="dark" class="compact-toolbar">
+            <ion-grid class="ion-no-padding content_width" style="margin-top: -3px">
+                <ion-row class="ion-align-items-center">
+                    <ion-col size="6">
+                        <TruncateText style="margin-left: 10px" class="date-value" :text="userFacilityName" :maxLines="1" />
+                    </ion-col>
+                    <ion-col size="6" class="ion-text-right">
+                        <TruncateText style="margin-right: 10px" class="date-value" :text="sessionDate" :maxLines="1" />
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-toolbar>
     </ion-header>
 
-    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed"/>
+    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed" />
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonRow, IonCol, IonLabel, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
+import {
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonRow,
+    IonCol,
+    IonLabel,
+    IonTitle,
+    IonIcon,
+    IonToolbar,
+    IonSearchbar,
+    IonPopover,
+} from "@ionic/vue";
 import { notificationsOutline, personCircleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
-import userProfile from "@/views/UserManagement/userProfile.vue"
+import userProfile from "@/views/UserManagement/userProfile.vue";
 import { useProgramStore } from "@/stores/ProgramStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
-import TruncateText from '@/components/TruncateText.vue'
+import TruncateText from "@/components/TruncateText.vue";
 import { useUserStore } from "@/stores/userStore";
 export default defineComponent({
     name: "Home",
@@ -100,7 +103,7 @@ export default defineComponent({
             locationName: "",
             programName: "",
             showUserProfileModal: false,
-            sessionDate: 'Date: '+HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
+            sessionDate: "Date: " + HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
         };
     },
     watch: {
@@ -137,7 +140,7 @@ export default defineComponent({
             this.showUserProfileModal = true;
         },
         modalClosed() {
-           this.showUserProfileModal = false;
+            this.showUserProfileModal = false;
         },
     },
 });
@@ -197,16 +200,16 @@ export default defineComponent({
 }
 .compact-toolbar {
     --min-height: 11px;
-  }
+}
 
-  .facility-name,
-  .date-label {
+.facility-name,
+.date-label {
     font-size: 14px;
     margin: 0;
     color: #838688;
-  }
-  .date-value {
+}
+.date-value {
     color: #838688;
     font-size: 14px;
-  }
+}
 </style>

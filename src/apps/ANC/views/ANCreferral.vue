@@ -3,7 +3,8 @@
     <Toolbar/>
     <ion-content :fullscreen="true">
       <DemographicBar/>
-      <Stepper  stepper-title="ANC referral" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData"/>
+      <Stepper  stepper-title="ANC referral" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData" :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"/>
     </ion-content>
     <BasicFooter @finishBtn="saveData()" />
 
@@ -38,10 +39,13 @@ import {useDemographicsStore} from "@/stores/DemographicStore";
 import {useReferralStore} from "@/apps/ANC/store/referral/referralStore";
 import {ReferralService} from "@/apps/ANC/service/referral_service";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 
 export default defineComponent ({
   name : 'treatment',
+  mixins: [SetUserRole, SetEncounter],
   components : {
     BasicFooter,
     IonContent,
@@ -97,7 +101,7 @@ export default defineComponent ({
     markWizard(){},
     saveData(){
     this.saveReferral();
-    // this.$router.push("ANChome");
+    this.$router.push("ANChome");
 
     },
     async saveReferral() {

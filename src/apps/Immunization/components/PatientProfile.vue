@@ -319,7 +319,6 @@ export default defineComponent({
                 "overDueVaccinesCount",
                 "lastVaccinesGiven",
                 "lastVaccineGievenDate",
-                "vaccineReload",
                 "nextAppointMentDate",
             ]),
     },

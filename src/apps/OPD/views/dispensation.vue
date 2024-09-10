@@ -89,7 +89,6 @@ export default defineComponent({
                     class: "common_step",
                     checked: false,
                     disabled: false,
-
                     number: 1,
                     last_step: "",
                 },

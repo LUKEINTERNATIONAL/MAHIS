@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const useImmunizationAppointMentStore = defineStore('immunizationAppointMentStore', {
     state: () => ({
         selectedAppointmentMent: [] as any,
-        selectedAppointmentMentForAppointmentsPage: '' as any
+        selectedAppointmentMentForAppointmentsPage: '' as any,
+        AppointmentsReload: false,
     }),
     actions: {
         getAppointmentMents(): any {
@@ -22,7 +23,13 @@ export const useImmunizationAppointMentStore = defineStore('immunizationAppointM
         },
         setSelectedAppointmentMentForAppointmentsPage(appointment: any): void {
             this.selectedAppointmentMentForAppointmentsPage = appointment
-        }  
+        },
+        setAppointmentsReload(value: boolean): void {
+            this.AppointmentsReload = value;
+        },
+        getAppointmentsReload(): boolean {
+            return this.AppointmentsReload;
+        },
     }
 })
 
