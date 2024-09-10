@@ -55,6 +55,7 @@
                     name="Edit"
                     fill="clear"
                     iconSlot="start"
+                    @click="openPIM()"
                     :icon="iconsContent.editFade"
                   />
                 </div>
@@ -694,7 +695,7 @@ export default defineComponent({
       ];
     },
     openPIM() {
-      createModal(personalInformationModal, { class: "otherVitalsModal" });
+      createModal(personalInformationModal, { class: "otherVitalsModal largeModal" });
     },
     convertToDisplayDate(date: any) {
       return HisDate.toStandardHisDisplayFormat(date);
