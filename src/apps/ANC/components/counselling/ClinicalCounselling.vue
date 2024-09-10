@@ -1,20 +1,24 @@
 <template>
     <div class="container">
-        <ion-card  class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-                <basic-form :contentData="diagnoses"> </basic-form>
-            </ion-card-content>
-    </ion-card>
+      <ion-card  class="section">
+        <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+        <ion-card-content>
+          <basic-form :contentData="gdm"></basic-form>
+          <basic-form :contentData="gdmCounselling"></basic-form>
+          <basic-form :contentData="hivRisk"></basic-form>
+          <basic-form :contentData="hypertension"> </basic-form>
+          <basic-form :contentData="hyper"> </basic-form>
+          <basic-form :contentData="hepatitisB"> </basic-form>
+          <basic-form :contentData="hepatitisC"> </basic-form>
+          <basic-form :contentData="syphilis"> </basic-form>
+          <basic-form :contentData="tbScreening"> </basic-form>
+          <basic-form :contentData="ASB"> </basic-form>
+          <basic-form :contentData="diabetes"> </basic-form>
+          <basic-form :contentData="anaemia"> </basic-form>
 
+        </ion-card-content>
+      </ion-card>
     </div>
-
-
-
-
-
-
-
 </template>
 
 <script lang="ts">
@@ -46,6 +50,7 @@ import { modifyRadioValue,
     getFieldValue,
     modifyFieldValue,
     modifyCheckboxValue} from '@/services/data_helpers'
+import {useDiagnosisCounsellingStore} from "@/apps/ANC/store/diagnosisCounsellingStore";
 export default defineComponent ({
     name: "diagnosisTreatment",
     components: {
@@ -74,7 +79,7 @@ export default defineComponent ({
         return { checkmark,pulseOutline };
     },
     computed:{
-      ...mapState(useDiagnosisStore,["diagnoses"]),
+        ...mapState(useDiagnosisStore, ["diagnoses"]),
         ...mapState(useDiagnosisStore, ["hypertension"]),
         ...mapState(useDiagnosisStore, ["preEclampsia"]),
         ...mapState(useDiagnosisStore, ["hyper"]),
@@ -88,6 +93,10 @@ export default defineComponent ({
         ...mapState(useDiagnosisStore, ["GDM"]),
         ...mapState(useDiagnosisStore, ["diabetes"]),
         ...mapState(useDiagnosisStore, ["anaemia"]),
+      ...mapState(useDiagnosisCounsellingStore,["gdm"]),
+      ...mapState(useDiagnosisCounsellingStore,["gdmCounselling"]),
+      ...mapState(useDiagnosisCounsellingStore,["hivRisk"]),
+      ...mapState(useDiagnosisCounsellingStore,["prEp"]),
 
     },
     mounted(){
@@ -99,11 +108,6 @@ export default defineComponent ({
       diagnoses:{
         handler(){
           this. handleNone()
-        },
-        deep:true
-      },
-      hypertensionReason:{
-        handler(){
         },
         deep:true
       },
@@ -126,20 +130,6 @@ export default defineComponent ({
         this.currentSection--;
       }
     },
-    // handleHyper(){
-    //   if(getRadioSelectedValue(this.hypertensionReason,'Counselling on hypertension')=='No'){
-    //     modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',false)
-    //   }else{
-    //     modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',true)
-    //   }
-    // },
-    // handleHyperOther(){
-    //   if(getRadioSelectedValue(this.hypertensionReason,'hypertension')=='other'){
-    //     modifyFieldValue(this.hypertensionReason,'other','displayNone',false)
-    //   }else{
-    //     modifyFieldValue(this.hypertensionReason,'other','displayNone',true)
-    //   }
-    // },
     handledeHiv(){
       if(getRadioSelectedValue(this.hiv,'counselling on HIV not provided')=='other'){
         modifyFieldValue(this.hiv,'hiv Counselling','displayNone',false)
@@ -154,27 +144,6 @@ export default defineComponent ({
         modifyRadioValue(this.hiv,'hiv','displaNone',true)
       }
     },
-    // handleHperB(){
-    //   if(getRadioSelectedValue(this.hepatitisReason,'hepatitis B')=='other'){
-    //     modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',false)
-    //   }else{
-    //      modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',true)
-    //   }
-    // },
-    // handleasbReason(){
-    //   if(getRadioSelectedValue(this.asbReason,'SevenDay')=='no'){
-    //     modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',false)
-    //   }else{
-    //     modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',true)
-    //   }
-    // },
-    // handleOtherasb(){
-    //   if(getRadioSelectedValue(this.asbReason,'SevenDayReason')=='other'){
-    //     modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',false)
-    //   }else{
-    //     modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',true)
-    //   }
-    // },
     handleNone(){
         const checkBoxes=['Hypertension','Pre-eclampsia','HIV','Hepatitis B','Hepatitis C','Syphilis',]
 
