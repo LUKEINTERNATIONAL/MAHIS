@@ -299,7 +299,8 @@ export default defineComponent({
                     toastSuccess("Quick check details have been created");
                 }
                 this.$router.push("ANCHome");
-            } else {
+            }
+            else {
                 await toastWarning("Please complete all required fields");
             }
 
