@@ -13,8 +13,16 @@
         :isOpen="checkInModalOpen"
         :title="`Are you sure you want to check in the patient?`"
       />
-      <PatientProfile v-if="activeProgramID == 33" />
+      <AncEnrollmentModal
+        :closeModalFunc="closeEnrollmentModal"
+        :onYes="handleEnrollmentYes"
+        :onNo="handleEnrollmentNo"
+        :isOpen="isEnrollmentModalOpen"
+        :title="enrollModalTitle"
+      />
 
+
+      <PatientProfile v-if="activeProgramID == 33" />
       <div
         class="content_manager"
         v-if="activeProgramID !== 33 && activeProgramID != ''"
@@ -92,13 +100,11 @@
             </ion-card>
             <div style="margin-left: 10px">
               <DynamicButton
-                class=""
-                style="margin-bottom: 5px; width: 96%; height: 45px"
-                @click="handleProgramClick(btn)"
+              :style="'margin-bottom: 5px; width: 96%; height: 45px'"
+               @click="handleProgramClick(btn)"
                 v-for="(btn, index) in programBtn"
-                :id="btn.name === 'OPD Program' ? 'patient-profile-opd' : ''"
                 :key="index"
-                :name="btn.actionName"
+                :name="checkProgram(btn)"
                 :fill="activeProgramID != btn.program_id ? 'outline' : 'solid'"
                 :color="activeProgramID == btn.program_id ? 'success' : ''"
               />
@@ -488,16 +494,7 @@ import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { ObservationService } from "@/services/observation_service";
 import { useVitalsStore } from "@/stores/VitalsStore";
-import {
-  modifyCheckboxInputField,
-  getCheckboxSelectedValue,
-  getRadioSelectedValue,
-  getFieldValue,
-  modifyRadioValue,
-  modifyFieldValue,
-} from "@/services/data_helpers";
-import { toastWarning } from "@/utils/Alerts";
-import ProgramData from "@/Data/ProgramData";
+
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Programs from "@/components/Programs.vue";
@@ -508,10 +505,13 @@ import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
 import OPDPopover from "@/components/Popovers/Opdpopover.vue";
+import AncEnrollmentModal from "@/components/Modal/AncEnrollmentModal.vue";
 
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
+import { ProgramService } from "@/services/program_service";
+
 export default defineComponent({
   mixins: [SetPrograms],
   components: {
@@ -561,6 +561,7 @@ export default defineComponent({
     Programs,
     CheckInConfirmationModal,
     OPDPopover,
+    AncEnrollmentModal
   },
   data() {
     return {
@@ -588,6 +589,10 @@ export default defineComponent({
       } as any,
       checkInModalOpen: false,
       popoverOpen: false,
+      isEnrollmentModalOpen: false,
+      enrolledPrograms: [],
+      programToEnroll:0,
+      enrollModalTitle:"",
     };
   },
   computed: {
@@ -600,6 +605,7 @@ export default defineComponent({
     this.checkAge();
     const patient = new PatientService();
     this.visits = await PatientService.getPatientVisits(patient.getID(), false);
+    await this.refreshPrograms();
     this.setAlerts();
     await this.updateData();
   },
@@ -731,11 +737,57 @@ export default defineComponent({
     },
 
     handleProgramClick(btn: any) {
-      if (btn.name == "OPD Program") {
-        this.togglePopover();
-        return;
+      const lower = (title:string)=> title.toLowerCase().replace(/\s+/g, '');
+
+      if (lower(btn.actionName) == lower("+ Enroll in ANC Program" )||
+         lower(btn.actionName) == lower("+ Enroll in PNC Program") ||
+         lower(btn.actionName) == lower("+ Enroll in Labour and delivery program")
+         ) {
+        const found: any = this.enrolledPrograms.find(
+          (p: any) => p.id == btn.program_id
+        );
+
+        if (!found) {
+          this.isEnrollmentModalOpen = true;
+          this.enrollModalTitle = `Are you sure you want to Enroll the patient in ${btn.name}`;
+          this.programToEnroll = btn.program_id;
+          return;
+        }
+        return this.$router.push("ANCHome");
       }
       this.setProgram(btn);
+    },
+    closeEnrollmentModal() {
+      this.isEnrollmentModalOpen = false;
+    },
+    toggleEnrollmentModal() {
+      this.isEnrollmentModalOpen = !this.isEnrollmentModalOpen;
+    },
+    async handleEnrollmentYes() {
+      await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, (new Date()).toString());
+      await this.refreshPrograms();
+      this.toggleEnrollmentModal();
+      return this.$router.push("ANCHome");
+    },
+    async refreshPrograms() {
+      const programs = await ProgramService.getPatientPrograms(
+        this.demographics.patient_id
+      );
+      this.enrolledPrograms = programs.map((p: any) => ({
+        name: p.program.name,
+        id: p.program_id,
+      }));
+    },
+    handleEnrollmentNo() {
+      this.toggleEnrollmentModal();
+    },
+    checkProgram(btn: any) {
+      const found: any = this.enrolledPrograms.find(
+        (p: any) => p.id == btn.program_id
+      );
+      if (found) return `Start ${btn.name}`;
+
+      return btn.actionName;
     },
     async updateData() {
       const array = [

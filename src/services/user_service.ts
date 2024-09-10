@@ -112,7 +112,7 @@ export class UserService extends Service {
         }
     }
     static async userProgramData(patientID = "") {
-        const accessPrograms: any = localStorage.getItem("userPrograms");
+        const accessPrograms: any = sessionStorage.getItem("userPrograms");
         const programs = JSON.parse(accessPrograms);
 
         const filteredPrograms = [];
@@ -175,7 +175,7 @@ export class UserService extends Service {
     static async updateUserPrograms() {
         const userID: any = Service.getUserID();
         const data = await UserService.getUserByID(userID);
-        localStorage.setItem("userPrograms", JSON.stringify(data.programs));
+        sessionStorage.setItem("userPrograms", JSON.stringify(data.programs));
     }
     static async setNCDValue() {
         const patient = new PatientService();
@@ -191,7 +191,7 @@ export class UserService extends Service {
                     url = "patientProfile";
                     NCDProgramActionName = "+ Edit NCD Enrollment";
                 } else {
-                    if (localStorage.getItem("saveProgressStatus") == "true") {
+                    if (sessionStorage.getItem("saveProgressStatus") == "true") {
                         NCDProgramActionName = "+ Continue NCD consultation";
                     } else if (visits.includes(HisDate.currentDate())) {
                         NCDProgramActionName = "+ Edit NCD consultation";

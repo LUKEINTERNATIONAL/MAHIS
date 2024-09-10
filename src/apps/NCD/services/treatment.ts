@@ -40,8 +40,6 @@ export class PreviousTreatment {
         const store = useDemographicsStore();
         this.demographics = store.demographics;
         this.patientID = this.demographics.patient_id;
-
-       
         this.date = ObservationService.getSessionDate();
         this.providerID = Service.getUserID() as number;
         this.programID = ObservationService.getProgramID();

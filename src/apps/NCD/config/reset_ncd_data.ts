@@ -13,7 +13,7 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 
 export async function resetNCDPatientData() {
-    localStorage.setItem("saveProgressStatus", "false");
+    sessionStorage.setItem("saveProgressStatus", "false");
     const vitals = useVitalsStore();
     const investigations = useInvestigationStore();
     const outcome = useOutcomeStore();

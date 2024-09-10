@@ -9,7 +9,7 @@ export function validateField(data: any, fieldName: string, value: any) {
         Stillbirths: () => MultValidations(fieldName, value),
         LiveBirths: () => Validation.required(value),
         Parity: () => Validation.required(value),
-        "Abortions/Miscarriages": () => MultValidations(fieldName, value),
+        Abortions: () => MultValidations(fieldName, value),
         lmnpDate: () => MultValidations(fieldName, value),
         lmnpGestationAge: () => Validation.required(value),
         LNMPKnown: () => Validation.required(value),

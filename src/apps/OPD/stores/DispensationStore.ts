@@ -1,4 +1,4 @@
-
+import { DrugPrescriptionService } from "@/services/drug_prescription_service";
 import { defineStore } from "pinia";
 
 interface DispensationData {

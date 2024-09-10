@@ -148,7 +148,7 @@ const initialOPDVitals = [
         {
           colData: [
             {
-              inputHeader: "Respiratory rate",
+              inputHeader: "Respiratory rateeeeee",
               unit: "BMP",
               icon: icons.respiratory,
               value: "",

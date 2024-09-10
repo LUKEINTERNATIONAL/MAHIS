@@ -8,26 +8,29 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
             {
                 selectdData: [],
-                classDash: 'dashed_bottom_border',
+                classDash: '',
                 radioBtnContent:
                     {
                         header:{
                             title: 'Any injury present?',
                             selectedValue: '',
                             name:'Injury present',
-                            class:"bold"
                         },
                         data:[
                             {
                                 value: 'yes',
                                 name: 'Yes',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'no',
                                 name: 'No',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                         ]
@@ -37,27 +40,30 @@ export const usePresentingSigns = defineStore('presentingSigns',{
             },
             {
                 selectdData: [],
-                classDash: 'dashed_bottom_border',
+                classDash: '',
                 radioBtnContent:
                     {
                         header:{
                             title: 'Is there traumatic injury to abdomen?',
                             selectedValue: '',
-                            name:'Traumatic injury',
-                            class:"bold",
-                            displayNone:"true"
+                            name:'Traumatic injury'
                         },
                         data:[
                             {
                                 value: 'yes',
                                 name: 'Yes',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'no',
                                 name: 'No',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
+
                             },
                         ]
                     }
@@ -110,61 +116,29 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                         header:{
                             title: 'Any other clinical enquiry done?',
                             selectedValue: '',
-                            name: "Clinical enquiry",
-                            class:"bold"
+                            name: "Clinical enquiry"
                         },
                         data:[
                             {
                                 value: 'yes',
                                 name: 'Yes',
-                                colSize: '2.5',
-
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'no',
                                 name: 'No',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
+
                             },
                         ]
                     }
 
 
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border',
-
-                header:{
-                    title: 'Any other clinical enquiry done?',
-                    selectedValue: '',
-                    name: "Clinical enquiry notes",
-                    class:"bold"
-                },
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        displayNone:true,
-                                        inputHeader: 'Specify the clinical enquiry provided',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Clinical enquiry notes',
-                                        valueType: 'text',
-                                        required: true,
-                                        eventType: 'input',
-
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
             },
             {
                 selectdData: [],
@@ -175,43 +149,47 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                             title: 'Reason clinical enquiry was not done',
                             selectedValue: '',
                             displayNone: true,
-                            name:'Reason not done',
-                            class:"bold"
+                            name:'Reason not done'
                         },
                         data:[
                             {
                                 value: 'Client referred',
                                 name: 'Client was referred',
+                                labelPlacement: 'start',
                                 colSize: '7',
-
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'Trained provider unavailable',
                                 name: 'Trained provider unavailable',
+                                labelPlacement: 'start',
                                 colSize: '7',
-
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'Safe space unavailable',
                                 name: 'Private or safe space unavailable',
+                                labelPlacement: 'start',
                                 colSize: '7',
-
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'Confidentiality not assured',
                                 name: 'Confidentiality could not be assured',
+                                labelPlacement: 'start',
                                 colSize: '7',
-
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'Other',
                                 name: 'Other reason',
+                                labelPlacement: 'start',
                                 colSize: '7',
-
+                                justify: 'space-between'
 
                             },
                         ]
@@ -264,22 +242,26 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Has the woman been subjected to any form of violence?',
+                            title: 'Has the woman been subjected to any form of injury?',
                             selectedValue: '',
-                            name:'Woman subjected to IPV',
-                            class:"bold"
+                            name:'Injury present'
                         },
                         data:[
                             {
                                 value: 'yes',
                                 name: 'Yes',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'no',
                                 name: 'No',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
+
                             },
                         ]
                     }
@@ -287,33 +269,72 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
             },
             {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border',
+
+                header:{
+                    title: 'Any other clinical enquiry done?',
+                    selectedValue: '',
+                    name: "Clinical enquiry"
+                },
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Specify any other signs indicative of violence',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Other (specify)',
+                                        valueType: 'text',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "55%",
+                                        
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
                 selectdData: [],
                 classDash: '',
                 radioBtnContent:
                     {
                         header:{
-                            title: 'What type of Intimate Partner Violence the woman has been subjected to?',
+                            title: 'Types of IPV',
                             selectedValue: '',
-                            name: "Type of IPV the woman has been subjected to",
-                            class:"bold",
-                            displayNone:true
+                            name: "Intimate partner violence"
                         },
                         data:[
                             {
                                 value: 'Physical violence (IPV)',
                                 name: 'Physical violence',
+                                labelPlacement: 'start',
                                 colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'Sexual violence',
                                 name: 'Sexual violence',
+                                labelPlacement: 'start',
                                 colSize: '7',
+                                justify: 'space-between'
+
                             },
                             {
                                 value: 'Psychological abuse',
                                 name: 'Psychological/emotional abuse',
+                                labelPlacement: 'start',
                                 colSize: '7',
+                                justify: 'space-between'
 
                             },
                         ]
@@ -366,6 +387,6 @@ export const usePresentingSigns = defineStore('presentingSigns',{
             this.clinicalEnquiry = data
         }
     },
-    // persist:true,
+    persist:true,
 
 })

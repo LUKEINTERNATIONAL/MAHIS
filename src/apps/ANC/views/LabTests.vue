@@ -8,9 +8,6 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
-                :backUrl="userRoleSettings.url"
-                :backBtn="userRoleSettings.btnName"
-
             ></Stepper>
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -41,13 +38,9 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import {TBScreeningInstance, UltrasoundInstance, UrineTestInstance} from "@/apps/ANC/service/labtests_service"
 import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
-import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "Lab",
-  mixins: [SetUserRole, SetEncounter],
-
-  components: {BasicFooter, IonPage, DemographicBar, Toolbar, IonContent, UltrasoundScan, UrineTest, TB, Stepper },
+    components: {BasicFooter, IonPage, DemographicBar, Toolbar, IonContent, UltrasoundScan, UrineTest, TB, Stepper },
     data() {
         return {
             iconsContent: icons,

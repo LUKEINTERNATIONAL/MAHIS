@@ -10,23 +10,31 @@ export const useTBScreeningStore = defineStore("TBScreeningStore", {
                 classDash: "dashed_bottom_border _padding",
                 radioBtnContent: {
                     header: {
-                        title: "TB screening",
+                        title: "Select whether:",
                         selectedValue: "",
                         name: "TB screening status",
-                        class:"bold"
                     },
                     data: [
                         {
                             name: "TB screening conducted",
                             value: "Screening conducted",
+                            labelPlacement: "start",
                             colSize: "7",
-
+                            justify: "space-between",
+                        },
+                        {
+                            name: "TB screening ordered",
+                            value: "Screening ordered",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
                             name: "TB screening not done",
                             value: "Screening not done",
+                            labelPlacement: "start",
                             colSize: "7",
-
+                            justify: "space-between",
                         },
                     ],
                 },
@@ -44,33 +52,35 @@ export const useTBScreeningStore = defineStore("TBScreeningStore", {
                         selectedValue: "",
                         name: "TB screening results",
                         displayNone: true,
-                        class:"bold"
-
                     },
                     data: [
                         {
                             name: "Positive for TB",
                             value: "positive",
+                            labelPlacement: "start",
                             colSize: "7",
-
+                            justify: "space-between",
                         },
                         {
                             name: "Negative for TB",
                             value: "negative",
+                            labelPlacement: "start",
                             colSize: "7",
-
+                            justify: "space-between",
                         },
                         {
                             name: "Inconclusive",
                             value: "Inconclusive",
+                            labelPlacement: "start",
                             colSize: "7",
-
+                            justify: "space-between",
                         },
                         {
                             name: "Incomplete (symptoms only)",
                             value: "Incomplete",
+                            labelPlacement: "start",
                             colSize: "7",
-
+                            justify: "space-between",
                         },
                     ],
                 },
@@ -82,8 +92,6 @@ export const useTBScreeningStore = defineStore("TBScreeningStore", {
                     header: {
                         selectedValue: "",
                         name: "Screening date",
-                        class:"bold"
-
                     },
                     rowData: [
                         {
@@ -113,7 +121,7 @@ export const useTBScreeningStore = defineStore("TBScreeningStore", {
                 classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
                     header: {
-                        title: "Reasons TB Screening not done",
+                        title: "Reasons TB Screeening not done",
                         selectedValue: "",
                         class: "bold",
                         displayNone: true,
@@ -124,15 +132,17 @@ export const useTBScreeningStore = defineStore("TBScreeningStore", {
                             name: "Sputum smear not available",
                             value: "Sputum smear not available",
                             checked: false,
-                            colSize: "7",
-
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                         {
                             name: "Sputum culture not available",
                             value: "Sputum culture not available",
                             checked: false,
-                            colSize: "7",
-
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                     ],
                 },
@@ -146,23 +156,23 @@ export const useTBScreeningStore = defineStore("TBScreeningStore", {
                         selectedValue: "",
                         displayNone: true,
                         name: "Reason not done",
-                        class:"bold"
-
                     },
                     data: [
                         {
                             name: "GeneXpert machine not available",
                             value: "GeneXpert machine not available",
                             checked: false,
-                            colSize: "7",
-
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                         {
                             name: "X-ray machine not available",
                             value: "X-ray machine not available",
                             checked: false,
-                            colSize: "7",
-
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                     ],
                 },
@@ -175,23 +185,23 @@ export const useTBScreeningStore = defineStore("TBScreeningStore", {
                         selectedValue: "",
                         name: "Reason not done",
                         displayNone: true,
-                        class:"bold"
-
                     },
                     data: [
                         {
                             name: "No sputum testing supplies available",
                             value: "No sputum testing supplies available",
                             checked: false,
-                            colSize: "7",
-
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                         {
                             name: "Machine not functioning",
                             value: "Machine not functioning",
                             checked: false,
-                            colSize: "7",
-
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                     ],
                 },
@@ -205,23 +215,23 @@ export const useTBScreeningStore = defineStore("TBScreeningStore", {
                         selectedValue: "",
                         displayNone: true,
                         name: "Reason not done",
-                        class:"bold"
-
                     },
                     data: [
                         {
                             name: "Technician not available",
                             value: "Technician not available",
                             checked: false,
-                            colSize: "7",
-
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                         {
                             name: "Other",
                             value: "Other",
                             checked: false,
-                            colSize: "7",
-
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                     ],
                 },

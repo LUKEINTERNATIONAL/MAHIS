@@ -4,7 +4,7 @@
     </ion-header>
 
     <ion-content :fullscreen="true" class="ion-padding">
-        <div class="mod-ls" v-for="(item, index) in vaccineSchedule.vaccine_schedule" :key="index">
+        <div class="mod-ls" v-for="(item, index) in vaccineHistory" :key="index">
             <row>
                 <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
                 <span> at <span style="color: #016302;">{{ item.age }}</span></span>
@@ -61,7 +61,6 @@ import { defineComponent } from "vue";
 import { icons } from "@/utils/svg"
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
-import { mapState } from "pinia";
 
 export default defineComponent({
     name: "Home",
@@ -85,10 +84,15 @@ export default defineComponent({
     setup() {
         return { closeOutline, checkmarkOutline }
     },
-    computed: {
-        ...mapState(useAdministerVaccineStore, ["vaccineReload", "vaccineSchedule"]),
+    async mounted() {
+        this.populateHistory()
     },
     methods: {
+        populateHistory() {
+            const vaccineScheduleStore = useAdministerVaccineStore();
+            const vaccinSchedules = vaccineScheduleStore.getVaccineSchedule().vaccine_schedule
+            this.vaccineHistory = vaccinSchedules
+        },
         vaccinesGivenCount(vaccinSchedule: any) {
             const administeredVaccines = []
             vaccinSchedule.antigens.forEach((vaccine: any) => {

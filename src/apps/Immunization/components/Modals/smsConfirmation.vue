@@ -10,7 +10,7 @@
     <div class="saveBtn">
       <ion-row>
         <ion-col>
-          <ion-button @click="dismissModal" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
+          <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
             No
           </ion-button>
         </ion-col>
@@ -23,61 +23,36 @@
       </ion-row>
     </div>
   </template>
-
   
   <script lang="ts">
   import { defineComponent, PropType } from "vue";
-  import { IonCol, IonRow, IonItem, IonList, modalController, IonButton } from "@ionic/vue";
+  import { modalController } from "@ionic/vue";
   import { Service } from '@/services/service';
-  import HisDate from "@/utils/Date";
   import { SmsService } from "@/apps/Immunization/services/sms_service";
+  
   export default defineComponent({
-        components: {
-            IonRow,
-            IonItem,
-            IonList,
-            IonButton,
-            IonCol,
-        },
     props: {
       date: {
-        type: String,
+        type: Date,
         required: true
       },
       patient: {
         type: Number,
         required: true
-      },
-      modalaction: {
-        type: String,
-        required: true
       }
     },
-    data() {
-    return {
-       formattedDate: HisDate.toStandardHisFormat(this.date)  // Create a local variable for the formatted date
-    };
-  },
     methods: {
-      dismissModal() {
+      dismiss() {
         modalController.dismiss();
       },
       async sendSMS() {
-
         try {
-               if(this.modalaction == "saveAppointment") { 
-                // await SmsService.appointment(this.patient,this.formattedDate);
-               }
-               else{ 
-                 console.log(this.formattedDate,"...........good") 
-                 // await SmsService.cancelappointment(this.patient,this.formattedDate);
-               }
-              this.dismissModal();
+          await SmsService.appointment(this.patient,this.date);
+          this.dismiss();
         } catch (error) {
           console.error("Failed to send SMS:", error);
         }
-      },
- 
+      }
     }
   });
   </script>
@@ -93,12 +68,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 10px; /* Rounded corners */
     }
 
     .text-container {
         text-align: center;
         padding: 20px;
+        border-radius: 10px; /* Rounded corners */
     }
 
     .text-container div {

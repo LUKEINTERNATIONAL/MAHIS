@@ -24,13 +24,6 @@ export default defineComponent({
                         stepperTitle: "The consultation plan",
                     };
                 }
-
-              if(this.userRole){
-                this.userRoleSettings={
-                  url:"ANCHome",
-                  btnName:"Back to home"
-                }
-              }
             },
             immediate: true,
             deep: true,

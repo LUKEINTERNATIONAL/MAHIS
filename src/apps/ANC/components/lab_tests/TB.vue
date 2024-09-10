@@ -4,9 +4,14 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="tbTest"></basic-form>
-              <basic-form :contentData="reasons"></basic-form>
+                <!-- <basic-form :contentData="results"></basic-form> -->
+            </ion-card-content>
+    </ion-card>
 
-              <!-- <basic-form :contentData="results"></basic-form> -->
+        <ion-card class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="reasons"></basic-form>
             </ion-card-content>
     </ion-card>
 
@@ -160,6 +165,8 @@ export default defineComponent({
 }
 
 ion-card {
+ box-shadow:none;
+  background-color:inherit;   
   width: 100%;
  color: black;
 }

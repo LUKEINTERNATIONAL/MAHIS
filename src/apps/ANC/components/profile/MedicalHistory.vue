@@ -1,17 +1,6 @@
 <template>
 
     <div class="container">
-      <!-- Chronical Health conditions -->
-      <ion-card class="section">
-        <ion-card-content>
-          <basic-form
-              :contentData="exisitingChronicHealthConditions"
-              :initialData="initialData2"
-              @update:selected="handleInputData"
-              @update:inputValue="handleInputData"
-          ></basic-form>
-        </ion-card-content>
-      </ion-card>
          <!-- Past Surgeries -->
             <ion-card class="section">
             <ion-card-content>
@@ -28,6 +17,18 @@
                 <basic-form
                     :contentData="allegy"
                     :initialData="initialData1"
+                ></basic-form>
+            </ion-card-content>
+            </ion-card>
+
+        <!-- Chronical Health conditions -->
+            <ion-card class="section">
+            <ion-card-content>
+                <basic-form
+                    :contentData="exisitingChronicHealthConditions"
+                    :initialData="initialData2"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
                 ></basic-form>
             </ion-card-content>
             </ion-card>

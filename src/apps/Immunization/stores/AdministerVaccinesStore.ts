@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import HisDate from "@/utils/Date";
-import { compareDates } from "@/utils/GeneralUti";
+import NextAppointMent from "../components/Modals/nextAppointMent.vue";
 
 export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
     state: () => ({
@@ -136,12 +135,8 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
             return this.lastVaccineAdminstredOnschedule
         },
         setNextAppointMentDate(NextAppointMentDate: string): void {
-            if (compareDates(HisDate.currentDate(), NextAppointMentDate) == false) {
-                this.nextAppointMentDate ='NA'
-            } else {
-                this.nextAppointMentDate = HisDate.toStandardHisDisplayFormat(NextAppointMentDate)
-            }  
-        },
+            this.nextAppointMentDate = NextAppointMentDate
+        }
     },
     persist: true,
 });

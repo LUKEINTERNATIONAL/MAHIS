@@ -1,6 +1,6 @@
 import EventBus from "@/utils/EventBus";
 
-import { getFileConfig2, Config } from "@/utils/GeneralUti";
+import { getFileConfig2, Config } from "@/utils/GeneralUti"
 
 export enum ApiBusEvents {
     BEFORE_API_REQUEST = "before_api_request",
@@ -9,10 +9,10 @@ export enum ApiBusEvents {
 }
 
 const ApiClient = (() => {
-    const baseURL = "";
+    const baseURL = ''
 
     async function getFileConfig(): Promise<Config> {
-        return await getFileConfig2();
+        return await getFileConfig2()
     }
 
     function getLocalConfig(): Config | undefined {
@@ -26,11 +26,11 @@ const ApiClient = (() => {
     }
 
     function getSessionConfig(): Config | undefined {
-        const host = localStorage.apiURL;
-        const port = localStorage.apiPort;
-        const protocol = localStorage.apiProtocol;
-        const thirdpartyapps = localStorage.thirdpartyApps;
-        const otherApps = localStorage.otherApps;
+        const host = sessionStorage.apiURL;
+        const port = sessionStorage.apiPort;
+        const protocol = sessionStorage.apiProtocol;
+        const thirdpartyapps = sessionStorage.thirdpartyApps;
+        const otherApps = sessionStorage.otherApps;
 
         if (host && port && protocol) return { host, port, protocol, thirdpartyapps, otherApps, baseURL };
     }
@@ -53,7 +53,7 @@ const ApiClient = (() => {
 
     function headers() {
         return {
-            Authorization: localStorage.apiKey,
+            Authorization: sessionStorage.apiKey,
             "Content-Type": "application/json",
         };
     }
@@ -97,7 +97,7 @@ const ApiClient = (() => {
     }
     function handleUnauthorized(response: any) {
         if (response == "Unauthorized") {
-            localStorage.setItem("apiKey", "");
+            sessionStorage.setItem("apiKey", "");
         }
     }
     // /**

@@ -3,6 +3,34 @@ import {icons} from "@/utils/svg";
 import _ from "lodash"
 
 const initialDangerSigns= [
+
+    // {
+    //     selectdData: [],
+    //     sideColSize:0.3,
+    //     classDash: "dashed_bottom_border",
+    //     radioBtnContent: {
+    //         header: {
+    //             selectedValue: "",
+    //             name: "Extremities normal",
+    //             title: "Extremities normal?",
+    //             class:"bold",
+    //             displayNext:"Yes"
+    //             // displayNone: true,
+    //         },
+    //         data: [
+    //             {
+    //                 value: "Yes",
+    //                 name: "Yes",
+    //                 colSize: "2",
+    //             },
+    //             {
+    //                 value: "No",
+    //                 name:"No",
+    //                 colSize: "2",
+    //             },
+    //         ],
+    //     },
+    // },
     {
 
         selectdData: [],
@@ -13,6 +41,7 @@ const initialDangerSigns= [
                 selectedValue: "",
                 class:"bold",
                 name:'Danger signs',
+                // displayNone:true
             },
             data: [
                 {

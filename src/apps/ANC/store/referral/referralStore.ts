@@ -60,9 +60,7 @@ export const useReferralStore = defineStore('referralStore',{
                         },
                     ]
                 }
-            }, 
-            
-            
+            },
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -78,44 +76,16 @@ export const useReferralStore = defineStore('referralStore',{
                         {  
                             name: 'Yes',
                             value: 'Yes',
-                            colSize: "2",
+                            colSize: "2.5",
                         },
                         { 
                             name: "No",
                             value: "No",
-                            colSize: "2",
+                            colSize: "2.5",
                         },
                     ]
                 }
             },
-            {
-                sectionHeader: "",
-                classDash: "dashed_bottom_border",
-                header: {
-                    selectedValue: "",
-                },
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    class:"bold",
-                                    displayNone:true,
-                                    inputHeader: "treatment",
-                                    unit: "",
-                                    icon: "",
-                                    value: "",
-                                    name: "treatment",
-                                    valueType: "number",
-                                    eventType: "input",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            
-            
             
             {   
                classDash: 'dashed_bottom_border',
@@ -147,11 +117,11 @@ export const useReferralStore = defineStore('referralStore',{
                                         inputHeader: 'Time scheduled referral',
                                         icon: icons.timePicker,
                                         name: 'Time scheduled referral',
-                                        value: "",
-                                        valueType: "text",
+                                    value: "",
+                                    valueType: "text",
                                         placeholder:'Pick time',
                                         eventType: 'input',
-                                        required: true
+                                    required: true
                                 }
                                 ]
                         }
@@ -345,7 +315,7 @@ export const useReferralStore = defineStore('referralStore',{
                 }
 
             },
-            
+
         ] as any,
     }),
         actions:{

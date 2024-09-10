@@ -9,10 +9,9 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             checkboxBtnContent:
                 {
                     header:{
-                        title: 'Respiratory exam findings',
+                        title: '',
                         selectedValue: '',
-                        name:'Respiratory exam findings',
-                        class:"bold"
+                        name:'Respiratory exam findings'
                     },
                     data:[
                         {
@@ -116,8 +115,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     },
                     data:[
                         {
-                            name: 'Other findings',
-                            value: 'Other findings',
+                            name: 'Other',
+                            value: 'Other',
                             checked: false,
                             labelPlacement: 'start',
                             colSize: '6',
@@ -139,11 +138,11 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             colData: [
                                 {
                                     displayNone: true,
-                                    inputHeader: 'Specify other respiratory findings',
+                                    inputHeader: 'Specify',
                                     unit: '',
                                     icon: icons.editPen,
                                     value: '',
-                                    name: 'Other respiratory findings notes',
+                                    name: 'Other notes',
                                     valueType: 'text',
                                     required: true,
                                     eventType: 'input',
@@ -163,22 +162,25 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Is pallor present?',
+                            title: '',
                             selectedValue: '',
-                            name:'Pallor?',
-                            class:'bold'
+                            name:'Pallor?'
                         },
                         data:[
                             {
-                                value: 'Yes',
+                                value: 'Y',
                                 name: 'Yes',
-                                colSize: '2',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'No',
                                 name: 'No',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                         ]
@@ -194,10 +196,9 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                 checkboxBtnContent:
                     {
                         header:{
-                            title: 'Breast examinations results',
+                            title: '',
                             selectedValue: '',
-                            name: 'Breast exam',
-                            class:"bold"
+                            name: 'Breast exam'
                         },
                         data:[
                             {
@@ -392,26 +393,31 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Cervical examination done?',
+                            title: '',
                             selectedValue: '',
-                            name:'Cervical exam',
-                            class:"bold"
+                            name:'Cervical exam'
                         },
                         data:[
                             {
                                 value: 'yes',
                                 name: 'Yes',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'no',
                                 name: 'No',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             }
                         ]
                     }
+
+
             },
             {
                 sectionHeader: '',
@@ -421,7 +427,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 colData: [
                                     {   displayNone:true,
-                                        inputHeader: 'Cervical findings',
+                                        inputHeader: 'Cervical dilation',
                                         unit: 'cm',
                                         icon:'',
                                         value: '',
@@ -447,10 +453,9 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                 checkboxBtnContent:
                     {
                         header:{
-                            title: 'Vaginal inspection',
+                            title: '',
                             selectedValue: '',
-                            name: 'Vaginal inspection',
-                            class:"bold"
+                            name: 'Vaginal inspection'
                         },
                         data:[
                             {
@@ -475,39 +480,39 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     }
 
             },
-        //    {
-            //    selectdData: [],
-            //    classDash: 'dashed_bottom_border',
-            //    checkboxBtnContent:
-                   // {
-                     //   header:{
-                      //      title: '',
-                      //      selectedValue: '',
-                      //      name: 'Vaginal inspection'
-                      //  },
-                     //   data:[
-                    //       {
-                        //        name: 'Evidence of amniotic fluid',
-                       //         value: 'evidence of amniotic fluid',
-                      //          checked: false,
-                     //           labelPlacement: 'start',
-                    //            colSize: '6',
-                   //             justify: 'space-between'
-        
-                  //          },
-                           // {
-                           //     name: 'Genital pain',
-                           //     value: 'genital pain',
-                           //     checked: false,
-                           //     labelPlacement: 'start',
-                           //     colSize: '6',
-                           //     justify: 'space-between'
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: '',
+                            name: 'Vaginal inspection'
+                        },
+                        data:[
+                            {
+                                name: 'Evidence of amniotic fluid',
+                                value: 'evidence of amniotic fluid',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between'
 
-                          //  },
-                       // ]
-                   // }
+                            },
+                            {
+                                name: 'Genital pain',
+                                value: 'genital pain',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between'
 
-            // },
+                            },
+                        ]
+                    }
+
+            },
             {
                 selectdData: [],
                 classDash: 'dashed_bottom_border',
@@ -618,15 +623,6 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                         },
                         data:[
                             {
-                                name: 'Genital pain',
-                                value: 'genital pain',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
-        
-                            },
-                            {
                                 name: 'Other',
                                 value: 'Other',
                                 checked: false,
@@ -639,29 +635,6 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     }
 
             },
-            {
-                isFinishBtn: false,
-                sectionHeader: "",
-                data: {
-                  rowData: [
-                    {
-                      colData: [
-                        {
-                          class: "bold",
-                          inputHeader: "Amniotic fluid level",
-                          value: "",
-                          name: "Amniotic fluid",
-                          icon: icons.editPen,
-                          required: true,
-                          valueType: "text",
-                          eventType: "input",
-                          alertsErrorMassage: "",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              },
             {
                 isFinishBtn: false,
                 sectionHeader: '',
@@ -710,13 +683,17 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 value: 'yes',
                                 name: 'Yes',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'no',
                                 name: 'No',
-                                colSize: '2.5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             }
                         ]
@@ -740,31 +717,39 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 value: 'pitting ankle oedema',
                                 name: 'Pitting ankle oedema',
+                                labelPlacement: 'start',
                                 colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'leg swelling',
                                 name: 'Leg swelling',
+                                labelPlacement: 'start',
                                 colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'oedema of the hands and feet',
                                 name: 'Oedema of the hands and feet',
+                                labelPlacement: 'start',
                                 colSize: '7',
-
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'pitting lower back oedema',
                                 name: 'Pitting lower back oedema',
+                                labelPlacement: 'start',
                                 colSize: '7',
-
+                                justify: 'space-between'
 
                             },
                         ]
                     }
+
+
             },
             {
                 selectdData: [],
@@ -776,34 +761,39 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             selectedValue: '',
                             name:'Oedema severity',
                             displayNone:true,
-                            class:"bold"
 
                         },
                         data:[
                             {
                                 value: '+',
                                 name: '+',
+                                labelPlacement: 'start',
                                 colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: '++',
                                 name: '++',
+                                labelPlacement: 'start',
                                 colSize: '7',
-
+                                justify: 'space-between'
 
                             },
                             {
                                 value: '+++',
                                 name: '+++',
+                                labelPlacement: 'start',
                                 colSize: '7',
-
+                                justify: 'space-between'
 
                             },
                             {
                                 value: '++++',
                                 name: '++++',
+                                labelPlacement: 'start',
                                 colSize: '7',
+                                justify: 'space-between'
 
                             },
                         ]

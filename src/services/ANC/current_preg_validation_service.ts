@@ -102,8 +102,10 @@ function MultValidations(fieldName: string, value: any): null | any {
             return minMaxError;
         }
     } else {
+        // For other fields, simply return null
         return null;
     }
 
+    // Add a return statement here to satisfy TypeScript
     return null;
 }

@@ -132,11 +132,28 @@ const initialChangeGuardianInfo = [
 ] as any;
 const initialVaccineAdverseEffects = [
     {
-        checkboxBtnContent: {
-            header: {
-                name: "Vaccine adverse effects",
-            },
-            data: [],
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "",
+                            icon: icons.search,
+                            valueType: "coded",
+                            isMultiSelect: true,
+                            value: "",
+                            name: "Vaccine adverse effects",
+                            trackBy: "concept_id",
+                            multiSelectData: [],
+                            eventType: "input",
+                            required: true,
+                            alertsErrorMassage: "",
+                            id: "",
+                            idName: "district_id",
+                        },
+                    ],
+                },
+            ],
         },
     },
 ] as any;

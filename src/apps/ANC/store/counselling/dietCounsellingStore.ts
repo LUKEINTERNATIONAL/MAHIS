@@ -9,10 +9,10 @@ const initialDietCounselling=[
         classDash: 'dashed_bottom_border',
         radioBtnContent:{
             header:{
-                title: 'Counselling  conducted on six food balanced diet?',
+                title: 'Counselling  conducted on health eating and keeping physically active?',
                 selectedValue: '',
                 class:'bold',
-                name:'Counselling on six food balanced diet',
+                name:'Counselling on health eating',
                 displayNext:"No"
             },
             data:[
@@ -31,71 +31,15 @@ const initialDietCounselling=[
     },
     {
         selectdData: [],
-        childName:'Counselling on six food balanced diet',
+        childName:'Counselling on health eating',
         classDash: 'dashed_bottom_border',
         sideColSize:0.5,
         isFinishBtn: false,
         radioBtnContent:{
             header:{
-                title: 'Reason counselling on six food balanced diet was not done?',
+                title: 'Reason counselling on health eating and keeping physically active was not done?',
                 selectedValue: '',
-                name:'Counselling on six food balanced diet was not done',
-                displayNone: true,
-                displayNext:"Other",
-                class:'bold',
-            },
-            data:[
-                {
-                    name:'Client was referred',
-                    value: 'client was referred',
-                    colSize: "7",
-                },
-                {
-                    name:'Other',
-                    value:'Other',
-                    colSize: "7",
-                },
-            ]
-        }
-    },
-
-    {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: 'dashed_bottom_border',
-        radioBtnContent:{
-            header:{
-                title: 'Counselling conducted on keeping physically active?',
-                selectedValue: '',
-                class:'bold',
-                name:'Counselling on keeping physically active',
-                displayNext:"No"
-            },
-            data:[
-                {
-                    name: "Yes",
-                    value: "Yes",
-                    colSize: "2.5",
-                },
-                {
-                    name: "No",
-                    value: "No",
-                    colSize: "2.5",
-                },
-            ]
-        }
-    },
-    {
-        selectdData: [],
-        childName:'Counselling on keeping physically active',
-        classDash: 'dashed_bottom_border',
-        sideColSize:0.5,
-        isFinishBtn: false,
-        radioBtnContent:{
-            header:{
-                title: 'Reason counselling on keeping physically active was not done?',
-                selectedValue: '',
-                name:'Counselling on keeping physically active was not done',
+                name:'Counselling on health eating and keeping physically active was not done',
                 displayNone: true,
                 displayNext:"Other",
                 class:'bold',
@@ -115,7 +59,7 @@ const initialDietCounselling=[
         }
     },
     {
-        childName:'Counselling on keeping physically active was not done',
+        childName:'Counselling on health eating and keeping physically active was not done',
         classDash: 'dashed_bottom_border',
         sideColSize:0.5,
         data:{

@@ -62,9 +62,9 @@ export default defineComponent({
         nav(url: any, action: any) {
             if (action == "not_save") {
                 resetPatientData();
-                localStorage.setItem("saveProgressStatus", "false");
+                sessionStorage.setItem("saveProgressStatus", "false");
             } else {
-                localStorage.setItem("saveProgressStatus", "true");
+                sessionStorage.setItem("saveProgressStatus", "true");
             }
             UserService.setProgramUserActions();
             this.dismiss();

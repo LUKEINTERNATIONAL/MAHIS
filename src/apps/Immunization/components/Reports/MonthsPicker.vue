@@ -1,7 +1,7 @@
 <template>
   <ion-list>
     <ion-card v-for="task in tasks" :key="task.month">
-      <ion-card-content style="cursor: pointer;" @click="navigationMenu(task)">
+      <ion-card-content style="cursor: pointer;" @click="navigationMenu('EIRReport', task)">
         <ion-item lines="none">
           <ion-label>
             <h2>{{ task.month }}</h2>
@@ -20,6 +20,7 @@ import { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote } from '@i
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { mapState } from "pinia";
 import { getMonthsList } from "@/apps/Immunization/services/vaccines_service";
+import HisDate from "@/utils/Date";
 
 interface Task {
   month: string;
@@ -33,62 +34,36 @@ export default defineComponent({
   components: { IonList, IonCard, IonCardContent, IonItem, IonLabel, IonNote },
   data() {
     return {
-      tasks: [] as Task[],
-      foward_Route: '',
-      backward_route: '',
-      report_name: '',
+      tasks: [] as Task[]
     };
   },
   computed: {
     ...mapState(EIRreportsStore, ["navigationPayload"]), 
   },
   async mounted() {
-    this.initN()
     this.initMonths()
     this.initOwnNavData()
-  },
-  props: {
-    fowardRoute: {
-      default: 'home',
-    },
-    reportName: {
-      default: 'Change name',
-    },
-    backwardRoute: {
-      default: '',
-    }
   },
   watch: {
     $route: {
         async handler(data) {
-          if (data.name == "EIPMReport" || data.name == "AEFIReport")
+          if (data.name == "EIPMReport")
           this.initOwnNavData()
-        },
-        deep: true,
-    },
-    fowardRoute: {
-        async handler(data) {
-          this.initN()         
         },
         deep: true,
     },
   },
   methods: {
-    initN() {
-      this.foward_Route = this.$props.fowardRoute
-      this.backward_route = this.$props.backwardRoute
-      this.report_name = this.$props.reportName
-    },
-    navigationMenu(task: Task): void{
+    navigationMenu(url: string, task: Task): void{
       this.initNavData(task)
-      this.$router.push(this.foward_Route)
+      this.$router.push(url)
     },
     initNavData(task: Task) {
       const store = EIRreportsStore()
       const dates = task.other[1][1].split(" to ")
       store.setStartAndEndDates(dates[0],dates[1])
       const subText = task.other[1][0]
-      store.setNavigationPayload(this.report_name, true, false, '/', this.backwardRoute, subText as string)
+      store.setNavigationPayload('EIR Monthly Report', true, false, '/', 'EIPMReport', subText as string)
     },
     initOwnNavData() {
       const store = EIRreportsStore()

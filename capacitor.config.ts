@@ -1,7 +1,7 @@
 import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-    appId: "com.mohmw.MAHIS",
+    appId: "com.lukeInternational.MaHIS",
     appName: "MaHIS",
     webDir: "dist",
     bundledWebRuntime: false,
