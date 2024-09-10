@@ -59,30 +59,6 @@
             </ion-buttons>
         </div>
     </ion-header>
-    <ion-header>
-    <ion-toolbar color="dark" class="compact-toolbar">
-        <ion-grid class="ion-no-padding content_width" style="margin-top: -3px;">
-        <ion-row class="ion-align-items-center">
-            <ion-col size="6">
-                <TruncateText
-                    style="margin-left: 10px;" 
-                    class="date-value"
-                    :text=userFacilityName
-                    :maxLines="1"
-                />
-            </ion-col>
-            <ion-col size="6" class="ion-text-right">
-                <TruncateText
-                    style="margin-right: 10px;" 
-                    class="date-value"
-                    :text=sessionDate
-                    :maxLines="1"
-                />
-            </ion-col>
-        </ion-row>
-        </ion-grid>
-    </ion-toolbar>
-    </ion-header>
     <!-- <ion-header>
         <ion-toolbar color="dark" class="compact-toolbar">
             <ion-grid class="ion-no-padding content_width" style="margin-top: -3px">
