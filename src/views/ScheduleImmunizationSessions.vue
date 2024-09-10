@@ -1,6 +1,5 @@
 <template>
     <ion-page :class="{ loading: isLoading }">
-        <!-- Spinner -->
         <div v-if="isLoading" class="spinner-overlay">
             <ion-spinner name="bubbles"></ion-spinner>
             <div class="loading-text">Please wait...</div>
@@ -8,14 +7,13 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                <h1 style="width: 100%; text-align: center; font-weight: 700">Schedule Immunization Sessions</h1>
-                <div style="display: flex; justify-content: space-between">
-                    <div
-                        style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
-                        <basic-form :contentData="startEndDate"></basic-form>
+                <h1 class="heading">Schedule Immunization Sessions</h1>
+                <div class="search-create-container">
+                    <div>
+                        <ion-searchbar animated="true" placeholder="Search by name..."></ion-searchbar>
                     </div>
-                    <div style="display: inline-block; vertical-align: top; margin-top: 10px; float: right">
-                        <ion-button @click="openModal()">
+                    <div>
+                        <ion-button :size="buttonSize" @click="openCreateModal()">
                             <ion-icon slot="start" :icon="add"></ion-icon>
                             Create Session
                         </ion-button>
@@ -23,13 +21,16 @@
                 </div>
 
                 <div class="content-container">
-                    <ion-card-title class="content-title" style="padding-bottom: 10px;">Session
-                        Schedules</ion-card-title>
+                    <ion-card-title>Session Schedules</ion-card-title>
+                    <ion-card-subtitle>Select schedule day to view more details</ion-card-subtitle>
                     <div class="flex-between">
                         <div>
-                            <div v-if="!isLoading" class="calendar-container">
-                                <VCalendar :is-dark="false" :attributes="attributes" :expanded="true" @dayclick="onCalendarDayClick" />
-                            </div>
+                            <ion-card v-if="!isLoading">
+                                <div class="calendar-container">
+                                    <VCalendar color="gray" :is-dark="false" :attributes="attributes" :expanded="true"
+                                        borderless @dayclick="onCalendarDayClick" />
+                                </div>
+                            </ion-card>
                             <ion-list v-else>
                                 <ion-item v-for="i in 3" :key="i">
                                     <ion-thumbnail slot="start">
@@ -37,13 +38,13 @@
                                     </ion-thumbnail>
                                     <ion-label>
                                         <h3>
-                                            <ion-skeleton-text :animated="true" style="width: 80%;"></ion-skeleton-text>
+                                            <ion-skeleton-text :animated="true" class="skeleton-80"></ion-skeleton-text>
                                         </h3>
                                         <p>
-                                            <ion-skeleton-text :animated="true" style="width: 60%;"></ion-skeleton-text>
+                                            <ion-skeleton-text :animated="true" class="skeleton-60"></ion-skeleton-text>
                                         </p>
                                         <p>
-                                            <ion-skeleton-text :animated="true" style="width: 30%;"></ion-skeleton-text>
+                                            <ion-skeleton-text :animated="true" class="skeleton-30"></ion-skeleton-text>
                                         </p>
                                     </ion-label>
                                 </ion-item>
@@ -153,8 +154,7 @@
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Vaccines</h3>
                                                 <p>
-                                                    {{ schedule.vaccines.map((vaccine: any) => vaccine.name).join(', ')
-                                                    }}
+                                                    {{ schedule.assignees?.map((vaccine: any) => vaccine.name).join(',')}}
                                                 </p>
                                             </ion-label>
                                         </ion-item>
@@ -176,7 +176,7 @@
 
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Session type</h3>
-                                                <p>{{ schedule.session_type }} ({{ schedule.repeat_type }} repeat)</p>
+                                                <p>{{ schedule.session_type }} ({{ schedule?.repeat_type }} repeat)</p>
                                             </ion-label>
                                         </ion-item>
                                         <ion-item>
@@ -195,7 +195,8 @@
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Assignees</h3>
                                                 <p>
-                                                    {{ schedule.assignees.map((assignee: any) => `${assignee.given_name}
+                                                    {{ schedule.assignees?.map((assignee: Assignee) =>
+                                                        `${assignee.given_name}
                                                     ${assignee.family_name}`).join(', ') }}
                                                 </p>
                                             </ion-label>
@@ -206,13 +207,15 @@
                         </ion-card>
                         <ion-card v-if="displaySchedules.length == 0" class="w-full ion-hide-sm-down">
                             <ion-card-content
-                                style="display: flex; padding-top: 10px; justify-content: center; align-items: center; flex-direction: column;">
+                                style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100%;">
                                 <img height="70" style="width: auto; object-fit: cover;"
                                     src="../../public/assets/icon/not-selected.png" alt="schedule-not-selected-icon" />
-                                <ion-card-subtitle>Please select immunization session schedules date(s) to view
-                                    details</ion-card-subtitle>
+                                <ion-text>
+                                    <h3>Please select immunization session schedules date(s) to view details</h3>
+                                </ion-text>
                             </ion-card-content>
                         </ion-card>
+
                     </div>
                 </div>
             </div>
@@ -220,239 +223,195 @@
     </ion-page>
 </template>
 
-<script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonSkeletonText, IonCardHeader, IonCardTitle, IonButton, IonPage, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
-import { defineComponent } from "vue";
-import Toolbar from "@/components/Toolbar.vue";
-import ToolbarSearch from "@/components/ToolbarSearch.vue";
-import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
-import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
-import { mapState } from "pinia";
-import SetUser from "@/views/Mixin/SetUser.vue";
-import HisDate from "@/utils/Date";
-import "datatables.net-buttons";
-import "datatables.net-buttons/js/buttons.html5";
-import "datatables.net-responsive";
-import "datatables.net-buttons-dt";
-import DynamicButton from "@/components/DynamicButton.vue";
-import AddImmunizationSessionModal from "@/components/Modal/AddImmunizationSessionModal.vue";
-import { createModal } from "@/utils/Alerts";
-import { useStartEndDate } from "@/stores/StartEndDate";
-import BasicForm from "@/components/BasicForm.vue";
-import { ellipsisVertical, add } from 'ionicons/icons';
-import "datatables.net-select";
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue';
+import {
+    IonContent,
+    IonText,
+    IonSkeletonText,
+    IonCardHeader,
+    IonCardTitle,
+    IonButton,
+    IonPage,
+    IonPopover,
+    IonItem,
+    IonCard,
+    IonCardContent,
+} from '@ionic/vue';
 import { Capacitor } from '@capacitor/core';
-import { SessionScheduleService } from "@/services/session_schedule_service";
-import { SessionSchedule } from "@/types";
-import ViewImmunizationSessionModal from "@/components/Modal/ViewImmunizationSessionModal.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import { ellipsisVertical, add } from 'ionicons/icons';
+import ViewImmunizationSessionModal from '@/components/Modal/ViewImmunizationSessionModal.vue';
+import { SessionScheduleService } from '@/services/session_schedule_service';
+import { Assignee, SessionSchedule } from '@/types';
+import { createModal } from '@/utils/Alerts';
 
-export default defineComponent({
-    name: "Home",
-    mixins: [SetUser],
-    components: {
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonPage,
-        IonTitle,
-        IonCardTitle,
-        IonMenu,
-        IonItem,
-        IonPopover,
-        IonList,
-        IonToolbar,
-        Toolbar,
-        ToolbarSearch,
-        IonRow,
-        IonCol,
-        IonCardHeader,
-        IonIcon,
-        IonCardContent,
-        ImmunizationTrendsGraph,
-        ImmunizationGroupGraph,
-        IonCard,
-        DynamicButton,
-        BasicForm,
-        IonSkeletonText,
-        ViewImmunizationSessionModal
-    },
-    data() {
-        return {
-            reportData: [] as any,
-            currentStock: [] as any,
-            schedules: <SessionSchedule[]>[],
-            displaySchedules: [] as any,
-            allStock: [] as any,
-            outStock: [] as any,
-            startDate: HisDate.currentDate(),
-            endDate: HisDate.currentDate(),
-            options: {
-                responsive: true,
-                select: false,
-            } as any,
-            selectedButton: "all",
-            isLoading: false,
-            svgIconHeight: 50,
-            svgIconWidth: 50,
-            attributes: [
-                {
-                    key: "today",
-                    content: 'green',
-                    highlight: {
-                        color: 'green',
-                        fillMode: 'light',
-                    },
-                    dot: 'green',
-                    dates: new Date(),
-                    order: 0
-                },
-            ] as any
-        };
-    },
-    setup() {
-        return { add, ellipsisVertical }
-    },
-    computed: {
-        ...mapState(useStartEndDate, ["startEndDate"]),
-    },
-    $route: {
-        async handler() { },
-        deep: true,
-    },
-    watch: {
-        stock: {
-            async handler() {
-            },
-            deep: true,
+const schedules = ref<SessionSchedule[]>([]);
+const displaySchedules = ref<SessionSchedule[]>([]);
+const isLoading = ref<boolean>(false);
+const svgIconHeight: number = 50;
+const svgIconWidth: number = 50;
+const attributes = ref<any[]>([
+    {
+        key: 'today',
+        content: 'green',
+        highlight: {
+            color: 'green',
+            fillMode: 'light',
         },
+        bar: 'green',
+        dates: new Date(),
+        order: 0,
     },
-    async mounted() {
-        this.getSessionSchedules();
-    },
-    methods: {
-        async onCalendarDayClick(calendarDay: any, event: MouseEvent) {
-            let hasOverlap = false;
-            calendarDay.attributes.forEach((attribute: { description: string }) => {
-                this.schedules
-                    .filter((schedule) => schedule.session_name === attribute.description)
-                    .forEach((schedule) => {
-                        const overlappingSchedule = this.displaySchedules.find((s: { session_name: string, start_date: string, end_date: string }) =>
-                            s.session_name === schedule.session_name &&
-                            (new Date(s.start_date) <= new Date(schedule.end_date)) &&
-                            (new Date(s.end_date) >= new Date(schedule.start_date))
-                        );
+]);
 
-                        if (overlappingSchedule) {
-                            hasOverlap = true;
-                        } else {
-                            this.displaySchedules = [];
-                            this.displaySchedules.push(schedule);
-                        }
-                    });
-            });
-
-            if (hasOverlap) {
-                calendarDay.attributes.forEach((attribute: { description: string }) => {
-                    this.schedules
-                        .filter((schedule) => schedule.session_name === attribute.description)
-                        .forEach((schedule) => {
-                            if (!this.displaySchedules.some((s: { session_name: string }) => s.session_name === schedule.session_name)) {
-                                this.displaySchedules.push(schedule);
-                            }
-                        });
-                });
-            }
-            const platform = Capacitor.getPlatform();
-            if (true) {
-                await createModal(ViewImmunizationSessionModal, { class: "otherVitalsModal largeModal", data: this.displaySchedules });
-            }
-        },
-        async getSessionSchedules(): Promise<void> {
-            this.isLoading = true;
-            try {
-                const sessionService = new SessionScheduleService();
-                const data: any = await sessionService.getSessions();
-                data.forEach((item: any) => {
-                    this.attributes.push({
-                        description: item.session_name,
-                        isComplete: false,
-                        highlight: {
-                            start: {
-                                fillMode: 'light',
-                                contentStyle: { color: this.getUniqueColor() },
-                            },
-                            base: {
-                                fillMode: 'light',
-                                contentStyle: { color: '#fff' },
-                                style: { background: this.getUniqueColor() },
-                            },
-                            end: {
-                                fillMode: 'light',
-                                contentStyle: { color: this.getUniqueColor() },
-                            },
-                        },
-                        color: this.getUniqueColor(),
-                        content: {
-                            color: this.getUniqueColor()
-                        },
-                        dates: {
-                            start: item.start_date,
-                            end: item.end_date,
-                        },
-                        popover: {
-                            label: item.session_name,
-                        },
-                    },)
-                })
-                this.schedules = data;
-                this.isLoading = false;
-            } catch (exception: any) {
-                console.error(exception)
-                this.isLoading = false;
-            }
-        },
-        getUniqueColor() {
-            const existingColors = new Set(this.attributes.map((attribute: { color: string; }) => attribute.color));
-            const colors = <string[]>['gray', 'red', 'green', 'purple', 'orange', 'teal', 'pink', 'indigo'];
-            for (const color of colors) {
-                if (!existingColors.has(color)) {
-                    return color;
-                }
-            }
-            return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-        },
-        async openModal() {
-            const data: any = await createModal(AddImmunizationSessionModal, { class: "otherVitalsModal largeModal" });
-            if (data == "dismiss") {
-                await this.getSessionSchedules();
-            }
-        },
-    },
+onMounted(async (): Promise<void> => {
+    await getSessionSchedules();
 });
+
+async function getSessionSchedules(): Promise<void> {
+    isLoading.value = true;
+    try {
+        const sessionService = new SessionScheduleService();
+        const data: any = await sessionService.getSessions();
+        data.forEach((item: SessionSchedule) => {
+            attributes.value.push({
+                description: item.session_name,
+                isComplete: false,
+                dot: {
+                    color: new Date(item.end_date) < new Date() ? "gray" : "green",
+                    ...(new Date(item.end_date) < new Date() && { class: 'opacity-50' })
+                },
+                color: new Date(item.end_date) < new Date() ? "gray" : "green",
+                content: {
+                    color: new Date(item.end_date) < new Date() ? "gray" : "green",
+                },
+                dates: {
+                    start: item.start_date,
+                    end: item.end_date,
+                },
+                popover: {
+                    label: item.session_name,
+                },
+            });
+        });
+        schedules.value = data;
+    } catch (exception: any) {
+        console.error(exception);
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+async function onCalendarDayClick(calendarDay: any) {
+    let hasOverlap = false;
+    const selectedSchedules: SessionSchedule[] = [];
+
+    displaySchedules.value = [];
+
+    calendarDay.attributes.forEach((attribute: { description: string }) => {
+        schedules.value
+            .filter((schedule) => schedule.session_name === attribute.description)
+            .forEach((schedule) => {
+                const overlappingSchedule = selectedSchedules.find(
+                    (s) =>
+                        s.session_name === schedule.session_name &&
+                        new Date(s.start_date) <= new Date(schedule.end_date) &&
+                        new Date(s.end_date) >= new Date(schedule.start_date)
+                );
+
+                if (overlappingSchedule) {
+                    hasOverlap = true;
+                } else {
+                    selectedSchedules.push(schedule);
+                }
+            });
+    });
+
+    if (hasOverlap) {
+        calendarDay.attributes.forEach((attribute: { description: string }) => {
+            schedules.value
+                .filter((schedule) => schedule.session_name === attribute.description)
+                .forEach((schedule) => {
+                    if (!selectedSchedules.some((s) => s.session_name === schedule.session_name)) {
+                        selectedSchedules.push(schedule);
+                    }
+                });
+        });
+    }
+
+    displaySchedules.value = selectedSchedules;
+    const platform = Capacitor.getPlatform();
+
+    if (displaySchedules.value.length > 0) {
+        if (platform === 'android' || platform === 'ios') {
+            await createModal(ViewImmunizationSessionModal, { class: 'otherVitalsModal largeModal' }, true, {
+                data: displaySchedules.value,
+            });
+        }
+    }
+}
+
+const buttonSize = computed((): "default" | "small" | "large" | undefined => {
+    const platform = Capacitor.getPlatform();
+    return platform === 'android' || platform === 'ios' ? 'small' : 'large';
+});
+
+const openCreateModal = () => {
+    createModal(ViewImmunizationSessionModal, { class: 'otherVitalsModal largeModal' });
+}
 </script>
 
+
 <style scoped>
+.heading {
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+}
+
+.search-create-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skeleton-80 {
+    width: 80%;
+}
+
+.skeleton-60 {
+    width: 60%;
+}
+
+.skeleton-30 {
+    width: 30%;
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.session-title {
+    text-transform: uppercase;
+    font-size: 22px;
+}
+
 .calendar-container {
     width: 100%;
     margin: 0 auto;
 }
 
-@media (max-width: 767px) {
-  .calendar-container {
-    max-width: 100%;
-    width: 100%;
-    padding: 0;
-  }
-}
-
-.calendar-container ::v-deep  .vc-header {
+.calendar-container ::v-deep .vc-header {
     margin-bottom: 10px;
 }
 
-.calendar-container ::v-deep  .vc-header button {
-  background-color: transparent;
-  font-size: 22px;
-  background-image: none;
+.calendar-container ::v-deep .vc-header button {
+    background-color: transparent;
+    font-size: 22px;
+    background-image: none;
 }
 
 .calendar-container ::v-deep .vc-container {
@@ -464,7 +423,13 @@ export default defineComponent({
 }
 
 .calendar-container ::v-deep .vc-day {
-    padding: 10px;
+    padding: 0;
+}
+
+@media (max-width: 767px) {
+    .calendar-container ::v-deep .vc-day {
+        padding: 10px;
+    }
 }
 
 .calendar-container ::v-deep .vc-header {
@@ -481,9 +446,16 @@ export default defineComponent({
     font-size: 20px;
 }
 
+@media (max-width: 767px) {
+    .calendar-container {
+        max-width: 100%;
+        padding: 0;
+    }
+}
+
 .content-container {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .w-full {
@@ -523,10 +495,6 @@ export default defineComponent({
     background-color: green !important;
 }
 
-.bigGroupButton {
-    margin-top: 10px;
-}
-
 .icon-container {
     display: flex;
     justify-content: center;
@@ -546,256 +514,5 @@ export default defineComponent({
         height: 50px;
         width: 50px;
     }
-}
-
-.ion-label-h3 {
-    font-size: 18px;
-    font-weight: 500;
-}
-
-#container {
-    text-align: center;
-
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-#container strong {
-    font-size: 20px;
-    line-height: 26px;
-}
-
-#container p {
-    font-size: 16px;
-    line-height: 22px;
-
-    color: #8c8c8c;
-
-    margin: 0;
-}
-
-#container a {
-    text-decoration: none;
-}
-
-.centered-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.graphBackground {
-    position: absolute;
-    width: 100vw;
-    height: 62vh;
-    left: 0px;
-    top: 23vh;
-    background: linear-gradient(158.66deg, #d6d5d6 0.36%, #f8f8f8 40.1%);
-    border-radius: 22px;
-}
-
-.total {
-    position: absolute;
-    width: 251px;
-    height: 128px;
-    top: 25px;
-    left: 50%;
-    transform: translate(-50%, 10%);
-    text-align: center;
-    background: rgba(237, 235, 238, 0.95);
-    opacity: 0.8;
-    border-radius: 6px;
-}
-
-.totalNumber {
-    /* 3,764 */
-
-    height: 77px;
-
-    font-style: normal;
-    font-weight: 700;
-    font-size: 60px;
-    line-height: 77px;
-
-    /* text_color */
-    color: #5d5d5d;
-}
-
-.totalText {
-    width: 229px;
-    height: 48px;
-
-    font-style: normal;
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 150%;
-    /* or 22px */
-    display: flex;
-    align-items: center;
-    text-align: center;
-
-    color: #08475e;
-}
-
-.dueMiss {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-}
-
-.missed {
-    width: 187px;
-    height: 90px;
-    left: 14px;
-    background: #ffffff;
-    border-radius: 6px;
-    text-align: center;
-}
-
-.due {
-    width: 187px;
-    height: 90px;
-    left: 14px;
-    background: #ffffff;
-    border-radius: 6px;
-    text-align: center;
-}
-
-.dueMissText {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 17px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    padding: 7px;
-    color: #004d4d;
-}
-
-.dueNumber {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 30px;
-    margin-top: 10px;
-
-    /* blue/800 */
-    color: #016302;
-}
-
-.missedNumber {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 30px;
-    margin-top: 10px;
-
-    color: #b42318;
-}
-
-.clientSeen {
-    height: 120px;
-    margin-top: 15px;
-    background: #ffffff;
-}
-
-.clientSeenTitle {
-    padding-top: 10px;
-    margin-left: 10px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    color: #2d3648;
-}
-
-.clientSeenBoxChild {
-    background: #2d3648 !important;
-}
-
-.clientSeenBoxMen {
-    background: #004d4d !important;
-}
-
-.clientSeenBoxWomen {
-    background: #556080 !important;
-}
-
-.clientSeenBox {
-    width: 68px;
-    height: 68px;
-    background: #006401;
-    border-radius: 7px;
-    padding-top: 8px;
-}
-
-.clientSeenBoxes {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-}
-
-.clientSeenBoxText {
-    /* text-md */
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 150%;
-    align-items: center;
-    text-align: center;
-
-    /* White */
-    color: #ffffff;
-}
-
-.clientSeenBoxNumber {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 29px;
-    text-align: center;
-
-    color: #ffffff;
-}
-
-.graphCard {
-    width: 98vw;
-    margin: 0 auto;
-    margin-top: 10px;
-}
-
-.modal_wrapper {
-    border-radius: 8px;
-}
-
-.bigButton {
-    font-weight: 500;
-    height: 180px;
-}
-
-.centerBigBtnContain {
-    align-items: center;
-    align-content: center;
-}
-
-.bigBtnHeader {
-    font-weight: 700;
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-ion-button {
-    height: 60px;
-    margin: 20px;
-    margin-left: 0px;
-    margin-right: 8px;
-}
-
-.addBtn {
-    height: 50px;
-    align-items: center;
 }
 </style>
