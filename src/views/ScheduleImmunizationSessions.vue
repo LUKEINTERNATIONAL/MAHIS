@@ -404,45 +404,45 @@ const openCreateModal = () => {
     margin: 0 auto;
 }
 
-.calendar-container ::v-deep .vc-header {
+.calendar-container :deep(.vc-header) {
     margin-bottom: 10px;
 }
 
-.calendar-container ::v-deep .vc-header button {
+.calendar-container :deep(.vc-header button) {
     background-color: transparent;
     font-size: 22px;
     background-image: none;
 }
 
-.calendar-container ::v-deep .vc-container {
+.calendar-container :deep(.vc-container) {
     width: 100%;
 }
 
-.calendar-container ::v-deep .vc-weeks {
+.calendar-container :deep(.vc-weeks) {
     grid-template-columns: repeat(7, 1fr);
 }
 
-.calendar-container ::v-deep .vc-day {
+.calendar-container :deep(.vc-day) {
     padding: 0;
 }
 
 @media (max-width: 767px) {
-    .calendar-container ::v-deep .vc-day {
+    .calendar-container :deep(.vc-day) {
         padding: 10px;
     }
 }
 
-.calendar-container ::v-deep .vc-header {
+.calendar-container :deep(.vc-header) {
     padding: 10px 0;
     font-size: 16px;
     font-weight: 600;
 }
 
-.calendar-container ::v-deep .vc-header-label {
+.calendar-container :deep(.vc-header-label) {
     font-size: 18px;
 }
 
-.calendar-container ::v-deep .vc-arrow {
+.calendar-container :deep(.vc-arrow) {
     font-size: 20px;
 }
 
