@@ -13,7 +13,7 @@
                 <ion-card class="nationalIDCard">
                     <ion-icon slot="start" :icon="iconsContent.scanner" aria-hidden="true"></ion-icon>
                     <div>
-                        <ion-button style="padding-top: 10px" @click="checkDevice()" fill="solid">Yes, I need to scan it</ion-button>
+                        <ion-button style="padding-top: 10px" @click="nav('registration/scan')" fill="solid">Yes, I need to scan it</ion-button>
                     </div>
                     <div>
                         <ion-button fill="clear" @click="nav('registration/manual')"> No ID</ion-button>
@@ -32,11 +32,8 @@ import { ref } from "vue";
 import { icons } from "@/utils/svg";
 import { resetDemographics } from "@/services/reset_data";
 import { Service } from "@/services/service";
-import { scannedData, extractDetails } from "@/services/national_id";
-import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
-import DeviceDetection from "@/views/Mixin/DeviceDetection.vue";
+
 export default defineComponent({
-    mixins: [DeviceDetection, SetPersonInformation],
     name: "Menu",
     components: {
         IonContent,
@@ -56,16 +53,6 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
-        checkDevice() {
-            if (this.isMobile) this.scanCode();
-            else this.nav("registration/scan");
-        },
-        async scanCode() {
-            const dataScanned: any = await scannedData();
-            const dataExtracted: any = await extractDetails(dataScanned);
-            await this.setPersonInformation(dataExtracted);
-            this.$router.push("/registration/manual");
-        },
         programID() {
             return Service.getProgramID();
         },

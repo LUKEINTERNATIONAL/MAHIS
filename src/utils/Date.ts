@@ -59,7 +59,7 @@ function getBirthdateAge(date: any) {
     return calculateAge(date, currentDate()) + " yrs (" + toStandardHisDisplayFormat(date) + ")";
 }
 function sessionDate() {
-    return localStorage.getItem("sessionDate") || dayjs().format(STANDARD_DATE_FORMAT);
+    return sessionStorage.getItem("sessionDate") || dayjs().format(STANDARD_DATE_FORMAT);
 }
 
 function currentDisplayDate() {

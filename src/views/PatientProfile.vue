@@ -2,21 +2,77 @@
   <ion-page>
     <Toolbar />
     <ion-content :fullscreen="true">
-      <DemographicBar class="displayNoneDesktop" v-if="activeProgramID !== 33 && activeProgramID != ''" />
+      <DemographicBar
+        class="displayNoneDesktop"
+        v-if="activeProgramID !== 33 && activeProgramID != ''"
+      />
+      <CheckInConfirmationModal
+        :closeModalFunc="closeCheckInModal"
+        :onYes="handleCheckInYes"
+        :onNo="handleCheckInNo"
+        :isOpen="checkInModalOpen"
+        :title="`Are you sure you want to check in the patient?`"
+      />
+      <AncEnrollmentModal
+        :closeModalFunc="closeEnrollmentModal"
+        :onYes="handleEnrollmentYes"
+        :onNo="handleEnrollmentNo"
+        :isOpen="isEnrollmentModalOpen"
+        :title="enrollModalTitle"
+      />
+
+
       <PatientProfile v-if="activeProgramID == 33" />
-      <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
+      <div
+        class="content_manager"
+        v-if="activeProgramID !== 33 && activeProgramID != ''"
+      >
         <ion-row class="content_width">
-          <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
+          <ion-col
+            size="2.5"
+            size-lg="2.6"
+            size-md="3"
+            class="displayNoneMobile"
+          >
             <ion-card style="margin-bottom: 20px; background-color: #fff">
               <ion-card-content>
+                <div style="display: flex; justify-content: space-between">
+                  <!-- <DynamicButton
+                    name="Checkin Patient"
+                    @click="toggleCheckInModal()"
+                    fill="clear"
+                    iconSlot="start"
+                    :icon="checkboxOutline"
+                  /> -->
+                  <DynamicButton
+                    name="Checkin Patient"
+                    @click="toggleCheckInModal()"
+                    fill="clear"
+                    iconSlot="start"
+                    :icon="closeCircleOutline"
+                  />
+                  <DynamicButton
+                    name="Edit"
+                    fill="clear"
+                    iconSlot="start"
+                    :icon="iconsContent.editFade"
+                  />
+                </div>
                 <div class="p_name_image">
-                  <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
-                    <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
+                  <div
+                    :class="
+                      demographics.gender == 'M'
+                        ? 'initialsBox maleColor'
+                        : 'initialsBox femaleColor'
+                    "
+                    @click="openPIM()"
+                  >
+                    <ion-icon
+                      style="color: #fff; font-size: 70px"
+                      :icon="person"
+                    ></ion-icon>
                   </div>
                   <div style="width: 100%">
-                    <div style="display: flex; justify-content: end; height: 20px; top: -10px; position: relative">
-                      <DynamicButton name="Edit" fill="clear" iconSlot="start" :icon="iconsContent.editFade" />
-                    </div>
                     <div class="p_name">{{ demographics?.name }}</div>
                   </div>
                 </div>
@@ -26,7 +82,9 @@
                 </ion-row>
                 <ion-row>
                   <ion-col size="4">Gendar:</ion-col>
-                  <ion-col class="demoContent">{{ covertGender(demographics?.gender) }}</ion-col>
+                  <ion-col class="demoContent">{{
+                    covertGender(demographics?.gender)
+                  }}</ion-col>
                 </ion-row>
                 <ion-row>
                   <ion-col size="4">Age:</ion-col>
@@ -34,91 +92,151 @@
                 </ion-row>
                 <ion-row>
                   <ion-col size="4">Address:</ion-col>
-                  <ion-col class="demoContent">{{ covertGender(demographics?.address) }}</ion-col>
+                  <ion-col class="demoContent">{{
+                    covertGender(demographics?.address)
+                  }}</ion-col>
                 </ion-row>
               </ion-card-content>
             </ion-card>
             <div style="margin-left: 10px">
               <DynamicButton
-                  class=""
-                  style="margin-bottom: 5px; width: 96%; height: 45px"
-                  @click="setProgram(btn)"
-                  v-for="(btn, index) in programBtn"
-                  :key="index"
-                  :name="btn.actionName"
-                  :fill="activeProgramID != btn.program_id ? 'outline' : 'solid'"
-                  :color="activeProgramID == btn.program_id ? 'success' : ''"
+              :style="'margin-bottom: 5px; width: 96%; height: 45px'"
+               @click="handleProgramClick(btn)"
+                v-for="(btn, index) in programBtn"
+                :key="index"
+                :name="checkProgram(btn)"
+                :fill="activeProgramID != btn.program_id ? 'outline' : 'solid'"
+                :color="activeProgramID == btn.program_id ? 'success' : ''"
               />
+              <OPDPopover :isOpen="popoverOpen" />
             </div>
 
             <ion-card style="margin-bottom: 20px; background-color: #fff">
               <ion-accordion-group :value="['first']">
-                <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
+                <ion-accordion
+                  value="first"
+                  style="background-color: #fff"
+                  toggle-icon-slot="start"
+                >
                   <ion-item slot="header" color="white">
-                    <ion-label class="side_title">Alerts & Reminders </ion-label>
+                    <ion-label class="side_title"
+                      >Alerts & Reminders
+                    </ion-label>
                   </ion-item>
                   <ion-card-content slot="content">
-                                        <span v-for="(al, index3) in alerts" :key="index3">
-                                            <ion-row
-                                                v-if="al.value"
-                                                :style="
-                                                    'border-radius: 5px;  margin-top:10px; margin-bottom:10px;background-color:' + al.backgroundColor
-                                                "
-                                            >
-                                                <div style="display: flex">
-                                                    <div style="align-items: center; display: flex; margin: 10px">
-                                                        <ion-icon slot="start" :icon="al.icon" aria-hidden="true"></ion-icon>
-                                                    </div>
-                                                    <div>
-                                                        <div class="position_content alert_content">
-                                                            <span :style="'color:' + al.textColor + '; font-weight:600; margin: 0px 2px; width:100%'">
-                                                                {{ al.index }}</span
-                                                            >
-                                                        </div>
-                                                        <div class="position_content bottom_text" :style="'color:' + al.textColor + ';'">
-                                                            {{ al.value }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </ion-row>
-                                        </span>
+                    <span v-for="(al, index3) in alerts" :key="index3">
+                      <ion-row
+                        v-if="al.value"
+                        :style="
+                          'border-radius: 5px;  margin-top:10px; margin-bottom:10px;background-color:' +
+                          al.backgroundColor
+                        "
+                      >
+                        <div style="display: flex">
+                          <div
+                            style="
+                              align-items: center;
+                              display: flex;
+                              margin: 10px;
+                            "
+                          >
+                            <ion-icon
+                              slot="start"
+                              :icon="al.icon"
+                              aria-hidden="true"
+                            ></ion-icon>
+                          </div>
+                          <div>
+                            <div class="position_content alert_content">
+                              <span
+                                :style="
+                                  'color:' +
+                                  al.textColor +
+                                  '; font-weight:600; margin: 0px 2px; width:100%'
+                                "
+                              >
+                                {{ al.index }}</span
+                              >
+                            </div>
+                            <div
+                              class="position_content bottom_text"
+                              :style="'color:' + al.textColor + ';'"
+                            >
+                              {{ al.value }}
+                            </div>
+                          </div>
+                        </div>
+                      </ion-row>
+                    </span>
                   </ion-card-content>
                 </ion-accordion>
               </ion-accordion-group>
             </ion-card>
             <ion-card style="margin-bottom: 20px; background-color: #fff">
               <ion-accordion-group :value="['first']">
-                <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
+                <ion-accordion
+                  value="first"
+                  style="background-color: #fff"
+                  toggle-icon-slot="start"
+                >
                   <ion-item slot="header" color="white">
                     <ion-label class="side_title">Templates/Forms</ion-label>
                   </ion-item>
                   <ul style="list-style: none" slot="content">
                     <li class="form_list">
-                      <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.form"></ion-icon>
+                      <ion-icon
+                        slot="start"
+                        aria-hidden="true"
+                        :icon="iconsContent.form"
+                      ></ion-icon>
                       <div class="form_list_content">AETC Form</div>
                     </li>
                     <li class="form_list">
-                      <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.inpatient"></ion-icon>
+                      <ion-icon
+                        slot="start"
+                        aria-hidden="true"
+                        :icon="iconsContent.inpatient"
+                      ></ion-icon>
                       <div class="form_list_content">Medical Inpatient</div>
                     </li>
                     <li class="form_list">
-                      <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>
+                      <ion-icon
+                        slot="start"
+                        aria-hidden="true"
+                        :icon="iconsContent.notes"
+                      ></ion-icon>
                       <div class="form_list_content">Surgucal Notes</div>
                     </li>
                     <li class="form_list">
-                      <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.gynacological"></ion-icon>
+                      <ion-icon
+                        slot="start"
+                        aria-hidden="true"
+                        :icon="iconsContent.gynacological"
+                      ></ion-icon>
                       <div class="form_list_content">Gynacological</div>
                     </li>
                     <li class="form_list">
-                      <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>
+                      <ion-icon
+                        slot="start"
+                        aria-hidden="true"
+                        :icon="iconsContent.notes"
+                      ></ion-icon>
                       <div class="form_list_content">SOAP</div>
                     </li>
                     <li class="form_list">
-                      <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.monitoring"></ion-icon>
+                      <ion-icon
+                        slot="start"
+                        aria-hidden="true"
+                        :icon="iconsContent.monitoring"
+                      ></ion-icon>
                       <div class="form_list_content">Monitoring Chart</div>
                     </li>
                     <li class="form_list">
-                      <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.referal"></ion-icon>
+                      <ion-icon
+                        slot="start"
+                        aria-hidden="true"
+                        :icon="iconsContent.referal"
+                      ></ion-icon>
                       <div class="form_list_content">Referral</div>
                     </li>
                   </ul>
@@ -127,9 +245,15 @@
             </ion-card>
             <ion-card style="margin-bottom: 20px; background-color: #fff">
               <ion-accordion-group>
-                <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
+                <ion-accordion
+                  value="first"
+                  style="background-color: #fff"
+                  toggle-icon-slot="start"
+                >
                   <ion-item slot="header" color="white">
-                    <ion-label class="side_title">AETC Clerking Sheet</ion-label>
+                    <ion-label class="side_title"
+                      >AETC Clerking Sheet</ion-label
+                    >
                   </ion-item>
                   <ion-card-content slot="content"> </ion-card-content>
                 </ion-accordion>
@@ -152,48 +276,105 @@
                   <ion-col class="vitalsHeading">Blood pressure</ion-col>
                 </ion-row>
                 <ion-row>
-                  <ion-col class="vitalsValue">{{ vitals["Weight"] }} <span class="vitalsUnits">kg</span></ion-col>
-                  <ion-col class="vitalsValue">{{ vitals["Height"] }} <span class="vitalsUnits">cm</span></ion-col>
-                  <ion-col class="vitalsValue">{{ vitals["Temp"] }} <span class="vitalsUnits">C</span></ion-col>
-                  <ion-col class="vitalsValue">0 <span class="vitalsUnits">mg/dL</span></ion-col>
-                  <ion-col class="vitalsValue">{{ vitals["Pulse"] }} <span class="vitalsUnits">bpm </span></ion-col>
                   <ion-col class="vitalsValue"
-                  >{{ vitals["Systolic"] }}/{{ vitals["Diastolic"] }}<span class="vitalsUnits">mmhg</span></ion-col
+                    >{{ vitals["Weight"] }}
+                    <span class="vitalsUnits">kg</span></ion-col
+                  >
+                  <ion-col class="vitalsValue"
+                    >{{ vitals["Height"] }}
+                    <span class="vitalsUnits">cm</span></ion-col
+                  >
+                  <ion-col class="vitalsValue"
+                    >{{ vitals["Temp"] }}
+                    <span class="vitalsUnits">C</span></ion-col
+                  >
+                  <ion-col class="vitalsValue"
+                    >0 <span class="vitalsUnits">mg/dL</span></ion-col
+                  >
+                  <ion-col class="vitalsValue"
+                    >{{ vitals["Pulse"] }}
+                    <span class="vitalsUnits">bpm </span></ion-col
+                  >
+                  <ion-col class="vitalsValue"
+                    >{{ vitals["Systolic"] }}/{{ vitals["Diastolic"]
+                    }}<span class="vitalsUnits">mmhg</span></ion-col
                   >
                 </ion-row>
               </div>
             </ion-card>
             <div>
               <ion-segment :value="segmentContent">
-                <ion-segment-button value="Patient Summary" @click="setSegmentContent('Patient Summary')">
+                <ion-segment-button
+                  value="Patient Summary"
+                  @click="setSegmentContent('Patient Summary')"
+                >
                   <ion-label>Patient Summary</ion-label>
                 </ion-segment-button>
-                <ion-segment-button value="Visits History" @click="setSegmentContent('Visits History')">
+                <ion-segment-button
+                  value="Visits History"
+                  @click="setSegmentContent('Visits History')"
+                >
                   <ion-label>Visits History</ion-label>
                 </ion-segment-button>
-                <ion-segment-button value="Vitals & Measurements Summary" @click="setSegmentContent('Vitals & Measurements Summary')">
+                <ion-segment-button
+                  value="Vitals & Measurements Summary"
+                  @click="setSegmentContent('Vitals & Measurements Summary')"
+                >
                   <ion-label>Vitals & Measurements Summary</ion-label>
                 </ion-segment-button>
-                <ion-segment-button value="Lab Tests History" @click="setSegmentContent('Lab Tests History')">
+                <ion-segment-button
+                  value="Lab Tests History"
+                  @click="setSegmentContent('Lab Tests History')"
+                >
                   <ion-label>Lab Tests History</ion-label>
                 </ion-segment-button>
-                <ion-segment-button value="Diagnoses History" @click="setSegmentContent('Diagnoses History')">
+                <ion-segment-button
+                  value="Diagnoses History"
+                  @click="setSegmentContent('Diagnoses History')"
+                >
                   <ion-label>Diagnoses History</ion-label>
                 </ion-segment-button>
-                <ion-segment-button value="Allergies & Contraindication" @click="setSegmentContent('Allergies & Contraindication')">
+                <ion-segment-button
+                  value="Allergies & Contraindication"
+                  @click="setSegmentContent('Allergies & Contraindication')"
+                >
                   <ion-label>Allergies & Contraindication</ion-label>
                 </ion-segment-button>
               </ion-segment>
             </div>
             <div v-if="segmentContent == 'Patient Summary'">
               <div style="display: flex; margin-top: 10px">
-                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
+                <div
+                  style="
+                    width: 50vw;
+                    background-color: #fff;
+                    border-radius: 5px;
+                    margin-right: 5px;
+                  "
+                  v-if="checkUnderFive"
+                >
                   <WeightHeightChart />
                 </div>
-                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px">
+                <div
+                  style="
+                    width: 50vw;
+                    background-color: #fff;
+                    border-radius: 5px;
+                    margin-right: 5px;
+                  "
+                >
                   <BloodPressure />
                 </div>
-                <div style="width: 50vw; background-color: #fff; border-radius: 5px" v-if="!checkUnderFive"><PreviousVitals /></div>
+                <div
+                  style="
+                    width: 50vw;
+                    background-color: #fff;
+                    border-radius: 5px;
+                  "
+                  v-if="!checkUnderFive"
+                >
+                  <PreviousVitals />
+                </div>
               </div>
               <div class="bottomSummary">
                 <ion-segment value="custom">
@@ -218,10 +399,18 @@
             <div v-if="segmentContent == 'Visits History'">
               <VisitsHistory />
             </div>
-            <div v-if="segmentContent == 'Vitals & Measurements Summary'"><VitalsMeasurementsSummary /></div>
-            <div v-if="segmentContent == 'Lab Tests History'"><LabTestsHistory /></div>
-            <div v-if="segmentContent == 'Diagnoses History'"><DiagnosesHistory /></div>
-            <div v-if="segmentContent == 'Allergies & Contraindication'"><AllergiesContraindication /></div>
+            <div v-if="segmentContent == 'Vitals & Measurements Summary'">
+              <VitalsMeasurementsSummary />
+            </div>
+            <div v-if="segmentContent == 'Lab Tests History'">
+              <LabTestsHistory />
+            </div>
+            <div v-if="segmentContent == 'Diagnoses History'">
+              <DiagnosesHistory />
+            </div>
+            <div v-if="segmentContent == 'Allergies & Contraindication'">
+              <AllergiesContraindication />
+            </div>
           </ion-col>
         </ion-row>
       </div>
@@ -273,6 +462,8 @@ import {
   globe,
   add,
   person,
+  checkboxOutline,
+  closeCircleOutline
 } from "ionicons/icons";
 
 import { modalController } from "@ionic/vue";
@@ -303,16 +494,7 @@ import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { ObservationService } from "@/services/observation_service";
 import { useVitalsStore } from "@/stores/VitalsStore";
-import {
-  modifyCheckboxInputField,
-  getCheckboxSelectedValue,
-  getRadioSelectedValue,
-  getFieldValue,
-  modifyRadioValue,
-  modifyFieldValue,
-} from "@/services/data_helpers";
-import { toastWarning } from "@/utils/Alerts";
-import ProgramData from "@/Data/ProgramData";
+
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Programs from "@/components/Programs.vue";
@@ -321,9 +503,15 @@ import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeigh
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
+import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
+import OPDPopover from "@/components/Popovers/Opdpopover.vue";
+import AncEnrollmentModal from "@/components/Modal/AncEnrollmentModal.vue";
+
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
+import { ProgramService } from "@/services/program_service";
+
 export default defineComponent({
   mixins: [SetPrograms],
   components: {
@@ -371,6 +559,9 @@ export default defineComponent({
     DiagnosesHistory,
     LabTestsHistory,
     Programs,
+    CheckInConfirmationModal,
+    OPDPopover,
+    AncEnrollmentModal
   },
   data() {
     return {
@@ -396,6 +587,12 @@ export default defineComponent({
         PreHigh: ["#FEDF89", "#B54708", "#FED667"],
         High: ["#FECDCA", "#B42318", "#FDA19B"],
       } as any,
+      checkInModalOpen: false,
+      popoverOpen: false,
+      isEnrollmentModalOpen: false,
+      enrolledPrograms: [],
+      programToEnroll:0,
+      enrollModalTitle:"",
     };
   },
   computed: {
@@ -408,6 +605,7 @@ export default defineComponent({
     this.checkAge();
     const patient = new PatientService();
     this.visits = await PatientService.getPatientVisits(patient.getID(), false);
+    await this.refreshPrograms();
     this.setAlerts();
     await this.updateData();
   },
@@ -421,7 +619,6 @@ export default defineComponent({
   },
   setup() {
     const modal = ref();
-
     return {
       chevronBackOutline,
       checkmark,
@@ -435,16 +632,31 @@ export default defineComponent({
       medkit,
       add,
       person,
+      checkboxOutline,
+      closeCircleOutline
     };
   },
 
   methods: {
     checkAge() {
       if (this.demographics?.birthdate) {
-        this.checkUnderFourteen = HisDate.getAgeInYears(this.demographics?.birthdate) >= 14 ? true : false;
-        this.checkUnderNine = HisDate.ageInMonths(this.demographics?.birthdate) < 9 ? true : false;
-        this.checkUnderFive = HisDate.getAgeInYears(this.demographics?.birthdate) < 5 ? true : false;
-        this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics?.birthdate) < 42 ? true : false;
+        this.checkUnderFourteen =
+          HisDate.getAgeInYears(this.demographics?.birthdate) >= 14
+            ? true
+            : false;
+        this.checkUnderNine =
+          HisDate.ageInMonths(this.demographics?.birthdate) < 9 ? true : false;
+        this.checkUnderFive =
+          HisDate.getAgeInYears(this.demographics?.birthdate) < 5
+            ? true
+            : false;
+        this.checkUnderSixWeeks =
+          HisDate.dateDiffInDays(
+            HisDate.currentDate(),
+            this.demographics?.birthdate
+          ) < 42
+            ? true
+            : false;
       }
     },
     setSegmentContent(name: any) {
@@ -491,7 +703,7 @@ export default defineComponent({
       return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
     },
     programAccess(programName: string): boolean {
-      const accessPrograms: any = localStorage.getItem("userPrograms");
+      const accessPrograms: any = sessionStorage.getItem("userPrograms");
       const programs: any = JSON.parse(accessPrograms);
       if (programs.some((program: any) => program.name === programName)) {
         return true;
@@ -506,12 +718,94 @@ export default defineComponent({
     dismiss() {
       modalController.dismiss();
     },
-    async updateData() {
-      const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+    closeCheckInModal(){
+   this.checkInModalOpen = false;
+    },
+    toggleCheckInModal() {
+      this.checkInModalOpen = !this.checkInModalOpen;
+    },
+    handleCheckInYes() {
+      console.log("yes");
+      this.toggleCheckInModal();
+    },
+    handleCheckInNo() {
+      this.toggleCheckInModal();
+    },
 
+    togglePopover() {
+      this.popoverOpen = !this.popoverOpen;
+    },
+
+    handleProgramClick(btn: any) {
+      const lower = (title:string)=> title.toLowerCase().replace(/\s+/g, '');
+
+      if (lower(btn.actionName) == lower("+ Enroll in ANC Program" )||
+         lower(btn.actionName) == lower("+ Enroll in PNC Program") ||
+         lower(btn.actionName) == lower("+ Enroll in Labour and delivery program")
+         ) {
+        const found: any = this.enrolledPrograms.find(
+          (p: any) => p.id == btn.program_id
+        );
+
+        if (!found) {
+          this.isEnrollmentModalOpen = true;
+          this.enrollModalTitle = `Are you sure you want to Enroll the patient in ${btn.name}`;
+          this.programToEnroll = btn.program_id;
+          return;
+        }
+        return this.$router.push("ANCHome");
+      }
+      this.setProgram(btn);
+    },
+    closeEnrollmentModal() {
+      this.isEnrollmentModalOpen = false;
+    },
+    toggleEnrollmentModal() {
+      this.isEnrollmentModalOpen = !this.isEnrollmentModalOpen;
+    },
+    async handleEnrollmentYes() {
+      await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, (new Date()).toString());
+      await this.refreshPrograms();
+      this.toggleEnrollmentModal();
+      return this.$router.push("ANCHome");
+    },
+    async refreshPrograms() {
+      const programs = await ProgramService.getPatientPrograms(
+        this.demographics.patient_id
+      );
+      this.enrolledPrograms = programs.map((p: any) => ({
+        name: p.program.name,
+        id: p.program_id,
+      }));
+    },
+    handleEnrollmentNo() {
+      this.toggleEnrollmentModal();
+    },
+    checkProgram(btn: any) {
+      const found: any = this.enrolledPrograms.find(
+        (p: any) => p.id == btn.program_id
+      );
+      if (found) return `Start ${btn.name}`;
+
+      return btn.actionName;
+    },
+    async updateData() {
+      const array = [
+        "Height",
+        "Weight",
+        "Systolic",
+        "Diastolic",
+        "Temp",
+        "Pulse",
+        "SP02",
+        "Respiratory rate",
+      ];
       // An array to store all promises
       const promises = array.map(async (item) => {
-        const dd = await ObservationService.getFirstValueNumber(this.demographics.patient_id, item);
+        const dd = await ObservationService.getFirstValueNumber(
+          this.demographics.patient_id,
+          item
+        );
         return { [item]: dd };
       });
 
@@ -522,7 +816,11 @@ export default defineComponent({
       this.vitals = Object.assign({}, ...resultsArray);
     },
     covertGender(gender: any) {
-      return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
+      return ["Male", "M"].includes(gender)
+        ? "Male"
+        : ["Female", "F"].includes(gender)
+        ? "Female"
+        : "";
     },
     formatBirthdate() {
       return HisDate.getBirthdateAge(this.demographics?.birthdate);

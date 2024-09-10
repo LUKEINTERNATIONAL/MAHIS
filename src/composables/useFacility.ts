@@ -40,9 +40,9 @@ async function setLocation() {
     district.value = "location.district";
 
     // Maintained for backward compatibility
-    localStorage.setItem("locationName", facilityName.value);
-    localStorage.setItem("location", facilityName.value);
-    localStorage.setItem("siteUUID", facilityUUID.value);
+    sessionStorage.setItem("locationName", facilityName.value);
+    sessionStorage.setItem("location", facilityName.value);
+    sessionStorage.setItem("siteUUID", facilityUUID.value);
 }
 
 export default function useFacility() {

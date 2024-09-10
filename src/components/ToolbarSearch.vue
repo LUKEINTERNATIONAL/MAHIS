@@ -1,5 +1,7 @@
 <template>
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
+    <CheckInConfirmationModal :closeModalFunc="closeCheckInModal" :onYes="handleCheckInYes" :onNo="handleCheckInNo"  :isOpen="checkInModalOpen" :title="`Do you want to check in the patient?`" />
+    
     <div style="display: flex; align-items: center">
         <ion-input
             @ionInput="handleInput"
@@ -42,7 +44,7 @@
                 <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
                 <ion-col style="max-width: 25px"></ion-col>
             </ion-row>
-            <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
+            <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openCheckInModal(item)">
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                     item.person.names[0].given_name + " " + item.person.names[0].family_name
                 }}</ion-col>
@@ -161,6 +163,7 @@ import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import DeviceDetection from "@/views/Mixin/DeviceDetection.vue";
 import { scannedData, extractDetails } from "@/services/national_id";
+import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
 import db from "@/db";
 import { Patient } from "@/interfaces/patient";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
@@ -192,6 +195,7 @@ export default defineComponent({
         RoleSelectionModal,
         IonButton,
         IonInput,
+        CheckInConfirmationModal
     },
     setup() {
         return { checkmark, add, search, camera };
@@ -215,6 +219,8 @@ export default defineComponent({
             useDDE: true as boolean,
             ddeEnabled: true as boolean,
             patient: {} as any,
+            checkInModalOpen: false,
+            selectedPatient: {} as any,
             facts: {
                 hasHighViralLoad: false as boolean,
                 patientFound: false as boolean,
@@ -431,8 +437,10 @@ export default defineComponent({
             store.setVaccineReload(!store.getVaccineReload());
             const userProgramsData: any = localStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
-            const roleData: any = localStorage.getItem("userRoles");
-            const roles: any = JSON.parse(roleData);
+            const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
+
+           
+            const roles: any =  roleData ? roleData : [];
             UserService.setProgramUserActions();
 
             if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
@@ -441,7 +449,7 @@ export default defineComponent({
                 this.$router.push("dispensation");
             } else if (roles.some((role: any) => role.role === "Lab")) {
                 this.$router.push("OPDConsultationPlan");
-            } else if (userPrograms.length == 1) {
+            } else if (userPrograms?.length == 1) {
                 let NCDUserAction: any = "";
                 if (this.NCDUserActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.NCDUserActions;
                 if (NCDUserAction && userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "NCD PROGRAM")) {
@@ -723,6 +731,24 @@ export default defineComponent({
                 return [entity, errors.join(", ")];
             });
         },
+        closeCheckInModal(){
+    this.checkInModalOpen=false
+},
+        handleCheckInNo() {
+          
+            this.openNewPage('patientProfile', this.selectedPatient);
+            this.toggleCheckInModal();
+        },
+        handleCheckInYes(){
+            // console.log(this.selectedPatient)
+        },
+        toggleCheckInModal(){
+            this.checkInModalOpen=!this.checkInModalOpen
+        },
+        openCheckInModal(item: any) {
+this.checkInModalOpen=true;
+this.selectedPatient = item;
+}
     },
 });
 </script>

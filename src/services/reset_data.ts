@@ -71,7 +71,7 @@ import { useDangerSignsStore } from "@/apps/ANC/store/quickCheck/dangerSigns";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 
 export async function resetPatientData() {
-    localStorage.setItem("saveProgressStatus", "false");
+    sessionStorage.setItem("saveProgressStatus", "false");
     const vitals = useVitalsStore();
     const investigations = useInvestigationStore();
     const outcome = useOutcomeStore();
