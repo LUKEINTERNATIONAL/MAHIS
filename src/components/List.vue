@@ -54,6 +54,20 @@
                 :icon="iconsContent.delete"
                 @click="openDeletePopover({ event: $event, name: item.name, id: item.id })"
             />
+            <DynamicButton
+                v-if="item?.btn?.includes('void')"
+                fill="solid"
+                name="Void"
+                iconSlot="icon-only"
+                color="danger"
+                @click="
+                    openVoidPopover({
+                        event: $event,
+                        name: item.name,
+                        id: item.id,
+                    })
+                "
+            />
         </ion-col>
     </ion-row>
 </template>
@@ -86,7 +100,7 @@ export default defineComponent({
             default: [] as any,
         },
         classNames: {
-            default: "dashed_bottom_border white" as any,
+            default: "solid_bottom_border white" as any,
         },
     },
     methods: {
@@ -99,6 +113,14 @@ export default defineComponent({
                 this.$emit("clicked:delete", e);
             }
         },
+        async openVoidPopover(e: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to void ${e.name} ?`, e.event, {
+                confirmBtnLabel: "Void",
+            });
+            if (deleteConfirmed) {
+                this.$emit("clicked:void", e);
+            }
+        },
     },
 });
 </script>
@@ -109,8 +131,8 @@ export default defineComponent({
 }
 
 .action_buttons {
-    opacity: 0; /* Initially hide the action buttons */
-    transition: opacity 0.3s; /* Add a smooth transition effect */
+    /* opacity: 0; 
+    transition: opacity 0.3s;  */
 }
 
 .dashed_bottom_border:hover .action_buttons {

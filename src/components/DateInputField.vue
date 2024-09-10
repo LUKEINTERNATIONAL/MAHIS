@@ -22,6 +22,7 @@
                     :value="inputValue"
                     :placeholder="placeholder"
                     :type="inputType"
+                    :disabled="disabled"
                 >
                     <ion-label v-if="InnerActionBtnPropeties.show" style="display: flex" slot="end">
                         <ion-button slot="end" @click="handleInnerActionBtnPropetiesFn">{{ InnerActionBtnPropeties.name }}</ion-button>
@@ -124,6 +125,10 @@ export default defineComponent({
         bold: {
             type: String,
             default: "",
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
         },
     },
     methods: {

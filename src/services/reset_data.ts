@@ -33,7 +33,7 @@ import { useReferralStore } from "@/apps/ANC/store/referral/referralStore";
 import { useIpvStore } from "@/apps/ANC/store/symptomsFollowUp/ipvStore";
 import { useFatalMovementStore } from "@/apps/ANC/store/symptomsFollowUp/fatalMovementStore";
 import { useCurrentPhysiologicalSymptomsStore } from "@/apps/ANC/store/symptomsFollowUp/currentPhysiologicalSymptomsStore";
-import { useMedicalFollowUpStore } from "@/apps/ANC/store/symptomsFollowUp/medicalFollowUpStore";
+import { useMedicalFollowUpStore } from "@/apps/ANC/store/symptomsFollowUp/medicalFollowUp";
 import { usePersistentBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/persistentBehaviourStore";
 import { usePersistentSymptomsStore } from "@/apps/ANC/store/symptomsFollowUp/persistentSymptomsStore";
 import { useWomenBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/womenBehaviourStore";
@@ -229,6 +229,6 @@ export async function resetPatientData() {
 }
 
 export function resetDemographics() {
-    // const demographics = useDemographicsStore();
-    // demographics.$reset();
+    const demographics = useDemographicsStore();
+    demographics.$reset();
 }

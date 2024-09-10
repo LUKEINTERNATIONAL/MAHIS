@@ -1,21 +1,17 @@
 <template>
-    <ion-header>
-        <ion-toolbar>
+    <div>
+        <ion-toolbar style="--background: #fff; --color: #000">
             <ion-title class="ion-text-center">
                 <span class="his-lg-text" :class="color"> {{ title }} </span>
-                <h1 v-if="subtitle">{{ subtitle }}</h1>
+                <h3 v-if="subtitle">{{ subtitle }}</h3>
             </ion-title>
         </ion-toolbar>
-  </ion-header>
+    </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import {
-    IonToolbar,
-    IonTitle,
-    IonHeader
-} from "@ionic/vue"
+import { defineComponent } from "vue";
+import { IonToolbar, IonTitle, IonHeader } from "@ionic/vue";
 
 export default defineComponent({
     components: { IonToolbar, IonTitle, IonHeader },
@@ -25,16 +21,16 @@ export default defineComponent({
             required: true,
         },
         subtitle: {
-            type: String
+            type: String,
         },
         color: {
-            type: String
-        }
-    }
-})
+            type: String,
+        },
+    },
+});
 </script>
 <style scoped>
 h2 {
-    padding-bottom: .2em;
+    padding-bottom: 0.2em;
 }
 </style>

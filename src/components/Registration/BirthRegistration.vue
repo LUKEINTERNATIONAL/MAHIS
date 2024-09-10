@@ -1,5 +1,11 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="handleBtns"></basic-card>
+    <basic-card
+        :content="cardData"
+        :editable="editable"
+        @update:selected="handleInputData"
+        @update:inputValue="handleInputData"
+        @clicked:button="handleBtns"
+    ></basic-card>
 </template>
 
 <script lang="ts">
@@ -123,6 +129,11 @@ export default defineComponent({
                 this.buildCards();
             },
             deep: true,
+        },
+    },
+    props: {
+        editable: {
+            default: false as any,
         },
     },
     async mounted() {

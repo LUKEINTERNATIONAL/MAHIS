@@ -103,7 +103,7 @@ export default defineComponent({
         async saveData() {
             const TAValue = getFieldValue(this.addTA, "TA", "value");
             const villageValue = getFieldValue(this.addTA, "Village", "value");
-            if (Validation.isName(TAValue) == null && Validation.isName(villageValue) == null) {
+            if (Validation.isNames(TAValue) == null && Validation.isNames(villageValue) == null) {
                 const address = await LocationService.createAddress(
                     this.validationData.address_type,
                     this.validationData.addresses_name,
@@ -115,6 +115,8 @@ export default defineComponent({
                 } else {
                     toastWarning(`Unable to add ${this.validationData.address_type}`);
                 }
+            } else {
+                toastWarning("Unable to save");
             }
             return false;
         },
@@ -167,11 +169,11 @@ export default defineComponent({
                 modifyFieldValue(this.addTA, "TA", "value", "");
                 modifyFieldValue(this.addTA, "Village", "value", "");
                 if (sessionStorage.getItem("activeLocation") == "current") {
-                    modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsErrorMassage", false);
-                    modifyFieldValue(this.currentLocation, "current_village", "alertsErrorMassage", false);
+                    modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsErrorMassage", "");
+                    modifyFieldValue(this.currentLocation, "current_village", "alertsErrorMassage", "");
                 } else {
-                    modifyFieldValue(this.homeLocation, "home_traditional_authority", "alertsErrorMassage", false);
-                    modifyFieldValue(this.homeLocation, "home_village", "alertsErrorMassage", false);
+                    modifyFieldValue(this.homeLocation, "home_traditional_authority", "alertsErrorMassage", "");
+                    modifyFieldValue(this.homeLocation, "home_village", "alertsErrorMassage", "");
                 }
             }
         },
@@ -186,13 +188,11 @@ export default defineComponent({
                 districtData = getFieldValue(this.homeLocation, this.districtType, "value");
             }
 
-            if (Validation.isName(event.value) != null) {
+            if (Validation.isNames(event.value) != null) {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "Please enter a valid " + event.name);
-                modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", true);
                 return false;
             } else {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "");
-                modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", false);
             }
 
             let filteredList = [];
@@ -207,11 +207,9 @@ export default defineComponent({
             const filteredData = filteredList.filter((item: any) => item.name.toLowerCase() == name.toLowerCase());
             if (!isEmpty(filteredData)) {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "Can't add existing " + event.name);
-                modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", true);
                 return false;
             } else {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "");
-                modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", false);
             }
             this.validationStatus = true;
         },
@@ -261,9 +259,9 @@ ion-footer {
 }
 .saveBtn {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     margin: 20px;
-    width: 390px;
+    width: 100%;
     align-items: end;
 }
 .btnContent {

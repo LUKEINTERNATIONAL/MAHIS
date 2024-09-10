@@ -308,6 +308,10 @@ const initialSocialHistory = [
                     value: "widow",
                 },
                 {
+                    name: "Widower",
+                    value: "widower",
+                },
+                {
                     name: "Divorced",
                     value: "divorced",
                 },
@@ -409,7 +413,7 @@ const initialHomeLocation = [
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
-                            trackBy: "district_id",
+                            trackBy: "traditional_authority_id",
                             multiSelectData: [],
                             idName: "district_id",
                             displayNone: true,
@@ -561,8 +565,6 @@ const initialCurrentLocation = [
             ],
         },
     },
-] as any;
-const initialClosestLandmark = [
     {
         data: {
             rowData: [
@@ -580,52 +582,75 @@ const initialClosestLandmark = [
                             multiSelectData: [
                                 {
                                     id: 1,
-                                    name: "Catholic Church",
+                                    name: "Church",
                                 },
+
                                 {
                                     id: 2,
-                                    name: "CCAP",
-                                },
-                                {
-                                    id: 3,
-                                    name: "Seventh Day",
-                                },
-                                {
-                                    id: 4,
                                     name: "Mosque",
                                 },
                                 {
-                                    id: 5,
+                                    id: 3,
                                     name: "Primary School",
                                 },
                                 {
-                                    id: 6,
+                                    id: 4,
                                     name: "Borehole",
                                 },
                                 {
-                                    id: 7,
+                                    id: 5,
                                     name: "Secondary School",
                                 },
                                 {
-                                    id: 8,
+                                    id: 6,
                                     name: "College",
                                 },
                                 {
-                                    id: 9,
+                                    id: 7,
                                     name: "Market",
                                 },
                                 {
-                                    id: 10,
+                                    id: 8,
                                     name: "Football Ground",
                                 },
+                                {
+                                    id: 9,
+                                    name: "Other",
+                                },
                             ],
+
+                        },
+
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        isFinishBtn: false,
+        sectionHeader: "",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            class: "",
+                            displayNone:true,
+                            inputHeader: "Specify Landmark*",
+                            value: "",
+                            icon: icons.editPen,
+                            name: "Other (specify)",
+                            valueType: "text",
+                            eventType: "input",
+                            alertsErrorMassage: "",
                         },
                     ],
                 },
             ],
         },
     },
-];
+] as any;
+
 const initialAddTA = [
     {
         data: {
@@ -719,13 +744,13 @@ const initialGuardianInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "First name *",
+                            inputHeader: "First name",
                             icon: icons.fullName,
                             value: "",
                             name: "guardianFirstname",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            validationFunctionName: "isName",
+                            validationFunctionName: "isNameEmpty",
                         },
                     ],
                 },
@@ -738,13 +763,13 @@ const initialGuardianInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Last name *",
+                            inputHeader: "Last name",
                             icon: icons.fullName,
                             value: "",
                             name: "guardianLastname",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            validationFunctionName: "isName",
+                            validationFunctionName: "isNameEmpty",
                         },
                     ],
                 },
@@ -763,6 +788,7 @@ const initialGuardianInformation = [
                             name: "guardianMiddleName",
                             eventType: "input",
                             alertsErrorMassage: "",
+                            validationFunctionName: "isNamesEmpty",
                         },
                     ],
                 },
@@ -801,11 +827,10 @@ const initialGuardianInformation = [
                             eventType: "input",
                             alertsErrorMassage: "",
                             selectedID: "",
-                            validationFunctionName: "isName",
-                            popOverData: {
-                                filterData: false,
-                                data: [],
-                            },
+                            validationFunctionName: "isNameWithSlush",
+                            isSingleSelect: true,
+                            trackBy: "trackByID",
+                            multiSelectData: [],
                         },
                     ],
                 },
@@ -813,13 +838,13 @@ const initialGuardianInformation = [
         },
     },
 ] as any;
+
 export const useRegistrationStore = defineStore("registrationStore", {
     state: () => ({
         personInformation: [...initialPersonalInformation],
         socialHistory: [...initialSocialHistory],
         homeLocation: [...initialHomeLocation],
         currentLocation: [...initialCurrentLocation],
-        closestLandmark: [...initialClosestLandmark],
         guardianInformation: [...initialGuardianInformation],
         addTA: [...initialAddTA],
         addVillage: [...initialAddVillage],
@@ -840,6 +865,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
         setGuardianInformation(data: any) {
             this.guardianInformation = data;
         },
+
         getInitialPersonalInformation() {
             const data = _.cloneDeep(initialPersonalInformation);
             return [...data];

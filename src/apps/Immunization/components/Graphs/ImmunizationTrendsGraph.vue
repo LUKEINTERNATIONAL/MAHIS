@@ -95,10 +95,20 @@ export default defineComponent({
     setup() {
         return { checkmark, pulseOutline };
     },
+    props: {
+        reportData: {
+            default: [] as any,
+        },
+    },
+    watch: {
+        reportData: {
+            handler() {
+                this.setData();
+            },
+            deep: true,
+        },
+    },
     async mounted() {
-        this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
-        this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
-        this.BMI = await ObservationService.getAll(this.demographics.patient_id, "BMI");
         this.setData();
         this.iconBg.graph = "iconBg";
     },
@@ -130,16 +140,18 @@ export default defineComponent({
             else if (active == "BMI") this.activeBMI = "_active";
         },
         setData() {
-            this.series[0].data = ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"];
-            this.series[0].name = "Total";
-            this.options = {
-                ...this.options,
-                ...{
-                    xaxis: {
-                        categories: ["Jan", "Feb", "Mach", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "oct", "Nov", "Dec"],
+            if (this.reportData?.vaccination_counts_by_month?.months) {
+                this.series[0].data = this.reportData?.vaccination_counts_by_month?.vaccinations;
+                this.series[0].name = "Total";
+                this.options = {
+                    ...this.options,
+                    ...{
+                        xaxis: {
+                            categories: this.reportData?.vaccination_counts_by_month?.months,
+                        },
                     },
-                },
-            };
+                };
+            }
         },
         setListData(data: any) {
             this.list = [];

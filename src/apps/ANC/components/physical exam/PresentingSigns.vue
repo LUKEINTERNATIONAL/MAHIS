@@ -2,9 +2,6 @@
   <div class="container">
     <!-- Signs of injury -->
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Injuries</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="signsOfInjury"></basic-form>
        <!-- <basic-form :contentData="abdominalInjury"></basic-form> -->
@@ -13,9 +10,6 @@
 
     <!-- clinical enquirry -->
     <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header"> Clinical enquiry</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="clinicalEnquiry"></basic-form>
       </ion-card-content>
@@ -23,9 +17,6 @@
 
     <!-- any form of violence -->
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Violence to the woman</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <!-- <basic-form :contentData="violence"></basic-form> -->
         <basic-form :contentData="intimateViolence"></basic-form>
@@ -91,6 +82,8 @@ export default defineComponent({
   },
   mounted(){
     this.handleClinicalEnquiry()
+    this.handleInjuries()
+    this.handleViolence()
   },
   watch: {
     clinicalEnquiry:{
@@ -98,7 +91,19 @@ export default defineComponent({
         this.handleClinicalEnquiry();
       },
       deep:true
-    }
+    },
+    signsOfInjury:{
+      handler(){
+        this.handleInjuries();
+      },
+      deep:true
+    },
+    intimateViolence:{
+      handler(){
+        this.handleViolence();
+      },
+      deep:true
+    },
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -106,25 +111,29 @@ export default defineComponent({
   methods:{
     
     handleClinicalEnquiry(){
-      if(getRadioSelectedValue(this.clinicalEnquiry, 'Clinical enquiry')=='yes'){
+      if(getRadioSelectedValue(this.clinicalEnquiry, 'Clinical enquiry')=='no'){
         modifyRadioValue(this.clinicalEnquiry,'Reason not done','displayNone', false)
       }   else {modifyRadioValue(this.clinicalEnquiry,'Reason not done','displayNone', true)}
+
+      if(getRadioSelectedValue(this.clinicalEnquiry, 'Clinical enquiry')=='yes'){
+        modifyFieldValue(this.clinicalEnquiry,'Clinical enquiry notes','displayNone', false)
+      }   else {modifyFieldValue(this.clinicalEnquiry,'Clinical enquiry notes','displayNone', true)}
+    },
+    handleInjuries(){
+      if(getRadioSelectedValue(this.signsOfInjury, 'Injury present')=='yes'){
+        modifyRadioValue(this.signsOfInjury,'Traumatic injury','displayNone', false)
+      }   else {modifyRadioValue(this.signsOfInjury,'Traumatic injury','displayNone', true)}
+
+    },
+    handleViolence(){
+      if(getRadioSelectedValue(this.intimateViolence, 'Woman subjected to IPV')=='yes'){
+        modifyRadioValue(this.intimateViolence,'Type of IPV the woman has been subjected to','displayNone', false)
+      }   else {modifyRadioValue(this.intimateViolence,'Type of IPV the woman has been subjected to','displayNone', true)}
     },
 
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);
-    },
-    //Method for navigating
-    goToNextSection() {
-      if (this.currentSection < 2) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
     },
 
   }
@@ -162,7 +171,7 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+  width: 100%;
+  color: black;
 }
 </style>

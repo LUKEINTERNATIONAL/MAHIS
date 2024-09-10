@@ -4,7 +4,7 @@
             <div class="login-container">
                 <ion-card style="background-color: #fff">
                     <ion-card-content>
-                        <ion-img class="login_img" :src="loginIcon" id="logo"></ion-img>
+                        <ion-img class="login_img" :src="loginIcon()" id="logo"></ion-img>
                         <ion-title class="login-title">MaHIS</ion-title>
                         <span style="text-align: left">
                             <ion-input
@@ -101,6 +101,8 @@ import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
 import ProgramData from "@/Data/ProgramData";
+import { getUserLocation } from "@/services/userService"
+import { useUserStore } from "@/stores/userStore";
 
 export default defineComponent({
     name: "Home",
@@ -139,9 +141,7 @@ export default defineComponent({
         };
     },
     computed: {
-        loginIcon() {
-            return img("mw.png");
-        },
+
     },
     setup() {
         return { eye, person, eyeOff };
@@ -149,11 +149,14 @@ export default defineComponent({
     created() {
         this.auth = new AuthService();
     },
-    mounted() {
-        this.getPrograms();
+    async mounted() {
+        const auth = new AuthService()
+        await auth.loadConfig();
+        await this.getPrograms();
     },
     methods: {
         async getPrograms() {
+            ProgramData.sort((a, b) => a.name.localeCompare(b.name));
             this.multiSelectData = ProgramData;
         },
         doLogin: async function () {
@@ -167,8 +170,13 @@ export default defineComponent({
                     //     throw "Local date does not match API date. Please Update your device's date";
                     // }
                     await this.auth.login(this.password);
-                    this.auth.startSession();
-                    this.$router.push("/home");
+                
+                    if (this.auth.checkUserPrograms(this.program.name)) {
+                        this.facilityB()
+                        this.$router.push("/home");
+                    } else {
+                        toastDanger("You don't have permission to access the program.");
+                    }
                 } catch (e) {
                     if (e instanceof InvalidCredentialsError) {
                         toastDanger("Invalid username or password");
@@ -183,10 +191,19 @@ export default defineComponent({
         handleInput(event: any) {
             sessionStorage.setItem("app", JSON.stringify({ programID: event.program_id, applicationName: event.name }));
         },
-    },
-    togglePasswordVisibility() {
-        if (!this.togglePasswordVisibility) return true;
-        else return false;
+        togglePasswordVisibility() {
+            if (!this.togglePasswordVisibility) return true;
+            else return false;
+        },
+        loginIcon() {
+            return img("mw.png");
+        },
+        async facilityB() {
+            const store = useUserStore();
+            const data = await getUserLocation();
+            store.setUserFacilityName(data.name);
+            store.setCurrentUserProgram(this.program)
+        }
     },
 });
 </script>
@@ -248,5 +265,13 @@ export default defineComponent({
 }
 .multiselect::before {
     top: -7px;
+}
+@media (max-width: 902px) {
+    .login-page {
+        --ion-background-color: #ffffff;
+    }
+    ion-card {
+        box-shadow: unset;
+    }
 }
 </style>

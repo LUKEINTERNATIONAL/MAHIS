@@ -1,6 +1,11 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
+import stockManagement from "../views/StockManagement.vue";
+import scheduleImmunization from "../views/ScheduleImmunizationSessions.vue";
+import manageAppointMents from "../views/ManageAppointMents.vue";
+import ManageAppointMentsTemplate from "../views/ManageAppointMentsTemplate.vue";
+import Scan from "../components/Registration/ScanRegistration.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
 import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
@@ -8,6 +13,7 @@ import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
+import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
 import NCD from "@/apps/NCD/config/routes";
@@ -15,6 +21,7 @@ import OPD from "@/apps/OPD/config/routes";
 import ANC from "@/apps/ANC/config/routes";
 import LABOUR from "@/apps/LABOUR/config/routes";
 import PNC from "@/apps/PNC/config/routes";
+import EIR from "@/apps/Immunization/config/routes";
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -24,6 +31,26 @@ const routes: Array<RouteRecordRaw> = [
         path: "/home",
         name: "Home",
         component: HomePage,
+    },
+    {
+        path: "/stockManagement",
+        name: "stockManagement",
+        component: stockManagement,
+    },
+    {
+        path: "/scheduleImmunization",
+        name: "scheduleImmunization",
+        component: scheduleImmunization,
+    },
+    {
+        path: "/manageAppointMents",
+        name: "manageAppointMents",
+        component: manageAppointMents,
+    },
+    {
+        path: "/ManageAppointMentsTemplate",
+        name: "ManageAppointMentsTemplate",
+        component: ManageAppointMentsTemplate,
     },
     {
         path: "/login",
@@ -39,6 +66,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/setSessionDate",
         name: "setSessionDate",
         component: setSessionDate,
+    },
+    {
+        path: "/setSmsConfig",
+        name: "setSMSConfiguration",
+        component: setSmsConfig,
     },
     {
         path: "/registration/:registrationType",
@@ -67,6 +99,7 @@ const routes: Array<RouteRecordRaw> = [
     ...LABOUR,
     ...PNC,
     ...OPD,
+    ...EIR,
 ];
 
 const router = createRouter({

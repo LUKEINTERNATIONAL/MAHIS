@@ -3,15 +3,10 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper
-                stepper-title="HEADSS Assessment"
-                :wizardData="wizardData"
-                @updateStatus="markWizard"
-                :StepperData="StepperData"
-            />
+            <Stepper stepper-title="HEADSS Assessment" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" :backUrl="userRoleSettings.url"
+                     :backBtn="userRoleSettings.btnName" />
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
-
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -39,11 +34,15 @@ import { getRadioSelectedValue, modifyRadioValue } from "@/services/data_helpers
 import { validateField } from "@/services/ANC/profile_validation_service";
 import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreganciesStore";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "treatment",
-    components: {
-      BasicFooter,
+  mixins: [SetUserRole, SetEncounter],
+
+  components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonItem,
@@ -125,7 +124,6 @@ export default defineComponent({
                     this.$router.push("ANCHome");
                 }
             } else {
-                modifyRadioValue(this.headssAssesment, "Who does the client live with", "alertsErrorMassage", true);
                 modifyRadioValue(this.headssAssesment, "Who does the client live with", "alertsErrorMassage", "This is a mandatory question");
                 await toastWarning("Please complete all required fields");
             }

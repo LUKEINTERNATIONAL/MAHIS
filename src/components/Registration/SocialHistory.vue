@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -14,8 +14,9 @@ import { LocationService } from "@/services/location_service";
 import Validation from "@/validations/StandardValidations";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
-import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
+import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     name: "Menu",
@@ -63,21 +64,30 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useRegistrationStore, ["socialHistory"]),
-        maritalStatus() {
-            return this.getRadioValue(this.socialHistory, 0);
-        },
-        religion() {
-            return this.getInputData(this.socialHistory, 1, 0, 0, "value");
-        },
-        occupationStatus() {
-            return this.getRadioValue(this.socialHistory, 2);
+        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+    },
+    props: {
+        editable: {
+            default: false as any,
         },
     },
     async mounted() {
         this.updateRegistrationStores();
         this.buildCards();
+        this.setData();
     },
     methods: {
+        setData() {
+            if (this.editable) {
+                modifyFieldValue(this.socialHistory, "religion", "value", { id: "", name: this.getAttributes(this.patient, "Religion") });
+                modifyRadioValue(this.socialHistory, "occupation", "selectedValue", this.getAttributes(this.patient, "Occupation"));
+                modifyRadioValue(this.socialHistory, "maritalStatus", "selectedValue", this.getAttributes(this.patient, "Civil Status"));
+                modifyRadioValue(this.socialHistory, "highestLevelOfEducation", "selectedValue", this.getAttributes(this.patient, "EDUCATION LEVEL"));
+            }
+        },
+        getAttributes(item: any, name: any) {
+            return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;
+        },
         buildCards() {
             this.cardData = {
                 mainTitle: "Demographics",
@@ -89,51 +99,15 @@ export default defineComponent({
                 ],
             };
         },
-        openModal() {
-            createModal(DispositionModal);
-        },
         updateRegistrationStores() {
             const registrationStore = useRegistrationStore();
             registrationStore.setSocialHistory(this.socialHistory);
         },
-
-        validationRules(event: any) {
-            return validateField(this.socialHistory, event.name, (this as any)[event.name]);
-        },
-        validatedSocialHistory() {
-            if (
-                Validation.required(this.maritalStatus) == null ||
-                Validation.required(this.religion) == null ||
-                Validation.required(this.occupationStatus) == null
-            )
-                return true;
-            else {
-                return false;
-            }
-        },
-        getRadioValue(data: any, section: any) {
-            return data[section].radioBtnContent.header.selectedValue;
-        },
-        getInputData(data: any, section: any, row: any, col: any, type: any) {
-            const rowData = data[section].data.rowData[row].colData[col];
-            switch (type) {
-                case "value":
-                    return rowData.value;
-                case "inputHeader":
-                    return rowData.inputHeader;
-                case "id":
-                    return rowData.id;
-                default:
-                    return null;
-            }
-        },
         async handleInputData(event: any) {
-            this.validationRules(event);
             this.handleReligion(event.name);
         },
         handleReligion(name: any) {
             if (name == "religion") {
-                console.log("ffffffffff", this.religionsList);
                 modifyFieldValue(this.socialHistory, name, "multiSelectData", this.religionsList);
             }
         },

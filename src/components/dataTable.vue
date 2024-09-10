@@ -1,6 +1,5 @@
-// this data table need disintegration
 <template>
-        <ion-card style="margin-top: 0px;">
+        <ion-card style="margin-top: 0px; background-color: inherit;">
           <ion-row>
             <ion-col>
               <ListPicker
@@ -18,7 +17,7 @@
               />
             </ion-col>
             
-            <ion-col style="margin-top: 20px;">
+            <ion-col style="margin-top: 5px;">
                 <ion-row>
                   <ion-col size="9">
                     <BasicInputField
@@ -47,19 +46,19 @@
 
         <ion-card style="margin-top: 0px;">
           <EasyDataTable
-                table-class-name="customize-table"
-                :headers="headers"
-                :items="items_local"
-                :rows-per-page="10"
-                :search-field="searchField"
-                :search-value="searchValue"
-                :loading="pageIsLoading"
-                :body-row-class-name="getBodyRowClassName"
-                @click-row="showRow"
-            >
+            table-class-name="modern-table"
+            :headers="headers"
+            :items="items_local"
+            :rows-per-page="10"
+            :search-field="searchField"
+            :search-value="searchValue"
+            :loading="pageIsLoading"
+            :body-row-class-name="getBodyRowClassName"
+            @click-row="showRow"
+          >
 
             <div id="row-clicked"></div>
-<!-- 
+              <!-- 
               <template #loading>
                 <img
                   src="https://i.pinimg.com/originals/94/fd/2b/94fd2bf50097ade743220761f41693d5.gif"
@@ -124,7 +123,6 @@
   const searchValue = ref("")
 
   const getBodyRowClassName: BodyRowClassNameFunction = (item: Item, rowNumber: number): string => {
-    console.log("wwwww",rowNumber)
     let cls = rowNumber % 2 === 0 ? "even-row" : "odd-row"
     return cls
   }
@@ -164,12 +162,12 @@ watch(
 watch(
     () => props.items,
     async (newValue) => {
-      console.log(newValue)
+      // console.log(newValue)
 
       items_local.value = newValue 
 
-      console.log("qwweerrtkkk....")
-      console.log(items_local.value)
+      // console.log("qwweerrtkkk....")
+      // console.log(items_local.value)
     }
 )
 
@@ -179,8 +177,8 @@ onMounted(async ()=>{
 
 onMounted(async ()=>{
   searchFieldS.value = props.search_fields
-  console.log("*&*&^%#$")
-  console.log(searchFieldS.value)
+  // console.log("*&*&^%#$")
+  // console.log(searchFieldS.value)
 })
 
 watch(() => props.search_fields,
@@ -191,9 +189,9 @@ watch(() => props.search_fields,
 
 onMounted(async ()=>{
   items_local.value = props.items
-  console.log("qwweerrt....")
+  // console.log("qwweerrt....")
   //
-  console.log(items_local.value)
+  // console.log(items_local.value)
 })
 
 watch(() => props.items,
@@ -288,32 +286,32 @@ const showRow = (item: ClickRowArgument) => {
 }
 </script>
 <style>
-  .customize-table {
-  /* --easy-table-border: 1px solid #445269; */
-  --easy-table-row-border: 1px solid #d7dce4;
+.modern-table {
+  --easy-table-border: 1px solid #e0e0e0;
+  --easy-table-row-border: 1px solid #f0f0f0;
 
   --easy-table-header-font-size: 14px;
   --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #c1cad4;
-  --easy-table-header-background-color: #575151bd;
+  --easy-table-header-font-color: #333;
+  --easy-table-header-background-color: #f9f9f9;
 
   --easy-table-header-item-padding: 10px 15px;
 
-  --easy-table-body-even-row-font-color: #fff;
-  --easy-table-body-even-row-background-color: #4c5d7a;
+  --easy-table-body-even-row-font-color: #333;
+  --easy-table-body-even-row-background-color: #ffffff;
 
-  --easy-table-body-row-font-color: #01060e;
-  /* --easy-table-body-row-background-color: #2d3a4f; */
+  --easy-table-body-row-font-color: #333;
+  --easy-table-body-row-background-color: #f9f9f9;
   --easy-table-body-row-height: 50px;
-  --easy-table-body-row-font-size: 15px;
+  --easy-table-body-row-font-size: 14px;
 
-  /* --easy-table-body-row-hover-font-color: #2d3a4f; */
-  --easy-table-body-row-hover-background-color: #756e6e;
+  --easy-table-body-row-hover-font-color: #000;
+  --easy-table-body-row-hover-background-color: #f0f0f0;
 
   --easy-table-body-item-padding: 10px 15px;
 
-  --easy-table-footer-background-color: #575151bd;
-  --easy-table-footer-font-color: #c0c7d2;
+  --easy-table-footer-background-color: #f9f9f9;
+  --easy-table-footer-font-color: #333;
   --easy-table-footer-font-size: 14px;
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;
@@ -322,13 +320,45 @@ const showRow = (item: ClickRowArgument) => {
   --easy-table-rows-per-page-selector-option-padding: 10px;
   --easy-table-rows-per-page-selector-z-index: 1;
 
+  --easy-table-scrollbar-track-color: #f1f1f1;
+  --easy-table-scrollbar-color: #e1e1e1;
+  --easy-table-scrollbar-thumb-color: #c1c1c1;
+  --easy-table-scrollbar-corner-color: #f1f1f1;
 
-  --easy-table-scrollbar-track-color: #2d3a4f;
-  --easy-table-scrollbar-color: #2d3a4f;
-  --easy-table-scrollbar-thumb-color: #4c5d7a;;
-  --easy-table-scrollbar-corner-color: #2d3a4f;
+  --easy-table-loading-mask-background-color: rgba(255, 255, 255, 0.5);
 
-  --easy-table-loading-mask-background-color: #2d3a4f;
+  /* Modern additions */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Additional modern styles */
+.modern-table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modern-table td, .modern-table th {
+  transition: all 0.3s ease;
+}
+
+.modern-table tbody tr {
+  cursor: pointer;
+}
+
+.modern-table tbody tr:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .modern-table {
+    --easy-table-body-row-font-size: 12px;
+    --easy-table-body-item-padding: 8px 10px;
+  }
 }
 
 .even-row {
