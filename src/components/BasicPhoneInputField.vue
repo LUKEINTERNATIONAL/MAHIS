@@ -17,8 +17,7 @@
             :defaultCountry="'mw'"
             :inputOptions="{ showDialCode: true,}"
             :dropdownOptions="{ showSearchBox: true, showFlags:true,showDialCodeInList: true, searchBoxPlaceholder: 'Search here...'}"
-            mode="international"
-            
+            mode="international"     
         >
         </vue-tel-input>
     </div>
@@ -143,6 +142,9 @@ export default defineComponent({
         handleInput(event: any) {
             //if (this.popOverData?.data) this.setEvent(event);
             this.$emit("update:inputValue", event);
+            if (!event.target.value.startsWith(`+${this.country.dialCode}`)) {
+              this.phone = `+${this.country.dialCode}` + event.target.value.replace(/^\+?\d*/, "");
+             }
         },
         handleBlur(event: any) {
             this.$emit("update:inputValue", event);
