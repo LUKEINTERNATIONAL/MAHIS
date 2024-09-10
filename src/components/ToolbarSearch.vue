@@ -298,8 +298,10 @@ export default defineComponent({
             const dataExtracted: any = await extractDetails(dataScanned);
             if (await this.searchByNpid(dataScanned + "$")) {
                 this.searchValue = dataScanned;
+                return;
             } else if (dataExtracted && (await this.searchByMWNationalID(dataExtracted?.idNumber))) {
                 this.searchValue = dataScanned?.idNumber;
+                return;
             } else if (dataExtracted) {
                 await this.setPersonInformation(dataExtracted);
                 this.$router.push("/registration/manual");
