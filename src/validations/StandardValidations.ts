@@ -1,4 +1,5 @@
 import { isEmpty, isPlainObject, isArray } from "lodash";
+import { getBaseURl } from "@/utils/GeneralUti";
 
 function validateSeries(conditions: Array<any>) {
     try {
@@ -150,6 +151,40 @@ function validateRBS(val: any) {
 function validateFBS(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 70, 126);
 }
+
+async function validateMobilePhone(val: any, countryData: any) {
+    try {
+        let baseURL = getBaseURl();
+        if (baseURL.length > 0) {
+            baseURL = '/' + baseURL;
+        }
+        const response = await fetch(`${baseURL}/countryphones.json`)
+        const data = await response.json();
+        const country = data.countries.find((c: { iso2: string }) => c.iso2 === countryData.iso2);
+        
+        if (!country) {
+            return "Country not found";
+        }
+
+        const sampleNumber = country.examplePhoneNumber;
+        let result = !isEmpty(val) && (val.replace(/\s+/g, '').length !== sampleNumber.replace(/\s+/g, '').length) ? "Not a valid phone number" : null;
+        if (result == null){ result = formatToExample(val, sampleNumber); }
+        return result
+    } catch (error) {
+        return `Error fetching or processing data: ${error}`;
+    }
+}
+
+function formatToExample(value: string, exampleNumber: string): string {
+    const digits = value.replace(/\s+/g, '');
+    let digitIndex = 0;
+
+    return exampleNumber.split('').map(char => {
+        if (char === ' ') return ' ';
+        return digitIndex < digits.length ? digits[digitIndex++] : '';
+    }).join('');
+}
+
 
 export default {
     validateRBS,

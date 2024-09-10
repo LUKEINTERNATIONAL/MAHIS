@@ -67,12 +67,12 @@ export default defineComponent({
         },
         id:{
             type:String,
-            default: ""
+            default: "" 
         },
         style: {
-            type:String,
-            default:""
-        }
+      type: [String, Object] as PropType<string | Record<string, any>>,
+      default: '',
+    },
 
     },
     components: {

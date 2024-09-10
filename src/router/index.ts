@@ -4,6 +4,8 @@ import HomePage from "../views/HomePage.vue";
 import stockManagement from "../views/StockManagement.vue";
 import scheduleImmunization from "../views/ScheduleImmunizationSessions.vue";
 import manageAppointMents from "../views/ManageAppointMents.vue";
+import ManageAppointMentsTemplate from "../views/ManageAppointMentsTemplate.vue";
+import Scan from "../components/Registration/ScanRegistration.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
 import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
@@ -43,6 +45,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/manageAppointMents",
         name: "manageAppointMents",
         component: manageAppointMents,
+    },
+    {
+        path: "/ManageAppointMentsTemplate",
+        name: "ManageAppointMentsTemplate",
+        component: ManageAppointMentsTemplate,
     },
     {
         path: "/login",

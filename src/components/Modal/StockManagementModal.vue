@@ -5,10 +5,12 @@
             <ion-spinner name="bubbles"></ion-spinner>
             <div class="loading-text">Please wait...</div>
         </div>
-        <Toolbar />
+        <ion-header style="display: flex; justify-content: space-between">
+            <ion-title class="modalTitle">Inventory Management </ion-title>
+            <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="iconsContent.cancel"></ion-icon>
+        </ion-header>
         <ion-content style="--background: #fff">
             <div class="container">
-                <h4 style="width: 100%; text-align: center; font-weight: 700">Inventory Management</h4>
                 <div style="width: 80vw; top: -10px; position: relative; margin-right: 10px">
                     <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
                 </div>
@@ -16,49 +18,42 @@
                     <div class="drug_content" v-for="(item, index) in reportData" :key="index">
                         <ion-row class="search_header">
                             <ion-col class="">
-                                <span style="font-weight: 700; font-size: 14px; color: #939393">{{ item.drug_legacy_name }}</span>
+                                <span style="font-weight: 700; font-size: 16px; color: #939393">{{ item.drug_legacy_name }}</span>
                             </ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Batch/Lot Number</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Batch/Lot Number</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.batch_number }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Manufacturer</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Manufacturer</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.manufacture }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Expiration date</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Expiration date</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.expiry_date) }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Dosage Form </ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dosage_form }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">VVM stage </ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.vvm_stage }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Date received</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Date received</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.delivery_date) }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Issued</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dispensed_quantity }}</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Doses Received</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses Available</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
-                        </ion-row>
-                        <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Doses wasted</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Doses wasted</ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.doses_wasted }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 100px" class="contentBold">Total Doses</ion-col>
-                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.delivered_quantity }}</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Doses Issued</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.dispensed_quantity }}</ion-col>
                         </ion-row>
+                        <ion-row class="search_header">
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Doses Available</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
+                        </ion-row>
+
                         <div>
                             <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px" @click="discardStock($event, item)"
                                 >Discard Stock</ion-button
@@ -79,9 +74,6 @@
                     />
                 </div>
             </div>
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')">
-                <ion-fab-button color="primary"> <ion-icon :icon="add"></ion-icon> </ion-fab-button>
-            </ion-fab>
         </ion-content>
     </ion-page>
 </template>
@@ -102,6 +94,7 @@ import {
     IonCol,
     IonCard,
     IonButton,
+    modalController,
 } from "@ionic/vue";
 import { defineComponent, ref, computed } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -128,6 +121,7 @@ import { useSearchName } from "@/stores/SearchName";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import { icons } from "@/utils/svg";
 import {
     medkit,
     chevronBackOutline,
@@ -169,6 +163,7 @@ export default defineComponent({
     },
     data() {
         return {
+            iconsContent: icons,
             reportData: [] as any,
             currentStock: [] as any,
             allStock: [] as any,
@@ -203,12 +198,19 @@ export default defineComponent({
             person,
         };
     },
+    props: {
+        data: {
+            default: {} as any,
+        },
+    },
     computed: {
         ...mapState(useStockStore, ["stock"]),
         ...mapState(useSearchName, ["searchName"]),
     },
     $route: {
-        async handler() {},
+        async handler() {
+            await this.buildTableData();
+        },
         deep: true,
     },
     watch: {
@@ -223,9 +225,13 @@ export default defineComponent({
         await this.buildTableData();
     },
     methods: {
+        dismiss() {
+            modalController.dismiss("dismiss");
+        },
         async onClickHandler(page: any) {
             await this.buildTableData(page);
         },
+
         formatDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
@@ -251,7 +257,13 @@ export default defineComponent({
             this.isLoading = true;
             try {
                 const stockService = new StockService();
-                this.reportData = await stockService.getItems("2000-01-01", this.endDate, this.filter, page);
+                this.reportData = await stockService.getItems({
+                    start_date: "2000-01-01",
+                    end_date: this.endDate,
+                    drug_name: this.data.drug_legacy_name,
+                    page: page,
+                    page_size: 4,
+                });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
@@ -263,7 +275,7 @@ export default defineComponent({
             await this.buildTableData();
         },
         async openAddStockModal(data: any) {
-            const response: any = await createModal(AddStockModal, { class: "otherVitalsModal largeModal" }, true, { data: data });
+            const response: any = await createModal(AddStockModal, { class: "fullScreenModal" }, true, { data: data });
             if (response == "dismiss") {
                 await this.buildTableData();
             }
@@ -302,7 +314,7 @@ export default defineComponent({
 </style>
 <style scoped>
 .drug_container {
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     flex-wrap: wrap;
     gap: 30px;
@@ -312,13 +324,14 @@ ion-row {
     line-height: 10px;
 }
 .content {
-    font-size: 12px;
+    font-size: 14px;
     color: #939393;
 }
 .contentBold {
     font-weight: 700;
-    font-size: 12px;
+    font-size: 14px;
     color: gray;
+    line-height: 16px;
 }
 .container {
     display: flex;
