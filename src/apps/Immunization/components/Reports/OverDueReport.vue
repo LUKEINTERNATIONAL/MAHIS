@@ -29,7 +29,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Date Of Birth</th>
-                            <th>Missed Milestones</th>
+                            <th>Missed Doses</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -157,18 +157,21 @@ export default defineComponent({
                 
                 //Loop hrough each item in the vaccineData
                 vaccineData.forEach((dataItem: any) => {
-                    dataItem.value.under_five_missed_visits.forEach((visit: any) => {
+                    const overdue_clients = dataItem.value.under_five_missed_visits.concat(dataItem.value.over_five_missed_visits)
+                    let doses =  0;
+                    overdue_clients.forEach((overdue_client: any) => {
                         // Extract personal details from each visit 
-                        let item = visit.client.table;
+                        let client = overdue_client.client.table;
 
-                        //const personalDetails = { birthdate, given_name, family_name, patient_id };
-
-                        //Push perso
+                        overdue_client.missed_visits.forEach(( missed_visit: any) => {
+                            doses += missed_visit.antigens.length
+                        })
+                        
                         this.reportData.push([
-                            `${item.given_name} ${item.family_name}`,
-                            item.birthdate,
-                            visit.missed_visits.length,
-                            `<button class="btn btn-sm btn-primary follow-up-btn" data-id="${item.patient_id}">Follow UP</button>`
+                            `${client.given_name} ${client.family_name}`,
+                            HisDate.toStandardHisDisplayFormat(client.birthdate),
+                            doses,
+                            `<button class="btn btn-sm btn-primary follow-up-btn" data-id="${client.patient_id}">Follow UP</button>`
                         ]);
                         
                     })
