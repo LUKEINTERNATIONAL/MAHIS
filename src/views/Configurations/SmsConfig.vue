@@ -25,7 +25,6 @@
                                   :placeholder="'Gateway API Key'"
                                   @update:inputValue ="handleInputData($event,'apiKey')"
                                   :icon="createOutline"
-                                  inputType="password" 
                               />
                           </ion-col>
                       </ion-row>
@@ -52,36 +51,11 @@
                                   class="custom"
                                   v-model="configData.reminderMessage"
                                   :value="configData.reminderMessage"
-                                  label="Reminder Message" 
-                                  label-placement="floating"
                                   @ionInput="handleInputData($event,'reminderMessage')"
-                                  @ionBlur="handleInputKeyUp($event,'reminder_preview')"
-                                  @input="handleInputDatachange($event,'reminder_preview')"
-                                  @ionFocus="handleInputDatachange($event,'reminder_preview')"
                                   :placeholder="'Add Reminder message'"
                                   :auto-grow="true"
                                   fill="outline"
                               ></ion-textarea>
-                              <div id="reminder_preview" style="background-color: beige;font-style: italic;color: orange;"></div>
-                          </ion-col>
-                      </ion-row>
-                      <ion-row class="form-row" v-if="configData.smsReminder">
-                          <ion-col>
-                              <ion-textarea
-                                  class="custom"
-                                  v-model="configData.cancelMessage"
-                                  :value="configData.cancelMessage"
-                                  label="Cancel Appointment Message" 
-                                  label-placement="floating"
-                                  @ionInput="handleInputData($event,'cancelMessage')"
-                                  @ionBlur="handleInputKeyUp($event,'appointment_preview')"
-                                  @input="handleInputDatachange($event,'appointment_preview')"
-                                  @ionFocus="handleInputDatachange($event,'appointment_preview')"
-                                  :placeholder="'Add Cancel appointment message'"
-                                  :auto-grow="true"
-                                  fill="outline"
-                              ></ion-textarea>
-                              <div id="appointment_preview" style="background-color: beige;font-style: italic;color: orange;"></div>
                           </ion-col>
                       </ion-row>
                       <ion-row class="form-row" v-if="configData.smsReminder">
@@ -179,13 +153,11 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import VueMultiselect from "vue-multiselect";
 import FacilityInformationBar from "@/components/FacilityInformationBar.vue";
 import { toastWarning, toastSuccess } from "@/utils/Alerts";
-import HisDate from "@/utils/Date";
 
 interface ConfigData {
     url: string;
     apiKey: string;
     reminderMessage: string;
-    cancelMessage: string;
     reminderPeriod: string;
     smsReminder: boolean;
     smsActivation: boolean;
@@ -217,7 +189,6 @@ export default defineComponent({
                     url: "",
                   apiKey: "",
          reminderMessage: "",
-         cancelMessage: "",
             reminderPeriod: "",
             smsReminder: false,
             smsActivation: false,
@@ -250,7 +221,6 @@ export default defineComponent({
             this.configData.apiKey = data.sms_api_key;
             this.configData.smsReminder = data.sms_reminder;
             this.configData.reminderMessage = data.next_appointment_message;
-            this.configData.cancelMessage = data.cancel_appointment_message;
             this.configData.reminderPeriod = data.next_appointment_reminder_period;
             this.configData.smsActivation = data.sms_activation;
             this.configData.smsPopup = data.show_sms_popup;
@@ -268,25 +238,11 @@ export default defineComponent({
         handleInputData(event:any, field: keyof ConfigData) {
             this.configData[field] = event.target.value
         },
-        handleInputKeyUp(event:any,elementid:any){
-            const previewElement = document.getElementById(elementid);
-           if (previewElement) {
-              previewElement.innerHTML = "";
-            }
-
-        },
-        handleInputDatachange(event:any,elementid:any){
-
-            const previewElement = document.getElementById(elementid);
-           if (previewElement) {
-              previewElement.innerHTML = `<b>Preview of the message to be sent</b> </br>${event.target.value} ${HisDate.currentDisplayDate()}`;
-            }
-
-        },
         async onSubmit(){
             try {
                 const configs = await SmsService.setConfigurations(this.configData);
-                this.updateConfigData(configs.message);
+                this.updateConfigData(configs);
+
                 toastSuccess("Successfully updated configuration file");
             } catch (e) {
                 toastWarning(`${e}`);

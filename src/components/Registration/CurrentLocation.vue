@@ -142,7 +142,7 @@ export default defineComponent({
             this.validationRules(event);
         },
         async handleInputData(event: any) {
-            localStorage.setItem("activeLocation", "current");
+            sessionStorage.setItem("activeLocation", "current");
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village", "Other (specify)"];
             await this.validations(this.currentLocation, currentFields);
 

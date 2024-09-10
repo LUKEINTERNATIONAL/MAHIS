@@ -245,7 +245,7 @@ export default defineComponent({
             this.data.map((item: any) => {
             if (item.name == "missed_immunizations") {
                 const uniqueClients = new Set<number>();
-                this.clientDetails = [];
+                this.clientDetails = []; //Ressetting client details
 
                 const processAntigensClients = (antigens: any[]) => {
                     return antigens.map((antigen: any) => {

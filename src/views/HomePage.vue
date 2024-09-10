@@ -204,6 +204,7 @@ import {getBaseURl} from "@/utils/GeneralUti";
 import { setOfflineData } from "@/services/set_location";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
+import { getBaseURL } from "@/utils/GeneralUti";
 
 export default defineComponent({
     name: "Home",
@@ -292,8 +293,9 @@ export default defineComponent({
             async handler(data) {
                 if (data.name == "Home") resetDemographics();
                 await this.setAppointments();
-                const wsService = new WebSocketService();
-                wsService.setMessageHandler(this.onMessage);
+                // cannot subscribe more than once
+                // const wsService = new WebSocketService();
+                // wsService.setMessageHandler(this.onMessage);
             },
             deep: true,
         },
@@ -337,7 +339,7 @@ export default defineComponent({
         },
         async onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);
-            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: localStorage.getItem("locationID") })) {
+            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: sessionStorage.getItem("locationID") })) {
                 this.reportData = data.message;
                 console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
                 this.totalStats = [

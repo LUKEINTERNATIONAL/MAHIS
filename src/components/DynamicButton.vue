@@ -1,5 +1,5 @@
 <template>
-    <ion-button :disabled="disabledValue" :expand="expand" :fill="$props.fill" :size="size" :color="color" @click="$emit('clicked:btn')">
+    <ion-button :style="style" :id="id" :disabled="disabledValue" :expand="expand" :fill="$props.fill" :size="size" :color="color" @click="$emit('clicked:btn')">
         <span v-if="!subName && showName" :style="'font-size: 14px; font-weight:' + fontWeight">
             {{ $props.name }}
         </span>
@@ -65,6 +65,15 @@ export default defineComponent({
         fontWeight: {
             default: "400",
         },
+        id:{
+            type:String,
+            default: "" 
+        },
+        style: {
+      type: [String, Object] as PropType<string | Record<string, any>>,
+      default: '',
+    },
+
     },
     components: {
         IonButton,
