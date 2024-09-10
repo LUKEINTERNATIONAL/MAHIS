@@ -158,23 +158,24 @@ export default defineComponent({
                 //Loop hrough each item in the vaccineData
                 vaccineData.forEach((dataItem: any) => {
                     const overdue_clients = dataItem.value.under_five_missed_visits.concat(dataItem.value.over_five_missed_visits)
-                    let doses =  0;
-                    overdue_clients.forEach((overdue_client: any) => {
+                   
+                    overdue_clients.forEach((visit: any) => {
+                        let doses =  0;
                         // Extract personal details from each visit 
-                        let client = overdue_client.client.table;
+                        let item = visit.client.table;
 
-                        overdue_client.missed_visits.forEach(( missed_visit: any) => {
+                        visit.missed_visits.forEach(( missed_visit: any) => {
                             doses += missed_visit.antigens.length
-                        })
+                        });
                         
                         this.reportData.push([
-                            `${client.given_name} ${client.family_name}`,
-                            HisDate.toStandardHisDisplayFormat(client.birthdate),
+                            `${item.given_name} ${item.family_name}`,
+                            item.birthdate,
                             doses,
-                            `<button class="btn btn-sm btn-primary follow-up-btn" data-id="${client.patient_id}">Follow UP</button>`
+                            `<button class="btn btn-sm btn-primary follow-up-btn" data-id="${item.patient_id}">Follow UP</button>`
                         ]);
                         
-                    })
+                    });
                 })
 
                 DataTable.use(DataTablesCore);
