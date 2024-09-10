@@ -291,6 +291,7 @@ export default defineComponent({
     },
     methods: {
         nav(url: any) {
+            resetPatientData();
             this.$router.push(url);
         },
         async scanCode() {
