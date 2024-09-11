@@ -1,6 +1,8 @@
 <template>
     <ion-header>
+        <ion-toolbar>
         <ion-title class="modalTitle">Create Immunization Session Schedule</ion-title>
+        </ion-toolbar>  
     </ion-header>
     <ion-loading v-show="isSaving" trigger="open-loading" message="Saving, please wait..."> </ion-loading>
     <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">

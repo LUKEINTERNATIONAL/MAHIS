@@ -3,15 +3,43 @@ interface SessionType {
   name: string;
 }
 
+type Vaccine = {
+ schedule_vaccine_id: numbe;
+ session_schedule_id: number;
+ drug_id: number;
+ voided: boolean,
+ voided_by: string;
+ date_voided: string;
+ created_at: string;
+ updated_at: string;
+ name: string;
+}
+
+type Assignee = {
+  schedule_assignee_id: number;
+  session_schedule_id: number;
+  user_id: number;
+  voided: number;
+  voided_by: string;
+  date_voided: string;
+  created_at: string;
+  updated_at: string;
+  username: string;
+  given_name:string;
+  family_name: string;
+}
+
 type SessionSchedule = {
   id?: number;
   session_name: string;
+  repeat_type?: string;
   repeat?: string;
   target?: string;
   start_date: Date;
   end_date: Date;
   session_type: SessionType;
-  assignees?: number[];
+  vaccines?: Vaccine[]
+  assignees?: Assignee[];
 };
 
 type Role = {
@@ -102,6 +130,8 @@ type User = {
 export {
   SessionSchedule,
   SessionType,
+  Vaccine,
+  Assignee,
   Role,
   Person,
   User,

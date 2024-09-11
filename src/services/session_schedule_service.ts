@@ -10,7 +10,7 @@ export class SessionScheduleService extends Service {
         super();
     }
 
-    private ENDPOINT: string = "eir/schedule";
+    private ENDPOINT: string = "eir/session_schedule";
     private CREATE_ENDPOINT: string = "eir/session_schedule";
 
     /**
@@ -47,12 +47,6 @@ export class SessionScheduleService extends Service {
         page: number = 1,
         perPage: number = 10
     ): Promise<Service> {
-        return Service.getJson(this.ENDPOINT, {
-            start_date: start_date,
-            end_date: end_date,
-            session_name: session_name,
-            page: page,
-            page_size: perPage,
-        });
+        return Service.getJson(this.ENDPOINT);
     }
 }
