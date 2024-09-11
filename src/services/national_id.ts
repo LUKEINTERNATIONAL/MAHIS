@@ -24,8 +24,9 @@ export async function extractDetails(inputString: string) {
             const dob = parts[9];
             const sex = parts[8].charAt(0);
             const lastName = parts[4];
-            const firstName = parts[6];
-            const middleName = parts[7];
+            const nameParts = parts[6].split(",");
+            const firstName = nameParts[0].trim(); // First name is the first part
+            const middleName = nameParts[1] ? nameParts[1].trim() : "";
             return {
                 idNumber,
                 sex,
