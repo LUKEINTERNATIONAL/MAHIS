@@ -1,5 +1,4 @@
 <template>
-  <!--  reason for visit-->
   <div class="container">
     <ion-card class="section">
       <ion-card-content>
@@ -11,6 +10,20 @@
       </ion-card-content>
     </ion-card>
   </div>
+  <ion-modal :is-open="isReferralModalOpen" @didDismiss="closeReferralModal">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Referral Details</ion-title>
+        <ion-buttons slot="end">
+          <ion-button @click="closeReferralModal">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-header>I am the header of the sample modal</ion-header>
+      <!-- Your referral form or additional content goes here -->
+    </ion-content>
+  </ion-modal>
 </template>
 
 <script lang="ts">
@@ -21,6 +34,7 @@ import {
   IonList,
   IonTitle,
   IonToolbar,
+  IonModal,
   IonMenu,
   menuController,
   IonToggle,
@@ -62,12 +76,15 @@ export default defineComponent({
     IonSelectOption,
     IonInput,
     BasicInputField,
-    BasicForm
+    BasicForm,
+    IonModal
   },
   data() {
     return {
       iconsContent: icons,
       initialData:[] as any,
+      isReferralModalOpen: false,
+      ReferralDetails: []
 
     };
   },
@@ -80,12 +97,14 @@ export default defineComponent({
     this.initialData = ReasonForVisit.getInitial();
     this.handleFirstAntenalVisit();
     this.handleSpecificConcernsVisit()
+    this.handleReferralQuestionResponse()
   },
   watch:{
     ReasonForVisit:{
       handler(){
         this.handleFirstAntenalVisit()
         this.handleSpecificConcernsVisit()
+        this.handleReferralQuestionResponse();
       },
       deep:true
     }
@@ -118,11 +137,11 @@ handleFirstAntenalVisit() {
   }
 
   const checkBoxes = [
-    'Pre-term labour', 'Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
+    'Preterm labour', 'Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
     'Severe headache', 'Severe vomiting', 'Severe abdominal pain', 'Draining liquor',
-    'Respiratory problems', 'Convulsion history', 'Vomiting', 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs'
+    'Respiratory problems', 'Convulsion history', 'Vomiting', 'Edema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs'
 
-    ,'Abnormal vaginal discharge','Change in blood pressure-up','Diarrhoea','Vomiting','Genital ulcers','Change in blood pressure-down',
+    ,'Abnormal vaginal discharge','Change in blood pressure-up','Diarrhea','Vomiting','Genital ulcers','Change in blood pressure-down',
     'Constipation','Contractions','Vaginal bleeding','Intimate partner violence','Flu symptoms','Painful urination','Headache','Dyspepsia','Frequent urination/Polyuria',
     'Injury','Jaundice','Mental health-Depression','Genital warts','Itchy vulva','Painful intercourse','No health concerns','Other'
   ];
@@ -135,8 +154,8 @@ handleFirstAntenalVisit() {
     });
 
     // Reset and hide 
-    modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'selectedValue', '');
-    modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', true);
+    modifyRadioValue(this.ReasonForVisit, 'Intervention on danger signs', 'selectedValue', '');
+    modifyRadioValue(this.ReasonForVisit, 'Intervention on danger signs', 'displayNone', true);
     modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', true);
     
     //ReasonForSubsequentVisit
@@ -155,10 +174,10 @@ handleFirstAntenalVisit() {
 
     
 
-    modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', !anyCheckboxSelected);
+    modifyRadioValue(this.ReasonForVisit, 'Intervention on danger signs', 'displayNone', !anyCheckboxSelected);
   }
 
-  if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+  if (getRadioSelectedValue(this.ReasonForVisit, 'Intervention on danger signs') == 'No') {
     modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
     modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
   } else {
@@ -179,6 +198,16 @@ handleFirstAntenalVisit() {
       //   modifyCheckboxValue(this.ReasonForVisit, 'Specific health concerns', 'selectedValue', '');
       //
       // }
+    },
+    closeReferralModal() {
+      this.isReferralModalOpen = false;
+    },
+    handleReferralQuestionResponse() {
+      if (getRadioSelectedValue(this.ReasonForVisit, 'Intervention on danger signs')== 'Yes') {
+        this.isReferralModalOpen = true;
+      } else {
+        this.isReferralModalOpen = false;
+      }
     },
 
   }
