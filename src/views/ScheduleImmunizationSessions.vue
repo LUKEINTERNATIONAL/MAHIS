@@ -296,30 +296,36 @@ async function getSessionSchedules(): Promise<void> {
                 },
             });
         });
-        schedules.value = data;
-    } catch (exception: any) {
-        console.error(exception);
-    } finally {
-        isLoading.value = false;
-    }
-}
+    },
+    methods: {
+        handleEdit(id: any) {
+            // Implement edit logic here
+            console.log(`Editing item with id: ${id}`);
+        },
 
-async function onCalendarDayClick(calendarDay: any) {
-    let hasOverlap = false;
-    const selectedSchedules: SessionSchedule[] = [];
+        handleDelete(id: any) {
+            // Implement delete logic here
+            console.log(`Deleting item with id: ${id}`);
+        },
+        async handleInputData(event: any) {
+            if (event.inputHeader == "Start date") {
+                this.startDate = HisDate.toStandardHisFormat(event.value);
+            }
+            if (event.inputHeader == "End date") {
+                this.endDate = HisDate.toStandardHisFormat(event.value);
+            }
+            await this.buildTableData();
+        },
+        async buildTableData() {
+            this.isLoading = true;
+            try {
+                const stockService = new StockService();
+                const data = await stockService.getItems(this.startDate, this.endDate);
 
-    displaySchedules.value = [];
-
-    calendarDay.attributes.forEach((attribute: { description: string }) => {
-        schedules.value
-            .filter((schedule) => schedule.session_name === attribute.description)
-            .forEach((schedule) => {
-                const overlappingSchedule = selectedSchedules.find(
-                    (s) =>
-                        s.session_name === schedule.session_name &&
-                        new Date(s.start_date) <= new Date(schedule.end_date) &&
-                        new Date(s.end_date) >= new Date(schedule.start_date)
-                );
+                let filteredData = data;
+                this.allStock = data;
+                this.currentStock = data.filter((item: any) => item.current_quantity !== 0);
+                this.outStock = data.filter((item: any) => item.current_quantity === 0);
 
                 if (overlappingSchedule) {
                     hasOverlap = true;

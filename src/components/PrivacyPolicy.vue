@@ -3,7 +3,7 @@
     <ion-header :translucent="true" class="primary_color_background">
       <div class="content_manager" style="margin-top: unset">
         <ion-toolbar class="content_width primary_color_background">
-          <ion-title style="cursor: pointer" @click="nav('/home')">
+          <ion-title style="cursor: pointer" @click="">
             <b>Privacy Policy</b>
           </ion-title>
         </ion-toolbar>
@@ -25,17 +25,21 @@
 </template>
 
 <script lang="ts">
+import { getBaseURl } from "@/utils/GeneralUti";
 export default {
   name: "PrivacyPolicy",
   data() {
     return {
-      pdfUrl: null,
+      pdfUrl: '',
     };
   },
   mounted() {
-    this.pdfUrl = "../../mahis/public/assets/MaHIS_Privacy_Policy.pdf";
+    let baseURL = getBaseURl();
+    if (baseURL.length > 0) {
+        baseURL = baseURL;
+    }
+    this.pdfUrl = `../../${baseURL}/public/assets/MaHIS_Privacy_Policy.pdf`;
   },
- 
 };
 </script>
 

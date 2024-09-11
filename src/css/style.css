@@ -513,6 +513,11 @@ ion-accordion {
     width: 60vw;
     padding: 10px;
     text-align: left;
+    max-width: 800px;
+    color: #000;
+    background-color: #fff;
+    border-radius: 5px;
+    margin: 5px;
 }
 .search_card {
     width: 1290px;
@@ -628,6 +633,70 @@ ion-footer {
 }
 .Toastify__toast-body > div:last-child {
     font-size: 12px;
+}
+.barcode-scanner-active {
+    background: transparent;
+    --background: transparent;
+}
+
+.scanning-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.scanning-frame {
+    width: 80vw;
+    height: 80vw;
+    max-width: 300px;
+    max-height: 300px;
+    border: 2px solid white;
+    position: relative;
+}
+
+.zoom-slider {
+    width: 80vw;
+    max-width: 300px;
+    margin-top: 20px;
+}
+
+.stop-scanning-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.torch-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}
+
+.torch-btn.torch-on {
+    background: yellow;
+}
+
+.torch-btn svg {
+    width: 24px;
+    height: 24px;
 }
 .vti__dropdown-list {
     z-index: 10;

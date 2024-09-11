@@ -25,7 +25,7 @@ export const useUserStore = defineStore("userStore", {
             return this.showUserProfileEdit
         },
         setUserFacilityName(name: string) {
-            this.userFacilityName = "Facility name: "+name
+            this.userFacilityName = name
         },
         getUserId() {
             return this.user_ID
