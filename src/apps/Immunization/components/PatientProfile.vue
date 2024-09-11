@@ -115,7 +115,7 @@
                 <div style="width: 100%; display: flex; justify-content: space-between; align-content: center">
                     <div class="vaccinesTitleText">Administer Vaccines</div>
                     <div class="vaccinesTitleDate">
-                        <span style="font-size:13px;">Next Appt. Date: </span><b>{{ nextAppointMentDate }}</b>
+                        <span style="font-size: 13px">Next Appt. Date: </span><b>{{ nextAppointMentDate }}</b>
                     </div>
                 </div>
             </div>
@@ -308,19 +308,16 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList",
-                "nonPharmalogicalTherapyAndOtherNotes",
-                "selectedMedicalAllergiesList"
-            ]),
+        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useAdministerVaccineStore, [
-                "currentMilestone",
-                "missedVaccineSchedules",
-                "overDueVaccinesCount",
-                "lastVaccinesGiven",
-                "lastVaccineGievenDate",
-                "nextAppointMentDate",
-            ]),
+            "currentMilestone",
+            "missedVaccineSchedules",
+            "overDueVaccinesCount",
+            "lastVaccinesGiven",
+            "lastVaccineGievenDate",
+            "nextAppointMentDate",
+        ]),
     },
     created() {
         this.getData();
@@ -330,6 +327,7 @@ export default defineComponent({
         this.loadCurrentMilestone();
         this.checkAge();
         await this.checkProtectedStatus();
+        await this.openFollowModal();
     },
     watch: {
         vitals: {
@@ -427,7 +425,7 @@ export default defineComponent({
             if (this.demographics?.patient_id) {
                 this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
                 const dataToPass = { protectedStatus: this.protectedStatus };
-                if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "otherVitalsModal" }, true, dataToPass);
+                if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
             }
         },
         openAdministerVaccineModal() {
@@ -673,7 +671,6 @@ export default defineComponent({
         getLastVaccinesGivenDisplayDate() {
             return HisDate.toStandardHisDisplayFormat(this.lastVaccineGievenDate);
         },
-
     },
 });
 </script>
