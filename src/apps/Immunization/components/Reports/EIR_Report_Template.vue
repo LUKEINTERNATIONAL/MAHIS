@@ -2,17 +2,16 @@
 
         <ion-row>
           <ion-col>
-              <h1 style="width: 100%; text-align: left; font-weight: 400">Immunisation</h1>
+              <h1 style="width: 100%; text-align: left; font-weight: 400">Immunization</h1>
           </ion-col>
         </ion-row>
 
         <ion-fab slot="fixed" horizontal="end" vertical="top" @click="exXport">
           <ion-fab-button>
-            <ion-icon :icon="fileTray"></ion-icon>
+            <ion-icon :icon="downloadOutline"></ion-icon>
           </ion-fab-button>
         </ion-fab>
 
-  
         <table class="custom-table">
           <colgroup>
             <col style="width: 20%;" />
@@ -121,7 +120,7 @@ import NavigationMenu from './NavigationMenu.vue';
 import { mapState } from "pinia";
 import { getVaccinesAdministered, getImmunizationDrugs } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
-import { add, fileTray } from 'ionicons/icons';
+import { add, fileTray, downloadOutline } from 'ionicons/icons';
 
 export default defineComponent({
     name: 'TableComponent',
@@ -132,6 +131,7 @@ export default defineComponent({
         selectedColumn: '',  // To keep track of the selected column
         tableData: [] as any,
         fileTray,
+        downloadOutline,
       };
     },
     watch: {
@@ -192,8 +192,9 @@ export default defineComponent({
       async exXport() {
         const navigator_ = navigator as any
         console.log(this.tableData)
+        let {CSVString} =  this.generateCSVStringForImmunizationMonthly()
 
-        const csvData = new Blob(['dominic'], { type: "text/csv;charset=utf-8;" });
+        const csvData = new Blob([CSVString], { type: "text/csv;charset=utf-8;" });
         const reportTitle = `qaXport`;
         if (navigator_.msSaveBlob) {
           navigator_.msSaveBlob(csvData, 'exportFilename');
@@ -207,10 +208,11 @@ export default defineComponent({
           document.body.removeChild(link);
         }
       },
-      generateCSVString(IDSRConditionsObj: any) {
-        let CSVString = `Diseases/Events/Conditions, #,\n`
-        for(const condition of IDSRConditionsObj) {
-          const row = `${condition.name},${condition.total},\n`
+      generateCSVStringForImmunizationMonthly() {
+        let CSVString = ` ,Static,,Outreach\n`
+        CSVString += ` ,<1y, >1y,<1y, >1y\n`
+        for(const Immunization_record of this.tableData) {
+          const row = `${Immunization_record.label}, ${Immunization_record.fixed.lessThan1y}, ${Immunization_record.fixed.moreThan1y}, ${Immunization_record.outreach.lessThan1y}, ${Immunization_record.outreach.moreThan1y}\n`
           CSVString+=row
         }
         return {CSVString}
