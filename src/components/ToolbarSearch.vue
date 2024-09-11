@@ -391,6 +391,7 @@ export default defineComponent({
             if (Validation.isMWNationalID(searchText) == null) {
                 const nationalID = await PatientService.findByOtherID(28, searchText);
                 if (nationalID && nationalID.length > 0) {
+                    this.patients = [];
                     this.patients.push(...nationalID);
                     this.openNewPage("patientProfile", this.patients[0]);
                     return true;
