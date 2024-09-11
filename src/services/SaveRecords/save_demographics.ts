@@ -30,7 +30,7 @@ async function savePersonInformation(record: any) {
                 saveStatusPersonInformation: "complete",
                 serverPatientID: patientID,
             });
-            createIDs(record.otherPersonInformation);
+            createIDs(record.otherPersonInformation, patientID);
             enrollProgram(patientID);
             createRegistrationEncounter(patientID);
             return patientID;
@@ -41,10 +41,10 @@ async function savePersonInformation(record: any) {
     return record.serverPatientID;
 }
 
-async function createIDs({ nationalID, birthID }: any) {
+async function createIDs({ nationalID, birthID }: any, patientID: any) {
     const patient = new PatientService();
-    if (nationalID) await patient.updateMWNationalId(nationalID);
-    if (birthID) await patient.updateBirthId(birthID);
+    if (nationalID) await patient.updateMWNationalId(nationalID, patientID);
+    if (birthID) await patient.updateBirthId(birthID, patientID);
 }
 
 async function createGuardian(patientID: any, record: any) {
