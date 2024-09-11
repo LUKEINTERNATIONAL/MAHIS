@@ -62,7 +62,7 @@
                             :inputValue="col.value"
                             :eventType="col.eventType"
                             @update:inputValue="handleInput(contentData, col, $event, 'updateInput')"
-                            @countryChanged="handleInput(contentData, col, $event,'countryChanged')"
+                            @countryChanged="handleInput(contentData, col, $event, 'countryChanged')"
                             :popOverData="col.popOverData"
                             @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
                             :InnerActionBtnPropeties="col.InnerBtn"
@@ -159,6 +159,7 @@
                             :eventType="col.eventType"
                             :minDate="col.minDate"
                             :maxDate="col.maxDate"
+                            :disabled="col.disabled"
                             @update:dateValue="handleInput(contentData, col, $event, 'updateDate')"
                         />
 
@@ -313,6 +314,7 @@
                             :eventType="checkboxInput.eventType"
                             :minDate="checkboxInput.minDate"
                             :maxDate="checkboxInput.maxDate"
+                            :disabled="checkboxInput.disabled"
                             @update:dateValue="handleInput(contentData, checkboxInput, $event, 'updateDate')"
                         />
                         <div v-if="checkboxInput.isMultiSelect">
@@ -426,8 +428,8 @@ export default defineComponent({
         async handleInput(data: any, col: any, event: any, inputType: any) {
             this.event = event;
             if (inputType == "updateInput") {
-                this.validateData(data, col, event.target.value);
-                modifyFieldValue(data, col.name, "value", event?.target?.value?.trim());
+                this.validateData(data, col, event?.target?.value);
+                if (event) modifyFieldValue(data, col?.name, "value", event?.target?.value?.trim());
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateValue") {
@@ -488,11 +490,11 @@ export default defineComponent({
                 this.$emit("update:inputValue", { col, event });
             }
             if (inputType == "countryChanged") {
-                 const message = await Validation.validateMobilePhone(col.value,event);
-                 modifyFieldValue(data, col.name, "alertsErrorMassage", null);
-                if(!message.includes("+")){
+                const message = await Validation.validateMobilePhone(col.value, event);
+                modifyFieldValue(data, col.name, "alertsErrorMassage", null);
+                if (!message.includes("+")) {
                     modifyFieldValue(data, col.name, "alertsErrorMassage", message);
-                }  
+                }
                 this.$emit("countryChanged", { col, event });
             }
         },

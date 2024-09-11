@@ -6,7 +6,7 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <ion-header style="display: flex; justify-content: space-between">
-            <ion-title class="modalTitle">Stock Management</ion-title>
+            <ion-title class="modalTitle">Inventory Management </ion-title>
             <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="iconsContent.cancel"></ion-icon>
         </ion-header>
         <ion-content style="--background: #fff">

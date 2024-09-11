@@ -15,10 +15,10 @@
             :disabled="disabled"
             :preferredCountries="['mw']"
             :defaultCountry="'mw'"
-            :inputOptions="{ showDialCode: true,}"
-            :dropdownOptions="{ showSearchBox: true, showFlags:true,showDialCodeInList: true, searchBoxPlaceholder: 'Search here...'}"
-            mode="international"
-            
+            :inputOptions="{ showDialCode: false,placeholder: 'Enter a phone number'}"
+            :dropdownOptions="{ showDialCodeInSelection: true, showSearchBox: true, showFlags:true,showDialCodeInList: true, searchBoxPlaceholder: 'Search here...'}"
+            mode="international" 
+            :autoFormat="false"  
         >
         </vue-tel-input>
     </div>
@@ -56,7 +56,7 @@ export default defineComponent({
             displayList: [] as any,
             popoverOpen: false,
             event: "" as any,
-            phone: "" as any,
+            phone: this.inputValue || "" as any,
             options: {} as any,
             selectedText: "" as any,
             filteredData: [] as any,
