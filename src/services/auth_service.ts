@@ -4,6 +4,7 @@ import HisDate from "@/utils/Date";
 import PACK_CONF from "../../package.json";
 import { useUserStore } from "@/stores/userStore";
 import * as CryptoJS from "crypto-js";
+import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 export class InvalidAPIVersionError extends Error {
     message: string;
     constructor(version: string) {
@@ -59,7 +60,6 @@ export class AuthService {
         try {
             const response = await this.requestLogin(password);
             if (response) {
-                console.log("🚀 ~ AuthService ~ login ~ response:", response);
                 const {
                     authorization: { token, user, expiry_time },
                 } = response;
@@ -78,12 +78,16 @@ export class AuthService {
                 this.storeOfflineLoginInfo(this.username, password, token, expiry_time);
                 this.startSession();
             } else {
-                throw "Unable to login";
+                throw "Unable to login on remote server";
             }
         } catch (error) {
             // If online login fails, try offline login
-            if (await this.offlineLogin(this.username, password)) {
-                console.log("Offline login successful");
+            if (error == "Unable to login on remote server") {
+                if (await this.offlineLogin(this.username, password)) {
+                    console.log("Offline login successful");
+                } else {
+                    throw "Unable to login offline";
+                }
             } else {
                 throw error;
             }
@@ -106,7 +110,10 @@ export class AuthService {
 
     async offlineLogin(username: string, password: string): Promise<boolean> {
         const offlineLoginInfoString = localStorage.getItem("offlineLoginInfo");
-        if (!offlineLoginInfoString) return false;
+        if (!offlineLoginInfoString) {
+            toastDanger("No offline login details available.");
+            return false;
+        }
 
         const offlineLoginInfo = JSON.parse(offlineLoginInfoString);
         if (
@@ -114,6 +121,7 @@ export class AuthService {
             offlineLoginInfo.passwordHash !== this.hashPassword(password) ||
             new Date(offlineLoginInfo.expiryTime) < new Date()
         ) {
+            toastDanger("Failed to log in offline: incorrect username or password, or the token has expired.");
             return false;
         }
 
@@ -126,24 +134,25 @@ export class AuthService {
     }
 
     startSession() {
-        sessionStorage.setItem("apiKey", this.token);
-        sessionStorage.setItem("username", this.username);
-        sessionStorage.setItem("userID", this.userID.toString());
-        sessionStorage.setItem("userRoles", JSON.stringify(this.roles));
-        sessionStorage.setItem("userPrograms", JSON.stringify(this.programs));
-        sessionStorage.setItem("sessionDate", this.sessionDate);
-        sessionStorage.setItem("APIVersion", this.systemVersion);
-        sessionStorage.setItem("locationID", this.locationID);
+        localStorage.setItem("apiKey", this.token);
+        localStorage.setItem("username", this.username);
+        localStorage.setItem("userID", this.userID.toString());
+        localStorage.setItem("userRoles", JSON.stringify(this.roles));
+        localStorage.setItem("userPrograms", JSON.stringify(this.programs));
+        localStorage.setItem("sessionDate", this.sessionDate);
+        localStorage.setItem("APIVersion", this.systemVersion);
+        localStorage.setItem("locationID", this.locationID);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
     }
     checkUserPrograms(selectedProgram: any) {
-        const accessPrograms: any = sessionStorage.getItem("userPrograms");
+        const accessPrograms: any = localStorage.getItem("userPrograms");
         const programs = JSON.parse(accessPrograms);
         console.log("🚀 ~ AuthService ~ checkUserPrograms ~ programs:", programs);
-        return programs.some((program: any) => program.name === selectedProgram);
+        if (programs) return programs.some((program: any) => program.name === selectedProgram);
+        else toastDanger("No user programs");
     }
     clearSession() {
-        sessionStorage.clear();
+        localStorage.clear();
     }
 
     requestLogin(password: string) {
@@ -196,10 +205,10 @@ export class AuthService {
              * by checking presence of apiDate. We update ApiDate
              * if found else we update SessionDate.
              */
-            if (sessionStorage.getItem("apiDate")) {
-                sessionStorage.setItem("apiDate", date);
+            if (localStorage.getItem("apiDate")) {
+                localStorage.setItem("apiDate", date);
             } else {
-                sessionStorage.setItem("sessionDate", date);
+                localStorage.setItem("sessionDate", date);
             }
         }, interval);
     }
@@ -228,7 +237,7 @@ export class AuthService {
     }
 
     getAppConf(confKey: "promptFullScreenDialog" | "showUpdateNotifications" | "enableVersionLocking" | "dataCaching") {
-        const conf: any = sessionStorage.getItem("appConf");
+        const conf: any = localStorage.getItem("appConf");
         if (conf) {
             try {
                 const confObj = JSON.parse(conf);

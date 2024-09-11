@@ -11,11 +11,13 @@
                     @update:selected="$emit('update:selected', $event)"
                     @update:inputValue="$emit('update:inputValue', $event)"
                     @clicked:button="$emit('clicked:button', $event)"
+                    @countryChanged="(c: any,$event) => $emit('countryChanged', c,$event)"
                 ></basic-form>
                 <basic-form
                     :contentData="card.contentTwo"
                     @update:selected="$emit('update:selected', $event)"
                     @update:inputValue="$emit('update:inputValue', $event)"
+                    @countryChanged="(c: any,$event) => $emit('countryChanged', c, $event)"
                     @clicked:button="$emit('clicked:button', $event)"
                 ></basic-form>
             </div>
@@ -27,11 +29,13 @@
             :initialData="card.initialData"
             @update:selected="$emit('update:selected', $event)"
             @update:inputValue="$emit('update:inputValue', $event)"
+            @countryChanged="(c: any,$event) => $emit('countryChanged', c, $event)"
             @clicked:button="$emit('clicked:button', $event)"
         ></basic-form>
         <basic-form
             :contentData="card.contentTwo"
             @update:selected="$emit('update:selected', $event)"
+            @countryChanged="(c: any,$event) => $emit('countryChanged', c, $event)"
             @update:inputValue="$emit('update:inputValue', $event)"
             @clicked:button="$emit('clicked:button', $event)"
         ></basic-form>
@@ -62,6 +66,7 @@ export default defineComponent({
             iconGridStatus: "inactive_icon",
         };
     },
+    emits: ["countryChanged", "update:selected", "update:inputValue", "clicked:button"],
     computed: {
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
     },

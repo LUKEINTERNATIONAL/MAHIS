@@ -128,6 +128,13 @@ export default defineComponent({
             modifyFieldValue(this.stock, "expire date", "value", this.data.expiry_date);
             modifyFieldValue(this.stock, "quantity", "value", this.data.delivered_quantity);
             modifyFieldValue(this.stock, "delivery_date", "value", this.data.delivery_date);
+
+            modifyFieldValue(this.stock, "product name", "disabled", "true");
+            modifyFieldValue(this.stock, "batch", "disabled", "true");
+            modifyFieldValue(this.stock, "manufacture", "disabled", "true");
+            modifyFieldValue(this.stock, "expire date", "disabled", "true");
+            modifyFieldValue(this.stock, "quantity", "disabled", "true");
+            modifyFieldValue(this.stock, "delivery_date", "disabled", "true");
         },
         async handleBatch() {
             if (this.data) {
@@ -171,29 +178,20 @@ export default defineComponent({
         async updateBatch() {
             const doses_wasted = parseInt(getFieldValue(this.stock, "doses_wasted", "value"));
             const delivered_quantity = parseInt(getFieldValue(this.stock, "quantity", "value"));
-            const dispensed_quantity = parseInt(this.data.dispensed_quantity);
-            const doses_issued = doses_wasted + dispensed_quantity;
-            if (delivered_quantity < doses_issued) {
+            this.data.current_quantity;
+            const total_used_quantity = this.data.dispensed_quantity + this.data.doses_wasted + doses_wasted;
+            if (delivered_quantity < total_used_quantity) {
                 toastWarning("Quantity delivered can not be greater than quantity wasted and dispensed");
                 return false;
             }
             if (validateInputFiledData(this.stock)) {
                 const data = {
-                    batch_number: getFieldValue(this.stock, "batch", "value"),
                     doses_wasted: doses_wasted,
                     drug_id: getFieldValue(this.stock, "product name", "value").drug_id,
-                    expiry_date: getFieldValue(this.stock, "expire date", "value"),
-                    manufacture: getFieldValue(this.stock, "manufacture", "value"),
-                    delivered_quantity: delivered_quantity,
-                    current_quantity: delivered_quantity - doses_issued,
-                    delivery_date: getFieldValue(this.stock, "delivery_date", "value") || HisDate.currentDate(),
-                    product_code: "",
-                    pack_size: "",
-                    reason: "Mistake Entirely",
-                    pharmacy_batch_id: this.data.pharmacy_batch_id,
                     reallocation_code: "MA20",
-                    date: HisDate.currentDate(),
                     waste_reason: "Something wrong with the drug",
+                    date: HisDate.currentDate(),
+                    reason: "Mistake Entirely",
                 };
                 try {
                     await this.stockService.updateItem(this.data.id, data);

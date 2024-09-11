@@ -8,35 +8,25 @@
       </ion-row>
 
       <table>
-        <colgroup>
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
-          <col style="width: 9.09%;" />
+        <colgroup v-for="(vaccine, index) in vaccines" :key="index">
+          <col :style="{ width: (100 / vaccines.length) + '%' }" />
         </colgroup>
 
         <thead>
           <tr>
             <th>Cases</th>
-            <th v-for="vaccine in vaccines" :key="vaccine">{{ vaccine }}</th>
+            <th v-for="vaccine in vaccines" :key="vaccine">{{ vaccine.name }}</th>
           </tr>
         </thead>
         <tbody>
           <template v-for="category in categories" :key="category.name">
             <tr>
-              <td colspan="11" id="hugo"><strong>{{ category.name }}</strong></td>
+              <td :colspan="vaccines.length+1" id="hugo"><strong>{{ category.name }}</strong></td>
             </tr>
             <tr v-for="case_ in category.cases" :key="case_.name">
               <td>{{ case_.name }}</td>
-              <td v-for="vaccine in vaccines" :key="vaccine">
-                {{ case_.data[vaccine] }}
+              <td v-for="vaccine in case_.data" :key="vaccine">
+                {{ vaccine.count }}
               </td>
             </tr>
           </template>
@@ -48,75 +38,135 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { IonContent, IonPage, IonRow, IonCol } from '@ionic/vue';
+import { ConceptService } from "@/services/concept_service";
+import { mapState } from "pinia";
+import { getAefiReport, getunderfiveImmunizationsDrugs } from "@/apps/Immunization/services/vaccines_service";
+import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+interface Category {
+  cases: Case[];
+}
+
+interface Case {
+  concept_id: number;
+  data: DrugData[];
+}
+
+interface DrugData {
+  drug_id: number;
+  count: number;
+}
+
+interface Item {
+  concept_id: number;
+  drugs: Drug[];
+}
+
+interface Drug {
+  drug_inventory_id: number;
+}
+
+interface AefiReportData {
+  data: Item[];
+}
 
 export default defineComponent({
   name: 'TableComponent',
   components: { IonContent, IonPage, IonRow, IonCol },
   data() {
     return {
-      vaccines: ['BCG', 'OPV', 'IPV', 'DPT-HepB-Hib', 'PCV', 'ROTA', 'Measles/MR', 'TT/Td', 'MV', 'HPV'],
+      // vaccines: ['BCG', 'OPV', 'IPV', 'DPT-HepB-Hib', 'PCV', 'ROTA', 'Measles/MR', 'TT/Td', 'MV', 'HPV'] as any,
+      vaccines: [] as any,
       categories: [
         {
           name: 'Minor AEFIs',
-          cases: [
-            {
-              name: 'Bacteria abscesses',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Severe local reaction',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Lymphadenitis',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Sepsis',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            }
-          ] as any
+          cases: [] as any
         },
         {
           name: 'Serious AEFIs',
-          cases: [
-            {
-              name: 'High fever >38°c',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Death',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Encephalopathy',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Seizures',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Paralysis',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Significant Disability',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Birth Defect',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            },
-            {
-              name: 'Toxic Shock syndrome',
-              data: { BCG: 0, OPV: 0, IPV: 0, 'DPT-HepB-Hib': 0, PCV: 0, ROTA: 0, 'Measles/MR': 0, 'TT/Td': 0, MV: 0, HPV: 0 }
-            }
-          ] as any
+          cases: [] as any
         }
       ]
     };
   },
+  watch: {
+    $route: {
+        async handler(data) {
+          if (data.name == "EIRReport")
+          await this.initReport()
+        },
+        deep: true,
+    },
+  },
+  computed: {
+    ...mapState(EIRreportsStore, ["start_date", "end_date"]), 
+  },
+  async mounted() {
+    await this.initReport()
+  },
+  methods: {
+    async initReport() {
+      this.vaccines = await this.UnderFiveImmunizations()
+      this.categories[0].cases = await this.getAEFIKnownList(this.categories[0].name, this.vaccines);
+      this.categories[1].cases = await this.getAEFIKnownList(this.categories[1].name, this.vaccines);
+      await this.initAefiReport(this.categories)
+    },
+    async initAefiReport(categories: Category[]): Promise<void> {
+    try {
+      const data = await getAefiReport(this.start_date, this.end_date);
+
+      // Create a map for faster lookup
+      const conceptDrugCountMap = new Map<number, Map<number, number>>();
+
+      // Process data and build the map
+      data.data.forEach((item: any) => {
+        const drugCountMap = conceptDrugCountMap.get(item.concept_id) || new Map<number, number>();
+        item.drugs.forEach((drug: any) => {
+          drugCountMap.set(drug.drug_inventory_id, (drugCountMap.get(drug.drug_inventory_id) || 0) + 1);
+        });
+        conceptDrugCountMap.set(item.concept_id, drugCountMap);
+      });
+
+      // Update categories
+      categories.forEach(category => {
+        category.cases.forEach(caseItem => {
+          const drugCountMap = conceptDrugCountMap.get(caseItem.concept_id);
+          if (drugCountMap) {
+            caseItem.data.forEach(d_d => {
+              d_d.count += drugCountMap.get(d_d.drug_id) || 0;
+            });
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error in initAefiReport:', error);
+    }
+  },
+    async UnderFiveImmunizations() {
+      const data: any = [];
+      const UFIs = await getunderfiveImmunizationsDrugs()
+      UFIs.forEach((item: any) => {data.push(item)})
+      return data
+    }, 
+    async getAEFIKnownList(concept_set_name: string, vaccines: any) {
+      const data: any = [];
+      const vaccineEffect = await ConceptService.getConceptSet(concept_set_name);
+      vaccineEffect.forEach((item: any) => {
+        const updatedVaccines = vaccines.map((vaccine: any) => ({
+          ...vaccine,
+          count: 0,
+        }));
+        data.push(
+          {
+            concept_id: item.concept_id,
+            name: item.name,
+            data: updatedVaccines
+          }
+        )
+      })
+      data.sort((a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name));
+      return data
+    }
+  }
 });
 </script>
 

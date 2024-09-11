@@ -242,6 +242,7 @@ import { Capacitor } from '@capacitor/core';
 import Toolbar from "@/components/Toolbar.vue";
 import { ellipsisVertical, add } from 'ionicons/icons';
 import ViewImmunizationSessionModal from '@/components/Modal/ViewImmunizationSessionModal.vue';
+import AddImmunizationSessionModal from '@/components/Modal/AddImmunizationSessionModal.vue';
 import { SessionScheduleService } from '@/services/session_schedule_service';
 import { Assignee, SessionSchedule } from '@/types';
 import { createModal } from '@/utils/Alerts';
@@ -358,7 +359,7 @@ const buttonSize = computed((): "default" | "small" | "large" | undefined => {
 });
 
 const openCreateModal = () => {
-    createModal(ViewImmunizationSessionModal, { class: 'otherVitalsModal largeModal' });
+    createModal(AddImmunizationSessionModal, { class: 'otherVitalsModal largeModal' });
 }
 </script>
 

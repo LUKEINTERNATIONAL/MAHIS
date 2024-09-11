@@ -6,7 +6,7 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <ion-header style="display: flex; justify-content: space-between">
-            <ion-title class="modalTitle">Stock Management</ion-title>
+            <ion-title class="modalTitle">Inventory Management </ion-title>
             <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="iconsContent.cancel"></ion-icon>
         </ion-header>
         <ion-content style="--background: #fff">
@@ -231,6 +231,7 @@ export default defineComponent({
         async onClickHandler(page: any) {
             await this.buildTableData(page);
         },
+
         formatDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
@@ -259,10 +260,9 @@ export default defineComponent({
                 this.reportData = await stockService.getItems({
                     start_date: "2000-01-01",
                     end_date: this.endDate,
-                    _drug_name: this.data.drug_legacy_name,
+                    drug_name: this.data.drug_legacy_name,
                     page: page,
                     page_size: 4,
-                    display_details: "true",
                 });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
