@@ -154,7 +154,7 @@
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Vaccines</h3>
                                                 <p>
-                                                    {{ schedule.assignees?.map((vaccine: any) => vaccine.name).join(',')}}
+                                                    {{ schedule.vaccines?.map((vaccine: any) => vaccine.name).join(',')}}
                                                 </p>
                                             </ion-label>
                                         </ion-item>
