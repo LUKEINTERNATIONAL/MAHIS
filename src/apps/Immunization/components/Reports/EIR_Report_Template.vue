@@ -6,7 +6,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-fab slot="fixed" horizontal="end" vertical="top" @click="exXport">
+        <ion-fab slot="fixed" horizontal="end" vertical="top" @click="exportReportToCSV">
           <ion-fab-button>
             <ion-icon :icon="downloadOutline"></ion-icon>
           </ion-fab-button>
@@ -118,7 +118,7 @@ import { defineComponent } from 'vue';
 import { IonContent , IonPage, IonRow, IonCol, IonFab, IonFabButton, } from '@ionic/vue';
 import NavigationMenu from './NavigationMenu.vue';
 import { mapState } from "pinia";
-import { getVaccinesAdministered, getImmunizationDrugs } from "@/apps/Immunization/services/vaccines_service";
+import { getVaccinesAdministered, getImmunizationDrugs, exportReportToCSV } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { add, fileTray, downloadOutline } from 'ionicons/icons';
 
@@ -132,6 +132,7 @@ export default defineComponent({
         tableData: [] as any,
         fileTray,
         downloadOutline,
+        exportReportToCSV,
       };
     },
     watch: {
@@ -188,34 +189,11 @@ export default defineComponent({
           items.push(row_item)
         })
         this.tableData = items
+        const store = EIRreportsStore()
+        store.setImmunizationMonthlyRepoartData(this.tableData)
       },
-      async exXport() {
-        const navigator_ = navigator as any
-        console.log(this.tableData)
-        let {CSVString} =  this.generateCSVStringForImmunizationMonthly()
-
-        const csvData = new Blob([CSVString], { type: "text/csv;charset=utf-8;" });
-        const reportTitle = `qaXport`;
-        if (navigator_.msSaveBlob) {
-          navigator_.msSaveBlob(csvData, 'exportFilename');
-        } else {
-          //In FF link must be added to DOM to be clicked
-          const link = document.createElement("a");
-          link.href = window.URL.createObjectURL(csvData);
-          link.setAttribute("download", `${reportTitle}.csv`);
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-      },
-      generateCSVStringForImmunizationMonthly() {
-        let CSVString = ` ,Static,,Outreach\n`
-        CSVString += ` ,<1y, >1y,<1y, >1y\n`
-        for(const Immunization_record of this.tableData) {
-          const row = `${Immunization_record.label}, ${Immunization_record.fixed.lessThan1y}, ${Immunization_record.fixed.moreThan1y}, ${Immunization_record.outreach.lessThan1y}, ${Immunization_record.outreach.moreThan1y}\n`
-          CSVString+=row
-        }
-        return {CSVString}
+      generateCSVStringForAEFIMonthly() {
+        console.log()
       }
     },
   });

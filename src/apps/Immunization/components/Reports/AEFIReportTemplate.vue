@@ -137,6 +137,9 @@ export default defineComponent({
           }
         });
       });
+
+      const store = EIRreportsStore()
+      store.setAEFIReportData({'vaccines': this.vaccines, 'categories': this.categories})
     } catch (error) {
       console.error('Error in initAefiReport:', error);
     }
