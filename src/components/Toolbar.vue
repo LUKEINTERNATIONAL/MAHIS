@@ -3,14 +3,14 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title style="cursor: pointer; line-height: 20px;" @click="nav('/home')">
+                <ion-title style="cursor: pointer; padding-left: 0; line-height: 20px;" @click="nav('/home')">
                     <b>MaHIS</b><small> ({{ programs.program.applicationName }})</small>
                 </ion-title>
-                <ion-title style="cursor: pointer; line-height: 20px;" @click="nav('/home')">
-                    <small class="facility-name">
+                <ion-title style="cursor: pointer; padding-left: 0; line-height: 20px;" @click="nav('/home')">
+                    <small class="facility-name" style="font-size: 68%;">
                         {{ userFacilityName }}
                     </small>
-                    <small>
+                    <small style="font-size: 68%;">
                         | {{ sessionDate }}
                     </small>
                 </ion-title>
@@ -236,7 +236,7 @@ export default defineComponent({
     color: #ffffff;
     font-size: 14px;
 }
-@media (max-width: 500px) {
+@media (max-width: 200px) {
     .facility-name {
         display: inline-block;
         max-width: 150px;
