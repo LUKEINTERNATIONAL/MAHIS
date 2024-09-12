@@ -134,9 +134,20 @@ export function checkDrugName(drug: any) {
 }
 
 function isNameInList(name: string): boolean {
-    const nameList = ['Vit A', 'Albendazole (400mg tablet)', 'Albendazole (200mg tablet)'];
-    return nameList.some(listedName => listedName.toLowerCase().includes(name.toLowerCase()));
+    const nameList = ['Vit','Albendazole'];
+    const nameParts = name.toLowerCase().split(/[\s,()]+/); // Split the input name into parts
+    
+    return nameList.some(listedName => {
+        const listedNameParts = listedName.toLowerCase().split(/[\s,()]+/); // Split each listed name into parts
+        
+        // Check if any part of the input name matches any part of the listed name
+        return listedNameParts.some(listedPart => 
+            nameParts.some(namePart => namePart.includes(listedPart) || listedPart.includes(namePart))
+        );
+    });
 }
+
+
 
 export async function getMonthsList(): Promise<any> {
     const data = await Service.getJson("immunization/months_picker");
