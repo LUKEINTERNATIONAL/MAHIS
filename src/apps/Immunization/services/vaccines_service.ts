@@ -9,6 +9,7 @@ import { createModal } from "@/utils/Alerts";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 import { ObservationService } from "@/services/observation_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { useUserStore } from "@/stores/userStore";
 
 export async function getVaccinesSchedule() {
     const patient = new PatientService();
@@ -210,14 +211,20 @@ function escapeCSV(str: string): string {
 export function exportReportToCSV(): void {
     try {
         const store = EIRreportsStore()
+        const user_store = useUserStore()
         const navigator_ = navigator as any
 
         let CSVString = generateCSVStringForImmunizationMonthly(store.$state.immunizationMonthlyRepoartData as any);
         CSVString += '\n';
         CSVString += generateCSVStringForAEFIMonthly(store.$state.AEFIReportData as any);
+        CSVString += '\n';
+        CSVString += `
+        Date Created: ${new Date().toISOString().split('T')[0]}
+        Report Period: ${store.$state.navigationPayload.subTxt}
+        Site: ${user_store.$state.userFacilityName}`
 
         const csvData = new Blob([CSVString], { type: "text/csv;charset=utf-8;" });
-        const reportTitle = `report_export_${new Date().toISOString().split('T')[0]}`;
+        const reportTitle = `${user_store.$state.userFacilityName}_${store.$state.navigationPayload.subTxt}_${store.$state.navigationPayload.title}`;
 
         if (navigator_.msSaveBlob) {
             navigator_.msSaveBlob(csvData, `${reportTitle}.csv`);
@@ -232,7 +239,6 @@ export function exportReportToCSV(): void {
         }
     } catch (error) {
         console.error("Error exporting CSV:", error);
-        // Here you might want to show an error message to the user
     }
 }
 
