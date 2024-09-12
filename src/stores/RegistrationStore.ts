@@ -50,25 +50,6 @@ const initialPersonalInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Last name*",
-                            icon: icons.fullName,
-                            value: "",
-                            name: "lastname",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
                             inputHeader: "Middle name",
                             icon: icons.fullName,
                             value: "",
@@ -88,10 +69,30 @@ const initialPersonalInformation = [
                 {
                     colData: [
                         {
+                            inputHeader: "Last name*",
+                            icon: icons.fullName,
+                            value: "",
+                            name: "lastname",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
                             inputHeader: "Phone number",
                             icon: icons.phone,
                             value: "",
                             name: "phoneNumber",
+                            isPhoneInput: true,
                             eventType: "input",
                             alertsErrorMassage: "",
                             required: true,
@@ -379,7 +380,7 @@ const initialHomeLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Home district",
+                            inputHeader: "Home district *",
                             popOver: true,
                             icon: icons.search,
                             value: "",
@@ -392,6 +393,7 @@ const initialHomeLocation = [
                             multiSelectData: [],
                             id: "",
                             idName: "district_id",
+                            validationFunctionName: "required",
                         },
                     ],
                 },
@@ -404,7 +406,7 @@ const initialHomeLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Home traditional authority",
+                            inputHeader: "Home traditional authority *",
                             icon: icons.search,
                             value: "",
                             name: "home_traditional_authority",
@@ -417,6 +419,7 @@ const initialHomeLocation = [
                             multiSelectData: [],
                             idName: "district_id",
                             displayNone: true,
+                            validationFunctionName: "required",
                         },
                     ],
                     btns: [
@@ -438,7 +441,7 @@ const initialHomeLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Home village",
+                            inputHeader: "Home village *",
                             icon: icons.search,
                             value: "",
                             name: "home_village",
@@ -451,6 +454,7 @@ const initialHomeLocation = [
                             multiSelectData: [],
                             idName: "traditional_authority_id",
                             displayNone: true,
+                            validationFunctionName: "required",
                         },
                     ],
                     btns: [
@@ -618,9 +622,7 @@ const initialCurrentLocation = [
                                     name: "Other",
                                 },
                             ],
-
                         },
-
                     ],
                 },
             ],
@@ -635,7 +637,7 @@ const initialCurrentLocation = [
                     colData: [
                         {
                             class: "",
-                            displayNone:true,
+                            displayNone: true,
                             inputHeader: "Specify Landmark*",
                             value: "",
                             icon: icons.editPen,
@@ -803,6 +805,7 @@ const initialGuardianInformation = [
                         {
                             inputHeader: "Phone number",
                             icon: icons.phone,
+                            isPhoneInput: true,
                             value: "",
                             name: "guardianPhoneNumber",
                             eventType: "input",

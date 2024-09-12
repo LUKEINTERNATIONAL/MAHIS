@@ -7,6 +7,7 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import HisDate from "@/utils/Date";
 import { createModal } from "@/utils/Alerts";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
+import { ObservationService } from "@/services/observation_service";
 
 export async function getVaccinesSchedule() {
     const patient = new PatientService();
@@ -21,6 +22,7 @@ export async function saveVaccineAdministeredDrugs() {
     const userId: any = Service.getUserID();
     const programId: any = Service.getProgramID();
     const patient = new PatientService();
+    const drugs = [] as any;
     if (!isEmpty(store.getAdministeredVaccines())) {
         try {
             const drugOrders = mapToOrders();
@@ -28,6 +30,7 @@ export async function saveVaccineAdministeredDrugs() {
             const encounter = await prescriptionService.createEncounter();
             if (!encounter) return toastWarning("Unable to create immunization encounter");
             const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId);
+            await createObForEachDrugAdminstred(encounter)
             if (!drugOrder) return toastWarning("Unable register vaccine!");
             toastSuccess("Vaccine registred successfully");
             store.setVaccineReload(!store.getVaccineReload());
@@ -56,10 +59,21 @@ function mapToOrders(): any[] {
             instructions: "",
             dose: 1,
             frequency: "Unknown",
-            batch_number: drug.batch_number,
+            batch_number:drug.batch_number || 'Unknown',
             prn: 0,
         };
     });
+}
+
+async function createObForEachDrugAdminstred(encounter: any) {
+    const store = useAdministerVaccineStore();
+    store.getAdministeredVaccines().map(async (drug: any) => {
+        await ObservationService.saveObs(encounter.encounter_id, {
+            concept_id: 2876,
+            value_text: drug.drug_.drug.drug_name,
+            obs_datetime: encounter.encounter_datetime,
+        });
+    })
 }
 
 function calculateExpireDate(startDate: string | Date, duration: any) {
@@ -101,3 +115,48 @@ function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
     return antigens.every((antigen: any) => antigen.status === 'administered');
 }
 
+export async function voidVaccine(orderId: number, reason: string) {
+    return Service.void(`orders/${orderId}?reason=${JSON.stringify(reason)}`, { reason });
+}
+
+export async function voidVaccineEncounter(encounterId: number, reason: string) {
+    return Service.void(`/encounters/${encounterId}`, { reason });
+} 
+
+export function checkDrugName(drug: any) {
+    if (isNameInList(drug.drug_name) == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isNameInList(name: string): boolean {
+    const nameList = ['Vit A', 'Albendazole (400mg tablet)', 'Albendazole (200mg tablet)'];
+    return nameList.some(listedName => listedName.toLowerCase().includes(name.toLowerCase()));
+}
+
+export async function getMonthsList(): Promise<any> {
+    const data = await Service.getJson("immunization/months_picker");
+    return data
+}
+
+export async function getVaccinesAdministered(start_date: string, end_date: string): Promise<any> {
+    const data = await Service.getJson(`immunization/vaccines_administered`, {start_date: start_date, end_date: end_date})
+    return data
+}
+
+export async function getAefiReport(start_date: string, end_date: string): Promise<any> {
+    const data = await Service.getJson(`immunization/aefi_report`, {start_date: start_date, end_date: end_date})
+    return data
+}
+
+export async function getunderfiveImmunizationsDrugs() {
+    const data = await Service.getJson(`immunization/under_five_immunizations_drugs`)
+    return data
+}
+
+export async function getImmunizationDrugs(): Promise<any> {
+    const data = await Service.getJson(`/immunization/drugs`)
+    return data
+}

@@ -39,13 +39,13 @@
             </div>
         </div>
 
-        <ion-row v-if="show_select_batach">
+        <ion-row v-show="show_select_batach">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                 >Batch numbers<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
 
-        <div v-if="show_select_batach">
+        <div v-show="show_select_batach">
             <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
@@ -61,7 +61,7 @@
                     {{ batch_number_error_message }}
                 </ion-label>
             </div> -->
-            <lotNumberList :action="childAction" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
+            <lotNumberList :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
         </div>
 
         <customDatePicker v-if="showPD" />
@@ -83,18 +83,15 @@
             </div>
 
             <div class="saveBtn" v-if="!showDateBtns">
-                <ion-row>
-                    <ion-col>
+                <ion-row class="ion-justify-content-between">
+                    <ion-col size="auto">
                         <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
-                            Cancel
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
+                        Cancel
                         </ion-button>
                     </ion-col>
-
-                    <ion-col>
+                    <ion-col size="auto">
                         <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px">
-                            save
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
+                        Save
                         </ion-button>
                     </ion-col>
                 </ion-row>
@@ -143,6 +140,7 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import lotNumberList from "./lotNumberList.vue"
 import alert from "@/apps/Immunization/components/Modals/alert.vue"
 import { StockService } from '@/services/stock_service'
+import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
 
 export default defineComponent({
     components: {
@@ -199,7 +197,7 @@ export default defineComponent({
                 {
                     concept_id: 11592,
                     drug_id: 1301,
-                    drug_name: "IPV",
+                    drug_name: "Albendazole (200mg tablet)",
                     status: "administered",
                     date_administered: "31/May/2024 15:33:44",
                     vaccine_batch_number: null,
@@ -222,6 +220,7 @@ export default defineComponent({
             showDateBtns: true as boolean,
             selected_date_: '',
             show_select_batach: false,
+            skip_validation: false,
         };
     },
     computed: {
@@ -310,7 +309,14 @@ export default defineComponent({
             store.setLotNumberData(data_)
 
             if(data_.length == 0) {
-                createModal(alert, { class: "otherVitalsModal" })
+                if(checkDrugName(data) == false) {
+                    createModal(alert, { class: "otherVitalsModal" });
+                }
+
+                if (checkDrugName(data) == true) {
+                    this.show_select_batach = false;
+                    this.skip_validation = true;
+                } 
             }
 
             if (data_.length > 0) {
@@ -338,6 +344,7 @@ export default defineComponent({
                 batch_number: selectedOption.lotNumber,
                 date_administered: this.selected_date_,
                 drug_id: this.currentDrugOb.drug_id,
+                drug_: this.currentDrugOb
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
@@ -351,7 +358,9 @@ export default defineComponent({
                 this.triggerChildAction()
 
                 if (this.show_select_batach == false) {
-                    toastDanger("Please Update Stock for Selected Vaccine")
+                    if (this.skip_validation == false) {
+                        toastDanger("Please Update Stock for Selected Vaccine")
+                    } 
                 }
             }
             // this.validateBatchNumber();
@@ -424,11 +433,9 @@ h5 {
     display: flex;
     justify-content: space-between;
     margin: 20px;
-    width: 330px;
     align-items: center;
 }
 .btnContent {
-    display: flex;
     justify-content: center;
     line-height: 60px;
 }

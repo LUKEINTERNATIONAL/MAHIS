@@ -1,7 +1,31 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import HisDate from "@/utils/Date";
 import _ from "lodash";
 const initialStock = [
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Product Name *",
+                            icon: icons.search,
+                            value: "",
+                            name: "product name",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            selectedID: "",
+                            validationFunctionName: "required",
+                            isSingleSelect: true,
+                            trackBy: "drug_id",
+                            multiSelectData: [],
+                        },
+                    ],
+                },
+            ],
+        },
+    },
     {
         selectedData: {},
         isFinishBtn: false,
@@ -30,34 +54,9 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Product Name *",
-                            icon: icons.search,
+                            inputHeader: "Manufacturer*",
                             value: "",
-                            name: "product name",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            selectedID: "",
-                            validationFunctionName: "required",
-                            isSingleSelect: true,
-                            trackBy: "concept_id",
-                            multiSelectData: [],
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        selectedData: {},
-        isFinishBtn: false,
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Quantity*",
-                            value: "",
-                            name: "stock in",
+                            name: "manufacture",
                             eventType: "input",
                             alertsErrorMassage: "",
                             valueType: "text",
@@ -74,7 +73,44 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Delivery date",
+                            inputHeader: "Doses Received*",
+                            value: "",
+                            name: "quantity",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            validationFunctionName: "isNumber",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Doses Wasted",
+                            value: "",
+                            name: "doses_wasted",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            valueType: "text",
+                            validationFunctionName: "isNumber",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Date Received*",
                             icon: icons.calenderPrimary,
                             value: "",
                             name: "delivery_date",
@@ -82,13 +118,13 @@ const initialStock = [
                             alertsErrorMassage: "",
                             required: true,
                             isDatePopover: true,
+                            validationFunctionName: "required",
                         },
                     ],
                 },
             ],
         },
     },
-
     {
         data: {
             rowData: [
@@ -103,7 +139,7 @@ const initialStock = [
                             alertsErrorMassage: "",
                             required: true,
                             isDatePopover: true,
-                            minDate: "",
+                            minDate: HisDate.currentDate(),
                             maxDate: "",
                             validationFunctionName: "required",
                         },

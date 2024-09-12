@@ -115,7 +115,7 @@
                 <div style="width: 100%; display: flex; justify-content: space-between; align-content: center">
                     <div class="vaccinesTitleText">Administer Vaccines</div>
                     <div class="vaccinesTitleDate">
-                        Todays Date: <b>{{ todays_date }}</b>
+                        <span style="font-size: 13px">Next Appt. Date: </span><b>{{ nextAppointMentDate }}</b>
                     </div>
                 </div>
             </div>
@@ -316,7 +316,7 @@ export default defineComponent({
             "overDueVaccinesCount",
             "lastVaccinesGiven",
             "lastVaccineGievenDate",
-            "vaccineReload",
+            "nextAppointMentDate",
         ]),
     },
     created() {
@@ -327,6 +327,7 @@ export default defineComponent({
         this.loadCurrentMilestone();
         this.checkAge();
         await this.checkProtectedStatus();
+        await this.openFollowModal();
     },
     watch: {
         vitals: {
@@ -424,7 +425,7 @@ export default defineComponent({
             if (this.demographics?.patient_id) {
                 this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
                 const dataToPass = { protectedStatus: this.protectedStatus };
-                if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "otherVitalsModal" }, true, dataToPass);
+                if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
             }
         },
         openAdministerVaccineModal() {
@@ -860,7 +861,7 @@ export default defineComponent({
     font-style: normal;
     margin-top: -7px;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     color: #00190e;
 }
 .vaccinesTitleDate {

@@ -1,39 +1,17 @@
 <template>
     <div class="modal_wrapper">
-        <ion-row>
-            <ion-col size="3">
-                <div class="diplay_space_between bmi_blood">
-                    <div style="cursor: pointer" :class="activeHeight" @click="setHeight()">Height</div>
-                    <div style="cursor: pointer" :class="activeWeight" @click="setWeight()">Weight</div>
-                    <div style="cursor: pointer" :class="activeBMI" @click="setBMI()">BMI</div>
-                </div>
-            </ion-col>
-            <ion-col size-lg="2" size-xs="3" size-sm="2" offset-xl="7" offset-lg="7" offset-md="6.5" offset-sm="5.5" offset-xs="6">
-                <div class="diplay_space_between graphBtn">
-                    <ion-icon
-                        slot="end"
-                        style="font-size: x-large; cursor: pointer"
-                        :class="iconBg.graph"
-                        :icon="graphIcon"
-                        @click="toggleDisplay(true)"
-                    ></ion-icon>
-                    <ion-icon
-                        slot="end"
-                        style="font-size: x-large; cursor: pointer"
-                        :class="iconBg.list"
-                        :icon="listIcon"
-                        @click="toggleDisplay(false)"
-                    ></ion-icon>
-                </div>
-            </ion-col>
-        </ion-row>
-        <div>
-            <ApexChart width="100%" height="390px" type="area" :options="options" :series="series" v-if="displayGraph" />
-            <list :listData="list" v-else></list>
+        <ListHeightWeight
+            @click:height="setHeight()"
+            @click:weight="setWeight()"
+            @click:toggleDisplay="toggleDisplays()"
+            @click:void="openVoidPopover($event)"
+            :propsContent="propsContent"
+        />
+        <div v-if="displayGraph">
+            <ApexChart width="100%" height="390px" type="area" :options="options" :series="series" />
         </div>
     </div>
 </template>
-
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
@@ -47,8 +25,10 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import { iconGraph, iconList } from "@/utils/SvgDynamicColor";
+import ListHeightWeight from "@/views/Mixin/ListHeightWeight.vue";
 
 export default defineComponent({
+    mixins: [ListHeightWeight],
     name: "Menu",
     components: {
         IonContent,
@@ -60,6 +40,7 @@ export default defineComponent({
         IonToolbar,
         ApexChart,
         List,
+        ListHeightWeight,
     },
 
     computed: {
@@ -68,18 +49,18 @@ export default defineComponent({
     data() {
         return {
             valueNumericArray: [] as any,
+            propsContent: {
+                activeWeight: [] as any,
+                activeHeight: [] as any,
+                graphIcon: iconGraph(["#006401"]),
+                listIcon: iconList(["#636363"]),
+                displayGraph: true,
+                iconBg: {} as any,
+                weight: [] as any,
+                height: [] as any,
+                list: [] as any,
+            } as any,
             obsDatetime: [] as any,
-            graphIcon: iconGraph(["#006401"]),
-            listIcon: iconList(["#636363"]),
-            displayGraph: true,
-            weight: [] as any,
-            height: [] as any,
-            BMI: [] as any,
-            iconBg: {} as any,
-            activeWeight: [] as any,
-            activeHeight: [] as any,
-            activeBMI: [] as any,
-            list: [] as any,
             options: {
                 chart: {
                     id: "vuechart-example",
@@ -154,6 +135,11 @@ export default defineComponent({
             ],
         };
     },
+    async mounted() {
+        await this.updateData();
+        this.setWeight();
+        this.iconBg.graph = "iconBg";
+    },
     watch: {
         demographics: {
             async handler() {
@@ -161,65 +147,57 @@ export default defineComponent({
             },
             deep: true,
         },
+        vitalsWeightHeight: {
+            async handler() {
+                if (this.vitalsWeightHeight[0].validationStatus == "success") {
+                    await this.updateData();
+                }
+            },
+            deep: true,
+        },
+        list: {
+            async handler() {
+                this.propsContent.list = this.list;
+            },
+            deep: true,
+        },
     },
     setup() {
         return { checkmark, pulseOutline };
     },
-    async mounted() {
-        await this.updateData();
-        this.iconBg.graph = "iconBg";
-    },
     methods: {
-        async updateData() {
-            this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
-            this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
-            this.BMI = await ObservationService.getAll(this.demographics.patient_id, "BMI");
-            this.setHeight();
-        },
         dismiss() {
             modalController.dismiss();
         },
         handleIcon() {},
-        toggleDisplay(status: any) {
-            this.displayGraph = status;
-            if (this.displayGraph) {
-                this.graphIcon = iconGraph(["#006401"]);
-                this.listIcon = iconList(["#636363"]);
-                this.iconBg.graph = "iconBg";
-                this.iconBg.list = "";
-            } else {
-                this.graphIcon = iconGraph(["#636363"]);
-                this.listIcon = iconList(["#006401"]);
-                this.iconBg.graph = "";
-                this.iconBg.list = "iconBg";
-            }
+        toggleDisplays() {
+            this.toggleDisplay();
+            this.propsContent.displayGraph = this.displayGraph;
+            this.propsContent.graphIcon = this.graphIcon;
+            this.propsContent.listIcon = this.listIcon;
+            this.propsContent.iconBg.graph = this.iconBg.graph;
+            this.propsContent.iconBg.graph = this.iconBg.graph;
         },
-        setWeight() {
+        async setWeight() {
+            this.propsContent.list = this.list;
             if (this.weight) {
-                this.setData(this.weight, "weight");
+                await this.setData(this.weight, "weight");
             }
         },
-        setHeight() {
+        async setHeight() {
             if (this.height) {
-                this.setData(this.height, "height");
+                await this.setData(this.height, "height");
             }
         },
-        setBMI() {
-            if (this.BMI) {
-                this.setData(this.BMI, "BMI");
-            }
+        setActive(active: any) {
+            this.setActiveClass(active);
+            this.propsContent.activeWeight = this.activeWeight;
+            this.propsContent.activeHeight = this.activeHeight;
         },
-        setActivClass(active: any) {
-            this.activeHeight = "";
-            this.activeBMI = "";
-            this.activeWeight = "";
-            if (active == "height") this.activeHeight = "_active";
-            else if (active == "weight") this.activeWeight = "_active";
-            else if (active == "BMI") this.activeBMI = "_active";
-        },
-        setData(data: any, active: any) {
-            this.setListData(data);
-            this.setActivClass(active);
+        async setData(data: any, active: any) {
+            this.setActive(active);
+            this.propsContent.weight = this.weight;
+            this.propsContent.height = this.height;
             this.valueNumericArray = data.map((item: any) => item.value_numeric);
             this.obsDatetime = data.map((item: any) => HisDate.toStandardHisFormat(item.obs_datetime));
             this.series[0].data = this.valueNumericArray;
@@ -233,24 +211,6 @@ export default defineComponent({
                 },
             };
         },
-        setListData(data: any) {
-            this.list = [];
-            this.list.push({
-                actionBtn: false,
-                class: "col_background",
-                header: true,
-                minHeight: "--min-height: 25px;",
-                display: ["Date", "Measure"],
-            });
-            data.forEach((item: any) => {
-                this.list.push({
-                    actionBtn: false,
-                    minHeight: "--min-height: 25px;",
-                    class: "col_background",
-                    display: [HisDate.toStandardHisFormat(item.obs_datetime), item.value_numeric],
-                });
-            });
-        },
     },
 });
 </script>
@@ -262,7 +222,7 @@ export default defineComponent({
     border: 1px solid #ddeedd;
     border-radius: 4px;
     padding: 4px;
-    min-width: 160px;
+    min-width: 150px;
 }
 .graphBtn {
     font-size: 14px;

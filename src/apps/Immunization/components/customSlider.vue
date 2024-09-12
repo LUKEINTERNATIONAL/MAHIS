@@ -58,6 +58,8 @@ import { getVaccinesSchedule, checkIfLastVaccineAdministered } from "@/apps/Immu
 import { icons } from "@/utils/svg";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 import { concat } from "lodash";
+import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service";
+import HisDate from "@/utils/Date";
 
 export default defineComponent({
     name: "xxxComponent",
@@ -109,6 +111,7 @@ export default defineComponent({
             createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
         },
         async loadVaccineSchedule() {
+            this.setAppointmentDate()
             const data__ = await getVaccinesSchedule();
             const vaccineScheduleStore = useAdministerVaccineStore();
 
@@ -257,6 +260,13 @@ export default defineComponent({
         },
         openNextVaccineAppoinment() {
             createModal(nextAppointMent, { class: "otherVitalsModal" }, false);
+        },
+        async setAppointmentDate() {
+            const store = useAdministerVaccineStore();
+            const appointment_service = new Appointment();
+            const data = await appointment_service.getNextAppointment();
+            const appointmentDate = data.next_appointment_date ? data.next_appointment_date : ''
+            store.setNextAppointMentDate(appointmentDate)
         },
     },
 });

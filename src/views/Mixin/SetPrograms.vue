@@ -73,7 +73,7 @@ export default defineComponent({
     },
     methods: {
         async setProgram(program: any) {
-            sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
+            localStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
             await this.setProgramInfo();
             if (this.demographics.patient_id) await this.nav(program.url);
         },
@@ -82,7 +82,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         async setProgramInfo() {
-            let program: any = sessionStorage.getItem("app");
+            let program: any = localStorage.getItem("app");
             program = JSON.parse(program);
             this.activeProgramID = program.programID;
             this.programBtn = await UserService.userProgramData(this.demographics.patient_id);

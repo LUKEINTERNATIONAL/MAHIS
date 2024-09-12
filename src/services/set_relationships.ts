@@ -15,7 +15,7 @@ export async function getOfflineRelationship() {
         .collection("relationship")
         .get()
         .then(async (locationData: any) => {
-            return locationData[0].relationship;
+            return locationData[0]?.relationship;
         });
 }
 export async function getRelationships() {

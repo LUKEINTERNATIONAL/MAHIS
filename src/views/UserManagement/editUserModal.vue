@@ -3,7 +3,7 @@
         <ion-header>
             <ion-toolbar>
                 <ion-title>
-                    <b>User Proile</b>
+                    <b>User Profile</b>
                 </ion-title>
                 <ion-buttons slot="end">
                     <ion-button @click="$emit('closePopoover', false)">Close</ion-button>

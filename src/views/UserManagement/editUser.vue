@@ -1,6 +1,4 @@
 <template>
-    
-
     <ion-row>
         <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
@@ -56,7 +54,18 @@
                     </ion-label>
                 </div>
             </ion-col>
-            <ion-col></ion-col>
+
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Phone<span style="color: #b42318">*</span></ion-label
+            >
+                <BasicInputField
+                    :placeholder="'phone number'"
+                    :icon="phonePortraitOutline"
+                    :inputValue="''"
+                    @update:inputValue=""
+                />
+            </ion-col>
     </ion-row>
 
 
@@ -91,9 +100,39 @@
         </ion-row>
 
         <ion-row v-if="isSuperUser">
+            <ion-col size="6" v-if="false">
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                    >District(s)<span style="color: #b42318">*</span></ion-label
+                >
+                <VueMultiselect
+                    v-model="selected_Districts"
+                    @update:model-value="selectedDistrict($event)"
+                    :multiple="true"
+                    :taggable="false"
+                    :hide-selected="true"
+                    :close-on-select="true"
+                    openDirection="bottom"
+                    tag-placeholder="Find and select District(s)"
+                    placeholder="Find and select District(s)"
+                    selectLabel=""
+                    label="name"
+                    :searchable="true"
+                    @search-change=""
+                    track-by="district_id"
+                    :options="districtList"
+                    :disabled="HSA_found_for_disabling_button"
+                />
+
+                <div>
+                    <ion-label v-if="district_show_error" class="error-label">
+                        {{ district_error_message }}
+                    </ion-label>
+                </div>
+            </ion-col>
+
             <ion-col size="6">
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Find and select facility name<span style="color: #b42318">*</span></ion-label
+                    >Facility name<span style="color: #b42318">*</span></ion-label
                 >
                 <VueMultiselect
                     v-model="selected_location"
@@ -121,10 +160,71 @@
             </ion-col>
         </ion-row>
 
+        <ion-row>
+        <ion-col size="6">
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >TA(s)<span style="color: #b42318">*</span></ion-label
+            >
+            <VueMultiselect
+                v-model="selected_TAz"
+                @update:model-value="selectedTA($event)"
+                :multiple="true"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select Traditional Authority (TA)"
+                placeholder="Find and select Traditional Authority (TA)"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change=""
+                track-by="assigned_id"
+                :options="TAList"
+                :disabled="HSA_found_for_disabling_button"
+            />
+
+            <div>
+                <ion-label v-if="TAz_show_error" class="error-label">
+                    {{ TAz_error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+        <ion-col size="6">
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Village(s)<span style="color: #b42318">*</span></ion-label
+            >
+            <VueMultiselect
+                v-model="selected_villages"
+                @update:model-value="selectedVillage($event)"
+                :multiple="true"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select village(s)"
+                placeholder="Find and select village(s)"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change=""
+                track-by="assigned_id"
+                :options="villageList"
+                :disabled="HSA_found_for_disabling_button"
+            />
+
+            <div>
+                <ion-label v-if="village_show_error" class="error-label">
+                    {{ village_error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+    </ion-row>
+
         <ion-row v-if="isSuperUser">
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Find and select facility Role(s)<span style="color: #b42318">*</span></ion-label
+                    >Role(s)<span style="color: #b42318">*</span></ion-label
                 >
                 <ListPicker
                     :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -145,7 +245,7 @@
         <ion-row v-if="isSuperUser">
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Find and select facility Program(s)<span style="color: #b42318">*</span></ion-label
+                    >Program(s)<span style="color: #b42318">*</span></ion-label
                 >
                 <ListPicker
                     :multiSelection="list_picker_prperties[1].multi_Selection"
@@ -253,7 +353,8 @@ import {
     keyOutline,
     transgenderOutline,
     personOutline,
-    peopleOutline
+    peopleOutline,
+    phonePortraitOutline,
 } from "ionicons/icons";
 import { ref, onMounted, watch } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
@@ -283,6 +384,23 @@ const passwordErrorMsgs = [
     'Password does not match'
 ]
 const isSuperUser = ref(false);
+const districtList = ref([] as any);
+const HSA_found_for_disabling_button = ref(true)
+const selected_Districts = ref();
+const district_show_error = ref(false)
+const district_error_message = ref('Select district(s)')
+const village_error_message = ref('Select village(s)')
+const selected_TAz = ref()
+const villageList = ref([] as any)
+const village_show_error = ref(false)
+const TAz_show_error = ref(false)
+const TAz_error_message = ref('Select TA(s)')
+const selected_villages = ref()
+const TAList = ref([] as any)
+const selectedDistrictIds : any[] = []
+const selectedTAIds: any[] = []
+const disableVillageSelection = ref(true)
+const selectedVillageIds: any[] = []
 
 const props = defineProps<{
     toggle: true,
@@ -294,7 +412,8 @@ onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
     await getUserData()
-    getCurrentUser() 
+    getCurrentUser()
+    districtList.value = await getdistrictList() 
 })
 
 watch(
@@ -810,6 +929,7 @@ const list_picker_prperties = [
 
 function listUpdated1(data: any) {
     user_roles.value = data
+    checkIfSelectedIsHSA(user_roles.value)
 }
 
 function listUpdated2(data: any) {
@@ -852,6 +972,107 @@ const emit = defineEmits<{
 
 function saveEvent(boolean_value: any) {
     emit("save", boolean_value)
+}
+
+function selectedDistrict(selectedDistrict: any) {
+    selectedDistrictIds.length = 0
+    selectedDistrict.forEach((district: any) => {
+        selectedDistrictIds.push(district.district_id)
+    })
+
+    selectedDistrict.forEach((district: any ) => {
+        fetchTraditionalAuthorities(district.district_id, '')
+    })
+}
+
+async function fetchTraditionalAuthorities(district_id: any,name: string) {  
+    TAList.value = []           
+    var districtVillages = await LocationService.getTraditionalAuthorities(district_id,"")
+    const arrayWithIds = districtVillages.map((item: any, index: any) => ({
+        ...item,
+        assigned_id: index
+    }));
+    TAList.value = TAList.value.concat(arrayWithIds)
+    // if (villageList.value.length > 0) {
+    //     disableVillageSelection.value = false
+    // }
+}
+
+async function getdistrictList() {
+    const districtList = [];
+    for (let i of [1, 2, 3]) {
+        const districts: any = await LocationService.getDistricts(i);
+        districtList.push(...districts);
+    }
+
+    //__________________________not ideal
+
+    districtList.forEach((district: any) => {
+        selectedDistrictIds.push(district.district_id)
+    })
+
+    districtList.forEach((district: any ) => {
+        fetchTraditionalAuthorities(district.district_id, '')
+    })
+    //__________________________
+
+    return districtList
+}
+
+function findVillages(district_id: any) {
+    disableVillageSelection.value = true;
+    selected_villages.value = []
+    
+    fetchVillages(district_id, '')
+}
+
+async function fetchVillages(district_id: any,name: string) {   
+    villageList.value = []         
+    var districtVillages = await LocationService.getVillages(district_id,"")
+    const arrayWithIds = districtVillages.map((item: any, index: any) => ({
+        ...item,
+        assigned_id: index
+    }));
+    villageList.value = villageList.value.concat(arrayWithIds)
+    if (villageList.value.length > 0) {
+        disableVillageSelection.value = false
+    }
+}
+
+function selectedTA(selectedTAList: any) {
+    selectedTAIds.length = 0
+    selectedTAList.forEach((village: any ) => {
+        selectedTAIds.push(village.traditional_authority_id)
+    })
+   
+    selectedTAList.forEach((TA: any ) => {
+            findVillages(TA.district_id)
+        }
+    ) 
+}
+
+function selectedVillage(VillagesList: any) {
+    selectedVillageIds.length = 0
+    VillagesList.forEach((village: any ) => {
+        selectedVillageIds.push(village.village_id)
+    })
+}
+
+function checkIfSelectedIsHSA(role_list: any) {
+    village_show_error.value = false
+    let is_found = false
+    role_list.forEach((item: any) => {
+        if (item?.selected == true && item?.name == 'HSA') {
+            HSA_found_for_disabling_button.value = false
+            is_found = true
+        }
+    })
+
+    if (is_found == false) {
+        village_show_error.value = false
+        HSA_found_for_disabling_button.value = true
+    }
+    return is_found
 }
 
 </script>

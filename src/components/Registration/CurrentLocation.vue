@@ -142,7 +142,7 @@ export default defineComponent({
             this.validationRules(event);
         },
         async handleInputData(event: any) {
-            sessionStorage.setItem("activeLocation", "current");
+            localStorage.setItem("activeLocation", "current");
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village", "Other (specify)"];
             await this.validations(this.currentLocation, currentFields);
 
@@ -183,7 +183,7 @@ export default defineComponent({
             }
         },
         async setVillage(obj: any) {
-            const targetData = this.getVillages(obj.traditional_authority_id);
+            const targetData = await this.getVillages(obj.traditional_authority_id);
             if (targetData.length > 0) {
                 modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
                 modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);

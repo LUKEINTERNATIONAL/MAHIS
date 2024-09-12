@@ -1,22 +1,24 @@
 <template>
     <ion-row>
-        <ion-list style="width: 100%;">
-            <ion-radio-group :compareWith="compareWith" @ionChange="handleChange($event)" value="start">
-                <ion-item v-for="lotnumber in lotNumbers" :key="lotnumber.id">
-                    <ion-radio :value="lotnumber">{{ lotnumber.lotNumber }}</ion-radio>
-                </ion-item>
-            </ion-radio-group>
-        </ion-list>
+        <ion-card class="shadowless-card" style="width: 100%; padding: 0;">
+            <ion-list>
+                <ion-radio-group :compareWith="compareWith" @ionChange="handleChange($event)" value="start">
+                    <ion-item v-for="lotnumber in lotNumbers" :key="lotnumber.id">
+                        <ion-radio :value="lotnumber">{{ lotnumber.lotNumber }}</ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+            </ion-list>
+        </ion-card>
     </ion-row>
 </template>
 
-  
 <script lang="ts">
 import { IonRadio, IonRadioGroup, IonItem, IonList } from '@ionic/vue'
 import { defineComponent, PropType } from 'vue'
 import { toastWarning } from "@/utils/Alerts"
 import { StockService } from '@/services/stock_service'
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
 import _ from 'lodash'
 
 export default defineComponent({
@@ -26,10 +28,22 @@ export default defineComponent({
             type: Function as PropType<() => void>,
             required: true
         },
+        retro: {
+            type: Boolean,
+            required: true
+        }
     },
     async mounted() {
         this.loadCurrentSelectedDrug()
     },
+    watch: {
+    retro: {
+      handler() {
+        this.checkToShow()
+      },
+      deep: true, // `deep` is not needed for primitive types like Boolean
+    },
+  },
     data() {
         return {
             lotNumbers: [] as any,
@@ -47,8 +61,12 @@ export default defineComponent({
             if (_.has(this.selectedOption, 'lotNumber')) {
                 return true;
             } else {
-                toastWarning("Select a batch number!");
-                return false;
+                if (this.checkDrugNameInt() == true) {
+                    return true;
+                } else {
+                    toastWarning("Select a batch number!");
+                    return false;
+                }
             }
         },
         performAction() {
@@ -77,10 +95,47 @@ export default defineComponent({
                     }
                     this.lotNumbers.push(listItem)
                 })
+                this.checkToShow()
             } catch (error) {
                 
             }
-        }
+        },
+        addUnkownLotNumberOption() {
+            const store = useAdministerVaccineStore();
+            const currentDrug = store.getCurrentSelectedDrug();
+            console.log(currentDrug.drug)
+            this.lotNumbers.push({
+                id: currentDrug.drug.drug_id,
+                lotNumber: 'Unknown',
+            })
+        },
+        checkToShow() {
+            if (this.$props.retro == true) {
+                    this.addUnkownLotNumberOption()
+            }
+            this.checkDrugNameInt()
+        },
+        checkDrugNameInt() {
+            const store = useAdministerVaccineStore();
+            const currentDrug = store.getCurrentSelectedDrug();
+            if (checkDrugName(currentDrug.drug) == true) {
+                this.lotNumbers = []
+                this.lotNumbers.push({
+                    id: currentDrug.drug.drug_id,
+                    lotNumber: 'Unknown',
+                })
+                return true
+            } else {
+                return false
+            }
+        },
     },
 });
 </script>
+<style scoped>
+.shadowless-card {
+    box-shadow: none;
+    border: none;
+    background: none;
+}
+</style>

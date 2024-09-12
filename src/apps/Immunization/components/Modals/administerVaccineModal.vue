@@ -4,7 +4,7 @@
             <ion-col style="margin-left: -3px">
                 <div class="om">Administer Vaccine</div>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="6" style="text-align: right">
                 <ion-label class="lbl-tl" style="font-size: 13">
                     Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label
                 >
@@ -14,12 +14,12 @@
         <ion-row>
             <ion-label style="font-weight: 600px; font-size: 20px; margin: 10px; margin-left: 0px">{{ drugName }}</ion-label>
         </ion-row>
-        <ion-row>
+        <ion-row v-show="is_a_vaccine">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                 >Select Batch number<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
-        <div>
+        <div v-show="is_a_vaccine">
             <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
@@ -35,7 +35,7 @@
                     {{ batch_number_error_message }}
                 </ion-label>
             </div> -->
-            <lotNumberList :action="childAction" ref="childComponentRef" @actionTriggered="ActionTriggered" @emptyList="ShowAlert"/>
+            <lotNumberList :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered" @emptyList="ShowAlert"/>
         </div>
 
         <div class="client_admi">
@@ -61,18 +61,16 @@
             </div>
 
             <div class="saveBtn" v-if="!showDateBtns">
-                <ion-row>
-                    <ion-col>
-                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
+                <ion-row justify-content-between>
+                    <ion-col size="auto">
+                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px;">
                             Cancel
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                         </ion-button>
                     </ion-col>
 
-                    <ion-col>
-                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px">
-                            save
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
+                    <ion-col size="auto" class="ion-text-end" style="margin-left: auto;">
+                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px;">
+                            Save
                         </ion-button>
                     </ion-col>
                 </ion-row>
@@ -110,6 +108,7 @@ import {
 } from "@/services/data_helpers";
 import { useUserStore } from "@/stores/userStore";
 import lotNumberList from "./lotNumberList.vue"
+import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
 
 export default defineComponent({
     components: {
@@ -148,6 +147,7 @@ export default defineComponent({
                 },
             },
             selected_date_: '',
+            is_a_vaccine: true,
         };
     },
     computed: {
@@ -201,6 +201,11 @@ export default defineComponent({
             this.currentDrug = store.getCurrentSelectedDrug();
             this.drugName = this.currentDrug.drug.drug_name;
             this.batchNumber = this.currentDrug.drug.vaccine_batch_number ? this.currentDrug.drug.vaccine_batch_number : "";
+
+            if (checkDrugName(this.currentDrug.drug) == true) {
+                this.is_a_vaccine = false;
+                this.batchNumber = 'unknown';
+            }
         },
         showCPD() {
             this.showPD = true as boolean;
@@ -231,11 +236,11 @@ export default defineComponent({
             this.batchNumber = input || this.tempScannedBatchNumber?.text || "";
         },
         ActionTriggered(selectedOption: any) {
-            console.log(selectedOption)
             const dta = {
                 batch_number: selectedOption.lotNumber,
                 date_administered: this.selected_date_,
                 drug_id: this.currentDrug.drug.drug_id,
+                drug_: this.currentDrug,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
@@ -342,11 +347,9 @@ h5 {
     display: flex;
     justify-content: space-between;
     margin: 20px;
-    width: 330px;
     align-items: center;
 }
 .btnContent {
-    display: flex;
     justify-content: center;
     line-height: 60px;
 }

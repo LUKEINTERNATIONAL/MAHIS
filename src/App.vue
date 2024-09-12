@@ -26,6 +26,8 @@ import { loadingController } from "@ionic/vue";
 import { AuthService } from "./services/auth_service";
 import Screentimeout from "@/composables/Screentimeout";
 import useFacility from "./composables/useFacility";
+import { useStatusStore } from "@/stores/StatusStore";
+import { storeToRefs } from "pinia";
 import { savePatientRecord } from "@/services/save_records";
 
 export default defineComponent({
@@ -36,9 +38,10 @@ export default defineComponent({
         Menu,
         ModalContainer: defineAsyncComponent(() => import("@/components/ModalContainer.vue")),
         FullScreenNotice: defineAsyncComponent(() => import("@/components/FullScreenModifier.vue")),
-        ConnectionError: defineAsyncComponent(() => import("@/components/ConnectionError.vue")),
+        // ConnectionError: defineAsyncComponent(() => import("@/components/ConnectionError.vue")),
     },
     setup() {
+        const status = useStatusStore();
         const apiOk = ref(true);
         const route = useRoute();
         const notConfigPage = ref(true);
@@ -72,6 +75,7 @@ export default defineComponent({
 
         watch(healthCheckInterval, (interval: any) => {
             apiOk.value = !interval;
+            status.setApiStatus(apiOk.value);
         });
 
         EventBus.on(EventChannels.SHOW_MODAL, (modal: any) => (activeModal.value = modal));
@@ -79,6 +83,7 @@ export default defineComponent({
         EventBus.on(ApiBusEvents.BEFORE_API_REQUEST, () => nprogress.start());
 
         EventBus.on(ApiBusEvents.AFTER_API_REQUEST, async (res: any) => {
+            status.setApiStatus(apiOk.value);
             if (healthCheckInterval.value) {
                 clearInterval(healthCheckInterval.value);
                 healthCheckInterval.value = null;
@@ -103,7 +108,7 @@ export default defineComponent({
                         ApiClient.healthCheck();
                     }
                 }, 2500);
-                toastWarning("Unable to reach api. You can fix the error below");
+                toastWarning("Unable to reach api");
             }
             nprogress.done();
         });

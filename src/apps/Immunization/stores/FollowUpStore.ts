@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+import HisDate from "@/utils/Date";
 const initialChangeGuardianInfo = [
     {
         data: {
@@ -132,24 +133,143 @@ const initialChangeGuardianInfo = [
 ] as any;
 const initialVaccineAdverseEffects = [
     {
+        classDash: "solid_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                name: "Vaccine adverse effects",
+                title: "Adverse event (s)",
+                class: "bold",
+            },
+            data: [],
+        },
+    },
+] as any;
+const initialSerious = [
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        radioBtnContent: {
+            header: {
+                selectedValue: "",
+                title: "Serious",
+                class: "bold",
+                displayNext: "yes",
+                name: "SeriousCheck",
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "yes",
+                    colSize: "4",
+                    labelPlacement: "start",
+                },
+                {
+                    name: "No",
+                    value: "no",
+                    colSize: "4",
+                    labelPlacement: "start",
+                },
+            ],
+        },
+    },
+    {
+        childName: "SeriousCheck",
+        classDash: "solid_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                name: "Seriousness of adverse effects",
+                displayNone: true,
+            },
+            data: [],
+        },
+    },
+] as any;
+const initialOutcome = [
+    {
+        classDash: "solid_bottom_border",
+        radioBtnContent: {
+            header: {
+                name: "Adverse effects outcome",
+                title: "Outcome",
+                class: "bold",
+                displayNext: "Patient died",
+            },
+            data: [],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Adverse effects outcome",
         data: {
             rowData: [
                 {
                     colData: [
                         {
-                            inputHeader: "",
-                            icon: icons.search,
-                            valueType: "coded",
-                            isMultiSelect: true,
+                            inputHeader: "Date of death",
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Vaccine adverse effects",
-                            trackBy: "concept_id",
-                            multiSelectData: [],
+                            name: "Date of death",
                             eventType: "input",
-                            required: true,
-                            alertsErrorMassage: "",
-                            id: "",
-                            idName: "district_id",
+                            isDatePopover: true,
+                            displayNone: true,
+                            minDate: "",
+                            maxDate: HisDate.currentDate(),
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
+const initialFirstDecision = [
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        radioBtnContent: {
+            header: {
+                selectedValue: "",
+                title: "Investigation needed",
+                class: "bold",
+                displayNext: "yes",
+                name: "investigation_needed",
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "yes",
+                    colSize: "4",
+                    labelPlacement: "start",
+                },
+                {
+                    name: "No",
+                    value: "no",
+                    colSize: "4",
+                    labelPlacement: "start",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "investigation_needed",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Date investigation planned",
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            buildConceptIgnore: true,
+                            value: "",
+                            name: "Investigation needed",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                            minDate: HisDate.currentDate(),
+                            maxDate: "",
                         },
                     ],
                 },
@@ -203,6 +323,9 @@ export const useFollowUpStoreStore = defineStore("followUpStoreStore", {
         changeGuardianInfo: [...initialChangeGuardianInfo] as any,
         vaccineAdverseEffects: [...initialVaccineAdverseEffects] as any,
         protectedAtBirth: [...initialProtectedAtBirth] as any,
+        serious: [...initialSerious] as any,
+        outcome: [...initialOutcome] as any,
+        firstDecision: [...initialFirstDecision] as any,
     }),
     actions: {
         setChangeGuardianInfo(data: any) {
@@ -212,7 +335,18 @@ export const useFollowUpStoreStore = defineStore("followUpStoreStore", {
             const data = _.cloneDeep(initialChangeGuardianInfo);
             return [...data];
         },
-
+        getInitialSerious() {
+            const data = _.cloneDeep(initialSerious);
+            return [...data];
+        },
+        getInitialOutcome() {
+            const data = _.cloneDeep(initialOutcome);
+            return [...data];
+        },
+        getInitialFirstDecision() {
+            const data = _.cloneDeep(initialFirstDecision);
+            return [...data];
+        },
         setVaccineAdverseEffects(data: any) {
             this.vaccineAdverseEffects = data;
         },
@@ -229,5 +363,5 @@ export const useFollowUpStoreStore = defineStore("followUpStoreStore", {
             return [...data];
         },
     },
-    persist: true,
+    // persist: true,
 });

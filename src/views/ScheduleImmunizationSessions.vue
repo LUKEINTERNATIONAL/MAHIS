@@ -165,7 +165,7 @@ export default defineComponent({
             this.isLoading = true;
             try {
                 const stockService = new StockService();
-                const data = await stockService.getItems("2024-06-01", this.endDate);
+                const data = await stockService.getItems(this.startDate);
 
                 let filteredData = data;
                 this.allStock = data;

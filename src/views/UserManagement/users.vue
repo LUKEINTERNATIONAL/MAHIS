@@ -246,4 +246,18 @@ function nav(url: any) {
     cursor: pointer;
     margin: 1%;
 }
+
+.text-container {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.content-container {
+  overflow: auto;
+}
+
+.hide-overflow {
+  overflow: hidden;
+}
 </style>

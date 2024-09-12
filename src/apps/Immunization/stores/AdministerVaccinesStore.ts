@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import HisDate from "@/utils/Date";
+import { compareDates } from "@/utils/GeneralUti";
 
 export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
     state: () => ({
@@ -18,6 +20,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         vaccineToBeVoided: {} as any,
         lotNumberData: [] as any,
         lastVaccineAdminstredOnschedule: [] as any,
+        nextAppointMentDate: "" as any,
     }),
     actions: {
         setVaccineSchedule(data: any) {
@@ -131,7 +134,14 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         },
         getLastVaccineAdminstredOnschedule() {
             return this.lastVaccineAdminstredOnschedule
-        }
+        },
+        setNextAppointMentDate(NextAppointMentDate: string): void {
+            if (compareDates(HisDate.currentDate(), NextAppointMentDate) == false) {
+                this.nextAppointMentDate ='NA'
+            } else {
+                this.nextAppointMentDate = HisDate.toStandardHisDisplayFormat(NextAppointMentDate)
+            }  
+        },
     },
     persist: true,
 });

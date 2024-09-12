@@ -1,24 +1,40 @@
 <template>
-    <ion-menu side="start" content-id="main">
+    <ion-menu side="start" content-id="main" @ionDidOpen="onMenuOpen">
         <ion-header>
             <ion-toolbar>
                 <ion-title>Menu</ion-title>
             </ion-toolbar>
         </ion-header>
-        <ion-content>
+        <ion-content style="--background: #fff">
             <ion-accordion-group expand="inset">
-                <ion-accordion value="first" @click="navigationMenu('home')">
+                <ion-accordion value="first" @click="navigationMenu('home')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Home</ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="second">
+
+                <ion-accordion value="third" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Schedule Immunization</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="fifth" @click="navigationMenu('manageAppointMents')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Manage Appointments</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="second" @click="navigationMenu('stockManagement')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Inventory Management </ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="fourth">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Reports</ion-label>
                     </ion-item>
                     <div class="ion-padding" slot="content">
                         <ion-accordion-group>
-                            <ion-accordion value="first">
+                            <ion-accordion value="first" v-if="programAttri[2].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">OPD Reports</ion-label>
                                 </ion-item>
@@ -31,7 +47,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="second">
+                            <ion-accordion value="second" v-if="programAttri[1].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">NCD Reports</ion-label>
                                 </ion-item>
@@ -42,7 +58,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="third">
+                            <ion-accordion value="third" v-if="programAttri[0].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">ANC Reports</ion-label>
                                 </ion-item>
@@ -53,22 +69,46 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="fourth">
+
+                            <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer">
+                                EPI Monthly Report
+                            </ion-item>
+
+                            <ion-item
+                                @click="navigationMenu('OverDueReport')"
+                                class="list-content"
+                                style="cursor: pointer"
+                            >
+                                EIR Overdue Report
+                            </ion-item>
+
+                            <!-- <ion-accordion value="fourth" v-if="programAttri[3].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">EIR Reports</ion-label>
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
-                                        <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer"
-                                            >Indicators And Performance Metrics</ion-item
+                                        <ion-item
+                                            @click="navigationMenu('EIPMReport')"
+                                            class="list-content"
+                                            style="cursor: pointer"
                                         >
+                                            EPI Monthly Report
+                                        </ion-item>
+                                        <ion-item
+                                            @click="navigationMenu('AEFIReport')"
+                                            class="list-content"
+                                            style="cursor: pointer"
+                                        >
+                                            Adverse Events Following Immunization - AEFI
+                                        </ion-item>
                                     </ion-list>
                                 </div>
-                            </ion-accordion>
+                            </ion-accordion> -->
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
-                <ion-accordion value="third" v-if="isSuperuser">
+                <ion-accordion value="sixth" v-if="isSuperuser">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Settings</ion-label>
                     </ion-item>
@@ -91,21 +131,11 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-item button @click="navigationMenu('users')" color="light">
-                                <ion-label>User Management</ion-label>
+                            <ion-item button @click="navigationMenu('users')">
+                                <ion-label class="header">User Management</ion-label>
                             </ion-item>
                         </ion-accordion-group>
                     </div>
-                </ion-accordion>
-                <ion-accordion value="fourth" @click="navigationMenu('stockManagement')">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="header">Stock Management</ion-label>
-                    </ion-item>
-                </ion-accordion>
-                <ion-accordion value="fifth" @click="navigationMenu('scheduleImmunization')">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="header">Schedule Immunization</ion-label>
-                    </ion-item>
                 </ion-accordion>
             </ion-accordion-group>
         </ion-content>
@@ -114,9 +144,11 @@
 
 <script lang="ts">
 import { IonAccordion, IonAccordionGroup, IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController } from "@ionic/vue";
-import { defineComponent, ref, computed, onMounted, onUpdated } from "vue";
+import { defineComponent, ref, computed, onMounted, onUpdated, watch } from "vue";
 import { UserService } from "@/services/user_service";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
+import { mapState } from "pinia";
 
 export default defineComponent({
     name: "Menu",
@@ -131,10 +163,45 @@ export default defineComponent({
         IonTitle,
         IonToolbar,
     },
+    data() {
+        return {
+            programAttri: [
+                {
+                    programId: 12,
+                    showReports: false,
+                },
+                {
+                    programId: 32,
+                    showReports: false,
+                },
+                {
+                    programId: 14,
+                    showReports: false,
+                },
+                {
+                    programId: 33,
+                    showReports: false,
+                },
+            ],
+        };
+    },
+    watch: {
+        currentProgramId: {
+            async handler(data) {
+                this.showPogramReports();
+            },
+            deep: true,
+        },
+    },
+    async mounted() {
+        this.showPogramReports();
+    },
+    computed: {
+        ...mapState(useUserStore, ["currentProgramId"]),
+    },
     setup() {
         const router = useRouter();
         const user_data = ref<any>(null);
-
         onMounted(async () => {
             await fetchUserData();
         });
@@ -147,7 +214,9 @@ export default defineComponent({
         const isSuperuser = computed(() => {
             return user_data.value?.roles.some((role: any) => role.role === "Superuser");
         });
-
+        async function onMenuOpen() {
+            await fetchUserData();
+        }
         function navigationMenu(url: string) {
             menuController.close();
             router.push(url).then(() => {
@@ -156,12 +225,35 @@ export default defineComponent({
                 }
             });
         }
-
         return {
             isSuperuser,
             user_data,
             navigationMenu,
+            onMenuOpen,
         };
+    },
+    methods: {
+        showPogramReports(): void {
+            this.programAttri.forEach((PA: any) => {
+                if (PA.programId == this.currentProgramId) {
+                    PA.showReports = true;
+                } else {
+                    PA.showReports = false;
+                }
+            });
+        },
     },
 });
 </script>
+<style scoped>
+ion-accordion {
+    margin: 0 auto;
+}
+
+ion-accordion.accordion-expanding,
+ion-accordion.accordion-expanded {
+    width: calc(100% - 32px);
+
+    margin: 16px auto;
+}
+</style>
