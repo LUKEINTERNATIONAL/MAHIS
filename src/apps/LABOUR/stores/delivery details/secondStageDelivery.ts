@@ -151,7 +151,7 @@ const babyDetails = [
                             placeholder: "",
                         },
                         {
-                            inputHeader: "Baby circumference",
+                            inputHeader: "Head circumference",
                             unit: "cm",
                             icon: icons.height,
                             value: "",
@@ -474,7 +474,30 @@ export const BabyDetailsValidationSchema = yup.object().shape({
     'Last name': yup.string()
     .required('first name is required')
     .max(50, 'Name cannot be longer than 50 characters')
-    .matches(/^[A-Za-z\s]+$/, 'First Name can only contain letters and spaces') 
+    .matches(/^[A-Za-z\s]+$/, 'First Name can only contain letters and spaces'), 
+    'Apgar score at 1 minute': yup.number()
+        .typeError("Apgar score at 1 minute can only be a number")
+        .required('Apgar score at 1 minute is required')
+    .label('Apgar score at 1 minute'),
+    'Apgar score at 5 minute': yup.number()
+        .typeError("Apgar score at 5 minute can only be a number")
+        .required()
+    .label('Apgar score at 5 minute'),
+    'Weight': yup.number()
+        .typeError("Weight can only be a number")
+        .min(2500)
+        .required()
+    .label("Weight"),
+    'Height': yup.number()
+        .typeError("Height can only be a number")
+        .min(2500)
+        .required()
+    .label("Weight"),
+    'Circumference': yup.number()
+        .typeError("Circimference can only be a number")
+        .required()
+    .label("Circumference"),
+   
 })
 
 const initialSecondStageDetails = [
