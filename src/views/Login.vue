@@ -103,6 +103,7 @@ import { ProgramService } from "@/services/program_service";
 import ProgramData from "@/Data/ProgramData";
 import { getUserLocation } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
+import db from "@/db";
 
 export default defineComponent({
     name: "Home",
@@ -154,8 +155,16 @@ export default defineComponent({
     },
     methods: {
         async getPrograms() {
-            ProgramData.sort((a, b) => a.name.localeCompare(b.name));
-            this.multiSelectData = ProgramData;
+            const programsData = await db.collection("programs").get();
+            const programs = programsData[0]?.programs;
+            if (!(programs && Object.keys(programs).length > 0)) {
+                await this.setOfflinePrograms();
+                await this.getPrograms();
+            }
+            if (programs && Object.keys(programs).length > 0) {
+                programs.sort((a: any, b: any) => a.name.localeCompare(b.name));
+                this.multiSelectData = ProgramData;
+            }
         },
         doLogin: async function () {
             if (this.username && this.password && this.program) {
@@ -201,6 +210,14 @@ export default defineComponent({
             const data = await getUserLocation();
             store.setUserFacilityName(data.name);
             store.setCurrentUserProgram(this.program);
+        },
+        async setOfflinePrograms() {
+            const programs = await ProgramService.getAllPrograms();
+            if (programs && Object.keys(programs).length > 0) {
+                await db.collection("programs").add({
+                    programs: programs,
+                });
+            }
         },
     },
 });
