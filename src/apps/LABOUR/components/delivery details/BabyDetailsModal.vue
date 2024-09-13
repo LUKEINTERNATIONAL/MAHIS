@@ -5,6 +5,8 @@
          <basic-form
             :contentData="babyDetails"
             :initialData="initialData"
+             @update:selected="handleInputData" 
+             @update:inputValue="handleInputData"
             ></basic-form>
         <div style="display:flex;">
           <DynamicButton
@@ -40,10 +42,12 @@
 import { closeOutline } from 'ionicons/icons';
 import DynamicButton from "@/components/DynamicButton.vue";
 import BasicForm from '@/components/BasicForm.vue';
-import { useSecondStageOfLabourStore } from '../../stores/delivery details/secondStageDelivery';
+import { BabyDetailsValidationSchema, useSecondStageOfLabourStore } from '../../stores/delivery details/secondStageDelivery';
 import { mapState } from 'pinia';
 import { getRadioSelectedValue, modifyCheckboxHeader, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
-  
+import { YupValidateField } from '@/services/validation_service';
+
+
   export default defineComponent({
     name: 'BabyDetailsModal',
     components: {
@@ -91,11 +95,13 @@ import { getRadioSelectedValue, modifyCheckboxHeader, modifyFieldValue, modifyRa
       },
       computed: {
         ...mapState(useSecondStageOfLabourStore, ["babyDetails"]),
-        ...mapState(useSecondStageOfLabourStore,["secondStageDetails"]),
+        ...mapState(useSecondStageOfLabourStore, ["secondStageDetails"]),
+   
     },
+  
     watch: {
     secondStageDetails: {
-      handler() {
+       async handler() {
         this.handleChangeDisplay();
       },
       deep: true,
@@ -108,6 +114,9 @@ import { getRadioSelectedValue, modifyCheckboxHeader, modifyFieldValue, modifyRa
     },
   },
     methods: {
+      async handleInputData(event: any) {
+        YupValidateField(this.babyDetails, BabyDetailsValidationSchema, event.name, event.value);
+      },
       closeOutline() {
         return closeOutline;
       },

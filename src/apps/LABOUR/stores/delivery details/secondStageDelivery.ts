@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+import * as yup from "yup"
 
 
 const babyDetails = [
@@ -463,6 +464,18 @@ const babyDetails = [
         },
     },
 ]
+
+export const BabyDetailsValidationSchema = yup.object().shape({
+    'First name': yup.string()
+      .required('First Name is required')
+      .max(50, 'First Name cannot be longer than 50 characters')
+      .matches(/^[A-Za-z\s]+$/, 'First Name can only contain letters and spaces') 
+    ,
+    'Last name': yup.string()
+    .required('first name is required')
+    .max(50, 'Name cannot be longer than 50 characters')
+    .matches(/^[A-Za-z\s]+$/, 'First Name can only contain letters and spaces') 
+})
 
 const initialSecondStageDetails = [
     {
