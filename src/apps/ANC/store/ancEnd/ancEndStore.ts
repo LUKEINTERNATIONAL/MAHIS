@@ -32,8 +32,8 @@ const initialANCend=[
                     colSize: "4.01",
                 },
                 {
-                    name: "Miscarriage",
-                    value:"Miscarriage",
+                    name: "Pregnancy, miscarriage",
+                    value:"Pregnancy, miscarriage",
                     colSize: "4.01",
                 },
                 {
@@ -79,6 +79,7 @@ const initialANCend=[
                             name: "Pregnancy outcome notes",
                             inputType:"text",
                             eventType: 'input',
+                            valueType:'text',
                             inputWidth: "82%",
                             required: true
                         }
@@ -152,13 +153,14 @@ const initialANCend=[
                     colData:[
                         {
                             displayNone:true,
-                            inputHeader: 'Date of delivery *',
+                            inputHeader: 'Estimated date of delivery *',
                             icon: icons.calenderPrimary,
                             value: "",
-                            name: "Date of delivery",
+                            name: "Estimated date of delivery",
                             eventType: 'input',
                             inputWidth: "82%",
                             inputType:"text",
+                            valueType:"text",
                             placeholder:"Pick date",
                             required: true,
                             isDatePopover: true
@@ -187,7 +189,7 @@ const initialANCend=[
             data:[
                 {
                     name: "Home",
-                    value: "Home",
+                    value: "Home or TBA",
                     colSize: "6.01",
                 },
                 {
@@ -246,12 +248,12 @@ const initialANCend=[
                 {
                     name: "Yes",
                     value: "Yes",
-                    colSize: "7",
+                    colSize: "2.5",
                 },
                 {
                     name:  "No",
                     value: "No",
-                    colSize: "7",
+                    colSize: "2.5",
                 },
             ]
         }
@@ -287,8 +289,8 @@ const initialANCend=[
                     colSize: "4.01",
                 },
                 {
-                    name: "C-section",
-                    value: "C-section",
+                    name: "Caesarean section",
+                    value: "Caesarean section",
                     colSize: "4.01",
                 },
             ]
@@ -333,6 +335,6 @@ export const useAncEndStore = defineStore('ancEndStore',{
                return [...data]; // Return a copy of the initial state
            }
     },
-    persist:true
+    // persist:true
 })
 

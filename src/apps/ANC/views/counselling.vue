@@ -203,8 +203,6 @@ export default defineComponent({
           await  this.saveDietCounselling()
           resetPatientData();
           this.$router.push("ANChome");
-
-
         },
       async saveBehaviourCounselling() {
         if (this.behaviourInfo.length > 0) {

@@ -288,5 +288,5 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
             return [...data]; // Return a copy of the initial state
         }
     },
-    // persist: true,
+    persist: true,
 });

@@ -75,7 +75,7 @@ function MultValidations(fieldName: string, value: any): null | any {
         if (minMaxError !== null) {
             return minMaxError;
         }
-    } else if (fieldName === "Abortions") {
+    } else if (fieldName === "Abortions/Miscarriages") {
         const requiredError: any | null = Validation.required(value);
         if (requiredError !== null) {
             return requiredError;
