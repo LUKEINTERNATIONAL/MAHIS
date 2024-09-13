@@ -2,10 +2,16 @@
 
         <ion-row>
           <ion-col>
-              <h1 style="width: 100%; text-align: left; font-weight: 400">Immunisation</h1>
+              <h1 style="width: 100%; text-align: left; font-weight: 400">Immunization</h1>
           </ion-col>
         </ion-row>
-  
+
+        <ion-fab slot="fixed" horizontal="end" vertical="top" @click="exportReportToCSV">
+          <ion-fab-button>
+            <ion-icon :icon="downloadOutline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+
         <table class="custom-table">
           <colgroup>
             <col style="width: 20%;" />
@@ -109,20 +115,24 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonContent , IonPage, IonRow, IonCol } from '@ionic/vue';
+import { IonContent , IonPage, IonRow, IonCol, IonFab, IonFabButton, } from '@ionic/vue';
 import NavigationMenu from './NavigationMenu.vue';
 import { mapState } from "pinia";
-import { getVaccinesAdministered, getImmunizationDrugs } from "@/apps/Immunization/services/vaccines_service";
+import { getVaccinesAdministered, getImmunizationDrugs, exportReportToCSV } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { add, fileTray, downloadOutline } from 'ionicons/icons';
 
 export default defineComponent({
     name: 'TableComponent',
-    components: { IonContent, IonPage, NavigationMenu,  IonRow, IonCol },
+    components: { IonContent, IonPage, IonFab, IonFabButton, NavigationMenu,  IonRow, IonCol },
     data() {
       return {
         selectedSection: '', // To keep track of the selected section
         selectedColumn: '',  // To keep track of the selected column
         tableData: [] as any,
+        fileTray,
+        downloadOutline,
+        exportReportToCSV,
       };
     },
     watch: {
@@ -179,6 +189,11 @@ export default defineComponent({
           items.push(row_item)
         })
         this.tableData = items
+        const store = EIRreportsStore()
+        store.setImmunizationMonthlyRepoartData(this.tableData)
+      },
+      generateCSVStringForAEFIMonthly() {
+        console.log()
       }
     },
   });

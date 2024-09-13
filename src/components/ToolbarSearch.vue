@@ -297,6 +297,7 @@ export default defineComponent({
     },
     methods: {
         nav(url: any) {
+            resetPatientData();
             this.$router.push(url);
         },
         async scanCode() {
@@ -304,11 +305,14 @@ export default defineComponent({
             const dataExtracted: any = await extractDetails(dataScanned);
             if (await this.searchByNpid(dataScanned + "$")) {
                 this.searchValue = dataScanned;
+                return;
             } else if (dataExtracted && (await this.searchByMWNationalID(dataExtracted?.idNumber))) {
                 this.searchValue = dataScanned?.idNumber;
+                return;
             } else if (dataExtracted) {
                 await this.setPersonInformation(dataExtracted);
                 this.$router.push("/registration/manual");
+                return;
             }
             this.searchValue = dataScanned;
         },
@@ -393,6 +397,7 @@ export default defineComponent({
             if (Validation.isMWNationalID(searchText) == null) {
                 const nationalID = await PatientService.findByOtherID(28, searchText);
                 if (nationalID && nationalID.length > 0) {
+                    this.patients = [];
                     this.patients.push(...nationalID);
                     this.openNewPage("patientProfile", this.patients[0]);
                     return true;
