@@ -100,7 +100,6 @@ import { toastWarning, toastDanger } from "@/utils/Alerts";
 import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
-import ProgramData from "@/Data/ProgramData";
 import { getUserLocation } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
 import db from "@/db";
@@ -163,7 +162,7 @@ export default defineComponent({
             }
             if (programs && Object.keys(programs).length > 0) {
                 programs.sort((a: any, b: any) => a.name.localeCompare(b.name));
-                this.multiSelectData = ProgramData;
+                this.multiSelectData = programs;
             }
         },
         doLogin: async function () {
