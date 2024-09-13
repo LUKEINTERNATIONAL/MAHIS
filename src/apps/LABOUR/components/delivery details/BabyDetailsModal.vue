@@ -121,7 +121,6 @@ import { YupValidateField } from '@/services/validation_service';
         return closeOutline;
       },
       closeModal() {
-        // this.$emit('update:isOpen', false);
         this.closeModalFunc();
       },
     confirm() {
