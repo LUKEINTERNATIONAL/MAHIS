@@ -3,16 +3,14 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title style="cursor: pointer; line-height: 20px;" @click="nav('/home')">
-                    <b>MaHIS</b><small> ({{ programs.program.applicationName }})</small>
+                <ion-title style="cursor: pointer; line-height: 20px" @click="nav('/home')">
+                    <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                 </ion-title>
-                <ion-title style="cursor: pointer; line-height: 20px;" @click="nav('/home')">
+                <ion-title style="cursor: pointer; line-height: 20px" @click="nav('/home')">
                     <small class="facility-name">
                         {{ userFacilityName }}
                     </small>
-                    <small>
-                        | {{ sessionDate }}
-                    </small>
+                    <small> | {{ sessionDate }} </small>
                 </ion-title>
                 <ion-buttons slot="end" class="search-input-desktop" style="max-width: 800px">
                     <ToolbarSearch />
