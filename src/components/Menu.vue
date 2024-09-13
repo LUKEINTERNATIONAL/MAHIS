@@ -28,6 +28,11 @@
                         <ion-label class="header">Inventory Management </ion-label>
                     </ion-item>
                 </ion-accordion>
+                <ion-accordion value="second" @click="navigationMenu('OfflineRecords')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Manage Offline Records </ion-label>
+                    </ion-item>
+                </ion-accordion>
                 <ion-accordion value="fourth">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Reports</ion-label>
@@ -74,11 +79,7 @@
                                 EPI Monthly Report
                             </ion-item>
 
-                            <ion-item
-                                @click="navigationMenu('OverDueReport')"
-                                class="list-content"
-                                style="cursor: pointer"
-                            >
+                            <ion-item @click="navigationMenu('OverDueReport')" class="list-content" style="cursor: pointer">
                                 EIR Overdue Report
                             </ion-item>
 
