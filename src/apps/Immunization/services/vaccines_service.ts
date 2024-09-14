@@ -11,10 +11,12 @@ import { ObservationService } from "@/services/observation_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { useUserStore } from "@/stores/userStore";
 
-export async function getVaccinesSchedule() {
+export async function getVaccinesSchedule(patientID = null) {
     const patient = new PatientService();
-    if (patient.getID()) {
-        const data = await Service.getJson("eir/schedule", { patient_id: patient.getID() });
+    const id = patientID !== null ? patientID : patient.getID();
+    
+    if (id) {
+        const data = await Service.getJson("eir/schedule", { patient_id: id });
         return data;
     }
 }
