@@ -44,7 +44,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import BasicForm from '@/components/BasicForm.vue';
 import { BabyDetailsValidationSchema, useSecondStageOfLabourStore } from '../../stores/delivery details/secondStageDelivery';
 import { mapState } from 'pinia';
-import { getRadioSelectedValue, modifyCheckboxHeader, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
+import { getRadioSelectedValue, modifyCheckboxHeader, modifyFieldValue, modifyRadioValue, getCheckboxSelectedValue, modifyCheckboxValue } from '@/services/data_helpers';
 import { YupValidateField } from '@/services/validation_service';
 
 
@@ -109,6 +109,11 @@ import { YupValidateField } from '@/services/validation_service';
     babyDetails: {
       handler() {
         this.handleChangeDisplay();
+        const complications = ['Prematurity','Sepsis','Congenital abnormalities','Asphyxia','Other complications'];
+        const managementNewborn = ['Kangaroo mother care','Antibiotics','Other'];
+        // alert("Test")
+        this.handleNone(complications, 'None');
+        this.handleNone(managementNewborn,'Nothing');
       },
       deep: true,
     },
@@ -144,7 +149,20 @@ import { YupValidateField } from '@/services/validation_service';
       modifyCheckboxHeader(this.babyDetails,'Management to newborn','displayNone', visibility)
       modifyRadioValue(this.babyDetails,'Oxytocin 10 UI given','displayNone', visibility)
       modifyRadioValue(this.babyDetails,'Vitamin K given','displayNone', visibility)
+    },
+    handleNone(checkBoxes:Array<any>, noneConcept:string){
+      console.log({noneConcept});
+      if (getCheckboxSelectedValue(this.babyDetails, noneConcept)?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.babyDetails, checkbox, 'checked', false);
+            modifyCheckboxValue(this.babyDetails, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.babyDetails, checkbox, 'disabled', false);
+        });
     }
+    },
     }
   });
   </script>
