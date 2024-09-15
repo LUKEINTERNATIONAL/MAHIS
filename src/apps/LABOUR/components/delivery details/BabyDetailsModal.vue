@@ -109,7 +109,7 @@ import { YupValidateField } from '@/services/validation_service';
     babyDetails: {
       handler() {
         this.handleChangeDisplay();
-        const complications = ['Prematurity','Sepsis','Congenital abnormalities','Asphyxia','Other complications'];
+        const complications = ['Prematurity','Sepsis','Congenital abnormalities','Asphyxia','Other complications',"Low birthweight"];
         const managementNewborn = ['Kangaroo mother care','Antibiotics','Other'];
         // alert("Test")
         this.handleNone(complications, 'None');
