@@ -257,6 +257,40 @@ const babyDetails = [
             ],
         },
     },
+    
+    
+    {
+        sideColSize: 1,
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Newborn baby complications",
+                displayNone: false,
+            },
+            data: [
+                {
+                    name: "Asphyxia",
+                    value: "Asphyxia",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Low birthweight",
+                    value: "Low birthweight",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    
+    
     {
         sideColSize: 1,
         classDash: "dashed_bottom_border _padding",
@@ -270,14 +304,6 @@ const babyDetails = [
             },
             data: [
                 {
-                    name: "Asphyxia",
-                    value: "Asphyxia",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-                {
                     name: "Other complications",
                     value: "Other complications",
                     checked: false,
@@ -288,6 +314,7 @@ const babyDetails = [
             ],
         },
     },
+    
     {
         sideColSize: 1,
 
