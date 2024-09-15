@@ -8,32 +8,20 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                <h1 style="width: 100%; text-align: center; font-weight: 700">Offline Records Status</h1>
-                <div style="display: flex; justify-content: space-between">
-                    <div style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
-                        <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
-                    </div>
-                    <div style="display: inline-block; vertical-align: top; margin-top: 10px; float: right">
-                        <ion-button class="addBtn" color="danger" @click="openModal()">
-                            <div>
-                                <div class="centerBigBtnContain">Delete All</div>
-                            </div>
-                        </ion-button>
-                    </div>
-                </div>
+                <h4 style="width: 100%; text-align: center; font-weight: 700">Offline Records Status</h4>
 
                 <div class="table-responsive">
                     <DataTable ref="dataTable" :options="options" :data="reportData" class="display nowrap" width="100%">
                         <thead>
                             <tr>
                                 <th>Full Name</th>
-                                <th>MRN</th>
+                                <th>Offline MRN</th>
+                                <th>Server MRN</th>
                                 <th>Personal Info Status</th>
                                 <th>Birth Registration Status</th>
                                 <th>Guardian Info Status</th>
                                 <th>Vitals Status</th>
                                 <th>Vaccine Admin Status</th>
-                                <th>Assignees</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -63,9 +51,9 @@ import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
+import DataTablesResponsive from "datatables.net-responsive";
 import "datatables.net-buttons";
 import "datatables.net-buttons/js/buttons.html5";
-import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import "datatables.net-responsive";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -78,7 +66,9 @@ import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import "datatables.net-select";
+import db from "@/db";
 // DataTable.use(DataTablesCore);
+
 export default defineComponent({
     name: "Home",
     mixins: [SetUser],
@@ -136,9 +126,7 @@ export default defineComponent({
         await this.buildTableData();
         this.$nextTick(() => {
             const table = (this.$refs.dataTable as any).dt;
-            console.log("🚀 ~ this.$nextTick ~ table:", table.responsive);
-            // table.responsive.recalc();
-
+            table.columns.adjust().draw();
             table.on("click", ".edit-btn", (e: Event) => {
                 const id = (e.target as HTMLElement).getAttribute("data-id");
                 this.handleEdit(id);
@@ -170,42 +158,32 @@ export default defineComponent({
         },
         async buildTableData() {
             this.isLoading = true;
-            try {
-                const stockService = new StockService();
-                const data = await stockService.getItems(this.startDate);
-
-                let filteredData = data;
-                this.allStock = data;
-                this.currentStock = data.filter((item: any) => item.current_quantity !== 0);
-                this.outStock = data.filter((item: any) => item.current_quantity === 0);
-
-                if (this.selectedButton === "current") {
-                    filteredData = this.currentStock;
-                } else if (this.selectedButton === "out") {
-                    filteredData = this.outStock;
-                }
-
-                this.reportData = filteredData.map((item: any) => {
-                    return [
-                        HisDate.toStandardHisDisplayFormat(item.delivery_date),
-                        HisDate.toStandardHisDisplayFormat(item.expiry_date),
-                        item.batch_number,
-                        item.delivered_quantity,
-                        item.dispensed_quantity,
-                        item.current_quantity,
-                        item.drug_legacy_name,
-                        item.current_quantity,
-                        `<button class="btn btn-sm btn-primary edit-btn" data-id="${item.id}">Edit</button>
-                 <button class="btn btn-sm btn-danger delete-btn" data-id="${item.id}">Delete</button>`,
-                    ];
+            await db
+                .collection("patientRecords")
+                .get()
+                .then(async (document: any) => {
+                    try {
+                        this.reportData = document.map((item: any) => {
+                            return [
+                                item.personInformation.given_name + " " + item.personInformation.family_name,
+                                item.offlinePatientID,
+                                item.serverPatientID,
+                                item.saveStatusPersonInformation,
+                                item.saveStatusBirthRegistration,
+                                item.saveStatusGuardianInformation,
+                                "",
+                                "",
+                                `<button class="btn btn-sm btn-primary edit-btn" data-id="${item.id}">More details</button>
+                                <button class="btn btn-sm btn-danger delete-btn" data-id="${item.id}">Delete</button>`,
+                            ];
+                        });
+                        DataTable.use(DataTablesCore);
+                    } catch (error) {
+                        toastWarning("An error occurred while loading data.");
+                    } finally {
+                        this.isLoading = false;
+                    }
                 });
-
-                DataTable.use(DataTablesCore);
-            } catch (error) {
-                toastWarning("An error occurred while loading data.");
-            } finally {
-                this.isLoading = false;
-            }
         },
         async selectButton(button: any) {
             this.selectedButton = button;
@@ -226,10 +204,6 @@ export default defineComponent({
 @import "datatables.net-buttons-dt";
 @import "datatables.net-responsive-dt";
 @import "datatables.net-select-dt";
-
-@import "bootstrap";
-/* @import "datatables.net-dt/css/jquery.dataTables.min.css";
-@import "datatables.net-responsive-dt/css/responsive.dataTables.min.css"; */
 
 .table-responsive {
     width: 100%;
