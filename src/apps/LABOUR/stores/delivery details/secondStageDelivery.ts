@@ -302,7 +302,7 @@ const babyDetails = [
             },
             data: [
                 {
-                    name: "None",
+                    name: "Nothing",
                     value: "none",
                     checked: false,
                     labelPlacement: "start",
