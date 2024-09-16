@@ -256,9 +256,7 @@ const babyDetails = [
                 },
             ],
         },
-    },
-    
-    
+    }, 
     {
         sideColSize: 1,
         selectdData: [],
@@ -288,9 +286,7 @@ const babyDetails = [
                 },
             ],
         },
-    },
-    
-    
+    }, 
     {
         sideColSize: 1,
         classDash: "dashed_bottom_border _padding",
@@ -310,6 +306,30 @@ const babyDetails = [
                     labelPlacement: "start",
                     colSize: "6",
                     justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "Specify Congenital Abnormalities",
+                            unit: "",
+                            icon: icons.editPen,
+                            value: "",
+                            valueType: "text",
+                            name: "Specify",
+                            eventType: "input",
+                            placeholder: "",
+                        },
+                    ],
                 },
             ],
         },
