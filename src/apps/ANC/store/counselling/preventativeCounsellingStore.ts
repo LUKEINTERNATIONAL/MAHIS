@@ -1,114 +1,113 @@
-import { defineStore } from "pinia"
+import { defineStore } from "pinia";
 import { icons } from '@/utils/svg';
+import _ from "lodash";
 
-const initialPhysiologicalCounselling=[
+const initialPreventativeCounselling=[
     {
         selectdData: [],
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
-                title: "Which physiological counselling done?",
+                title: "Preventative counselling done?",
                 selectedValue: "",
-                name:'Physiological counselling',
+                    name:'Preventative counselling',
                 class:'bold'
 
             },
             data: [
                 {
-                    name: "Counselling on non-pharmacological measures",
-                    value: "Counselling on non-pharmacological measures",
+                    name: "PrEp for HIV prevention provided",
+                    value: "PrEp for HIV prevention provided",
                     checked: false,
                     colSize:12,
                 },
                 {
-                    name: "Counselling  conducted on lifestyle",
-                    value: "Counselling  conducted on lifestyle",
-                    checked: false,
-                    colSize:12,
-
-                },
-                {
-                    name: "Counselling on antacid",
-                    value: "Counselling on antacid",
+                    name: "Counselling on seeking care",
+                    value: "Counselling on seeking care",
                     checked: false,
                     colSize:12,
 
                 },
                 {
-                    name: "Counselling on leg craps",
-                    value: "Counselling on leg craps",
+                    name: "Counseling on ANC contact schedule",
+                    value: "Counseling on ANC contact schedule",
                     checked: false,
                     colSize:12,
 
                 },
                 {
-                    name: "Counselling on the use magnesium and calcium",
-                    value: "Counselling on the use magnesium and calcium",
+                    name: "Counselling to immediately go to hospital if severe danger signs are present",
+                    value: "Counselling to immediately go to hospital if severe danger signs are present",
                     checked: false,
                     colSize:12,
 
                 },
                 {
-                    name: "Counselling on dietary modifications",
-                    value: "Counselling on dietary modifications",
+                    name: "Counselling conducted on birth preparedness and complications",
+                    value: "Counselling conducted on birth preparedness and complications",
                     checked: false,
                     colSize:12,
 
                 },
                 {
-                    name: "Counselling  conducted on the use of wheat bran and other fibre supplements",
-                    value: "Counselling  conducted on the use of wheat bran and other fibre supplements",
+                    name: "Counselling on TB screening",
+                    value: "Counselling on mode of transport",
                     checked: false,
                     colSize:12,
 
                 },
                 {
-                    name: "Counselling on regular exercises",
-                    value: "Counselling on regular exercises",
+                    name: "Counselling on intrapartum",
+                    value: "Counselling on intrapartum",
                     checked: false,
                     colSize:12,
 
                 },
                 {
-                    name: "Counselling on  varicose veins and  oedema",
-                    value: "Counselling on  varicose veins and  oedema",
+                    name: "Counselling on postpartum",
+                    value: "Counselling on postpartum",
                     checked: false,
                     colSize:12,
 
                 },
+                {
+                    name: "Counselling on breast feeding",
+                    value: "Counselling on breast feeding",
+                    checked: false,
+                    colSize:12,
 
+                },
             ],
         },
     },
-
-
     {
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border',
+        sideColSize:0,
         checkboxBtnContent:{
             header:{
-                title: 'Reason if any physiological counselling was not done?',
+                title: 'Reason if any preventative counselling not conducted?',
                 selectedValue: '',
-                name:'Reason if any physiological counselling was not done',
-                class:'bold'
+                name:'Reason clinical counselling not done',
+                class:'bold',
             },
             data:[
                 {
                     name:'Client was referred',
                     value: 'client was referred',
-                    colSize: "12",
+                    colSize: 12
                 },
                 {
                     name: 'Other',
                     value: 'Other',
-                    colSize: "12",
+                    colSize: 12
                 },
             ]
         }
     },
     {
-        childName:'Other',
+        childName:"Other",
         classDash: 'dashed_bottom_border',
         sideColSize:0.5,
         data:{
@@ -119,8 +118,10 @@ const initialPhysiologicalCounselling=[
                             displayNone:true,
                             inputHeader: 'Specify',
                             icon: icons.editPen,
-                            name: "Other notes",
-                            value: "",
+                            name: 'Other notes',
+                            inputType:"",
+                            valueType:"text",
+                            value: '',
                             eventType: 'input',
                             inputWidth: "100%",
                             required: true
@@ -134,17 +135,17 @@ const initialPhysiologicalCounselling=[
 
     },
 ] as any;
-export const usePhysiologicalCounselingStore = defineStore('physiologicalCounselingStore',{
+export const usePreventativeCounsellingStore = defineStore('preventativeCounsellingStore',{
     state: () =>({
-        physiologicalCounselingInfo:[...initialPhysiologicalCounselling] as any,
+        preventativeCounselling:[...initialPreventativeCounselling] as any,
     }),
-        actions:{
-        addPhysiologicalCounselingInfo(data:any){
-            this.physiologicalCounselingInfo = data
+    actions:{
+        addBehaviourInfo(data:any){
+            this.preventativeCounselling = data
         },
         getInitial(){
-            const data=[...initialPhysiologicalCounselling]
-            return [...data]
+            const data = _.cloneDeep(initialPreventativeCounselling);
+            return [...data];
         }
     },
     // persist:true

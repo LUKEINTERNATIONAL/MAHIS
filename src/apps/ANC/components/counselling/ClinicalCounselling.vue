@@ -3,19 +3,10 @@
       <ion-card  class="section">
         <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
         <ion-card-content>
-          <basic-form :contentData="gdm"></basic-form>
-          <basic-form :contentData="gdmCounselling"></basic-form>
-          <basic-form :contentData="hivRisk"></basic-form>
-          <basic-form :contentData="hypertension"> </basic-form>
-          <basic-form :contentData="hyper"> </basic-form>
-          <basic-form :contentData="hepatitisB"> </basic-form>
-          <basic-form :contentData="hepatitisC"> </basic-form>
-          <basic-form :contentData="syphilis"> </basic-form>
-          <basic-form :contentData="tbScreening"> </basic-form>
-          <basic-form :contentData="ASB"> </basic-form>
-          <basic-form :contentData="diabetes"> </basic-form>
-          <basic-form :contentData="anaemia"> </basic-form>
+          <basic-form :contentData="clinicalCounselling"
+                      :initialData="initialData"
 
+          ></basic-form>
         </ion-card-content>
       </ion-card>
     </div>
@@ -50,7 +41,7 @@ import { modifyRadioValue,
     getFieldValue,
     modifyFieldValue,
     modifyCheckboxValue} from '@/services/data_helpers'
-import {useDiagnosisCounsellingStore} from "@/apps/ANC/store/diagnosisCounsellingStore";
+import {useClinicalCounsellingStore} from "@/apps/ANC/store/counselling/clinicalCousellingStore";
 export default defineComponent ({
     name: "diagnosisTreatment",
     components: {
@@ -73,50 +64,22 @@ export default defineComponent ({
     data() {
         return {
             currentSection: 0,
+          initialData:[] as any,
+
         }
     },
     setup(){
         return { checkmark,pulseOutline };
     },
     computed:{
-        ...mapState(useDiagnosisStore, ["diagnoses"]),
-        ...mapState(useDiagnosisStore, ["hypertension"]),
-        ...mapState(useDiagnosisStore, ["preEclampsia"]),
-        ...mapState(useDiagnosisStore, ["hyper"]),
-        ...mapState(useDiagnosisStore, ["hiv"]),
-        ...mapState(useDiagnosisStore, ["hepatitisB"]),
-        ...mapState(useDiagnosisStore, ["hepatitisC"]),
-        ...mapState(useDiagnosisStore, ["syphilis"]),
-        ...mapState(useDiagnosisStore, ["syphilisTesting"]),
-        ...mapState(useDiagnosisStore, ["tbScreening"]),
-        ...mapState(useDiagnosisStore, ["ASB"]),
-        ...mapState(useDiagnosisStore, ["GDM"]),
-        ...mapState(useDiagnosisStore, ["diabetes"]),
-        ...mapState(useDiagnosisStore, ["anaemia"]),
-      ...mapState(useDiagnosisCounsellingStore,["gdm"]),
-      ...mapState(useDiagnosisCounsellingStore,["gdmCounselling"]),
-      ...mapState(useDiagnosisCounsellingStore,["hivRisk"]),
-      ...mapState(useDiagnosisCounsellingStore,["prEp"]),
+...mapState(useClinicalCounsellingStore,["clinicalCounselling"])
 
     },
     mounted(){
-      this. handledeHiv()
-      this.handleCounselHiv()
-      this. handleNone()
+    const clinicalCounselling=useClinicalCounsellingStore()
+      this.initialData=clinicalCounselling.getInitial()
     },
     watch:{
-      diagnoses:{
-        handler(){
-          this. handleNone()
-        },
-        deep:true
-      },
-      hiv:{
-        handler(){
-          this. handledeHiv()
-          this.handleCounselHiv()
-        },deep:true
-      },
 
     },
     methods :{
@@ -124,39 +87,6 @@ export default defineComponent ({
       if (this.currentSection < 4) {
         this.currentSection++;
       }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
-    handledeHiv(){
-      if(getRadioSelectedValue(this.hiv,'counselling on HIV not provided')=='other'){
-        modifyFieldValue(this.hiv,'hiv Counselling','displayNone',false)
-      }else{
-         modifyFieldValue(this.hiv,'hiv Counselling','displayNone',true)
-      }
-    },
-    handleCounselHiv(){
-      if(getRadioSelectedValue(this.hiv,'cousellHiv')=='no'){
-        modifyRadioValue(this.hiv,'hiv','displaNone',false)
-      }else{
-        modifyRadioValue(this.hiv,'hiv','displaNone',true)
-      }
-    },
-    handleNone(){
-        const checkBoxes=['Hypertension','Pre-eclampsia','HIV','Hepatitis B','Hepatitis C','Syphilis',]
-
-      if (getCheckboxSelectedValue(this.diagnoses, 'None')?.checked) {
-        checkBoxes.forEach((checkbox) => {
-            modifyCheckboxValue(this.diagnoses, checkbox, 'checked', false);
-            modifyCheckboxValue(this.diagnoses, checkbox, 'disabled', true);
-        });
-        } else {
-        checkBoxes.forEach((checkbox) => {
-            modifyCheckboxValue(this.diagnoses, checkbox, 'disabled', false);
-        });
-    }
     },
     }
 })

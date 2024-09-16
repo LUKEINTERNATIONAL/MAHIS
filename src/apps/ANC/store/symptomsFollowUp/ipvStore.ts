@@ -16,18 +16,15 @@ export const useIpvStore = defineStore('ipvStore',{
                     },
                     data:[
                         {
-                            name: 'Ongoing stress',
-                            value: 'Ongoing stress',
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            name: "None",
+                            value: 'None',
+                            colSize: '12',
                             checked: false
-                        },                        {
+                        },
+                                          {
                             name: 'Injury to abdomen',
                             value: 'Injury to abdomen',
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            colSize: '12',
                             checked: false
                         }
                         
@@ -51,17 +48,13 @@ export const useIpvStore = defineStore('ipvStore',{
                         {
                             name: "Partner's intrusive during consultations",
                             value: "Partner's intrusive during consultations",
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            colSize: '12',
                             checked: false
                         },
                         {
                             name: "Misuse of alcohol",
                             value: "Misuse of alcohol",
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            colSize: '12',
                             checked: false
                         }
                         
@@ -84,17 +77,13 @@ export const useIpvStore = defineStore('ipvStore',{
                         {
                             name: "Unspecified Harmful Behaviours",
                             value: "Unspecified Harmful Behaviours",
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            colSize: '12',
                             checked: false
                         },
                         {
                             name: "Thoughts of self-harm",
                             value: "Thoughts of self-harm",
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            colSize: '12',
                             checked: false
                         }
                         
@@ -117,17 +106,13 @@ export const useIpvStore = defineStore('ipvStore',{
                         {
                             name: "Unwanted pregnancies",
                             value: "Unwanted pregnancies",
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            colSize: '12',
                             checked: false
                         },
                         {
                             name: "Misuse of drugs",
                             value: "Misuse of drugs",
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            colSize: '12',
                             checked: false
                         }
                         
@@ -148,14 +133,12 @@ export const useIpvStore = defineStore('ipvStore',{
                     },
                     data:[
                         {
-                            name: "None",
-                            value: 'None',
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            name: 'Ongoing stress',
+                            value: 'Ongoing stress',
+                            colSize: '12',
                             checked: false
                         },
-                        
+
                     ],
                 }
                     
@@ -168,6 +151,7 @@ export const useIpvStore = defineStore('ipvStore',{
             this. ipv = data
         }
     },
-    persist:true
+    // persist:true
 
 })
+

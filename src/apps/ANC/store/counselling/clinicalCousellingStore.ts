@@ -2,49 +2,70 @@ import { defineStore } from "pinia";
 import { icons } from '@/utils/svg';
 import _ from "lodash";
 
-const initialBehaviourInfo=[
+const initialClinicalCounselling=[
     {
         selectdData: [],
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
-                title: "Behaviour counselling done",
+                title: "Clinical counselling done?",
                 selectedValue: "",
-                name:'Behaviour counselling',
+                name:'Clinical counselling',
                 class:'bold'
 
             },
             data: [
                 {
-                    name: "Counselling on caffeine",
-                    value: "Counselling on caffeine",
+                    name: "Counseling conducted on the risks of severe hypertension",
+                    value: "Counseling conducted on the risks of severe hypertension",
                     checked: false,
                     colSize:12,
                 },
                 {
-                    name: "Counselling on tobacco",
-                    value: "Counselling on tobacco",
-                    checked: false,
-                    colSize:12,
-
-                },
-                {
-                    name: "Counselling on second hand smoke",
-                    value: "Counselling on second hand smoke",
+                    name: "Counselling on HIV positive",
+                    value: "Counselling on HIV positive",
                     checked: false,
                     colSize:12,
 
                 },
                 {
-                    name: "Counselling conducted on condom use",
-                    value: "Counselling conducted on condom use",
+                    name: "Counselling on Hepatitis B",
+                    value: "Counselling on Hepatitis B",
                     checked: false,
                     colSize:12,
 
                 },
                 {
-                    name: "Counselling conducted on alcohol/substance",
-                    value: "Counselling conducted on alcohol/substance",
+                    name: "Counselling on Hepatitis C",
+                    value: "Counselling on Hepatitis C",
+                    checked: false,
+                    colSize:12,
+
+                },
+                {
+                    name: "Counselling on Syphilis",
+                    value: "Counselling on Syphilis",
+                    checked: false,
+                    colSize:12,
+
+                },
+                {
+                    name: "Counselling on TB screening",
+                    value: "Counselling on TB screening",
+                    checked: false,
+                    colSize:12,
+
+                },
+                {
+                    name: "Counselling on gestational diabetes mellitus (GDM)",
+                    value: "Counselling on gestational diabetes mellitus (GDM)",
+                    checked: false,
+                    colSize:12,
+
+                },
+                {
+                    name: "Counselling on anaemia conducted",
+                    value: "Counselling on anaemia conducted",
                     checked: false,
                     colSize:12,
 
@@ -59,21 +80,21 @@ const initialBehaviourInfo=[
         sideColSize:0,
         checkboxBtnContent:{
             header:{
-                title: 'Reason if any behaviour counselling not conducted?',
+                title: 'Reason if any clinical counselling not conducted?',
                 selectedValue: '',
-                name:'Reason behaviour counselling not done',
+                name:'Reason clinical counselling not done',
                 class:'bold',
             },
             data:[
                 {
                     name:'Client was referred',
                     value: 'client was referred',
-                    colSize: "12",
+                    colSize: "7",
                 },
                 {
                     name: 'Other',
                     value: 'Other',
-                    colSize: "12",
+                    colSize: "7",
                 },
             ]
         }
@@ -88,10 +109,11 @@ const initialBehaviourInfo=[
                     colData:[
                         {
                             displayNone:true,
-                            inputHeader: 'Other (specify)',
+                            inputHeader: 'Specify',
                             icon: icons.editPen,
-                            name: 'Other alcohol/substance not done',
-                            inputType:"text",
+                            name: 'Other notes',
+                            inputType:"",
+                            valueType:"text",
                             value: '',
                             eventType: 'input',
                             inputWidth: "100%",
@@ -106,16 +128,16 @@ const initialBehaviourInfo=[
 
     },
 ] as any;
-export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore',{
+export const useClinicalCounsellingStore = defineStore('clinicalCounsellingStore',{
     state: () =>({
-        behaviourInfo:[...initialBehaviourInfo] as any,
+        clinicalCounselling:[...initialClinicalCounselling] as any,
     }),
     actions:{
         addBehaviourInfo(data:any){
-            this.behaviourInfo = data
+            this.clinicalCounselling = data
         },
         getInitial(){
-            const data = _.cloneDeep(initialBehaviourInfo);
+            const data = _.cloneDeep(initialClinicalCounselling);
             return [...data];
         }
     },

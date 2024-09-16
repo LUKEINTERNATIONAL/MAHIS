@@ -1,219 +1,140 @@
-import { radio } from "ionicons/icons";
 import { defineStore } from "pinia";
+import { icons } from '@/utils/svg';
+import _ from "lodash";
 
-export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
-    state: () => ({
-        trial:[
-            {
-                selectdData: [],
-                isFinishBtn:false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
+const initialMedicalFollowUp=[
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "What medication supplements is the woman currently taking?",
+                selectedValue: "",
+                name:'Medication supplements',
+                class:'bold'
 
-                    header:{
-                        selectedValue:'',
-                        radioTitle:['Yes','No'],
-                        name: "Taking Calcium Suppliments",
-                        
-                    },
-                    data:[
-                        {
-                            name: 'Taking Calcium Suppliments',
-                            value: 'Yes',
-                            labelPlacement:'start',
-                            colSize: "9.7",
-                            justify:"space-between",
-                            
-                        },
-                        {
-                            value: 'No',
-                            labelPlacement:'start',
-                            colSize: "2",
-                            justify:"end" 
-                        }
-                    ]
-                }
             },
-            {
-                selectdData: [],
-                isFinishBtn:false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
+            data: [
+                {
+                    name: 'Taking Calcium Supplements',
+                    value: 'Taking Calcium Supplements',
+                    colSize: "12",
 
-                    header:{
-                        selectedValue:'',
-                        name: 'Side-effects from calcium supplements',
-                    },
-                    data:[
-                        {
-                            name: 'Has side-effects from calcium supplements',
-                            value: 'Yes',
-                            labelPlacement:'start',
-                            colSize: "9.7",
-                            justify:"space-between",                            
-                            
-                        },
-                        {
-                            value: 'No',
-                            labelPlacement:'start',
-                            colSize: "2",
-                            justify:"end" 
-                        }
-                    ]
-                }
+                },
+                {
+                    name: 'Taking iron and folic acid (IFA) tablets',
+                    value: 'Taking iron and folic acid (IFA) tablets',
+                    colSize: "12",
+
+                },
+                {
+                    name: 'Taking aspirin tablets',
+                    value: 'Taking aspirin tablets',
+                    colSize: "12",
+
+                },
+                {
+                    name: 'Taking vitamin A supplements',
+                    value: 'Taking vitamin A supplements',
+                    colSize: "12",
+
+                },
+                {
+                    name: 'Taking penicillin treatment for syphilis',
+                    value: 'Taking penicillin treatment for syphilis',
+                    colSize: "12",
+
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        sideColSize:0,
+        checkboxBtnContent:{
+            header:{
+                title: 'What side effects does the woman have due to medication supplements?',
+                selectedValue: '',
+                name:'Side effects',
+                class:'bold',
             },
-            {
-                selectdData: [],
-                isFinishBtn:false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
+            data:[
+                {
+                    name: 'Side-effects from calcium supplements',
+                    value: 'Side-effects from calcium supplements',
+                    colSize: "12",
 
-                    header:{
-                        
-                        selectedValue:'',
-                        name:'Taking iron and folic acid tablets',
-                        
-                    },
-                    data:[
-                        {
-                            name: 'Taking iron and folic acid (IFA) tablets',
-                            value: 'Yes',
-                            labelPlacement:'start',
-                            colSize: "9.7",
-                            justify:"space-between",
-                            // class: 'bold' 
-                        },
-                        {
-    
-                            value: 'No',
-                            labelPlacement:'start',
-                            colSize: "2",
-                             justify:"end" 
-                        }
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn:false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
+                },
+                {
+                    name: 'Side-effects from iron and folic acid supplements',
+                    value: 'Side-effects from iron and folic acid supplements',
+                    colSize: "12",
 
-                    header:{
-                        selectedValue:'',
-                        name:'Side-effects from iron and folic acid supplements',
-                    },
-                    data:[
-                        {
-                            name: 'Has side-effects from iron and folic acid supplements',
-                            value: 'Yes',
-                            labelPlacement:'start',
-                            colSize: "9.7",
-                            justify:"space-between",
-                        },
-                        {
-       
-                            value:"No",
-                            labelPlacement:'start',
-                            colSize: "2",
-                            justify:"end" 
-                        }
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn:false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
+                },
+                {
+                    name: 'Side-effects from Aspirin supplements',
+                    value: 'Side-effects from Aspirin supplements',
+                    colSize: "12",
 
-                    header:{
-                        selectedValue:'',
-                        name:'Taking aspirin tablets',
-                    },
-                    data:[
-                        {
-                            name: 'Taking aspirin tablets',
-                            value: 'Yes',
-                            labelPlacement:'start',
-                            colSize: "9.7",
-                            justify:"space-between", 
-                        },
-                        {
-                            
-                            value: 'No',
-                            labelPlacement:'start',
-                            colSize: "2",
-                            justify:"end" 
-                        }
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn:false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
+                },
+                {
+                    name: 'Side-effects from Vitamin A supplements',
+                    value: 'Side-effects from Vitamin A supplements',
+                    colSize: "12",
 
-                    header:{
-                        selectedValue:'',
-                        name:'Taking vitamin A supplements',
-                    },
-                    data:[
-                        {
-                            name: 'Taking vitamin A supplements',
-                            value: 'Yes',
-                            labelPlacement:'start',
-                            colSize: "9.7",
-                            justify:"space-between",
-                            
-                        },
-                        {
+                },
+                {
+                    name: 'Side-effects from Penicillin',
+                    value: 'Side-effects from Penicillin',
+                    colSize: "12",
 
-                            value: 'No',
-                            labelPlacement:'start',
-                            colSize: "2",
-                            justify:"end" 
-                        }
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn:false,
-               classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-
-                    header:{
-                        selectedValue:'',
-                        name:'Taking penicillin treatment'
-                    },
-                    data:[
-                        {
-                            name: 'Taking penicillin treatment for syphilis',
-                            value: 'Yes',
-                            labelPlacement:'start',
-                            colSize: "9.7",
-                            justify:"space-between",
-                            
-                        },
-                        {
-                         
-                            value: 'No',
-                            labelPlacement:'start',
-                            colSize: "2",
-                            justify:"end" 
-                        }
-                    ]
-                }
-            }
-        ] as any,
-    }),
-
-    actions:{
-        addFollowUp(data:any){
-            this.trial=data;
+                },
+            ]
         }
     },
-    persist:true
+    {
+        childName:"Other",
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: 'Other notes',
+                            inputType:"",
+                            valueType:"text",
+                            value: '',
+                            eventType: 'input',
+                            inputWidth: "100%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
+    },
+] as any;
+export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
+    state: () =>({
+        medicalFollowUp:[...initialMedicalFollowUp] as any,
+    }),
+    actions:{
+        addMedicalFollowUP(data:any){
+            this.medicalFollowUp = data
+        },
+        getInitial(){
+            const data = _.cloneDeep(initialMedicalFollowUp);
+            return [...data];
+        }
+    },
+    // persist:true
 })

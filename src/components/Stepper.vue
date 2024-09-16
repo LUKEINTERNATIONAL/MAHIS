@@ -108,7 +108,7 @@ import UrineTest from "@/apps/ANC/components/lab_tests/UrineTest.vue";
 import TB from "@/apps/ANC/components/lab_tests/TB.vue";
 import DiagnosisTreatment from "@/apps/ANC/components/Treatment/DiagnosisTreatment.vue";
 import MedicationDispensed from "@/apps/ANC/components/Treatment/MedicationDispensed.vue";
-import DiagnosisCounselling from "@/apps/ANC/components/counselling/DiagnosisCounselling.vue";
+import DiagnosisCounselling from "@/apps/ANC/components/counselling/PreventativeCounselling.vue";
 import Immunization from "@/apps/ANC/components/Treatment/Immunization.vue";
 import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
 import Deworming from "@/apps/ANC/components/Treatment/Deworming.vue";
@@ -116,7 +116,6 @@ import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
 import MedicalFollowUp from "@/apps/ANC/components/symptomsFollowUp/MedicalFollowUp.vue";
 import PersistentBehaviour from "@/apps/ANC/components/symptomsFollowUp/PersistentBehaviour.vue";
-import PersistentSymptoms from "@/apps/ANC/components/symptomsFollowUp/PersistentSymptoms.vue";
 import CurrentPhysiologicalSymptoms from "@/apps/ANC/components/symptomsFollowUp/CurrentPhysiologicalSymptoms.vue";
 import Ipv from "@/apps/ANC/components/symptomsFollowUp/Ipv.vue";
 import FatalMovement from "@/apps/ANC/components/symptomsFollowUp/FatalMovement.vue";
@@ -219,7 +218,6 @@ export default defineComponent({
         TB,
         MedicalFollowUp,
         PersistentBehaviour,
-        PersistentSymptoms,
         CurrentPhysiologicalSymptoms,
         Ipv,
         FatalMovement,

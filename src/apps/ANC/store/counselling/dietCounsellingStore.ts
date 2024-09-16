@@ -45,13 +45,12 @@ const initialDietCounselling=[
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border',
-        radioBtnContent:{
+        checkboxBtnContent:{
             header:{
                 title: 'Reason if any diet counselling was not done?',
                 selectedValue: '',
                 name:"Reason if any diet counselling was not done",
                 class:'bold',
-                displayNext:'Other'
             },
             data:[
                 {
@@ -68,7 +67,7 @@ const initialDietCounselling=[
         }
     },
     {
-        childName:'Reason if any diet counselling was not done',
+        childName:'Other',
         classDash: 'dashed_bottom_border',
         sideColSize:0.5,
         data:{
@@ -81,7 +80,7 @@ const initialDietCounselling=[
                             icon: icons.editPen,
                             valueType:'text',
                             name: "Other notes",
-                            value: "Other notes",
+                            value: "",
                             eventType: 'input',
                             inputWidth: "82%",
                             required: true

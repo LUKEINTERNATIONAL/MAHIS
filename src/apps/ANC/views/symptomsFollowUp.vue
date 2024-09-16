@@ -11,6 +11,7 @@
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
             />
+
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
 
@@ -60,7 +61,6 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { useMedicalFollowUpStore } from "../store/symptomsFollowUp/medicalFollowUp";
 import { usePersistentBehaviourStore } from "../store/symptomsFollowUp/persistentBehaviourStore";
-import { usePersistentSymptomsStore } from "../store/symptomsFollowUp/persistentSymptomsStore";
 import { useIpvStore } from "../store/symptomsFollowUp/ipvStore";
 import { useCurrentPhysiologicalSymptomsStore } from "../store/symptomsFollowUp/currentPhysiologicalSymptomsStore";
 import { useFatalMovementStore } from "../store/symptomsFollowUp/fatalMovementStore";
@@ -110,51 +110,34 @@ export default defineComponent({
                     number: 1,
                     last_step: "",
                 },
-                // {
-                //     title: "Persistent behaviours",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 2,
-                //     last_step: "",
-                // },
-                // {
-                //     title: "Persistent symptoms",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 3,
-                //     last_step: "",
-                // },
-                // {
-                //     title: "Current physiological symptoms",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 4,
-                //     last_step: "",
-                // },
-                // {
-                //     title: "Intimate partner violence(IPV)",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 5,
-                //     last_step: "",
-                // },
-                // {
-                //     title: "Fatal Movement",
-                //     class: "common_step",
-                //     checked: "",
-                //     icon: false,
-                //     disabled: false,
-                //     number: 6,
-                //     last_step: "last_step",
-                // },
+                {
+                    title: "Persistent behaviours and symptoms",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 2,
+                    last_step: "",
+                },
+
+                {
+                    title: "Intimate partner violence(IPV)",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 3,
+                    last_step: "",
+                },
+                {
+                    title: "Fatal Movement",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 4,
+                    last_step: "last_step",
+                },
             ],
             StepperData: [
                 {
@@ -162,40 +145,29 @@ export default defineComponent({
                     component: "MedicalFollowUp",
                     value: "1",
                 },
-                // {
-                //     title: "Persistent behaviours",
-                //     component: "PersistentBehaviour",
-                //     value: "2",
-                // },
-                // {
-                //     title: "Persistent symptoms",
-                //     component: "PersistentSymptoms",
-                //     value: "3",
-                // },
-                // {
-                //     title: "Current physiological symptoms",
-                //     component: "CurrentPhysiologicalSymptoms",
-                //     value: "4",
-                // },
-                // {
-                //     title: "Intimate partner violence(IPV)",
-                //     component: "Ipv",
-                //     value: "5",
-                // },
-                // {
-                //     title: "Fetal Movement",
-                //     component: "FatalMovement",
-                //     value: "6",
-                // },
+                {
+                    title: "Persistent behaviours and symptoms",
+                    component: "PersistentBehaviour",
+                    value: "2",
+                },
+                {
+                    title: "Intimate partner violence(IPV)",
+                    component: "Ipv",
+                    value: "3",
+                },
+                {
+                    title: "Fetal Movement",
+                    component: "FatalMovement",
+                    value: "4",
+                },
             ],
             isOpen: false,
             iconsContent: icons,
         };
     },
     computed: {
-        ...mapState(useMedicalFollowUpStore,["trial"]),
+        ...mapState(useMedicalFollowUpStore,["medicalFollowUp"]),
         ...mapState(usePersistentBehaviourStore,["persistentBehaviour"]),
-        ...mapState(usePersistentSymptomsStore,["persistentSymptom"]),
         ...mapState(useCurrentPhysiologicalSymptomsStore,["physiologicalSymptoms"]),
         ...mapState(useIpvStore,["ipv"]),
         ...mapState(useFatalMovementStore,["fatalMovement"]),
@@ -232,7 +204,7 @@ export default defineComponent({
         },
         async buildMedicalFollowUp() {
        return [
-         ...(await formatRadioButtonData(this.trial)),
+         ...(await formatRadioButtonData(this.medicalFollowUp)),
 
         ]
     },
