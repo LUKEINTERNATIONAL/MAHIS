@@ -28,8 +28,7 @@
                             <ion-card v-if="!isLoading">
                                 <div class="calendar-container">
                                     <VCalendar color="gray" :is-dark="false" :attributes="attributes" disable-page-swipe
-                                    is-expanded
-                                        borderless @dayclick="onCalendarDayClick"></VCalendar>
+                                        is-expanded borderless @dayclick="onCalendarDayClick"></VCalendar>
                                 </div>
                             </ion-card>
                             <ion-list v-else>
@@ -133,7 +132,8 @@
 
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Expected Clients</h3>
-                                                <p>{{ schedule.session_vaccines?.total_clients }} people (Under 5), {{ schedule.session_vaccines?.total_missed_doses }} doses required </p>
+                                                <p>{{ schedule.session_vaccines?.total_clients }} people (Under 5), {{
+                                                    schedule.session_vaccines?.total_missed_doses }} doses required </p>
                                             </ion-label>
                                         </ion-item>
                                         <ion-item>
@@ -154,14 +154,8 @@
                                             </div>
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Vaccines</h3>
-                                                <!--<p>
-                                                    {{ schedule.session_vaccines?.vaccines.map((vaccine: any) => vaccine.drug_name).join(',')}}
-                                                </p>-->
-
-                                                <p>
-                                                    {{ schedule.session_vaccines?.vaccines.map((vaccine: any) => `${vaccine.drug_name}: ${vaccine.missed_doses} `).join(', ') }}
+                                                <p v-html="getFormattedVaccines(schedule)">
                                                 </p>
-
                                             </ion-label>
                                         </ion-item>
                                         <ion-item>
@@ -358,20 +352,29 @@ async function onCalendarDayClick(calendarDay: any) {
     const platform = Capacitor.getPlatform();
 
     if (displaySchedules.value.length > 0) {
-        if (platform === 'android' || platform === 'ios') {
-            await createModal(ViewImmunizationSessionModal, { class: 'otherVitalsModal largeModal' }, true, {
+        if (platform === 'android' || platform === 'ios' || window.innerWidth < 768) {
+            await createModal(ViewImmunizationSessionModal, {
+                class: 'otherVitalsModal largeModal mobileView'
+            }, true, {
                 data: displaySchedules.value,
             });
         }
     }
 }
 
+const getFormattedVaccines = (schedule: SessionSchedule): string => {
+    const vaccines = schedule.session_vaccines?.vaccines || [];
+    return vaccines
+        .map((vaccine) => `${vaccine.drug_name}: <b>(${vaccine.missed_doses})</b>`)
+        .join(', ');
+};
+
 const buttonSize = computed((): "default" | "small" | "large" | undefined => {
     const platform = Capacitor.getPlatform();
     return platform === 'android' || platform === 'ios' ? 'small' : 'large';
 });
 
-const openCreateModal = () => {
+const openCreateModal = (): void => {
     createModal(AddImmunizationSessionModal, { class: 'otherVitalsModal largeModal' });
 }
 </script>

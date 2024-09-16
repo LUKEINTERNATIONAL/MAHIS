@@ -113,9 +113,7 @@
                         </div>
                         <ion-label>
                             <h3 class="ion-label-h3">Vaccines</h3>
-                            <p>
-                                {{ schedule.vaccines.map((vaccine: any) => vaccine.name).join(', ')
-                                }}
+                            <p v-html="getFormattedVaccines(schedule)">
                             </p>
                         </ion-label>
                     </ion-item>
@@ -167,6 +165,7 @@
 </template>
 
 <script lang="ts" setup>
+import { SessionSchedule, Vaccine } from "@/types";
 import { IonContent, IonHeader, IonCardHeader, IonLabel, modalController, IonCardSubtitle, IonCardTitle, IonButton, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
 
 import { ellipsisVertical, close } from 'ionicons/icons';
@@ -185,6 +184,13 @@ const svgIconHeight = ref<number>(50);
 const svgIconWidth = ref<number>(50);
 const popoverOpen = ref(false);
 const event = ref(null);
+
+const getFormattedVaccines = (schedule: SessionSchedule): string => {
+    const vaccines = schedule.session_vaccines?.vaccines || [];
+    return vaccines
+        .map((vaccine: Vaccine) => `${vaccine.drug_name}: <b>(${vaccine.missed_doses})</b>`)
+        .join(', ');
+};
 
 const openPopover = (e: Event) => {
     popoverOpen.value = true;

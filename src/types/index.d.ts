@@ -9,6 +9,7 @@ type Vaccine = {
  drug_id: number;
  drug_name?: string;
  voided: boolean,
+ missed_doses?: number;
  voided_by: string;
  date_voided: string;
  created_at: string;
@@ -39,7 +40,7 @@ type SessionSchedule = {
   start_date: Date;
   end_date: Date;
   session_type: SessionType;
-  session_vaccines?: { total_clients: number; vaccines: Vaccine[]; }
+  session_vaccines?: { total_clients: number; vaccines: Vaccine[];  total_missed_doses?: number; }
   assignees?: Assignee[];
 };
 
