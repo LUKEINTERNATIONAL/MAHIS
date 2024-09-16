@@ -110,6 +110,7 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
 import {  voidVaccineEncounter, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { RelationshipService } from "@/services/relationship_service";
 import { PatientService } from "@/services/patient_service";
+import { AppointmentService } from "@/services/appointment_service";
 
 const user = useDemographicsStore();
 const date = ref();
@@ -248,8 +249,7 @@ async function getFirstUpcomingVaccineMilestone(patientId: string): Promise<any 
 }
 
 async function getAppointmentMents(date: any) {
-    const appointment_service = new Appointment();
-    const res = await appointment_service.getDailiyAppointments(HisDate.toStandardHisFormat(date));
+    const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
     appointment_count.value = res.length + 1;
 }
 
