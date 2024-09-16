@@ -133,7 +133,7 @@
 
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Target</h3>
-                                                <p>{{ schedule.target }} people (Under 5)</p>
+                                                <p>{{ schedule.session_vaccines?.total_clients }} people (Under 5)</p>
                                             </ion-label>
                                         </ion-item>
                                         <ion-item>
