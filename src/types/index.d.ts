@@ -31,11 +31,13 @@ type Assignee = {
   family_name: string;
 }
 
+type RepeatType = "Daily" | "Weekly" | "Monthly" | "Never";
+
 type SessionSchedule = {
   id?: number;
   session_schedule_id?: number;
   session_name: string;
-  repeat_type?: string;
+  repeat_type?: RepeatType;
   repeat?: string;
   target?: string;
   start_date: Date;
@@ -140,4 +142,5 @@ export {
   User,
   PersonName,
   Program,
+  RepeatType
 };
