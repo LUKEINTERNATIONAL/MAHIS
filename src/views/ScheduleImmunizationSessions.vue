@@ -27,8 +27,9 @@
                         <div>
                             <ion-card v-if="!isLoading">
                                 <div class="calendar-container">
-                                    <VCalendar color="gray" :is-dark="false" :attributes="attributes" :expanded="true"
-                                        borderless @dayclick="onCalendarDayClick" />
+                                    <VCalendar color="gray" :is-dark="false" :attributes="attributes" disable-page-swipe
+                                    is-expanded
+                                        borderless @dayclick="onCalendarDayClick"></VCalendar>
                                 </div>
                             </ion-card>
                             <ion-list v-else>
@@ -154,7 +155,7 @@
                                             <ion-label>
                                                 <h3 class="ion-label-h3">Vaccines</h3>
                                                 <p>
-                                                    {{ schedule.vaccines?.map((vaccine: any) => vaccine.name).join(',')}}
+                                                    {{ schedule.session_vaccines?.vaccines.map((vaccine: any) => vaccine.drug_name).join(',')}}
                                                 </p>
                                             </ion-label>
                                         </ion-item>
