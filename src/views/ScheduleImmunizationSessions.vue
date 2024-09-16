@@ -244,6 +244,7 @@ import {
     IonSpinner,
     IonSearchbar,
     IonCardContent,
+    modalController,
 } from '@ionic/vue';
 import { Capacitor } from '@capacitor/core';
 import Toolbar from "@/components/Toolbar.vue";
@@ -259,8 +260,7 @@ const displaySchedules = ref<SessionSchedule[]>([]);
 const isLoading = ref<boolean>(false);
 const svgIconHeight: number = 50;
 const svgIconWidth: number = 50;
-const attributes = ref<any[]>([
-    {
+const defaultAttribute = {
         key: 'today',
         content: 'green',
         highlight: {
@@ -270,7 +270,9 @@ const attributes = ref<any[]>([
         bar: 'green',
         dates: new Date(),
         order: 0,
-    },
+    }
+const attributes = ref<any[]>([
+    defaultAttribute,
 ]);
 
 onMounted(async (): Promise<void> => {
@@ -282,6 +284,8 @@ async function getSessionSchedules(): Promise<void> {
     try {
         const sessionService = new SessionScheduleService();
         const data: any = await sessionService.getSessions();
+        attributes.value = [];
+        attributes.value.push(defaultAttribute); 
         data.forEach((item: SessionSchedule) => {
             attributes.value.push({
                 description: item.session_name,
@@ -314,9 +318,7 @@ async function getSessionSchedules(): Promise<void> {
 async function onCalendarDayClick(calendarDay: any) {
     let hasOverlap = false;
     const selectedSchedules: SessionSchedule[] = [];
-
     displaySchedules.value = [];
-
     calendarDay.attributes.forEach((attribute: { description: string }) => {
         schedules.value
             .filter((schedule) => schedule.session_name === attribute.description)
@@ -349,15 +351,18 @@ async function onCalendarDayClick(calendarDay: any) {
     }
 
     displaySchedules.value = selectedSchedules;
-
-
     if (displaySchedules.value.length > 0) {
         if (displaMdDown.value) {
-            await createModal(ViewImmunizationSessionModal, {
-                class: 'otherVitalsModal largeModal mobileView'
-            }, true, {
-                data: displaySchedules.value,
+            const modal = await modalController.create({
+                component: ViewImmunizationSessionModal,
+                componentProps: {
+                    data: displaySchedules.value,
+                },
+                cssClass: 'otherVitalsModal largeModal mobileView'
             })
+            await modal.present();
+            const { data } = await modal.onDidDismiss()
+            if(data.update) getSessionSchedules();
         }
     }
 }
@@ -379,7 +384,10 @@ const buttonSize = computed((): "default" | "small" | "large" | undefined => {
 });
 
 const openCreateModal = (): void => {
-    createModal(AddImmunizationSessionModal, { class: 'otherVitalsModal largeModal' });
+    const modal = createModal(AddImmunizationSessionModal, { class: 'otherVitalsModal largeModal' });
+    modal.then((update) => {
+        if(update) getSessionSchedules();
+    })
 }
 </script>
 

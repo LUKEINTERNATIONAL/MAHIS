@@ -1,4 +1,8 @@
 <template>
+    <div v-if="isSaving" class="spinner-overlay">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <div class="loading-text">Please wait...</div>
+    </div>
     <ion-header>
         <ion-toolbar>
         <ion-title class="modalTitle">Create Immunization Session Schedule</ion-title>
@@ -160,7 +164,7 @@ export default defineComponent({
             modifyFieldValue(this.immunizationSessions, "assignees", "multiSelectData", modifiedAssignees);
         },
         dismiss(): void {
-            modalController.dismiss();
+            modalController.dismiss({ update: true });
         },
     },
 });

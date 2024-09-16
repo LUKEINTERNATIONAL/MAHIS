@@ -1,4 +1,8 @@
 <template>
+    <div v-if="loading" class="spinner-overlay">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <div class="loading-text">Please wait...</div>
+    </div>
     <ion-header>
         <ion-toolbar>
             <ion-title>View Immunization Session Schedule</ion-title>
@@ -9,16 +13,15 @@
             </ion-buttons>
         </ion-toolbar>
     </ion-header>
-    <ion-content style="margin: -5px;">
-        <ion-list v-if="props.data.length > 0" style="margin-top: 0px;" v-for="schedule, index in props.data"
+    <ion-content>
+        <ion-list v-if="props.data.length > 0" style="margin: -10px;" v-for="schedule, index in props.data"
             v-bind:key="schedule.id">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <ion-card-header style="flex: 1;">
                     <div>
                         <ion-card-title class="ion-text-wrap text-mobile">
-    ({{ index + 1 }}) {{ schedule.session_name }}
-</ion-card-title>
-
+                            ({{ index + 1 }}) {{ schedule.session_name }}
+                        </ion-card-title>
                         <ion-card-subtitle>
                             Scheduled from: {{ schedule.start_date }} to {{ schedule.end_date }}
                         </ion-card-subtitle>
@@ -171,11 +174,10 @@
 import { SessionSchedule, Vaccine } from "@/types";
 import { IonContent, IonHeader, IonCardHeader, IonLabel, modalController, IonCardSubtitle, IonCardTitle, IonButton, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
 import { ellipsisVertical, close } from 'ionicons/icons';
-import { ref, defineEmits } from 'vue';
+import { ref } from 'vue';
 import voidReason from '@/apps/Immunization/components/Modals/voidReason.vue';
 import { SessionScheduleService } from "@/services/session_schedule_service";
-import { toastWarning, toastSuccess } from "@/utils/Alerts";
-
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
 
 const props = defineProps({
     data: {
@@ -187,12 +189,11 @@ const props = defineProps({
 
 const svgIconHeight = ref<number>(50);
 const svgIconWidth = ref<number>(50);
-const emits = defineEmits(['update']);
+const loading = ref<boolean>(false);
 interface PopoverRefs {
     [key: number]: typeof IonPopover | undefined;
 }
 const popoverRefs = ref<PopoverRefs>({});
-
 const getFormattedVaccines = (schedule: SessionSchedule): string => {
     const vaccines = schedule.session_vaccines?.vaccines || [];
     return vaccines
@@ -205,7 +206,6 @@ const handleEdit = () => {
 };
 
 const handleDelete = async (session: SessionSchedule) => {
-    closeModal();
     const modal = await modalController.create({
         component: voidReason,
         cssClass: "otherVitalsModal",
@@ -216,10 +216,12 @@ const handleDelete = async (session: SessionSchedule) => {
     await modal.present();
     modal.onDidDismiss().then(async (data: any) => {
         if (data.data) {
+            loading.value = true;
             const sessionSchedule = new SessionScheduleService();
             const response = await sessionSchedule.delete(Number(session.session_schedule_id), data.data.name);
             response ? toastSuccess("Immunization schedule deleted successfully!") : toastWarning("An error occurred, please try again later.");
-            emits('update', true);
+            loading.value = false;
+            modalController.dismiss({ update: true });
         }
     });
 };
@@ -231,11 +233,12 @@ const closeModal = (): void => {
 
 <style scoped>
 .text-mobile {
-  font-size: 1.5rem;
+    font-size: 1.5rem;
 }
 
 @media (max-width: 768px) {
-  .text-mobile {
-    font-size: 1.2rem;
-  }
-}</style>
+    .text-mobile {
+        font-size: 1.2rem;
+    }
+}
+</style>
