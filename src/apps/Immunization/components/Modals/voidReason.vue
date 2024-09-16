@@ -91,10 +91,18 @@
                 // console.log('Current value:', JSON.stringify(ev.detail.value));
             },
             cancel() {
-                modalController.dismiss();
+                try {
+                    modalController.dismiss();   
+                } catch (error) {
+                    
+                }
             },
             dismiss() {
-                modalController.dismiss(this.selectedOption);
+                try {
+                    modalController.dismiss(this.selectedOption);
+                } catch (error) {
+                    
+                }
             },
             checkIfSelected() {
                 if ( _.has(this.selectedOption, 'name') == true) {
