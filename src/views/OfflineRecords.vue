@@ -57,7 +57,7 @@ import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-buttons-dt";
 import "datatables.net-responsive";
 import DynamicButton from "@/components/DynamicButton.vue";
-import AddImmunizationSessionModal from "@/components/Modal/AddImmunizationSessionModal.vue";
+import OfflineMoreDetailsModal from "@/components/Modal/OfflineMoreDetailsModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { StockService } from "@/services/stock_service";
 import { useStockStore } from "@/stores/StockStore";
@@ -101,6 +101,12 @@ export default defineComponent({
             options: {
                 responsive: true,
                 select: false,
+                layout: {
+                    topStart: null,
+                    topEnd: "search",
+                    bottomStart: "info",
+                    bottomEnd: "paging",
+                },
             } as any,
             selectedButton: "all",
             isLoading: false,
@@ -138,9 +144,8 @@ export default defineComponent({
         });
     },
     methods: {
-        handleEdit(id: any) {
-            // Implement edit logic here
-            console.log(`Editing item with id: ${id}`);
+        handleEdit(data: any) {
+            this.openModal(JSON.parse(data));
         },
 
         handleDelete(id: any) {
@@ -173,8 +178,8 @@ export default defineComponent({
                                 item.saveStatusGuardianInformation,
                                 "",
                                 "",
-                                `<button class="btn btn-sm btn-primary edit-btn" data-id="${item.id}">More details</button>
-                                <button class="btn btn-sm btn-danger delete-btn" data-id="${item.id}">Delete</button>`,
+                                `<button class="btn btn-sm btn-primary edit-btn" data-id='${JSON.stringify(item)}'>More details</button>
+                                <button class="btn btn-sm btn-danger delete-btn" data-id="${item.offlinePatientID}">Delete</button>`,
                             ];
                         });
                         DataTable.use(DataTablesCore);
@@ -189,8 +194,8 @@ export default defineComponent({
             this.selectedButton = button;
             await this.buildTableData();
         },
-        async openModal() {
-            const data: any = await createModal(AddImmunizationSessionModal, { class: "otherVitalsModal largeModal" });
+        async openModal(clientData: any) {
+            const data: any = await createModal(OfflineMoreDetailsModal, { class: "fullScreenModal" }, true, { clientData: clientData });
             if (data == "dismiss") {
                 await this.buildTableData();
             }
