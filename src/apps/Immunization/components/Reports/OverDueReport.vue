@@ -165,7 +165,7 @@ export default defineComponent({
                         let item = visit.client.table;
 
                         visit.missed_visits.forEach(( missed_visit: any) => {
-                            doses += missed_visit.antigens.length
+                            doses += missed_visit.antigens.length   
                         });
                         
                         this.reportData.push([
