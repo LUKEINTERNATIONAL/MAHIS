@@ -33,6 +33,7 @@ type Assignee = {
 
 type SessionSchedule = {
   id?: number;
+  session_schedule_id?: number;
   session_name: string;
   repeat_type?: string;
   repeat?: string;

@@ -349,18 +349,23 @@ async function onCalendarDayClick(calendarDay: any) {
     }
 
     displaySchedules.value = selectedSchedules;
-    const platform = Capacitor.getPlatform();
+
 
     if (displaySchedules.value.length > 0) {
-        if (platform === 'android' || platform === 'ios' || window.innerWidth < 768) {
+        if (displaMdDown.value) {
             await createModal(ViewImmunizationSessionModal, {
                 class: 'otherVitalsModal largeModal mobileView'
             }, true, {
                 data: displaySchedules.value,
-            });
+            })
         }
     }
 }
+
+const displaMdDown = computed(() => {
+    const platform = Capacitor.getPlatform();
+    return platform === 'android' || platform === 'ios' || window.innerWidth < 768
+})
 
 const getFormattedVaccines = (schedule: SessionSchedule): string => {
     const vaccines = schedule.session_vaccines?.vaccines || [];
@@ -370,8 +375,7 @@ const getFormattedVaccines = (schedule: SessionSchedule): string => {
 };
 
 const buttonSize = computed((): "default" | "small" | "large" | undefined => {
-    const platform = Capacitor.getPlatform();
-    return platform === 'android' || platform === 'ios' ? 'small' : 'large';
+    return displaMdDown.value ? 'small' : 'large';
 });
 
 const openCreateModal = (): void => {
