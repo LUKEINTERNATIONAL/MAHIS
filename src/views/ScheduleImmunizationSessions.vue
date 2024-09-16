@@ -132,7 +132,7 @@
                                             </div>
 
                                             <ion-label>
-                                                <h3 class="ion-label-h3">Target</h3>
+                                                <h3 class="ion-label-h3">Expected Clients</h3>
                                                 <p>{{ schedule.session_vaccines?.total_clients }} people (Under 5), {{ schedule.session_vaccines?.total_missed_doses }} doses required </p>
                                             </ion-label>
                                         </ion-item>
@@ -159,7 +159,7 @@
                                                 </p>-->
 
                                                 <p>
-                                                    {{ schedule.session_vaccines?.vaccines.map((vaccine: any) => `${vaccine.drug_name} `).join(', ') }}
+                                                    {{ schedule.session_vaccines?.vaccines.map((vaccine: any) => `${vaccine.drug_name}: ${vaccine.missed_doses} `).join(', ') }}
                                                 </p>
 
                                             </ion-label>
