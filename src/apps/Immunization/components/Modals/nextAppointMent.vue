@@ -210,17 +210,21 @@ onMounted(async () => {
 });
 
 async function suggestNextAppointmentDate() {
-    const patient = new PatientService();
-    const patientId = props.patient_Id !== undefined ? props.patient_Id : patient.getID();
-    const mileStone = await getFirstUpcomingVaccineMilestone(patientId as any);
-    // const patientData = await PatientService.findByID(patientId)
-    if (vaccinesPreviouslyAdministered.length > 0) {
-        const lastVaccine = vaccinesPreviouslyAdministered[vaccinesPreviouslyAdministered.length - 1];
-        date.value = addDaysAndFormat(lastVaccine.date_administered, convertToDays(mileStone.age) as any)
-        suggested_date.value = HisDate.toStandardHisDisplayFormat(date.value)
-        DateUpdated(date.value)
-        getCounter(date.value)
-        show_suggested_date.value = true
+    try {
+        const patient = new PatientService();
+        const patientId = props.patient_Id !== undefined ? props.patient_Id : patient.getID();
+        const mileStone = await getFirstUpcomingVaccineMilestone(patientId as any);
+        // const patientData = await PatientService.findByID(patientId)
+        if (vaccinesPreviouslyAdministered.length > 0) {
+            const lastVaccine = vaccinesPreviouslyAdministered[vaccinesPreviouslyAdministered.length - 1];
+            date.value = addDaysAndFormat(lastVaccine.date_administered, convertToDays(mileStone.age) as any)
+            suggested_date.value = HisDate.toStandardHisDisplayFormat(date.value)
+            DateUpdated(date.value)
+            getCounter(date.value)
+            show_suggested_date.value = true
+        }
+    } catch (error) {
+        
     }
 }
 
@@ -237,7 +241,8 @@ function findPreviouslyAdministeredVaccineSchedule(vaccine_schedule: any) {
 }
 
 async function getFirstUpcomingVaccineMilestone(patientId: string): Promise<any | null> {
-    const data = await getVaccinesSchedule(patientId as any);
+    try {
+        const data = await getVaccinesSchedule(patientId as any);
     findPreviouslyAdministeredVaccineSchedule(data.vaccine_schedule)
     for (const milestone of data.vaccine_schedule) {
         if (milestone.milestone_status === 'upcoming') {
@@ -246,19 +251,30 @@ async function getFirstUpcomingVaccineMilestone(patientId: string): Promise<any 
     }
     
     return null;
+    } catch (error) {
+        return null;
+    }
 }
 
 async function getAppointmentMents(date: any) {
-    const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
-    appointment_count.value = res.length + 1;
+    try {
+        const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
+        appointment_count.value = res.length + 1;
+    } catch (error) {
+        
+    }
 }
 
 function dismiss() {
     modalController.dismiss();
 }
 async function getfacilityConfiguration() {
-    let data = await SmsService.getConfigurations();
-    configsSms.value = data.show_sms_popup;
+    try {
+        let data = await SmsService.getConfigurations();
+        configsSms.value = data.show_sms_popup;
+    } catch (error) {
+        
+    }
 }
 
 async function getMobilePhones(){
