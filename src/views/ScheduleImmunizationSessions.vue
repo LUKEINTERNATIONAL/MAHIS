@@ -10,7 +10,7 @@
                 <h1 class="heading">Schedule Immunization Sessions</h1>
                 <div class="search-create-container">
                     <div>
-                        <ion-searchbar animated="true" placeholder="Search by name..."></ion-searchbar>
+                        <ion-searchbar :animated="true" placeholder="Search by name..."></ion-searchbar>
                     </div>
                     <div>
                         <ion-button :size="buttonSize" @click="openCreateModal()">
@@ -237,6 +237,13 @@ import {
     IonPopover,
     IonItem,
     IonCard,
+    IonLabel,
+    IonList,
+    IonCardSubtitle,
+    IonThumbnail,
+    IonIcon,
+    IonSpinner,
+    IonSearchbar,
     IonCardContent,
 } from '@ionic/vue';
 import { Capacitor } from '@capacitor/core';
