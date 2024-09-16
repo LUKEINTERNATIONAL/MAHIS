@@ -1,67 +1,73 @@
 <template>
-    <ion-content>
-      <ion-grid>
-        <ion-row>
-          <!-- Left Panel: Primary Clients -->
-          <ion-col size="12" size-md="4">
-            <ion-list>
-              <ion-list-header>
-                <ion-label>Primary Clients</ion-label>
-              </ion-list-header>
-              <ion-item v-for="client in clients" :key="client.primary_patient_id" 
-                        button @click="selectPrimaryClient(client)" 
-                        :class="{ 'selected': selectedPrimaryClient === client }">
-                <ion-label>{{ client.primary_firstname }} {{ client.primary_sirname }}</ion-label>
-              </ion-item>
-            </ion-list>
-          </ion-col>
-  
-          <!-- Middle and Right Panels -->
-          <ion-col size="12" size-md="8">
-            <!-- Middle Panel: Selected Primary Client Details -->
-            <ion-card v-if="selectedPrimaryClient">
-              <ion-card-header>
-                <ion-card-title>{{ selectedPrimaryClient.primary_firstname }} {{ selectedPrimaryClient.primary_sirname }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <p>Birth Date: {{ selectedPrimaryClient.primary_birthdate }}</p>
-                <p>Gender: {{ selectedPrimaryClient.primary_gender }}</p>
-                <p>ID: {{ selectedPrimaryClient.primary_patient_id }}</p>
-              </ion-card-content>
-            </ion-card>
-  
-            <!-- Right Panel: Duplicates -->
-            <ion-list v-if="selectedPrimaryClient">
-              <ion-list-header>
-                <ion-label>Potential Duplicates</ion-label>
-              </ion-list-header>
-              <ion-item v-for="duplicate in selectedPrimaryClient.duplicates" :key="duplicate.secondary_patient_id">
-                <ion-checkbox slot="start" v-model="duplicate.selected"></ion-checkbox>
-                <ion-label>
-                  <h3>{{ duplicate.secondary_firstname }} {{ duplicate.secondary_sirname }}</h3>
-                  <p>ID: {{ duplicate.secondary_patient_id }}</p>
-                  <p>Match: {{ duplicate.match_percentage }}%</p>
-                </ion-label>
-              </ion-item>
-            </ion-list>
-            <ion-button expand="block" @click="mergeSelected" :disabled="!hasSelectedDuplicates">
-              Merge Selected
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-content>
+    <ion-page>
+        <NavigationMenu/>
+        <ion-content>
+        <ion-grid>
+            <ion-row>
+            <!-- Left Panel: Primary Clients -->
+            <ion-col size="12" size-md="4">
+                <ion-list>
+                <ion-list-header>
+                    <ion-label>Primary Clients</ion-label>
+                </ion-list-header>
+                <ion-item v-for="client in clients" :key="client.primary_patient_id" 
+                            button @click="selectPrimaryClient(client)" 
+                            :class="{ 'selected': selectedPrimaryClient === client }">
+                    <ion-label>{{ client.primary_firstname }} {{ client.primary_sirname }}</ion-label>
+                </ion-item>
+                </ion-list>
+            </ion-col>
+    
+            <!-- Middle and Right Panels -->
+            <ion-col size="12" size-md="8">
+                <!-- Middle Panel: Selected Primary Client Details -->
+                <ion-card v-if="selectedPrimaryClient">
+                <ion-card-header>
+                    <ion-card-title>{{ selectedPrimaryClient.primary_firstname }} {{ selectedPrimaryClient.primary_sirname }}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <p>Birth Date: {{ selectedPrimaryClient.primary_birthdate }}</p>
+                    <p>Gender: {{ selectedPrimaryClient.primary_gender }}</p>
+                    <p>ID: {{ selectedPrimaryClient.primary_patient_id }}</p>
+                </ion-card-content>
+                </ion-card>
+    
+                <!-- Right Panel: Duplicates -->
+                <ion-list v-if="selectedPrimaryClient">
+                <ion-list-header>
+                    <ion-label>Potential Duplicates</ion-label>
+                </ion-list-header>
+                <ion-item v-for="duplicate in selectedPrimaryClient.duplicates" :key="duplicate.secondary_patient_id">
+                    <ion-checkbox slot="start" v-model="duplicate.selected"></ion-checkbox>
+                    <ion-label>
+                    <h3>{{ duplicate.secondary_firstname }} {{ duplicate.secondary_sirname }}</h3>
+                    <p>ID: {{ duplicate.secondary_patient_id }}</p>
+                    <p>Match: {{ duplicate.match_percentage }}%</p>
+                    </ion-label>
+                </ion-item>
+                </ion-list>
+                <ion-button expand="block" @click="mergeSelected" :disabled="!hasSelectedDuplicates">
+                Merge Selected
+                </ion-button>
+            </ion-col>
+            </ion-row>
+        </ion-grid>
+        </ion-content>
+    </ion-page>
   </template>
   
   <script lang="ts">
-  import { IonContent, IonGrid, IonRow, IonCol, IonList, IonListHeader, IonItem, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonCheckbox, IonButton } from "@ionic/vue";
+  import { IonContent, IonGrid, IonPage, IonRow, IonCol, IonList, IonListHeader, IonItem, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonCheckbox, IonButton } from "@ionic/vue";
   import { defineComponent, ref, computed } from "vue";
+  import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMenu.vue";
+  import { PatientService } from "@/services/patient_service";
+  import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
   
   export default defineComponent({
     name: 'ClientDeduplication',
     components: {
       IonContent, IonGrid, IonRow, IonCol, IonList, IonListHeader, IonItem, IonLabel, 
-      IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonCheckbox, IonButton
+      IonCard, IonCardHeader, IonPage, IonCardTitle, IonCardContent, IonCheckbox, IonButton, NavigationMenu
     },
     setup() {
       const clients = ref([
@@ -136,20 +142,20 @@
         }
       ]);
   
-      const selectedPrimaryClient = ref(null);
+      const selectedPrimaryClient = ref(null) as any;
   
-      const selectPrimaryClient = (client) => {
+      const selectPrimaryClient = (client: any) => {
         selectedPrimaryClient.value = client;
       };
   
       const hasSelectedDuplicates = computed(() => {
         return selectedPrimaryClient.value && 
-               selectedPrimaryClient.value.duplicates.some(d => d.selected);
+               selectedPrimaryClient.value.duplicates.some((d: any) => d.selected);
       });
   
       const mergeSelected = () => {
         if (selectedPrimaryClient.value) {
-          const selectedDuplicates = selectedPrimaryClient.value.duplicates.filter(d => d.selected);
+          const selectedDuplicates = selectedPrimaryClient.value.duplicates.filter((d: any) => d.selected);
           console.log(`Merging ${selectedDuplicates.length} duplicates into ${selectedPrimaryClient.value.primary_firstname} ${selectedPrimaryClient.value.primary_sirname}`);
           // Implement actual merge logic here
         }
@@ -162,7 +168,25 @@
         hasSelectedDuplicates,
         mergeSelected
       };
-    }
+    },
+    watch: {
+        $route: {
+        async handler(data) {
+          if (data.name == "Deduplicateclients")
+          this.initNavData()
+        },
+            deep: true,
+        },
+    },
+    async mounted() {
+        this.initNavData()
+    },
+    methods: {
+        initNavData() {
+            const store = EIRreportsStore()
+            store.setNavigationPayload('Clients De-Duplication', true, false, '/', 'home', '')
+        },
+    },
   });
   </script>
   
