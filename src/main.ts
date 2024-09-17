@@ -52,3 +52,6 @@ DataTable.use(DataTablesCore);
 router.isReady().then(() => {
     app.mount("#app");
 });
+
+
+

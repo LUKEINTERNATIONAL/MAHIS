@@ -5,6 +5,8 @@
         <basic-form
             :contentData="newbornComplications"
             :initialData1="initialData"
+            @update:selected="handleInputData"
+            @update:inputValue="handleInputData"
         ></basic-form>
       </ion-card-content>
     </ion-card>
@@ -36,11 +38,14 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  getRadioSelectedValue,
+  modifyFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
 //import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
 import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
+import { LocationService } from '@/services/location_service';
 export default defineComponent({
   name: "DeliveryNewbornDetails",
   components:{
@@ -69,7 +74,7 @@ export default defineComponent({
       hasValidationErrors: [] as any,
       inputField: '' as any,
       initialData:[] as any,
-
+      facilities:[] as any
 
     };
   },
@@ -77,16 +82,44 @@ export default defineComponent({
     ...mapState(useSecondStageOfLabourStore,["newbornComplications"]),
 
   },
-  mounted(){
+  async mounted(){
     const newbornComplications=useSecondStageOfLabourStore()
-    this.initialData=newbornComplications.getInitialNewbornComplications()
+    this.initialData=newbornComplications.getInitialNewbornComplications();
   },
   watch:{
+    newbornComplications:{
+      handler(){
+        this.handleOtherFacilitySelect()
+      },
+      deep:true
+    },
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+   async handleInputData(col:any){
+      if(col.name=="Facility"){
+          modifyFieldValue(this.newbornComplications,'Facility',"popOverData",{
+            filterData: false,
+            data: await this.getLocations(col.value),
+          },)
+
+      }
+    },
+    handleOtherFacilitySelect(){
+      const otherCheck=getRadioSelectedValue(this.newbornComplications, 'Place of delivery')=="Other facility";
+
+
+      console.log(getRadioSelectedValue(this.newbornComplications, 'Place of delivery'));
+      console.log(otherCheck);
+
+      modifyFieldValue(this.newbornComplications,'Facility','displayNone', !otherCheck);
+    },
+   async getLocations(value:any){
+     return await LocationService.getFacilities({name:value});
+    }
+  }
 });
 
 </script>

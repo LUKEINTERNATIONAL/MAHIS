@@ -180,6 +180,9 @@ export default defineComponent({
     },
 
     handleAddBabyDetails(babyNumber: number) {
+      const secondStageDetails = useSecondStageOfLabourStore();
+      secondStageDetails.setBabyDetails()
+
       this.selectedBaby = babyNumber;
       this.toggleBabyModal()
     },
@@ -219,7 +222,7 @@ export default defineComponent({
       modifyRadioValue(this.babyDetails, 'Tetracycline eye ointment given', 'displayNone', visibility);
       modifyRadioValue(this.babyDetails, 'Chlorhexidine', 'displayNone', visibility);
       modifyCheckboxHeader(this.babyDetails,'Newborn baby complications','displayNone', visibility)
-      modifyCheckboxHeader(this.babyDetails,'Management to newborn','displayNone', visibility)
+      // modifyCheckboxHeader(this.babyDetails,'Management to newborn','displayNone', visibility)
       modifyRadioValue(this.babyDetails,'Oxytocin 10 UI given','displayNone', visibility)
       modifyRadioValue(this.babyDetails,'Vitamin K given','displayNone', visibility)
     }

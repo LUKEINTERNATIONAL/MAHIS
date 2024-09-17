@@ -334,7 +334,95 @@ const babyDetails = [
             ],
         },
     },
-    
+    {
+        sideColSize: 1,
+        childName: "Asphyxia",
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Was resuscitation attempted?",
+                selectedValue: "",
+                name: "Resuscitation attempt",
+                class: "bold",
+                displayNext: "Yes",
+                displayNone: true,
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Resuscitation attempt",
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Type of resuscitation?",
+                selectedValue: "",
+                displayNone: true,
+                class: "bold",
+                name: "Type of resuscitation",
+            },
+            data: [
+                {
+                    name: "Drying only",
+                    value: "Drying only",
+                    colSize: "7",
+                },
+                {
+                    name: "Clearing airway",
+                    value: "Clearing airway",
+                    colSize: "7",
+                },
+                {
+                    name: "Bag and mask",
+                    value: "Bag and mask",
+                    colSize: "7",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Other",
+        isFinishBtn: false,
+        sectionHeader: "",
+        classDash: "dashed_bottom_border _padding",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "Specify",
+                            unit: "",
+                            icon: icons.editPen,
+                            value: "",
+                            valueType: "text",
+                            name: "Other notes",
+                            required: true,
+                            eventType: "input",
+                            inputWidth: "85%",
+                        },
+                    ],
+                },
+            ],
+        },
+    },  
     {
         sideColSize: 1,
 
@@ -344,13 +432,13 @@ const babyDetails = [
                 title: "Select the management given to newborn",
                 selectedValue: "",
                 class: "bold",
-                displayNone: false,
+                displayNone: true,
                 name: "Management to newborn",
             },
             data: [
                 {
-                    name: "Nothing",
-                    value: "none",
+                    name: "Routine newborn care",
+                    value: "Routine newborn care",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -367,7 +455,7 @@ const babyDetails = [
             header: {
                 title: "",
                 selectedValue: "",
-                displayNone: false,
+                displayNone: true,
                 name: "Management to newborn",
             },
             data: [
@@ -389,7 +477,7 @@ const babyDetails = [
             header: {
                 title: "",
                 selectedValue: "",
-                displayNone: false,
+                displayNone: true,
                 name: "Management to newborn",
             },
             data: [
@@ -427,33 +515,7 @@ const babyDetails = [
             ],
         },
     },
-    {
-        selectdData: [],
-        sideColSize: 1,
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-            header: {
-                title: "Oxytocin 10 UI given?",
-                selectedValue: "",
-                class: "bold",
-                displayNone: false,
-                name: "Oxytocin 10 UI given",
-            },
-            data: [
-                {
-                    name: "Yes",
-                    value: "Yes",
-                    colSize: "2.5",
-                },
-                {
-                    name: "No",
-                    value: "No",
-                    colSize: "2.5",
-                },
-            ],
-        },
-    },
+   
     {
         selectdData: [],
         sideColSize: 1,
@@ -690,96 +752,6 @@ const initialSecondStageDetails = [
             ],
         },
     },
-    {
-        sideColSize: 1,
-        childName: "Asphyxia",
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-            header: {
-                title: "Was resuscitation attempted?",
-                selectedValue: "",
-                name: "Resuscitation attempt",
-                class: "bold",
-                displayNext: "Yes",
-                displayNone: true,
-            },
-            data: [
-                {
-                    name: "Yes",
-                    value: "Yes",
-                    colSize: "2.5",
-                },
-                {
-                    name: "No",
-                    value: "No",
-                    colSize: "2.5",
-                },
-            ],
-        },
-    },
-    {
-        sideColSize: 1,
-        childName: "Resuscitation attempt",
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-            header: {
-                title: "Type of resuscitation?",
-                selectedValue: "",
-                displayNone: true,
-                class: "bold",
-                name: "Type of resuscitation",
-            },
-            data: [
-                {
-                    name: "Drying only",
-                    value: "Drying only",
-                    colSize: "7",
-                },
-                {
-                    name: "Clearing airway",
-                    value: "Clearing airway",
-                    colSize: "7",
-                },
-                {
-                    name: "Bag and mask",
-                    value: "Bag and mask",
-                    colSize: "7",
-                },
-            ],
-        },
-    },
-    {
-        sideColSize: 1,
-        childName: "Other",
-        isFinishBtn: false,
-        sectionHeader: "",
-        classDash: "dashed_bottom_border _padding",
-
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            displayNone: true,
-                            inputHeader: "Specify",
-                            unit: "",
-                            icon: icons.editPen,
-                            value: "",
-                            valueType: "text",
-                            name: "Other notes",
-                            required: true,
-                            eventType: "input",
-                            inputWidth: "85%",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
 ] as any;
 const initialNewbornComplications = [
     // {
@@ -871,6 +843,45 @@ const initialNewbornComplications = [
             ],
         },
     },
+    {   
+        classDash: 'dashed_bottom_border',
+        header:{
+                 title: 'Other Facility',
+                 selectedValue: ''
+             },
+         data:{ 
+             rowData:[
+                 {
+                     colData:[
+                         {
+                            displayNone:true,
+                             class:"bold",
+                             inputHeader: "Specify Other Facility?",
+                             icon: icons.search,
+                             value: "",
+                             name: "Facility",
+                             popOver: true,
+                             valueType: "text",
+                             eventType: "input",
+                             required: true,
+                             alertsError: false,
+                             alertsErrorMassage: "",
+                             placeholder: "Search for facility",
+                             popOverData: {
+                                 filterData: false,
+                                 data: [],
+                             },
+                             id: "",
+                             idName: "facility_id",
+                         },
+                         
+                     ]
+                 }
+             ],
+             
+         }
+             
+     },
     {
         selectdData: [],
         isFinishBtn: false,
@@ -1402,7 +1413,6 @@ const initialObstetricDetails = [
         },
     },
 ] as any;
-
 
  
 export const useSecondStageOfLabourStore = defineStore("secondStageOfLabourStore", {

@@ -72,7 +72,7 @@ export function modifyGroupedRadioValue(data: any, radioBtnName: any, element: a
 export function modifyCheckboxValue(data: any, checkboxName: any, element: any, newValue: any, initialData = []) {
     data.forEach((item: any) => {
         const checkbox = item.checkboxBtnContent?.data.find((checkbox: any) => checkbox.name === checkboxName);
-            console.log({checkbox})
+      
         if (checkbox) {
             checkbox[element] = newValue;
             if (initialData.length > 0) {

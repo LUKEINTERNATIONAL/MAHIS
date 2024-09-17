@@ -16,7 +16,6 @@ const initialPlacentaExamination=[
                 },
                 data:[
 
-
                 ]
             }
 
@@ -86,16 +85,11 @@ const initialPlacentaExamination=[
                         colSize: '7',
                     },
 
-                    {
-                        name: 'Other',
-                        value: 'Other',
-                        colSize: '7',
-                    },
                 ]
             }
 
     },
-    {        classDash: 'dashed_bottom_border _padding',
+    {  classDash: 'dashed_bottom_border _padding',
         childName:'Mode of delivery',
         isFinishBtn: false,
         data:
@@ -130,7 +124,7 @@ const initialPlacentaExamination=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Placenta',
+                    title: 'Placenta Weight and Height',
                     selectedValue: '',
                     class:"bold",
                     name:"Placenta"
@@ -178,6 +172,32 @@ const initialPlacentaExamination=[
                 ]
             }
 
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Oxytocin 10 UI given?",
+                selectedValue: "",
+                class: "bold",
+                displayNone: false,
+                name: "Oxytocin 10 UI given",
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ],
+        },
     },
     {
         selectdData: [],
@@ -514,6 +534,6 @@ export const useThirdStageOfLabourStore = defineStore('thirdStageOfLabour',{
             return [...data]
         }
     },
-    persist:true,
+    // persist:true,
 
 })
