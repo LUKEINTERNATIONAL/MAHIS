@@ -5,6 +5,8 @@
       <ion-card-content>
         <basic-form :contentData="placentaExamination"
                     :initialData="initialData"
+                         @update:selected="handleInputData"
+        @update:inputValue="handleInputData"
 
         ></basic-form>
       </ion-card-content>
@@ -41,7 +43,8 @@ import {
 import BasicCard from "@/components/BasicCard.vue";
 //import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
-import {useThirdStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
+import {PlacentaExaminationValidationSchema, useThirdStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
+import { YupValidateField } from '@/services/validation_service';
 export default defineComponent({
   name: "ThirdStageOfDelivery",
   components:{
@@ -85,7 +88,17 @@ export default defineComponent({
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    async handleInputData(event: any) {
+      console.log(event.name, event.value);
+      YupValidateField(
+        this.placentaExamination,
+        PlacentaExaminationValidationSchema,
+        event.name,
+        event.value
+      );
+    },
+  }
 });
 
 </script>

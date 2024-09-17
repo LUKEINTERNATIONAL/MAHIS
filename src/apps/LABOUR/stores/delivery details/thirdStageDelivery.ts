@@ -1,6 +1,24 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 import _ from "lodash";
+import * as yup from "yup"
+
+
+export const PlacentaExaminationValidationSchema = yup.object().shape({
+    'Weight': yup.number()
+    .typeError("Weight can only be a number")
+    .min(0)
+    .required()
+.label("Weight"),
+'Length': yup.number()
+    .typeError("Length can only be a number")
+    .min(0)
+    .required(),
+'Cord Length': yup.number()
+    .typeError("Length can only be a number")
+    .min(0)
+    .required()
+})
 
 const initialPlacentaExamination=[
     {
@@ -23,7 +41,6 @@ const initialPlacentaExamination=[
     {
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
-
         data:
             {
                 rowData:[
@@ -117,34 +134,147 @@ const initialPlacentaExamination=[
             },
     },
 
+    // {
+    //     selectdData: [],
+    //     isFinishBtn: false,
+    //     classDash: 'dashed_bottom_border _padding',
+    //     radioBtnContent:
+    //         {
+    //             header:{
+    //                 title: 'Placenta Weight and Length',
+    //                 selectedValue: '',
+    //                 class:"bold",
+    //                 name:"Placenta"
+    //             },
+    //             data:[
+    //                 {
+    //                     name: 'Complete',
+    //                     value: 'Complete',
+    //                     colSize: '3',
+    //                 },
+    //                 {
+    //                     name: 'Incomplete',
+    //                     value: 'Incomplete',
+    //                     colSize: '3',
+    //                 },
+
+    //             ]
+    //         }
+
+    // },
     {
         selectdData: [],
         isFinishBtn: false,
-        classDash: 'dashed_bottom_border _padding',
+        classDash: '',
         radioBtnContent:
             {
                 header:{
-                    title: 'Placenta Weight and Height',
-                    selectedValue: '',
-                    class:"bold",
-                    name:"Placenta"
+                    title: 'Placenta Weight and Length',
+                    class:'bold',
+                    selectedValue: ''
                 },
                 data:[
-                    {
-                        name: 'Complete',
-                        value: 'Complete',
-                        colSize: '3',
-                    },
-                    {
-                        name: 'Incomplete',
-                        value: 'Incomplete',
-                        colSize: '3',
-                    },
 
                 ]
             }
 
     },
+    {
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                inputHeader: '',
+                                unit: '',
+                                icon: icons.editPen,
+                                valueType: 'text',
+                                name: 'Weight',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:'Enter Weight',
+
+                            },
+                            {
+                                inputHeader: '',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType: 'text',
+                                name: 'Length',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:'Enter Length',
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Cord Length',
+                    selectedValue: '',
+                    class:"bold",
+                    name:""
+                },
+                data:[
+
+
+                ]
+            }
+
+    },
+
+    {
+        classDash: 'dashed_bottom_border _padding',
+        isFinishBtn: false,
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            // {
+                            //     inputHeader: '',
+                            //     unit: '',
+                            //     icon: icons.editPen,
+                            //     value: '',
+                            //     valueType:'text',
+                            //     name: 'Placenta weight',
+                            //     required: true,
+                            //     eventType: 'input',
+                            //     placeholder:''
+
+                            // },
+                            {
+                                inputHeader: '',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:'text',
+                                name: 'Cord Length',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:''
+
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+
+
     {
         selectdData: [],
         isFinishBtn: false,
@@ -199,64 +329,6 @@ const initialPlacentaExamination=[
             ],
         },
     },
-    {
-        selectdData: [],
-        isFinishBtn: false,
-        radioBtnContent:
-            {
-                header:{
-                    title: 'Placenta and Cord weight',
-                    selectedValue: '',
-                    class:"bold",
-                    name:""
-                },
-                data:[
-
-
-                ]
-            }
-
-    },
-
-    {
-        classDash: 'dashed_bottom_border _padding',
-        isFinishBtn: false,
-        data:
-            {
-                rowData:[
-                    {
-                        colData: [
-                            {
-                                inputHeader: '',
-                                unit: '',
-                                icon: icons.editPen,
-                                value: '',
-                                valueType:'text',
-                                name: 'Placenta weight',
-                                required: true,
-                                eventType: 'input',
-                                placeholder:''
-
-                            },
-                            {
-                                inputHeader: '',
-                                unit: '',
-                                icon: icons.editPen,
-                                value: '',
-                                valueType:'text',
-                                name: 'Cord weight',
-                                required: true,
-                                eventType: 'input',
-                                placeholder:''
-
-                            },
-
-                        ]
-                    }
-                ]
-            },
-    },
-
     {
         selectdData: [],
         isFinishBtn: false,
