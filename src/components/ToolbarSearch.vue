@@ -4,6 +4,7 @@
     
     <div style="display: flex; align-items: center">
         <ion-input
+            style="color: #000; width: 100%"
             @ionInput="handleInput"
             fill="outline"
             :value="searchValue"
