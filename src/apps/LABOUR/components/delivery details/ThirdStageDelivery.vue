@@ -39,10 +39,11 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  getRadioSelectedValue,
+  modifyRadioValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
-import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
+
 import {PlacentaExaminationValidationSchema, useThirdStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
 import { YupValidateField } from '@/services/validation_service';
 export default defineComponent({
@@ -84,13 +85,18 @@ export default defineComponent({
     this.initialData=placentaExamination.getInitial()
   },
   watch:{
+    placentaExamination : {
+      handler(){
+        this.handleCervixTearChange();
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
   methods: {
     async handleInputData(event: any) {
-      console.log(event.name, event.value);
       YupValidateField(
         this.placentaExamination,
         PlacentaExaminationValidationSchema,
@@ -98,6 +104,20 @@ export default defineComponent({
         event.value
       );
     },
+
+    handleCervixTearChange(){
+      const tearChange =
+        getRadioSelectedValue(this.placentaExamination, "Presentation") ==
+        "Other";
+
+      modifyRadioValue(
+        this.placentaExamination,
+        "Severity",
+        "displayNone",
+        !tearChange
+      );
+    }
+
   }
 });
 

@@ -42,13 +42,10 @@ import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import {
-  dynamicValue,
-  getCheckboxSelectedValue,
-  getFieldValue,
-} from '@/services/data_helpers';
+
 import BasicCard from "@/components/BasicCard.vue";
 import {useLabourPhysicalExamStore} from "@/apps/LABOUR/stores/physical exam/physicalExamination";
+import { getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 export default defineComponent({
   name: "History",
   components:{
@@ -86,11 +83,46 @@ export default defineComponent({
   mounted(){
   },
   watch:{
+    otherphysicalExams:{
+      handler(){
+        this.handleOtherPresentation();
+        this.handleContractions();
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    handleOtherPresentation(){
+      const isOther =
+        getRadioSelectedValue(this.otherphysicalExams, "Presentation") ==
+        "Other";
+
+      modifyFieldValue(
+        this.otherphysicalExams,
+        "Other",
+        "displayNone",
+        !isOther
+      );
+    },
+    handleContractions(){
+      const isOther =
+        getRadioSelectedValue(this.otherphysicalExams, "Contractions") ==
+        "no Contraction Felt";
+
+
+        console.log(getRadioSelectedValue(this.otherphysicalExams, "Contractions"));
+
+      modifyFieldValue(
+        this.otherphysicalExams,
+        "Number of contraction",
+        "displayNone",
+        isOther
+      );
+    }
+  }
 });
 
 </script>

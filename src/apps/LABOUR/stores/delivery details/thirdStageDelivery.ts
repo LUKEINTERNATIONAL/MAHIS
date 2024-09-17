@@ -15,9 +15,14 @@ export const PlacentaExaminationValidationSchema = yup.object().shape({
     .min(0)
     .required(),
 'Cord Length': yup.number()
-    .typeError("Length can only be a number")
+    .typeError("Cord Length can only be a number")
     .min(0)
-    .required()
+    .required(),
+    'Number of vessels': yup.number()
+    .typeError("Number of Vessels can only be a number")
+    .min(0)
+    .required(),
+
 })
 
 const initialPlacentaExamination=[
@@ -273,6 +278,34 @@ const initialPlacentaExamination=[
                 ]
             },
     },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Cord insertion',
+                    selectedValue: '',
+                    class:"bold",
+                    name:'Cord insertion'
+                },
+                data:[
+                    {
+                        name: 'Central',
+                        value: 'central',
+                        colSize: '3',
+                    },
+                    {
+                        name: 'Lateral',
+                        value: 'lateral',
+                        colSize: '3',
+                    },
+
+                ]
+            }
+
+    },
 
 
     {
@@ -329,34 +362,7 @@ const initialPlacentaExamination=[
             ],
         },
     },
-    {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: 'dashed_bottom_border _padding',
-        radioBtnContent:
-            {
-                header:{
-                    title: 'Cord insertion',
-                    selectedValue: '',
-                    class:"bold",
-                    name:'Cord insertion'
-                },
-                data:[
-                    {
-                        name: 'Central',
-                        value: 'central',
-                        colSize: '3',
-                    },
-                    {
-                        name: 'Lateral',
-                        value: 'lateral',
-                        colSize: '3',
-                    },
 
-                ]
-            }
-
-    },
     {
         selectdData: [],
         isFinishBtn: false,
@@ -487,6 +493,43 @@ const initialPlacentaExamination=[
             }
 
     },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                displayNone:true,
+                title: "Severity of Tear",
+                selectedValue: "",
+                name: "Severity",
+                class: "bold",
+            },
+            data: [
+                {
+                    name: "Lacerations",
+                    value: "Lacerations",
+                    colSize: "2.5",
+                },
+                {
+                    name: "First Degree",
+                    value: "First Degree",
+                    colSize: "3",
+                },
+                {
+                    name: "Second Degree",
+                    value: "Second Degree",
+                    colSize: "3",
+                },
+                {
+                    name: "Third Degree",
+                    value: "Third Degree",
+                    colSize: "3",
+                },
+            ],
+        },
+    },
+    
 
     {
         selectdData: [],
