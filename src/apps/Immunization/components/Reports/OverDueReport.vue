@@ -98,19 +98,25 @@ export default defineComponent({
             isLoading: false,
         };
     },
+    
     computed: {
         ...mapState(useStartEndDate, ["startEndDate"]),
     },
-    $route: {
-        async handler() {},
-        deep: true,
-    },
     watch: {
-        stock: {
-            async handler(){
+        $route: {
+        async handler(data) {
+          if (data.name == "OverDueReport"){
+            await this.buildTableData().then(() => {
+                const table = (this.$refs.dataTable as any)?.dt;
 
-            },
-            deep: true,
+                table.on("click", ".follow-up-btn", (e: Event) => {
+                    const id = (e.target as HTMLElement ).getAttribute("data-id");
+                    this.handleFollowUp(id);
+                });
+            });
+          }   
+        },
+        deep: true,
         },
     },
     async mounted() {
@@ -142,6 +148,7 @@ export default defineComponent({
             this.isLoading = true;
 
             try {
+                this.reportData = [];
                 const vaccineData = await getVaccinesData();
                 
                 //Loop hrough each item in the vaccineData
