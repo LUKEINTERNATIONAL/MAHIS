@@ -8,7 +8,6 @@ import { Program } from "../interfaces/program";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { ProgramService } from "@/services/program_service";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import ProgramData from "@/Data/ProgramData";
 import { OrderService } from "@/services/order_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 
@@ -84,6 +83,10 @@ export class UserService extends Service {
 
     static getUsers() {
         return super.getJson("users", { role: "Provider" });
+    }
+
+    static getUsersByRole( role: any) {
+        return super.getJson("users" , role);
     }
 
     static getSystemUsageByUsers(startDate: string, endDate: string) {

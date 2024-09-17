@@ -392,7 +392,6 @@ export default defineComponent({
             }else{
                  modifyFieldValue(this.syphilisTest,'Reason','displayNone',true)
             }
-            console.log(getCheckboxSelectedValue(this.syphilisTest,'notDone'))
         },
 
 

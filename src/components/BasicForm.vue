@@ -102,7 +102,7 @@
                                 :multiple="true"
                                 :taggable="true"
                                 :hide-selected="true"
-                                :close-on-select="false"
+                                :close-on-select="true"
                                 :openDirection="col.openDirection || 'bottom'"
                                 :prevent-autofocus="true"
                                 tabindex="-1"
@@ -441,7 +441,9 @@ export default defineComponent({
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateMultiselect") {
-                this.validateData(data, col, event?.name);
+                const multipleValues = Array.isArray(event) ? event.map((item: any) => item.name) : [];
+                const singleValue = typeof event === "object" ? event.name : "";
+                this.validateData(data, col, col?.isMultiSelect ? multipleValues : singleValue);
                 modifyFieldValue(data, col.name, "value", event);
                 this.$emit("update:inputValue", col);
             }

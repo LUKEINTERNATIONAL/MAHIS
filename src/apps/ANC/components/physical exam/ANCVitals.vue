@@ -55,6 +55,7 @@ export default defineComponent({
             RespiratoryStatus: {} as any,
             OxygenStatus: {} as any,
             vValidations: "" as any,
+            initialData:[] as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
@@ -62,9 +63,11 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useVitalsStore, ["vitals"]),
+      ...mapState(useVitalsStore,['vitals'])
     },
    async mounted() {
+      const vitals=useVitalsStore();
+      this.initialData=vitals.getInitialVitals()
         await this.setTodayVitals();
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);

@@ -97,6 +97,14 @@ export function modifyCheckboxHeader(data: any, headerName: any, element: any, n
         }
     });
 }
+
+export function modifyCheckboxData(data: any, type: any, headerName: any, newValue: any) {
+    data.forEach((item: any) => {
+        if (item[type]?.header?.name === headerName) {
+            item[type].data = newValue;
+        }
+    });
+}
 function modifyObjects(data: any[], triggerName: any, initialData: any) {
     data.forEach((item: any, index: number) => {
         if (triggerName && item.childName === triggerName) {

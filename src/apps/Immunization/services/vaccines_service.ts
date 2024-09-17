@@ -8,11 +8,15 @@ import HisDate from "@/utils/Date";
 import { createModal } from "@/utils/Alerts";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 import { ObservationService } from "@/services/observation_service";
+import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { useUserStore } from "@/stores/userStore";
 
-export async function getVaccinesSchedule() {
+export async function getVaccinesSchedule(patientID = null) {
     const patient = new PatientService();
-    if (patient.getID()) {
-        const data = await Service.getJson("eir/schedule", { patient_id: patient.getID() });
+    const id = patientID !== null ? patientID : patient.getID();
+    
+    if (id) {
+        const data = await Service.getJson("eir/schedule", { patient_id: id });
         return data;
     }
 }
@@ -132,9 +136,20 @@ export function checkDrugName(drug: any) {
 }
 
 function isNameInList(name: string): boolean {
-    const nameList = ['Vit A', 'Albendazole (400mg tablet)', 'Albendazole (200mg tablet)'];
-    return nameList.some(listedName => listedName.toLowerCase().includes(name.toLowerCase()));
+    const nameList = ['Vit','Albendazole'];
+    const nameParts = name.toLowerCase().split(/[\s,()]+/); // Split the input name into parts
+    
+    return nameList.some(listedName => {
+        const listedNameParts = listedName.toLowerCase().split(/[\s,()]+/); // Split each listed name into parts
+        
+        // Check if any part of the input name matches any part of the listed name
+        return listedNameParts.some(listedPart => 
+            nameParts.some(namePart => namePart.includes(listedPart) || listedPart.includes(namePart))
+        );
+    });
 }
+
+
 
 export async function getMonthsList(): Promise<any> {
     const data = await Service.getJson("immunization/months_picker");
@@ -159,4 +174,110 @@ export async function getunderfiveImmunizationsDrugs() {
 export async function getImmunizationDrugs(): Promise<any> {
     const data = await Service.getJson(`/immunization/drugs`)
     return data
+}
+
+
+// Define interfaces for better type safety
+interface ImmunizationRecord {
+    label: string;
+    fixed: {
+        lessThan1y: number;
+        moreThan1y: number;
+    };
+    outreach: {
+        lessThan1y: number;
+        moreThan1y: number;
+    };
+}
+
+interface AEFIVaccine {
+    name: string;
+}
+
+interface AEFICase {
+    name: string;
+    data: { count: number }[];
+}
+
+interface AEFICategory {
+    name: string;
+    cases: AEFICase[];
+}
+
+interface AEFIData {
+    vaccines: AEFIVaccine[];
+    categories: AEFICategory[];
+}
+
+interface EIRReportsStore {
+    immunizationMonthlyReportData: ImmunizationRecord[];
+    AEFIReportData: AEFIData;
+}
+
+function escapeCSV(str: string): string {
+    if (/[,"\n]/.test(str)) {
+        return `"${str.replace(/"/g, '""')}"`;
+    }
+    return str;
+}
+
+export function exportReportToCSV(): void {
+    try {
+        const store = EIRreportsStore()
+        const user_store = useUserStore()
+        const navigator_ = navigator as any
+
+        let CSVString = generateCSVStringForImmunizationMonthly(store.$state.immunizationMonthlyRepoartData as any);
+        CSVString += '\n';
+        CSVString += generateCSVStringForAEFIMonthly(store.$state.AEFIReportData as any);
+        CSVString += '\n';
+        CSVString += `
+        Date Created: ${new Date().toISOString().split('T')[0]}
+        Report Period: ${store.$state.navigationPayload.subTxt}
+        Site: ${user_store.$state.userFacilityName}`
+
+        const csvData = new Blob([CSVString], { type: "text/csv;charset=utf-8;" });
+        const reportTitle = `${user_store.$state.userFacilityName}_${store.$state.navigationPayload.subTxt}_${store.$state.navigationPayload.title}`;
+
+        if (navigator_.msSaveBlob) {
+            navigator_.msSaveBlob(csvData, `${reportTitle}.csv`);
+        } else {
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(csvData);
+            link.setAttribute("download", `${reportTitle}.csv`);
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    } catch (error) {
+        console.error("Error exporting CSV:", error);
+    }
+}
+
+function generateCSVStringForImmunizationMonthly(data: ImmunizationRecord[]): string {
+    let CSVString = "Category,Static <1y,Static >1y,Outreach <1y,Outreach >1y\n";
+    for (const record of data) {
+        const row = [
+            escapeCSV(record.label),
+            record.fixed.lessThan1y,
+            record.fixed.moreThan1y,
+            record.outreach.lessThan1y,
+            record.outreach.moreThan1y
+        ].join(',');
+        CSVString += row + '\n';
+    }
+    return CSVString;
+}
+
+function generateCSVStringForAEFIMonthly(data: AEFIData): string {
+    let CSVString = 'Cases,' + data.vaccines.map(v => escapeCSV(v.name)).join(',') + '\n';
+    for (const category of data.categories) {
+        CSVString += escapeCSV(category.name) + '\n';
+        for (const caseItem of category.cases) {
+            const rowData = [escapeCSV(caseItem.name), ...caseItem.data.map(d => d.count)];
+            CSVString += rowData.join(',') + '\n';
+        }
+    }
+    return CSVString;
 }

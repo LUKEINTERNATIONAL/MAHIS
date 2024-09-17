@@ -29,7 +29,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Date Of Birth</th>
-                            <th>Missed Milestones</th>
+                            <th>Missed Doses</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -157,21 +157,25 @@ export default defineComponent({
                 
                 //Loop hrough each item in the vaccineData
                 vaccineData.forEach((dataItem: any) => {
-                    dataItem.value.under_five_missed_visits.forEach((visit: any) => {
+                    const overdue_clients = dataItem.value.under_five_missed_visits.concat(dataItem.value.over_five_missed_visits)
+                   
+                    overdue_clients.forEach((visit: any) => {
+                        let doses =  0;
                         // Extract personal details from each visit 
                         let item = visit.client.table;
 
-                        //const personalDetails = { birthdate, given_name, family_name, patient_id };
-
-                        //Push perso
+                        visit.missed_visits.forEach(( missed_visit: any) => {
+                            doses += missed_visit.antigens.length
+                        });
+                        
                         this.reportData.push([
                             `${item.given_name} ${item.family_name}`,
                             item.birthdate,
-                            visit.missed_visits.length,
+                            doses,
                             `<button class="btn btn-sm btn-primary follow-up-btn" data-id="${item.patient_id}">Follow UP</button>`
                         ]);
                         
-                    })
+                    });
                 })
 
                 DataTable.use(DataTablesCore);
