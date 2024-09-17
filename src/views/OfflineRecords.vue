@@ -65,13 +65,15 @@ import { useStartEndDate } from "@/stores/StartEndDate";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { savePatientRecord } from "@/services/save_records";
 import "datatables.net-select";
 import db from "@/db";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 // DataTable.use(DataTablesCore);
 
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser],
+    mixins: [SetUser, SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -117,7 +119,9 @@ export default defineComponent({
         ...mapState(useStartEndDate, ["startEndDate"]),
     },
     $route: {
-        async handler() {},
+        async handler() {
+            await this.buildTableData();
+        },
         deep: true,
     },
     watch: {
@@ -148,8 +152,9 @@ export default defineComponent({
             this.openModal(JSON.parse(data));
         },
 
-        handleDelete(id: any) {
+        async handleDelete(id: any) {
             // Implement delete logic here
+            await savePatientRecord();
             console.log(`Deleting item with id: ${id}`);
         },
         async handleInputData(event: any) {
@@ -172,7 +177,7 @@ export default defineComponent({
                             return [
                                 item.personInformation.given_name + " " + item.personInformation.family_name,
                                 item.offlinePatientID,
-                                item.serverPatientID,
+                                this.patientIdentifier(item.patientData),
                                 item.saveStatusPersonInformation,
                                 item.saveStatusBirthRegistration,
                                 item.saveStatusGuardianInformation,
