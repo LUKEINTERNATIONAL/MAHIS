@@ -77,7 +77,7 @@
                   'selected': selectedSection === 'fixed' || selectedColumn === 'fixedLessThan1y'
                 }"
               >
-                {{ row.fixed.lessThan1y }}
+                 <pan @click="openPersonCardComponent"> {{ row.fixed.lessThan1y }}</pan>
               </td>
               <td
                 :class="{
@@ -121,10 +121,12 @@ import { mapState } from "pinia";
 import { getVaccinesAdministered, getImmunizationDrugs, exportReportToCSV } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { add, fileTray, downloadOutline } from 'ionicons/icons';
+import PersonCardComponent from "@/apps/Immunization/components/Modals/PersonCardComponent.vue"
+import { createModal } from "@/utils/Alerts";
 
 export default defineComponent({
     name: 'TableComponent',
-    components: { IonContent, IonPage, IonFab, IonFabButton, NavigationMenu,  IonRow, IonCol },
+    components: { IonContent, IonPage, IonFab, IonFabButton, NavigationMenu,  IonRow, IonCol, PersonCardComponent },
     data() {
       return {
         selectedSection: '', // To keep track of the selected section
@@ -133,6 +135,11 @@ export default defineComponent({
         fileTray,
         downloadOutline,
         exportReportToCSV,
+        peopleArray: [
+        { id: 1, firstName: 'John', lastName: 'Doe', age: 30, dob: '1993-05-15', sex: 'Male' },
+        { id: 2, firstName: 'Jane', lastName: 'Smith', age: 28, dob: '1995-09-22', sex: 'Female' },
+        // Add more people as needed
+      ],
       };
     },
     watch: {
@@ -192,9 +199,15 @@ export default defineComponent({
         const store = EIRreportsStore()
         store.setImmunizationMonthlyRepoartData(this.tableData)
       },
-      generateCSVStringForAEFIMonthly() {
-        console.log()
-      }
+      openPersonCardComponent() {
+        const       peopleArray = [
+          { id: 1, firstName: 'John', lastName: 'Doe', age: 30, dob: '1993-05-15', sex: 'Male' },
+          { id: 2, firstName: 'Jane', lastName: 'Smith', age: 28, dob: '1995-09-22', sex: 'Female' },
+          // Add more people as needed
+        ]
+        const dataToPass = {'people': peopleArray}
+        createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass);
+      },
     },
   });
   </script>
