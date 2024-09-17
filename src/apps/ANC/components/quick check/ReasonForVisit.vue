@@ -35,7 +35,7 @@ import { icons } from '@/utils/svg';
 import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
-import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
+import {ReasonForVisitValidationSchema, useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
 import {usePastMedicalHistoryStore} from "@/apps/OPD/stores/PastMedicalHistoryStore";
 import {
   getCheckboxSelectedValue,
@@ -46,6 +46,7 @@ import {
   modifyRadioValue
 } from "@/services/data_helpers";
 import { validateField } from '@/services/ANC/quickCheck_validation_service';
+import { YupValidateField } from '@/services/validation_service';
 
 export default defineComponent({
   name: 'Menu',
@@ -94,10 +95,18 @@ export default defineComponent({
     return { checkmark,pulseOutline };
   },
   methods:{
+    async handleInputData(event: any) {
+      YupValidateField(
+        this.ReasonForVisit,
+        ReasonForVisitValidationSchema,
+        event.name,
+        event.value
+      );
+    },
     validationRules(event: any) {
             return validateField(this.ReasonForVisit, event.name, (this as any)[event.name]);
      },
-   async handleInputData(event:any){
+   async handleInputDataa(event:any){
      this.validationRules(event)
    },
     navigationMenu(url: any){
@@ -159,13 +168,20 @@ handleFirstAntenalVisit() {
   }
 
   if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
-    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
-    modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
   } else {
-    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
-    modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+        modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+  }
+
+  if(getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'Yes'){
   }
 }
+
+
+
+
 
 
 ,

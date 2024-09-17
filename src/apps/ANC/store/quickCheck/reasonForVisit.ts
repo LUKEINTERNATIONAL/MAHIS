@@ -1,6 +1,14 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+import * as yup from "yup";
+
+export const ReasonForVisitValidationSchema = yup.object().shape({
+  Weight: yup
+    .number()
+    .typeError("Weight can only be a number")
+    .min(0),
+});
 
 const initialReasonForVisit = [
     {
