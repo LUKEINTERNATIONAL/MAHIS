@@ -140,7 +140,11 @@ export default defineComponent({
        !(liquor=="meconium stained")
       );
 
+      modifyFieldValue(this.firstVaginalExamination,"specify","displayNone",!(whatIsPresenting=="other"))
       modifyFieldValue(this.firstVaginalExamination,"Position of sutures and fontanelles","displayNone",!(whatIsPresenting=="head"))
+      modifyRadioValue(this.firstVaginalExamination,"Level in relation to ischial spines","displayNone",!(whatIsPresenting=="head"))
+      modifyRadioValue(this.firstVaginalExamination,"Caput","displayNone",!(whatIsPresenting=="head"))
+      modifyRadioValue(this.firstVaginalExamination,"Moulding","displayNone",!(whatIsPresenting=="head"))
     },
   }
 });

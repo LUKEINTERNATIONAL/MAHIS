@@ -615,6 +615,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                         value: '',
                                         name: 'specify',
                                         required: true,
+                                        displayNone:true,
                                         eventType: 'input',
                                     },
 
@@ -656,6 +657,8 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Level in relation to ischial spines *',
+                            name: 'Level in relation to ischial spines',
+                            displayNone: true,
                             selectedValue: ''
                         },
                         data:[
@@ -692,6 +695,8 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Caput',
+                            name: 'Caput',
+                            displayNone:true,
                             selectedValue: ''
                         },
                         data:[
@@ -734,10 +739,19 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Moulding *',
+                            title: 'Moulding',
+                            name: 'Moulding',
+                            displayNone:true,
                             selectedValue: ''
                         },
                         data:[
+                            {
+                                name: 'zero',
+                                value: 'zero',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
                             {
                                 name: '+',
                                 value: '+',
