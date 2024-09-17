@@ -2,18 +2,12 @@
   <div class="container">
       <!-- Pallor -->
       <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Respiratory exam findings</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="respiratory"></basic-form>
       </ion-card-content>
     </ion-card>
     <!-- Pallor -->
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Is Pallor present?</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="pallor"></basic-form>
       </ion-card-content>
@@ -21,18 +15,12 @@
 
     <!-- Breast exam Section -->
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Breast exam result</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="breastExam"></basic-form>
       </ion-card-content>
     </ion-card>
     <!-- vaginal inspection Section -->
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header"> Vaginal inspection</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="vaginalInspection"></basic-form>
       </ion-card-content>
@@ -40,9 +28,6 @@
 
     <!-- Cervical exam -->
     <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Cervical exam conducted?</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="cervicalExam"></basic-form>
       </ion-card-content>
@@ -50,9 +35,6 @@
 
     <!-- oedema exam Section -->
     <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">oedema</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="oedemaPresence"></basic-form>
       </ion-card-content>
@@ -221,18 +203,6 @@ export default defineComponent({
            modifyRadioValue(this.oedemaPresence, 'Oedema severity', 'displayNone', true)}
     },
 
-    //Method for navigating
-    goToNextSection() {
-      if (this.currentSection < 4) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
-
   }
 });
 
@@ -255,7 +225,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 500px; /* Adjust max-width as needed */
+  max-width: 500px;
 }
 
 @media (max-width: 1500px) {
@@ -268,7 +238,7 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+  width: 100%;
+  color: black;
 }
 </style>

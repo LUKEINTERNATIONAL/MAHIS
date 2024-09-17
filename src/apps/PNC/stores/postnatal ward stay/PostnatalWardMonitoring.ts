@@ -2,331 +2,329 @@ import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 import _ from "lodash";
 
-const initialWardDangerSigns=[
-    {
-        selectdData: [],
-        classDash: 'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: 'Danger signs*',
-                    selectedValue: '',
-                    class:'bold',
-                    name:'Danger signs'
-                },
-                data:[
-
-                    {
-                        name: 'Bleeding vaginally',
-                        value: 'bleeding vaginally',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-                    {
-                        name: 'Central cyanosis',
-                        value: 'central cyanosis',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-                ]
-            }
-
+const initialWardDangerSigns = [
+  {
+    selectdData: [],
+    classDash: "dashed_bottom_border",
+    checkboxBtnContent: {
+      header: {
+        title: "Danger signs*",
+        selectedValue: "",
+        class: "bold",
+        name: "Danger signs",
+      },
+      data: [
+        {
+          name: "Bleeding vaginally",
+          value: "bleeding vaginally",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+        {
+          name: "Central cyanosis",
+          value: "central cyanosis",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+      ],
     },
-    {
-        selectdData: [],
-        classDash: 'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: '',
-                    selectedValue: '',
-                    name:'Danger signs'
-
-                },
-                data:[
-
-                    {
-                        name: 'Preterm labour',
-                        value: 'Preterm labour',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-                    {
-                        name: 'Severe vomiting',
-                        value: 'severe vomiting',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-                ]
-            }
-
+  },
+  {
+    selectdData: [],
+    classDash: "dashed_bottom_border",
+    checkboxBtnContent: {
+      header: {
+        title: "",
+        selectedValue: "",
+        name: "Danger signs",
+      },
+      data: [
+        {
+          name: "Convulsions",
+          value: "convulsions",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+        {
+          name: "Severe vomiting",
+          value: "severe vomiting",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+      ],
     },
+  },
 
-    {
-        classDash: 'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: '',
-                    selectedValue: '',
-                    name:'Danger signs'
-
-                },
-                data:[
-                    {
-                        name: 'Fever',
-                        value: 'fever',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-                    {
-                        name: 'Visual disturbance',
-                        value: 'visual disturbance',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-
-                ]
-            }
-
+  {
+    classDash: "dashed_bottom_border",
+    checkboxBtnContent: {
+      header: {
+        title: "",
+        selectedValue: "",
+        name: "Danger signs",
+      },
+      data: [
+        {
+          name: "Fever",
+          value: "fever",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+        {
+          name: "Visual disturbance",
+          value: "visual disturbance",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+      ],
     },
-    {
-        classDash: 'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: '',
-                    selectedValue: '',
-                    name:'Danger signs'
-
-                },
-                data:[
-                    {
-                        name: 'Severe abdominal pain',
-                        value: 'severe abdominal pain',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-                    {
-                        name: 'Unconscious',
-                        value: 'unconscious',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-
-                ]
-            }
-
+  },
+  {
+    classDash: "dashed_bottom_border",
+    checkboxBtnContent: {
+      header: {
+        title: "",
+        selectedValue: "",
+        name: "Danger signs",
+      },
+      data: [
+        {
+          name: "Severe abdominal pain",
+          value: "severe abdominal pain",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+        {
+          name: "Unconscious",
+          value: "unconscious",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+      ],
     },
+  },
 
-    {
-        classDash: 'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: '',
-                    selectedValue: '',
-                    name:'Danger signs'
-
-                },
-                data:[
-                    {
-                        name: 'Other danger signs',
-                        value: 'Other danger signs',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-                    {
-                        name: 'No danger signs',
-                        value: 'no danger signs',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-                ]
-            }
-
+  {
+    classDash: "dashed_bottom_border",
+    checkboxBtnContent: {
+      header: {
+        title: "",
+        selectedValue: "",
+        name: "Danger signs",
+      },
+      data: [
+        {
+          name: "Other danger signs",
+          value: "Other danger signs",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+        {
+          name: "No danger signs",
+          value: "no danger signs",
+          checked: false,
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+        },
+      ],
     },
+  },
 
-    {
-        childName:'Other danger signs',
-        isFinishBtn: false,
-        sectionHeader: '',
-        classDash: 'dashed_bottom_border _padding',
+  {
+    childName: "Other danger signs",
+    isFinishBtn: false,
+    sectionHeader: "",
+    classDash: "dashed_bottom_border _padding",
 
-        data:
+    data: {
+      rowData: [
+        {
+          colData: [
             {
-                rowData:[
-                    {
-                        colData: [
-                            {
-                                displayNone:true,
-                                inputHeader: 'Specify',
-                                unit: '',
-                                icon: icons.editPen,
-                                value: '',
-                                valueType:'text',
-                                name: 'Other danger signs notes',
-                                required: true,
-                                eventType: 'input',
-                                inputWidth: "85%",
-                            },
-                        ]
-                    }
-                ]
+              displayNone: true,
+              inputHeader: "Specify",
+              unit: "",
+              icon: icons.editPen,
+              value: "",
+              valueType: "text",
+              name: "Other danger signs notes",
+              required: true,
+              eventType: "input",
+              inputWidth: "85%",
             },
+          ],
+        },
+      ],
     },
+  },
 ] as any;
-const initialVitals =[
-
-    {
-        sectionHeader: 'Blood pressure',
-        classDash: 'dashed_bottom_border _padding',
-        data:
+const initialVitals = [
+  {
+    sectionHeader: "Blood pressure",
+    classDash: "dashed_bottom_border _padding",
+    data: {
+      rowData: [
+        {
+          colData: [
             {
-                rowData:[
-                    {
-                        colData:    [
-                            {
-                                inputHeader: 'Systolic Pressure*',
-                                unit: 'mmHg',
-                                icon: icons.systolicPressure,
-                                value: '',
-                                valueType:'text',
-                                name: 'Systolic blood pressure',
-                                required: true,
-                                eventType: 'input'
-                            },
-                            {
-                                inputHeader: 'Diastolic pressure*',
-                                unit: 'mmHg',
-                                icon: icons.diastolicPressure,
-                                value: '',
-                                valueType:'text',
-                                name: 'Diastolic blood pressure',
-                                required: true,
-                                eventType: 'input'
-                            }
-                        ],
-                    },
-                ]
+              inputHeader: "Systolic Pressure*",
+              unit: "mmHg",
+              icon: icons.systolicPressure,
+              value: "",
+              valueType: "text",
+              name: "Systolic blood pressure",
+              required: true,
+              eventType: "input",
             },
-        alerts:[
             {
-                backgroundColor: '',
-                status: '',
-                icon: '',
-                textColor: '',
-                value: '',
-                name: '',
-                index: ''
-            }
-        ],
-        previousView:{
-            name:'vitals'
-        }
-    },
-
-    {
-        sectionHeader: 'Pulse rate',
-        classDash: 'dashed_bottom_border _padding',
-
-        data:
-            {
-                rowData:[
-                    {
-                        colData: [
-                            {
-                                inputHeader: 'Pulse rate*',
-                                unit: 'BMP',
-                                icon: icons.pulse,
-                                value: '',
-                                valueType:'text',
-                                name: 'Pulse',
-                                eventType: 'input'
-                            }
-                        ],
-                    },
-
-                ]
+              inputHeader: "Diastolic pressure*",
+              unit: "mmHg",
+              icon: icons.diastolicPressure,
+              value: "",
+              valueType: "text",
+              name: "Diastolic blood pressure",
+              required: true,
+              eventType: "input",
             },
-        previousView:{
-            name:'vitals'
-        }
+          ],
+        },
+      ],
     },
-    {
-        sectionHeader: 'Temperature',
-        classDash: 'dashed_bottom_border _padding',
+    alerts: [
+      {
+        backgroundColor: "",
+        status: "",
+        icon: "",
+        textColor: "",
+        value: "",
+        name: "",
+        index: "",
+      },
+    ],
+    previousView: {
+      name: "vitals",
+    },
+  },
 
-        data:
+  {
+    sectionHeader: "Pulse rate",
+    classDash: "dashed_bottom_border _padding",
+
+    data: {
+      rowData: [
+        {
+          colData: [
             {
-                rowData:[
-                    {
-                        colData: [
-                            {
-                                inputHeader: 'Temperature*',
-                                unit: 'C',
-                                icon: icons.temprature,
-                                value: '',
-                                valueType:'text',
-                                name: 'Temp',
-                                eventType: 'input'
-                            },
-                        ],
-                    },
-
-                ]
+              inputHeader: "Pulse rate*",
+              unit: "BMP",
+              icon: icons.pulse,
+              value: "",
+              valueType: "text",
+              name: "Pulse",
+              eventType: "input",
             },
-        previousView:{
-            name:'vitals'
-        }
+          ],
+        },
+      ],
     },
-    {
-        sectionHeader: 'Respiratory rate',
-        classDash: 'dashed_bottom_border _padding',
+    previousView: {
+      name: "vitals",
+    },
+  },
+  {
+    sectionHeader: "Temperature",
+    classDash: "dashed_bottom_border _padding",
 
-        data:
+    data: {
+      rowData: [
+        {
+          colData: [
             {
-                rowData:[
-                    {
-                        colData: [
-                            {
-                                inputHeader: 'Respiratory rate*',
-                                unit: 'BMP',
-                                icon: icons.respiratory,
-                                valueType:'text',
-                                value: '',
-                                name: 'Respiratory rate',
-                                eventType: 'input'
-                            },
-                        ],
-
-                    },
-                ]
+              inputHeader: "Temperature*",
+              unit: "C",
+              icon: icons.temprature,
+              value: "",
+              valueType: "text",
+              name: "Temp",
+              eventType: "input",
             },
-        previousView:{
-            name:'vitals'
-        }
+          ],
+        },
+      ],
     },
+    previousView: {
+      name: "vitals",
+    },
+  },
+  {
+    sectionHeader: "Respiratory rate",
+    classDash: "dashed_bottom_border _padding",
+
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Respiratory rate*",
+              unit: "BPM",
+              icon: icons.respiratory,
+              valueType: "text",
+              value: "",
+              name: "Respiratory rate",
+              eventType: "input",
+            },
+          ],
+        },
+      ],
+    },
+    previousView: {
+      name: "vitals",
+    },
+  },
+  {
+    sectionHeader: "Oxygen saturation",
+    classDash: "dashed_bottom_border _padding",
+
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Oxygen saturation*",
+              unit: "%",
+              icon: icons.oxgenStaturation,
+              valueType: "text",
+              value: "",
+              name: "Oxygen saturation",
+              eventType: "input",
+            },
+          ],
+        },
+      ],
+    },
+    previousView: {
+      name: "vitals",
+    },
+  },
 ] as any;
 
 const initialOtherexams=[

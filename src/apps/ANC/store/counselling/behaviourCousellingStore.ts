@@ -92,7 +92,7 @@ const initialBehaviourInfo=[
         radioBtnContent:{
             header:{
                 class:'bold',
-                title: 'Counselling  conducted on Tobacco cessation?',
+                title: 'Counselling  conducted on stop tobacco use?',
                 selectedValue: '',
                 name:'Counselling on tobacco',
                 displayNext:'No'

@@ -142,7 +142,7 @@ export default defineComponent({
         },
         async handleInputData(event: any) {
             if (event?.col?.name == "Same as current") this.setSameAsCurrent();
-            localStorage.setItem("activeLocation", "home");
+            sessionStorage.setItem("activeLocation", "home");
             const currentFields: any = ["home_district", "home_traditional_authority", "home_village"];
             await this.validations(this.homeLocation, currentFields);
             if (event.name == "home_district") {

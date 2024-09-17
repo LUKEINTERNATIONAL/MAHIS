@@ -9,12 +9,11 @@ import Scan from "../components/Registration/ScanRegistration.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
 import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
+import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
 import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
-import setDDE from "@/views/Configurations/setDDE.vue";
-import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
 import NCD from "@/apps/NCD/config/routes";
@@ -37,11 +36,6 @@ const routes: Array<RouteRecordRaw> = [
         path: "/stockManagement",
         name: "stockManagement",
         component: stockManagement,
-    },
-    {
-        path: "/setDDE",
-        name: "setDDE",
-        component: setDDE,
     },
     {
         path: "/scheduleImmunization",
@@ -79,7 +73,7 @@ const routes: Array<RouteRecordRaw> = [
         component: setSmsConfig,
     },
     {
-        path: "/registration/manual",
+        path: "/registration/:registrationType",
         name: "registration",
         component: PatientRegistration,
         props: true,
@@ -93,11 +87,6 @@ const routes: Array<RouteRecordRaw> = [
         path: "/clinicaldays",
         name: "clinicaldays",
         component: clinicaldays,
-    },
-    {
-        path: "/registration/scan",
-        name: "scan",
-        component: Scan,
     },
     {
         path: "/privacypolicy",
@@ -123,8 +112,8 @@ router.beforeEach((to, from, next) => {
     modalController.getTop().then((v) => (v ? modalController.dismiss() : null));
     alertController.getTop().then((v) => (v ? alertController.dismiss() : null));
     toastController.getTop().then((v) => (v ? toastController.dismiss() : null));
-    const whitelistedUri = ["/login", "/settings/host"];
-    if (!localStorage.getItem("apiKey") && !whitelistedUri.includes(to.path)) {
+    const whitelistedUri = ["/login", "/settings/host", "/privacypolicy"];
+    if (!sessionStorage.getItem("apiKey") && !whitelistedUri.includes(to.path)) {
         next("/login");
     }
     next();

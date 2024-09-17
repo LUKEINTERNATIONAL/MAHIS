@@ -8,6 +8,8 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
             <ion-spinner v-if="isLoading" name="lines"></ion-spinner>
         </ion-content>
@@ -83,10 +85,13 @@ import { resetPatientData } from "@/services/reset_data";
 import { getCheckboxSelectedValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/quickCheck_validation_service";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "Home",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -294,7 +299,8 @@ export default defineComponent({
                     toastSuccess("Quick check details have been created");
                 }
                 this.$router.push("ANCHome");
-            } else {
+            }
+            else {
                 await toastWarning("Please complete all required fields");
             }
 

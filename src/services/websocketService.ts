@@ -13,10 +13,10 @@ export class WebSocketService {
     }
     private initPromise: Promise<void>;
     private async init() {
-        const apiURL = localStorage.getItem("apiURL");
-        const apiPort = localStorage.getItem("apiPort");
+        const apiURL = sessionStorage.getItem("apiURL");
+        const apiPort = sessionStorage.getItem("apiPort");
 
-        this.location_id = localStorage.getItem("locationID");
+        this.location_id = sessionStorage.getItem("locationID");
 
         if (apiURL && apiPort) {
             const websocketURL = getWebsockerURL();
@@ -30,7 +30,7 @@ export class WebSocketService {
             this.socket.onclose = this.onClose;
             this.socket.onerror = this.onError;
         } else {
-            console.error("WebSocket not initialized: apiURL or apiPort is missing in localStorage.");
+            console.error("WebSocket not initialized: apiURL or apiPort is missing in sessionStorage.");
         }
     }
 
