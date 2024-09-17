@@ -1,6 +1,18 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
+import * as yup from "yup"
+
+export const FirstVaginalExaminationValidationSchema = yup.object().shape({
+    'cervical dilation': yup.number()
+        .typeError(" can only be a number")
+        .min(1)
+        .min(10)
+        .required()
+    .label("Cervical Dilation")
+   
+})
+
 export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminationStore',{
     state: () => ({
 
@@ -16,20 +28,20 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'State of Cervix',
+                                        inputHeader: 'State of Cervical',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'state of cervix',
+                                        name: 'state of cervical',
                                         required: true,
                                         eventType: 'input',
                                     },
                                     {
-                                        inputHeader: 'Cervix dilation',
+                                        inputHeader: 'Cervical dilation',
                                         unit: 'cm',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'cervix dilation',
+                                        name: 'cervical dilation',
                                         required: true,
                                         eventType: 'input',
                                         placeholder:'Enter the number between 1-10'
@@ -198,6 +210,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Show',
+                            name: 'Show',
                             selectedValue: ''
                         },
                         data:[
@@ -219,6 +232,37 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     }
 
             },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Color',
+                            name: 'Color',
+                            selectedValue: '',
+                            displayNone:true,
+                        },
+                        data:[
+                            {
+                                name: 'Clear',
+                                value: 'clear',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Blood Stained',
+                                value: 'blood Stained',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
 
             {
                 selectdData: [],
@@ -231,13 +275,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                             selectedValue: ''
                         },
                         data:[
-                            {
-                                name: 'Soft',
-                                value: 'soft',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
+            
                             {
                                 name: 'Warm and moist',
                                 value: 'warm and moist',
@@ -601,6 +639,6 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
             this.firstVaginalExamination = data
         },
     },
-    persist:true,
+    // persist:true,
 
 })

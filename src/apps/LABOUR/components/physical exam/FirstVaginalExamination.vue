@@ -3,7 +3,9 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Cervix</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="firstVaginalExamination"></basic-form>
+        <basic-form :contentData="firstVaginalExamination"   
+        @update:selected="handleInputData"
+        @update:inputValue="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -34,9 +36,12 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  getRadioSelectedValue,
+  modifyRadioValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {usefirstVaginalExaminationStore} from "@/apps/LABOUR/stores/physical exam/firstVaginalExamination";
+import {FirstVaginalExaminationValidationSchema, usefirstVaginalExaminationStore} from "@/apps/LABOUR/stores/physical exam/firstVaginalExamination";
+import { YupValidateField } from '@/services/validation_service';
 export default defineComponent({
   name: "FirstVaginalExamination", 
   components:{
@@ -73,11 +78,40 @@ export default defineComponent({
   mounted(){
   },
   watch:{
+    firstVaginalExamination:{
+      handler(){
+        this.handleShow()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    handleShow(){
+      const isOther =
+        getRadioSelectedValue(this.firstVaginalExamination, "Show") ==
+        "present";
+
+        console.log(getRadioSelectedValue(this.firstVaginalExamination, "Show"));
+
+      modifyRadioValue(
+        this.firstVaginalExamination,
+        "Color",
+        "displayNone",
+        !isOther
+      );
+    },
+    async handleInputData(event: any) {
+      YupValidateField(
+        this.firstVaginalExamination,
+        FirstVaginalExaminationValidationSchema,
+        event.name,
+        event.value
+      );
+    },
+  }
 });
 
 </script>

@@ -87,6 +87,7 @@ export default defineComponent({
       handler(){
         this.handleOtherPresentation();
         this.handleContractions();
+     
       },
       deep:true
     }
@@ -112,16 +113,13 @@ export default defineComponent({
         getRadioSelectedValue(this.otherphysicalExams, "Contractions") ==
         "no Contraction Felt";
 
-
-        console.log(getRadioSelectedValue(this.otherphysicalExams, "Contractions"));
-
       modifyFieldValue(
         this.otherphysicalExams,
         "Number of contraction",
         "displayNone",
         isOther
       );
-    }
+    },
   }
 });
 
