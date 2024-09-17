@@ -5,7 +5,7 @@ import * as yup from "yup"
 
 export const FirstVaginalExaminationValidationSchema = yup.object().shape({
     'cervical dilation': yup.number()
-        .typeError(" can only be a number")
+        .typeError("cervical dilation can only be a number")
         .min(1)
         .min(10)
         .required()
@@ -146,12 +146,13 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'State of membranes?',
+                            name: 'State of membranes',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Raptured',
-                                value: 'raptured',
+                                name: 'Ruptured',
+                                value: 'ruptured',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -159,6 +160,37 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                             {
                                 name: 'Intact',
                                 value: 'intact',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'How',
+                            name: 'How',
+                            selectedValue: '',
+                            displayNone: true
+                        },
+                        data:[
+                            {
+                                name: 'Spontaneously',
+                                value: 'spontaneously',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Artificial',
+                                value: 'artificial',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -177,20 +209,20 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Time membranes raptured',
+                                        inputHeader: 'Time membranes ruptured',
                                         unit: '',
                                         icon: icons.time,
                                         value: '',
-                                        name: 'time membranes raptured',
+                                        name: 'time membranes ruptured',
                                         required: true,
                                         eventType: 'input',
                                     },
                                     {
-                                        inputHeader: 'Date membranes raptured',
+                                        inputHeader: 'Date membranes ruptured',
                                         unit: '',
                                         icon: icons.calenderPrimary,
                                         value: '',
-                                        name: 'date membranes raptured',
+                                        name: 'date membranes ruptured',
                                         required: true,
                                         datePopover:true,
                                         eventType: 'input',

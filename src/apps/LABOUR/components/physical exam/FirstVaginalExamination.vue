@@ -80,7 +80,8 @@ export default defineComponent({
   watch:{
     firstVaginalExamination:{
       handler(){
-        this.handleShow()
+        this.handleShow();
+        this.handleRupturedMembrane();
       },
       deep:true
     }
@@ -93,8 +94,6 @@ export default defineComponent({
       const isOther =
         getRadioSelectedValue(this.firstVaginalExamination, "Show") ==
         "present";
-
-        console.log(getRadioSelectedValue(this.firstVaginalExamination, "Show"));
 
       modifyRadioValue(
         this.firstVaginalExamination,
@@ -109,6 +108,18 @@ export default defineComponent({
         FirstVaginalExaminationValidationSchema,
         event.name,
         event.value
+      );
+    },
+    handleRupturedMembrane(){
+      const isOther =
+        getRadioSelectedValue(this.firstVaginalExamination, "State of membranes") ==
+        "ruptured";
+
+      modifyRadioValue(
+        this.firstVaginalExamination,
+        "How",
+        "displayNone",
+        !isOther
       );
     },
   }
