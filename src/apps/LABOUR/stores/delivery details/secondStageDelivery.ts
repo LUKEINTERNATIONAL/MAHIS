@@ -1083,7 +1083,7 @@ const initialObstetricDetails = [
                 },
                 {
                     name: "Perineal tear",
-                    value: "perineal tear",
+                    value: "Perineal tear",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -1112,9 +1112,44 @@ const initialObstetricDetails = [
             ],
         },
     },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                displayNone:true,
+                title: "Severity of Perineal Tear",
+                selectedValue: "",
+                name: "Severity",
+                class: "bold",
+            },
+            data: [
+                {
+                    name: "Lacerations",
+                    value: "Lacerations",
+                    colSize: "2.5",
+                },
+                {
+                    name: "First Degree",
+                    value: "First Degree",
+                    colSize: "3",
+                },
+                {
+                    name: "Second Degree",
+                    value: "Second Degree",
+                    colSize: "3",
+                },
+                {
+                    name: "Third Degree",
+                    value: "Third Degree",
+                    colSize: "3",
+                },
+            ],
+        },
+    },
 
     {
-        childName: "Other complications",
         isFinishBtn: false,
         sectionHeader: "",
         classDash: "dashed_bottom_border _padding",

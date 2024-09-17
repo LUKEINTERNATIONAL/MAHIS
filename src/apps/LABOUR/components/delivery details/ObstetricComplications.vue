@@ -37,6 +37,8 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  modifyFieldValue,
+  modifyRadioValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
 //import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
@@ -83,11 +85,39 @@ export default defineComponent({
     this.initialData=obstetricComplications.getInitialObstetricDetails()
   },
   watch:{
+    obstetricComplications:  {
+      handler(){
+        this.handleOtherComplications();
+        this.handlePerinealTear()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    handleOtherComplications() {
+      const checked= getCheckboxSelectedValue(this.obstetricComplications, "Other complications")?.checked;
+      modifyFieldValue(
+        this.obstetricComplications,
+        "Other notes",
+        "displayNone",
+        !checked
+      );
+    },
+    handlePerinealTear(){
+      const checked= getCheckboxSelectedValue(this.obstetricComplications, "Perineal tear")?.checked;
+      console.log({checked});
+      modifyRadioValue(
+        this.obstetricComplications,
+        "Severity",
+        "displayNone",
+        !checked
+      );
+
+    }
+  }
 });
 
 </script>
