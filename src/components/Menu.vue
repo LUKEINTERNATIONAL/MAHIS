@@ -52,7 +52,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="second" v-if="programAttri[1].showReports">
+                            <ion-accordion value="seventh" v-if="programAttri[1].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">NCD Reports</ion-label>
                                 </ion-item>
