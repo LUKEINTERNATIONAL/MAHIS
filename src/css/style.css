@@ -513,7 +513,7 @@ ion-accordion {
     width: 60vw;
     padding: 10px;
     text-align: left;
-    max-width: 800px;
+    /* max-width: 800px; */
     color: #000;
     background-color: #fff;
     border-radius: 5px;
