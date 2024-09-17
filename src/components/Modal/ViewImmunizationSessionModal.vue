@@ -36,7 +36,7 @@
                     :ref="(el: any) => { if (el) popoverRefs[index] = el as typeof IonPopover; }">
                     <ion-content>
                         <ion-list>
-                            <ion-item button @click="handleEdit()">
+                            <ion-item button @click="handleEdit(schedule)">
                                 <ion-label>Edit</ion-label>
                             </ion-item>
                             <ion-item button @click="handleDelete(schedule)">
@@ -172,12 +172,13 @@
 
 <script lang="ts" setup>
 import { SessionSchedule, Vaccine } from "@/types";
-import { IonContent, IonHeader, IonCardHeader, IonLabel, modalController, IonCardSubtitle, IonCardTitle, IonButton, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
+import { IonContent, IonHeader, IonCardHeader, IonLabel, IonSpinner, IonButtons, modalController, IonCardSubtitle, IonCardTitle, IonButton, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
 import { ellipsisVertical, close } from 'ionicons/icons';
 import { ref } from 'vue';
 import voidReason from '@/apps/Immunization/components/Modals/voidReason.vue';
 import { SessionScheduleService } from "@/services/session_schedule_service";
-import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { createModal, toastSuccess, toastWarning } from "@/utils/Alerts";
+import EditImmunizationSessionModal from "./EditImmunizationSessionModal.vue";
 
 const props = defineProps({
     data: {
@@ -187,8 +188,8 @@ const props = defineProps({
     }
 })
 
-const svgIconHeight = ref<number>(50);
-const svgIconWidth = ref<number>(50);
+const svgIconHeight = ref<number>(40);
+const svgIconWidth = ref<number>(40);
 const loading = ref<boolean>(false);
 interface PopoverRefs {
     [key: number]: typeof IonPopover | undefined;
@@ -201,8 +202,8 @@ const getFormattedVaccines = (schedule: SessionSchedule): string => {
         .join(', ');
 };
 
-const handleEdit = () => {
-    console.log('Edit clicked');
+const handleEdit = async(schedule: SessionSchedule) => {
+   modalController.dismiss({ edit: schedule });
 };
 
 const handleDelete = async (session: SessionSchedule) => {

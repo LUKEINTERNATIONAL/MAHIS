@@ -255,6 +255,7 @@ import { SessionScheduleService } from '@/services/session_schedule_service';
 import { startOfMonth, endOfMonth, eachDayOfInterval, isAfter, isBefore, format, parse, startOfWeek, addWeeks, differenceInDays, startOfDay, addDays, subDays, isSunday, addMonths } from 'date-fns';
 import { Assignee, RepeatType, SessionSchedule } from '@/types';
 import { createModal } from '@/utils/Alerts';
+import EditImmunizationSessionModal from '@/components/Modal/EditImmunizationSessionModal.vue';
 
 const schedules = ref<SessionSchedule[]>([]);
 const displaySchedules = ref<SessionSchedule[]>([]);
@@ -290,9 +291,9 @@ async function getSessionSchedules(): Promise<void> {
 
 
         data.forEach((item: SessionSchedule) => {
-            const datesMap: Record<string, {start_date: Date, end_date: Date}[]> = {
+            const datesMap: Record<string, { start_date: Date, end_date: Date }[]> = {
                 "Weekly": generateDateRangesWeekly(parseInt(format(new Date(item.start_date), 'yyyy')), parseInt(format(new Date(item.start_date), 'M')) - 1, `${item.start_date.toString()} 08:00`, `${item.end_date.toString()} 16:00`),
-                "Never": [ {start_date: item.start_date, end_date: item.end_date} ],
+                "Never": [{ start_date: item.start_date, end_date: item.end_date }],
                 "Daily": generateDateRangesDaily(`${item.start_date.toString()} 08:00`, 7),
                 "Monthly": generateDateRangesMonthly(parseInt(format(new Date(item.start_date), 'yyyy')), parseInt(format(new Date(item.start_date), 'M')) - 1, `${item.start_date.toString()} 08:00`, `${item.end_date.toString()} 16:00`),
             }
@@ -383,18 +384,18 @@ const generateDateRangesMonthly = (year: number, month: number, startDateStr: st
     }
     const dayDifference = differenceInDays(endDate, startDate);
     const dateRanges: { start_date: Date, end_date: Date }[] = [];
-        let currentStartDate = startOfMonth(startDate);
-        currentStartDate = new Date(year, month, startDate.getDate());
+    let currentStartDate = startOfMonth(startDate);
+    currentStartDate = new Date(year, month, startDate.getDate());
     while (currentStartDate.getFullYear() <= year) {
         const currentEndDate = endOfMonth(currentStartDate);
         const rangeEndDate = addDays(currentStartDate, dayDifference);
-                if (rangeEndDate > currentStartDate) {
+        if (rangeEndDate > currentStartDate) {
             dateRanges.push({
                 start_date: currentStartDate,
                 end_date: rangeEndDate > currentEndDate ? currentEndDate : rangeEndDate
             });
         }
-                currentStartDate = addMonths(currentStartDate, 1);
+        currentStartDate = addMonths(currentStartDate, 1);
         if (currentStartDate.getFullYear() > year) break;
     }
 
@@ -448,8 +449,30 @@ async function onCalendarDayClick(calendarDay: any) {
             })
             await modal.present();
             const { data } = await modal.onDidDismiss()
-            if (data.update) getSessionSchedules();
+            if (data) {
+                if (data.update) {
+                    getSessionSchedules();
+                }
+                if (data.edit) {
+                    showEditModal(data)
+                }
+            }
         }
+    }
+}
+
+const showEditModal = async(props: any): Promise<void> => {
+    const modal = await modalController.create({
+        component: EditImmunizationSessionModal,
+        cssClass: "otherVitalsModal",
+        componentProps: {
+            data: props.edit,
+        },
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if(data === "dismiss"){
+        getSessionSchedules();
     }
 }
 
