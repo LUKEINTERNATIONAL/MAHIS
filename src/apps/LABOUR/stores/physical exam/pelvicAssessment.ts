@@ -71,7 +71,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Sacral promotory',
+                            title: 'Sacral promontory',
                             selectedValue: ''
                         },
                         data:[
@@ -270,15 +270,15 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                         },
                         data:[
                             {
-                                name: 'Admits 4 knuckles (Normal)',
-                                value: 'admits 4 knucles (Normal)',
+                                name: 'more than or equal to 8.5cm (Normal)',
+                                value: 'more than or equal to 8.5cm (Normal)',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Admits 4 knuckles (Abnormal)',
-                                value: 'admits 4 knuckles (Abrnormal)',
+                                name: 'less than 8.5cm (Abnormal)',
+                                value: 'less than 8.5cm (Abnormal)',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',

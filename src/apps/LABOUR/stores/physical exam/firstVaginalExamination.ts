@@ -216,6 +216,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                         name: 'time membranes ruptured',
                                         required: true,
                                         eventType: 'input',
+                                        displayNone: true
                                     },
                                     {
                                         inputHeader: 'Date membranes ruptured',
@@ -226,7 +227,8 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                         required: true,
                                         datePopover:true,
                                         eventType: 'input',
-                                        placeholder:'Pick date'
+                                        placeholder:'Pick date',
+                                        displayNone: true
                                     },
 
                                 ]

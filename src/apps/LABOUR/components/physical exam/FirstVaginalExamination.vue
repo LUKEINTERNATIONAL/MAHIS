@@ -126,6 +126,18 @@ export default defineComponent({
         "displayNone",
         !(stateOfMembrane =="ruptured")
       );
+      modifyFieldValue(
+        this.firstVaginalExamination,
+        "time membranes ruptured",
+        "displayNone",
+        !(stateOfMembrane =="ruptured")
+      );
+      modifyFieldValue(
+        this.firstVaginalExamination,
+        "date membranes ruptured",
+        "displayNone",
+        !(stateOfMembrane =="ruptured")
+      );
       modifyRadioValue(
         this.firstVaginalExamination,
         "cold felt color",
