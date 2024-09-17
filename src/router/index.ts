@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import stockManagement from "../views/StockManagement.vue";
+import OfflineRecords from "../views/OfflineRecords.vue";
 import scheduleImmunization from "../views/ScheduleImmunizationSessions.vue";
 import manageAppointMents from "../views/ManageAppointMents.vue";
 import ManageAppointMentsTemplate from "../views/ManageAppointMentsTemplate.vue";
@@ -37,6 +38,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/stockManagement",
         name: "stockManagement",
         component: stockManagement,
+    },
+    {
+        path: "/OfflineRecords",
+        name: "OfflineRecords",
+        component: OfflineRecords,
     },
     {
         path: "/setDDE",
