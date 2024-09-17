@@ -342,6 +342,6 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
             this.pelvicAssessment = data
         },
     },
-    persist:true,
+    // persist:true,
 
 })
