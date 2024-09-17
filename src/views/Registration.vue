@@ -33,10 +33,7 @@
                     ></ion-icon>
                 </div>
             </div>
-            <div v-if="registrationType == 'scan'">
-                <ScanRegistration />
-            </div>
-            <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991">
+            <div class="center_content" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
                 <div v-if="registrationDisplayType == 'grid'" class="flex-container">
                     <div class="flex-item">
                         <PersonalInformation />
@@ -53,7 +50,7 @@
                 </div>
             </div>
 
-            <div v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
+            <div v-if="registrationDisplayType == 'list' || screenWidth <= 991">
                 <div v-if="currentStep == 'Personal Information'">
                     <PersonalInformation />
                 </div>
@@ -75,7 +72,7 @@
         <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
             <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" :disabledValue="disableSaveBtn" @click="createPatient()" />
         </div>
-        <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
+        <ion-footer v-if="registrationDisplayType == 'list' || screenWidth <= 991">
             <div class="footer position_content">
                 <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="nav('/home')" />
                 <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
@@ -122,13 +119,9 @@ import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
-import ScanRegistration from "@/components/Registration/ScanRegistration.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
-import { PatientRegistrationService } from "@/services/patient_registration_service";
 import { PatientService } from "@/services/patient_service";
-import { RelationsService } from "@/services/relations_service";
-import { SocialHistoryService } from "@/services/social_history_service";
 import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { resetPatientData } from "@/services/reset_data";
@@ -137,23 +130,24 @@ import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
-import { UserService } from "@/services/user_service";
 import { isEmpty } from "lodash";
-import { LocationService } from "@/services/location_service";
 import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegistrationStore";
-import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
-import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
-import { AppEncounterService } from "@/services/app_encounter_service";
+import { formatInputFiledData } from "@/services/formatServerData";
+import { validateInputFiledData } from "@/services/group_validation";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
-import { PatientProgramService } from "@/services/patient_program_service";
 import { resetDemographics } from "@/services/reset_data";
 import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
+import PersonMatchView from "@/components/PersonMatchView.vue";
+import { createModal } from "@/utils/Alerts";
 import { useWebWorkerFn } from "@vueuse/core";
 import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
+import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
+import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 export default defineComponent({
-    mixins: [ScreenSizeMixin, Districts],
+    mixins: [ScreenSizeMixin, Districts, SetDemographics],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -169,12 +163,12 @@ export default defineComponent({
         CurrentLocation,
         HomeLocation,
         SocialHistory,
-        ScanRegistration,
         BirthRegistration,
     },
     data() {
         return {
             iconListStatus: "active_icon",
+            deduplicationData: "active_icon",
             iconGridStatus: "inactive_icon",
             iconsContent: icons,
             demographic: true,
@@ -192,6 +186,7 @@ export default defineComponent({
     },
     props: ["registrationType"],
     computed: {
+        ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["socialHistory"]),
         ...mapState(useRegistrationStore, ["homeLocation"]),
@@ -269,7 +264,7 @@ export default defineComponent({
         $route: {
             async handler(data) {
                 this.currentStep = "Personal Information";
-                await resetPatientData();
+                // await resetPatientData();
                 if (data.name == "registration") resetDemographics();
             },
             deep: true,
@@ -355,7 +350,26 @@ export default defineComponent({
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
-
+        async possibleDuplicates() {
+            const ddeInstance = new PatientDemographicsExchangeService();
+            this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
+            if (this.deduplicationData.length > 0) {
+                const response: any = await createModal(PersonMatchView, { class: "fullScreenModal" }, true, {
+                    to_be_registered: toRaw(this.personInformation[0].selectedData),
+                    deduplicationData: this.deduplicationData,
+                });
+                if (response != "dismiss" && response != "back") {
+                    const result = await ddeInstance.importPatient(response?.person?.id);
+                    await this.findPatient(result.patient_id);
+                    return true;
+                } else if (response == "back") {
+                    return true;
+                }
+                return false;
+            } else {
+                return false;
+            }
+        },
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
@@ -369,30 +383,24 @@ export default defineComponent({
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
+                (await validateInputFiledData(this.homeLocation)) &&
                 (await this.validateBirthData()) &&
                 this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
                 this.isLoading = true;
+
+                if (this.globalPropertyStore.dde_enabled) {
+                    if (await this.possibleDuplicates()) {
+                        this.disableSaveBtn = false;
+                        this.isLoading = false;
+                        return;
+                    }
+                }
+
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const offlinePatientID = Date.now();
-                await db.collection("patientRecords").add({
-                    offlinePatientID: offlinePatientID,
-                    serverPatientID: "",
-                    personInformation: toRaw(this.personInformation[0].selectedData),
-                    guardianInformation: toRaw(this.guardianInformation[0].selectedData),
-                    birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
-                    otherPersonInformation: {
-                        nationalID: this.validatedNationalID(),
-                        birthID: this.validatedBirthID(),
-                        relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
-                    },
-                    saveStatusPersonInformation: "pending",
-                    saveStatusGuardianInformation: "pending",
-                    saveStatusBirthRegistration: "pending",
-                    date_created: "",
-                    creator: "",
-                });
+                await this.createOfflineRecord(offlinePatientID);
                 await savePatientRecord();
                 toastSuccess("Successfully Created Patient");
                 await db
@@ -401,7 +409,7 @@ export default defineComponent({
                     .get()
                     .then(async (document: any) => {
                         if (document.serverPatientID) {
-                            await this.findPatient(document.serverPatientID);
+                            this.openNewPage(document.patientData);
                         } else {
                             await this.setOfflineData(document);
                         }
@@ -409,6 +417,26 @@ export default defineComponent({
             } else {
                 toastWarning("Please complete all required fields");
             }
+        },
+        async createOfflineRecord(offlinePatientID: any) {
+            await db.collection("patientRecords").add({
+                offlinePatientID: offlinePatientID,
+                serverPatientID: "",
+                patientData: "",
+                personInformation: toRaw(this.personInformation[0].selectedData),
+                guardianInformation: toRaw(this.guardianInformation[0].selectedData),
+                birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
+                otherPersonInformation: {
+                    nationalID: this.validatedNationalID(),
+                    birthID: this.validatedBirthID(),
+                    relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
+                },
+                saveStatusPersonInformation: "pending",
+                saveStatusGuardianInformation: "pending",
+                saveStatusBirthRegistration: "pending",
+                date_created: "",
+                creator: "",
+            });
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
@@ -428,10 +456,9 @@ export default defineComponent({
         async validateBirthData() {
             if (this.checkUnderNine) {
                 const result = this.checkWeightForAge(
-                    getFieldValue(this.birthRegistration, "Weight", "value"),
-                    HisDate.getAgeInYears(this.birthdate)
+                    HisDate.getAgeInYears(this.birthdate),
+                    getFieldValue(this.birthRegistration, "Weight", "value")
                 );
-                console.log("🚀 ~ validateBirthData ~ result:", result);
                 if (!result) {
                     const confirm = await alertConfirmation(
                         `Do you want to continue with this weight (${getFieldValue(
@@ -440,7 +467,6 @@ export default defineComponent({
                             "value"
                         )}) for age (${HisDate.getAgeInYears(this.birthdate)})`
                     );
-                    console.log("🚀 ~ validateBirthData ~ confirm:", confirm);
                     if (confirm) return true;
                     else return false;
                 }
@@ -461,28 +487,7 @@ export default defineComponent({
         },
         async setOfflineData(item: any) {
             await resetPatientData();
-            const demographicsStore = useDemographicsStore();
-            let fullName = "";
-            if (item.personInformation.middle_name && item.personInformation.middle_name != "N/A") {
-                fullName = item.personInformation.given_name + " " + item.personInformation.middle_name + " " + item.personInformation.family_name;
-            } else {
-                fullName = item.personInformation.given_name + " " + item.personInformation.family_name;
-            }
-            demographicsStore.setDemographics({
-                name: fullName,
-                mrn: item.offlinePatientID,
-                birthdate: item.personInformation.birthdate,
-                category: "",
-                gender: item.personInformation.gender,
-                patient_id: item.offlinePatientID,
-                address:
-                    item?.personInformation?.current_district +
-                    "," +
-                    item?.personInformation?.current_traditional_authority +
-                    "," +
-                    item?.personInformation?.current_village,
-                phone: item.personInformation.cell_phone_number,
-            });
+            this.setOfflineDemographics(item);
             this.isLoading = false;
             let url = "/patientProfile";
             this.disableSaveBtn = false;
@@ -490,29 +495,7 @@ export default defineComponent({
         },
         async openNewPage(item: any) {
             await resetPatientData();
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient(item);
-            let fullName = "";
-            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
-            } else {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
-            }
-            demographicsStore.setDemographics({
-                name: fullName,
-                mrn: this.patientIdentifier(item),
-                birthdate: item.person.birthdate,
-                category: "",
-                gender: item.person.gender,
-                patient_id: item.patient_id,
-                address:
-                    item?.person?.addresses[0]?.state_province +
-                    "," +
-                    item?.person?.addresses[0]?.township_division +
-                    "," +
-                    item?.person?.addresses[0]?.city_village,
-                phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
-            });
+            this.setDemographics(item);
             this.isLoading = false;
             let url = "/patientProfile";
             this.disableSaveBtn = false;
@@ -528,7 +511,6 @@ export default defineComponent({
             const closestLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value")?.name;
             const otherLandmark = getFieldValue(this.currentLocation, "Other (specify)", "value");
             const landmark = closestLandmark === "Other" ? otherLandmark : closestLandmark;
-
             this.personInformation[0].selectedData = {
                 given_name: getFieldValue(this.personInformation, "firstname", "value"),
                 middle_name: getFieldValue(this.personInformation, "middleName", "value"),
@@ -670,4 +652,3 @@ ion-footer {
     box-sizing: border-box;
 }
 </style>
-@/services/SaveRecords/save_registration

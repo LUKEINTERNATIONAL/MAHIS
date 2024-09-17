@@ -3,22 +3,20 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-              <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px" @click="nav('/home')">
-                <div style="display: block">
-                  <div>
-                    <b>MaHIS</b>
-                    <small v-if="programs?.program?.applicationName"> ({{ programs.program.applicationName }})</small>
-                  </div>
-                  <div>
-                    <small class="facility-name" style="font-size: 68%">
-                      {{ userFacilityName }}
-                    </small>
-                    <small style="font-size: 68%"> | {{ sessionDate }} </small>
-                  </div>
-                </div>
-              </ion-title>
-
-              <div slot="end" class="search-input-desktop" style="width: 100%" v-if="screenWidth > 980">
+                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px" @click="nav('/home')">
+                    <div style="display: block">
+                        <div style="font-size: 16px">
+                            <b>MaHIS</b><small> ({{ programs.program.applicationName }})</small>
+                        </div>
+                        <div>
+                            <small class="facility-name" style="font-size: 68%">
+                                {{ userFacilityName }}
+                            </small>
+                            <small style="font-size: 68%"> | {{ sessionDate }} </small>
+                        </div>
+                    </div>
+                </ion-title>
+                <div slot="end" class="search-input-desktop" style="width: 100%" v-if="screenWidth > 980">
                     <ToolbarSearch />
                 </div>
                 <div class="notifaction_person" slot="end">

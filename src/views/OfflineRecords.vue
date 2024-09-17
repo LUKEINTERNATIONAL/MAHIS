@@ -1,39 +1,32 @@
 <template>
-    <ion-page :class="{ loading: isLoading}">
+    <ion-page :class="{ loading: isLoading }">
         <!-- Spinner -->
         <div v-if="isLoading" class="spinner-overlay">
-            <ion-spinner name="bubles"></ion-spinner>
+            <ion-spinner name="bubbles"></ion-spinner>
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
         <ion-content>
             <div class="container">
-                <h1 style="width: 100%; text-align: center; font-weight: 700">
-                    Overdue  Report
-                </h1>
-                <div style="display: flex; justify-content: space-between">
-                    <div style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
-                        <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
-                    </div>
-                    <div style="display: inline-block; vertical-align: top; margin-top: 10px; float: right">
-                        <ion-button class="addBtn" color="primary">
-                            <div>
-                                <div class="centerBigBtnContain">Export To CSV</div>
-                            </div>
-                        </ion-button>
-                    </div>
-                </div>
+                <h4 style="width: 100%; text-align: center; font-weight: 700">Offline Records Status</h4>
 
-                <DataTable ref="dataTable" v-if="reportData.length > 0" :options="options" :data="reportData" class="display nowrap" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Date Of Birth</th>
-                            <th>Missed Doses</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </DataTable>
+                <div class="table-responsive">
+                    <DataTable ref="dataTable" :options="options" :data="reportData" class="display nowrap" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Offline MRN</th>
+                                <th>Server MRN</th>
+                                <th>Personal Info Status</th>
+                                <th>Birth Registration Status</th>
+                                <th>Guardian Info Status</th>
+                                <th>Vitals Status</th>
+                                <th>Vaccine Admin Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </DataTable>
+                </div>
             </div>
         </ion-content>
     </ion-page>
@@ -44,25 +37,39 @@ import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, Io
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
+import { Service } from "@/services/service";
+import img from "@/utils/Img";
 import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
 import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
+import { useUserStore } from "@/stores/userStore";
+import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
+import { UserService } from "@/services/user_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
+import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
+import DataTablesResponsive from "datatables.net-responsive";
 import "datatables.net-buttons";
 import "datatables.net-buttons/js/buttons.html5";
-import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
+import "datatables.net-responsive";
 import DynamicButton from "@/components/DynamicButton.vue";
+import OfflineMoreDetailsModal from "@/components/Modal/OfflineMoreDetailsModal.vue";
+import { createModal } from "@/utils/Alerts";
+import { StockService } from "@/services/stock_service";
+import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
+import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
-import { toastWarning } from "@/utils/Alerts";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { savePatientRecord } from "@/services/save_records";
 import "datatables.net-select";
-import { PatientService } from "@/services/patient_service";
+import db from "@/db";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+// DataTable.use(DataTablesCore);
 
 export default defineComponent({
     name: "Home",
@@ -88,112 +95,131 @@ export default defineComponent({
     data() {
         return {
             reportData: [] as any,
+            currentStock: [] as any,
+            allStock: [] as any,
+            outStock: [] as any,
             startDate: HisDate.currentDate(),
             endDate: HisDate.currentDate(),
             options: {
-                responsive: true, 
+                responsive: true,
                 select: false,
+                layout: {
+                    topStart: null,
+                    topEnd: "search",
+                    bottomStart: "info",
+                    bottomEnd: "paging",
+                },
             } as any,
-            selectButton: "all",
+            selectedButton: "all",
             isLoading: false,
         };
     },
-    
     computed: {
+        ...mapState(useStockStore, ["stock"]),
         ...mapState(useStartEndDate, ["startEndDate"]),
     },
-    watch: {
-        $route: {
-        async handler(data) {
-          if (data.name == "OverDueReport"){
-            await this.buildTableData().then(() => {
-                const table = (this.$refs.dataTable as any)?.dt;
-
-                table.on("click", ".follow-up-btn", (e: Event) => {
-                    const id = (e.target as HTMLElement ).getAttribute("data-id");
-                    this.handleFollowUp(id);
-                });
-            });
-          }   
+    $route: {
+        async handler() {
+            await this.buildTableData();
         },
         deep: true,
+    },
+    watch: {
+        stock: {
+            async handler() {
+                // await this.buildTableData();
+            },
+            deep: true,
         },
     },
     async mounted() {
-        await this.buildTableData().then(() => {
-            const table = (this.$refs.dataTable as any)?.dt;
-
-            table.on("click", ".follow-up-btn", (e: Event) => {
-                const id = (e.target as HTMLElement ).getAttribute("data-id");
-                this.handleFollowUp(id);
+        await this.buildTableData();
+        this.$nextTick(() => {
+            const table = (this.$refs.dataTable as any).dt;
+            table.columns.adjust().draw();
+            table.on("click", ".edit-btn", (e: Event) => {
+                const id = (e.target as HTMLElement).getAttribute("data-id");
+                this.handleEdit(id);
+            });
+            table.on("click", ".delete-btn", (e: Event) => {
+                const id = (e.target as HTMLElement).getAttribute("data-id");
+                this.handleDelete(id);
             });
         });
-    }, 
+    },
     methods: {
-        async handleFollowUp(id: any){
-            const patientData  = await PatientService.findByID(id);
-            this.setDemographics(patientData);
-            this.$router.push("patientProfile");
+        handleEdit(data: any) {
+            this.openModal(JSON.parse(data));
         },
-        async handleInputData(event: any){
-            if(event.inputHeader == "Start date") {
+
+        async handleDelete(id: any) {
+            // Implement delete logic here
+            await savePatientRecord();
+            console.log(`Deleting item with id: ${id}`);
+        },
+        async handleInputData(event: any) {
+            if (event.inputHeader == "Start date") {
                 this.startDate = HisDate.toStandardHisFormat(event.value);
             }
-            if(event.inputHeader == "End date"){
+            if (event.inputHeader == "End date") {
                 this.endDate = HisDate.toStandardHisFormat(event.value);
             }
             await this.buildTableData();
         },
         async buildTableData() {
             this.isLoading = true;
-
-            try {
-                this.reportData = [];
-                const vaccineData = await getVaccinesData();
-                
-                //Loop hrough each item in the vaccineData
-                vaccineData.forEach((dataItem: any) => {
-                    const overdue_clients = dataItem.value.under_five_missed_visits.concat(dataItem.value.over_five_missed_visits)
-                   
-                    overdue_clients.forEach((visit: any) => {
-                        let doses =  0;
-                        // Extract personal details from each visit 
-                        let item = visit.client.table;
-
-                        visit.missed_visits.forEach(( missed_visit: any) => {
-                            doses += missed_visit.antigens.length   
+            await db
+                .collection("patientRecords")
+                .get()
+                .then(async (document: any) => {
+                    try {
+                        this.reportData = document.map((item: any) => {
+                            return [
+                                item.personInformation.given_name + " " + item.personInformation.family_name,
+                                item.offlinePatientID,
+                                this.patientIdentifier(item.patientData),
+                                item.saveStatusPersonInformation,
+                                item.saveStatusBirthRegistration,
+                                item.saveStatusGuardianInformation,
+                                "",
+                                "",
+                                `<button class="btn btn-sm btn-primary edit-btn" data-id='${JSON.stringify(item)}'>More details</button>
+                                <button class="btn btn-sm btn-danger delete-btn" data-id="${item.offlinePatientID}">Delete</button>`,
+                            ];
                         });
-                        
-                        this.reportData.push([
-                            `${item.given_name} ${item.family_name}`,
-                            item.birthdate,
-                            doses,
-                            `<button class="btn btn-sm btn-primary follow-up-btn" data-id="${item.patient_id}">Follow UP</button>`
-                        ]);
-                        
-                    });
-                })
-
-                DataTable.use(DataTablesCore);
-
-            } catch(error){
-                toastWarning("An error occure while loading data.");
-                console.log(error);
-            } finally {
-                this.isLoading = false; 
-            }
+                        DataTable.use(DataTablesCore);
+                    } catch (error) {
+                        toastWarning("An error occurred while loading data.");
+                    } finally {
+                        this.isLoading = false;
+                    }
+                });
         },
-        async selectedButton(button: any){
-            this.selectButton = button;
-            await this.buildTableData();
-        },
-        async selectButton(button: any){
+        async selectButton(button: any) {
             this.selectedButton = button;
             await this.buildTableData();
+        },
+        async openModal(clientData: any) {
+            const data: any = await createModal(OfflineMoreDetailsModal, { class: "fullScreenModal" }, true, { clientData: clientData });
+            if (data == "dismiss") {
+                await this.buildTableData();
+            }
         },
     },
 });
 </script>
+
+<style>
+@import "datatables.net-dt";
+@import "datatables.net-buttons-dt";
+@import "datatables.net-responsive-dt";
+@import "datatables.net-select-dt";
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+</style>
 <style scoped>
 .bigGroupButton {
     margin-top: 10px;
@@ -417,12 +443,4 @@ ion-button {
     height: 50px;
     align-items: center;
 }
-</style>
-<style>
-@import "datatables.net-dt";
-@import "datatables.net-buttons-dt";
-@import "datatables.net-responsive-dt";
-@import "datatables.net-select-dt";
-
-@import "bootstrap";
 </style>
