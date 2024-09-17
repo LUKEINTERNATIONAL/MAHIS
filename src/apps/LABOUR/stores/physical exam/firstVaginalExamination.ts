@@ -342,6 +342,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Liquor',
+                            name: 'Liquor',
                             selectedValue: ''
                         },
                         data:[
@@ -360,7 +361,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Meconium stained (Grade 1 to 3)',
+                                name: 'Meconium stained',
                                 value: 'meconium stained',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -380,6 +381,51 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                 colSize: '7',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'Foul smelling',
+                                value: 'Foul smelling',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Meconium Grade',
+                            name: 'Meconium Grade',
+                            selectedValue: '',
+                            displayNone: true
+                        },
+                        data:[
+                            {
+                                name: '+',
+                                value: '+',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '++',
+                                value: '++',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '+++',
+                                value: '+++',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
                         ]
                     }
 
@@ -392,6 +438,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Cord',
+                            name: 'Cord',
                             selectedValue: ''
                         },
                         data:[
@@ -412,6 +459,52 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                             {
                                 name: 'Prolapsed',
                                 value: 'prolapsed',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Felt',
+                                value: 'felt',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Color',
+                            selectedValue: '',
+                            name: "cold felt color",
+                            displayNone: true
+                        },
+                        data:[
+                         
+                            {
+                                name: 'Clear',
+                                value: 'clear',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Meconium stained',
+                                value: 'meconium stained',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'blood stained',
+                                value: 'blood stained',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',

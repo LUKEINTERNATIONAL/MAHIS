@@ -7,7 +7,6 @@
         :initialData="initialData"
          @update:selected="handleInputData"
         @update:inputValue="handleInputData"
-        
       ></basic-form>
       <div style="display: flex">
         <DynamicButton

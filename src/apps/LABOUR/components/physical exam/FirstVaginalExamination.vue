@@ -111,15 +111,31 @@ export default defineComponent({
       );
     },
     handleRupturedMembrane(){
-      const isOther =
-        getRadioSelectedValue(this.firstVaginalExamination, "State of membranes") ==
-        "ruptured";
+
+      const stateOfMembrane = getRadioSelectedValue(this.firstVaginalExamination, "State of membranes");
+      const cord = getRadioSelectedValue(this.firstVaginalExamination, "Cord");
+      const liquor = getRadioSelectedValue(this.firstVaginalExamination, "Liquor");
+ 
+      console.log((liquor=="meconium stained"))
 
       modifyRadioValue(
         this.firstVaginalExamination,
         "How",
         "displayNone",
-        !isOther
+        !(stateOfMembrane =="ruptured")
+      );
+      modifyRadioValue(
+        this.firstVaginalExamination,
+        "cold felt color",
+        "displayNone",
+       !(cord=="felt")
+      );
+
+      modifyRadioValue(
+        this.firstVaginalExamination,
+        "Meconium Grade",
+        "displayNone",
+       !(liquor=="meconium stained")
       );
     },
   }
