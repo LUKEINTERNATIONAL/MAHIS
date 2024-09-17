@@ -457,7 +457,7 @@ async function onCalendarDayClick(calendarDay: any) {
                     getSessionSchedules();
                 }
                 if (data.edit) {
-                    showEditModal(data)
+                    showEditModal(data, "modal")
                 }
             }
         }
@@ -490,12 +490,12 @@ const handleDelete = async (session: SessionSchedule) => {
     });
 };
 
-const showEditModal = async (props: any): Promise<void> => {
+const showEditModal = async (props: any, origin: "modal" | "view" = "view"): Promise<void> => {
     const modal = await modalController.create({
         component: EditImmunizationSessionModal,
         cssClass: "otherVitalsModal",
         componentProps: {
-            data: props,
+            data: origin === "modal" ? props.edit : props,
         },
     });
     await modal.present();
