@@ -1184,6 +1184,7 @@ const initialObstetricDetails = [
                 selectedValue: "",
                 class: "bold",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1204,6 +1205,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1224,6 +1226,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1245,6 +1248,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1265,6 +1269,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1284,6 +1289,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1303,6 +1309,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1322,6 +1329,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1341,6 +1349,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1360,6 +1369,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1380,6 +1390,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {

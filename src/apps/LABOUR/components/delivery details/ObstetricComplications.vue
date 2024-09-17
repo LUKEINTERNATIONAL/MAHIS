@@ -37,6 +37,8 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  modifyCheckboxHeader,
+  modifyCheckboxValue,
   modifyFieldValue,
   modifyRadioValue,
 } from '@/services/data_helpers';
@@ -89,6 +91,12 @@ export default defineComponent({
       handler(){
         this.handleOtherComplications();
         this.handlePerinealTear()
+
+        const obstetricComplications = ["Perineal tear","Sepsis","Pre-Eclampsia","Retained placenta","Postpartum haemorrhage"]
+        const obstetricCareProvided = ["Oxytocin/cabitocin/tranexamic acid","Anticonvulsants","Antibiotics","Blood transfusion","Manual removal of placenta","Non-pneumatic Anti-shock Garment (NASG)","Manual Removal of Retained Products of Conception","Evacuation","Misoprostol","Other care"]
+        this.handleObstetricComplicationCheck(obstetricComplications)
+        this.handleNone([...obstetricComplications,'Other complications'],"No complications")
+        this.handleNone(obstetricCareProvided, "None")
       },
       deep:true
     }
@@ -108,15 +116,37 @@ export default defineComponent({
     },
     handlePerinealTear(){
       const checked= getCheckboxSelectedValue(this.obstetricComplications, "Perineal tear")?.checked;
-      console.log({checked});
       modifyRadioValue(
         this.obstetricComplications,
         "Severity",
         "displayNone",
         !checked
       );
+    },
+    handleObstetricComplicationCheck(checkBoxes: any) {
+      let checked=false;
+      checkBoxes.forEach((checkbox: string) => {
+        checked =
+          checked ||
+          getCheckboxSelectedValue(this.obstetricComplications, checkbox)?.checked;
+      });
 
-    }
+      modifyCheckboxHeader(this.obstetricComplications,"Obstetric care","displayNone", !checked);
+    },
+
+    handleNone(checkBoxes: Array<any>, noneConcept: string) {
+      if (getCheckboxSelectedValue(this.obstetricComplications, noneConcept)?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.obstetricComplications, checkbox, "checked", false);
+          modifyCheckboxValue(this.obstetricComplications, checkbox, "disabled", true);
+        });
+      } else {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.obstetricComplications, checkbox, "disabled", false);
+        });
+      }
+    },
+
   }
 });
 

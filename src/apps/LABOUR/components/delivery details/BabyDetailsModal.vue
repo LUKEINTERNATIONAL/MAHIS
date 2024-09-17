@@ -253,7 +253,6 @@ export default defineComponent({
       });
 
       modifyCheckboxHeader(this.babyDetails,"Management to newborn","displayNone", !checked);
-      
     },
 
     handleCongenitalCheck() {
