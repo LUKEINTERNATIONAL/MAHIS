@@ -1,6 +1,18 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
+import * as yup from "yup"
+
+export const FirstVaginalExaminationValidationSchema = yup.object().shape({
+    'cervical dilation': yup.number()
+        .typeError("cervical dilation can only be a number")
+        .min(1)
+        .min(10)
+        .required()
+    .label("Cervical Dilation")
+   
+})
+
 export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminationStore',{
     state: () => ({
 
@@ -16,20 +28,20 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'State of Cervix',
+                                        inputHeader: 'State of Cervical',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'state of cervix',
+                                        name: 'state of cervical',
                                         required: true,
                                         eventType: 'input',
                                     },
                                     {
-                                        inputHeader: 'Cervix dilation',
+                                        inputHeader: 'Cervical dilation',
                                         unit: 'cm',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'cervix dilation',
+                                        name: 'cervical dilation',
                                         required: true,
                                         eventType: 'input',
                                         placeholder:'Enter the number between 1-10'
@@ -134,12 +146,13 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'State of membranes?',
+                            name: 'State of membranes',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Raptured',
-                                value: 'raptured',
+                                name: 'Ruptured',
+                                value: 'ruptured',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -147,6 +160,37 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                             {
                                 name: 'Intact',
                                 value: 'intact',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'How',
+                            name: 'How',
+                            selectedValue: '',
+                            displayNone: true
+                        },
+                        data:[
+                            {
+                                name: 'Spontaneously',
+                                value: 'spontaneously',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Artificial',
+                                value: 'artificial',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -165,24 +209,26 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Time membranes raptured',
+                                        inputHeader: 'Time membranes ruptured',
                                         unit: '',
                                         icon: icons.time,
                                         value: '',
-                                        name: 'time membranes raptured',
+                                        name: 'time membranes ruptured',
                                         required: true,
                                         eventType: 'input',
+                                        displayNone: true
                                     },
                                     {
-                                        inputHeader: 'Date membranes raptured',
+                                        inputHeader: 'Date membranes ruptured',
                                         unit: '',
                                         icon: icons.calenderPrimary,
                                         value: '',
-                                        name: 'date membranes raptured',
+                                        name: 'date membranes ruptured',
                                         required: true,
                                         datePopover:true,
                                         eventType: 'input',
-                                        placeholder:'Pick date'
+                                        placeholder:'Pick date',
+                                        displayNone: true
                                     },
 
                                 ]
@@ -198,6 +244,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Show',
+                            name: 'Show',
                             selectedValue: ''
                         },
                         data:[
@@ -219,6 +266,37 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     }
 
             },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Color',
+                            name: 'Color',
+                            selectedValue: '',
+                            displayNone:true,
+                        },
+                        data:[
+                            {
+                                name: 'Clear',
+                                value: 'clear',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Blood Stained',
+                                value: 'blood Stained',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
 
             {
                 selectdData: [],
@@ -231,13 +309,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                             selectedValue: ''
                         },
                         data:[
-                            {
-                                name: 'Soft',
-                                value: 'soft',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
+            
                             {
                                 name: 'Warm and moist',
                                 value: 'warm and moist',
@@ -272,6 +344,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Liquor',
+                            name: 'Liquor',
                             selectedValue: ''
                         },
                         data:[
@@ -290,7 +363,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Meconium stained (Grade 1 to 3)',
+                                name: 'Meconium stained',
                                 value: 'meconium stained',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -310,6 +383,51 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                 colSize: '7',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'Foul smelling',
+                                value: 'Foul smelling',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Meconium Grade',
+                            name: 'Meconium Grade',
+                            selectedValue: '',
+                            displayNone: true
+                        },
+                        data:[
+                            {
+                                name: '+',
+                                value: '+',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '++',
+                                value: '++',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '+++',
+                                value: '+++',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
                         ]
                     }
 
@@ -322,6 +440,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Cord',
+                            name: 'Cord',
                             selectedValue: ''
                         },
                         data:[
@@ -346,6 +465,52 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                 colSize: '7',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'Felt',
+                                value: 'felt',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Color',
+                            selectedValue: '',
+                            name: "cold felt color",
+                            displayNone: true
+                        },
+                        data:[
+                         
+                            {
+                                name: 'Clear',
+                                value: 'clear',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Meconium stained',
+                                value: 'meconium stained',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'blood stained',
+                                value: 'blood stained',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
                         ]
                     }
 
@@ -358,6 +523,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'What part is presenting?',
+                            name: 'What part is presenting',
                             selectedValue: ''
                         },
                         data:[
@@ -418,6 +584,13 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                 justify: 'space-between',
                             },
                             {
+                                name: 'Vertex',
+                                value: 'vertex',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
                                 name: 'Other',
                                 value: 'other',
                                 labelPlacement: 'start',
@@ -444,6 +617,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                         value: '',
                                         name: 'specify',
                                         required: true,
+                                        displayNone:true,
                                         eventType: 'input',
                                     },
 
@@ -455,20 +629,20 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
             {
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border _padding',
-
                 data:
                     {
                         rowData:[
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Position of sutures and fontanelles *',
+                                        inputHeader: 'Position of sutures and fontanelles',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Position of sutures and fontanelles *',
-                                        required: true,
+                                        name: 'Position of sutures and fontanelles',
                                         eventType: 'input',
+                                        displayNone: true
+
                                     },
 
                                 ]
@@ -485,6 +659,8 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Level in relation to ischial spines *',
+                            name: 'Level in relation to ischial spines',
+                            displayNone: true,
                             selectedValue: ''
                         },
                         data:[
@@ -521,6 +697,8 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Caput',
+                            name: 'Caput',
+                            displayNone:true,
                             selectedValue: ''
                         },
                         data:[
@@ -563,10 +741,19 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Moulding *',
+                            title: 'Moulding',
+                            name: 'Moulding',
+                            displayNone:true,
                             selectedValue: ''
                         },
                         data:[
+                            {
+                                name: 'zero',
+                                value: 'zero',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
                             {
                                 name: '+',
                                 value: '+',
@@ -601,6 +788,6 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
             this.firstVaginalExamination = data
         },
     },
-    persist:true,
+    // persist:true,
 
 })
