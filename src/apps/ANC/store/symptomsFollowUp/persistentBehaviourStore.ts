@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import {icons} from "@/utils/svg";
+import _ from "lodash";
 
 const initialPersistentBehaviour=[
     {
@@ -331,11 +332,11 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
 
     actions:{
         getInitial(){
-            const data=[...initialPersistentBehaviour]
+            const data=_.cloneDeep(initialPersistentBehaviour)
             return [...data]
         },
         getInitialPersistentSymptoms(){
-            const data=[...initialPersistentSymptoms]
+            const data=_.cloneDeep(initialPersistentSymptoms)
             return [...data]
         },
         addPersistentBehaviour(data:any){

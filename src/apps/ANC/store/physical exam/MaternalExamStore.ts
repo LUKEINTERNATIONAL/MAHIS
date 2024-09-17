@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
-import {initial} from "lodash";
+import _, {initial} from "lodash";
 import {pencil} from "ionicons/icons";
 const initialRespiratoryExam=[
     {
@@ -988,28 +988,28 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             this.breastExam = data
         },
         getInitialRespiratoryExam(){
-            const data=[...initialRespiratoryExam]
-            return [...data]
+            const data = _.cloneDeep(initialRespiratoryExam);
+            return [...data];
         },
         getInitialBreastExam(){
-            const data=[...initialBreastExam]
+            const data=_.cloneDeep(initialBreastExam)
             return [...data]
         },
         getInitialPallor(){
-            const data=[...initialPallor]
+            const data=_.cloneDeep(initialPallor)
             return [...data]
         },
         getInitialCervicalExam(){
-            const data=[...initialCervicalExam]
+            const data=_.cloneDeep(initialCervicalExam)
             return [...data]
         },
         getInitialVaginalInspection(){
-            const data=[...initialVaginalExam]
+            const data=_.cloneDeep(initialVaginalExam)
             return [...data]
         },
 
         getInitialOedema(){
-            const data=[...initialOedema]
+            const data=_.cloneDeep(initialOedema)
             return [...data]
         },
     },
