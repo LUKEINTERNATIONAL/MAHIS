@@ -41,6 +41,7 @@ export default defineComponent({
             } else {
                 fullName = item.personInformation.given_name + " " + item.personInformation.family_name;
             }
+            demographicsStore.setPatient(item.patientData);
             demographicsStore.setDemographics({
                 name: fullName,
                 mrn: item.offlinePatientID,
@@ -58,10 +59,14 @@ export default defineComponent({
             });
         },
         patientIdentifier(identifiers: any) {
-            return identifiers.patient_identifiers
-                .filter((identifier: any) => identifier.identifier_type === 3)
-                .map((identifier: any) => identifier.identifier)
-                .join(", ");
+            if (identifiers) {
+                return identifiers.patient_identifiers
+                    .filter((identifier: any) => identifier.identifier_type === 3)
+                    .map((identifier: any) => identifier.identifier)
+                    .join(", ");
+            } else {
+                return "";
+            }
         },
         getPhone(item: any) {
             return item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value;
