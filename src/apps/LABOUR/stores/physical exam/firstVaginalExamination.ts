@@ -521,6 +521,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'What part is presenting?',
+                            name: 'What part is presenting',
                             selectedValue: ''
                         },
                         data:[
@@ -581,6 +582,13 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                                 justify: 'space-between',
                             },
                             {
+                                name: 'Vertex',
+                                value: 'vertex',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
                                 name: 'Other',
                                 value: 'other',
                                 labelPlacement: 'start',
@@ -618,20 +626,20 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
             {
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border _padding',
-
                 data:
                     {
                         rowData:[
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Position of sutures and fontanelles *',
+                                        inputHeader: 'Position of sutures and fontanelles',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Position of sutures and fontanelles *',
-                                        required: true,
+                                        name: 'Position of sutures and fontanelles',
                                         eventType: 'input',
+                                        displayNone: true
+
                                     },
 
                                 ]

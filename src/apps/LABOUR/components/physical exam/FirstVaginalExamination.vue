@@ -37,6 +37,7 @@ import {
   getCheckboxSelectedValue,
   getFieldValue,
   getRadioSelectedValue,
+  modifyFieldValue,
   modifyRadioValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
@@ -115,8 +116,9 @@ export default defineComponent({
       const stateOfMembrane = getRadioSelectedValue(this.firstVaginalExamination, "State of membranes");
       const cord = getRadioSelectedValue(this.firstVaginalExamination, "Cord");
       const liquor = getRadioSelectedValue(this.firstVaginalExamination, "Liquor");
+      const whatIsPresenting = getRadioSelectedValue(this.firstVaginalExamination, "What part is presenting");
  
-      console.log((liquor=="meconium stained"))
+   
 
       modifyRadioValue(
         this.firstVaginalExamination,
@@ -137,6 +139,8 @@ export default defineComponent({
         "displayNone",
        !(liquor=="meconium stained")
       );
+
+      modifyFieldValue(this.firstVaginalExamination,"Position of sutures and fontanelles","displayNone",!(whatIsPresenting=="head"))
     },
   }
 });
