@@ -215,6 +215,7 @@ export default defineComponent({
       //     const encounter = await behaviourInfo.createEncounter();
       //     if (!encounter) return toastWarning("Unable to create patient behaviour counselling encounter");
       //     const patientStatus = await behaviourInfo.saveObservationList(await this.buildBehaviourCounselling());
+      //
       //     if (!patientStatus) return toastWarning("Unable to create patient behaviour counselling details!");
       //     toastSuccess("Behaviour counselling details have been created");
       //   }

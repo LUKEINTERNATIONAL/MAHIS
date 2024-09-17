@@ -151,7 +151,7 @@ export const useIpvStore = defineStore('ipvStore',{
             this. ipv = data
         }
     },
-    // persist:true
+    persist:true
 
 })
 
