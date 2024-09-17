@@ -327,7 +327,6 @@ export default defineComponent({
                 } else {
                     this.offlineFilteredPatients = [];
                     const payload = this.splitSearchText(this.searchText);
-                    console.log("🚀 ~ handleInput ~ payload:", payload);
                     this.offlineFilteredPatients = await this.searchOfflinePatients(payload);
                 }
             }
@@ -491,7 +490,6 @@ export default defineComponent({
             this.page--;
         },
         searchOfflinePatients(searchCriteria: any) {
-            console.log("🚀 ~ returnthis.offlinePatients.filter ~ this.offlinePatient:", this.offlinePatients);
             return this.offlinePatients.filter((patient: any) => {
                 const personInfo = patient.personInformation;
 
@@ -501,80 +499,6 @@ export default defineComponent({
                     (!searchCriteria.gender || personInfo.gender === searchCriteria.gender)
                 );
             });
-        },
-        async searchOffline(searchText: any) {
-            this.offlinePatients;
-            return {
-                patient_id: "",
-                date_created: "",
-                person: {
-                    gender: "",
-                    birthdate: "",
-                    names: [
-                        {
-                            given_name: "",
-                            middle_name: "",
-                            family_name: "",
-                        },
-                    ],
-                    addresses: [
-                        {
-                            address1: "",
-                            address2: "",
-                            city_village: "",
-                            state_province: "",
-                            postal_code: "",
-                            county_district: "",
-                            neighborhood_cell: "",
-                            region: "",
-                            subregion: "",
-                            township_division: "",
-                        },
-                    ],
-                    person_attributes: [
-                        {
-                            value: "",
-                            type: {
-                                person_attribute_type_id: "",
-                                name: "",
-                            },
-                        },
-                        {
-                            person_attribute_id: "",
-                            value: "",
-                            type: {
-                                person_attribute_type_id: "",
-                                name: "",
-                            },
-                        },
-                        {
-                            value: "",
-                            type: {
-                                person_attribute_type_id: "",
-                                name: "",
-                            },
-                        },
-                        {
-                            person_attribute_id: "",
-                            value: "",
-                            type: {
-                                person_attribute_type_id: "",
-                                name: "",
-                            },
-                        },
-                    ],
-                },
-                patient_identifiers: [
-                    {
-                        patient_identifier_id: "",
-                        identifier: "",
-                        type: {
-                            patient_identifier_type_id: "",
-                            name: "",
-                        },
-                    },
-                ],
-            };
         },
         async handleSearchResults(patient: Promise<Patient | Patient[]>) {
             let results: Patient[] | Patient = [];
