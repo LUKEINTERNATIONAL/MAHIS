@@ -27,6 +27,6 @@ export default [
     {
         path: "/OverDueReport",
         name: "OverDueReport",
-        component: OverDueReport
+        component: OverDueReport,
     }
 ];
