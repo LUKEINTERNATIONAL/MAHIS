@@ -116,6 +116,7 @@ export default defineComponent({
   },
   mounted() {
     this.handleLochia()
+    this. handleEpisiotomy()
   },
   setup() {
     return { checkmark, pulseOutline };
@@ -137,6 +138,7 @@ export default defineComponent({
     otherExams:{
       handler(){
         this.handleLochia()
+        this. handleEpisiotomy()
       },
       deep: true,
     }
@@ -152,6 +154,13 @@ export default defineComponent({
               modifyFieldValue(this.otherExams,'Status of lochia notes', 'displayNone', true)
             }
       },
+    handleEpisiotomy(){
+      if(getRadioSelectedValue(this.otherExams,'Episiotomy/tear')=='No'){
+        modifyFieldValue(this.otherExams,'Episiotomy Reason','displayNone', false)
+      }else{
+        modifyFieldValue(this.otherExams,'Episiotomy Reason','displayNone', true)
+      }
+    }  
   },
 });
 </script>

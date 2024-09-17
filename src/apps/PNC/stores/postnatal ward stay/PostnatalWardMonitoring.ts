@@ -628,6 +628,32 @@ const initialOtherexams = [
     },
   },
   {
+    isFinishBtn: false,
+    sectionHeader: "",
+    classDash: "dashed_bottom_border _padding",
+
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              displayNone: true,
+              inputHeader: "Specify",
+              unit: "",
+              icon: icons.editPen,
+              value: "",
+              valueType: "text",
+              name: "Episiotomy Reason",
+              required: true,
+              eventType: "input",
+              inputWidth: "",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     childName: "Condition of episiotomy/tear",
     selectdData: [],
     isFinishBtn: false,
