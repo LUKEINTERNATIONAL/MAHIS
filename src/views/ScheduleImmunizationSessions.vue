@@ -64,17 +64,20 @@
                                         </ion-card-subtitle>
                                     </ion-card-header>
 
-                                    <ion-button id="popover-trigger" slot="end" fill="clear">
-                                        <ion-icon slot="icon-only" :icon="ellipsisVertical"></ion-icon>
-                                    </ion-button>
-
-                                    <ion-popover trigger="popover-trigger" dismiss-on-select="true">
+                                    <div style="display: flex; align-items: center;">
+                                        <ion-button fill="clear" :id="`click-trigger-${index}`"
+                                            style="margin-left: auto;">
+                                            <ion-icon :icon="ellipsisVertical" />
+                                        </ion-button>
+                                    </div>
+                                    <ion-popover dismiss-on-select :trigger="`click-trigger-${index}`"
+                                        trigger-action="click">
                                         <ion-content>
                                             <ion-list>
-                                                <ion-item button>
+                                                <ion-item button @click="handleEdit(schedule)">
                                                     <ion-label>Edit</ion-label>
                                                 </ion-item>
-                                                <ion-item button>
+                                                <ion-item button @click="handleDelete(schedule)">
                                                     <ion-label>Delete</ion-label>
                                                 </ion-item>
                                             </ion-list>
@@ -254,8 +257,9 @@ import AddImmunizationSessionModal from '@/components/Modal/AddImmunizationSessi
 import { SessionScheduleService } from '@/services/session_schedule_service';
 import { startOfMonth, endOfMonth, eachDayOfInterval, isAfter, isBefore, format, parse, startOfWeek, addWeeks, differenceInDays, startOfDay, addDays, subDays, isSunday, addMonths } from 'date-fns';
 import { Assignee, RepeatType, SessionSchedule } from '@/types';
-import { createModal } from '@/utils/Alerts';
+import { createModal, toastSuccess, toastWarning } from '@/utils/Alerts';
 import EditImmunizationSessionModal from '@/components/Modal/EditImmunizationSessionModal.vue';
+import VoidReason from '@/apps/Immunization/components/Modals/voidReason.vue';
 
 const schedules = ref<SessionSchedule[]>([]);
 const displaySchedules = ref<SessionSchedule[]>([]);
@@ -288,8 +292,7 @@ async function getSessionSchedules(): Promise<void> {
         const data: any = await sessionService.getSessions();
         attributes.value = [];
         attributes.value.push(defaultAttribute);
-
-
+        displaySchedules.value = []
         data.forEach((item: SessionSchedule) => {
             const datesMap: Record<string, { start_date: Date, end_date: Date }[]> = {
                 "Weekly": generateDateRangesWeekly(parseInt(format(new Date(item.start_date), 'yyyy')), parseInt(format(new Date(item.start_date), 'M')) - 1, `${item.start_date.toString()} 08:00`, `${item.end_date.toString()} 16:00`),
@@ -461,17 +464,43 @@ async function onCalendarDayClick(calendarDay: any) {
     }
 }
 
-const showEditModal = async(props: any): Promise<void> => {
+const handleEdit = async (schedule: SessionSchedule) => {
+    showEditModal(schedule)
+};
+
+const handleDelete = async (session: SessionSchedule) => {
+    const modal = await modalController.create({
+        component: VoidReason,
+        cssClass: "otherVitalsModal",
+        componentProps: {
+            data: session,
+        },
+    });
+    await modal.present();
+    modal.onDidDismiss().then(async (data: any) => {
+        if (data.data) {
+            isLoading.value = true;
+            const sessionSchedule = new SessionScheduleService();
+            const response = await sessionSchedule.delete(Number(session.session_schedule_id), data.data.name);
+            response ? toastSuccess("Immunization schedule deleted successfully!") : toastWarning("An error occurred, please try again later.");
+            isLoading.value = false;
+            modalController.dismiss()
+            if(response) getSessionSchedules();
+        }
+    });
+};
+
+const showEditModal = async (props: any): Promise<void> => {
     const modal = await modalController.create({
         component: EditImmunizationSessionModal,
         cssClass: "otherVitalsModal",
         componentProps: {
-            data: props.edit,
+            data: props,
         },
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
-    if(data === "dismiss"){
+    if (data === "dismiss") {
         getSessionSchedules();
     }
 }

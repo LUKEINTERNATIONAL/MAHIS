@@ -28,11 +28,11 @@
                     </div>
                 </ion-card-header>
                 <div style="display: flex; align-items: center;">
-                    <ion-button fill="clear" :id="`click-trigger-${index}`" style="margin-left: auto;">
+                    <ion-button fill="clear" :id="`click-trigger-${index}-`" style="margin-left: auto;">
                         <ion-icon :icon="ellipsisVertical" />
                     </ion-button>
                 </div>
-                <ion-popover dismiss-on-select :trigger="`click-trigger-${index}`" trigger-action="click"
+                <ion-popover dismiss-on-select :trigger="`click-trigger-${index}-`" trigger-action="click"
                     :ref="(el: any) => { if (el) popoverRefs[index] = el as typeof IonPopover; }">
                     <ion-content>
                         <ion-list>
