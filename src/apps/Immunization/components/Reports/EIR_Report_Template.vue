@@ -77,14 +77,14 @@
                   'selected': selectedSection === 'fixed' || selectedColumn === 'fixedLessThan1y'
                 }"
               >
-                 <pan @click="openPersonCardComponent"> {{ row.fixed.lessThan1y }}</pan>
+                 <pan @click="openPersonCardComponent(row.fixed.lessThan1yPersons)"> {{ row.fixed.lessThan1y }}</pan>
               </td>
               <td
                 :class="{
                   'selected': selectedSection === 'fixed' || selectedColumn === 'fixedMoreThan1y'
                 }"
               >
-                {{ row.fixed.moreThan1y }}
+                <pan @click="openPersonCardComponent(row.fixed.moreThan1yPersons)"> {{ row.fixed.moreThan1y }}</pan>
               </td>
               <td
                 :class="{
@@ -181,8 +181,6 @@ export default defineComponent({
               let value =  t_data.fixed[r_key];
               t_data.fixed[r_key] = value+1
               t_data.fixed[data_key].push(AV)
-
-              console.log(t_data.fixed[data_key])
             }
           }
         })
@@ -203,13 +201,8 @@ export default defineComponent({
         const store = EIRreportsStore()
         store.setImmunizationMonthlyRepoartData(this.tableData)
       },
-      openPersonCardComponent() {
-        const       peopleArray = [
-          { id: 1, firstName: 'John', lastName: 'Doe', age: 30, dob: '1993-05-15', sex: 'Male' },
-          { id: 2, firstName: 'Jane', lastName: 'Smith', age: 28, dob: '1995-09-22', sex: 'Female' },
-          // Add more people as needed
-        ]
-        const dataToPass = {'people': peopleArray, heading_text: `Immunization (Client Drill Down | ${this.navigationPayload.subTxt})`}
+      openPersonCardComponent(clients: []) {
+        const dataToPass = {'people': clients, heading_text: `Immunization (Client Drill Down | ${this.navigationPayload.subTxt})`}
         createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass);
       },
     },

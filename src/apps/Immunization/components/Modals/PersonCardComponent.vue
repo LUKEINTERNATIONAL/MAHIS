@@ -30,21 +30,21 @@
           <ion-card-content>
             <div class="card-header">
               <div>
-                <ion-card-title>{{ person.firstName }} {{ person.lastName }}</ion-card-title>
-                <ion-label style="font-size: 17px;">{{ person.age }} yrs ({{ formatDate(person.dob) }})</ion-label>
+                <ion-card-title>{{ person.given_name }} {{ person.family_name }}</ion-card-title>
+                <ion-label style="font-size: 17px;">{{ getBirthdateAge(person.birthdate) }} yrs ({{ formatDate(person.birthdate) }})</ion-label>
               </div>
               <ion-icon :icon="eyeOutline" class="eye-icon"></ion-icon>
             </div>
             <ion-list lines="none" style="border-radius: 6px;">
               <ion-item class="p-inf">
                 <ion-icon :icon="personOutline" slot="start"></ion-icon>
-                <ion-label>Gender: {{ person.sex }}</ion-label>
+                <ion-label>Gender: {{ person.gender }}</ion-label>
               </ion-item>
               <hr class="solid-line">
 
               <ion-item  class="p-inf">
                 <ion-icon :icon="locationOutline" slot="start"></ion-icon>
-                <ion-label>Village: {{ person.village }}</ion-label>
+                <ion-label>Village: {{ person.city_village }}</ion-label>
               </ion-item>
 
             </ion-list>
@@ -70,17 +70,7 @@ import { defineComponent } from 'vue';
 import { IonGrid, IonRow, IonCol, IonCard, IonContent, IonCardContent, IonFooter, IonCardTitle, IonHeader, IonTitle, IonCardSubtitle, IonList, IonItem, IonLabel, IonIcon } from '@ionic/vue';
 import { calendarOutline, personOutline, locationOutline, eyeOutline, searchOutline } from 'ionicons/icons';
 import BasicInputField from "@/components/BasicInputField.vue"
-
-interface Person {
-  id: number;
-  firstName: string;
-  lastName: string;
-  age: number;
-  dob: string;
-  sex: string;
-  village: string;
-  appointmentDate: string;
-}
+import HisDate from "@/utils/Date";
 
 export default defineComponent({
   name: 'PersonCardComponent',
@@ -89,7 +79,7 @@ export default defineComponent({
   },
   props: {
     people: {
-      type: Array as () => Person[],
+      type: Array as () => any[],
       required: true,
     },
     heading_text: {
@@ -113,6 +103,9 @@ export default defineComponent({
     formatDate(dateString: string): string {
       const date = new Date(dateString);
       return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    },
+    getBirthdateAge(dateString: string) {
+      return HisDate.getBirthdateAge(dateString)
     },
     searchTextUpdated(event: any) {
         // const reason = event.target.value
