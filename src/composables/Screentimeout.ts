@@ -46,16 +46,16 @@ function resetInactivityTimer() {
 
 function configureTimeout(timeout: number) {
     idleTime.value = timeout
-    sessionStorage.setItem('screen_timeout', `${timeout}`)
+    localStorage.setItem('screen_timeout', `${timeout}`)
 }
 
 function clearScreenTimeout() {
     idleTime.value = 0
-    sessionStorage.removeItem('screen_timeout')
+    localStorage.removeItem('screen_timeout')
 }
 
 function initiateSystemIdleMonitor() {
-    idleTime.value = parseInt(sessionStorage.getItem('screen_timeout')||'0')
+    idleTime.value = parseInt(localStorage.getItem('screen_timeout')||'0')
     document.addEventListener("mousemove", resetInactivityTimer);
     document.addEventListener("keydown", resetInactivityTimer);
     resetInactivityTimer()
