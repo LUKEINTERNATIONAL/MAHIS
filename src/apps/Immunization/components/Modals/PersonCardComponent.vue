@@ -14,7 +14,7 @@
               placeholder=""
               :icon="searchOutline"
               :inputValue="search_text"
-              @update:inputValue="searchTextUpdated"
+              @update:inputmodalControllerValue="searchTextUpdated"
             />
             <div>
                 <ion-label v-if="search_txt_error" class="error-label">
@@ -38,13 +38,13 @@
             <ion-list lines="none" style="border-radius: 6px;">
               <ion-item class="p-inf">
                 <ion-icon :icon="personOutline" slot="start"></ion-icon>
-                <ion-label>Gender: {{ person.gender }}</ion-label>
+                <ion-label> <span class="s-inf">Gender:</span> {{ person.gender }}</ion-label>
               </ion-item>
               <hr class="solid-line">
 
               <ion-item  class="p-inf">
                 <ion-icon :icon="locationOutline" slot="start"></ion-icon>
-                <ion-label>Village: {{ person.city_village }}</ion-label>
+                <ion-label> <span class="s-inf">Village:</span> {{ person.city_village }}</ion-label>
               </ion-item>
 
             </ion-list>
@@ -188,5 +188,8 @@ ion-item {
   margin-right: 10px;
   margin-top: 0px;
   margin-bottom: 0px;
+}
+.s-inf {
+  font-size: 16px; color: gray;
 }
 </style>
