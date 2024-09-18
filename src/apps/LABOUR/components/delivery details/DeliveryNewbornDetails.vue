@@ -6,12 +6,14 @@
             :contentData="secondStageDetails"
             :initialData="initialData"
         ></basic-form>
+
         <BabyDetailsModal  
         :closeModalFunc="closeBabyModal"
         :onYes="handleBabyYes"
         :onNo="handleBabyNo"
         :isOpen="babyModalOpen"
         :title="``" />
+        
         <div v-if="arrayOfBabies.length>0">
           <div v-for="n in  arrayOfBabies" :key="n">
             <ion-button v-if="!checkIfSubmitted(n)" @click="handleAddBabyDetails(n)">Add Baby {{ n + 1 }}</ion-button>
