@@ -6,7 +6,7 @@
         </div>
         <Toolbar />
         <ion-content>
-            <div>
+            <div class="container">
                 <h1 class="heading">Schedule Immunization Sessions</h1>
                 <div style="margin-top: 15px;">
                     <ScheduleXCalendar :calendar-app="calendarApp" />
