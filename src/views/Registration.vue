@@ -140,7 +140,7 @@ import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
 import PersonMatchView from "@/components/PersonMatchView.vue";
 import { createModal } from "@/utils/Alerts";
-import { useWebWorkerFn } from "@vueuse/core";
+
 import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
