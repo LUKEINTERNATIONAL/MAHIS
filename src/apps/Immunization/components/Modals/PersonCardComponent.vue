@@ -33,7 +33,7 @@
                 <ion-card-title>{{ person.given_name }} {{ person.family_name }}</ion-card-title>
                 <ion-label style="font-size: 17px;">{{ getBirthdateAge(person.birthdate) }}</ion-label>
               </div>
-              <ion-icon :icon="eyeOutline" class="eye-icon"></ion-icon>
+              <ion-icon :icon="eyeOutline" @click="viewPatientProfile(person.patient_id)" class="eye-icon"></ion-icon>
             </div>
             <ion-list lines="none" style="border-radius: 6px;">
               <ion-item class="p-inf">
@@ -110,6 +110,9 @@ export default defineComponent({
         
       }
     },
+    viewPatientProfile(client_id: string) {
+      this.$emit('action-name', {client_id})
+    },
     searchTextUpdated(event: any) {
         // const reason = event.target.value
         // this.search_text = reason
@@ -162,6 +165,7 @@ ion-card-subtitle {
 
 .eye-icon {
   font-size: 1.8rem;
+  cursor: pointer
 }
 
 ion-icon {
