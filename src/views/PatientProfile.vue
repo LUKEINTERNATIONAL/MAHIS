@@ -712,7 +712,7 @@ export default defineComponent({
       return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
     },
     programAccess(programName: string): boolean {
-      const accessPrograms: any = sessionStorage.getItem("userPrograms");
+      const accessPrograms: any = localStorage.getItem("userPrograms");
       const programs: any = JSON.parse(accessPrograms);
       if (programs.some((program: any) => program.name === programName)) {
         return true;
@@ -734,7 +734,7 @@ export default defineComponent({
       this.checkInModalOpen = !this.checkInModalOpen;
     },
     handleCheckInYes() {
-      console.log("yes");
+   
       this.toggleCheckInModal();
     },
     handleCheckInNo() {
@@ -745,7 +745,10 @@ export default defineComponent({
       this.popoverOpen = !this.popoverOpen;
     },
 
-    handleProgramClick(btn: any) {
+    async handleProgramClick(btn: any) {
+
+      // TODO: this function is supposed to run in mounted method
+      await this.refreshPrograms();
       const lower = (title:string)=> title.toLowerCase().replace(/\s+/g, '');
 
       if (lower(btn.actionName) == lower("+ Enroll in ANC Program" )||
@@ -783,6 +786,10 @@ export default defineComponent({
       const programs = await ProgramService.getPatientPrograms(
         this.demographics.patient_id
       );
+      
+      console.log({programs});
+
+
       this.enrolledPrograms = programs.map((p: any) => ({
         name: p.program.name,
         id: p.program_id,

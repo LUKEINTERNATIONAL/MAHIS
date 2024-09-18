@@ -26,11 +26,11 @@ const ApiClient = (() => {
     }
 
     function getSessionConfig(): Config | undefined {
-        const host = sessionStorage.apiURL;
-        const port = sessionStorage.apiPort;
-        const protocol = sessionStorage.apiProtocol;
-        const thirdpartyapps = sessionStorage.thirdpartyApps;
-        const otherApps = sessionStorage.otherApps;
+        const host = localStorage.apiURL;
+        const port = localStorage.apiPort;
+        const protocol = localStorage.apiProtocol;
+        const thirdpartyapps = localStorage.thirdpartyApps;
+        const otherApps = localStorage.otherApps;
 
         if (host && port && protocol) return { host, port, protocol, thirdpartyapps, otherApps, baseURL };
     }
@@ -53,7 +53,7 @@ const ApiClient = (() => {
 
     function headers() {
         return {
-            Authorization: sessionStorage.apiKey,
+            Authorization: localStorage.apiKey,
             "Content-Type": "application/json",
         };
     }
@@ -97,7 +97,7 @@ const ApiClient = (() => {
     }
     function handleUnauthorized(response: any) {
         if (response == "Unauthorized") {
-            sessionStorage.setItem("apiKey", "");
+            localStorage.setItem("apiKey", "");
         }
     }
     // /**

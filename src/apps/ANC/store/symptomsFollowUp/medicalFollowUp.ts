@@ -10,7 +10,7 @@ const initialMedicalFollowUp=[
             header: {
                 title: "What medication supplements is the woman currently taking?",
                 selectedValue: "",
-                name:'Medication supplements',
+                name:'Medical follow up',
                 class:'bold'
 
             },
@@ -87,7 +87,7 @@ const initialMedicalFollowUp=[
                 },
                 {
                     name: 'Side-effects from Penicillin',
-                    value: 'Side-effects from Penicillin',
+                    value: 'Taking penicillin treatment',
                     colSize: "12",
 
                 },
@@ -136,5 +136,5 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
             return [...data];
         }
     },
-    // persist:true
+    persist:true
 })

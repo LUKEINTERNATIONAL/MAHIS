@@ -6,14 +6,22 @@
             :contentData="secondStageDetails"
             :initialData="initialData"
         ></basic-form>
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         <BabyDetailsModal  
         :closeModalFunc="closeBabyModal"
         :onYes="handleBabyYes"
         :onNo="handleBabyNo"
         :isOpen="babyModalOpen"
         :title="``" />
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         <div v-if="arrayOfBabies.length>0">
           <div v-for="n in  arrayOfBabies" :key="n">
             <ion-button v-if="!checkIfSubmitted(n)" @click="handleAddBabyDetails(n)">Add Baby {{ n + 1 }}</ion-button>
@@ -221,7 +229,7 @@ export default defineComponent({
       modifyRadioValue(this.babyDetails, 'Tetracycline eye ointment given', 'displayNone', visibility);
       modifyRadioValue(this.babyDetails, 'Chlorhexidine', 'displayNone', visibility);
       modifyCheckboxHeader(this.babyDetails,'Newborn baby complications','displayNone', visibility)
-      modifyCheckboxHeader(this.babyDetails,'Management to newborn','displayNone', visibility)
+      // modifyCheckboxHeader(this.babyDetails,'Management to newborn','displayNone', visibility)
       modifyRadioValue(this.babyDetails,'Oxytocin 10 UI given','displayNone', visibility)
       modifyRadioValue(this.babyDetails,'Vitamin K given','displayNone', visibility)
     }

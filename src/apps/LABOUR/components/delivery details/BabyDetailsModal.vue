@@ -22,19 +22,28 @@ import {
   IonButtons,
   IonButton,
   IonContent,
-  IonIcon
-} from '@ionic/vue';
-import { closeOutline } from 'ionicons/icons';
+  IonIcon,
+} from "@ionic/vue";
+import { closeOutline } from "ionicons/icons";
 import DynamicButton from "@/components/DynamicButton.vue";
-import BasicForm from '@/components/BasicForm.vue';
-import { BabyDetailsValidationSchema, useSecondStageOfLabourStore } from '../../stores/delivery details/secondStageDelivery';
-import { mapState } from 'pinia';
-import { getRadioSelectedValue, modifyCheckboxHeader, modifyFieldValue, modifyRadioValue, getCheckboxSelectedValue, modifyCheckboxValue } from '@/services/data_helpers';
-import { YupValidateField } from '@/services/validation_service';
-
+import BasicForm from "@/components/BasicForm.vue";
+import {
+  BabyDetailsValidationSchema,
+  useSecondStageOfLabourStore,
+} from "../../stores/delivery details/secondStageDelivery";
+import { mapState } from "pinia";
+import {
+  getRadioSelectedValue,
+  modifyCheckboxHeader,
+  modifyFieldValue,
+  modifyRadioValue,
+  getCheckboxSelectedValue,
+  modifyCheckboxValue,
+} from "@/services/data_helpers";
+import { YupValidateField } from "@/services/validation_service";
 
 export default defineComponent({
-  name: 'BabyDetailsModal',
+  name: "BabyDetailsModal",
   components: {
     DynamicButton,
     IonModal,
@@ -45,43 +54,39 @@ export default defineComponent({
     IonButton,
     IonContent,
     IonIcon,
-    BasicForm
+    BasicForm,
   },
   data() {
     return {
-      initialData: [] as any
-    }
+      initialData: [] as any,
+    };
   },
   props: {
     isOpen: {
       type: Boolean as PropType<boolean>,
       required: true,
-      default: false
+      default: false,
     },
     closeModalFunc: {
       type: Function as PropType<() => void>,
-      required: true
-
+      required: true,
     },
     onYes: {
       type: Function as PropType<() => void>,
-      required: true
-
+      required: true,
     },
     onNo: {
       type: Function as PropType<() => void>,
-      required: true
-
+      required: true,
     },
     title: {
       type: String as PropType<string>,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     ...mapState(useSecondStageOfLabourStore, ["babyDetails"]),
     ...mapState(useSecondStageOfLabourStore, ["secondStageDetails"]),
-
   },
 
   watch: {
@@ -94,18 +99,37 @@ export default defineComponent({
     babyDetails: {
       handler() {
         this.handleChangeDisplay();
-        const complications = ['Prematurity', 'Sepsis', 'Congenital abnormalities', 'Asphyxia', 'Other complications', "Low birthweight"];
-        const managementNewborn = ['Kangaroo mother care', 'Antibiotics', 'Other'];
-        this.handleNone(complications, 'None');
-        this.handleNone(managementNewborn, 'Nothing');
+        const complications = [
+          "Prematurity",
+          "Sepsis",
+          "Congenital abnormalities",
+          "Asphyxia",
+          "Other complications",
+          "Low birthweight",
+        ];
+        const managementNewborn = [
+          "Kangaroo mother care",
+          "Antibiotics",
+          "Other",
+        ];
+        this.handleComplicationCheck(complications)
+        this.handleNone(complications, "None");
+        this.handleNone(managementNewborn, "Routine newborn care");
         this.handleCongenitalCheck();
+        this.handleAsphyxiaCheck();
+        this.handleResuscitationChange();
       },
       deep: true,
     },
   },
   methods: {
     async handleInputData(event: any) {
-      YupValidateField(this.babyDetails, BabyDetailsValidationSchema, event.name, event.value);
+      YupValidateField(
+        this.babyDetails,
+        BabyDetailsValidationSchema,
+        event.name,
+        event.value
+      );
     },
     closeOutline() {
       return closeOutline;
@@ -119,42 +143,139 @@ export default defineComponent({
       this.closeModal();
     },
     handleChangeDisplay() {
-      const babyGeneralCondition = getRadioSelectedValue(this.secondStageDetails, 'Baby general condition at birth');
-      this.babyDetailsDisplayNone(babyGeneralCondition == "Macerated stillbirth" || babyGeneralCondition == "Fresh stillbirth")
-
+      const babyGeneralCondition = getRadioSelectedValue(
+        this.secondStageDetails,
+        "Baby general condition at birth"
+      );
+      this.babyDetailsDisplayNone(
+        babyGeneralCondition == "Macerated stillbirth" ||
+          babyGeneralCondition == "Fresh stillbirth"
+      );
     },
     babyDetailsDisplayNone(visibility: boolean) {
-      modifyFieldValue(this.babyDetails, "First name", "displayNone", visibility)
-      modifyFieldValue(this.babyDetails, "Last name", "displayNone", visibility)
-      modifyFieldValue(this.babyDetails, "Apgar score at 1 minute", "displayNone", visibility)
-      modifyFieldValue(this.babyDetails, "Apgar score at 5 minute", "displayNone", visibility)
-      modifyRadioValue(this.babyDetails, 'Tetracycline eye ointment given', 'displayNone', visibility);
-      modifyRadioValue(this.babyDetails, 'Chlorhexidine', 'displayNone', visibility);
-      modifyCheckboxHeader(this.babyDetails, 'Newborn baby complications', 'displayNone', visibility)
-      modifyCheckboxHeader(this.babyDetails, 'Management to newborn', 'displayNone', visibility)
-      modifyRadioValue(this.babyDetails, 'Oxytocin 10 UI given', 'displayNone', visibility)
-      modifyRadioValue(this.babyDetails, 'Vitamin K given', 'displayNone', visibility)
+      modifyFieldValue(
+        this.babyDetails,
+        "First name",
+        "displayNone",
+        visibility
+      );
+      modifyFieldValue(
+        this.babyDetails,
+        "Last name",
+        "displayNone",
+        visibility
+      );
+      modifyFieldValue(
+        this.babyDetails,
+        "Apgar score at 1 minute",
+        "displayNone",
+        visibility
+      );
+      modifyFieldValue(
+        this.babyDetails,
+        "Apgar score at 5 minute",
+        "displayNone",
+        visibility
+      );
+      modifyRadioValue(
+        this.babyDetails,
+        "Tetracycline eye ointment given",
+        "displayNone",
+        visibility
+      );
+      modifyRadioValue(
+        this.babyDetails,
+        "Chlorhexidine",
+        "displayNone",
+        visibility
+      );
+      modifyCheckboxHeader(
+        this.babyDetails,
+        "Newborn baby complications",
+        "displayNone",
+        visibility
+      );
+      // modifyCheckboxHeader(
+      //   this.babyDetails,
+      //   "Management to newborn",
+      //   "displayNone",
+      //   visibility
+      // );
+      modifyRadioValue(
+        this.babyDetails,
+        "Oxytocin 10 UI given",
+        "displayNone",
+        visibility
+      );
+      modifyRadioValue(
+        this.babyDetails,
+        "Vitamin K given",
+        "displayNone",
+        visibility
+      );
     },
     handleNone(checkBoxes: Array<any>, noneConcept: string) {
       if (getCheckboxSelectedValue(this.babyDetails, noneConcept)?.checked) {
         checkBoxes.forEach((checkbox) => {
-          modifyCheckboxValue(this.babyDetails, checkbox, 'checked', false);
-          modifyCheckboxValue(this.babyDetails, checkbox, 'disabled', true);
+          modifyCheckboxValue(this.babyDetails, checkbox, "checked", false);
+          modifyCheckboxValue(this.babyDetails, checkbox, "disabled", true);
         });
       } else {
         checkBoxes.forEach((checkbox) => {
-          modifyCheckboxValue(this.babyDetails, checkbox, 'disabled', false);
+          modifyCheckboxValue(this.babyDetails, checkbox, "disabled", false);
         });
       }
     },
+
+
+    // find another means
+    handleComplicationCheck(checkBoxes: any) {
+      let checked=false;
+      checkBoxes.forEach((checkbox: string) => {
+        checked =
+          checked ||
+          getCheckboxSelectedValue(this.babyDetails, checkbox)?.checked;
+      });
+
+      modifyCheckboxHeader(this.babyDetails,"Management to newborn","displayNone", !checked);
+    },
+
     handleCongenitalCheck() {
-      const checked = getCheckboxSelectedValue(this.babyDetails, "Congenital abnormalities")?.checked
+      const checked = getCheckboxSelectedValue(
+        this.babyDetails,
+        "Congenital abnormalities"
+      )?.checked;
 
-      modifyFieldValue(this.babyDetails, "Specify", "displayNone", !checked)
+      modifyFieldValue(this.babyDetails, "Specify", "displayNone", !checked);
+    },
+    handleAsphyxiaCheck() {
+      const checked = getCheckboxSelectedValue(
+        this.babyDetails,
+        "Asphyxia"
+      )?.checked;
 
-    }
-  }
-  });
+      modifyRadioValue(
+        this.babyDetails,
+        "Resuscitation attempt",
+        "displayNone",
+        !checked
+      );
+    },
+
+    handleResuscitationChange() {
+      const yesValue =
+        getRadioSelectedValue(this.babyDetails, "Resuscitation attempt") ==
+        "Yes";
+
+      modifyRadioValue(
+        this.babyDetails,
+        "Type of resuscitation",
+        "displayNone",
+        !yesValue
+      );
+    },
+  },
+});
 </script>
 
 <style scoped>
@@ -172,13 +293,11 @@ ion-header {
 
 ion-title {
   color: var(--ion-color-light);
-
 }
 
 ion-content {
   display: flex;
   /* flex-direction: column; */
   /* border: black solid 8px; */
-
 }
 </style>

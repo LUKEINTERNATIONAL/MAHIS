@@ -85,7 +85,7 @@ export default defineComponent({
         ...mapState(useRegistrationStore, ["addTA", "currentLocation", "homeLocation"]),
     },
     mounted() {
-        if (sessionStorage.getItem("activeLocation") == "current") {
+        if (localStorage.getItem("activeLocation") == "current") {
             this.districtType = "current_district";
             this.TAType = "current_traditional_authority";
             this.VillageType = "current_village";
@@ -135,7 +135,7 @@ export default defineComponent({
             const TAValue = getFieldValue(this.addTA, "TA", "value");
             const villageValue = getFieldValue(this.addTA, "Village", "value");
             let districtData = [];
-            if (sessionStorage.getItem("activeLocation") == "current") {
+            if (localStorage.getItem("activeLocation") == "current") {
                 districtData = getFieldValue(this.currentLocation, this.districtType, "value");
             } else {
                 districtData = getFieldValue(this.homeLocation, this.districtType, "value");
@@ -153,7 +153,7 @@ export default defineComponent({
 
                 const TAList = await LocationService.getTraditionalAuthorities(districtData.district_id, "");
                 const villageList = await LocationService.getVillages(filteredData[0].traditional_authority_id, "");
-                if (sessionStorage.getItem("activeLocation") == "current") {
+                if (localStorage.getItem("activeLocation") == "current") {
                     modifyFieldValue(this.currentLocation, this.TAType, "multiSelectData", TAList);
                     modifyFieldValue(this.currentLocation, this.VillageType, "multiSelectData", villageList);
                     modifyFieldValue(this.currentLocation, this.VillageType, "value", { name: villageValue });
@@ -168,7 +168,7 @@ export default defineComponent({
                 }
                 modifyFieldValue(this.addTA, "TA", "value", "");
                 modifyFieldValue(this.addTA, "Village", "value", "");
-                if (sessionStorage.getItem("activeLocation") == "current") {
+                if (localStorage.getItem("activeLocation") == "current") {
                     modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsErrorMassage", "");
                     modifyFieldValue(this.currentLocation, "current_village", "alertsErrorMassage", "");
                 } else {
@@ -182,7 +182,7 @@ export default defineComponent({
 
             const name = getFieldValue(this.addTA, event.name, "value");
             let districtData = [];
-            if (sessionStorage.getItem("activeLocation") == "current") {
+            if (localStorage.getItem("activeLocation") == "current") {
                 districtData = getFieldValue(this.currentLocation, this.districtType, "value");
             } else {
                 districtData = getFieldValue(this.homeLocation, this.districtType, "value");

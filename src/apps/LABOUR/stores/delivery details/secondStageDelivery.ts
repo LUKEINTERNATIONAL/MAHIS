@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+<<<<<<< HEAD
 import * as yup from "yup";
 
 const babyDetails = [
@@ -625,6 +626,81 @@ const initialSecondStageDetails = [
           name: "Live preterm",
           value: "Live preterm",
           colSize: "5",
+=======
+import * as yup from "yup"
+
+
+const babyDetails = [
+    {
+        sideColSize: 1,
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: false,
+                            inputHeader: "First name",
+                            unit: "",
+                            icon: icons.editPen,
+                            value: "",
+                            valueType: "text",
+                            name: "First name",
+                            required: true,
+                            eventType: "input",
+                            placeholder: "",
+                        },
+                        {
+                            inputHeader: "Last name",
+                            unit: "",
+                            icon: icons.editPen,
+                            value: "",
+                            valueType: "text",
+                            name: "Last name",
+                            required: true,
+                            eventType: "input",
+                            placeholder: "",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: false,
+                            inputHeader: "APGAR score at 1 minute",
+                            unit: "",
+                            icon: icons.editPen,
+                            valueType: "text",
+                            value: "",
+                            name: "Apgar score at 1 minute",
+                            required: true,
+                            eventType: "input",
+                            placeholder: "",
+                        },
+                        {
+                            inputHeader: "APGAR score at 5 minutes",
+                            unit: "",
+                            icon: icons.editPen,
+                            value: "",
+                            valueType: "text",
+                            name: "Apgar score at 5 minutes",
+                            required: true,
+                            eventType: "input",
+                            placeholder: "",
+                        },
+                    ],
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
         {
           name: "Macerated stillbirth",
@@ -638,6 +714,7 @@ const initialSecondStageDetails = [
         },
       ],
     },
+<<<<<<< HEAD
   },
 
   {
@@ -657,11 +734,26 @@ const initialSecondStageDetails = [
               eventType: "input",
               placeholder: "",
               inputWidth: "",
+=======
+    {
+        sideColSize: 1,
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Newborn sex",
+                selectedValue: "",
+                class: "bold",
+                displayNone: false,
+                name: "Sex",
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
             },
           ],
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     sideColSize: 1,
@@ -780,6 +872,657 @@ const initialSecondStageDetails = [
       ],
     },
   },
+=======
+    {
+        sideColSize: 1,
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "",
+        radioBtnContent: {
+            header: {
+                displayNone: false,
+                title: "Newborn vitals",
+                class: "bold",
+                selectedValue: "",
+                name: "vitals",
+            },
+            data: [],
+        },
+    },
+    {
+        sideColSize: 1,
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: false,
+                            inputHeader: "Baby weight",
+                            unit: "grams",
+                            icon: icons.weight,
+                            valueType: "text",
+                            value: "",
+                            name: "Weight",
+                            required: true,
+                            eventType: "input",
+                            placeholder: "",
+                        },
+                        {
+                            inputHeader: "Baby height",
+                            unit: "cm",
+                            icon: icons.height,
+                            value: "",
+                            valueType: "text",
+                            name: "Height",
+                            required: true,
+                            eventType: "input",
+                            placeholder: "",
+                        },
+                        {
+                            inputHeader: "Head circumference",
+                            unit: "cm",
+                            icon: icons.height,
+                            value: "",
+                            valueType: "text",
+                            name: "Circumference",
+                            required: true,
+                            eventType: "input",
+                            placeholder: "",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+       
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Tetracycline eye ointment given?",
+                selectedValue: "",
+                class: "bold",
+                displayNone: false,
+                name: "Tetracycline eye ointment given",
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+
+        childName: "Baby general condition at birth",
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "Any Newborn complications?",
+                selectedValue: "",
+                class: "bold",
+                name: "Newborn baby complications",
+                displayNone: false,
+            },
+            data: [
+                {
+                    name: "None",
+                    value: "none",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Prematurity",
+                    value: "prematurity",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Newborn baby complications",
+                displayNone: false,
+            },
+            data: [
+                {
+                    name: "Sepsis",
+                    value: "sepsis",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Congenital abnormalities",
+                    value: "Congenital abnormalities",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    }, 
+    {
+        sideColSize: 1,
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Newborn baby complications",
+                displayNone: false,
+            },
+            data: [
+                {
+                    name: "Asphyxia",
+                    value: "Asphyxia",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Low birthweight",
+                    value: "Low birthweight",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    }, 
+    {
+        sideColSize: 1,
+        classDash: "dashed_bottom_border _padding",
+        childName: "Baby general condition at birth",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Newborn baby complications",
+                displayNone: true,
+            },
+            data: [
+                {
+                    name: "Other complications",
+                    value: "Other complications",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "Specify Congenital Abnormalities",
+                            unit: "",
+                            icon: icons.editPen,
+                            value: "",
+                            valueType: "text",
+                            name: "Specify",
+                            eventType: "input",
+                            placeholder: "",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Asphyxia",
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Was resuscitation attempted?",
+                selectedValue: "",
+                name: "Resuscitation attempt",
+                class: "bold",
+                displayNext: "Yes",
+                displayNone: true,
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Resuscitation attempt",
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Type of resuscitation?",
+                selectedValue: "",
+                displayNone: true,
+                class: "bold",
+                name: "Type of resuscitation",
+            },
+            data: [
+                {
+                    name: "Drying only",
+                    value: "Drying only",
+                    colSize: "7",
+                },
+                {
+                    name: "Clearing airway",
+                    value: "Clearing airway",
+                    colSize: "7",
+                },
+                {
+                    name: "Bag and mask",
+                    value: "Bag and mask",
+                    colSize: "7",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Other",
+        isFinishBtn: false,
+        sectionHeader: "",
+        classDash: "dashed_bottom_border _padding",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "Specify",
+                            unit: "",
+                            icon: icons.editPen,
+                            value: "",
+                            valueType: "text",
+                            name: "Other notes",
+                            required: true,
+                            eventType: "input",
+                            inputWidth: "85%",
+                        },
+                    ],
+                },
+            ],
+        },
+    },  
+    {
+        sideColSize: 1,
+
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "Select the management given to newborn",
+                selectedValue: "",
+                class: "bold",
+                displayNone: true,
+                name: "Management to newborn",
+            },
+            data: [
+                {
+                    name: "Routine newborn care",
+                    value: "Routine newborn care",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Baby general condition at birth",
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                displayNone: true,
+                name: "Management to newborn",
+            },
+            data: [
+                {
+                    name: "Kangaroo mother care",
+                    value: "Kangaroo mother care",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+     
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                displayNone: true,
+                name: "Management to newborn",
+            },
+            data: [
+                {
+                    name: "Antibiotics",
+                    value: "Antibiotics",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },   
+    {
+        sideColSize: 1,
+        classDash: "dashed_bottom_border _padding",
+      
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                displayNone: true,
+                name: "Management to newborn",
+            },
+            data: [
+                {
+                    name: "Other",
+                    value: "Other",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+   
+    {
+        selectdData: [],
+        sideColSize: 1,
+        isFinishBtn: false,
+        childName: "Baby general condition at birth",
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Vitamin K given?",
+                selectedValue: "",
+                name: "Vitamin K given",
+                class: "bold",
+                displayNone: false,
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Baby general condition at birth",
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Chlorhexidine 7.1% applied?",
+                selectedValue: "",
+                class: "bold",
+                displayNone: false,
+                name: "Chlorhexidine",
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ],
+        },
+    },
+]
+
+export const BabyDetailsValidationSchema = yup.object().shape({
+    'First name': yup.string()
+      .required('First Name is required')
+      .max(50, 'First Name cannot be longer than 50 characters')
+      .matches(/^[A-Za-z\s]+$/, 'First Name can only contain letters and spaces') 
+    ,
+    'Last name': yup.string()
+    .required('first name is required')
+    .max(50, 'Name cannot be longer than 50 characters')
+    .matches(/^[A-Za-z\s]+$/, 'First Name can only contain letters and spaces'), 
+    'Apgar score at 1 minute': yup.number()
+        .typeError("Apgar score at 1 minute can only be a number")
+        .required('Apgar score at 1 minute is required')
+    .label('Apgar score at 1 minute'),
+    'Apgar score at 5 minute': yup.number()
+        .typeError("Apgar score at 5 minute can only be a number")
+        .required()
+    .label('Apgar score at 5 minute'),
+    'Weight': yup.number()
+        .typeError("Weight can only be a number")
+        .min(2500)
+        .required()
+    .label("Weight"),
+    'Height': yup.number()
+        .typeError("Height can only be a number")
+        .min(2500)
+        .required()
+    .label("Weight"),
+    'Circumference': yup.number()
+        .typeError("Circimference can only be a number")
+        .required()
+    .label("Circumference"),
+   
+})
+
+const initialSecondStageDetails = [
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "",
+        radioBtnContent: {
+            header: {
+                title: "Time and date of delivery",
+                class: "bold",
+                selectedValue: "",
+            },
+            data: [],
+        },
+    },
+    {
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Time of delivery",
+                            unit: "",
+                            icon: icons.time,
+                            value: "",
+                            valueType: "text",
+                            name: "Time of delivery",
+                            required: true,
+                            eventType: "input",
+                            placeholder: "Pick time",
+                           
+                            // isDatePopover:true,
+                        },
+                        {
+                            inputHeader: "Date of delivery",
+                            unit: "",
+                            icon: icons.calenderPrimary,
+                            value: "",
+                            valueType: "text",
+                            name: "Date of delivery",
+                            required: true,
+                            datePopover: true,
+                            eventType: "input",
+                            placeholder: "Pick date",
+                            isDatePopover: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                class: "bold",
+                title: "Baby general condition at birth",
+                selectedValue: "",
+                name: "Baby general condition at birth",
+                displayNext: "Live full term",
+            },
+            data: [
+                {
+                    name: "Live full term",
+                    value: "Live full term",
+                    colSize: "5",
+                },
+                {
+                    name: "Live preterm",
+                    value: "Live preterm",
+                    colSize: "5",
+                },
+                {
+                    name: "Macerated stillbirth",
+                    value: "Macerated stillbirth",
+                    colSize: "5",
+                },
+                {
+                    name: "Fresh stillbirth",
+                    value: "Fresh stillbirth",
+                    colSize: "5",
+                },
+            ],
+        },
+    },
+    
+    {
+        isFinishBtn: false,
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:false,
+                                inputHeader: '',
+                                unit: 'Babies',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Number of babies',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:'',
+                                inputWidth:''
+    
+                            },
+    
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        sideColSize: 1,
+        childName: "Other complications",
+        isFinishBtn: false,
+        sectionHeader: "",
+        classDash: "dashed_bottom_border _padding",
+
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "Specify",
+                            unit: "",
+                            icon: icons.editPen,
+                            value: "",
+                            valueType: "text",
+                            name: "Other notes",
+                            required: true,
+                            eventType: "input",
+                            inputWidth: "85%",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
 ] as any;
 const initialNewbornComplications = [
   // {
@@ -937,6 +1680,7 @@ const initialNewbornComplications = [
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     selectdData: [],
@@ -989,6 +1733,58 @@ const initialNewbornComplications = [
               required: true,
               eventType: "input",
               inputWidth: "85%",
+=======
+    {   
+        classDash: 'dashed_bottom_border',
+        header:{
+                 title: 'Other Facility',
+                 selectedValue: ''
+             },
+         data:{ 
+             rowData:[
+                 {
+                     colData:[
+                         {
+                            displayNone:true,
+                             class:"bold",
+                             inputHeader: "Specify Other Facility?",
+                             icon: icons.search,
+                             value: "",
+                             name: "Facility",
+                             popOver: true,
+                             valueType: "text",
+                             eventType: "input",
+                             required: true,
+                             alertsError: false,
+                             alertsErrorMassage: "",
+                             placeholder: "Search for facility",
+                             popOverData: {
+                                 filterData: false,
+                                 data: [],
+                             },
+                             id: "",
+                             idName: "facility_id",
+                         },
+                         
+                     ]
+                 }
+             ],
+             
+         }
+             
+     },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                class: "bold",
+                title: "Mode of delivery",
+                name: "Mode of delivery",
+                selectedValue: "",
+                displayNext: "Other mode of delivery",
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
             },
           ],
         },
@@ -1056,6 +1852,7 @@ const initialObstetricDetails = [
     },
   },
 
+<<<<<<< HEAD
   {
     checkboxBtnContent: {
       header: {
@@ -1071,6 +1868,33 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "6",
           justify: "space-between",
+=======
+    {
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric complications",
+            },
+            data: [
+                {
+                    name: "Retained placenta",
+                    value: "retained placenta",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Perineal tear",
+                    value: "Perineal tear",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
         {
           name: "Perineal tear",
@@ -1082,6 +1906,7 @@ const initialObstetricDetails = [
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     classDash: "dashed_bottom_border _padding",
@@ -1109,6 +1934,49 @@ const initialObstetricDetails = [
     isFinishBtn: false,
     sectionHeader: "",
     classDash: "dashed_bottom_border _padding",
+=======
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                displayNone:true,
+                title: "Severity of Perineal Tear",
+                selectedValue: "",
+                name: "Severity",
+                class: "bold",
+            },
+            data: [
+                {
+                    name: "Lacerations",
+                    value: "Lacerations",
+                    colSize: "2.5",
+                },
+                {
+                    name: "First Degree",
+                    value: "First Degree",
+                    colSize: "3",
+                },
+                {
+                    name: "Second Degree",
+                    value: "Second Degree",
+                    colSize: "3",
+                },
+                {
+                    name: "Third Degree",
+                    value: "Third Degree",
+                    colSize: "3",
+                },
+            ],
+        },
+    },
+
+    {
+        isFinishBtn: false,
+        sectionHeader: "",
+        classDash: "dashed_bottom_border _padding",
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
 
     data: {
       rowData: [
@@ -1132,6 +2000,7 @@ const initialObstetricDetails = [
     },
   },
 
+<<<<<<< HEAD
   {
     selectdData: [],
     checkboxBtnContent: {
@@ -1149,9 +2018,32 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "Obstetric care provided",
+                selectedValue: "",
+                class: "bold",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "None",
+                    value: "None",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     selectdData: [],
@@ -1169,9 +2061,31 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Oxytocin/cabitocin/tranexamic acid",
+                    value: "oxytocin/cabitocin/tranexamic acid",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     selectdData: [],
@@ -1189,9 +2103,31 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Anticonvulsants",
+                    value: "anticonvulsants",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     selectdData: [],
@@ -1210,11 +2146,34 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        selectdData: [],
+        classDash: "",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Antibiotics",
+                    value: "antibiotics",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
   },
 
+<<<<<<< HEAD
   {
     checkboxBtnContent: {
       header: {
@@ -1230,9 +2189,30 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Blood transfusion",
+                    value: "blood transfusion",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     checkboxBtnContent: {
@@ -1249,9 +2229,30 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Manual removal of placenta",
+                    value: "manual removal of placenta",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     checkboxBtnContent: {
@@ -1268,9 +2269,30 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Non-pneumatic Anti-shock Garment (NASG)",
+                    value: "Non-pneumatic Anti-shock Garment (NASG)",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     checkboxBtnContent: {
@@ -1287,9 +2309,30 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Manual Removal of Retained Products of Conception",
+                    value: "manual Removal of Retained Products of Conception",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     checkboxBtnContent: {
@@ -1306,9 +2349,30 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Evacuation",
+                    value: "evacuation",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     checkboxBtnContent: {
@@ -1325,9 +2389,30 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Misoprostol",
+                    value: "misoprostol",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
+<<<<<<< HEAD
   },
   {
     classDash: "dashed_bottom_border _padding",
@@ -1345,6 +2430,27 @@ const initialObstetricDetails = [
           labelPlacement: "start",
           colSize: "8",
           justify: "space-between",
+=======
+    {
+        classDash: "dashed_bottom_border _padding",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Obstetric care",
+                displayNone: true
+            },
+            data: [
+                {
+                    name: "Other care",
+                    value: "Other care",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "8",
+                    justify: "space-between",
+                },
+            ],
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
         },
       ],
     },
@@ -1405,6 +2511,7 @@ const initialObstetricDetails = [
   },
 ] as any;
 
+<<<<<<< HEAD
 export const useSecondStageOfLabourStore = defineStore(
   "secondStageOfLabourStore",
   {
@@ -1439,6 +2546,41 @@ export const useSecondStageOfLabourStore = defineStore(
         const data = _.cloneDeep(initialObstetricDetails);
         return [...data];
       },
+=======
+ 
+export const useSecondStageOfLabourStore = defineStore("secondStageOfLabourStore", {
+    state: () => ({
+        secondStageDetails: [...initialSecondStageDetails] as any,
+        newbornComplications: [...initialNewbornComplications] as any,
+        obstetricComplications: [...initialObstetricDetails] as any,
+        babyDetails:[..._.cloneDeep(babyDetails)] as any
+    }),
+    actions: {
+        setNewbornComplications(data: any) {
+            this.newbornComplications = data;
+        },
+        setSecondStageDetails(data: any) {
+            this.secondStageDetails = data;
+        },
+        setObstetricComplications(data: any) {
+            this.obstetricComplications = data;
+        },
+        setBabyDetails(details = babyDetails) {
+           this.babyDetails = [..._.cloneDeep(details)]
+        },
+        getInitial() {
+            const data = _.cloneDeep(initialSecondStageDetails);
+            return [...data];
+        },
+        getInitialNewbornComplications() {
+            const data = _.cloneDeep(initialNewbornComplications);
+            return [...data];
+        },
+        getInitialObstetricDetails() {
+            const data = _.cloneDeep(initialObstetricDetails);
+            return [...data];
+        },
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a
     },
     // persist:true,
   }
