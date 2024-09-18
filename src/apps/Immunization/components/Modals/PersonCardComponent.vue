@@ -2,7 +2,7 @@
     <ion-header>
         <ion-row>
           <ion-col>
-            <ion-title style="margin-bottom: 1px;" class="modalTitle">Change Heading</ion-title>
+            <ion-title style="margin-bottom: 1px;" class="modalTitle">{{ heading_text }}</ion-title>
           </ion-col>
         </ion-row>
     </ion-header>
@@ -93,6 +93,11 @@ export default defineComponent({
       type: Array as () => Person[],
       required: true,
     },
+    heading_text: {
+      type: String,
+      required: true,
+      default: "provide heading text",
+    }
   },
   setup() {
     return {

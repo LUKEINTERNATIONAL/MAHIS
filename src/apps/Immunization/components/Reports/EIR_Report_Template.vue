@@ -153,7 +153,7 @@ export default defineComponent({
       },
     },
     computed: {
-      ...mapState(EIRreportsStore, ["start_date", "end_date"]), 
+      ...mapState(EIRreportsStore, ["start_date", "end_date", "navigationPayload"]), 
     },
     async mounted() {
       await this.getDrugs()
@@ -205,7 +205,7 @@ export default defineComponent({
           { id: 2, firstName: 'Jane', lastName: 'Smith', age: 28, dob: '1995-09-22', sex: 'Female' },
           // Add more people as needed
         ]
-        const dataToPass = {'people': peopleArray}
+        const dataToPass = {'people': peopleArray, heading_text: `Immunization (Client Drill Down | ${this.navigationPayload.subTxt})`}
         createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass);
       },
     },
