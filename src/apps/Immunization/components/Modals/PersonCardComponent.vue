@@ -72,6 +72,7 @@ import { calendarOutline, personOutline, locationOutline, eyeOutline, searchOutl
 import BasicInputField from "@/components/BasicInputField.vue"
 import HisDate from "@/utils/Date";
 
+
 export default defineComponent({
   name: 'PersonCardComponent',
   components: {
@@ -110,8 +111,12 @@ export default defineComponent({
         
       }
     },
-    viewPatientProfile(client_id: string) {
-      this.$emit('action-name', {client_id})
+    async viewPatientProfile(client_id: string) {
+      // this.$emit('view-client', {client_id})
+      const modal = modalController.getTop();
+      if (modal) {
+          (await modal).dispatchEvent(new CustomEvent('view-client', { detail: {client_id} }));
+      }
     },
     searchTextUpdated(event: any) {
         // const reason = event.target.value

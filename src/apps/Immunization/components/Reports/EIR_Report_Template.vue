@@ -118,14 +118,17 @@ import { defineComponent } from 'vue';
 import { IonContent , IonPage, IonRow, IonCol, IonFab, IonFabButton, } from '@ionic/vue';
 import NavigationMenu from './NavigationMenu.vue';
 import { mapState } from "pinia";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { getVaccinesAdministered, getImmunizationDrugs, exportReportToCSV } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { add, fileTray, downloadOutline } from 'ionicons/icons';
 import PersonCardComponent from "@/apps/Immunization/components/Modals/PersonCardComponent.vue"
 import { createModal } from "@/utils/Alerts";
+import { PatientService } from "@/services/patient_service";
 
 export default defineComponent({
     name: 'TableComponent',
+    mixins: [SetDemographics],
     components: { IonContent, IonPage, IonFab, IonFabButton, NavigationMenu,  IonRow, IonCol, PersonCardComponent },
     data() {
       return {
@@ -202,9 +205,20 @@ export default defineComponent({
         store.setImmunizationMonthlyRepoartData(this.tableData)
       },
       openPersonCardComponent(clients: []) {
+        const handleModalAction = (event: CustomEvent<any>) => {
+            // console.log('Action received from modal:', event.detail);
+            this.openPatientProfile(event.detail.client_id)
+        };
+
         const dataToPass = {'people': clients, heading_text: `Immunization (Client Drill Down | ${this.navigationPayload.subTxt})`}
-        createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass);
+        createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass, { 'view-client': handleModalAction });
       },
+      async openPatientProfile(client_id: any) {
+        const patientData = await PatientService.findByID(client_id);
+        const patientData2 = await PatientService.findByNpid(patientData.patient_identifiers[0].identifier);
+        this.setDemographics(patientData2[0]);
+        this.$router.push("patientProfile");
+      }
     },
   });
   </script>
