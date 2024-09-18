@@ -12,7 +12,7 @@ function removeQuotes(str: string) {
 }
 export class BMIService {
     static async getBMIData(): Promise<Bmi> {
-        let  baseURL = removeQuotes(sessionStorage.baseURL);
+        let  baseURL = removeQuotes(localStorage.baseURL);
         if (baseURL.length > 0) {baseURL = '/'+baseURL}
         const req = await fetch(`${baseURL}/bmi.json`);
         return req.json();
