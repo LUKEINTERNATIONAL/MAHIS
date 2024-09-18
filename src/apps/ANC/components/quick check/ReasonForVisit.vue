@@ -167,16 +167,36 @@ handleFirstAntenalVisit() {
     modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', !anyCheckboxSelected);
   }
 
-  if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
-        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
-  } else {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
-        modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
-  }
+  // if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+  //       modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+  //       modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+  // } else {
+  //       modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+  //       modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+  // }
 
-  if(getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'Yes'){
-  }
+  if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+    modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+} else {
+    const clearCheckboxes = [
+      'Abnormal vaginal discharge', 'Change in blood pressure-up', 'Diarrhoea', 'Vomiting', 
+      'Genital ulcers', 'Change in blood pressure-down', 'Constipation', 'Contractions', 
+      'Vaginal bleeding', 'Intimate partner violence', 'Flu symptoms', 'Painful urination', 
+      'Headache', 'Dyspepsia', 'Frequent urination/Polyuria', 'Injury', 'Jaundice', 
+      'Mental health-Depression', 'Genital warts', 'Itchy vulva', 'Painful intercourse', 
+      'No health concerns', 'Other'
+    ];
+
+    clearCheckboxes.forEach((checkbox) => {
+      modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
+    });
+
+    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+    modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+}
+
+
 }
 
 
