@@ -1,6 +1,21 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+import * as yup from "yup";
+
+export const FetalAssessmentValidation=yup.object().shape({
+    'Number of fetuses':yup.number()
+        .required()
+        .typeError("Value can only be a number")
+        .min(0,)
+        .max(5),
+    'Symphysis-fundal height':yup.number()
+        .typeError("SFH can only be a number")
+        .min(0)
+        .max(5000)
+        .required()
+        .label("Symphysis-fundal height")
+})
 
 const initialFetalAssesment=[
     {
@@ -196,12 +211,15 @@ const initialFetalDetails=[
 
 export const useFetalAssessment = defineStore("fetalAssessment", {
     state: () => ({
-        fetalAssessment: [...initialFetalAssesment] as any,
+        fetalAssessment: [..._.cloneDeep(initialFetalAssesment)] as any,
         fetalDetails:[..._.cloneDeep(initialFetalDetails)] as any,
     }),
     actions: {
         setFetalAssessment(data: any) {
             this.fetalAssessment = data;
+        },
+        setFetalDetails(details = initialFetalDetails) {
+            this.fetalDetails = [..._.cloneDeep(details)]
         },
         getInitialFetalAssesment(){
             const data= _.cloneDeep(initialFetalAssesment);

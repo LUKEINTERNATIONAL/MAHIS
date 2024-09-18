@@ -1,20 +1,55 @@
 <template>
-      <div class="container">
-        <ion-card class="section">
-            <ion-card-content>
-                <basic-form :contentData="fetalAssessment" :initialData="initialData"></basic-form>
-              <basic-form :contentData="fetalPresentation"></basic-form>
-            </ion-card-content>
-        </ion-card>
-    </div>
+  <div class="container">
+    <!--  Fetal assessment-->
+    <ion-card class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Fetal assessment results</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="fetalAssessment"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
+        ></basic-form>
+        <basic-form :contentData="fetalPresentation"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
+        ></basic-form>
+        <FeatusModal
+            :closeModalFunc="closeFetalModal"
+            :onYes="handleFeatusYes"
+            :onNo="handleFeatusNo"
+            :isOpen="FeatusModalOpen"
+            :title="``"
+        />
+        <div v-if="arrayOfFeatus.length>0">
+          <div v-for="n in  arrayOfFeatus" :key="n">
+            <ion-button v-if="!checkIfSubmitted(n)" @click="handleAddFeatusDetails(n)">Add Featus {{ n + 1 }}</ion-button>
+            <ion-button v-if="checkIfSubmitted(n)" @click="selectFeatus(n)">View Featus {{ n + 1 }}</ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, IonToggle } from "@ionic/vue";
+import {
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonList,
+  IonTitle,
+  IonToolbar,
+  IonMenu,
+  menuController,
+  IonInput,
+  IonToggle,
+  IonButton
+} from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
-import { useFetalAssessment } from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
+import {FetalAssessmentValidation, useFetalAssessment} from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 import { mapState } from "pinia";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
@@ -23,110 +58,169 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
-import {getRadioSelectedValue, modifyFieldValue, modifyRadioValue} from "@/services/data_helpers";
+import FeatusModal from "@/apps/ANC/components/physical exam/FeatusModal.vue";
+import {getFieldValue, getRadioSelectedValue, modifyFieldValue} from "@/services/data_helpers";
+import BabyDetailsModal from "@/apps/LABOUR/components/delivery details/BabyDetailsModal.vue";
+import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
+import _ from "lodash";
 import {useFetalPresentationStore} from "@/apps/ANC/store/physical exam/FetalPresantationStore";
+import {YupValidateField} from "@/services/validation_service";
+import fetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
 
 export default defineComponent({
-    components: {
-        IonToggle,
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        IonInput,
-        BasicInputField,
-        BasicForm,
-    },
-    data() {
-        return {
-            iconsContent: icons,
-            vValidations: "" as any,
-            hasValidationErrors: [] as any,
-            initialData:[] as any,
-            initialData1:[] as any,
-        };
-    },
-    computed: {
-        ...mapState(useFetalAssessment, ["fetalAssessment"]),
-      ...mapState(useFetalPresentationStore,["fetalPresentation"]),
-    },
-    mounted() {
+  components: {
+    IonButton,
+    BabyDetailsModal,
+    IonToggle,
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonMenu,
+    IonTitle,
+    IonToolbar,
+    IonInput,
+    BasicInputField,
+    BasicForm,
+    FeatusModal
+  },
+  data() {
+    return {
+      iconsContent: icons,
+      vValidations: "" as any,
+      hasValidationErrors: [] as any,
+      FeatusModalOpen: false,
+      arrayOfFeatus: [] as any,
+      selectedFeatus: 0,
+      fetalsDetails: [] as any,
+
+
+
+    };
+  },
+  computed: {
+    ...mapState(useFetalAssessment, ["fetalAssessment","fetalDetails"]),
+    ...mapState(useFetalPresentationStore,["fetalPresentation"])
+  },
+  mounted() {
+    this.handleFetalAssessment();
+    this.handleFetalRate()
+  },
+  watch: {
+    fetalAssessment: {
+      handler() {
         this.handleFetalAssessment();
         this.handleFetalRate()
-        const fetalAssesment=useFetalAssessment()
-      this.initialData=fetalAssesment.getInitialFetalAssesment();
+      },
+      deep: true,
     },
-    watch: {
-        fetalAssessment: {
-            handler() {
-                this.handleFetalAssessment();
-                this.handleFetalRate()
-            },
-            deep: true,
-        },
+  },
+  setup() {
+    return { checkmark, pulseOutline };
+  },
+  methods: {
+    handleInputData(event:any){
+      YupValidateField(
+          this.fetalAssessment,
+          FetalAssessmentValidation,
+          event.name,
+          event.value
+      )
     },
-    setup() {
-        return { checkmark, pulseOutline };
-    },
-    methods: {
-        navigationMenu(url: any) {
-            menuController.close();
-            this.$router.push(url);
-        },
-        handleFetalAssessment() {
-            if (getRadioSelectedValue(this.fetalAssessment, "Number of fetuses known") == "yes") {
-                modifyFieldValue(this.fetalAssessment, "Number of fetuses", "displayNone", false);
-            } else {
-                modifyFieldValue(this.fetalAssessment, "Number of fetuses", "displayNone", true);
-            }
-        },
-        handleFetalRate() {
-            if (getRadioSelectedValue(this.fetalAssessment, "Fetal heartbeat") == "yes") {
-                modifyFieldValue(this.fetalAssessment, "Fetal heart rate", "displayNone", false);
-                modifyFieldValue(this.fetalAssessment, "Repeated fetal rate", "displayNone", false);
-                modifyRadioValue(this.fetalAssessment, "Fetal heart rate regularity", "displayNone", false);
+    selectFeatus(n: any) {
+      this.selectedFeatus = n;
+      const featus = this.fetalsDetails.find((b: any) => b.featus == n);
+      const fetalAssessment = useFetalAssessment();
+      fetalAssessment.setFetalDetails(featus.details);
+      this.toggleFetalModal();
 
-            } else {
-                modifyFieldValue(this.fetalAssessment, "Fetal heart rate", "displayNone", true);
-                modifyFieldValue(this.fetalAssessment, "Repeated fetal rate", "displayNone", true);
-                modifyRadioValue(this.fetalAssessment, "Fetal heart rate regularity", "displayNone", true);
-            }
-        },
     },
+    handleNumberOfBabies() {
+      const numberOfFeatus = getFieldValue(this.fetalAssessment, 'Number of fetuses', 'value');
+      this.arrayOfFeatus = [...Array(Number(numberOfFeatus)).keys()]
+    },
+    handleAddFeatusDetails(featusNumber: number) {
+      const fetalAssement = useFetalAssessment();
+      fetalAssement.setFetalDetails()
+
+      this.selectedFeatus = featusNumber;
+      this.toggleFetalModal()
+    },
+    closeFetalModal() {
+    },
+    handleFeatusYes() {
+      this.toggleFetalModal()
+      const fetalAssessment = useFetalAssessment()
+      const index =this.fetalsDetails.findIndex((b: any) => b.featus == this.selectedFeatus);
+      if (index < 0) {
+        this.fetalsDetails.push({featus: this.selectedFeatus, details: [..._.cloneDeep(fetalAssessment.fetalDetails)]})
+      } else {
+        this.fetalsDetails[index].details = [..._.cloneDeep(fetalAssessment.fetalDetails)];
+      }
+      fetalAssessment.setFetalDetails()
+    },
+    handleFeatusNo() {
+      this.toggleFetalModal();
+      useFetalAssessment().fetalAssessment.setFetalDetals()
+    },
+    toggleFetalModal() {
+      this.FeatusModalOpen=!this.FeatusModalOpen
+    },
+    navigationMenu(url: any) {
+      menuController.close();
+      this.$router.push(url);
+    },
+    checkIfSubmitted(n: any) {
+      return this.fetalsDetails.find((b: any) => b.featus == n);
+    },
+    handleFetalAssessment() {
+      if (getRadioSelectedValue(this.fetalAssessment, "Number of fetuses known") == "yes") {
+        modifyFieldValue(this.fetalAssessment, "Number of fetuses", "displayNone", false);
+      } else {
+        modifyFieldValue(this.fetalAssessment, "Number of fetuses", "displayNone", true);
+      }
+    },
+    handleFetalRate() {
+      if (getRadioSelectedValue(this.fetalAssessment, "Fetal heartbeat") == "yes") {
+        modifyFieldValue(this.fetalAssessment, "Fetal heart rate", "displayNone", false);
+        modifyFieldValue(this.fetalAssessment, "Repeated fetal rate", "displayNone", false);
+      } else {
+        modifyFieldValue(this.fetalAssessment, "Fetal heart rate", "displayNone", false);
+        modifyFieldValue(this.fetalAssessment, "Repeated fetal rate", "displayNone", false);
+      }
+    },
+  },
 });
 </script>
 
 <style scoped>
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .section {
-    width: 100%;
-    max-width: 1300px; /* Adjust max-width as needed */
-    margin-bottom: 20px;
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
 }
 
 .navigation-buttons {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 500px; /* Adjust max-width as needed */
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
 }
 
 @media (max-width: 1500px) {
-    .container {
-        padding: 10px;
-    }
+  .container {
+    padding: 10px;
+  }
 }
 .sub_item_header {
-    font-weight: bold;
-    font-size: medium;
+  font-weight: bold;
+  font-size: medium;
 }
 ion-card {
 
