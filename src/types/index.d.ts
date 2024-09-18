@@ -39,7 +39,7 @@ type SessionSchedule = {
   start_date: Date;
   end_date: Date;
   session_type: SessionType;
-  session_vaccines?: { total_clients: number; vaccines: Vaccine[]; }
+  session_vaccines?: { total_clients: number; vaccines: Vaccine[]; total_missed_doses:any }
   assignees?: Assignee[];
 };
 
