@@ -31,7 +31,7 @@
             <div class="card-header">
               <div>
                 <ion-card-title>{{ person.given_name }} {{ person.family_name }}</ion-card-title>
-                <ion-label style="font-size: 17px;">{{ getBirthdateAge(person.birthdate) }} yrs ({{ formatDate(person.birthdate) }})</ion-label>
+                <ion-label style="font-size: 17px;">{{ getBirthdateAge(person.birthdate) }}</ion-label>
               </div>
               <ion-icon :icon="eyeOutline" class="eye-icon"></ion-icon>
             </div>
@@ -67,7 +67,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonGrid, IonRow, IonCol, IonCard, IonContent, IonCardContent, IonFooter, IonCardTitle, IonHeader, IonTitle, IonCardSubtitle, IonList, IonItem, IonLabel, IonIcon } from '@ionic/vue';
+import { IonGrid, IonRow, IonCol, IonCard, IonContent, IonCardContent, IonFooter, IonCardTitle, IonHeader, IonTitle, IonCardSubtitle, IonList, IonItem, IonLabel, IonIcon, modalController } from '@ionic/vue';
 import { calendarOutline, personOutline, locationOutline, eyeOutline, searchOutline } from 'ionicons/icons';
 import BasicInputField from "@/components/BasicInputField.vue"
 import HisDate from "@/utils/Date";
@@ -100,12 +100,15 @@ export default defineComponent({
     };
   },
   methods: {
-    formatDate(dateString: string): string {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    },
     getBirthdateAge(dateString: string) {
       return HisDate.getBirthdateAge(dateString)
+    },
+    dismiss() {
+      try {
+        modalController.dismiss()
+      } catch (error) {
+        
+      }
     },
     searchTextUpdated(event: any) {
         // const reason = event.target.value
