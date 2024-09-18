@@ -290,21 +290,8 @@ export default defineComponent({
                   }
               }
           },
-          // handleReset(){
-          //   modifyFieldValue(this.lmnp, 'tt6Date', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, 'tt6Date', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, 'tt7Date', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, 'tt8Date', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, 'tt9Date', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, 'tt10Date', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, 'tt11Date', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, '12', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, '13', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, '14', 'displayNone', true);
-          //   modifyFieldValue(this.lmnp, '15', 'displayNone', true);
-          // },
         handleTetanus(){
-          //this.handleReset()
+        
           if(getRadioSelectedValue(this.lmnp, 'The woman received tetanus doses for immunization?')=='fully immunised'){
             modifyFieldValue(this.lmnp,'tt1Date','displayNone', false)
             modifyFieldValue(this.lmnp,'tt2Date','displayNone', false)
@@ -322,7 +309,7 @@ export default defineComponent({
           }
         },
         handleUnderImmunised(){
-          //this.handleReset()
+        
           if(getRadioSelectedValue(this.lmnp, 'The woman received tetanus doses for immunization?')=='under immunised'){
             modifyRadioValue(this.lmnp,'Number of tetanus doses','displayNone', false)
           }   else {
@@ -370,7 +357,7 @@ export default defineComponent({
           }
          },
          handleNodoses(){
-          //this.handleReset()
+ 
           if(getRadioSelectedValue(this.lmnp,'The woman received tetanus doses for immunization?') == 'no doses'){
             modifyRadioValue(this.lmnp,'Reason Tetanus toxoid (TT) was not conducted','displayNone',false)
 
@@ -379,7 +366,7 @@ export default defineComponent({
           }
          },
          handleOtherDoses(){            
-           if(getRadioSelectedValue(this.lmnp, 'Reason Tetanus toxoid (TT) was not conducted')=='other' && getRadioSelectedValue(this.lmnp, 'The woman received tetanus doses for immunization?')=='under immunised'){
+           if(getRadioSelectedValue(this.lmnp, 'Reason Tetanus toxoid (TT) was not conducted')=='other' && getRadioSelectedValue(this.lmnp,'The woman received tetanus doses for immunization?') == 'no doses'){
               modifyFieldValue(this.lmnp,'Other','displayNone', false)
             }   else {
               modifyFieldValue(this.lmnp,'Other','displayNone', true)
