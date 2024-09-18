@@ -34,58 +34,58 @@ const medicalHistoryForm = {
 };
 
 const allegiesForm = {
-    albendazole: {
-        name: "Albendazole",
-        value: "albendazole",
-    },
-    aluminiumHydroxide: {
-        name: "Aluminium-hydroxide",
-        value: "aluminium-hydroxide",
-    },
-    calcium: {
-        name: "Calcium",
-        value: "calcium",
-    },
-    chamomile: {
-        name: "Chamomile",
-        value: "chamomile",
-    },
-    folicAcid: {
-        name: "Folic-acid",
-        value: "folic-acid",
-    },
-    ginger: {
-        name: "Ginger",
-        value: "ginger",
-    },
-    fish: {
-        name: "Fish",
-        value: "fish",
-    },
-    iron: {
-        name: "Iron",
-        value: "iron",
-    },
-    malariaMedication: {
-        name: "Sulfadoxine-Pyrimethamine",
-        value: "sulfadoxine-pyrimethamine",
-    },
-    mebendazole: {
-        name: "Mebendazole",
-        value: "mebendazole",
-    },
-    penicillin: {
-        name: "Penicillin",
-        value: "penicillin",
-    },
-    prEPTenofovirDisoproxilFumarate: {
-        name: "PrEP(TDF)",
-        value: "PrEP(TDF)",
-    },
-    otherAllegies: {
-        name: "Other",
-        value: "other",
-    },
+  albendazole: {
+    name: "Albendazole",
+    value: "albendazole",
+  },
+  aluminiumHydroxide: {
+    name: "Aluminium-hydroxide",
+    value: "aluminium-hydroxide",
+  },
+  calcium: {
+    name: "Calcium",
+    value: "calcium",
+  },
+  chamomile: {
+    name: "Chamomile",
+    value: "chamomile",
+  },
+  folicAcid: {
+    name: "Folic-acid",
+    value: "folic-acid",
+  },
+  ginger: {
+    name: "Ginger",
+    value: "ginger",
+  },
+  fish: {
+    name: "Fish",
+    value: "fish",
+  },
+  iron: {
+    name: "Iron",
+    value: "iron",
+  },
+  malariaMedication: {
+    name: "Sulfadoxine-Pyrimethamine",
+    value: "Sulfadoxine-Pyrimethamine",
+  },
+  mebendazole: {
+    name: "Mebendazole",
+    value: "mebendazole",
+  },
+  penicillin: {
+    name: "Penicillin",
+    value: "penicillin",
+  },
+  prEPTenofovirDisoproxilFumarate: {
+    name: "PrEP(TDF)",
+    value: "PrEP(TDF)",
+  },
+  otherAllegies: {
+    name: "Other",
+    value: "other",
+  },
 };
 
 const chronicHealthConditionsForm = {

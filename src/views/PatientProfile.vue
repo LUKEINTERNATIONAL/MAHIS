@@ -495,6 +495,7 @@ import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { ObservationService } from "@/services/observation_service";
 import { useVitalsStore } from "@/stores/VitalsStore";
+<<<<<<< HEAD
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -504,6 +505,8 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { toastWarning } from "@/utils/Alerts";
+=======
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Programs from "@/components/Programs.vue";
