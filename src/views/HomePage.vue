@@ -1,7 +1,7 @@
 <template>
     <ion-page>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33">
+        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14">
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -9,8 +9,54 @@
                     profile and start the triage
                 </p>
                 <div class="centered-content">
-                    <!-- Your component goes here -->
                     <ToolbarSearch />
+                </div>
+            </div>
+        </ion-content>
+        <ion-content :fullscreen="true" v-else-if="programID() == 14">
+            <div id="containertwo">
+                <div class="centered-content OPDDueCardWrapper">
+                    <ion-card class="section">
+                        <ion-card-header>
+                            <ion-card-title class="cardTitle">Today's patients waiting list</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <div class="OPDDueCardContent">
+                                <div class="OPDDueCard" @click="openAllModal('All patients today')" :style="dueCardStyle('success')">
+                                    <ion-icon :icon="people" class="dueCardIcon"></ion-icon>
+                                    <div class="OPDStatsValue">0</div>
+                                    <div class="OPDStatsText">Total patients today</div>
+                                </div>
+                                <div
+                                    class="OPDDueCard"
+                                    @click="openPatientsListModal('Patients waiting for vitals')"
+                                    :style="dueCardStyle('success')"
+                                >
+                                    <ion-icon :icon="thermometer" class="dueCardIcon"></ion-icon>
+                                    <div class="OPDStatsValue">0</div>
+                                    <div class="OPDStatsText">Waiting for vitals</div>
+                                </div>
+                                <div
+                                    class="OPDDueCard"
+                                    @click="openPatientsListModal('Patients waiting for consultation')"
+                                    :style="dueCardStyle('success')"
+                                >
+                                    <ion-icon :icon="clipboard" class="dueCardIcon"></ion-icon>
+                                    <div class="OPDStatsValue">0</div>
+                                    <div class="OPDStatsText">Waiting for consultation</div>
+                                </div>
+                                <div
+                                    class="OPDDueCard"
+                                    @click="openPatientsListModal('Patients waiting for dispensation')"
+                                    :style="dueCardStyle('success')"
+                                >
+                                    <ion-icon :icon="medkit" class="dueCardIcon"></ion-icon>
+                                    <div class="OPDStatsValue">0</div>
+                                    <div class="OPDStatsText">Waiting for dispensation</div>
+                                </div>
+                            </div>
+                        </ion-card-content>
+                    </ion-card>
                 </div>
             </div>
         </ion-content>
@@ -156,6 +202,9 @@ import {
     globe,
     add,
     person,
+    clipboard,
+    thermometer,
+    people,
 } from "ionicons/icons";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import DueModal from "@/components/DashboardModal/DueModal.vue";
@@ -164,6 +213,10 @@ import { resetDemographics } from "@/services/reset_data";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
+import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
+import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
+import { getBaseURl } from "@/utils/GeneralUti";
+import { setOfflineData } from "@/services/set_location";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
 
@@ -193,6 +246,7 @@ export default defineComponent({
         Slide,
         Pagination,
         Navigation,
+        getBaseURl,
     },
     data() {
         return {
@@ -231,6 +285,9 @@ export default defineComponent({
             medkit,
             add,
             person,
+            people,
+            thermometer,
+            clipboard,
         };
     },
     computed: {
@@ -250,8 +307,9 @@ export default defineComponent({
             async handler(data) {
                 if (data.name == "Home") resetDemographics();
                 await this.setAppointments();
-                const wsService = new WebSocketService();
-                wsService.setMessageHandler(this.onMessage);
+                // cannot subscribe more than once
+                // const wsService = new WebSocketService();
+                // wsService.setMessageHandler(this.onMessage);
             },
             deep: true,
         },
@@ -266,6 +324,21 @@ export default defineComponent({
         wsService.setMessageHandler(this.onMessage);
     },
     methods: {
+        dueCardStyle(type: "success" | "warning" | "info" | "danger") {
+            const colors = {
+                success: "rgb(158, 207, 136)",
+                warning: "rgb(239, 221, 121)",
+                info: "rgb(144, 202, 249)",
+                danger: "rgb(241, 154, 154)",
+            };
+
+            return {
+                border: `1px solid ${colors[type]}`,
+                padding: "20px",
+                margin: "10px",
+            };
+        },
+
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
             if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
@@ -312,11 +385,91 @@ export default defineComponent({
             const dataToPass = { title: name };
             createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
         },
+
+        openPatientsListModal(name: any) {
+            const dataToPass = { title: name };
+            createModal(OPDWaitingListModal, { class: "fullScreenModal" }, true, dataToPass);
+        },
+        openAllModal(name: any) {
+            const dataToPass = { title: name };
+            createModal(OPDAllPatientsModal, { class: "fullScreenModal" }, true, dataToPass);
+        },
+        async getImagePath() {
+            const BASE_URL = await getBaseURl();
+            this.base_url = BASE_URL + this.base_url;
+        },
     },
 });
 </script>
-
 <style scoped>
+.centered-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.OPDDueCardWrapper {
+    padding: 20px;
+}
+
+.OPDDueCardContent {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.OPDDueCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-basis: calc(100% / 2 - 40px);
+    max-width: 300px;
+}
+
+@media (min-width: 0px) {
+    .OPDDueCard {
+        flex-basis: calc(100% / 2 - 40px);
+    }
+
+    #containertwo {
+        top: 50% !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .OPDDueCard {
+        flex-basis: calc(100% / 4 - 40px);
+    }
+
+    #containertwo {
+        top: 30%;
+    }
+}
+
+.dueCardIcon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.OPDStatsValue {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.OPDStatsText {
+    font-size: 1rem;
+    color: #555;
+}
+
 .totalStats {
     padding-bottom: 2vw;
     border-radius: 5px;
@@ -486,7 +639,16 @@ ion-card {
     position: absolute;
     left: 0;
     right: 0;
-    top: 50%;
+    top: 30%;
+    transform: translateY(-50%);
+}
+#containertwo {
+    text-align: center;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 30%;
     transform: translateY(-50%);
 }
 

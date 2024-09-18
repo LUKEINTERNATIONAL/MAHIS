@@ -3,7 +3,8 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepper-title="HEADSS Assessment" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
+            <Stepper stepper-title="HEADSS Assessment" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" :backUrl="userRoleSettings.url"
+                     :backBtn="userRoleSettings.btnName" />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
     </ion-page>
@@ -33,10 +34,14 @@ import { getRadioSelectedValue, modifyRadioValue } from "@/services/data_helpers
 import { validateField } from "@/services/ANC/profile_validation_service";
 import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreganciesStore";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "treatment",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+
+  components: {
         BasicFooter,
         IonContent,
         IonHeader,

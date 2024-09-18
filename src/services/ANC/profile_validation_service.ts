@@ -9,7 +9,7 @@ export function validateField(data: any, fieldName: string, value: any) {
         Stillbirths: () => MultValidations(fieldName, value),
         LiveBirths: () => Validation.required(value),
         Parity: () => Validation.required(value),
-        Abortions: () => MultValidations(fieldName, value),
+        "Abortions/Miscarriages": () => MultValidations(fieldName, value),
         lmnpDate: () => MultValidations(fieldName, value),
         lmnpGestationAge: () => Validation.required(value),
         LNMPKnown: () => Validation.required(value),
@@ -75,7 +75,7 @@ function MultValidations(fieldName: string, value: any): null | any {
         if (minMaxError !== null) {
             return minMaxError;
         }
-    } else if (fieldName === "Abortions") {
+    } else if (fieldName === "Abortions/Miscarriages") {
         const requiredError: any | null = Validation.required(value);
         if (requiredError !== null) {
             return requiredError;

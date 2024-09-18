@@ -3,7 +3,9 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Cervix</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="firstVaginalExamination"></basic-form>
+        <basic-form :contentData="firstVaginalExamination"   
+        @update:selected="handleInputData"
+        @update:inputValue="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -34,9 +36,13 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  getRadioSelectedValue,
+  modifyFieldValue,
+  modifyRadioValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {usefirstVaginalExaminationStore} from "@/apps/LABOUR/stores/physical exam/firstVaginalExamination";
+import {FirstVaginalExaminationValidationSchema, usefirstVaginalExaminationStore} from "@/apps/LABOUR/stores/physical exam/firstVaginalExamination";
+import { YupValidateField } from '@/services/validation_service';
 export default defineComponent({
   name: "FirstVaginalExamination", 
   components:{
@@ -73,11 +79,86 @@ export default defineComponent({
   mounted(){
   },
   watch:{
+    firstVaginalExamination:{
+      handler(){
+        this.handleShow();
+        this.handleRupturedMembrane();
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    handleShow(){
+      const isOther =
+        getRadioSelectedValue(this.firstVaginalExamination, "Show") ==
+        "present";
+
+      modifyRadioValue(
+        this.firstVaginalExamination,
+        "Color",
+        "displayNone",
+        !isOther
+      );
+    },
+    async handleInputData(event: any) {
+      YupValidateField(
+        this.firstVaginalExamination,
+        FirstVaginalExaminationValidationSchema,
+        event.name,
+        event.value
+      );
+    },
+    handleRupturedMembrane(){
+
+      const stateOfMembrane = getRadioSelectedValue(this.firstVaginalExamination, "State of membranes");
+      const cord = getRadioSelectedValue(this.firstVaginalExamination, "Cord");
+      const liquor = getRadioSelectedValue(this.firstVaginalExamination, "Liquor");
+      const whatIsPresenting = getRadioSelectedValue(this.firstVaginalExamination, "What part is presenting");
+ 
+   
+
+      modifyRadioValue(
+        this.firstVaginalExamination,
+        "How",
+        "displayNone",
+        !(stateOfMembrane =="ruptured")
+      );
+      modifyFieldValue(
+        this.firstVaginalExamination,
+        "time membranes ruptured",
+        "displayNone",
+        !(stateOfMembrane =="ruptured")
+      );
+      modifyFieldValue(
+        this.firstVaginalExamination,
+        "date membranes ruptured",
+        "displayNone",
+        !(stateOfMembrane =="ruptured")
+      );
+      modifyRadioValue(
+        this.firstVaginalExamination,
+        "cold felt color",
+        "displayNone",
+       !(cord=="felt")
+      );
+
+      modifyRadioValue(
+        this.firstVaginalExamination,
+        "Meconium Grade",
+        "displayNone",
+       !(liquor=="meconium stained")
+      );
+
+      modifyFieldValue(this.firstVaginalExamination,"specify","displayNone",!(whatIsPresenting=="other"))
+      modifyFieldValue(this.firstVaginalExamination,"Position of sutures and fontanelles","displayNone",!(whatIsPresenting=="head"))
+      modifyRadioValue(this.firstVaginalExamination,"Level in relation to ischial spines","displayNone",!(whatIsPresenting=="head"))
+      modifyRadioValue(this.firstVaginalExamination,"Caput","displayNone",!(whatIsPresenting=="head"))
+      modifyRadioValue(this.firstVaginalExamination,"Moulding","displayNone",!(whatIsPresenting=="head"))
+    },
+  }
 });
 
 </script>

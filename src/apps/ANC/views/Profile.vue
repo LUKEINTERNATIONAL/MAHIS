@@ -3,7 +3,15 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
+            <Stepper
+                stepperTitle="Profile"
+                :wizardData="wizardData"
+                @updateStatus="markWizard"
+                :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+
+            />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
     </ion-page>
@@ -65,6 +73,9 @@ import { validateField } from "@/services/ANC/profile_validation_service";
 import Validation from "@/validations/StandardValidations";
 import HisDate from "@/utils/Date";
 import calculateAge from "@/utils/Date";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
+
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -73,7 +84,9 @@ import calculateAge from "@/utils/Date";
 // }
 export default defineComponent({
     name: "Home",
-    components: {
+   mixins: [SetUserRole, SetEncounter],
+
+  components: {
         BasicFooter,
         IonContent,
         IonHeader,
@@ -296,7 +309,7 @@ export default defineComponent({
             //     "tt1Date","tt2Date","tt3Date","tt4Date","tt5Date","tt6Date","tt7Date","tt8Date","tt9Date","tt10Date","tt11Date","tt12Date","tt13Date","tt14Date",
             //     "tt15Date","ReasonTTVnotConducted","DailyCaffeineIntake","SubstanceAbuse","SecondHandSmoke","ExistingChronicConditions","Medications","Stillbirths",
             //     "LiveBirths","Parity","Abortions"
-            const fields: any = ["LNMPKnown", "lmnpDate"];
+            const fields: any = ["", ""];
             // if (Validation.required(this.lmnp))
             if (
                 await this.validations(
@@ -340,7 +353,7 @@ export default defineComponent({
                     if (!patientStatus) return toastWarning("Unable to create profile information!");
                     await toastSuccess("Profile information have been created");
                 }
-                // console.log("========>",await this.buildProfile())
+                console.log("========>",await this.buildProfile())
 
                 const number = this.modeOfDelivery.length / 2;
                 const children = [];
