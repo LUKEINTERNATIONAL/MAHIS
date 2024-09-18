@@ -204,7 +204,7 @@ import {getBaseURl} from "@/utils/GeneralUti";
 import { setOfflineData } from "@/services/set_location";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
-import { getBaseURL } from "@/utils/GeneralUti";
+
 
 export default defineComponent({
     name: "Home",
@@ -381,7 +381,7 @@ export default defineComponent({
         createModal(OPDAllPatientsModal, { class: "fullScreenModal" }, true, dataToPass);
       },
         async getImagePath() {
-            const BASE_URL = await getBaseURL()
+            const BASE_URL = await getBaseURl()
             this.base_url = BASE_URL + this.base_url
         }
     },

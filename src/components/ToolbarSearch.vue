@@ -176,6 +176,8 @@ import PersonField from "@/utils/HisFormHelpers/PersonFieldHelper";
 import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
+import { useProgramStore } from "@/stores/ProgramStore";
+
 
 export default defineComponent({
     name: "Home",
@@ -293,6 +295,7 @@ export default defineComponent({
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useGeneralStore, ["NCDUserActions"]),
         ...mapState(useStatusStore, ["apiStatus"]),
+        ...mapState(useProgramStore, ["programs"]),
     },
     async mounted() {
         this.ddeInstance = new PatientDemographicsExchangeService();
@@ -685,8 +688,13 @@ export default defineComponent({
             this.checkInModalOpen=!this.checkInModalOpen
         },
         openCheckInModal(item: any) {
-this.checkInModalOpen=true;
-this.selectedPatient = item;
+            console.log(this.programs?.program?.applicationName);
+            if(this.programs?.program?.applicationName=="OPD Program"){
+                        this.checkInModalOpen=true;
+                        this.selectedPatient = item;
+                        return
+            }
+            this.openNewPage('patientProfile', item);
 }
     },
 });
