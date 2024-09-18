@@ -178,7 +178,7 @@ handleFirstAntenalVisit() {
   if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
     modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
     modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
-} else {
+     } else {
     const clearCheckboxes = [
       'Abnormal vaginal discharge', 'Change in blood pressure-up', 'Diarrhoea', 'Vomiting', 
       'Genital ulcers', 'Change in blood pressure-down', 'Constipation', 'Contractions', 

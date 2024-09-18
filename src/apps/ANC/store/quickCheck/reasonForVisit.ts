@@ -4,9 +4,9 @@ import _ from "lodash";
 import * as yup from "yup";
 
 export const ReasonForVisitValidationSchema = yup.object().shape({
-  Weight: yup
+  'Number of previous visits': yup
     .number()
-    .typeError("Weight can only be a number")
+    .typeError("Previous ANC visit  can only be a Number")
     .min(0),
 });
 

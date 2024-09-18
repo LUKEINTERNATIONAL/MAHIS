@@ -3,7 +3,7 @@
   <ion-card  class="section">
             <ion-card-content>
               <basic-form :contentData="lmnp" @update:selected="handleInputData" @update:inputValue="handleInputData"
-                          :initialData="initialData"
+              :initialData="initialData"
               ></basic-form>
             </ion-card-content>
     </ion-card>
