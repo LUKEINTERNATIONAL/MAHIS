@@ -313,7 +313,7 @@ export default defineComponent({
         handleAllergies(){
 
             const checkBoxes = ['Other','PrEP(TDF)','Albendazole','Aluminium-hydroxide',
-                                 'Calcium','Chamomile','Folic-acid','Ginger','Fish',
+                                 'Calcium','Sulfadoxine-Pyrimethamine','Chamomile','Folic-acid','Ginger','Fish',
                                 'Iron','Mebendazole','Penicillin'];
 
                 if (getCheckboxSelectedValue(this.allegy, 'None')?.checked) {
