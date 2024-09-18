@@ -7,13 +7,6 @@
              <basic-form :contentData="reason"></basic-form>
             </ion-card-content>
     </ion-card>
-    <ion-card  class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-                <basic-form :contentData="amniotic"></basic-form>
-             <basic-form :contentData="placenta"></basic-form>
-            </ion-card-content>
-    </ion-card>
     </div>
 </template>
 
@@ -86,8 +79,7 @@ export default defineComponent({
     computed:{
         ...mapState(useLabTestsStore, ["reason"]),
         ...mapState(useLabTestsStore, ["ultrasound"]),
-        ...mapState(useLabTestsStore, ["amniotic"]),
-        ...mapState(useLabTestsStore, ["placenta"]),
+
     },
   
     setup(){
@@ -101,8 +93,12 @@ export default defineComponent({
 
             if(scanRequired || scanOrdered || scanConducted){
               modifyFieldValue(this.ultrasound,'Scan date','displayNone',false)
+              modifyRadioValue(this.reason, 'Amniotic fluid level', 'displayNone', false)
+              modifyRadioValue(this.reason, 'Placenta location', 'displayNone', false)
             }else{
                 modifyFieldValue(this.ultrasound,'Scan date','displayNone',true)
+              modifyRadioValue(this.reason, 'Amniotic fluid level', 'displayNone', true)
+              modifyRadioValue(this.reason, 'Placenta location', 'displayNone', true)
             }
         },
 
@@ -134,8 +130,6 @@ export default defineComponent({
 }
 
 ion-card {
- box-shadow:none;
-  background-color:inherit;   
   width: 100%;
  color: black;
 }

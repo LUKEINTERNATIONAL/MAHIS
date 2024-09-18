@@ -1,148 +1,19 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+import * as yup from "yup"
 
-const initialSecondStageDetails = [
-    {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "",
-        radioBtnContent: {
-            header: {
-                title: "Time and date of delivery",
-                class: "bold",
-                selectedValue: "",
-            },
-            data: [],
-        },
-    },
-    {
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Time of delivery",
-                            unit: "",
-                            icon: icons.time,
-                            value: "",
-                            valueType: "text",
-                            name: "Time of delivery",
-                            required: true,
-                            eventType: "input",
-                            placeholder: "Pick time",
-                            // isDatePopover:true,
-                        },
-                        {
-                            inputHeader: "Date of delivery",
-                            unit: "",
-                            icon: icons.calenderPrimary,
-                            value: "",
-                            valueType: "text",
-                            name: "Date of delivery",
-                            required: true,
-                            datePopover: true,
-                            eventType: "input",
-                            placeholder: "Pick date",
-                            isDatePopover: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
 
-    {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-            header: {
-                class: "bold",
-                title: "Baby general condition at birth",
-                selectedValue: "",
-                name: "Baby general condition at birth",
-                displayNext: "Live full term",
-            },
-            data: [
-                {
-                    name: "Live full term",
-                    value: "Live full term",
-                    colSize: "5",
-                },
-                {
-                    name: "Live preterm",
-                    value: "Live preterm",
-                    colSize: "5",
-                },
-                {
-                    name: "Macerated stillbirth",
-                    value: "Macerated stillbirth",
-                    colSize: "5",
-                },
-                {
-                    name: "Fresh stillbirth",
-                    value: "Fresh stillbirth",
-                    colSize: "5",
-                },
-            ],
-        },
-    },
+const babyDetails = [
     {
         sideColSize: 1,
-        childName: "Baby general condition at birth",
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "",
-        radioBtnContent: {
-            header: {
-                title: "Baby details",
-                class: "bold",
-                selectedValue: "",
-                displayNone: true,
-            },
-            data: [],
-        },
-    },
-    // {
-    //     childName:'Baby general condition at birth',
-    //     isFinishBtn: false,
-    //     data:
-    //         {
-    //             rowData:[
-    //                 {
-    //                     colData: [
-    //                         {
-    //                             displayNone:true,
-    //                             inputHeader: '',
-    //                             unit: 'Babies',
-    //                             icon: icons.editPen,
-    //                             value: '',
-    //                             name: 'Number of babies',
-    //                             required: true,
-    //                             eventType: 'input',
-    //                             placeholder:'',
-    //                             inputWidth:''
-    //
-    //                         },
-    //
-    //                     ]
-    //                 }
-    //             ]
-    //         },
-    // },
-    {
-        sideColSize: 1,
-        childName: "Baby general condition at birth",
         isFinishBtn: false,
         data: {
             rowData: [
                 {
                     colData: [
                         {
-                            displayNone: true,
+                            displayNone: false,
                             inputHeader: "First name",
                             unit: "",
                             icon: icons.editPen,
@@ -171,7 +42,6 @@ const initialSecondStageDetails = [
     },
     {
         sideColSize: 1,
-        childName: "Baby general condition at birth",
         isFinishBtn: false,
         classDash: "dashed_bottom_border _padding",
         data: {
@@ -179,7 +49,7 @@ const initialSecondStageDetails = [
                 {
                     colData: [
                         {
-                            displayNone: true,
+                            displayNone: false,
                             inputHeader: "APGAR score at 1 minute",
                             unit: "",
                             icon: icons.editPen,
@@ -206,10 +76,8 @@ const initialSecondStageDetails = [
             ],
         },
     },
-
     {
         sideColSize: 1,
-        childName: "Baby general condition at birth",
         selectdData: [],
         isFinishBtn: false,
         classDash: "dashed_bottom_border _padding",
@@ -218,7 +86,7 @@ const initialSecondStageDetails = [
                 title: "Newborn sex",
                 selectedValue: "",
                 class: "bold",
-                displayNone: true,
+                displayNone: false,
                 name: "Sex",
             },
             data: [
@@ -237,14 +105,12 @@ const initialSecondStageDetails = [
     },
     {
         sideColSize: 1,
-
-        childName: "Baby general condition at birth",
         selectdData: [],
         isFinishBtn: false,
         classDash: "",
         radioBtnContent: {
             header: {
-                displayNone: true,
+                displayNone: false,
                 title: "Newborn vitals",
                 class: "bold",
                 selectedValue: "",
@@ -255,7 +121,6 @@ const initialSecondStageDetails = [
     },
     {
         sideColSize: 1,
-        childName: "Baby general condition at birth",
         isFinishBtn: false,
         classDash: "dashed_bottom_border _padding",
         data: {
@@ -263,7 +128,7 @@ const initialSecondStageDetails = [
                 {
                     colData: [
                         {
-                            displayNone: true,
+                            displayNone: false,
                             inputHeader: "Baby weight",
                             unit: "grams",
                             icon: icons.weight,
@@ -286,7 +151,7 @@ const initialSecondStageDetails = [
                             placeholder: "",
                         },
                         {
-                            inputHeader: "Baby circumference",
+                            inputHeader: "Head circumference",
                             unit: "cm",
                             icon: icons.height,
                             value: "",
@@ -301,10 +166,9 @@ const initialSecondStageDetails = [
             ],
         },
     },
-
     {
         sideColSize: 1,
-        childName: "Baby general condition at birth",
+       
         selectdData: [],
         isFinishBtn: false,
         classDash: "dashed_bottom_border _padding",
@@ -313,7 +177,7 @@ const initialSecondStageDetails = [
                 title: "Tetracycline eye ointment given?",
                 selectedValue: "",
                 class: "bold",
-                displayNone: true,
+                displayNone: false,
                 name: "Tetracycline eye ointment given",
             },
             data: [
@@ -332,35 +196,6 @@ const initialSecondStageDetails = [
     },
     {
         sideColSize: 1,
-        childName: "Baby general condition at birth",
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-            header: {
-                title: "Chlorhexidine 7.1% applied?",
-                selectedValue: "",
-                class: "bold",
-                displayNone: true,
-                name: "Chlorhexidine",
-            },
-            data: [
-                {
-                    name: "Yes",
-                    value: "Yes",
-                    colSize: "2.5",
-                },
-                {
-                    name: "No",
-                    value: "No",
-                    colSize: "2.5",
-                },
-            ],
-        },
-    },
-
-    {
-        sideColSize: 1,
 
         childName: "Baby general condition at birth",
         selectdData: [],
@@ -370,7 +205,7 @@ const initialSecondStageDetails = [
                 selectedValue: "",
                 class: "bold",
                 name: "Newborn baby complications",
-                displayNone: true,
+                displayNone: false,
             },
             data: [
                 {
@@ -394,15 +229,13 @@ const initialSecondStageDetails = [
     },
     {
         sideColSize: 1,
-
-        childName: "Baby general condition at birth",
         selectdData: [],
         checkboxBtnContent: {
             header: {
                 title: "",
                 selectedValue: "",
                 name: "Newborn baby complications",
-                displayNone: true,
+                displayNone: false,
             },
             data: [
                 {
@@ -423,8 +256,37 @@ const initialSecondStageDetails = [
                 },
             ],
         },
-    },
-
+    }, 
+    {
+        sideColSize: 1,
+        selectdData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Newborn baby complications",
+                displayNone: false,
+            },
+            data: [
+                {
+                    name: "Asphyxia",
+                    value: "Asphyxia",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Low birthweight",
+                    value: "Low birthweight",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    }, 
     {
         sideColSize: 1,
         classDash: "dashed_bottom_border _padding",
@@ -438,14 +300,6 @@ const initialSecondStageDetails = [
             },
             data: [
                 {
-                    name: "Asphyxia",
-                    value: "Asphyxia",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-                {
                     name: "Other complications",
                     value: "Other complications",
                     checked: false,
@@ -456,29 +310,24 @@ const initialSecondStageDetails = [
             ],
         },
     },
-
     {
         sideColSize: 1,
-        childName: "Other complications",
         isFinishBtn: false,
-        sectionHeader: "",
         classDash: "dashed_bottom_border _padding",
-
         data: {
             rowData: [
                 {
                     colData: [
                         {
                             displayNone: true,
-                            inputHeader: "Specify",
+                            inputHeader: "Specify Congenital Abnormalities",
                             unit: "",
                             icon: icons.editPen,
                             value: "",
                             valueType: "text",
-                            name: "Other notes",
-                            required: true,
+                            name: "Specify",
                             eventType: "input",
-                            inputWidth: "85%",
+                            placeholder: "",
                         },
                     ],
                 },
@@ -549,7 +398,34 @@ const initialSecondStageDetails = [
     },
     {
         sideColSize: 1,
-        childName: "Baby general condition at birth",
+        childName: "Other",
+        isFinishBtn: false,
+        sectionHeader: "",
+        classDash: "dashed_bottom_border _padding",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "Specify",
+                            unit: "",
+                            icon: icons.editPen,
+                            value: "",
+                            valueType: "text",
+                            name: "Other notes",
+                            required: true,
+                            eventType: "input",
+                            inputWidth: "85%",
+                        },
+                    ],
+                },
+            ],
+        },
+    },  
+    {
+        sideColSize: 1,
+
         selectdData: [],
         checkboxBtnContent: {
             header: {
@@ -561,8 +437,8 @@ const initialSecondStageDetails = [
             },
             data: [
                 {
-                    name: "None",
-                    value: "none",
+                    name: "Routine newborn care",
+                    value: "Routine newborn care",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -594,10 +470,9 @@ const initialSecondStageDetails = [
             ],
         },
     },
-
     {
         sideColSize: 1,
-        childName: "Baby general condition at birth",
+     
         checkboxBtnContent: {
             header: {
                 title: "",
@@ -616,11 +491,11 @@ const initialSecondStageDetails = [
                 },
             ],
         },
-    },
+    },   
     {
         sideColSize: 1,
         classDash: "dashed_bottom_border _padding",
-        childName: "Baby general condition at birth",
+      
         checkboxBtnContent: {
             header: {
                 title: "",
@@ -640,10 +515,218 @@ const initialSecondStageDetails = [
             ],
         },
     },
-
+   
+    {
+        selectdData: [],
+        sideColSize: 1,
+        isFinishBtn: false,
+        childName: "Baby general condition at birth",
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Vitamin K given?",
+                selectedValue: "",
+                name: "Vitamin K given",
+                class: "bold",
+                displayNone: false,
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ],
+        },
+    },
     {
         sideColSize: 1,
-        childName: "Other",
+        childName: "Baby general condition at birth",
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                title: "Chlorhexidine 7.1% applied?",
+                selectedValue: "",
+                class: "bold",
+                displayNone: false,
+                name: "Chlorhexidine",
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ],
+        },
+    },
+]
+
+export const BabyDetailsValidationSchema = yup.object().shape({
+    'First name': yup.string()
+      .required('First Name is required')
+      .max(50, 'First Name cannot be longer than 50 characters')
+      .matches(/^[A-Za-z\s]+$/, 'First Name can only contain letters and spaces') 
+    ,
+    'Last name': yup.string()
+    .required('first name is required')
+    .max(50, 'Name cannot be longer than 50 characters')
+    .matches(/^[A-Za-z\s]+$/, 'First Name can only contain letters and spaces'), 
+    'Apgar score at 1 minute': yup.number()
+        .typeError("Apgar score at 1 minute can only be a number")
+        .required('Apgar score at 1 minute is required')
+    .label('Apgar score at 1 minute'),
+    'Apgar score at 5 minute': yup.number()
+        .typeError("Apgar score at 5 minute can only be a number")
+        .required()
+    .label('Apgar score at 5 minute'),
+    'Weight': yup.number()
+        .typeError("Weight can only be a number")
+        .min(2500)
+        .required()
+    .label("Weight"),
+    'Height': yup.number()
+        .typeError("Height can only be a number")
+        .min(2500)
+        .required()
+    .label("Weight"),
+    'Circumference': yup.number()
+        .typeError("Circimference can only be a number")
+        .required()
+    .label("Circumference"),
+   
+})
+
+const initialSecondStageDetails = [
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "",
+        radioBtnContent: {
+            header: {
+                title: "Time and date of delivery",
+                class: "bold",
+                selectedValue: "",
+            },
+            data: [],
+        },
+    },
+    {
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Time of delivery",
+                            unit: "",
+                            icon: icons.time,
+                            value: "",
+                            valueType: "text",
+                            name: "Time of delivery",
+                            required: true,
+                            eventType: "input",
+                            placeholder: "Pick time",
+                           
+                            // isDatePopover:true,
+                        },
+                        {
+                            inputHeader: "Date of delivery",
+                            unit: "",
+                            icon: icons.calenderPrimary,
+                            value: "",
+                            valueType: "text",
+                            name: "Date of delivery",
+                            required: true,
+                            datePopover: true,
+                            eventType: "input",
+                            placeholder: "Pick date",
+                            isDatePopover: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                class: "bold",
+                title: "Baby general condition at birth",
+                selectedValue: "",
+                name: "Baby general condition at birth",
+                displayNext: "Live full term",
+            },
+            data: [
+                {
+                    name: "Live full term",
+                    value: "Live full term",
+                    colSize: "5",
+                },
+                {
+                    name: "Live preterm",
+                    value: "Live preterm",
+                    colSize: "5",
+                },
+                {
+                    name: "Macerated stillbirth",
+                    value: "Macerated stillbirth",
+                    colSize: "5",
+                },
+                {
+                    name: "Fresh stillbirth",
+                    value: "Fresh stillbirth",
+                    colSize: "5",
+                },
+            ],
+        },
+    },
+    
+    {
+        isFinishBtn: false,
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:false,
+                                inputHeader: '',
+                                unit: 'Babies',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Number of babies',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:'',
+                                inputWidth:''
+    
+                            },
+    
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        sideColSize: 1,
+        childName: "Other complications",
         isFinishBtn: false,
         sectionHeader: "",
         classDash: "dashed_bottom_border _padding",
@@ -665,62 +748,6 @@ const initialSecondStageDetails = [
                             inputWidth: "85%",
                         },
                     ],
-                },
-            ],
-        },
-    },
-    {
-        selectdData: [],
-        sideColSize: 1,
-        childName: "Baby general condition at birth",
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-            header: {
-                title: "Oxytocin 10 UI given?",
-                selectedValue: "",
-                class: "bold",
-                displayNone: true,
-                name: "Oxytocin 10 UI given",
-            },
-            data: [
-                {
-                    name: "Yes",
-                    value: "Yes",
-                    colSize: "2.5",
-                },
-                {
-                    name: "No",
-                    value: "No",
-                    colSize: "2.5",
-                },
-            ],
-        },
-    },
-    {
-        selectdData: [],
-        sideColSize: 1,
-        isFinishBtn: false,
-        childName: "Baby general condition at birth",
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-            header: {
-                title: "Vitamin K given?",
-                selectedValue: "",
-                name: "Vitamin K given",
-                class: "bold",
-                displayNone: true,
-            },
-            data: [
-                {
-                    name: "Yes",
-                    value: "Yes",
-                    colSize: "2.5",
-                },
-                {
-                    name: "No",
-                    value: "No",
-                    colSize: "2.5",
                 },
             ],
         },
@@ -816,6 +843,45 @@ const initialNewbornComplications = [
             ],
         },
     },
+    {   
+        classDash: 'dashed_bottom_border',
+        header:{
+                 title: 'Other Facility',
+                 selectedValue: ''
+             },
+         data:{ 
+             rowData:[
+                 {
+                     colData:[
+                         {
+                            displayNone:true,
+                             class:"bold",
+                             inputHeader: "Specify Other Facility?",
+                             icon: icons.search,
+                             value: "",
+                             name: "Facility",
+                             popOver: true,
+                             valueType: "text",
+                             eventType: "input",
+                             required: true,
+                             alertsError: false,
+                             alertsErrorMassage: "",
+                             placeholder: "Search for facility",
+                             popOverData: {
+                                 filterData: false,
+                                 data: [],
+                             },
+                             id: "",
+                             idName: "facility_id",
+                         },
+                         
+                     ]
+                 }
+             ],
+             
+         }
+             
+     },
     {
         selectdData: [],
         isFinishBtn: false,
@@ -1017,7 +1083,7 @@ const initialObstetricDetails = [
                 },
                 {
                     name: "Perineal tear",
-                    value: "perineal tear",
+                    value: "Perineal tear",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -1046,9 +1112,44 @@ const initialObstetricDetails = [
             ],
         },
     },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+            header: {
+                displayNone:true,
+                title: "Severity of Perineal Tear",
+                selectedValue: "",
+                name: "Severity",
+                class: "bold",
+            },
+            data: [
+                {
+                    name: "Lacerations",
+                    value: "Lacerations",
+                    colSize: "2.5",
+                },
+                {
+                    name: "First Degree",
+                    value: "First Degree",
+                    colSize: "3",
+                },
+                {
+                    name: "Second Degree",
+                    value: "Second Degree",
+                    colSize: "3",
+                },
+                {
+                    name: "Third Degree",
+                    value: "Third Degree",
+                    colSize: "3",
+                },
+            ],
+        },
+    },
 
     {
-        childName: "Other complications",
         isFinishBtn: false,
         sectionHeader: "",
         classDash: "dashed_bottom_border _padding",
@@ -1083,6 +1184,7 @@ const initialObstetricDetails = [
                 selectedValue: "",
                 class: "bold",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1103,6 +1205,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1123,6 +1226,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1144,6 +1248,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1164,6 +1269,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1183,6 +1289,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1202,6 +1309,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1221,6 +1329,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1240,6 +1349,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1259,6 +1369,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1279,6 +1390,7 @@ const initialObstetricDetails = [
                 title: "",
                 selectedValue: "",
                 name: "Obstetric care",
+                displayNone: true
             },
             data: [
                 {
@@ -1347,13 +1459,14 @@ const initialObstetricDetails = [
         },
     },
 ] as any;
+
+ 
 export const useSecondStageOfLabourStore = defineStore("secondStageOfLabourStore", {
     state: () => ({
         secondStageDetails: [...initialSecondStageDetails] as any,
-
         newbornComplications: [...initialNewbornComplications] as any,
-
         obstetricComplications: [...initialObstetricDetails] as any,
+        babyDetails:[..._.cloneDeep(babyDetails)] as any
     }),
     actions: {
         setNewbornComplications(data: any) {
@@ -1364,6 +1477,9 @@ export const useSecondStageOfLabourStore = defineStore("secondStageOfLabourStore
         },
         setObstetricComplications(data: any) {
             this.obstetricComplications = data;
+        },
+        setBabyDetails(details = babyDetails) {
+           this.babyDetails = [..._.cloneDeep(details)]
         },
         getInitial() {
             const data = _.cloneDeep(initialSecondStageDetails);

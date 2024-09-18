@@ -118,7 +118,7 @@ export class VitalsService extends AppEncounterService {
                 validator: (val: any) => {
                     const errors = [];
                     errors.push(this.isNotEmptyandNumber(val));
-                    errors.push(this.checkMinMax(val, 2.0, 250.0));
+                    errors.push(this.checkMinMax(val, 0.5, 250.0));
                     return this.mergeErrors(errors);
                 },
             },
@@ -152,6 +152,15 @@ export class VitalsService extends AppEncounterService {
                 },
             },
             {
+                name: "Respiratory rate*",
+                validator: (val: any) => {
+                    const errors = [];
+                    errors.push(this.isNotEmptyandNumber(val));
+                    errors.push(this.checkMinMax(val, 5, 80));
+                    return this.mergeErrors(errors);
+                },
+            },
+            {
                 name: "Oxygen saturation",
                 validator: (val: any) => {
                     const minErrors = this.checkMinMax(val, 80, 100);
@@ -181,7 +190,7 @@ export class VitalsService extends AppEncounterService {
                 validator: (val: any) => {
                     const errors = [];
                     errors.push(this.isNotEmptyandNumber(val));
-                    errors.push(this.checkMinMax(val, 60, 120));
+                    errors.push(this.checkMinMax(val, 20, 80));
                     return this.mergeErrors(errors);
                 },
             },

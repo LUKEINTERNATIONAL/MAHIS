@@ -13,28 +13,20 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         title: "Select whether:",
                         selectedValue: "",
                         name: "Urine test status",
+                        class:"bold"
                     },
                     data: [
                         {
                             name: "Urine test conducted",
                             value: "Test conducted",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Urine test ordered",
-                            value: "Test ordered",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "Urine test not done",
                             value: "Test not done",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                     ],
                 },
@@ -55,23 +47,20 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         {
                             name: "Midstream urine culture (recommended)",
                             value: "Midstream urine culture",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "Midstream urine gram-staining",
                             value: "Midstream urine gram-staining",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "Urine dipstick",
                             value: "Urine dipstick",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                     ],
                 },
@@ -122,23 +111,20 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         {
                             name: "Machine not functioning",
                             value: "Machine not functioning",
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
+                            colSize: "7",
+
                         },
                         {
                             name: "Technician not available",
                             value: "Technician not available",
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
+                            colSize: "7",
+
                         },
                         {
                             name: "Other",
                             value: "Other",
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
+                            colSize: "7",
+
                         },
                     ],
                 },
@@ -190,23 +176,20 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         {
                             name: "Positive-any agent",
                             value: "positive",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "Positive-Group B Streptococcus (GBS)",
                             value: "Positive-Group B Streptococcus",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "Negative",
                             value: "negative",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                     ],
                 },
@@ -229,16 +212,14 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         {
                             name: "Positive",
                             value: "positive",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "Negative",
                             value: "negative",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                     ],
                 },
@@ -261,37 +242,32 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         {
                             name: "None",
                             value: "none",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "+",
                             value: "+",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "++",
                             value: "++",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "+++",
                             value: "+++",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "++++",
                             value: "negative",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                     ],
                 },
@@ -314,37 +290,32 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         {
                             name: "None",
                             value: "none",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "+",
                             value: "+",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "++",
                             value: "++",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "+++",
                             value: "+++",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "++++",
                             value: "negative",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                     ],
                 },
@@ -367,37 +338,32 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         {
                             name: "Negative",
                             value: "none",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "+",
                             value: "+",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "++",
                             value: "++",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "+++",
                             value: "+++",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "++++",
                             value: "negative",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                     ],
                 },
@@ -420,37 +386,32 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
                         {
                             name: "Negative",
                             value: "none",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "+",
                             value: "+",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "++",
                             value: "++",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "+++",
                             value: "+++",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                         {
                             name: "++++",
                             value: "negative",
-                            labelPlacement: "start",
                             colSize: "7",
-                            justify: "space-between",
+
                         },
                     ],
                 },

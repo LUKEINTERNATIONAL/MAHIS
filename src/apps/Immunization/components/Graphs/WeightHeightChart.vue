@@ -1,33 +1,27 @@
 <template>
-    <div class="graphBtn">
-        <div class="weightHeightGraphBtns">
-            <div>
-                <ion-button class="btnText" size="small" :fill="weightBtnProperty.fill" @click="changeGraph('weight')">
-                    Weight/Age Graph <ion-icon slot="end" size="small" :icon="weightBtnProperty.icon"></ion-icon>
-                </ion-button>
+    <div class="modal_wrapper">
+        <ListHeightWeight
+            @click:height="changeGraph('height')"
+            @click:weight="changeGraph('weight')"
+            @click:toggleDisplay="toggleDisplays()"
+            @click:void="openVoidPopover($event)"
+            :propsContent="propsContent"
+        />
+        <div v-if="displayGraph">
+            <div class="graphHeader">
+                <div class="immunizationGraphText">{{ graphTitle }}</div>
+                <div class="zScore">
+                    {{ zScoreName }} <b>{{ zScoreValue }}</b>
+                </div>
             </div>
             <div>
-                <ion-button class="btnText" size="small" :fill="heightBtnProperty.fill" @click="changeGraph('height')">
-                    Height/Age Graph
-                    <ion-icon slot="end" size="small" :icon="heightBtnProperty.icon"></ion-icon>
-                </ion-button>
+                <canvas height="200" id="myChart"></canvas>
             </div>
         </div>
     </div>
-    <div class="immunizationGraph">
-        <div class="graphHeader">
-            <div class="immunizationGraphText">{{ graphTitle }}</div>
-            <div class="zScore">
-                {{ zScoreName }} <b>{{ zScoreValue }}</b>
-            </div>
-        </div>
-        <div>
-            <canvas height="200" id="myChart"></canvas>
-        </div>
-    </div>
-    <div class="graphBtn">
+    <div class="graphBtn" v-if="showHeightWeight">
         <div class="weightHeightGraphBtns">
-            <div>
+            <div v-if="!checkUnderSixWeeks">
                 <span class="warningText">
                     Current Height: <b>{{ currentHeight }} Cm </b>
                 </span>
@@ -58,8 +52,10 @@ import WeightForAgeBoys from "@/Data/WeightForAgeBoys";
 import WeightForAgeGirls from "@/Data/WeightForAgeGirls";
 import HeightForAgeGirls from "@/Data/HeightForAgeGirls";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
+import ListHeightWeight from "@/views/Mixin/ListHeightWeight.vue";
 
 export default defineComponent({
+    mixins: [ListHeightWeight],
     name: "Menu",
     components: {
         IonContent,
@@ -69,30 +65,56 @@ export default defineComponent({
         IonMenu,
         IonTitle,
         IonToolbar,
+        ListHeightWeight,
     },
 
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
+    async mounted() {
+        await this.updateData();
+        await this.changeGraph("weight");
+        await this.displayWeightGraph();
+    },
     watch: {
         demographics: {
-            handler() {
-                this.buildGraph();
+            async handler() {
+                await this.updateData();
+                await this.changeGraph("weight");
+                await this.displayWeightGraph();
             },
             deep: true,
         },
         vitalsWeightHeight: {
-            handler() {
+            async handler() {
                 if (this.vitalsWeightHeight[0].validationStatus == "success") {
+                    await this.updateData();
                     this.changeGraph("weight");
                 }
+            },
+            deep: true,
+        },
+        list: {
+            async handler() {
+                this.propsContent.list = this.list;
             },
             deep: true,
         },
     },
     data() {
         return {
+            propsContent: {
+                activeWeight: [] as any,
+                activeHeight: [] as any,
+                graphIcon: iconGraph(["#006401"]),
+                listIcon: iconList(["#636363"]),
+                displayGraph: true,
+                iconBg: {} as any,
+                weight: [] as any,
+                height: [] as any,
+                list: [] as any,
+            } as any,
             valueNumericArray: [] as any,
             obsDatetime: [] as any,
             graphIcon: iconGraph(["#006401"]),
@@ -107,6 +129,7 @@ export default defineComponent({
             activeWeight: [] as any,
             activeHeight: [] as any,
             activeBMI: [] as any,
+            activeGraph: [] as any,
             list: [] as any,
             zScoreValue: "" as any,
             zScoreName: "" as any,
@@ -120,15 +143,39 @@ export default defineComponent({
             dataset: [] as any,
         };
     },
+    props: {
+        showHeightWeight: {
+            default: false,
+        },
+        checkUnderSixWeeks: {
+            default: false,
+        },
+    },
     setup() {
         return { checkmark, pulseOutline };
     },
-    async mounted() {
-        await this.displayWeightGraph();
-        await this.buildGraph();
-    },
     methods: {
+        setActive(active: any) {
+            this.setActiveClass(active);
+            this.propsContent.activeWeight = this.activeWeight;
+            this.propsContent.activeHeight = this.activeHeight;
+        },
+        async toggleDisplays() {
+            this.toggleDisplay();
+            this.propsContent.displayGraph = this.displayGraph;
+            this.propsContent.graphIcon = this.graphIcon;
+            this.propsContent.listIcon = this.listIcon;
+            this.propsContent.iconBg.graph = this.iconBg.graph;
+            this.propsContent.iconBg.graph = this.iconBg.graph;
+            if (this.displayGraph) await this.changeGraph(this.activeGraph);
+        },
         async changeGraph(name: any) {
+            this.propsContent.list = this.list;
+            console.log("🚀 ~ changeGraph ~ this.propsContent.list:", this.propsContent.list);
+            this.activeGraph = name;
+            this.setActive(name);
+            this.propsContent.weight = this.weight;
+            this.propsContent.height = this.height;
             if (name == "weight") {
                 this.heightBtnProperty = { fill: "outline", icon: icons.networkBarDark };
                 this.weightBtnProperty = { fill: "solid", icon: icons.networkBarLight };
@@ -146,7 +193,6 @@ export default defineComponent({
             this.currentWeight = await ObservationService.getFirstObsValue(this.demographics.patient_id, "weight", "value_numeric");
         },
         async displayWeightGraph() {
-            this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
             this.stepSize = 3;
             if (this.weight) {
                 this.valueNumericArray = this.weight?.map((item: any) => {
@@ -156,7 +202,6 @@ export default defineComponent({
             }
         },
         async displayHeightGraph() {
-            this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
             this.stepSize = 5;
             if (this.height) {
                 this.valueNumericArray = this.height.map((item: any) => {
@@ -213,7 +258,6 @@ export default defineComponent({
         },
         async buildGraph() {
             this.vitalsWeightHeight[0].validationStatus = "";
-            console.log("🚀 ~ buildGraph ~ this.vitalsWeightHeight[0].validationStatus:", this.vitalsWeightHeight[0].validationStatus);
             const ctx: any = document.getElementById("myChart");
             if (this.chart) {
                 this.chart.destroy();

@@ -60,7 +60,7 @@ export const useConfirmPregnancyStore = defineStore("confirmPregnancyStore", {
         },
         getInitial(){
             const data = _.cloneDeep(initialConfirmPregnancy);
-            return [...data]; // Return a copy of the initial state
+            return [...data];
         }
     },
     persist: true,

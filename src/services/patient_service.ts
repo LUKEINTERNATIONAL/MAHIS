@@ -16,10 +16,16 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export class PatientService extends Service {
     patient: Patient;
-    constructor() {
-        const demographicsStore = useDemographicsStore();
+    constructor();
+    constructor(patient: Patient);
+    constructor(patient?: Patient) {
         super();
-        this.patient = demographicsStore.getPatient();
+        if (patient) {
+            this.patient = patient;
+        } else {
+            const demographicsStore = useDemographicsStore();
+            this.patient = demographicsStore.getPatient();
+        }
     }
 
     public static mergePatients(payload: any) {
@@ -110,11 +116,11 @@ export class PatientService extends Service {
         });
     }
 
-    updateMWNationalId(newId: string) {
-        return PatientIdentifierService.create(this.getID(), 28, newId);
+    updateMWNationalId(newId: string, patientID: any = "") {
+        return PatientIdentifierService.create(this.getID() || patientID, 28, newId);
     }
-    updateBirthId(newId: string) {
-        return PatientIdentifierService.create(this.getID(), 23, newId);
+    updateBirthId(newId: string, patientID: any = "") {
+        return PatientIdentifierService.create(this.getID() || patientID, 23, newId);
     }
 
     isMale() {

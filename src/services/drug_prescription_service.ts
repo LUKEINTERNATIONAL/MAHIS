@@ -21,6 +21,7 @@ export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number
     { label : "ONCE A WEEK (QWK)", code : "QWK", value : 0.14 },
     { label : "ONCE A MONTH", code : "ONCE A MONTH", value : 0.03 },
     { label : "TWICE A MONTH", code : "TWICE A MONTH", value : 0.071 },
+    { label : "STAT", code : "STAT", value : 0},
     { label : "Unknown", code : "Unknown", value : 0 }
   ]
 
@@ -70,6 +71,9 @@ export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number
   }
 
   export async function getDrugRouteList() {
-    const data = await ConceptService.getConceptSet('Method of drug administration')
-    return data
+    const data = await ConceptService.getConceptSet('Method of drug administration');
+
+
+    //TODO: this is temporary fix for removing bleeding vaginally as i am waiting for concepts to be updated
+    return data.filter((concept:any)=>concept.name!=="Bleeding vaginally")
   }

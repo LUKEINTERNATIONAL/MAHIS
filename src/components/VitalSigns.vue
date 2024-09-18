@@ -31,7 +31,7 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
 import {
@@ -109,7 +109,8 @@ export default defineComponent({
             const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
             const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
             const mandatoryDone = [] as any;
-            const promises = array.map(async (item: any) => {
+          const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+          const promises = array.map(async (item: any) => {
                 const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
                 if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                     if (item == "Weight") {
@@ -134,6 +135,10 @@ export default defineComponent({
                 } else {
                     modifyFieldValue(this.vitals, item, "value", "");
                 }
+              if (item === "Respiratory rate" && age <= 5) {
+                modifyFieldValue(this.vitals, item, "required", true);
+                modifyFieldValue(this.vitals, item, "inputHeader", "Respiratory rate*");
+              }
             });
 
             await Promise.all(promises);
@@ -353,6 +358,7 @@ export default defineComponent({
                 let maxDiastolic;
                 const patient = new PatientService();
                 const age = patient.getAge();
+
                 // Determine age group and corresponding normal ranges
                 if (age < 1) {
                     ageGroup = "less than 1 year";
@@ -391,8 +397,8 @@ export default defineComponent({
                     return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " };
                 } else if (systolic >= minSystolic && systolic <= maxSystolic && diastolic >= minDiastolic && diastolic <= maxDiastolic) {
                     return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " };
-                } else if (systolic > maxSystolic && diastolic > maxDiastolic) {
-                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " };
+                } else if (systolic > 140 && diastolic > 90) {
+                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP" };
                 } else {
                     // Diastolic pressure is not within normal range, consider only systolic pressure
                     if (systolic < minSystolic) {
@@ -405,6 +411,7 @@ export default defineComponent({
                 }
             }
         },
+
         getTemperatureStatus(value: any) {
             if (value) {
                 let ageGroup;
@@ -415,20 +422,20 @@ export default defineComponent({
                 // Determine age group and corresponding normal ranges base on Axillary
                 if (age <= 1) {
                     ageGroup = "(less than 1 year)";
-                    minTemp = 36.5;
-                    maxTemp = 37.5;
+                    minTemp = 35.5;
+                    maxTemp = 37.4;
                 } else if (age >= 1 && age <= 18) {
                     ageGroup = "(1-18 years)";
-                    minTemp = 36;
-                    maxTemp = 37.5;
+                    minTemp = 35.5;
+                    maxTemp = 37.4;
                 } else if (age >= 19 && age <= 64) {
                     ageGroup = "(above 18 years)";
-                    minTemp = 35.9;
-                    maxTemp = 36.7;
+                    minTemp = 35.5;
+                    maxTemp = 37.4;
                 } else if (age >= 65) {
                     ageGroup = "(above 18 years)";
-                    minTemp = 35.6;
-                    maxTemp = 36.5;
+                    minTemp = 35.5;
+                    maxTemp = 37.4;
                 } else {
                     minTemp = "";
                     maxTemp = "";

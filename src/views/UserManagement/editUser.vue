@@ -1,8 +1,9 @@
 <template>
-    
-
     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >First Name<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="input_properties[1].placeHolder"
                 :icon="personOutline"
@@ -17,6 +18,9 @@
             </div>
         </ion-col>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Last name<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="input_properties[2].placeHolder"
                 :icon="peopleOutline"
@@ -34,6 +38,9 @@
 
     <ion-row>
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Username<span style="color: #b42318">*</span></ion-label
+                >
                 <BasicInputField
                     :placeholder="input_properties[0].placeHolder"
                     :icon="personCircleOutline"
@@ -47,7 +54,18 @@
                     </ion-label>
                 </div>
             </ion-col>
-            <ion-col></ion-col>
+
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Phone<span style="color: #b42318">*</span></ion-label
+            >
+                <BasicInputField
+                    :placeholder="'phone number'"
+                    :icon="phonePortraitOutline"
+                    :inputValue="''"
+                    @update:inputValue=""
+                />
+            </ion-col>
     </ion-row>
 
 
@@ -64,8 +82,11 @@
             <ion-col></ion-col>
         </ion-row> -->
 
-        <ion-row>
+        <ion-row v-if="isSuperUser">
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Activate/Deactivate user<span style="color: #b42318">*</span></ion-label
+                >
                 <Toggle
                     class="toggle-green"
                     :classes="{
@@ -78,8 +99,41 @@
             </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row v-if="isSuperUser">
+            <ion-col size="6" v-if="false">
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                    >District(s)<span style="color: #b42318">*</span></ion-label
+                >
+                <VueMultiselect
+                    v-model="selected_Districts"
+                    @update:model-value="selectedDistrict($event)"
+                    :multiple="true"
+                    :taggable="false"
+                    :hide-selected="true"
+                    :close-on-select="true"
+                    openDirection="bottom"
+                    tag-placeholder="Find and select District(s)"
+                    placeholder="Find and select District(s)"
+                    selectLabel=""
+                    label="name"
+                    :searchable="true"
+                    @search-change=""
+                    track-by="district_id"
+                    :options="districtList"
+                    :disabled="HSA_found_for_disabling_button"
+                />
+
+                <div>
+                    <ion-label v-if="district_show_error" class="error-label">
+                        {{ district_error_message }}
+                    </ion-label>
+                </div>
+            </ion-col>
+
             <ion-col size="6">
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Facility name<span style="color: #b42318">*</span></ion-label
+                >
                 <VueMultiselect
                     v-model="selected_location"
                     @update:model-value="selectedLocation($event)"
@@ -88,8 +142,8 @@
                     :hide-selected="true"
                     :close-on-select="true"
                     openDirection="bottom"
-                    tag-placeholder="Find and select medication"
-                    placeholder="Find and select medication"
+                    tag-placeholder="Find and select facility name"
+                    placeholder="Find and select facility name"
                     selectLabel=""
                     label="name"
                     :searchable="true"
@@ -107,7 +161,71 @@
         </ion-row>
 
         <ion-row>
+        <ion-col size="6">
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >TA(s)<span style="color: #b42318">*</span></ion-label
+            >
+            <VueMultiselect
+                v-model="selected_TAz"
+                @update:model-value="selectedTA($event)"
+                :multiple="true"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select Traditional Authority (TA)"
+                placeholder="Find and select Traditional Authority (TA)"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change=""
+                track-by="assigned_id"
+                :options="TAList"
+                :disabled="HSA_found_for_disabling_button"
+            />
+
+            <div>
+                <ion-label v-if="TAz_show_error" class="error-label">
+                    {{ TAz_error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+        <ion-col size="6">
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Village(s)<span style="color: #b42318">*</span></ion-label
+            >
+            <VueMultiselect
+                v-model="selected_villages"
+                @update:model-value="selectedVillage($event)"
+                :multiple="true"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select village(s)"
+                placeholder="Find and select village(s)"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change=""
+                track-by="assigned_id"
+                :options="villageList"
+                :disabled="HSA_found_for_disabling_button"
+            />
+
+            <div>
+                <ion-label v-if="village_show_error" class="error-label">
+                    {{ village_error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+    </ion-row>
+
+        <ion-row v-if="isSuperUser">
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Role(s)<span style="color: #b42318">*</span></ion-label
+                >
                 <ListPicker
                     :multiSelection="list_picker_prperties[0].multi_Selection"
                     :show_label="list_picker_prperties[0].show_list_label"
@@ -124,8 +242,11 @@
             </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row v-if="isSuperUser">
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Program(s)<span style="color: #b42318">*</span></ion-label
+                >
                 <ListPicker
                     :multiSelection="list_picker_prperties[1].multi_Selection"
                     :show_label="list_picker_prperties[1].show_list_label"
@@ -156,13 +277,16 @@
         </ion-row>
 
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px;">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Change Password</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >New password<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="password_input_properties[0].placeHolder"
                 :icon="keyOutline"
@@ -177,6 +301,9 @@
             </div>
         </ion-col>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Repeat password<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="password_input_properties[1].placeHolder"
                 :icon="keyOutline"
@@ -226,34 +353,54 @@ import {
     keyOutline,
     transgenderOutline,
     personOutline,
-    peopleOutline
-} from "ionicons/icons"
-import { ref, onMounted, watch } from "vue"
-import BasicInputField from "@/components/BasicInputField.vue"
-import { UserService } from "@/services/user_service"
-import { ProgramService } from "@/services/program_service"
-import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti"
-import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
+    peopleOutline,
+    phonePortraitOutline,
+} from "ionicons/icons";
+import { ref, onMounted, watch } from "vue";
+import BasicInputField from "@/components/BasicInputField.vue";
+import { UserService } from "@/services/user_service";
+import { ProgramService } from "@/services/program_service";
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { useUserStore } from "@/stores/userStore";
 
-const toggle_local = ref(false)
-const user_roles = ref([] as any)
-const user_programs = ref([] as any)
-const user_data = ref()
-const user_name = ref()
-const first_name = ref()
-const last_name = ref()
-const userId = ref() as any
-const show_user_programs = ref(false)
-const actionN = ref('')
-const selected_location = ref()
-const locationData = ref([]) as any
-const locationId = ref()
-const location_error_message = ref('Select location')
-const location_show_error = ref(false)
+const toggle_local = ref(false);
+const user_roles = ref([] as any);
+const user_programs = ref([] as any);
+const user_data = ref();
+const user_name = ref();
+const first_name = ref();
+const last_name = ref();
+const userId = ref() as any;
+const show_user_programs = ref(false);
+const actionN = ref('');
+const selected_location = ref();
+const locationData = ref([]) as any;
+const locationId = ref();
+const location_error_message = ref('Select location');
+const location_show_error = ref(false);
 const passwordErrorMsgs = [
     'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
     'Password does not match'
 ]
+const isSuperUser = ref(false);
+const districtList = ref([] as any);
+const HSA_found_for_disabling_button = ref(true)
+const selected_Districts = ref();
+const district_show_error = ref(false)
+const district_error_message = ref('Select district(s)')
+const village_error_message = ref('Select village(s)')
+const selected_TAz = ref()
+const villageList = ref([] as any)
+const village_show_error = ref(false)
+const TAz_show_error = ref(false)
+const TAz_error_message = ref('Select TA(s)')
+const selected_villages = ref()
+const TAList = ref([] as any)
+const selectedDistrictIds : any[] = []
+const selectedTAIds: any[] = []
+const disableVillageSelection = ref(true)
+const selectedVillageIds: any[] = []
 
 const props = defineProps<{
     toggle: true,
@@ -264,7 +411,9 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
-    await getUserData() 
+    await getUserData()
+    getCurrentUser()
+    districtList.value = await getdistrictList() 
 })
 
 watch(
@@ -319,7 +468,7 @@ function trigerSaveFn() {
     preSaveRoles()
     trigerSaveStatusFn()
     updateUserDemographics()
-    // updatePassword()
+    updatePassword()
 }
 
 const input_properties = [
@@ -361,7 +510,7 @@ const password_input_properties = [
         error_message: passwordErrorMsgs[0],
     },
     {
-        placeHolder: 'confirm password',
+        placeHolder: 'repeat password',
         dataHandler: passwordInputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
@@ -405,11 +554,31 @@ function validateLocation() {
     }
 }
 
-function updatePassword() {
-    const _ValidatePassword_ = ValidatePassword()
-    if (_ValidatePassword_ == true) {
 
-    }
+function validatePasswordMatch(){
+     const password = password_input_properties[0].dataValue.value;
+    const confirm = password_input_properties[1].dataValue.value;
+
+       if(password!=confirm) {
+         password_input_properties[0].show_error.value=true;
+         password_input_properties[0].error_message="Passwords don't match";
+         return false
+    } 
+         password_input_properties[0].show_error.value=false;
+         password_input_properties[0].error_message="";
+         return true
+    
+}
+
+async function updatePassword() {
+
+    if(!validatePasswordMatch())  return
+
+    const password =password_input_properties[0].dataValue.value;
+
+    if(password=="") return
+
+    await UserService.updateUser(userId.value, {password});
  }
 
 function ValidatePassword(): boolean {
@@ -525,11 +694,11 @@ async function updateUserDemographics() {
     const _areFieldsValid_ = areFieldsValid(input_properties)
     const _validateLocation = validateLocation()
 
-    if (_areFieldsValid_ == false && _validateLocation == false) {
+    if (_areFieldsValid_ == false && _validateLocation == false && !validatePasswordMatch()) {
         saveEvent(false)
     }
 
-    if (_areFieldsValid_ == true && _validateLocation == true) {
+    if (_areFieldsValid_ == true && _validateLocation == true && validatePasswordMatch()) {
         saveEvent(true)
         const payload = {
             given_name: first_name.value,
@@ -546,7 +715,6 @@ async function updateUserDemographics() {
 
         try {
             const response = await UserService.updateusername(userId.value, username_payload)
-            // console.log(response.message[0])
             toastSuccess("username updated successfully")
         } catch (error) {
             toastWarning("username update failed, already existing")
@@ -575,7 +743,6 @@ async function preSavePrograms() {
         selectedProgramIds.push(program.other.program_id)
     })
 
-    console.log(selectedProgramIds)
     if (selectedProgramIds.length > 0) {
         savePrograms(selectedProgramIds)
     }
@@ -597,6 +764,26 @@ function fillUserRoles() {
     })
 }
 
+function getCurrentUser() {
+    const user_store = useUserStore();
+    const current_user = user_store.getUser()
+    current_user.roles.forEach((userR: any) => {
+            findSuperUserRole(userR)
+        })
+}
+
+function findSuperUserRole(role: any) {
+    const superUserRoles = [
+        'Superuser',
+        'Superuser,Superuser,'
+    ]
+    superUserRoles.forEach((SUR: any) => {  
+        if (role.role.toLowerCase() == SUR.toLowerCase()) {
+            isSuperUser.value = true
+        }
+    })
+}
+
 async function generatePropertiesList() {
     const selectedPrograms = [] as any
     user_programs.value.forEach((item: any) => {
@@ -612,11 +799,8 @@ async function generatePropertiesList() {
 
 async function getAPICounterPart() {
     const selectedPrograms = await generatePropertiesList()
-    console.log(selectedPrograms)
     selectedPrograms.forEach((item: any, index: number) => {
-        // if
-        console.log("<><.....")
-        console.log(item)
+        
     })
 }
 
@@ -745,6 +929,7 @@ const list_picker_prperties = [
 
 function listUpdated1(data: any) {
     user_roles.value = data
+    checkIfSelectedIsHSA(user_roles.value)
 }
 
 function listUpdated2(data: any) {
@@ -787,6 +972,107 @@ const emit = defineEmits<{
 
 function saveEvent(boolean_value: any) {
     emit("save", boolean_value)
+}
+
+function selectedDistrict(selectedDistrict: any) {
+    selectedDistrictIds.length = 0
+    selectedDistrict.forEach((district: any) => {
+        selectedDistrictIds.push(district.district_id)
+    })
+
+    selectedDistrict.forEach((district: any ) => {
+        fetchTraditionalAuthorities(district.district_id, '')
+    })
+}
+
+async function fetchTraditionalAuthorities(district_id: any,name: string) {  
+    TAList.value = []           
+    var districtVillages = await LocationService.getTraditionalAuthorities(district_id,"")
+    const arrayWithIds = districtVillages.map((item: any, index: any) => ({
+        ...item,
+        assigned_id: index
+    }));
+    TAList.value = TAList.value.concat(arrayWithIds)
+    // if (villageList.value.length > 0) {
+    //     disableVillageSelection.value = false
+    // }
+}
+
+async function getdistrictList() {
+    const districtList = [];
+    for (let i of [1, 2, 3]) {
+        const districts: any = await LocationService.getDistricts(i);
+        districtList.push(...districts);
+    }
+
+    //__________________________not ideal
+
+    districtList.forEach((district: any) => {
+        selectedDistrictIds.push(district.district_id)
+    })
+
+    districtList.forEach((district: any ) => {
+        fetchTraditionalAuthorities(district.district_id, '')
+    })
+    //__________________________
+
+    return districtList
+}
+
+function findVillages(district_id: any) {
+    disableVillageSelection.value = true;
+    selected_villages.value = []
+    
+    fetchVillages(district_id, '')
+}
+
+async function fetchVillages(district_id: any,name: string) {   
+    villageList.value = []         
+    var districtVillages = await LocationService.getVillages(district_id,"")
+    const arrayWithIds = districtVillages.map((item: any, index: any) => ({
+        ...item,
+        assigned_id: index
+    }));
+    villageList.value = villageList.value.concat(arrayWithIds)
+    if (villageList.value.length > 0) {
+        disableVillageSelection.value = false
+    }
+}
+
+function selectedTA(selectedTAList: any) {
+    selectedTAIds.length = 0
+    selectedTAList.forEach((village: any ) => {
+        selectedTAIds.push(village.traditional_authority_id)
+    })
+   
+    selectedTAList.forEach((TA: any ) => {
+            findVillages(TA.district_id)
+        }
+    ) 
+}
+
+function selectedVillage(VillagesList: any) {
+    selectedVillageIds.length = 0
+    VillagesList.forEach((village: any ) => {
+        selectedVillageIds.push(village.village_id)
+    })
+}
+
+function checkIfSelectedIsHSA(role_list: any) {
+    village_show_error.value = false
+    let is_found = false
+    role_list.forEach((item: any) => {
+        if (item?.selected == true && item?.name == 'HSA') {
+            HSA_found_for_disabling_button.value = false
+            is_found = true
+        }
+    })
+
+    if (is_found == false) {
+        village_show_error.value = false
+        HSA_found_for_disabling_button.value = true
+    }
+    return is_found
 }
 
 </script>

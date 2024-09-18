@@ -7,7 +7,7 @@
         >
         <ion-item lines="none">
             <ion-thumbnail slot="start">
-                <img :src="activeIcon"/>
+                <img :src="loadImage(activeIcon)"/>
             </ion-thumbnail>
             <ion-label
                 class="his-sm-text ion-text-wrap"
@@ -25,13 +25,13 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
+import img from "@/utils/Img";
 import {
     IonCard,
     IonThumbnail,
     IonItem,
     IonLabel
 } from "@ionic/vue"
-import img from "@/utils/Img"
 
 export default defineComponent({
     components: {
@@ -79,19 +79,24 @@ export default defineComponent({
             } else {
                 return props.icon
             }
-        }) 
+        })
 
         return {
             activeIcon,
             isDisabled,
             isCompleted
         }
-    }
+    },
+    methods: {
+        loadImage(name: any) {
+            return img(name);
+        },
+    },
 })
 </script>
 <style scoped>
     ion-thumbnail {
-        --size: 18px!important;
+        --size: 50px!important;
     }
     ion-item {
         padding: 0;

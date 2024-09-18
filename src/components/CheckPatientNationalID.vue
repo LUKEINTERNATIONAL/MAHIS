@@ -6,7 +6,7 @@
         </div>
         <div>
             <div class="title">
-                Does the patient have <br />
+                Does the {{ programID() != 33 ? "patient" : "client" }} have <br />
                 a National ID card?
             </div>
             <div class="content">
@@ -31,6 +31,7 @@ import { checkmark, pulseOutline } from "ionicons/icons";
 import { ref } from "vue";
 import { icons } from "@/utils/svg";
 import { resetDemographics } from "@/services/reset_data";
+import { Service } from "@/services/service";
 
 export default defineComponent({
     name: "Menu",
@@ -52,6 +53,9 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        programID() {
+            return Service.getProgramID();
+        },
         dismiss() {
             modalController.dismiss();
         },

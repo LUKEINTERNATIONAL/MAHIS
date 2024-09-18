@@ -1,20 +1,94 @@
 <template>
-    <div class="modal_wrapper">
-        <div class="modal_title diplay_space_between">
-            <span></span>
-            <span @click="dismiss()" style="cursor: pointer; font-weight: 300">x</span>
-        </div>
-        <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle">Follow up visits</div>
-        </div>
+    <ion-header style="display: flex; justify-content: space-between">
+        <ion-title class="modalTitle">Follow up visits</ion-title>
+        <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="iconsContent.cancel"></ion-icon>
+    </ion-header>
+    <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
         <div class="">
-            <basic-form :contentData="followUpStore" @update:inputValue="handleInputData"></basic-form>
+            <ion-accordion-group ref="accordionGroup" class="">
+                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Change Guardian</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content" style="padding-bottom: 200px">
+                        <div class="">
+                            <basic-form :contentData="changeGuardianInfo" @update:inputValue="handleInputData"></basic-form>
+                        </div>
+                    </div>
+                </ion-accordion>
+                <ion-accordion value="second" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Vaccine adverse effects</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <div>
+                            <div slot="content">
+                                <basic-form :contentData="vaccineAdverseEffects" @update:inputValue="handleInputData"></basic-form>
+                            </div>
+                        </div>
+                        <div>
+                            <div slot="content">
+                                <basic-form
+                                    :contentData="serious"
+                                    :initialData="initialSeriousData"
+                                    @update:inputValue="handleInputData"
+                                ></basic-form>
+                            </div>
+                        </div>
+                        <div>
+                            <div slot="content">
+                                <basic-form
+                                    :contentData="outcome"
+                                    :initialData="initialOutcomeData"
+                                    @update:inputValue="handleInputData"
+                                ></basic-form>
+                            </div>
+                        </div>
+                        <div>
+                            <div slot="content">
+                                <basic-form
+                                    :contentData="firstDecision"
+                                    :initialData="initialFirstDecisionData"
+                                    @update:inputValue="handleInputData"
+                                ></basic-form>
+                            </div>
+                        </div>
+                    </div>
+                </ion-accordion>
+                <ion-accordion value="third" toggle-icon-slot="start" class="custom_card" v-if="protectedStatus != 'Yes'">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Child protected at birth</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content" style="padding-bottom: 120px">
+                        <basic-form :contentData="protectedAtBirth" @update:inputValue="handleInputData"></basic-form>
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
         </div>
-    </div>
+    </ion-content>
+    <ion-footer collapse="fade" class="ion-no-border">
+        <ion-row>
+            <ion-col>
+                <DynamicButton @click="saveData()" name="Save" fill="solid" style="float: right; margin: 2%; width: 130px" />
+            </ion-col>
+        </ion-row>
+    </ion-footer>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue";
+import {
+    IonContent,
+    IonHeader,
+    IonFooter,
+    IonItem,
+    IonList,
+    IonTitle,
+    IonToolbar,
+    IonMenu,
+    menuController,
+    IonInput,
+    modalController,
+} from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
@@ -30,7 +104,7 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
@@ -41,9 +115,22 @@ import {
     getFieldValue,
     modifyRadioValue,
     modifyFieldValue,
+    modifyCheckboxData,
 } from "@/services/data_helpers";
+import { RelationsService } from "@/services/relations_service";
+import DynamicButton from "@/components/DynamicButton.vue";
+import { ConceptService } from "@/services/concept_service";
+import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
+import { AppEncounterService } from "@/services/app_encounter_service";
+import { PersonService } from "@/services/person_service";
+import { PatientRegistrationService } from "@/services/patient_registration_service";
+import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { RelationshipService } from "@/services/relationship_service";
+import Relationship from "@/views/Mixin/SetRelationship.vue";
+import { DrugOrderService } from "@/services/drug_order_service";
 
 export default defineComponent({
+    mixins: [Relationship],
     components: {
         IonContent,
         IonHeader,
@@ -57,6 +144,8 @@ export default defineComponent({
         BasicForm,
         PreviousVitals,
         customDatePicker,
+        DynamicButton,
+        IonFooter,
     },
     data() {
         return {
@@ -68,104 +157,203 @@ export default defineComponent({
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
             showPD: false as boolean,
+            initialSeriousData: [] as any,
+            initialFirstDecisionData: [] as any,
+            initialOutcomeData: [] as any,
         };
+    },
+    props: {
+        protectedStatus: String,
+    },
+    watch: {
+        personInformation: {
+            async handler() {
+                await this.setRelationShip();
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useFollowUpStoreStore, ["followUpStore"]),
+        ...mapState(useFollowUpStoreStore, [
+            "changeGuardianInfo",
+            "vaccineAdverseEffects",
+            "protectedAtBirth",
+            "serious",
+            "outcome",
+            "firstDecision",
+        ]),
+
+        guardianFirstname() {
+            return getFieldValue(this.changeGuardianInfo, "guardianFirstname", "value");
+        },
+        guardianLastname() {
+            return getFieldValue(this.changeGuardianInfo, "guardianLastname", "value");
+        },
+        guardianMiddleName() {
+            return getFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value");
+        },
+        guardianPhoneNumber() {
+            return getFieldValue(this.changeGuardianInfo, "guardianPhoneNumber", "value");
+        },
+        relationship() {
+            return getFieldValue(this.changeGuardianInfo, "relationship", "value");
+        },
     },
     async mounted() {
-        const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+        const followUp = useFollowUpStoreStore();
+        this.initialSeriousData = followUp.getInitialSerious();
+        this.initialFirstDecisionData = followUp.getInitialFirstDecision();
+        this.initialOutcomeData = followUp.getInitialOutcome();
+        const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
+
+        modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
+        modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianPhoneNumber", "value", this.setAttribute("Cell Phone Number", guardianData[0]?.relation));
+        modifyFieldValue(this.changeGuardianInfo, "relationship", "value", {
+            id: guardianData[0]?.type.relationship_type_id,
+            name: guardianData[0]?.type.b_is_to_a,
+        });
+        await this.setRelationShip();
+        this.resetData();
+        await this.getVaccineAdverseEffects();
     },
     setup() {
         return { checkmark, pulseOutline };
     },
     methods: {
-        navigationMenu(url: any) {
-            menuController.close();
-            this.$router.push(url);
-        },
-        handleInputData(event: any) {
-            if (event?.col?.name == "Change guardian" && event?.col?.checked) {
-                const guardianFields = ["guardianFirstname", "guardianLastname", "guardianMiddleName", "guardianPhoneNumber", "relationship"];
-                guardianFields.forEach((fields) => {
-                    modifyFieldValue(this.followUpStore, fields, "displayNone", false);
-                });
-            } else if (event?.col?.name == "Change guardian") {
-                const guardianFields = ["guardianFirstname", "guardianLastname", "guardianMiddleName", "guardianPhoneNumber", "relationship"];
-                guardianFields.forEach((fields) => {
-                    modifyFieldValue(this.followUpStore, fields, "displayNone", true);
-                });
-            }
-
-            if (event?.col?.name == "Vaccine adverse effects" && event?.col?.checked) {
-                modifyFieldValue(this.followUpStore, "Vaccine adverse effects", "displayNone", false);
-            } else if (event?.col?.name == "Vaccine adverse effects") {
-                modifyFieldValue(this.followUpStore, "Vaccine adverse effects", "displayNone", true);
+        async setRelationShip() {
+            if (this.gender) {
+                await this.getRelationships();
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "displayNone", false);
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", this.relationships);
+            } else {
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "displayNone", true);
             }
         },
-        getBloodPressureStatus(systolic: any, diastolic: any) {
-            let ageGroup;
-            let minSystolic;
-            let maxSystolic;
-            let minDiastolic;
-            let maxDiastolic;
-            const patient = new PatientService();
-            const age = patient.getAge();
-            // Determine age group and corresponding normal ranges
-            if (age < 1) {
-                ageGroup = "less than 1 year";
-                minSystolic = 75;
-                maxSystolic = 100;
-                minDiastolic = 50;
-                maxDiastolic = 70;
-            } else if (age >= 1 && age < 6) {
-                ageGroup = "1-5 years";
-                minSystolic = 80;
-                maxSystolic = 110;
-                minDiastolic = 50;
-                maxDiastolic = 80;
-            } else if (age >= 6 && age < 13) {
-                ageGroup = "6-13 years";
-                minSystolic = 85;
-                maxSystolic = 120;
-                minDiastolic = 55;
-                maxDiastolic = 80;
-            } else if (age >= 13 && age < 18) {
-                ageGroup = "13-18 years";
-                minSystolic = 95;
-                maxSystolic = 140;
-                minDiastolic = 60;
-                maxDiastolic = 90;
+        setAttribute(name: string | undefined, data: any) {
+            if (!data || Object.keys(data).length === 0) return;
+            let str = data.person_attributes.find((x: any) => x.type.name == name);
+            if (str == undefined) return;
+            else return str.value;
+        },
+        resetData() {
+            const rest = useFollowUpStoreStore();
+            rest.setProtectedAtBirth(rest.getInitialProtectedAtBirth());
+            rest.setVaccineAdverseEffects(rest.getInitialVaccineAdverseEffects());
+        },
+        async createGuardian() {
+            const data = await this.guardianData();
+            if (validateInputFiledData(this.changeGuardianInfo)) {
+                const guardian: any = new PatientRegistrationService();
+                await guardian.registerGuardian(data);
+                const guardianID = guardian.getPersonID();
+                const selectedID = getFieldValue(this.changeGuardianInfo, "relationship", "value").id;
+                if (selectedID) await RelationsService.createRelation(this.demographics.patient_id, guardianID, selectedID);
+                toastSuccess("Guarding information save successfully", 3000);
+                return true;
             } else {
-                ageGroup = "above 18 years";
-                minSystolic = 100;
-                maxSystolic = 130;
-                minDiastolic = 60;
-                maxDiastolic = 90;
+                toastWarning("Guarding Information not save", 3000);
+                return false;
             }
+        },
 
-            // Diastolic pressure is within normal range, check systolic pressure
-            if (systolic < minSystolic && diastolic < minDiastolic) {
-                return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup };
-            } else if (systolic >= minSystolic && systolic <= maxSystolic && diastolic >= minDiastolic && diastolic <= maxDiastolic) {
-                return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup };
-            } else if (systolic > maxSystolic && diastolic > maxDiastolic) {
-                return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup };
-            } else {
-                // Diastolic pressure is not within normal range, consider only systolic pressure
-                if (systolic < minSystolic) {
-                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup + " (Using Systolic Only)" };
-                } else if (systolic >= minSystolic && systolic <= maxSystolic) {
-                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup + " (Using Systolic Only)" };
+        async getVaccineAdverseEffects() {
+            const vaccineEffect = await ConceptService.getConceptSet("Vaccine adverse effects");
+            const Seriousness = await ConceptService.getConceptSet("Seriousness of adverse effects");
+            const outcome = await ConceptService.getConceptSet("Adverse effects outcome");
+            modifyCheckboxData(
+                this.vaccineAdverseEffects,
+                "checkboxBtnContent",
+                "Vaccine adverse effects",
+                this.buildCheckboxData(vaccineEffect, 12)
+            );
+            modifyCheckboxData(this.serious, "checkboxBtnContent", "Seriousness of adverse effects", this.buildCheckboxData(Seriousness, ""));
+            modifyCheckboxData(this.outcome, "radioBtnContent", "Adverse effects outcome", this.buildCheckboxData(outcome, ""));
+        },
+        buildCheckboxData(data: any, colSize: any) {
+            return data.map((item: any) => {
+                return {
+                    name: item.name == "Patient died" ? "Died" : item.name == "Cured - TB" ? "Recovered" : item.name,
+                    value: item.name,
+                    colSize: colSize,
+                    checked: false,
+                };
+            });
+        },
+        async saveData() {
+            const guardianCreated = await this.createGuardian();
+            const vaccineAdverseEffectsSaved = await this.saveVaccineAdverseEffects();
+            if (guardianCreated && vaccineAdverseEffectsSaved) {
+                modalController.dismiss();
+            }
+        },
+        async saveVaccineAdverseEffects() {
+            if (this.demographics.patient_id) {
+                const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+                const date = getFieldValue(this.outcome, "Date of death", "value") || HisDate.currentDate();
+                const serious = await formatCheckBoxData(this.serious, HisDate.currentDate(), lastVaccine);
+                const outcome = await formatRadioButtonData(this.outcome, date, lastVaccine);
+                const vaccineAdverseEffects = await formatCheckBoxData(this.vaccineAdverseEffects, HisDate.currentDate(), lastVaccine);
+                const investigationDate = getFieldValue(this.firstDecision, "Investigation needed", "value");
+                let investigationNeeded: any = [];
+                if (investigationDate) {
+                    investigationNeeded = [
+                        {
+                            concept_id: 11887,
+                            value_text: investigationDate,
+                            obs_datetime: HisDate.currentDate(),
+                        },
+                    ];
+                }
+                const result = [...serious, ...outcome, ...vaccineAdverseEffects, ...investigationNeeded].filter((item) => item !== undefined);
+
+                const userID: any = Service.getUserID();
+                if (vaccineAdverseEffects.length > 0) {
+                    const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
+                    await registration.createEncounter();
+                    await registration.saveObservationList(result);
+                    toastSuccess("Vaccine adverse effects saved success", 1500);
+                    return true;
                 } else {
-                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup + " (Using Systolic Only)" };
+                    toastWarning("Vaccine adverse effects not saved", 1500);
+                    return false;
                 }
             }
         },
-        showCPD() {
-            this.showPD = true as boolean;
+
+        async guardianData() {
+            return {
+                person_id: this.demographics.patient_id,
+                given_name: this.guardianFirstname,
+                family_name: this.guardianLastname,
+                middle_name: this.guardianMiddleName,
+                gender: "",
+                birthdate: "",
+                cell_phone_number: this.guardianPhoneNumber,
+                birthdate_estimated: false,
+                home_district: "",
+                home_traditional_authority: "",
+                home_village: "",
+                current_district: "",
+                current_traditional_authority: "",
+                current_village: "",
+                landmark: "",
+                occupation: "",
+                facility_name: "",
+                patient_type: "",
+                national_id: getFieldValue(this.changeGuardianInfo, "guardianNationalID", "value"),
+            };
         },
+        handleInputData(event: any) {
+            // if (event.name == "SeriousCheck") {
+            //     if(displayNext)
+            // }
+            console.log("🚀 ~ handleInputData ~ event:", event);
+        },
+
         dismiss() {
             modalController.dismiss();
         },
@@ -221,5 +409,8 @@ h5 {
     display: flex;
     justify-content: center;
     line-height: 60px;
+}
+.custom_card {
+    margin-bottom: 20px;
 }
 </style>

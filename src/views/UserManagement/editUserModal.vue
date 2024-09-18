@@ -2,16 +2,16 @@
     <ion-modal :is-open="is_open" :show-backdrop="true" @didDismiss="$emit('closePopoover', false)" :keyboard-close="false">
         <ion-header>
             <ion-toolbar>
-                <ion-title
-                    ><b>User Details Proile</b></ion-title
-                >
+                <ion-title>
+                    <b>User Profile</b>
+                </ion-title>
                 <ion-buttons slot="end">
                     <ion-button @click="$emit('closePopoover', false)">Close</ion-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
-            <div class="modal_wrapper" >
+            <div class="" >
                 <div class="center text_12">
                     <ion-row>
                         <!-- <basic-form :contentData="[]"> </basic-form> -->
@@ -69,7 +69,6 @@ const emit = defineEmits<{
 
 function saveAction() {
     action.value = generateRandomStrings(100, 3)
-    // closeModal()
 }
 
 function isFormValid(data: any) {

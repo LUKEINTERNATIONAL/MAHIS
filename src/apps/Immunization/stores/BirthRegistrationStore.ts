@@ -52,27 +52,6 @@ const initialBirthRegistration = [
                 {
                     colData: [
                         {
-                            inputHeader: "Birth Height(cm)*",
-                            icon: icons.height,
-                            valueType: "number",
-                            value: "",
-                            name: "Height (cm)",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                            validationFunctionName: "validateHeight",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
                             inputHeader: "How many doses of Tdv did the mother receive?*",
                             icon: icons.search,
                             valueType: "text",
