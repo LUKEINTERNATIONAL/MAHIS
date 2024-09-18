@@ -385,8 +385,6 @@ import {
 } from "@/services/data_helpers";
 import { countBy } from "lodash";
 
-
-
 export default defineComponent({
     components: {
         BasicInputField,
@@ -398,7 +396,6 @@ export default defineComponent({
         VueMultiselect,
         BasicInputChangeUnits,
         BasicPhoneInputField,
-    
     },
     data() {
         return {
