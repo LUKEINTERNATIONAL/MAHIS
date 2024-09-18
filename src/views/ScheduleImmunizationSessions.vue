@@ -6,37 +6,32 @@
         </div>
         <Toolbar />
         <ion-content>
-            <div class="container">
+            <div>
                 <h1 class="heading">Schedule Immunization Sessions</h1>
-                <div class="search-create-container">
-                    <div>
-                    </div>
-                    <div>
-                        <ion-button :size="buttonSize" @click="openCreateModal()">
-                            <ion-icon slot="start" :icon="add"></ion-icon>
-                            Create Session
-                        </ion-button>
-                    </div>
-                </div>
                 <div style="margin-top: 15px;">
                     <ScheduleXCalendar :calendar-app="calendarApp" />
                 </div>
             </div>
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+                <ion-fab-button @click="openCreateModal()">
+                    <ion-icon :icon="add"></ion-icon>
+                </ion-fab-button>
+            </ion-fab>
         </ion-content>
     </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import {
     IonContent,
-    IonButton,
     IonPage,
     IonIcon,
+    IonFab,
+    IonFabButton,
     IonSpinner,
     modalController,
 } from '@ionic/vue';
-import { Capacitor } from '@capacitor/core';
 import Toolbar from "@/components/Toolbar.vue";
 import { add } from 'ionicons/icons';
 import ViewImmunizationSessionModal from '@/components/Modal/ViewImmunizationSessionModal.vue';
@@ -71,7 +66,7 @@ const calendarApp = createCalendar({
         createViewMonthAgenda(),
     ],
     events: [],
-    
+
     callbacks: {
         onEventClick(calendarEvent) {
             const eventSchedules = schedules.value.filter(
@@ -92,8 +87,8 @@ async function getSessionSchedules(): Promise<void> {
         const sessionService = new SessionScheduleService();
         const data: any = await sessionService.getSessions();
         calendarApp.events.getAll().forEach((event) => {
-                calendarApp.events.remove(event.id);
-            });
+            calendarApp.events.remove(event.id);
+        });
         data.forEach((item: SessionSchedule) => {
             const datesMap: Record<string, { start_date: Date, end_date: Date }[]> = {
                 "Weekly": generateDateRangesWeekly(
@@ -211,7 +206,7 @@ const generateDateRangesMonthly = (year: number, month: number, startDateStr: st
     return dateRanges;
 }
 
-async function onCalendarDayClick(selectedCalendarSchedules: any) {
+async function onCalendarDayClick(selectedCalendarSchedules: any) : Promise<void> {
     if (selectedCalendarSchedules.length > 0) {
         const modal = await modalController.create({
             component: ViewImmunizationSessionModal,
@@ -233,8 +228,6 @@ async function onCalendarDayClick(selectedCalendarSchedules: any) {
     }
 }
 
-
-
 const showEditModal = async (props: any, origin: "modal" | "view" = "view"): Promise<void> => {
     const modal = await modalController.create({
         component: EditImmunizationSessionModal,
@@ -250,16 +243,6 @@ const showEditModal = async (props: any, origin: "modal" | "view" = "view"): Pro
     }
 }
 
-const displaMdDown = computed(() => {
-    const platform = Capacitor.getPlatform();
-    return platform === 'android' || platform === 'ios' || window.innerWidth < 768
-})
-
-
-const buttonSize = computed((): "default" | "small" | "large" | undefined => {
-    return displaMdDown.value ? 'small' : 'large';
-});
-
 const openCreateModal = (): void => {
     const modal = createModal(AddImmunizationSessionModal, { class: 'otherVitalsModal largeModal' });
     modal.then((update) => {
@@ -268,189 +251,10 @@ const openCreateModal = (): void => {
 }
 </script>
 
-
-<style scoped>
+<style lang="css"scoped>
 .heading {
     width: 100%;
     text-align: center;
     font-weight: 700;
-}
-
-.search-create-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.skeleton-80 {
-    width: 80%;
-}
-
-.skeleton-60 {
-    width: 60%;
-}
-
-.skeleton-30 {
-    width: 30%;
-}
-
-.schedule-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.session-title {
-    text-transform: uppercase;
-    font-size: 22px;
-}
-
-.calendar-container {
-    width: 100%;
-    margin: 0 auto;
-}
-
-.calendar-container :deep(.vc-header) {
-    margin-bottom: 10px;
-}
-
-.calendar-container :deep(.vc-header button) {
-    background-color: transparent;
-    font-size: 22px;
-    background-image: none;
-}
-
-.calendar-container :deep(.vc-container) {
-    width: 100%;
-}
-
-.calendar-container :deep(.vc-weeks) {
-    grid-template-columns: repeat(7, 1fr);
-}
-
-.calendar-container :deep(.vc-day) {
-    padding: 0;
-}
-
-@media (max-width: 767px) {
-    .calendar-container :deep(.vc-day) {
-        padding: 10px;
-    }
-}
-
-.calendar-container :deep(.vc-header) {
-    padding: 10px 0;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.calendar-container :deep(.vc-header-label) {
-    font-size: 18px;
-}
-
-.calendar-container :deep(.vc-arrow) {
-    font-size: 20px;
-}
-
-@media (max-width: 767px) {
-    .calendar-container {
-        max-width: 100%;
-        padding: 0;
-    }
-}
-
-.content-container {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.w-full {
-    width: 100%;
-}
-
-.-mt-40 {
-    margin-top: -40px;
-}
-
-#svg {
-    height: 50px;
-    width: 50px;
-}
-
-.flex-between {
-    display: flex;
-    justify-content: space-between;
-}
-
-.flex-between>.center {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.content-title {
-    font-size: 22px;
-    font-weight: 600;
-}
-
-.icon-color {
-    color: #969696;
-}
-
-.vc-highlight {
-    background-color: green !important;
-}
-
-.icon-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-}
-
-@media (max-width: 600px) {
-    .icon-container svg {
-        height: 30px;
-        width: 30px;
-    }
-}
-
-@media (min-width: 601px) {
-    .icon-container svg {
-        height: 50px;
-        width: 50px;
-    }
-}
-
-.popover-container {
-    display: flex;
-    align-items: center;
-}
-
-.icon-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #bbf7d0;
-    padding: 5px;
-    border-radius: 5px;
-    width: 35px;
-    height: 35px;
-    margin-right: 5px;
-}
-
-.text-container {
-    margin-left: 10px;
-}
-
-.title {
-    font-size: 15px;
-    margin: 0;
-}
-
-.date-range {
-    font-size: 15px;
-    font-weight: 400;
-    margin: 5px 0 0;
 }
 </style>
