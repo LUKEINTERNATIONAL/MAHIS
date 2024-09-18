@@ -704,3 +704,43 @@ ion-footer {
 .vue-tel-input {
     height: 56px;
 }
+
+
+
+:root {
+    --sx-color-primary: green;
+    --sx-color-on-primary: #fff;
+    --sx-color-primary-container: #dcfce7;
+    --sx-color-on-primary-container: green;
+    --sx-color-secondary: #bbf7d0;
+    --sx-color-on-secondary: #fff;
+    --sx-color-secondary-container: #def8e9;
+    --sx-color-on-secondary-container: #192b23;
+    --sx-color-tertiary: #527d68;
+    --sx-color-on-tertiary: #fff;
+    --sx-color-tertiary-container: #d8fff2;
+    --sx-color-on-tertiary-container: #0b3726;
+    --sx-color-surface: #fef7ff;
+    --sx-color-surface-dim: #ded8e1;
+    --sx-color-surface-bright: #fef7ff;
+    --sx-color-on-surface: #1c1b1f;
+    --sx-color-surface-container: #f3edf7;
+    --sx-color-surface-container-low: #f7f2fa;
+    --sx-color-surface-container-high: #ece6f0;
+    --sx-color-background: #fff;
+    --sx-color-on-background: #1b1f1d;
+    --sx-color-outline: #747e77;
+    --sx-color-outline-variant: #c4c7c5;
+    --sx-color-shadow: #000;
+    --sx-color-surface-tint: green;
+    --sx-color-neutral: var(--sx-color-outline);
+    --sx-color-neutral-variant: var(--sx-color-outline-variant);
+
+    --sx-internal-color-gray-ripple-background: #e0e0e0;
+    --sx-internal-color-light-gray: #fafafa;
+    --sx-internal-color-text: #000;
+}
+
+.sx__month-agenda-day{
+color: #000;
+}

@@ -40,9 +40,6 @@ import "./css/style.css";
 import "./css/component_view.css";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
-//@ts-ignore
-import VCalendar from 'v-calendar';
-import 'v-calendar/style.css';
 
 const pinia = createPinia();
 const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePaginate);
@@ -50,7 +47,6 @@ const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePa
 app.component("VueDatePicker", VueDatePicker);
 app.component("EasyDataTable", Vue3EasyDataTable);
 app.component("v-select", vSelect);
-app.use(VCalendar, {})
 pinia.use(piniaPluginPersistedState);
 DataTable.use(DataTablesCore);
 router.isReady().then(() => {
