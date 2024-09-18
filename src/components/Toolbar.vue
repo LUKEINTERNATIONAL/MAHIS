@@ -6,7 +6,7 @@
                 <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px" @click="nav('/home')">
                     <div style="display: block">
                         <div style="font-size: 16px">
-                            <b>MaHIS</b><small> ({{ programs.program.applicationName }})</small>
+                            <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                         </div>
                         <div>
                             <small class="facility-name" style="font-size: 68%">

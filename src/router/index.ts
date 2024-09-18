@@ -10,7 +10,7 @@ import Scan from "../components/Registration/ScanRegistration.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
 import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
-import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
+
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
@@ -43,11 +43,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "OfflineRecords",
         component: OfflineRecords,
     },
-    {
-        path: "/setDDE",
-        name: "setDDE",
-        component: setDDE,
-    },
+  
     {
         path: "/scheduleImmunization",
         name: "scheduleImmunization",
@@ -99,11 +95,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "clinicaldays",
         component: clinicaldays,
     },
-    {
-        path: "/privacypolicy",
-        name: "privacypolicy",
-        component: PrivacyPolicyView,
-    },
+  
     ...NCD,
     ...OPD,
     ...ANC,
