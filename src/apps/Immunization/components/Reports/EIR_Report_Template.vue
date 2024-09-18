@@ -177,8 +177,12 @@ export default defineComponent({
         this.tableData.forEach((t_data: any) => {
           if (t_data.drug.drug_id == AV.drug_inventory_id) {
             if (r_key in t_data.fixed) {
+              let data_key = r_key+'Persons'
               let value =  t_data.fixed[r_key];
               t_data.fixed[r_key] = value+1
+              t_data.fixed[data_key].push(AV)
+
+              console.log(t_data.fixed[data_key])
             }
           }
         })
@@ -189,7 +193,7 @@ export default defineComponent({
         data.forEach((drug: any) => {
           const row_item = {
             label: drug.name,
-            fixed: { lessThan1y: 0, moreThan1y: 0 },
+            fixed: { lessThan1y: 0, moreThan1y: 0, lessThan1yPersons: [], moreThan1yPersons: []},
             outreach: { lessThan1y: 0, moreThan1y: 0 },
             drug: drug
           }
