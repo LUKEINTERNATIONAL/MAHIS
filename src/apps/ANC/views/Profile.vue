@@ -311,7 +311,7 @@ export default defineComponent({
             //     "tt1Date","tt2Date","tt3Date","tt4Date","tt5Date","tt6Date","tt7Date","tt8Date","tt9Date","tt10Date","tt11Date","tt12Date","tt13Date","tt14Date",
             //     "tt15Date","ReasonTTVnotConducted","DailyCaffeineIntake","SubstanceAbuse","SecondHandSmoke","ExistingChronicConditions","Medications","Stillbirths",
             //     "LiveBirths","Parity","Abortions"
-            const fields: any = ["LNMPKnown", "lmnpDate"];
+            const fields: any = ["", ""];
             // if (Validation.required(this.lmnp))
             if (
                 await this.validations(
@@ -355,7 +355,7 @@ export default defineComponent({
                     if (!patientStatus) return toastWarning("Unable to create profile information!");
                     await toastSuccess("Profile information have been created");
                 }
-                // console.log("========>",await this.buildProfile())
+                console.log("========>",await this.buildProfile())
 
                 const number = this.modeOfDelivery.length / 2;
                 const children = [];

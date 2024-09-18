@@ -90,6 +90,7 @@ function MultValidations(fieldName: string, value: any): null | any {
   return null;
 }
 
+<<<<<<< HEAD
 export async function YupValidateField(
   store: any,
   validationSchema: any,
@@ -120,3 +121,25 @@ const setErrorOnFields = (
   modifyFieldValue(store, fieldName, "alertsErrorMassage", message);
   modifyRadioValue(store, fieldName, "alertsErrorMassage", message);
 };
+=======
+export  async function YupValidateField(store:any, validationSchema:any, fieldName:string, value:any) {
+    try {
+        const fieldSchema = validationSchema.fields[fieldName];
+        if (yup.isSchema(fieldSchema)) {
+            await fieldSchema.validate(value);
+            setErrorOnFields(store, fieldName, false, "")
+            return true;
+        }
+    } catch (error: any) {
+        setErrorOnFields(store, fieldName, true, error.message)
+      return false;
+    } 
+}
+
+const setErrorOnFields = (store:any, fieldName:any, isValid:boolean, message:string)=>{
+    modifyFieldValue(store, fieldName, "alertsErrorMassage", isValid);
+    modifyRadioValue(store, fieldName, "alertsErrorMassage", isValid);
+    modifyFieldValue(store, fieldName, "alertsErrorMassage", message);
+    modifyRadioValue(store, fieldName, "alertsErrorMassage", message);
+}
+>>>>>>> f1e7ce3ddb1ad7f1cbae6879289a03535e78635a

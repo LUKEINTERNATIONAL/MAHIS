@@ -24,7 +24,7 @@ import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExaminati
 //import { useVitalsStore } from "../stores/OpdVitalsStore";
 
 export async function resetOPDPatientData() {
-    sessionStorage.setItem("saveProgressStatus", "false");
+    localStorage.setItem("saveProgressStatus", "false");
     const opdVitals = useVitalsStore();
     const vitals = useVitalsStore();
     const investigations = useInvestigationStore();

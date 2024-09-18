@@ -83,7 +83,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         async setProgramInfo() {
-          let program: any = sessionStorage.getItem("app");
+          let program: any = localStorage.getItem("app");
        
             program = JSON.parse(program);
             this.activeProgramID = program? program.programID : null;

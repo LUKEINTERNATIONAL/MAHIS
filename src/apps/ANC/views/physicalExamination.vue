@@ -240,7 +240,6 @@ export default defineComponent({
                 this.saveFetalPresentation();
                 this.savePresentingSigns();
                 resetPatientData();
-                //this.$router.push("ANChome");
                 toastSuccess("Physical examination data saved successfully");
             } else {
                 toastWarning("Please complete all required fields");

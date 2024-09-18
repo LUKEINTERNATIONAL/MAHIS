@@ -85,7 +85,7 @@ const initialVitals = [
             ],
             inputFields: [
                 {
-                    inputHeader: "Specify Reason*",
+                    inputHeader: "Specify Reason",
                     icon: icons.search,
                     isMultiSelect: true,
                     popOver: true,
@@ -180,7 +180,7 @@ const initialVitals = [
             ],
             inputFields: [
                 {
-                    inputHeader: "Specify Reason*",
+                    inputHeader: "Specify Reason",
                     icon: icons.search,
                     isMultiSelect: true,
                     popOver: true,
@@ -269,7 +269,7 @@ const initialVitals = [
             ],
             inputFields: [
                 {
-                    inputHeader: "Specify Reason*",
+                    inputHeader: "Specify Reason",
                     icon: icons.search,
                     isMultiSelect: true,
                     popOver: true,

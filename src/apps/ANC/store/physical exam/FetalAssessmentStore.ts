@@ -59,6 +59,7 @@ const initialFetalAssesment=[
             ],
         },
     },
+
     {
         sectionHeader: "",
         classDash: "dashed_bottom_border",
@@ -85,6 +86,9 @@ const initialFetalAssesment=[
             ],
         },
     },
+
+] as any;
+const initialFetalDetails=[
     {
         selectdData: [],
         classDash: "dashed_bottom_border",
@@ -188,10 +192,12 @@ const initialFetalAssesment=[
             ],
         },
     },
-] as any;
+]
+
 export const useFetalAssessment = defineStore("fetalAssessment", {
     state: () => ({
         fetalAssessment: [...initialFetalAssesment] as any,
+        fetalDetails:[..._.cloneDeep(initialFetalDetails)] as any,
     }),
     actions: {
         setFetalAssessment(data: any) {
@@ -199,6 +205,10 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
         },
         getInitialFetalAssesment(){
             const data= _.cloneDeep(initialFetalAssesment);
+            return[...data]
+        },
+        getInitialFetalDetails(){
+            const data= _.cloneDeep(initialFetalDetails);
             return[...data]
         }
     },

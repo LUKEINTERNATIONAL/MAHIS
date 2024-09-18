@@ -280,32 +280,31 @@ export default defineComponent({
             await this.saveQuickCheck();
             resetPatientData();
         },
-        async saveQuickCheck() {
-            const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
-            // "dangerSigns",'Pre-term labour',"None","Unconscious","Fever","Imminent delivery",
-            // "Severe headache","Vomiting", "Severe abdominal pain","Draining liquor",
-            // "Respiratory problems","Convulsion history","Convulsion history",
-            // "Epigastric pain",] //"referWoman","reasonVisitFacility","pregnancyConfirmed","pregnancyPlanned",
+      async saveQuickCheck() {
+        const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
 
-            if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
-                // && this.ConfirmPregnancy
-                if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {
-                    const userID: any = Service.getUserID();
-                    const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
-                    const encounter = await quickCheck.createEncounter();
-                    if (!encounter) return toastWarning("Unable to create quick check encounter");
-                    const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());
-                    if (!patientStatus) return toastWarning("Unable to create quick check details!");
-                    toastSuccess("Quick check details have been created");
-                }
-                this.$router.push("ANCHome");
+        if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
+          if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {
+            const userID: any = Service.getUserID();
+            const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
+            const encounter = await quickCheck.createEncounter();
+            if (!encounter) return toastWarning("Unable to create quick check encounter");
+            const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());
+            if (!patientStatus) return toastWarning("Unable to create quick check details!");
+            toastSuccess("Quick check details have been created");
+            if (getRadioSelectedValue(this.ReasonForVisit, "Intervention on danger signs")== "Yes") {
+              this.$router.push("/ancReferral");
+            } else {
+              this.$router.push("ANCHome");
             }
-            else {
-                await toastWarning("Please complete all required fields");
-            }
+          }
+        } else {
+          await toastWarning("Please complete all required fields");
+        }
+        console.log(await this.buildQuickCheck());
 
-            console.log(await this.buildQuickCheck());
-        },
+      },
+
         openModal() {
             createModal(SaveProgressModal);
         },

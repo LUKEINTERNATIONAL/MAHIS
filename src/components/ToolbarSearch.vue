@@ -1,10 +1,16 @@
 <template>
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
-    <CheckInConfirmationModal :closeModalFunc="closeCheckInModal" :onYes="handleCheckInYes" :onNo="handleCheckInNo"  :isOpen="checkInModalOpen" :title="`Do you want to check in the patient?`" />
-    
-    <div style="display: flex; align-items: center">
+    <CheckInConfirmationModal
+        :closeModalFunc="closeCheckInModal"
+        :onYes="handleCheckInYes"
+        :onNo="handleCheckInNo"
+        :isOpen="checkInModalOpen"
+        :title="`Do you want to check in the patient?`"
+    />
+
+    <div style="display: flex; width: 100%; justify-content: center">
         <ion-input
-            style="color: #000; width: 100%"
+            style="color: #000; width: 70%"
             @ionInput="handleInput"
             fill="outline"
             :value="searchValue"
@@ -65,7 +71,7 @@
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
             <ion-row
-                v-show="!patients"
+                v-show="!apiStatus"
                 class="search_result clickable-row"
                 v-for="(item, index) in offlineFilteredPatients"
                 :key="index"
@@ -175,6 +181,8 @@ import { isUnknownOrEmpty, isValueEmpty } from "@/utils/Strs";
 import PersonField from "@/utils/HisFormHelpers/PersonFieldHelper";
 import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 import { icons } from "@/utils/svg";
+import { useStatusStore } from "@/stores/StatusStore";
+import { useProgramStore } from "@/stores/ProgramStore";
 
 export default defineComponent({
     name: "Home",
@@ -196,7 +204,7 @@ export default defineComponent({
         RoleSelectionModal,
         IonButton,
         IonInput,
-        CheckInConfirmationModal
+        CheckInConfirmationModal,
     },
     setup() {
         return { checkmark, add, search, camera };
@@ -291,6 +299,8 @@ export default defineComponent({
     computed: {
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useGeneralStore, ["NCDUserActions"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
+        ...mapState(useProgramStore, ["programs"]),
     },
     async mounted() {
         this.ddeInstance = new PatientDemographicsExchangeService();
@@ -326,7 +336,13 @@ export default defineComponent({
             this.popoverOpen = false;
             if (this.searchText.length > 0) {
                 this.openPopover(ev);
-                await this.searchDemographicPayload(this.searchText);
+                if (this.apiStatus) {
+                    await this.searchDemographicPayload(this.searchText);
+                } else {
+                    this.offlineFilteredPatients = [];
+                    const payload = this.splitSearchText(this.searchText);
+                    this.offlineFilteredPatients = await this.searchOfflinePatients(payload);
+                }
             }
         },
         async setID(scannedID: any) {
@@ -343,16 +359,7 @@ export default defineComponent({
             await this.searchByNpid(searchText);
         },
         async searchByName(searchText: any) {
-            const splittedArray = searchText.split(" ");
-            const payload = {
-                given_name: splittedArray[0],
-                family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
-                gender: splittedArray.length >= 3 ? splittedArray[2] : "",
-                page: this.page.toString(),
-                per_page: this.paginationSize.toString(),
-            };
-            this.offlineFilteredPatients = [];
-
+            const payload = this.splitSearchText(searchText);
             // DDE enabled search
             if (this.globalPropertyStore.dde_enabled && payload.given_name && payload.family_name && payload.gender) {
                 return (this.patients = await this.ddeInstance.searchDemographics(payload));
@@ -361,9 +368,17 @@ export default defineComponent({
             this.patients = await PatientService.search(payload);
             if (this.patients && this.patients?.length > 0) {
                 this.callswipeleft();
-            } else {
-                this.offlineFilteredPatients = await this.searchOfflinePatients(payload);
             }
+        },
+        splitSearchText(searchText: any) {
+            const splittedArray = searchText.split(" ");
+            return {
+                given_name: splittedArray[0],
+                family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
+                gender: splittedArray.length >= 3 ? splittedArray[2] : "",
+                page: this.page.toString(),
+                per_page: this.paginationSize.toString(),
+            };
         },
         async searchByNpid(searchText: any) {
             if (/.+\$$/i.test(`${searchText}`)) {
@@ -445,8 +460,7 @@ export default defineComponent({
             const userPrograms: any = JSON.parse(userProgramsData);
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
 
-           
-            const roles: any =  roleData ? roleData : [];
+            const roles: any = roleData ? roleData : [];
             UserService.setProgramUserActions();
 
             if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
@@ -500,80 +514,6 @@ export default defineComponent({
                     (!searchCriteria.gender || personInfo.gender === searchCriteria.gender)
                 );
             });
-        },
-        async searchOffline(searchText: any) {
-            this.offlinePatients;
-            return {
-                patient_id: 25,
-                date_created: "2024-07-26T11:41:27.000+02:00",
-                person: {
-                    gender: "M",
-                    birthdate: "2024-07-26",
-                    names: [
-                        {
-                            given_name: "test",
-                            middle_name: "",
-                            family_name: "ppea",
-                        },
-                    ],
-                    addresses: [
-                        {
-                            address1: null,
-                            address2: null,
-                            city_village: "Chidothi",
-                            state_province: "Dowa ",
-                            postal_code: null,
-                            county_district: null,
-                            neighborhood_cell: null,
-                            region: null,
-                            subregion: null,
-                            township_division: "Mponela Urban",
-                        },
-                    ],
-                    person_attributes: [
-                        {
-                            value: "",
-                            type: {
-                                person_attribute_type_id: 12,
-                                name: "Cell Phone Number",
-                            },
-                        },
-                        {
-                            person_attribute_id: 272,
-                            value: "",
-                            type: {
-                                person_attribute_type_id: 13,
-                                name: "Occupation",
-                            },
-                        },
-                        {
-                            value: "",
-                            type: {
-                                person_attribute_type_id: 5,
-                                name: "Civil Status",
-                            },
-                        },
-                        {
-                            person_attribute_id: 274,
-                            value: "",
-                            type: {
-                                person_attribute_type_id: 28,
-                                name: "EDUCATION LEVEL",
-                            },
-                        },
-                    ],
-                },
-                patient_identifiers: [
-                    {
-                        patient_identifier_id: 1,
-                        identifier: "P170000000013",
-                        type: {
-                            patient_identifier_type_id: 3,
-                            name: "National id",
-                        },
-                    },
-                ],
-            };
         },
         async handleSearchResults(patient: Promise<Patient | Patient[]>) {
             let results: Patient[] | Patient = [];
@@ -737,24 +677,28 @@ export default defineComponent({
                 return [entity, errors.join(", ")];
             });
         },
-        closeCheckInModal(){
-    this.checkInModalOpen=false
-},
+        closeCheckInModal() {
+            this.checkInModalOpen = false;
+        },
         handleCheckInNo() {
-          
-            this.openNewPage('patientProfile', this.selectedPatient);
+            this.openNewPage("patientProfile", this.selectedPatient);
             this.toggleCheckInModal();
         },
-        handleCheckInYes(){
+        handleCheckInYes() {
             // console.log(this.selectedPatient)
         },
-        toggleCheckInModal(){
-            this.checkInModalOpen=!this.checkInModalOpen
+        toggleCheckInModal() {
+            this.checkInModalOpen = !this.checkInModalOpen;
         },
         openCheckInModal(item: any) {
-this.checkInModalOpen=true;
-this.selectedPatient = item;
-}
+            console.log(this.programs?.program?.applicationName);
+            if (this.programs?.program?.applicationName == "OPD Program") {
+                this.checkInModalOpen = true;
+                this.selectedPatient = item;
+                return;
+            }
+            this.openNewPage("patientProfile", item);
+        },
     },
 });
 </script>

@@ -3,10 +3,10 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px" @click="nav('/home')">
+                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px" @click="nav('/home')">
                     <div style="display: block">
-                        <div>
-                            <b>MaHIS</b><small> ({{ programs.program.applicationName }})</small>
+                        <div style="font-size: 16px">
+                            <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                         </div>
                         <div>
                             <small class="facility-name" style="font-size: 68%">

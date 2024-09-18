@@ -142,7 +142,7 @@ export default defineComponent({
         },
         async handleInputData(event: any) {
             if (event?.col?.name == "Same as current") this.setSameAsCurrent();
-            sessionStorage.setItem("activeLocation", "home");
+            localStorage.setItem("activeLocation", "home");
             const currentFields: any = ["home_district", "home_traditional_authority", "home_village"];
             await this.validations(this.homeLocation, currentFields);
             if (event.name == "home_district") {
@@ -159,12 +159,12 @@ export default defineComponent({
             }
         },
         async setTA(obj: any) {
-            const targetData = await LocationService.getTraditionalAuthorities(obj.district_id, "");
+            const targetData = this.getTAs(obj.district_id);
             modifyFieldValue(this.homeLocation, "home_traditional_authority", "multiSelectData", targetData);
             modifyFieldValue(this.homeLocation, "home_traditional_authority", "displayNone", false);
         },
         async setVillage(obj: any) {
-            const targetData = await LocationService.getVillages(obj.traditional_authority_id, "");
+            const targetData = await this.getVillages(obj.traditional_authority_id);
             modifyFieldValue(this.homeLocation, "home_village", "multiSelectData", targetData);
             modifyFieldValue(this.homeLocation, "home_village", "displayNone", false);
         },

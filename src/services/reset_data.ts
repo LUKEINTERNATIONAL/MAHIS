@@ -35,10 +35,9 @@ import { useFatalMovementStore } from "@/apps/ANC/store/symptomsFollowUp/fatalMo
 import { useCurrentPhysiologicalSymptomsStore } from "@/apps/ANC/store/symptomsFollowUp/currentPhysiologicalSymptomsStore";
 import { useMedicalFollowUpStore } from "@/apps/ANC/store/symptomsFollowUp/medicalFollowUp";
 import { usePersistentBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/persistentBehaviourStore";
-import { usePersistentSymptomsStore } from "@/apps/ANC/store/symptomsFollowUp/persistentSymptomsStore";
 import { useWomenBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/womenBehaviourStore";
 import { useMedicStore } from "@/apps/ANC/store/symptomsFollowUp/MedicStore";
-import { useDiagnosisCounsellingStore } from "@/apps/ANC/store/diagnosisCounsellingStore";
+import {usePreventativeCounsellingStore} from "@/apps/ANC/store/counselling/preventativeCounsellingStore";
 import { useDewormingStore } from "@/apps/ANC/store/dewormingStore";
 import { useImmunizationStore } from "@/apps/ANC/store/immunizationStore";
 import { useIntimatePartnerStore } from "@/apps/ANC/store/intimatePartnerStore";
@@ -71,7 +70,7 @@ import { useDangerSignsStore } from "@/apps/ANC/store/quickCheck/dangerSigns";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 
 export async function resetPatientData() {
-    sessionStorage.setItem("saveProgressStatus", "false");
+    localStorage.setItem("saveProgressStatus", "false");
     const vitals = useVitalsStore();
     const investigations = useInvestigationStore();
     const outcome = useOutcomeStore();
@@ -109,10 +108,9 @@ export async function resetPatientData() {
     const ANCcurrentPhysiological = useCurrentPhysiologicalSymptomsStore();
     const ANCmedicalFollowUp = useMedicalFollowUpStore();
     const ANCpersistent = usePersistentBehaviourStore();
-    const ANCpersistentSymptoms = usePersistentSymptomsStore();
     const ANCwomenBehavior = useWomenBehaviourStore();
     const ANCmedication = useMedicStore();
-    const ANCdiagnosisCounselling = useDiagnosisCounsellingStore();
+    const ANCpreventativeCounselling = usePreventativeCounsellingStore();
     const ANCdeworming = useDewormingStore();
     const ANCdiagnosis = useDiagnosisStore();
     const ANCimmunisation = useImmunizationStore();
@@ -193,10 +191,9 @@ export async function resetPatientData() {
     ANCcurrentPhysiological.$reset();
     ANCmedicalFollowUp.$reset();
     ANCpersistent.$reset();
-    ANCpersistentSymptoms.$reset();
     ANCwomenBehavior.$reset();
     ANCmedication.$reset();
-    ANCdiagnosisCounselling.$reset();
+    ANCpreventativeCounselling.$reset();
     ANCdeworming.$reset();
     ANCdiagnosis.$reset();
     ANCimmunisation.$reset();

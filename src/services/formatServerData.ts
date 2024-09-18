@@ -103,19 +103,35 @@ async function getValue(element: any, value: any, obs_datetime: any, childData =
         return null;
     }
 }
-export async function formatCheckBoxData(data: any) {
+export async function formatCheckBoxData(data: any, obs_datetime: any = ConceptService.getSessionDate(), childData = []) {
     const buildObjPromises: Promise<any>[] = data.flatMap(async (item: any) => {
         if (item?.checkboxBtnContent?.data && item.checkboxBtnContent.data.length > 0) {
             return await Promise.all(
                 item.checkboxBtnContent.data.map(async (checkboxData: any) => {
                     if (checkboxData.checked && !checkboxData.buildConceptIgnore) {
-                        return {
-                            concept_id: await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true),
-                            value_coded: await ConceptService.getConceptID(checkboxData.value, true),
-                            obs_datetime: ConceptService.getSessionDate(),
-                        };
-                    } else {
-                        return null;
+                        const value_coded = await ConceptService.getConceptID(checkboxData.value, true);
+                        const concept_id = await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true);
+                        const childNames = childData.map((item: any) => {
+                            return {
+                                concept_id: value_coded,
+                                value_coded: item.drug_inventory_id,
+                                obs_datetime: obs_datetime,
+                            };
+                        });
+                        if (childData) {
+                            return {
+                                concept_id,
+                                value_coded: value_coded,
+                                obs_datetime,
+                                child: childNames,
+                            };
+                        } else {
+                            return {
+                                concept_id: concept_id,
+                                value_coded: value_coded,
+                                obs_datetime: obs_datetime,
+                            };
+                        }
                     }
                 })
             );

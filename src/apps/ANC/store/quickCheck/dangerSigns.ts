@@ -47,8 +47,8 @@ const initialDangerSigns= [
             },
             data: [
                 {
-                    name: "Pre-term labour",
-                    value: "Pre-term labour",
+                    name: "Preterm labour",
+                    value: "Preterm labour",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -288,5 +288,5 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
             return [...data]; // Return a copy of the initial state
         }
     },
-    // persist: true,
+    persist: true,
 });
