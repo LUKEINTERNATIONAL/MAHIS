@@ -31,23 +31,22 @@
             <div class="card-header">
               <div>
                 <ion-card-title>{{ person.firstName }} {{ person.lastName }}</ion-card-title>
-                <ion-card-subtitle>{{ person.age }} yrs ({{ formatDate(person.dob) }})</ion-card-subtitle>
+                <ion-label style="font-size: 17px;">{{ person.age }} yrs ({{ formatDate(person.dob) }})</ion-label>
               </div>
               <ion-icon :icon="eyeOutline" class="eye-icon"></ion-icon>
             </div>
-            <ion-list lines="none">
-              <ion-item>
+            <ion-list lines="none" style="border-radius: 6px;">
+              <ion-item class="p-inf">
                 <ion-icon :icon="personOutline" slot="start"></ion-icon>
                 <ion-label>Gender: {{ person.sex }}</ion-label>
               </ion-item>
-              <ion-item>
+              <hr class="solid-line">
+
+              <ion-item  class="p-inf">
                 <ion-icon :icon="locationOutline" slot="start"></ion-icon>
                 <ion-label>Village: {{ person.village }}</ion-label>
               </ion-item>
-              <ion-item>
-                <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
-                <ion-label>Appointment: {{ formatDate(person.appointmentDate) }}</ion-label>
-              </ion-item>
+
             </ion-list>
           </ion-card-content>
         </ion-card>
@@ -166,8 +165,7 @@ ion-card-subtitle {
 }
 
 .eye-icon {
-  font-size: 1.2rem;
-  color: var(--ion-color-success);
+  font-size: 1.8rem;
 }
 
 ion-icon {
@@ -181,5 +179,18 @@ ion-item {
     color: #b42318;
     text-transform: none;
     float: right;
+}
+.p-inf {
+  margin-left: 30px;
+  
+}
+.solid-line {
+  border: none;
+  border-top: 1px solid black; /* Adjust thickness and color */
+  width: 90%;  /* Line length */
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 </style>
