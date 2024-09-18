@@ -35,6 +35,7 @@ import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import BasicCard from "@/components/BasicCard.vue";
 import {useHIVStatusAndTreatmentStore} from "@/apps/PNC/stores/postnatal details/HIVStatusAndTreatment";
+import { getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 export default defineComponent({
   name: "HIVStatusAndTreatment",
   components:{
@@ -72,13 +73,37 @@ export default defineComponent({
   mounted(){
     const hivStatus=useHIVStatusAndTreatmentStore()
     this.initialData=hivStatus.getInitial()
+    this.handleHIV()
+    this.handleArtNumber()
   },
   watch:{
+    hivStatusAndTreatment:{
+      handler(){
+        this.handleHIV()
+        this.handleArtNumber()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+      handleHIV(){
+        if(getRadioSelectedValue(this.hivStatusAndTreatment,'Mother HIV Status')=='positive'){
+          modifyRadioValue(this.hivStatusAndTreatment,'ART treatment','displayNone',false)
+        }else{
+          modifyRadioValue(this.hivStatusAndTreatment,'ART treatment','displayNone',true)
+        }
+  },
+  handleArtNumber(){
+    if(getRadioSelectedValue(this.hivStatusAndTreatment,'ART treatment')=='yes'){
+      modifyFieldValue(this.hivStatusAndTreatment,'ART Number','displayNone',false)
+    }else{
+      modifyFieldValue(this.hivStatusAndTreatment,'ART Number','displayNone',true)
+    }
+  },
+  }
 });
 
 </script>

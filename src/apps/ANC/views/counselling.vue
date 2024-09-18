@@ -8,6 +8,8 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -64,9 +66,15 @@ import {PhysiologicalCounsellingService} from "@/apps/ANC/service/physiological_
 import {DietCounsellingService} from "@/apps/ANC/service/diet_counselling_service";
 import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
+import {useClinicalCounsellingStore} from "@/apps/ANC/store/counselling/clinicalCousellingStore";
+import {usePreventativeCounsellingStore} from "@/apps/ANC/store/counselling/preventativeCounsellingStore";
 export default defineComponent({
     name: "Home",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -118,8 +126,27 @@ export default defineComponent({
                     icon: false,
                     disabled: false,
                     number: 3,
-                    last_step: "last_step",
+                    last_step: "",
                 },
+              {
+                title: "Clinical counselling",
+                class: "common_step",
+                checked: "",
+                icon: false,
+                disabled: false,
+                number: 4,
+                last_step: "",
+              },
+              {
+                title: "Preventative counselling",
+                class: "common_step",
+                checked: "",
+                icon: false,
+                disabled: false,
+                number: 5,
+                last_step: "last_step",
+              },
+
             ],
             StepperData: [
                 {
@@ -137,6 +164,16 @@ export default defineComponent({
                     component: "DietCounselling",
                     value: "3",
                 },
+              {
+                title: "Clinical counselling",
+                component: "ClinicalCounselling",
+                value: "4",
+              },
+              {
+                title: "Preventative counselling",
+                component: "DiagnosisCounselling",
+                value: "5",
+              },
             ],
             isOpen: false,
             iconsContent: icons,
@@ -149,7 +186,9 @@ export default defineComponent({
     ...mapState(useDemographicsStore, ["demographics"]),
     ...mapState(useBehaviourCousellingStore,["behaviourInfo"]),
     ...mapState(usePhysiologicalCounselingStore,["physiologicalCounselingInfo"]),
-    ...mapState(useDietCounsellingStore,["dietCounsellingInfo"])
+    ...mapState(useDietCounsellingStore,["dietCounsellingInfo"]),
+    ...mapState(useClinicalCounsellingStore,["clinicalCounselling"]),
+    ...mapState(usePreventativeCounsellingStore,["preventativeCounselling"]),
   },
     setup() {
         return { chevronBackOutline, checkmark };
@@ -163,74 +202,85 @@ export default defineComponent({
             });
         },
         async saveData() {
-          await this.saveBehaviourCounselling();
+          // await this.saveBehaviourCounselling();
           await this.savePhysiologicalCounselling()
-          await  this.saveDietCounselling()
-          resetPatientData();
-          this.$router.push("ANChome");
-
-
+          // await  this.saveDietCounselling()
+          // resetPatientData();
+          // this.$router.push("ANChome");
         },
-      async saveBehaviourCounselling() {
-        if (this.behaviourInfo.length > 0) {
-          const userID: any = Service.getUserID();
-          const  behaviourInfo= new BehaviourCounsellingService(this.demographics.patient_id, userID);
-          const encounter = await behaviourInfo.createEncounter();
-          if (!encounter) return toastWarning("Unable to create patient behaviour counselling encounter");
-          const patientStatus = await behaviourInfo.saveObservationList(await this.buildBehaviourCounselling());
-          if (!patientStatus) return toastWarning("Unable to create patient behaviour counselling details!");
-          toastSuccess("Behaviour counselling details have been created");
-        }
-        console.log(await this.buildBehaviourCounselling())
-
-      },
+      // async saveBehaviourCounselling() {
+      //   if (this.behaviourInfo.length > 0) {
+      //     const userID: any = Service.getUserID();
+      //     const  behaviourInfo= new BehaviourCounsellingService(this.demographics.patient_id, userID);
+      //     const encounter = await behaviourInfo.createEncounter();
+      //     if (!encounter) return toastWarning("Unable to create patient behaviour counselling encounter");
+      //     const patientStatus = await behaviourInfo.saveObservationList(await this.buildBehaviourCounselling());
+      //
+      //     if (!patientStatus) return toastWarning("Unable to create patient behaviour counselling details!");
+      //     toastSuccess("Behaviour counselling details have been created");
+      //   }
+      //   console.log(await this.buildBehaviourCounselling())
+      //
+      // },
       async savePhysiologicalCounselling() {
         if (this.physiologicalCounselingInfo.length > 0) {
           const userID: any = Service.getUserID();
           const  physiologicalCounsellingInfo= new PhysiologicalCounsellingService(this.demographics.patient_id, userID);
           const encounter = await physiologicalCounsellingInfo.createEncounter();
           if (!encounter) return toastWarning("Unable to create patient physiological counselling encounter");
-          const patientStatus = await physiologicalCounsellingInfo.saveObservationList(await this.buildPhysiologicalCounselling());
+          const patientStatus = await physiologicalCounsellingInfo.saveObservationList(await this.buildCounselling());
           if (!patientStatus) return toastWarning("Unable to create patient physiological counselling details!");
           toastSuccess("Physiological counselling details have been created");
         }
-        console.log(await this.buildPhysiologicalCounselling())
+        console.log(await this.buildCounselling())
 
       },
-      async saveDietCounselling() {
-        if (this.physiologicalCounselingInfo.length > 0) {
-          const userID: any = Service.getUserID();
-          const  dietCounsellingInfo= new DietCounsellingService(this.demographics.patient_id, userID);
-          const encounter = await dietCounsellingInfo.createEncounter();
-          if (!encounter) return toastWarning("Unable to create patient diet counselling encounter");
-          const patientStatus = await dietCounsellingInfo.saveObservationList(await this.buildDietCounselling());
-          if (!patientStatus) return toastWarning("Unable to create patient diet counselling details!");
-          toastSuccess("Diet counselling details have been created");
-        }
-        console.log(await this.buildDietCounselling())
-
-      },
-      async buildBehaviourCounselling() {
-        return [
-          ...(await formatCheckBoxData(this.behaviourInfo)),
-          ...(await formatRadioButtonData(this.behaviourInfo)),
-          ...(await formatInputFiledData(this.behaviourInfo)),
-        ];
-      },
-      async buildPhysiologicalCounselling() {
-        return [
-          ...(await formatCheckBoxData(this.physiologicalCounselingInfo)),
-          ...(await formatRadioButtonData(this.physiologicalCounselingInfo)),
-          ...(await formatInputFiledData(this.physiologicalCounselingInfo)),
-        ];
-      },
-      async buildDietCounselling() {
+      // async saveDietCounselling() {
+      //   if (this.physiologicalCounselingInfo.length > 0) {
+      //     const userID: any = Service.getUserID();
+      //     const  dietCounsellingInfo= new DietCounsellingService(this.demographics.patient_id, userID);
+      //     const encounter = await dietCounsellingInfo.createEncounter();
+      //     if (!encounter) return toastWarning("Unable to create patient diet counselling encounter");
+      //     const patientStatus = await dietCounsellingInfo.saveObservationList(await this.buildDietCounselling());
+      //     if (!patientStatus) return toastWarning("Unable to create patient diet counselling details!");
+      //     toastSuccess("Diet counselling details have been created");
+      //   }
+      //   console.log(await this.buildDietCounselling())
+      //
+      // },
+      // async buildBehaviourCounselling() {
+      //   return [
+      //     ...(await formatCheckBoxData(this.behaviourInfo)),
+      //     ...(await formatRadioButtonData(this.behaviourInfo)),
+      //     ...(await formatInputFiledData(this.behaviourInfo)),
+      //   ];
+      // },
+      async buildCounselling() {
         return [
           ...(await formatCheckBoxData(this.dietCounsellingInfo)),
           ...(await formatRadioButtonData(this.dietCounsellingInfo)),
           ...(await formatInputFiledData(this.dietCounsellingInfo)),
+          ...(await formatCheckBoxData(this.behaviourInfo)),
+          ...(await formatRadioButtonData(this.behaviourInfo)),
+          ...(await formatInputFiledData(this.behaviourInfo)),
+          ...(await formatCheckBoxData(this.physiologicalCounselingInfo)),
+          ...(await formatRadioButtonData(this.physiologicalCounselingInfo)),
+          ...(await formatInputFiledData(this.physiologicalCounselingInfo)),
+          ...(await formatCheckBoxData(this.clinicalCounselling)),
+          ...(await formatRadioButtonData(this.clinicalCounselling)),
+          ...(await formatInputFiledData(this.clinicalCounselling)),
+          ...(await formatCheckBoxData(this.preventativeCounselling)),
+          ...(await formatRadioButtonData(this.preventativeCounselling)),
+          ...(await formatInputFiledData(this.preventativeCounselling)),
         ];
       },
+      // async buildDietCounselling() {
+      //   return [
+      //     ...(await formatCheckBoxData(this.dietCounsellingInfo)),
+      //     ...(await formatRadioButtonData(this.dietCounsellingInfo)),
+      //     ...(await formatInputFiledData(this.dietCounsellingInfo)),
+      //   ];
+      // },
     },
 });
 </script>

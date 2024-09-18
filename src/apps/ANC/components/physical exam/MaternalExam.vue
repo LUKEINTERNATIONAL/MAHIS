@@ -2,59 +2,55 @@
   <div class="container">
       <!-- Pallor -->
       <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Respiratory exam findings</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="respiratory"></basic-form>
+        <basic-form :contentData="respiratory"
+                    :initialData="initialRespiratory"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
-    <!-- Pallor -->
-    <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Is Pallor present?</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="pallor"></basic-form>
-      </ion-card-content>
-    </ion-card>
-
     <!-- Breast exam Section -->
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Breast exam result</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="breastExam"></basic-form>
+        <basic-form :contentData="breastExam"
+                    :initialData="initialBreastExam"
+
+        ></basic-form>
       </ion-card-content>
     </ion-card>
     <!-- vaginal inspection Section -->
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header"> Vaginal inspection</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="vaginalInspection"></basic-form>
+        <basic-form :contentData="vaginalInspection"
+                    :initialData="initialVaginalExam"
+
+        ></basic-form>
       </ion-card-content>
     </ion-card>
+    <!-- Pallor -->
+    <ion-card class="section">
+      <ion-card-content>
+        <basic-form :contentData="pallor"
+                    :initialData="initialPallor"
 
+        ></basic-form>
+      </ion-card-content>
+    </ion-card>
     <!-- Cervical exam -->
     <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Cervical exam conducted?</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="cervicalExam"></basic-form>
+        <basic-form :contentData="cervicalExam"
+                    :initialData="initialCervicalExam"
+
+        ></basic-form>
       </ion-card-content>
     </ion-card>
 
     <!-- oedema exam Section -->
     <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">oedema</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="oedemaPresence"></basic-form>
+        <basic-form :contentData="oedemaPresence"
+                    :initialData="initialOedema"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
 
@@ -110,9 +106,14 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      currentSection: 0, // Initialize currentSection to 0
       vValidations: '' as any,
       hasValidationErrors: [] as any,
+      initialRespiratory: [] as any,
+      initialBreastExam:[] as any,
+      initialPallor:[] as any,
+      initialOedema:[] as any,
+      initialCervicalExam:[] as any,
+      initialVaginalExam:[] as any,
     };
   },
   computed:{
@@ -125,14 +126,21 @@ export default defineComponent({
   },
   mounted(){
     const userID: any  = Service.getUserID()
-    // const breastExam=useMaternalExamStore()
-    // const oedemaPresence=useMaternalExamStore()
-    // const vaginalInspection=useMaternalExamStore()
-    // const cervicalExam=useMaternalExamStore()
+    const breastExam=useMaternalExamStore()
+    this.initialBreastExam=breastExam.getInitialBreastExam()
+    const oedemaPresence=useMaternalExamStore()
+    this.initialOedema=oedemaPresence.getInitialOedema()
+    const vaginalInspection=useMaternalExamStore()
+    this.initialVaginalExam=vaginalInspection.getInitialVaginalInspection()
+    const cervicalExam=useMaternalExamStore()
+    this.initialCervicalExam=cervicalExam.getInitialCervicalExam()
+    const pallor=useMaternalExamStore()
+    this.initialPallor=pallor.getInitialPallor()
+    const respiratory=useMaternalExamStore()
+    this.initialRespiratory=respiratory.getInitialRespiratoryExam()
     this.handleBreastExams()
     this.handleVaginalInspection()
-    this.handleCervicalExam()
-    this.handleOedema()
+
 
   },
   watch: {
@@ -151,13 +159,11 @@ export default defineComponent({
 
     cervicalExam:{
        handler(){
-         this.handleCervicalExam();
        },
       deep:true
     },
     oedemaPresence:{
       handler(){
-        this.handleOedema();
       },
       deep:true
     }
@@ -171,11 +177,7 @@ export default defineComponent({
       this.$router.push(url);
     },
     handleBreastExams(){
-      if(getCheckboxSelectedValue(this.breastExam, 'Other breast exams')=='other breast exams'){
-        modifyFieldValue(this.breastExam,'Other','displayNone', false)
-      }   else {modifyFieldValue(this.breastExam,'Other','displayNone', true)}
-
-      const checkBoxes=['Normal breast exam result', 'Bleeding', 'Nodule','Discharge', 'Flushing','Local pain','Increased temperature', 'Epigastric pain', 'Other breast exams']
+      const checkBoxes=['Normal breast exam result', 'Bleeding',"Tenderness", "Other", "Breast",'Nodule','Discharge', 'Flushing','Local pain','Increased temperature', 'Epigastric pain', 'Other breast exams']
 
       if (getCheckboxSelectedValue(this.breastExam, 'No breast exam conducted')?.checked) {
         checkBoxes.forEach((checkbox) => {
@@ -189,13 +191,9 @@ export default defineComponent({
       }
     },
     handleVaginalInspection(){
-      if(getCheckboxSelectedValue(this.vaginalInspection, 'Other')=='other'){
-        modifyFieldValue(this.vaginalInspection,'Other','displayNone', false)
-      }   else {modifyFieldValue(this.vaginalInspection,'Other','displayNone', true)}
+      const checkBoxes=['Normal vaginal exam result','Nothing abnormal observed', "Other",'Evidence of amniotic fluid', 'Genital pain','Abnormal discharge', 'Papules','Ulcers','Ulcers','Warts','Vesicles','Bleeding','Other']
 
-      const checkBoxes=['Normal vaginal exam result', 'Evidence of amniotic fluid', 'Genital pain','Abnormal discharge', 'Papules','Ulcers','Ulcers','Warts','Vesicles','Bleeding','Other']
-
-      if (getCheckboxSelectedValue(this.vaginalInspection, 'No vaginal exam done')?.checked) {
+      if (getCheckboxSelectedValue(this.vaginalInspection, 'No vaginal inspection done')?.checked) {
         checkBoxes.forEach((checkbox) => {
           modifyCheckboxValue(this.vaginalInspection, checkbox, 'checked', false);
           modifyCheckboxValue(this.vaginalInspection, checkbox, 'disabled', true);
@@ -204,32 +202,6 @@ export default defineComponent({
         checkBoxes.forEach((checkbox) => {
           modifyCheckboxValue(this.vaginalInspection, checkbox, 'disabled', false);
         });
-      }
-    },
-    handleCervicalExam(){
-      if(getRadioSelectedValue(this.cervicalExam, 'Cervical exam')=='yes'){
-        modifyFieldValue(this.cervicalExam,'Cervical dilation','displayNone', false)
-      } else {modifyFieldValue(this.cervicalExam,'Cervical dilation','displayNone', true)}
-    },
-    handleOedema(){
-        if(getRadioSelectedValue(this.oedemaPresence, 'Oedema')=='yes'){
-          modifyRadioValue(this.oedemaPresence, 'Oedema types', 'displayNone', false)
-          modifyRadioValue(this.oedemaPresence, 'Oedema severity', 'displayNone', false)
-        
-        } else {
-           modifyRadioValue(this.oedemaPresence, 'Oedema types', 'displayNone', true)
-           modifyRadioValue(this.oedemaPresence, 'Oedema severity', 'displayNone', true)}
-    },
-
-    //Method for navigating
-    goToNextSection() {
-      if (this.currentSection < 4) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
       }
     },
 
@@ -255,7 +227,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 500px; /* Adjust max-width as needed */
+  max-width: 500px;
 }
 
 @media (max-width: 1500px) {
@@ -268,7 +240,7 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+  width: 100%;
+  color: black;
 }
 </style>

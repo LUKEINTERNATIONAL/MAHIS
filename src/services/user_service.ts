@@ -149,15 +149,16 @@ export class UserService extends Service {
                     filteredPrograms.push(item);
                 } else if (item.name === "ANC PROGRAM") {
                     let ANCItem = { ...item }; // Create a new object
-                    ANCItem.url = "ANCEnrollment";
+                    ANCItem.url = "ANChome";
                     ANCItem.actionName = "+ Enroll in ANC Program";
                     filteredPrograms.push(ANCItem);
-
+                } else if (item.name==="LABOUR AND DELIVERY PROGRAM"){
                     let labourItem = { ...item }; // Create a new object
                     labourItem.url = "labour/labourHome";
                     labourItem.actionName = "+ Enroll in Labour and delivery program";
                     filteredPrograms.push(labourItem);
-
+                } 
+                else if (item.name==="PNC PROGRAM"){
                     let pncItem = { ...item }; // Create a new object
                     pncItem.url = "pnc/Home";
                     pncItem.actionName = "+ Enroll in PNC program";

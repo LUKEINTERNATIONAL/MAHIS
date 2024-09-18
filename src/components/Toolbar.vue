@@ -3,10 +3,10 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px" @click="nav('/home')">
+                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px" @click="nav('/home')">
                     <div style="display: block">
-                        <div>
-                            <b>MaHIS</b><small> ({{ programs.program.applicationName }})</small>
+                        <div style="font-size: 16px">
+                            <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                         </div>
                         <div>
                             <small class="facility-name" style="font-size: 68%">
@@ -76,35 +76,22 @@
         </ion-toolbar>
     </ion-header> -->
 
-    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed" />
+    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed"/>
 </template>
 
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonRow,
-    IonCol,
-    IonLabel,
-    IonTitle,
-    IonIcon,
-    IonToolbar,
-    IonSearchbar,
-    IonPopover,
-} from "@ionic/vue";
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonRow, IonCol, IonLabel, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
 import { notificationsOutline, personCircleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
-import userProfile from "@/views/UserManagement/userProfile.vue";
+import userProfile from "@/views/UserManagement/userProfile.vue"
 import { useProgramStore } from "@/stores/ProgramStore";
 import { useStatusStore } from "@/stores/StatusStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
-import TruncateText from "@/components/TruncateText.vue";
+import TruncateText from '@/components/TruncateText.vue'
 import { useUserStore } from "@/stores/userStore";
 import { icons } from "@/utils/svg";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
@@ -174,7 +161,7 @@ export default defineComponent({
             this.showUserProfileModal = true;
         },
         modalClosed() {
-            this.showUserProfileModal = false;
+           this.showUserProfileModal = false;
         },
     },
 });
@@ -234,7 +221,7 @@ export default defineComponent({
 }
 .compact-toolbar {
     --min-height: 11px;
-}
+  }
 
 .date-value {
     color: #ffffff;

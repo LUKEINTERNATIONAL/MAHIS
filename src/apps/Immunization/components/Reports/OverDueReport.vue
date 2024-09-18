@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <DataTable ref="dataTable" :options="options" :data="reportData" class="display nowrap" width="100%">
+                <DataTable ref="dataTable" v-if="reportData.length > 0" :options="options" :data="reportData" class="display nowrap" width="100%">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -44,17 +44,11 @@ import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, Io
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
-import { Service } from "@/services/service";
-import img from "@/utils/Img";
 import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
 import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
-import { useUserStore } from "@/stores/userStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
-import { UserService } from "@/services/user_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
-import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
@@ -63,14 +57,9 @@ import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import DynamicButton from "@/components/DynamicButton.vue";
-import AddImmunizationSessionModal from "@/components/Modal/AddImmunizationSessionModal.vue";
-import { createModal } from "@/utils/Alerts";
-import { StockService } from "@/services/stock_service";
-import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
-import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
-import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { toastWarning } from "@/utils/Alerts";
 import "datatables.net-select";
 import { PatientService } from "@/services/patient_service";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
@@ -109,24 +98,30 @@ export default defineComponent({
             isLoading: false,
         };
     },
+    
     computed: {
         ...mapState(useStartEndDate, ["startEndDate"]),
     },
-    $route: {
-        async handler() {},
-        deep: true,
-    },
     watch: {
-        stock: {
-            async handler(){
+        $route: {
+        async handler(data) {
+          if (data.name == "OverDueReport"){
+            await this.buildTableData().then(() => {
+                const table = (this.$refs.dataTable as any)?.dt;
 
-            },
-            deep: true,
+                table.on("click", ".follow-up-btn", (e: Event) => {
+                    const id = (e.target as HTMLElement ).getAttribute("data-id");
+                    this.handleFollowUp(id);
+                });
+            });
+          }   
+        },
+        deep: true,
         },
     },
     async mounted() {
         await this.buildTableData().then(() => {
-            const table = (this.$refs.dataTable as any).dt;
+            const table = (this.$refs.dataTable as any)?.dt;
 
             table.on("click", ".follow-up-btn", (e: Event) => {
                 const id = (e.target as HTMLElement ).getAttribute("data-id");
@@ -153,6 +148,7 @@ export default defineComponent({
             this.isLoading = true;
 
             try {
+                this.reportData = [];
                 const vaccineData = await getVaccinesData();
                 
                 //Loop hrough each item in the vaccineData
@@ -165,7 +161,7 @@ export default defineComponent({
                         let item = visit.client.table;
 
                         visit.missed_visits.forEach(( missed_visit: any) => {
-                            doses += missed_visit.antigens.length
+                            doses += missed_visit.antigens.length   
                         });
                         
                         this.reportData.push([
@@ -182,6 +178,7 @@ export default defineComponent({
 
             } catch(error){
                 toastWarning("An error occure while loading data.");
+                console.log(error);
             } finally {
                 this.isLoading = false; 
             }

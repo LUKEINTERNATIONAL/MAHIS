@@ -1,6 +1,14 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+import * as yup from "yup";
+
+export const ReasonForVisitValidationSchema = yup.object().shape({
+  'Number of previous visits': yup
+    .number()
+    .typeError("Previous ANC visit  can only be a Number")
+    .min(0),
+});
 
 const initialReasonForVisit = [
     {
@@ -76,8 +84,8 @@ const initialReasonForVisit = [
             },
             data: [
                 {
-                    name: "Pre-term labour",
-                    value: "Pre-term labour",
+                    name: "Preterm labour",
+                    value: "Preterm labour",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -148,8 +156,8 @@ const initialReasonForVisit = [
                     justify: "space-between",
                 },
                 {
-                    name: "Vomiting",
-                    value: "Vomiting",
+                    name: "Severe vomiting",
+                    value: "Severe vomiting",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -231,13 +239,13 @@ const initialReasonForVisit = [
             header: {
                 title: "",
                 selectedValue: "",
-                displayNone: true,
+                // displayNone: true,
                 name: "Danger signs",
             },
             data: [
                 {
-                    name: "Convulsion history",
-                    value: "Oedema",
+                    name: "Edema",
+                    value: "Edema",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -321,7 +329,7 @@ const initialReasonForVisit = [
                 class: "bold",
                 title: "Do you want to refer the woman*?",
                 selectedValue: "",
-                name: "Action for danger signs",
+                name: "Intervention on danger signs",
                 displayNext: "No",
                 displayNone: true,
             },
@@ -393,8 +401,8 @@ const initialReasonForVisit = [
             },
             data: [
                 {
-                    name: "Diarrhoea",
-                    value: "Diarrhoea",
+                    name: "Diarrhea",
+                    value: "Diarrhea",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -758,7 +766,7 @@ const initialReasonForVisit = [
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
-                title: "Does the woman have any previous ANC visit/s done at any facility?",
+                title: "Does the woman have any previous ANC contacts done at any facility?",
                 class: "bold",
                 selectedValue: "",
                 name: "Previous visits",

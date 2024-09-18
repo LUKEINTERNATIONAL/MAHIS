@@ -106,7 +106,6 @@ import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
 import MedicalFollowUp from "@/apps/ANC/components/symptomsFollowUp/MedicalFollowUp.vue";
 import PersistentBehaviour from "@/apps/ANC/components/symptomsFollowUp/PersistentBehaviour.vue";
-import PersistentSymptoms from "@/apps/ANC/components/symptomsFollowUp/PersistentSymptoms.vue";
 import CurrentPhysiologicalSymptoms from "@/apps/ANC/components/symptomsFollowUp/CurrentPhysiologicalSymptoms.vue";
 import Ipv from "@/apps/ANC/components/symptomsFollowUp/Ipv.vue";
 import FatalMovement from "@/apps/ANC/components/symptomsFollowUp/FatalMovement.vue";
@@ -176,7 +175,6 @@ export default defineComponent({
         TB,
         MedicalFollowUp,
         PersistentBehaviour,
-        PersistentSymptoms,
         CurrentPhysiologicalSymptoms,
         Ipv,
         FatalMovement,

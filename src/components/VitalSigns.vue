@@ -109,7 +109,8 @@ export default defineComponent({
             const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
             const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
             const mandatoryDone = [] as any;
-            const promises = array.map(async (item: any) => {
+          const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+          const promises = array.map(async (item: any) => {
                 const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
                 if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                     if (item == "Weight") {
@@ -134,6 +135,10 @@ export default defineComponent({
                 } else {
                     modifyFieldValue(this.vitals, item, "value", "");
                 }
+              if (item === "Respiratory rate" && age <= 5) {
+                modifyFieldValue(this.vitals, item, "required", true);
+                modifyFieldValue(this.vitals, item, "inputHeader", "Respiratory rate*");
+              }
             });
 
             await Promise.all(promises);
@@ -317,7 +322,7 @@ export default defineComponent({
             vitals.icon = BMIService.iconBMI(bmiColor);
             vitals.backgroundColor = bmiColor[0];
             vitals.textColor = bmiColor[1];
-            vitals.index = "BMI " + this.BMI?.index ?? "";
+            vitals.index = "BMI " + (this.BMI?.index ?? "");
             vitals.value = this.BMI?.result ?? "";
         },
         async updateBP(systolic: any, diastolic: any) {

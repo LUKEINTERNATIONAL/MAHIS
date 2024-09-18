@@ -20,7 +20,6 @@ import {
 import { formatCheckBoxData } from "@/services/formatServerData";
 import { Service } from "@/services/service";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import treatment from "@/apps/ANC/views/Treatment.vue";
 import { Treatment } from "@/apps/OPD/services/treatment";
 export default defineComponent({
     name: "Menu",

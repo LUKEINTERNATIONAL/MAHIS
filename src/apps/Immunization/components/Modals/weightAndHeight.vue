@@ -214,7 +214,7 @@ export default defineComponent({
             vitalsWeightHeight.icon = BMIService.iconBMI(bmiColor);
             vitalsWeightHeight.backgroundColor = bmiColor[0];
             vitalsWeightHeight.textColor = bmiColor[1];
-            vitalsWeightHeight.index = "BMI " + this.BMI?.index ?? "";
+            vitalsWeightHeight.index = "BMI " + (this.BMI?.index ?? "");
             vitalsWeightHeight.value = this.BMI?.result ?? "";
         },
         showCPD() {
