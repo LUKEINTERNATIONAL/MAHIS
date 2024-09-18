@@ -34,10 +34,25 @@ import { ref } from 'vue';
 import { icons } from '@/utils/svg';
 import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
+<<<<<<< HEAD
 import BasicForm from '@/components/BasicForm.vue';
 import { useReasonForVisitStore } from "@/apps/ANC/store/quickCheck/reasonForVisit";
 import { getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue, modifyCheckboxValue, modifyRadioValue } from "@/services/data_helpers";
+=======
+import BasicForm from '@/components/BasicForm.vue'
+import {ReasonForVisitValidationSchema, useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
+import {usePastMedicalHistoryStore} from "@/apps/OPD/stores/PastMedicalHistoryStore";
+import {
+  getCheckboxSelectedValue,
+  getRadioSelectedValue,
+  modifyCheckboxHeader, modifyCheckboxValue,
+  modifyFieldValue,
+  modifyGroupedRadioValue,
+  modifyRadioValue
+} from "@/services/data_helpers";
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
 import { validateField } from '@/services/ANC/quickCheck_validation_service';
+import { YupValidateField } from '@/services/validation_service';
 
 export default defineComponent({
   name: 'Menu',
@@ -86,6 +101,7 @@ export default defineComponent({
   setup() {
     return { checkmark, pulseOutline };
   },
+<<<<<<< HEAD
   methods: {
     validationRules(event: any) {
       return validateField(this.ReasonForVisit, event.name, (this as any)[event.name]);
@@ -95,6 +111,25 @@ export default defineComponent({
     },
     navigationMenu(url: any) {
       menuController.close();
+=======
+  methods:{
+    async handleInputData(event: any) {
+      YupValidateField(
+        this.ReasonForVisit,
+        ReasonForVisitValidationSchema,
+        event.name,
+        event.value
+      );
+    },
+    validationRules(event: any) {
+            return validateField(this.ReasonForVisit, event.name, (this as any)[event.name]);
+     },
+   async handleInputDataa(event:any){
+     this.validationRules(event)
+   },
+    navigationMenu(url: any){
+      menuController.close()
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
       this.$router.push(url);
     },
     handleFirstAntenalVisit() {
@@ -119,10 +154,41 @@ export default defineComponent({
           modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', true);
         });
 
+<<<<<<< HEAD
         // Reset and hide fields
         modifyRadioValue(this.ReasonForVisit, 'Intervention on danger signs', 'selectedValue', '');
         modifyRadioValue(this.ReasonForVisit, 'Intervention on danger signs', 'displayNone', true);
         modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', true);
+=======
+  // if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+  //       modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+  //       modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+  // } else {
+  //       modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+  //       modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+  // }
+
+  if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+    modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+     } else {
+    const clearCheckboxes = [
+      'Abnormal vaginal discharge', 'Change in blood pressure-up', 'Diarrhoea', 'Vomiting', 
+      'Genital ulcers', 'Change in blood pressure-down', 'Constipation', 'Contractions', 
+      'Vaginal bleeding', 'Intimate partner violence', 'Flu symptoms', 'Painful urination', 
+      'Headache', 'Dyspepsia', 'Frequent urination/Polyuria', 'Injury', 'Jaundice', 
+      'Mental health-Depression', 'Genital warts', 'Itchy vulva', 'Painful intercourse', 
+      'No health concerns', 'Other'
+    ];
+
+    clearCheckboxes.forEach((checkbox) => {
+      modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
+    });
+
+    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+    modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+}
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
 
         modifyFieldValue(this.ReasonForVisit, 'notes', 'displayNone', true);
         modifyFieldValue(this.ReasonForVisit, 'Number of previous visits', 'displayNone', true);
@@ -137,6 +203,7 @@ export default defineComponent({
         modifyRadioValue(this.ReasonForVisit, 'Intervention on danger signs', 'displayNone', !anyCheckboxSelected);
       }
 
+<<<<<<< HEAD
       if (getRadioSelectedValue(this.ReasonForVisit, 'Intervention on danger signs') === 'No') {
         modifyFieldValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
         modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
@@ -147,6 +214,26 @@ export default defineComponent({
     },
     handleSpecificConcernsVisit() {
       // Logic for handling specific concerns
+=======
+}
+
+
+
+
+
+
+,
+    handleSpecificConcernsVisit(){
+      // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'Specific complaint related to antenatal care') {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+      //   // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+      //
+      // } else {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+      //   modifyCheckboxValue(this.ReasonForVisit, 'Specific health concerns', 'selectedValue', '');
+      //
+      // }
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
     },
   }
 });

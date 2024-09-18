@@ -138,6 +138,7 @@ export default defineComponent({
         async handleInputData(event: any) {
             if (event?.col?.name == "Estimate Age" && !event?.col?.checked) {
                 modifyFieldValue(this.personInformation, "estimation", "displayNone", true);
+<<<<<<< HEAD
             } else if (event.name == "phoneNumber") {
                 const phone = `+${this.selectedCountry.dialCode}${event.value}`
                 const message = await Validation.validateMobilePhone(phone,this.selectedCountry);
@@ -150,6 +151,10 @@ export default defineComponent({
                 }  
                 
                 return true 
+=======
+            } else {
+                // modifyFieldValue(this.personInformation,'birthdate','disabled',true)
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
             }
             // Estimated age
             this.validationRules(event);

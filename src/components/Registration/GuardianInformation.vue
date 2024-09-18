@@ -179,6 +179,7 @@ export default defineComponent({
             return validateField(this.guardianInformation, event.name, (this as any)[event.name]);
         },
         async handleInputData(event: any) {
+<<<<<<< HEAD
             if (event.name == "guardianPhoneNumber") {
                 const phone = `+${this.selectedCountry.dialCode}${event.value}`
                 const message = await Validation.validateMobilePhone(phone,this.selectedCountry);
@@ -191,6 +192,8 @@ export default defineComponent({
                 }
                 return true 
             }
+=======
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
             this.validationRules(event);
             this.buildGuardianInformation();
 

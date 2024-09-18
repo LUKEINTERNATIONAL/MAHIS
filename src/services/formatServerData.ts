@@ -109,6 +109,7 @@ export async function formatCheckBoxData(data: any, obs_datetime: any = ConceptS
             return await Promise.all(
                 item.checkboxBtnContent.data.map(async (checkboxData: any) => {
                     if (checkboxData.checked && !checkboxData.buildConceptIgnore) {
+<<<<<<< HEAD
                         const value_coded = await ConceptService.getConceptID(checkboxData.value, true);
                         const concept_id = await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true);
                         const childNames = childData.map((item: any) => {
@@ -132,6 +133,15 @@ export async function formatCheckBoxData(data: any, obs_datetime: any = ConceptS
                                 obs_datetime: obs_datetime,
                             };
                         }
+=======
+                        return {
+                            concept_id: await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true),
+                            value_coded: await ConceptService.getConceptID(checkboxData.value, true),
+                            obs_datetime: ConceptService.getSessionDate(),
+                        };
+                    } else {
+                        return null;
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
                     }
                 })
             );

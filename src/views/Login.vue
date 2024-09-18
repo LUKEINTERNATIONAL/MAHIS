@@ -100,7 +100,12 @@ import { toastWarning, toastDanger } from "@/utils/Alerts";
 import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
+<<<<<<< HEAD
 import { getUserLocation } from "@/services/userService";
+=======
+import ProgramData from "@/Data/ProgramData";
+import { getUserLocation } from "@/services/userService"
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
 import { useUserStore } from "@/stores/userStore";
 import db from "@/db";
 
@@ -208,6 +213,7 @@ export default defineComponent({
             const store = useUserStore();
             const data = await getUserLocation();
             store.setUserFacilityName(data.name);
+<<<<<<< HEAD
             store.setCurrentUserProgram(this.program);
         },
         async setOfflinePrograms() {
@@ -218,6 +224,10 @@ export default defineComponent({
                 });
             }
         },
+=======
+            store.setCurrentUserProgram(this.program)
+        }
+>>>>>>> 779075042ecf563ada722a84e044a9c9fa2a76d2
     },
 });
 </script>

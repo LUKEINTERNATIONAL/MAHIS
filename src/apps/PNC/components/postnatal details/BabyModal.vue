@@ -174,7 +174,6 @@ export default defineComponent({
       const asphyxiaChecked = getCheckboxSelectedValue(this.babyDetails, "Asphyxia")?.checked;
       
       if (asphyxiaChecked) {
-        console.log("Asphyxia selected")
         modifyRadioValue(this.babyDetails, "Resuscitation attempt", "displayNone", false);
 
         const resuscitationAttempt = getRadioSelectedValue(this.babyDetails, "Resuscitation attempt");
