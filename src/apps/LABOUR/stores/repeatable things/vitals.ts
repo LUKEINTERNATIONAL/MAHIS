@@ -215,7 +215,7 @@ const initialVitals = [
                         },
                         {
                             inputHeader: "Pulse rate*",
-                            unit: "BMP",
+                            unit: "BPM",
                             icon: icons.pulse,
                             value: "",
                             name: "Pulse",
@@ -296,7 +296,7 @@ const initialVitals = [
                     colData: [
                         {
                             inputHeader: "Respiratory rate",
-                            unit: "BMP",
+                            unit: "BPM",
                             icon: icons.respiratory,
                             value: "",
                             name: "Respiratory rate",
