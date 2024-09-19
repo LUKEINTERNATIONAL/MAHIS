@@ -212,45 +212,47 @@ export default defineComponent({
         ...mapState(useCurrentPregnanciesStore, ["palpation", "tetanus", "lmnp", "ultrasound"]),
         ...mapState(useMedicationStore, ["Medication"]),
         ...mapState(useWomanBehaviourStore, ["dailyCaffeineIntake", "Tobacco"]),
-        LNMPKnown() {
-            return getRadioSelectedValue(this.lmnp, "LNMP Known?");
-        },
-        LMNP() {
-            return getRadioSelectedValue(this.lmnp, "LMNP");
-        },
-        lmnpEED() {
-            return getFieldValue(this.lmnp, "lmnpEED", "value");
-        },
-        lmnpGestationAge() {
-            return getFieldValue(this.lmnp, "lmnpGestationAge", "value");
-        },
-        lmnpDate() {
-            return getFieldValue(this.lmnp, "lmnpDate", "value");
-        },
-        UltrasoundDone() {
-            return getRadioSelectedValue(this.ultrasound, "Ultrasound done?");
-        },
-        UltrasoundDate() {
-            return getFieldValue(this.ultrasound, "Ultrasound", "value");
-        },
-        UltrasoundGestationAge() {
-            return getFieldValue(this.ultrasound, "specify", "value");
-        },
-        GestationAgeByPalpationKnown() {
-            return getRadioSelectedValue(this.palpation, "Gestation");
-        },
-        GestationAgeByPalpation() {
-            return getFieldValue(this.palpation, "Gestation age by palpation", "value");
-        },
-        GestationAgeUsed() {
-            return getRadioSelectedValue(this.palpation, "Gestation age to be used");
-        },
-        TetanusDosesForImmunisation() {
-            return getRadioSelectedValue(this.tetanus, "The woman received tetanus doses for immunization?");
-        },
-        NumberOfUnderImmunisedDoses() {
-            return getRadioSelectedValue(this.tetanus, "Number of tetanus doses");
-        },
+        // LNMPKnown() {
+        //     return getRadioSelectedValue(this.lmnp, "LNMP Known?");
+        // },
+        // LMNP() {
+        //     return getRadioSelectedValue(this.lmnp, "LMNP");
+        // },
+        // lmnpEED() {
+        //     return getFieldValue(this.lmnp, "lmnpEED", "value");
+        // },
+        // lmnpGestationAge() {
+        //     return getFieldValue(this.lmnp, "lmnpGestationAge", "value");
+        // },
+        // lmnpDate() {
+        //     return getFieldValue(this.lmnp, "lmnpDate", "value");
+        // },
+        // UltrasoundDone() {
+        //     return getRadioSelectedValue(this.ultrasound, "Ultrasound done?");
+        // },
+        // UltrasoundDate() {
+        //     return getFieldValue(this.ultrasound, "Ultrasound", "value");
+        // },
+        // UltrasoundGestationAge() {
+        //     return getFieldValue(this.ultrasound, "specify", "value");
+        // },
+        // GestationAgeByPalpationKnown() {
+        //     return getRadioSelectedValue(this.palpation, "Gestation");
+        // },
+        // GestationAgeByPalpation() {
+        //     return getFieldValue(this.palpation, "Gestation age by palpation", "value");
+        // },
+        // GestationAgeUsed() {
+        //     return getRadioSelectedValue(this.palpation, "Gestation age to be used");
+        // },
+        // TetanusDosesForImmunisation() {
+        //     return getRadioSelectedValue(this.tetanus, "The woman received tetanus doses for immunization?");
+        // },
+        // NumberOfUnderImmunisedDoses() {
+        //     return getRadioSelectedValue(this.tetanus, "Number of tetanus doses");
+        // },
+
+
         // tt1Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
         // tt2Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
         // tt3Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
@@ -313,9 +315,9 @@ export default defineComponent({
             // if (Validation.required(this.lmnp))
             if (
                 await this.validations(
-                    this.lmnp &&
-                        this.ultrasound &&
-                        this.palpation &&
+                    // this.lmnp &&
+                        // this.ultrasound &&
+                        // this.palpation &&
                         this.exisitingChronicHealthConditions &&
                         this.Medication &&
                         this.dailyCaffeineIntake &&
@@ -328,8 +330,8 @@ export default defineComponent({
                 if (
                     this.prevPregnancies.length > 0 
                     &&
-                    this.lmnp.length > 0 
-                    &&
+                    // this.lmnp.length > 0 
+                    // &&
                     this.exisitingChronicHealthConditions.length > 0 
                     &&
                     this.allegy.length > 0 
@@ -383,8 +385,8 @@ export default defineComponent({
                     this.$router.push("ANCHome");
                 }
             } else {
-                modifyRadioValue(this.lmnp, "LNMP Known?", "alertsErrorMassage", "Value is required");
-                modifyFieldValue(this.lmnp, "lmnpDate", "alertsErrorMassage", "Value is required");
+                // modifyRadioValue(this.lmnp, "LNMP Known?", "alertsErrorMassage", "Value is required");
+                // modifyFieldValue(this.lmnp, "lmnpDate", "alertsErrorMassage", "Value is required");
 
                 await toastWarning("Please complete all required fields");
             }

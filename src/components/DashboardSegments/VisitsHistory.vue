@@ -402,7 +402,7 @@ export default defineComponent({
             this.vitalsWeightHeight.icon = BMIService.iconBMI(bmiColor);
             this.vitalsWeightHeight.backgroundColor = bmiColor[0];
             this.vitalsWeightHeight.textColor = bmiColor[1];
-            this.vitalsWeightHeight.index = "BMI " + this.BMI?.index ?? "";
+            this.vitalsWeightHeight.index = "BMI " + (this.BMI?.index ?? "");
             this.vitalsWeightHeight.value = this.BMI?.result ?? "";
         },
     },

@@ -19,7 +19,6 @@
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonPage, IonList, IonTitle, IonToolbar, IonMenu } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
-import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
@@ -163,18 +162,7 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useDiagnosisStore, [
             "diagnoses",
-            "hypertension",
-            "preEclampsia",
-            "hyper",
-            "hiv",
-            "hepatitisB",
-            "hepatitisC",
-            "syphilis",
-            "syphilisTesting",
-            "tbScreening",
-            "GDM",
-            "diabetes",
-            "anaemia",
+          
         ]),
         ...mapState(useMedicationDispensedStore, ["iron", "folicAcid"]),
         ...mapState(useImmunizationStore, ["ttDoses", "HepBCounselling", "HepB1", "HepB2", "HepB3", "hepBReason"]),
@@ -223,7 +211,6 @@ export default defineComponent({
             toastSuccess("Diagnosis saved");
 
           }
-            console.log(await this.buildDiagnosis());
         },
         async saveMedicationDispensed() {
                 if (this.folicAcid.length > 0) {
@@ -260,46 +247,16 @@ export default defineComponent({
         async buildDiagnosis() {
             return [
                 ...(await formatCheckBoxData(this.diagnoses)),
-                ...(await formatRadioButtonData(this.hypertension)),
-                ...(await formatRadioButtonData(this.preEclampsia)),
-                ...(await formatRadioButtonData(this.hyper)),
-                ...(await formatRadioButtonData(this.hiv)),
-                ...(await formatInputFiledData(this.hiv)),
-                ...(await formatRadioButtonData(this.hepatitisB)),
-                ...(await formatRadioButtonData(this.hepatitisC)),
-                ...(await formatRadioButtonData(this.syphilis)),
-                ...(await formatRadioButtonData(this.syphilisTesting)),
-                ...(await formatRadioButtonData(this.tbScreening)),
-                ...(await formatRadioButtonData(this.GDM)),
-                ...(await formatRadioButtonData(this.diabetes)),
-                ...(await formatRadioButtonData(this.anaemia)),
+        
             ];
         },
         async buildMedicationDispensed() {
             return [
                 ...(await formatRadioButtonData(this.iron)),
-                // ...(await formatRadioButtonData(this.calcium)),
+               
             ];
         },
-        // async buildCouselling() {
-        //     return [
-        //         ...(await formatRadioButtonData(this.preEclampsia)),
-        //         // ...(await formatRadioButtonData(this.preEclampsiaCounselling)),
-        //         ...(await formatRadioButtonData(this.aspirin)),
-        //         ...(await formatRadioButtonData(this.gdm)),
-        //         ...(await formatRadioButtonData(this.gdmCounselling)),
-        //         ...(await formatRadioButtonData(this.hivRisk)),
-        //         ...(await formatRadioButtonData(this.prEp)),
-        //         //  ...(await formatRadioButtonData(this.seekingCare)),
-        //         //  ...(await formatRadioButtonData(this.dangerSigns)),
-        //         ...(await formatRadioButtonData(this.birth)),
-        //         ...(await formatRadioButtonData(this.modeOfTransport)),
-        //         ...(await formatRadioButtonData(this.intrapartum)),
-        //         ...(await formatRadioButtonData(this.birthPlace)),
-        //         ...(await formatRadioButtonData(this.postpartum)),
-        //         ...(await formatRadioButtonData(this.breastFeeding)),
-        //     ];
-        // },
+    
         async buildImmunisation() {
             return [
                 ...(await formatRadioButtonData(this.ttDoses)),

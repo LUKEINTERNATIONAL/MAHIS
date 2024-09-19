@@ -1,6 +1,14 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+import * as yup from "yup";
+
+export const ReasonForVisitValidationSchema = yup.object().shape({
+  'Number of previous visits': yup
+    .number()
+    .typeError("Previous ANC visit  can only be a Number")
+    .min(0),
+});
 
 const initialReasonForVisit = [
     {
