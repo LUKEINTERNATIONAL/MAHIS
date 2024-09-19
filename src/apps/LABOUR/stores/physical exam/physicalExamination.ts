@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
+   
+
 export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
     state: () => ({
 
@@ -99,6 +101,17 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                             }
                         ]
                     },
+                alerts: [
+                        {
+                          backgroundColor: "",
+                          status: "",
+                          icon: "",
+                          textColor: "",
+                          value: "",
+                          name: "",
+                          index: "",
+                        },
+                      ],
             },
             {
                 isFinishBtn: false,
