@@ -168,6 +168,7 @@ export default defineComponent({
               await this.saveVitals();
               resetOPDPatientData();
               this.$router.push("OPDConsultationPlan");
+              // this.$router.push("patientProfile");
             } else {
               await this.validaterowData();
               toastWarning("Please fill all required fields");

@@ -95,6 +95,6 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
             this.fetalPresentation = data
         }
     },
-    // persist:true,
+    persist:true,
 
 })

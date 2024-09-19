@@ -1,27 +1,41 @@
 <template>
   <ion-modal :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
     <ion-content>
-      <ion-title style="color: black">{{ title }}</ion-title>
-      <basic-form
-          :contentData="fetalDetails"
-          :initialData="initialData"
-          @update:selected="handleInputData"
-          @update:inputValue="handleInputData"
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Capture Fetal details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button @click="onNo()">
+              <ion-icon :icon="closeOutline()"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-      ></basic-form>
-      <div style="display: flex">
+      <ion-card>
+        <ion-card-content>
+          <basic-form
+              :contentData="fetalDetails"
+              :initialData="initialData"
+              @update:selected="handleInputData"
+              @update:inputValue="handleInputData"
+          ></basic-form>
+        </ion-card-content>
+      </ion-card>
+
+      <div class="button-container">
         <DynamicButton
             expand="block"
             @click="confirm()"
             name="Save"
-            :style="`flex:1`"
+            class="action-button"
         />
         <DynamicButton
             expand="block"
             @click="onNo()"
-            :style="`flex:1`"
             name="Cancel"
             fill="clear"
+            class="action-button"
         />
       </div>
     </ion-content>
@@ -38,22 +52,16 @@ import {
   IonButtons,
   IonButton,
   IonContent,
+  IonCard,
+  IonCardContent,
   IonIcon,
 } from "@ionic/vue";
 import { closeOutline } from "ionicons/icons";
 import DynamicButton from "@/components/DynamicButton.vue";
 import BasicForm from "@/components/BasicForm.vue";
 import { mapState } from "pinia";
-import {
-  getRadioSelectedValue,
-  modifyCheckboxHeader,
-  modifyFieldValue,
-  modifyRadioValue,
-  getCheckboxSelectedValue,
-  modifyCheckboxValue,
-} from "@/services/data_helpers";
-// import { YupValidateField } from "@/services/validation_service";
-import {useFetalAssessment} from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
+import { YupValidateField } from "@/services/validation_service";
+import { FetusDetailsValidationSchema, useFetalAssessment } from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 
 export default defineComponent({
   name: "BabyDetailsModal",
@@ -67,6 +75,8 @@ export default defineComponent({
     IonButton,
     IonContent,
     IonIcon,
+    IonCard,
+    IonCardContent,
     BasicForm,
   },
   data() {
@@ -98,29 +108,20 @@ export default defineComponent({
     },
   },
   computed: {
-    ...mapState(useFetalAssessment,["fetalDetails","fetalAssessment"]),
+    ...mapState(useFetalAssessment, ["fetalDetails", "fetalAssessment"]),
   },
-
-  watch: {
-    secondStageDetails: {
-      async handler() {
-      },
-      deep: true,
-    },
-    babyDetails: {
-      handler() {
-      },
-      deep: true,
-    },
+  mounted() {
+    const fetalDetails = useFetalAssessment();
+    this.initialData = fetalDetails.getInitialFetalDetails();
   },
   methods: {
-    async handleInputData(event: any) {
-      // YupValidateField(
-      //     this.fetalDetails,
-      //     BabyDetailsValidationSchema,
-      //     event.name,
-      //     event.value
-      // );
+    handleInputData(event: any) {
+      YupValidateField(
+          this.fetalDetails,
+          FetusDetailsValidationSchema,
+          event.name,
+          event.value
+      );
     },
     closeOutline() {
       return closeOutline;
@@ -156,7 +157,32 @@ ion-title {
 
 ion-content {
   display: flex;
-  /* flex-direction: column; */
-  /* border: black solid 8px; */
+  flex-direction: column;
+}
+
+ion-card {
+  background-color: white;
+  padding: 16px;
+  margin: 20px;
+  border-radius: 8px;
+}
+
+ion-card-content {
+  padding: 16px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 20px 0 20px;
+}
+
+.action-button {
+  flex: 1;
+  margin: 0 8px;
+}
+
+ion-button {
+  --background: var(--ion-color-danger);
 }
 </style>
