@@ -111,8 +111,24 @@ export default defineComponent({
         event.value
       );
     },
+    handleShowAlertCordPulsating(){
+      const heightValue = getRadioSelectedValue(this.firstVaginalExamination, 'Is Cord Pulsating');
+      //
+      if(heightValue < 150 && heightValue != ""){
+        this.firstVaginalExamination.
+        this.firstVaginalExamination[2].alerts.push({
+              backgroundColor: "#FFD700",
+              status: "info",
+              icon: "info-circle",
+              textColor: "#000000",
+              value: "Height is less than 150 CM",
+              name: "Height",
+            });
+            return
+      }
+      // this.vitals[2].alerts = []
+    },
     handleRupturedMembrane(){
-
       const stateOfMembrane = getRadioSelectedValue(this.firstVaginalExamination, "State of membranes");
       const cord = getRadioSelectedValue(this.firstVaginalExamination, "Cord");
       const liquor = getRadioSelectedValue(this.firstVaginalExamination, "Liquor");
@@ -157,6 +173,7 @@ export default defineComponent({
       modifyRadioValue(this.firstVaginalExamination,"Level in relation to ischial spines","displayNone",!(whatIsPresenting=="head"))
       modifyRadioValue(this.firstVaginalExamination,"Caput","displayNone",!(whatIsPresenting=="head"))
       modifyRadioValue(this.firstVaginalExamination,"Moulding","displayNone",!(whatIsPresenting=="head"))
+      modifyRadioValue(this.firstVaginalExamination,"Is Cord Pulsating","displayNone",!(cord=="presenting" || cord=="prolapsed"))
     },
   }
 });

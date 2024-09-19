@@ -7,7 +7,7 @@
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Anaemia</ion-card-title></ion-card-header>
+      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Abdominal Examination</ion-card-title></ion-card-header>
       <ion-card-content>
         <basic-form :contentData="anaemia"></basic-form>
       </ion-card-content>
@@ -112,8 +112,6 @@ export default defineComponent({
    handleVitalsChange(){
       //reset alerts
    const heightValue = getFieldValue(this.vitals, 'Height','value');
-
-   console.log({heightValue})
       //
       if(heightValue < 150 && heightValue != ""){
         this.vitals[2].alerts.push({
