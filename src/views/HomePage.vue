@@ -216,7 +216,6 @@ import { createModal } from "@/utils/Alerts";
 import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
 import { getBaseURl } from "@/utils/GeneralUti";
-import { setOfflineData } from "@/services/set_location";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
 

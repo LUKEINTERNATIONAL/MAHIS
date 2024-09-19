@@ -75,24 +75,24 @@ export default defineComponent ({
     },
     computed:{
       ...mapState(useDiagnosisStore,["diagnoses"]),
-        ...mapState(useDiagnosisStore, ["hypertension"]),
-        ...mapState(useDiagnosisStore, ["preEclampsia"]),
-        ...mapState(useDiagnosisStore, ["hyper"]),
-        ...mapState(useDiagnosisStore, ["hiv"]),
-        ...mapState(useDiagnosisStore, ["hepatitisB"]),
-        ...mapState(useDiagnosisStore, ["hepatitisC"]),
-        ...mapState(useDiagnosisStore, ["syphilis"]),
-        ...mapState(useDiagnosisStore, ["syphilisTesting"]),
-        ...mapState(useDiagnosisStore, ["tbScreening"]),
-        ...mapState(useDiagnosisStore, ["ASB"]),
-        ...mapState(useDiagnosisStore, ["GDM"]),
-        ...mapState(useDiagnosisStore, ["diabetes"]),
-        ...mapState(useDiagnosisStore, ["anaemia"]),
+        // ...mapState(useDiagnosisStore, ["hypertension"]),
+        // ...mapState(useDiagnosisStore, ["preEclampsia"]),
+        // ...mapState(useDiagnosisStore, ["hyper"]),
+        // ...mapState(useDiagnosisStore, ["hiv"]),
+        // ...mapState(useDiagnosisStore, ["hepatitisB"]),
+        // ...mapState(useDiagnosisStore, ["hepatitisC"]),
+        // ...mapState(useDiagnosisStore, ["syphilis"]),
+        // ...mapState(useDiagnosisStore, ["syphilisTesting"]),
+        // ...mapState(useDiagnosisStore, ["tbScreening"]),
+        // ...mapState(useDiagnosisStore, ["ASB"]),
+        // ...mapState(useDiagnosisStore, ["GDM"]),
+        // ...mapState(useDiagnosisStore, ["diabetes"]),
+        // ...mapState(useDiagnosisStore, ["anaemia"]),
 
     },
     mounted(){
-      this. handledeHiv()
-      this.handleCounselHiv()
+      // this. handledeHiv()
+      // this.handleCounselHiv()
       this. handleNone()
     },
     watch:{
@@ -107,12 +107,12 @@ export default defineComponent ({
         },
         deep:true
       },
-      hiv:{
-        handler(){
-          this. handledeHiv()
-          this.handleCounselHiv()
-        },deep:true
-      },
+      // hiv:{
+      //   handler(){
+      //     this. handledeHiv()
+      //     this.handleCounselHiv()
+      //   },deep:true
+      // },
 
     },
     methods :{
@@ -140,20 +140,20 @@ export default defineComponent ({
     //     modifyFieldValue(this.hypertensionReason,'other','displayNone',true)
     //   }
     // },
-    handledeHiv(){
-      if(getRadioSelectedValue(this.hiv,'counselling on HIV not provided')=='other'){
-        modifyFieldValue(this.hiv,'hiv Counselling','displayNone',false)
-      }else{
-         modifyFieldValue(this.hiv,'hiv Counselling','displayNone',true)
-      }
-    },
-    handleCounselHiv(){
-      if(getRadioSelectedValue(this.hiv,'cousellHiv')=='no'){
-        modifyRadioValue(this.hiv,'hiv','displaNone',false)
-      }else{
-        modifyRadioValue(this.hiv,'hiv','displaNone',true)
-      }
-    },
+    // handledeHiv(){
+    //   if(getRadioSelectedValue(this.hiv,'counselling on HIV not provided')=='other'){
+    //     modifyFieldValue(this.hiv,'hiv Counselling','displayNone',false)
+    //   }else{
+    //      modifyFieldValue(this.hiv,'hiv Counselling','displayNone',true)
+    //   }
+    // },
+    // handleCounselHiv(){
+    //   if(getRadioSelectedValue(this.hiv,'cousellHiv')=='no'){
+    //     modifyRadioValue(this.hiv,'hiv','displaNone',false)
+    //   }else{
+    //     modifyRadioValue(this.hiv,'hiv','displaNone',true)
+    //   }
+    // },
     // handleHperB(){
     //   if(getRadioSelectedValue(this.hepatitisReason,'hepatitis B')=='other'){
     //     modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',false)

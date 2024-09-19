@@ -75,7 +75,6 @@ export default defineComponent({
       },
     methods:{
         navigationMenu(url: any) {
-            menuController.close();
             this.$router.push(url);
         },
         handleReferral(){
