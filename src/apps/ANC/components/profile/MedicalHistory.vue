@@ -1,6 +1,17 @@
 <template>
 
     <div class="container">
+      <!-- Chronical Health conditions -->
+      <ion-card class="section">
+        <ion-card-content>
+          <basic-form
+              :contentData="exisitingChronicHealthConditions"
+              :initialData="initialData2"
+              @update:selected="handleInputData"
+              @update:inputValue="handleInputData"
+          ></basic-form>
+        </ion-card-content>
+      </ion-card>
          <!-- Past Surgeries -->
             <ion-card class="section">
             <ion-card-content>
@@ -17,18 +28,6 @@
                 <basic-form
                     :contentData="allegy"
                     :initialData="initialData1"
-                ></basic-form>
-            </ion-card-content>
-            </ion-card>
-
-        <!-- Chronical Health conditions -->
-            <ion-card class="section">
-            <ion-card-content>
-                <basic-form
-                    :contentData="exisitingChronicHealthConditions"
-                    :initialData="initialData2"
-                    @update:selected="handleInputData"
-                    @update:inputValue="handleInputData"
                 ></basic-form>
             </ion-card-content>
             </ion-card>
@@ -295,7 +294,7 @@ export default defineComponent({
         },
         handleSurgries(){
             const checkBoxes=["Dilation and currettage","Myomectomy","Removal of ovarian cystst",
-                              "Oophorectomy","Salpingectomy","Cervical cone", "Other",]
+                              "Oophorectomy","Removal of ovarian cyst","Salpingectomy","Cervical cone", "Other",]
 
                if (getCheckboxSelectedValue(this.medicalHistory, 'None')?.checked) {
                 checkBoxes.forEach((checkbox) => {
@@ -314,8 +313,8 @@ export default defineComponent({
         handleAllergies(){
 
             const checkBoxes = ['Other','PrEP(TDF)','Albendazole','Aluminium-hydroxide',
-                                 'Calcium','Chamomile','Folic-acid','Ginger','Fish',
-                                'Iron','sulfadoxine-pyrimethamine','Mebendazole','Penicillin'];
+                                 'Calcium','Sulfadoxine-Pyrimethamine','Chamomile','Folic-acid','Ginger','Fish',
+                                'Iron','Mebendazole','Penicillin'];
 
                 if (getCheckboxSelectedValue(this.allegy, 'None')?.checked) {
                 checkBoxes.forEach((checkbox) => {
@@ -393,7 +392,6 @@ export default defineComponent({
             }else{
                  modifyFieldValue(this.syphilisTest,'Reason','displayNone',true)
             }
-            console.log(getCheckboxSelectedValue(this.syphilisTest,'notDone'))
         },
 
 

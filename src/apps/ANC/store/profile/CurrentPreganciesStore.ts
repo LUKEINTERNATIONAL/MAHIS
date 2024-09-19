@@ -7,7 +7,7 @@ const initialLMNP = [
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "LNMP Known?*",
+                title: "LNMP Known?",
                 selectedValue: "",
                 name: "LNMP Known?",
                 displayNext: "Yes",
@@ -39,7 +39,7 @@ const initialLMNP = [
                         {
                             displayNone: true,
                             class: "bold",
-                            inputHeader: "LNMP date*",
+                            inputHeader: "LNMP date",
                             value: "",
                             name: "lmnpDate",
                             eventType: "input",
@@ -114,7 +114,7 @@ const initialLMNP = [
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "Ultrasound done?*",
+                title: "Ultrasound done?",
                 selectedValue: "",
                 name: "Ultrasound done?",
                 displayNext: "Yes",
@@ -146,7 +146,7 @@ const initialLMNP = [
                         {
                             class: "bold",
                             displayNone: true,
-                            inputHeader: "Date for ultrasound*",
+                            inputHeader: "Date for ultrasound",
                             value: "",
                             name: "Ultrasound",
                             minDate: "",
@@ -162,7 +162,7 @@ const initialLMNP = [
                         },
                         {
                             class: "bold",
-                            inputHeader: "Gestation age from ultrasound*",
+                            inputHeader: "Gestation age from ultrasound",
                             value: "",
                             name: "specify",
                             required: true,
@@ -230,7 +230,7 @@ const initialLMNP = [
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "Gestation age by Palpation known*?",
+                title: "Gestation age by Palpation known?",
                 selectedValue: "",
                 name: "Gestation",
                 displayNext: "Yes",
@@ -262,7 +262,7 @@ const initialLMNP = [
                     colData: [
                         {
                             displayNone: true,
-                            inputHeader: "Enter gestation age by palpation*",
+                            inputHeader: "Enter gestation age by palpation",
                             value: "",
                             class: "bold",
                             name: "Gestation age by palpation",
@@ -298,7 +298,7 @@ const initialLMNP = [
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "Gestation age to be used*",
+                title: "Gestation age to be used",
                 selectedValue: "",
                 name: "Gestation age to be used",
                 alertsErrorMassage: "",

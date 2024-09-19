@@ -8,6 +8,8 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
             <ion-spinner v-if="isLoading" name="lines"></ion-spinner>
         </ion-content>
@@ -83,10 +85,13 @@ import { resetPatientData } from "@/services/reset_data";
 import { getCheckboxSelectedValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/quickCheck_validation_service";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "Home",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -275,31 +280,31 @@ export default defineComponent({
             await this.saveQuickCheck();
             resetPatientData();
         },
-        async saveQuickCheck() {
-            const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
-            // "dangerSigns",'Pre-term labour',"None","Unconscious","Fever","Imminent delivery",
-            // "Severe headache","Vomiting", "Severe abdominal pain","Draining liquor",
-            // "Respiratory problems","Convulsion history","Convulsion history",
-            // "Epigastric pain",] //"referWoman","reasonVisitFacility","pregnancyConfirmed","pregnancyPlanned",
+      async saveQuickCheck() {
+        const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
 
-            if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
-                // && this.ConfirmPregnancy
-                if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {
-                    const userID: any = Service.getUserID();
-                    const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
-                    const encounter = await quickCheck.createEncounter();
-                    if (!encounter) return toastWarning("Unable to create quick check encounter");
-                    const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());
-                    if (!patientStatus) return toastWarning("Unable to create quick check details!");
-                    toastSuccess("Quick check details have been created");
-                }
-                this.$router.push("ANCHome");
+        if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
+          if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {
+            const userID: any = Service.getUserID();
+            const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
+            const encounter = await quickCheck.createEncounter();
+            if (!encounter) return toastWarning("Unable to create quick check encounter");
+            const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());
+            if (!patientStatus) return toastWarning("Unable to create quick check details!");
+            toastSuccess("Quick check details have been created");
+            if (getRadioSelectedValue(this.ReasonForVisit, "Intervention on danger signs")== "Yes") {
+              this.$router.push("/ancReferral");
             } else {
-                await toastWarning("Please complete all required fields");
+              this.$router.push("ANCHome");
             }
+          }
+        } else {
+          await toastWarning("Please complete all required fields");
+        }
+        console.log(await this.buildQuickCheck());
 
-            console.log(await this.buildQuickCheck());
-        },
+      },
+
         openModal() {
             createModal(SaveProgressModal);
         },

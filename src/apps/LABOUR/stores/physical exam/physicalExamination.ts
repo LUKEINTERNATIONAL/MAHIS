@@ -217,7 +217,7 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
             },
             ] as any,
 
-            otherphysicalExams:[
+        otherphysicalExams:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -291,6 +291,7 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                     {
                         header:{
                             title: 'Presentation',
+                            name: 'Presentation',
                             selectedValue: ''
                         },
                         data:[
@@ -309,29 +310,36 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Footing',
-                                value: 'footing',
+                                name: 'Breech',
+                                value: 'Breech',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
                                 name: 'Cord',
-                                value: 'cord',
+                                value: 'Cord',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Fetal back/arms/shoulders',
-                                value: 'fetal back',
+                                name: 'Compound',
+                                value: 'Compound',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'No palpable fetal part',
-                                value: 'footing',
+                                name: 'Undefined',
+                                value: 'Undefined',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Other',
+                                value: 'Other',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -339,6 +347,32 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                         ]
                     }
 
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: "",
+                classDash: "dashed_bottom_border _padding",
+
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                 
+                                    displayNone:true,
+                                    inputHeader: "Specify Presentation",
+                                    unit: "",
+                                    icon: icons.editPen,
+                                    value: "",
+                                    name: "Other",
+                                    required: true,
+                                    eventType: "input",
+                                    inputWidth: "85%",
+                                },
+                            ],
+                        },
+                    ],
+                },
             },
             {
                 selectdData: [],
@@ -393,6 +427,13 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                                 colSize: '7',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'Breech Position',
+                                value: 'Breech',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
                         ]
                     }
 
@@ -405,19 +446,13 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                     {
                         header:{
                             title: 'Contractions',
+                            name: 'Contractions',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Not felt',
-                                value: 'not felt',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Strong',
-                                value: 'strong',
+                                name: 'Mild',
+                                value: 'mild',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -430,15 +465,48 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Mild',
-                                value: 'mild',
+                                name: 'Strong',
+                                value: 'strong',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'No Contraction felt',
+                                value: 'no Contraction Felt',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                          
+                           
+                         
                         ]
                     }
 
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Number Of Contractions',
+                                        displayNone:true,
+                                        value: '',
+                                        name: 'Number of contraction',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter Number of contraction'
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
             },
             {
                 selectdData: [],
@@ -477,6 +545,6 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
             this.vitals = data
         },
     },
-    persist:true,
+    // persist:true,
 
 })

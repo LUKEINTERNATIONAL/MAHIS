@@ -5,6 +5,8 @@
       <ion-card-content>
         <basic-form :contentData="placentaExamination"
                     :initialData="initialData"
+                         @update:selected="handleInputData"
+        @update:inputValue="handleInputData"
 
         ></basic-form>
       </ion-card-content>
@@ -37,11 +39,13 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  getRadioSelectedValue,
+  modifyRadioValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
-import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
-import {useThirdStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
+
+import {PlacentaExaminationValidationSchema, useThirdStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
+import { YupValidateField } from '@/services/validation_service';
 export default defineComponent({
   name: "ThirdStageOfDelivery",
   components:{
@@ -81,11 +85,40 @@ export default defineComponent({
     this.initialData=placentaExamination.getInitial()
   },
   watch:{
+    placentaExamination : {
+      handler(){
+        this.handleCervixTearChange();
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    async handleInputData(event: any) {
+      YupValidateField(
+        this.placentaExamination,
+        PlacentaExaminationValidationSchema,
+        event.name,
+        event.value
+      );
+    },
+
+    handleCervixTearChange(){
+      const tearChange =
+        getRadioSelectedValue(this.placentaExamination, "Presentation") ==
+        "Other";
+
+      modifyRadioValue(
+        this.placentaExamination,
+        "Severity",
+        "displayNone",
+        !tearChange
+      );
+    }
+
+  }
 });
 
 </script>

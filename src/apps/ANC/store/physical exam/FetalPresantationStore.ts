@@ -12,49 +12,40 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Select fetal presentation',
                             selectedValue: '',
-                            name:'Fetal presentation'
+                            name:'Fetal presentation',
+                            class:"bold"
                         },
                         data:[
                             {
                                 value: 'Unknown presentation',
                                 name: 'Unknown',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '4',
 
                             },
                             {
                                 value: 'Cephalic',
                                 name: 'Cephalic',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '8',
 
                             },
                             {
                                 value: 'Pelvic',
                                 name: 'Pelvic',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '4',
 
                             },
                             {
                                 value: 'Transverse',
                                 name: 'Transverse',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '8',
 
                             },
                             {
                                 value: 'other',
                                 name: 'Other',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
+                                colSize: '4',
 
                             },
                         ]

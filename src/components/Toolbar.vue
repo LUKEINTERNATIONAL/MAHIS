@@ -3,20 +3,22 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title style="cursor: pointer; padding-left: 0; line-height: 20px;" @click="nav('/home')">
-                    <b>MaHIS</b><small> ({{ programs.program.applicationName }})</small>
+                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px" @click="nav('/home')">
+                    <div style="display: block">
+                        <div style="font-size: 16px">
+                            <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
+                        </div>
+                        <div>
+                            <small class="facility-name" style="font-size: 68%">
+                                {{ userFacilityName }}
+                            </small>
+                            <small style="font-size: 68%"> | {{ sessionDate }} </small>
+                        </div>
+                    </div>
                 </ion-title>
-                <ion-title style="cursor: pointer; padding-left: 0; line-height: 20px;" @click="nav('/home')">
-                    <small class="facility-name" style="font-size: 68%;">
-                        {{ userFacilityName }}
-                    </small>
-                    <small style="font-size: 68%;">
-                        | {{ sessionDate }}
-                    </small>
-                </ion-title>
-                <ion-buttons slot="end" class="search-input-desktop" style="max-width: 800px">
+                <div slot="end" class="search-input-desktop" style="width: 100%" v-if="screenWidth > 980">
                     <ToolbarSearch />
-                </ion-buttons>
+                </div>
                 <div class="notifaction_person" slot="end">
                     <ion-buttons
                         v-if="apiStatus"
@@ -54,9 +56,9 @@
                 </ion-popover>
             </ion-toolbar>
 
-            <ion-buttons slot="end" class="search-input-mobile" style="max-width: 600px">
+            <div slot="end" v-if="screenWidth <= 980" style="width: 100%">
                 <ToolbarSearch />
-            </ion-buttons>
+            </div>
         </div>
     </ion-header>
     <!-- <ion-header>
@@ -74,38 +76,27 @@
         </ion-toolbar>
     </ion-header> -->
 
-    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed" />
+    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed"/>
 </template>
 
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonRow,
-    IonCol,
-    IonLabel,
-    IonTitle,
-    IonIcon,
-    IonToolbar,
-    IonSearchbar,
-    IonPopover,
-} from "@ionic/vue";
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonRow, IonCol, IonLabel, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
 import { notificationsOutline, personCircleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
-import userProfile from "@/views/UserManagement/userProfile.vue";
+import userProfile from "@/views/UserManagement/userProfile.vue"
 import { useProgramStore } from "@/stores/ProgramStore";
 import { useStatusStore } from "@/stores/StatusStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
-import TruncateText from "@/components/TruncateText.vue";
+import TruncateText from '@/components/TruncateText.vue'
 import { useUserStore } from "@/stores/userStore";
 import { icons } from "@/utils/svg";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 export default defineComponent({
+    mixins: [ScreenSizeMixin],
     name: "Home",
     components: {
         IonContent,
@@ -170,7 +161,7 @@ export default defineComponent({
             this.showUserProfileModal = true;
         },
         modalClosed() {
-            this.showUserProfileModal = false;
+           this.showUserProfileModal = false;
         },
     },
 });
@@ -230,7 +221,7 @@ export default defineComponent({
 }
 .compact-toolbar {
     --min-height: 11px;
-}
+  }
 
 .date-value {
     color: #ffffff;
