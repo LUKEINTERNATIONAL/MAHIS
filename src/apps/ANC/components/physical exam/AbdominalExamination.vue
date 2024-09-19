@@ -7,10 +7,7 @@
       </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="fetalAssessment"
-                    @update:selected="handleInputData"
-                    @update:inputValue="handleInputData"
-        ></basic-form>
-        <basic-form :contentData="fetalPresentation"
+                    :initialData="initialData"
                     @update:selected="handleInputData"
                     @update:inputValue="handleInputData"
         ></basic-form>
@@ -93,6 +90,7 @@ export default defineComponent({
       arrayOfFeatus: [] as any,
       selectedFeatus: 0,
       fetalsDetails: [] as any,
+      initialData:[] as any
 
 
 
@@ -103,14 +101,14 @@ export default defineComponent({
     ...mapState(useFetalPresentationStore,["fetalPresentation"])
   },
   mounted() {
-    this.handleFetalAssessment();
-    this.handleFetalRate()
+    const fetalAssessment=useFetalAssessment();
+    this.initialData=fetalAssessment.getInitialFetalAssesment();
+
   },
   watch: {
     fetalAssessment: {
       handler() {
-        this.handleFetalAssessment();
-        this.handleFetalRate()
+        this.handleNumberOfFetuses()
       },
       deep: true,
     },
@@ -135,7 +133,7 @@ export default defineComponent({
       this.toggleFetalModal();
 
     },
-    handleNumberOfBabies() {
+    handleNumberOfFetuses() {
       const numberOfFeatus = getFieldValue(this.fetalAssessment, 'Number of fetuses', 'value');
       this.arrayOfFeatus = [...Array(Number(numberOfFeatus)).keys()]
     },
@@ -172,22 +170,6 @@ export default defineComponent({
     },
     checkIfSubmitted(n: any) {
       return this.fetalsDetails.find((b: any) => b.featus == n);
-    },
-    handleFetalAssessment() {
-      if (getRadioSelectedValue(this.fetalAssessment, "Number of fetuses known") == "yes") {
-        modifyFieldValue(this.fetalAssessment, "Number of fetuses", "displayNone", false);
-      } else {
-        modifyFieldValue(this.fetalAssessment, "Number of fetuses", "displayNone", true);
-      }
-    },
-    handleFetalRate() {
-      if (getRadioSelectedValue(this.fetalAssessment, "Fetal heartbeat") == "yes") {
-        modifyFieldValue(this.fetalAssessment, "Fetal heart rate", "displayNone", false);
-        modifyFieldValue(this.fetalAssessment, "Repeated fetal rate", "displayNone", false);
-      } else {
-        modifyFieldValue(this.fetalAssessment, "Fetal heart rate", "displayNone", false);
-        modifyFieldValue(this.fetalAssessment, "Repeated fetal rate", "displayNone", false);
-      }
     },
   },
 });
