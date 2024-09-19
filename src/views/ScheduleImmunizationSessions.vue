@@ -60,9 +60,9 @@ const calendarApp = createCalendar({
     isDark: false,
     isResponsive: true,
     views: [
+    createViewMonthGrid(),
         createViewDay(),
         createViewWeek(),
-        createViewMonthGrid(),
         createViewMonthAgenda(),
     ],
     events: [],
