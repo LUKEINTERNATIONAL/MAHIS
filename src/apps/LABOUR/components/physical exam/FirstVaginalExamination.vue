@@ -70,6 +70,7 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      showPulsingAlert: false as boolean
 
     };
   },
@@ -83,9 +84,14 @@ export default defineComponent({
       handler(){
         this.handleShow();
         this.handleRupturedMembrane();
-        this.handleShowAlertCordPulsating();
+        this.showPulsingAlert = getRadioSelectedValue(this.firstVaginalExamination, 'Is Cord Pulsating')=="yes"
       },
       deep:true
+    },
+    showPulsingAlert: {
+      handler(){
+        this.handleShowAlertCordPulsating();
+      }
     }
   },
   setup() {
@@ -114,16 +120,16 @@ export default defineComponent({
     },
     handleShowAlertCordPulsating(){
       const value = getRadioSelectedValue(this.firstVaginalExamination, 'Is Cord Pulsating');
-      const inputItem =this.firstVaginalExamination.find((item:any)=>item?.radioBtnContent?.header?.name=="Is the Cord Pulsating");
+      const inputItem =this.firstVaginalExamination.find((item:any)=>item?.radioBtnContent?.header?.name=="Is Cord Pulsating");
 
-      if(value== ""){
+      if(value== "yes"){
         inputItem.alerts.push({
-              backgroundColor: "#FFD700",
+              backgroundColor: "#FF9999",
               status: "info",
               icon: "info-circle",
               textColor: "#000000",
-              value: "Height is less than 150 CM",
-              name: "Height",
+              value: "emergency",
+              name: "Is Cord Pulsating",
             });
             return
       }
