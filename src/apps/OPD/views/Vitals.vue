@@ -174,8 +174,8 @@ export default defineComponent({
               toastWarning("Please fill all required fields");
             }
           } else {
-            // this.$router.push("OPDConsultationPlan");
-            this.$router.push("patientProfile");
+            this.$router.push("OPDConsultationPlan");
+            // this.$router.push("patientProfile");
           }
         } catch (error) {
           console.error("Error in saveData: ", error);
