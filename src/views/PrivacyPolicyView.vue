@@ -4,7 +4,7 @@
     </div>
   </template>
   
-  <script lang="ts">
+  <script>
   import PrivacyPolicy from "@/components/PrivacyPolicy.vue";
   
   export default {

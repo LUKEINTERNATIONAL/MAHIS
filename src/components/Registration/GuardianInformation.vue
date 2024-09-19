@@ -180,11 +180,15 @@ export default defineComponent({
         },
         async handleInputData(event: any) {
             if (event.name == "guardianPhoneNumber") {
-                const message = await Validation.validateMobilePhone(event.value,this.selectedCountry);
+                const phone = `+${this.selectedCountry.dialCode}${event.value}`
+                const message = await Validation.validateMobilePhone(phone,this.selectedCountry);
                 this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = null;
                 if(!message.includes("+")){
                     this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
                 }  
+                else{
+                    modifyFieldValue(this.guardianInformation, "guardianPhoneNumber", "value", phone);
+                }
                 return true 
             }
             this.validationRules(event);

@@ -1,13 +1,32 @@
 import { ConceptService } from "@/services/concept_service";
 
-export async function formatRadioButtonData(data: any) {
+export async function formatRadioButtonData(data: any, date: any = ConceptService.getSessionDate(), childData = []) {
     const buildObjPromises: Promise<any>[] = data.map(async (item: any) => {
         if (item && item.radioBtnContent && item.radioBtnContent.header && item.radioBtnContent.header.selectedValue) {
-            return {
-                concept_id: await ConceptService.getConceptID(item.radioBtnContent.header.name, true),
-                value_coded: await ConceptService.getConceptID(item.radioBtnContent.header.selectedValue, true),
-                obs_datetime: ConceptService.getSessionDate(),
-            };
+            const value_coded = await ConceptService.getConceptID(item.radioBtnContent.header.selectedValue, true);
+            const concept_id = await ConceptService.getConceptID(item.radioBtnContent.header.name, true);
+            const obs_datetime = date || ConceptService.getSessionDate();
+            const childNames = childData.map((item: any) => {
+                return {
+                    concept_id: value_coded,
+                    value_coded: item.drug_inventory_id,
+                    obs_datetime: obs_datetime,
+                };
+            });
+            if (childData) {
+                return {
+                    concept_id,
+                    value_coded,
+                    obs_datetime,
+                    child: childNames,
+                };
+            } else {
+                return {
+                    concept_id,
+                    value_coded,
+                    obs_datetime,
+                };
+            }
         } else {
             return null;
         }
@@ -86,33 +105,33 @@ async function getValue(element: any, value: any, obs_datetime: any, childData =
 }
 export async function formatCheckBoxData(data: any, obs_datetime: any = ConceptService.getSessionDate(), childData = []) {
     const buildObjPromises: Promise<any>[] = data.flatMap(async (item: any) => {
-        if (item?.checkboxBtnContent?.data && item.checkboxBtnContent.data.length > 0 && childData) {
+        if (item?.checkboxBtnContent?.data && item.checkboxBtnContent.data.length > 0) {
             return await Promise.all(
                 item.checkboxBtnContent.data.map(async (checkboxData: any) => {
-                    const value_coded = await ConceptService.getConceptID(checkboxData.value, true);
-                    const concept_id = await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true);
-                    const childNames = childData.map((item: any) => {
-                        return {
-                            concept_id: value_coded,
-                            value_coded: item.drug_inventory_id,
-                            obs_datetime: obs_datetime,
-                        };
-                    });
                     if (checkboxData.checked && !checkboxData.buildConceptIgnore) {
-                        return {
-                            concept_id,
-                            value_coded: value_coded,
-                            obs_datetime,
-                            child: childNames,
-                        };
-                    } else if (checkboxData.checked && !checkboxData.buildConceptIgnore) {
-                        return {
-                            concept_id: concept_id,
-                            value_coded: value_coded,
-                            obs_datetime: obs_datetime,
-                        };
-                    } else {
-                        return null;
+                        const value_coded = await ConceptService.getConceptID(checkboxData.value, true);
+                        const concept_id = await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true);
+                        const childNames = childData.map((item: any) => {
+                            return {
+                                concept_id: value_coded,
+                                value_coded: item.drug_inventory_id,
+                                obs_datetime: obs_datetime,
+                            };
+                        });
+                        if (childData) {
+                            return {
+                                concept_id,
+                                value_coded: value_coded,
+                                obs_datetime,
+                                child: childNames,
+                            };
+                        } else {
+                            return {
+                                concept_id: concept_id,
+                                value_coded: value_coded,
+                                obs_datetime: obs_datetime,
+                            };
+                        }
                     }
                 })
             );

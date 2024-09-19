@@ -8,7 +8,6 @@ import { Program } from "../interfaces/program";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { ProgramService } from "@/services/program_service";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import ProgramData from "@/Data/ProgramData";
 import { OrderService } from "@/services/order_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 
@@ -86,6 +85,10 @@ export class UserService extends Service {
         return super.getJson("users", { role: "Provider" });
     }
 
+    static getUsersByRole( role: any) {
+        return super.getJson("users" , role);
+    }
+
     static getSystemUsageByUsers(startDate: string, endDate: string) {
         return super.getJson("user_system_usage", {
             start_date: startDate,
@@ -146,15 +149,16 @@ export class UserService extends Service {
                     filteredPrograms.push(item);
                 } else if (item.name === "ANC PROGRAM") {
                     let ANCItem = { ...item }; // Create a new object
-                    ANCItem.url = "ANCEnrollment";
+                    ANCItem.url = "ANChome";
                     ANCItem.actionName = "+ Enroll in ANC Program";
                     filteredPrograms.push(ANCItem);
-
+                } else if (item.name==="LABOUR AND DELIVERY PROGRAM"){
                     let labourItem = { ...item }; // Create a new object
                     labourItem.url = "labour/labourHome";
                     labourItem.actionName = "+ Enroll in Labour and delivery program";
                     filteredPrograms.push(labourItem);
-
+                } 
+                else if (item.name==="PNC PROGRAM"){
                     let pncItem = { ...item }; // Create a new object
                     pncItem.url = "pnc/Home";
                     pncItem.actionName = "+ Enroll in PNC program";

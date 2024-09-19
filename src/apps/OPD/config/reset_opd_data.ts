@@ -40,21 +40,25 @@ export async function resetOPDPatientData() {
     const pastMedicalHistoryStore = usePastMedicalHistoryStore();
     const OPDDiagnosisStore = useOPDDiagnosisStore();
 
-    const levelOfConsciousness = useLevelOfConsciousnessStore();
-    const pregnancy = usePregnancyStore();
-    const physicalExamination = usePhysicalExaminationStore();
-    const allegy = useAllegyStore();
+    const levelOfConsciousness = useLevelOfConsciousnessStore()
+    const pregnancy = usePregnancyStore()
+    const physicalExamination = usePhysicalExaminationStore()
+    const allegy = useAllegyStore()
+
 
     levelOfConsciousness.reset();
-    pregnancy.setPregnancy(pregnancy.getPregnancy());
+    pregnancy.setPregnancy(pregnancy.getPregnancy())
     pastMedicalHistoryStore.setPastMedicalHistory(pastMedicalHistoryStore.getInitial());
     physicalExamination.setPhysicalExamStore(physicalExamination.getInitial());
     //allegy.selectedMedicalAllergiesList(allegy)
 
+    
     opdVitals.$reset();
+
 
     presentingComplaintsStore.setPresentingComplaints(presentingComplaintsStore.getInitial());
 
+    
     OPDDiagnosisStore.setOPDDiagnosis(OPDDiagnosisStore.getInitial());
 
     vitals.setVitals(vitals.getInitialVitals());

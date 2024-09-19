@@ -45,7 +45,7 @@ export default defineComponent({
     },
     methods:{
         handleNone(){
-        const checkBoxes=["Ongoing stress","Injury to abdomen","Partner's intrusive during consultations","Misuse of alcohol","Unspecified harmful behaviours","Thoughts of self-harm","Unwanted Pregnancies","Misuse of drugs",]
+        const checkBoxes=["Ongoing stress","Unspecified Harmful Behaviours","Unwanted pregnancies","Injury to abdomen","Partner's intrusive during consultations","Misuse of alcohol","Unspecified harmful behaviours","Thoughts of self-harm","Unwanted Pregnancies","Misuse of drugs",]
 
       if (getCheckboxSelectedValue(this.ipv, 'None')?.checked) {
         checkBoxes.forEach((checkbox) => {

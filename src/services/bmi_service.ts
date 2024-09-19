@@ -6,16 +6,14 @@ export interface Bmi {
 
 function removeQuotes(str: string) {
     if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
-        return str.substring(1, str.length - 1);
+      return str.substring(1, str.length - 1);
     }
     return str;
 }
 export class BMIService {
     static async getBMIData(): Promise<Bmi> {
-        let baseURL = removeQuotes(localStorage.baseURL);
-        if (baseURL.length > 0) {
-            baseURL = "/" + baseURL;
-        }
+        let  baseURL = removeQuotes(localStorage.baseURL);
+        if (baseURL.length > 0) {baseURL = '/'+baseURL}
         const req = await fetch(`${baseURL}/bmi.json`);
         return req.json();
     }
