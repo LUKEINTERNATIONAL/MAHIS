@@ -161,7 +161,7 @@ export default defineComponent({
     async mounted() {
       await this.getDrugs()
       await this.initReport()
-  },
+    },
     methods: {
       selectSection(section: string) {
         this.selectedSection = section;

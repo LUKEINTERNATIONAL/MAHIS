@@ -11,10 +11,10 @@
       <ion-row>
         <ion-col style="margin-left: 10px; margin-right: 10px;">
             <BasicInputField
-              placeholder=""
+              placeholder="find client"
               :icon="searchOutline"
               :inputValue="search_text"
-              @update:inputmodalControllerValue="searchTextUpdated"
+              @update:inputValue="searchTextUpdated"
             />
             <div>
                 <ion-label v-if="search_txt_error" class="error-label">
@@ -25,7 +25,7 @@
       </ion-row>
 
       <ion-row>
-      <ion-col v-for="person in people" :key="person.id">
+      <ion-col v-for="person in display_pips" :key="person.id">
         <ion-card class="person-card">
           <ion-card-content>
             <div class="card-header">
@@ -98,7 +98,11 @@ export default defineComponent({
       searchOutline,
       search_text: '',
       search_txt_error: false,
+      display_pips: [] as any,
     };
+  },
+  async mounted() {
+    this.display_pips = this.$props.people
   },
   methods: {
     getBirthdateAge(dateString: string) {
@@ -118,27 +122,32 @@ export default defineComponent({
           (await modal).dispatchEvent(new CustomEvent('view-client', { detail: {client_id} }));
       }
     },
+    isValidString(input: string) {
+      const regex = /^[a-zA-Z\s]*$/;
+      return regex.test(input);
+    },
     searchTextUpdated(event: any) {
-        // const reason = event.target.value
-        // this.search_text = reason
+        const reason = event.target.value
+        this.search_text = reason
 
-        // if (this.isValidString(this.search_text) == true) {
-        //     this.search_txt_error = false
-        //     this.searchFirstLastName(this.search_text)
-        // } else {
-        //     this.search_txt_error = true
-        // }
+        if (this.isValidString(this.search_text) == true) {
+            this.search_txt_error = false
+            this.searchFirstLastName(this.search_text)
+        } else {
+            this.search_txt_error = true
+        }
+        this.$props
     },
     searchFirstLastName(srch_str: string) {
-            // const people_array_tem = [] as any
-            // const nameRegex = new RegExp(srch_str, 'i');
-            // this.people_cpy.forEach((person: any) => {
-            //     if (nameRegex.test(person.name) == true) {
-            //         people_array_tem.push(person)
-            //     }
-            // })
-            // this.people = people_array_tem;
-      }
+      const people_array_temp = [] as any
+      const nameRegex = new RegExp(srch_str, 'i');
+      this.people.forEach((person: any) => {
+          if (nameRegex.test(person.given_name) == true || nameRegex.test(person.family_name) == true) {
+              people_array_temp.push(person)
+          }
+      })
+      this.display_pips = [];
+    }
   },
 });
 </script>
