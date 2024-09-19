@@ -83,6 +83,7 @@ export default defineComponent({
       handler(){
         this.handleShow();
         this.handleRupturedMembrane();
+        this.handleShowAlertCordPulsating();
       },
       deep:true
     }
@@ -112,11 +113,11 @@ export default defineComponent({
       );
     },
     handleShowAlertCordPulsating(){
-      const heightValue = getRadioSelectedValue(this.firstVaginalExamination, 'Is Cord Pulsating');
-      //
-      if(heightValue < 150 && heightValue != ""){
-        this.firstVaginalExamination.
-        this.firstVaginalExamination[2].alerts.push({
+      const value = getRadioSelectedValue(this.firstVaginalExamination, 'Is Cord Pulsating');
+      const inputItem =this.firstVaginalExamination.find((item:any)=>item?.radioBtnContent?.header?.name=="Is the Cord Pulsating");
+
+      if(value== ""){
+        inputItem.alerts.push({
               backgroundColor: "#FFD700",
               status: "info",
               icon: "info-circle",
@@ -126,7 +127,7 @@ export default defineComponent({
             });
             return
       }
-      // this.vitals[2].alerts = []
+      inputItem.alerts = []
     },
     handleRupturedMembrane(){
       const stateOfMembrane = getRadioSelectedValue(this.firstVaginalExamination, "State of membranes");

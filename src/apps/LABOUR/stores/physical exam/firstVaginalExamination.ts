@@ -297,7 +297,6 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     }
 
             },
-
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -506,7 +505,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                          
                         ],
                     },
-                    alerts: [
+                alerts: [
                         {
                           backgroundColor: "",
                           status: "",
