@@ -2,6 +2,17 @@ import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 import _, {initial} from "lodash";
 import {pencil} from "ionicons/icons";
+import * as yup from "yup";
+
+export const MartenalExamValidationSchema=yup.object().shape({
+    'Amniotic fluid':yup.number()
+        .required()
+        .typeError("Value can only be a number")
+        .min(0,)
+        .max(5000)
+        .label("Amniotic fluid")
+    ,
+})
 const initialRespiratoryExam=[
     {
         selectdData: [],

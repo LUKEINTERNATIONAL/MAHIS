@@ -167,7 +167,7 @@ export default defineComponent({
         ...mapState(useMaternalExamStore,["pallor", "breastExam", "vaginalInspection", "cervicalExam", "oedemaPresence"]),
         ...mapState(useFetalAssessment, ["fetalAssessment"]),
         ...mapState(useFetalPresentationStore,["fetalPresentation"]),
-        ...mapState(usePresentingSigns,["signsOfInjury", "clinicalEnquiry", "intimateViolence"]),
+        ...mapState(usePresentingSigns,["presentingSigns"]),
 
     },
     mounted() {
@@ -239,7 +239,8 @@ export default defineComponent({
                 this.saveFetalAssessment();
                 this.saveFetalPresentation();
                 this.savePresentingSigns();
-                resetPatientData();
+               this.$router.push("ANChome");
+              resetPatientData();
                 toastSuccess("Physical examination data saved successfully");
             } else {
                 toastWarning("Please complete all required fields");
@@ -282,14 +283,9 @@ export default defineComponent({
 
     async buildPresentingSigns() {
         return [
-        ...(await formatInputFiledData(this.signsOfInjury)),
-        ...(await formatRadioButtonData(this.signsOfInjury)),
-        ...(await formatRadioButtonData(this.clinicalEnquiry)),
-        ...(await formatInputFiledData(this.clinicalEnquiry)),
-        ...(await formatRadioButtonData(this.intimateViolence)),
-        ...(await formatInputFiledData(this.intimateViolence)),
-
-        
+        ...(await formatInputFiledData(this.presentingSigns)),
+        ...(await formatRadioButtonData(this.presentingSigns)),
+        ...(await formatCheckBoxData(this.presentingSigns)),
         ]
 
     },

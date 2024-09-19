@@ -1,6 +1,37 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+import * as yup from "yup";
+
+export const FetalAssessmentValidation=yup.object().shape({
+    'Number of fetuses':yup.number()
+        .required()
+        .typeError("Value can only be a number")
+        .min(0,)
+        .max(5),
+    'Symphysis-fundal height':yup.number()
+        .typeError("SFH can only be a number")
+        .min(0)
+        .max(5000)
+        .required()
+        .label("Symphysis-fundal height")
+})
+
+export const FetusDetailsValidationSchema=yup.object().shape({
+    'Fetal heart rate'    :yup.number()
+        .required()
+        .typeError("Value can only be a number")
+        .min(0)
+        .max(200)
+        .label("Fetal heart rate"),
+    'Repeated fetal rate'    :yup.number()
+        .required()
+        .typeError("Value can only be a number")
+        .min(0)
+        .max(200)
+        .label("Repeated fetal rate")
+    }
+)
 
 const initialFetalAssesment=[
     {
@@ -43,16 +74,17 @@ const initialFetalAssesment=[
                 title: "Is number of fetuses known?",
                 selectedValue: "",
                 name: "Number of fetuses known",
-                class:"bold"
+                class:"bold",
+                displayNext:"Yes"
             },
             data: [
                 {
-                    value: "yes",
+                    value: "Yes",
                     name: "Yes",
                     colSize: "2",
                 },
                 {
-                    value: "no",
+                    value: "No",
                     name: "No",
                     colSize: "2",
                 },
@@ -61,6 +93,7 @@ const initialFetalAssesment=[
     },
 
     {
+        childName:"Number of fetuses known",
         sectionHeader: "",
         classDash: "dashed_bottom_border",
         header: {
@@ -103,12 +136,12 @@ const initialFetalDetails=[
             },
             data: [
                 {
-                    value: "yes",
+                    value: "Yes",
                     name: "Yes",
                     colSize: "2",
                 },
                 {
-                    value: "no",
+                    value: "No",
                     name: "No",
                     colSize: "2",
                 },
@@ -116,6 +149,7 @@ const initialFetalDetails=[
         },
     },
     {
+        childName:"Fetal heartbeat",
         sectionHeader: "",
         classDash: "dashed_bottom_border",
         header: {
@@ -142,6 +176,7 @@ const initialFetalDetails=[
         },
     },
     {
+        childName:"Fetal heartbeat",
         sectionHeader: "",
         classDash: "dashed_bottom_border",
         header: {
@@ -168,6 +203,7 @@ const initialFetalDetails=[
         },
     },
     {
+        childName:"Fetal heartbeat",
         selectdData: [],
         classDash: "dashed_bottom_border",
         radioBtnContent: {
@@ -192,7 +228,97 @@ const initialFetalDetails=[
             ],
         },
     },
-]
+        {
+            selectdData: [],
+            classDash: 'dashed_bottom_border',
+            radioBtnContent:
+                {
+                    header:{
+                        title: 'Select fetal presentation',
+                        selectedValue: '',
+                        name:'Fetal presentation',
+                        class:"bold",
+                        displayNext:"Other"
+                    },
+                    data:[
+                        {
+                            value: 'Unknown presentation',
+                            name: 'Unknown',
+                            colSize: '3',
+
+                        },
+                        {
+                            value: 'Cephalic',
+                            name: 'Cephalic',
+                            colSize: '9',
+
+                        },
+                        {
+                            value: 'Pelvic',
+                            name: 'Pelvic',
+                            colSize: '3',
+
+                        },
+                        {
+                            value: 'Transverse',
+                            name: 'Transverse',
+                            colSize: '9',
+
+                        },
+                        {
+                            value: 'Breech',
+                            name: 'Breech',
+                            colSize: '3',
+
+                        },
+                        {
+                            value: 'Other',
+                            name: 'Other',
+                            colSize: '9',
+
+                        },
+                    ]
+                }
+
+
+        },
+
+        {
+            childName:"Fetal presentation",
+            isFinishBtn: false,
+            sectionHeader: '',
+            classDash: '',
+
+            header:{
+                title: '',
+                selectedValue: '',
+
+            },
+
+            data:
+                {
+                    rowData:[
+                        {
+                            colData: [
+                                {   displayNone:true,
+                                    inputHeader: 'specify the Fetal presentation',
+                                    unit: '',
+                                    icon: icons.editPen,
+                                    value: '',
+                                    name: 'Other (specify)',
+                                    required: true,
+                                    eventType: 'input',
+                                    inputWidth: "100%",
+
+                                },
+
+                            ]
+                        }
+                    ]
+                },
+        },
+
+] as any
 
 export const useFetalAssessment = defineStore("fetalAssessment", {
     state: () => ({
@@ -202,6 +328,9 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
     actions: {
         setFetalAssessment(data: any) {
             this.fetalAssessment = data;
+        },
+        setFetalDetails(details = initialFetalDetails) {
+            this.fetalDetails = [..._.cloneDeep(details)]
         },
         getInitialFetalAssesment(){
             const data= _.cloneDeep(initialFetalAssesment);
