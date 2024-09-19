@@ -50,7 +50,7 @@
                                 <ion-label>Edit</ion-label>
                             </ion-item>
                             <ion-item button @click="handleDelete(schedule)">
-                                <ion-label>Delete</ion-label>
+                                <ion-label>Cancel</ion-label>
                             </ion-item>
                         </ion-list>
                     </ion-content>
