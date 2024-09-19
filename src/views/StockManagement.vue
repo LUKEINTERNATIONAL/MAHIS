@@ -38,7 +38,7 @@
 
                         <div>
                             <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openMoreDetailsModal(item)">
-                                More Details Stock
+                                More Stock Details
                             </ion-button>
                         </div>
                     </div>

@@ -84,8 +84,8 @@ const initialReasonForVisit = [
             },
             data: [
                 {
-                    name: "Preterm labour",
-                    value: "Preterm labour",
+                    name: "Pre-term labour",
+                    value: "Pre-term labour",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -156,8 +156,8 @@ const initialReasonForVisit = [
                     justify: "space-between",
                 },
                 {
-                    name: "Severe vomiting",
-                    value: "Severe vomiting",
+                    name: "Vomiting",
+                    value: "Vomiting",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -239,13 +239,13 @@ const initialReasonForVisit = [
             header: {
                 title: "",
                 selectedValue: "",
-                // displayNone: true,
+                displayNone: true,
                 name: "Danger signs",
             },
             data: [
                 {
-                    name: "Edema",
-                    value: "Edema",
+                    name: "Convulsion history",
+                    value: "Oedema",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -329,7 +329,7 @@ const initialReasonForVisit = [
                 class: "bold",
                 title: "Do you want to refer the woman*?",
                 selectedValue: "",
-                name: "Intervention on danger signs",
+                name: "Action for danger signs",
                 displayNext: "No",
                 displayNone: true,
             },
@@ -401,8 +401,8 @@ const initialReasonForVisit = [
             },
             data: [
                 {
-                    name: "Diarrhea",
-                    value: "Diarrhea",
+                    name: "Diarrhoea",
+                    value: "Diarrhoea",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -766,7 +766,7 @@ const initialReasonForVisit = [
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
-                title: "Does the woman have any previous ANC contacts done at any facility?",
+                title: "Does the woman have any previous ANC visit/s done at any facility?",
                 class: "bold",
                 selectedValue: "",
                 name: "Previous visits",
