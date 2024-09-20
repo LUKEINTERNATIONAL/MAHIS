@@ -100,7 +100,7 @@ import DiagnosisTreatment from "@/apps/ANC/components/Treatment/DiagnosisTreatme
 import MedicationDispensed from "@/apps/ANC/components/Treatment/MedicationDispensed.vue";
 import DiagnosisCounselling from "@/apps/ANC/components/Treatment/DiagnosisCounselling.vue";
 import Immunization from "@/apps/ANC/components/Treatment/Immunization.vue";
-import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
+// import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
 import Deworming from "@/apps/ANC/components/Treatment/Deworming.vue";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
@@ -186,7 +186,7 @@ export default defineComponent({
         DiagnosisTreatment,
         DiagnosisCounselling,
         Immunization,
-        IntimatePartner,
+        // IntimatePartner,
         Deworming,
         HeadAssessment,
         ANCTreatment,

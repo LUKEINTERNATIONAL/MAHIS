@@ -195,7 +195,7 @@ export default defineComponent({
     },
 
     validationRules(event: any) {
-      return validateField(this.deliveryDetails, event.name, this[event.name]);
+      return validateField(this.deliveryDetails, event.name, event.name);
     },
 
     async handleInputData(event: any) {
