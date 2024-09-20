@@ -52,15 +52,15 @@ export class LocationService extends Service {
         return super.getJson("/traditional_authorities", { district_id: villageID, name, page_size: 1000 });
     }
 
-    static getAllDistricts() {
-        return super.getJson("/districts", { paginate: false });
+    static async getAllDistricts() {
+        return await super.getJson("/districts", { paginate: false });
     }
 
-    static getAllVillages() {
-        return super.getJson("/villages", { paginate: false });
+    static async getAllVillages() {
+        return await super.getJson("/villages", { paginate: false });
     }
 
-    static getAllTraditionalAuthorities() {
-        return super.getJson("/traditional_authorities", { paginate: false });
+    static async getAllTraditionalAuthorities() {
+        return await super.getJson("/traditional_authorities", { paginate: false });
     }
 }
