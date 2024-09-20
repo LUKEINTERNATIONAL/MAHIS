@@ -1,0 +1,33 @@
+name: Build and Test
+
+on:
+  push: 
+    branches:
+      - '**'  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.17.0' 
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run Build
+      run: npm run build 
+
+# 
+    # - name: Upload logs if the build fails
+    #   if: failure()
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: build-logs
+    #     path: logs/  
