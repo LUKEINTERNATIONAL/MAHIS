@@ -1,0 +1,38 @@
+name: Build Vue App
+
+# Trigger the workflow on push to specific branches (e.g., main or development)
+on:
+    push:
+        branches:
+            - main # Replace 'main' with your branch name if different
+            - develop # Optional, if you want to trigger on other branches as well
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            # Checkout the code from the repository
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            # Set up Node.js version (you can specify the version your project needs)
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "16" # or specify the required version
+
+            # Install npm dependencies
+            - name: Install dependencies
+              run: npm install
+
+            # Build the Vue app
+            - name: Build Vue app
+              run: npm run build
+
+            # (Optional) Upload build artifacts for use in other workflows or deployment
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: build
+                  path: dist/ # Assuming your built files are in the dist/ folder
