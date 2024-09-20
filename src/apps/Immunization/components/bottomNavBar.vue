@@ -2,24 +2,34 @@
     <div class="pagination-container" :class="{ 'mobile': isMobileView }">
       <div class="pagination-controls">
         <div class="items-per-page">
-          <label for="itemsPerPage">Items per page:</label>
-          <select id="itemsPerPage" v-model="localItemsPerPage" @change="updatePagination">
-            <option v-for="option in itemsPerPageOptions" :key="option" :value="option">
-              {{ option }}
-            </option>
-          </select>
+          <ion-row>
+            <ion-col>
+              <label for="itemsPerPage">Items per page:</label>
+              <select id="itemsPerPage" v-model="localItemsPerPage" @change="updatePagination">
+                <option v-for="option in itemsPerPageOptions" :key="option" :value="option">
+                  {{ option }}
+                </option>
+              </select>
+            </ion-col>
+          </ion-row>
         </div>
         <div class="pagination-info">
           Showing {{ startItem }} - {{ endItem }} of {{ totalItems }}
         </div>
         <div class="page-nav">
-          <label for="currentPage">Page</label>
-          <select id="currentPage" v-model="localCurrentPage" @change="updatePagination">
-            <option v-for="page in totalPages" :key="page" :value="page">
-              {{ page }}
-            </option>
-          </select>
-          of {{ totalPages }}
+          <ion-row>
+            <ion-col>
+              <label for="currentPage">Page</label>
+              <select id="currentPage" v-model="localCurrentPage" @change="updatePagination">
+                <option v-for="page in totalPages" :key="page" :value="page">
+                  {{ page }}
+                </option>
+              </select>
+              of {{ totalPages }}
+            </ion-col>
+
+          </ion-row>
+
         </div>
       </div>
       <div class="navigation-buttons">
@@ -34,6 +44,7 @@
   </template>
   
   <script lang="ts">
+  import { IonCol, IonRow } from "@ionic/vue"
   import { defineComponent, ref, computed, watch, onMounted, onUnmounted } from 'vue';
   
   interface PaginationUpdateEvent {
@@ -43,6 +54,7 @@
   
   export default defineComponent({
     name: 'bottomNavBar',
+    component: { IonCol, IonRow },
     props: {
       totalItems: {
         type: Number,
@@ -61,7 +73,7 @@
     setup(props, { emit }) {
       const localCurrentPage = ref(props.currentPage);
       const localItemsPerPage = ref(props.itemsPerPage);
-      const itemsPerPageOptions = [10, 20, 30, 50];
+      const itemsPerPageOptions = [6,10, 20, 30, 50];
       const isMobileView = ref(false);
   
       const totalPages = computed(() => Math.max(1, Math.ceil(props.totalItems / localItemsPerPage.value)));

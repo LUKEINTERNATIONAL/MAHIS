@@ -1,13 +1,10 @@
 <template>
   <ion-header>
     <ion-row>
-      <ion-col>
+      <ion-col style="padding: 1px;">
         <ion-title class="modalTitle">{{ headingText }}</ion-title>
       </ion-col>
     </ion-row>
-  </ion-header>
-
-  <ion-content :fullscreen="true" class="ion-padding">
     <ion-row>
       <ion-col style="margin-left: 10px; margin-right: 10px;">
         <BasicInputField
@@ -23,7 +20,9 @@
         </div>
       </ion-col>
     </ion-row>
+  </ion-header>
 
+  <ion-content :fullscreen="true" class="ion-padding">
     <div v-if="isLoading" class="loading-spinner">
       <ion-spinner name="crescent"></ion-spinner>
     </div>
@@ -39,9 +38,9 @@
 
     <div v-else style="overflow-y: auto;">
       <ion-row>
-        <ion-col v-for="person in paginatedItems" :key="person.id">
+        <ion-col style="width: 900px;"v-for="person in paginatedItems" :key="person.id">
           <ion-card class="person-card">
-            <ion-card-content>
+            <ion-card-content style="min-width: 500px;">
               <div class="card-header">
                 <div>
                   <ion-card-title>{{ person.given_name }} {{ person.family_name }}</ion-card-title>
@@ -66,17 +65,22 @@
       </ion-row>
     </div>
 
-    <bottomNavBar
-      v-if="displayPeople.length > 0"
-      style="margin-left: 14px; margin-right: 14px;"
-      :totalItems="displayPeople.length" 
-      :currentPage="pagination.page"
-      :itemsPerPage="pagination.itemsPerPage"
-      @update:pagination="handlePaginationUpdate"
-    />
+
   </ion-content>
 
   <ion-footer collapse="fade" class="ion-no-border">
+    <ion-row>
+      <ion-col>
+        <bottomNavBar
+          v-if="displayPeople.length > 0"
+          style="margin-left: 20px; margin-right: 20px;"
+          :totalItems="displayPeople.length" 
+          :currentPage="pagination.page"
+          :itemsPerPage="pagination.itemsPerPage"
+          @update:pagination="handlePaginationUpdate"
+        />
+      </ion-col>
+    </ion-row>
     <ion-row>
       <ion-col>
         <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="dismiss()"> Cancel </ion-button>
@@ -126,7 +130,7 @@ export default defineComponent({
     const error = ref('');
     const pagination = reactive({
       page: 1,
-      itemsPerPage: 10
+      itemsPerPage: 6
     });
 
     const displayPeople = computed(() => {
@@ -313,5 +317,8 @@ ion-item {
   .s-inf {
     font-size: 14px;
   }
+}
+.modalTitle {
+  font-size: 18px;
 }
 </style>
