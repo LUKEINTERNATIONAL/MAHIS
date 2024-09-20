@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
-import { icons } from '@/utils/svg'
+import { defineStore } from "pinia";
+import { icons } from "@/utils/svg";
 import _ from "lodash";
 
 const initialWardDangerSigns = [
@@ -906,6 +906,33 @@ const initialOtherexams = [
   },
   {
     selectdData: [],
+    childName: "Interventions for complications",
+    isFinishBtn: false,
+    classDash: "dashed_bottom_border _padding",
+    radioBtnContent: {
+      header: {
+        title: "Vitamin A supplementation given?",
+        selectedValue: "",
+        name: "Vitamin A supplementation",
+        class: "bold",
+        // displayNone: true,
+      },
+      data: [
+        {
+          name: "Yes",
+          value: "Yes",
+          colSize: "2.5",
+        },
+        {
+          name: "No",
+          value: "No",
+          colSize: "2.5",
+        },
+      ],
+    },
+  },
+  {
+    selectdData: [],
     isFinishBtn: false,
     classDash: "dashed_bottom_border _padding",
     radioBtnContent: {
@@ -935,33 +962,36 @@ const initialOtherexams = [
     },
   },
 ] as any;
-export const usePostnatalWardStayStore = defineStore('postnatalWardStayStore',{
-    state: () => ({
-        dangerSigns: [...initialWardDangerSigns] as any,
+export const usePostnatalWardStayStore = defineStore("postnatalWardStayStore", {
+  state: () => ({
+    dangerSigns: [...initialWardDangerSigns] as any,
 
-        vitals: [...initialVitals] as any,
+    vitals: [...initialVitals] as any,
 
-        otherExams:[...initialOtherexams] as any,
-    }),
-    actions:{
-        setDangerSigns(data: any){
-            this.dangerSigns = data
-        }, setvitals(data: any){
-            this.vitals = data
-        }, setOtherExams(data: any){
-            this.otherExams = data
-        },
-        getInitial(){
-            const data=_.cloneDeep(initialWardDangerSigns);
-            return [...data];
-        },getInitial1(){
-            const data=_.cloneDeep(initialVitals);
-            return [...data];
-        },getInitial2(){
-            const data=_.cloneDeep(initialOtherexams);
-            return [...data];
-        },
+    otherExams: [...initialOtherexams] as any,
+  }),
+  actions: {
+    setDangerSigns(data: any) {
+      this.dangerSigns = data;
     },
-    // persist:true
-
-})
+    setvitals(data: any) {
+      this.vitals = data;
+    },
+    setOtherExams(data: any) {
+      this.otherExams = data;
+    },
+    getInitial() {
+      const data = _.cloneDeep(initialWardDangerSigns);
+      return [...data];
+    },
+    getInitial1() {
+      const data = _.cloneDeep(initialVitals);
+      return [...data];
+    },
+    getInitial2() {
+      const data = _.cloneDeep(initialOtherexams);
+      return [...data];
+    },
+  },
+  // persist:true
+});
