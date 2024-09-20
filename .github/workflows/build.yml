@@ -24,9 +24,10 @@ jobs:
     - name: Run Build
       run: npm run build 
 
-    - name: Upload logs if the build fails
-      if: failure()
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-logs
-        path: logs/  
+# 
+    # - name: Upload logs if the build fails
+    #   if: failure()
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: build-logs
+    #     path: logs/  
