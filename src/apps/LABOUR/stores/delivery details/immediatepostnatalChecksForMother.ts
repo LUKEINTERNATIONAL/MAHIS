@@ -288,6 +288,61 @@ const initialExamsAfterDelivery=[
                 ]
             },
     },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Breast Feeding Initiated?',
+                    selectedValue: '',
+                    class:"bold",
+                    name:"Breast Feeding Initiated",
+                    displayNext:"Yes"
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5',
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5',
+                    },
+                ]
+            }
+
+    },
+    {
+        childName:"Breast Feeding Initiated",
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Specify Reason',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:'text',
+                                name: 'reason',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:'',
+                                inputWidth:''
+
+                            },
+                        ]
+                    }
+                ]
+            },
+    },
 ] as any;
 export const useImmediatePostnatalChecksForMotherStore = defineStore('immediatePostnatalChecksForMotherStore',{
     state: () => ({
@@ -303,6 +358,6 @@ export const useImmediatePostnatalChecksForMotherStore = defineStore('immediateP
             return [...data]
         }
     },
-    persist:true,
+    // persist:true,
 
 })
