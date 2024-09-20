@@ -1,5 +1,13 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import * as yup from "yup";
+
+export const vitaminValidationSchema = yup.object().shape({
+  "Vitamin Amount": yup
+    .number()
+    .typeError("Amount of vitamin can only be a number")
+    .min(0),
+});
 
 export const useMedicationDispensedStore = defineStore("medicationDispensed", {
     state: () => ({
@@ -142,13 +150,11 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
                         {
                             name: "Yes",
                             value: "yes",
-
                             colSize: "2.5",
                         },
                         {
                             name: "No",
                             value: "no",
-
                             colSize: "2.5",
                         },
                     ],
