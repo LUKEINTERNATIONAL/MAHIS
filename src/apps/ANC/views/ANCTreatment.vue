@@ -29,7 +29,7 @@ import { icons } from "@/utils/svg";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import DiagnosisCounselling from "@/apps/ANC/components/Treatment/DiagnosisCounselling.vue";
 import Immunization from "@/apps/ANC/components/Treatment/Immunization.vue";
-import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
+//import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
 import Deworming from "@/apps/ANC/components/Treatment/Deworming.vue";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { mapState } from "pinia";
@@ -76,7 +76,7 @@ export default defineComponent({
         MedicationDispensed,
         DiagnosisCounselling,
         Immunization,
-        IntimatePartner,
+       // IntimatePartner,
         Deworming,
     },
     data() {
