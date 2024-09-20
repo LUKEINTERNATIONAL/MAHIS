@@ -300,6 +300,14 @@ const babyDetails = [
             },
             data: [
                 {
+                    name: "Nursery",
+                    value: "Nursery",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
                     name: "Other complications",
                     value: "Other complications",
                     checked: false,
