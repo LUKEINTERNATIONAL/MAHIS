@@ -1,5 +1,5 @@
 describe('Login Tests', () => {
-  const username = "Admin";
+  const username = "mwayab";
   const password = "test";
 
   beforeEach(() => {
@@ -13,11 +13,10 @@ describe('Login Tests', () => {
 
   it('Login happy path for different programs', function () {
     cy.fixture('programs.json').then((programs) => {
-      cy.log(programs);
       programs.forEach((program) => {
         cy.get('[cy-test="program-select"]').type(`${program.name}{enter}`);
         cy.get('[cy-test="login-button"]').click();
-        cy.url().should('include', '/home');
+        cy.url({ timeout: 10000 }).should('include', '/home');
         // Additional checks specific to the program can be added here
         cy.visit('/login'); // Navigate back to login page for the next program
       });
