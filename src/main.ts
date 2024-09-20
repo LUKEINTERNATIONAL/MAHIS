@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import Vue3EasyDataTable from "vue3-easy-data-table";
+// import { Vue3EasyDataTable } from "vue3-easy-data-table";
 import vSelect from "vue-select";
 
 import { IonicVue } from "@ionic/vue";
@@ -41,21 +41,18 @@ import "./css/component_view.css";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 //@ts-ignore
-import VCalendar from 'v-calendar';
-import 'v-calendar/style.css';
+import VCalendar from "v-calendar";
+import "v-calendar/style.css";
 
 const pinia = createPinia();
 const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePaginate);
 
 app.component("VueDatePicker", VueDatePicker);
-app.component("EasyDataTable", Vue3EasyDataTable);
+app.component("EasyDataTable", "" as any);
 app.component("v-select", vSelect);
-app.use(VCalendar, {})
+app.use(VCalendar, {});
 pinia.use(piniaPluginPersistedState);
 DataTable.use(DataTablesCore);
 router.isReady().then(() => {
     app.mount("#app");
 });
-
-
-
