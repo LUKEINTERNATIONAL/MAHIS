@@ -172,25 +172,27 @@ export default defineComponent({
     },
 
     async addNewRow() {
-      // console.log("==>1",await this.validaterowData())
       if (await this.validaterowData()) {
-
         if (this.buildDiagnosis()) {
-          console.log("==>1",this.buildDiagnosis())
           this.search_item = false;
           this.display_item = true;
           this.addItemButton = true;
           this.display_primary = false;
-          this.OPDdiagnosis[0].data.rowData[0].colData[0].value = "";
-          this.OPDdiagnosis[0].data.rowData[0].colData[1].value = "";
-          modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone", true);
-          modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "colSize", 0);
+
+          this.OPDdiagnosis[0].data.rowData[0].colData[0].value = ""; // Primary diagnosis
+          this.OPDdiagnosis[0].data.rowData[0].colData[1].value = ""; // Secondary diagnosis
+
+          modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone", false);
+          modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "colSize", "");
         }
       }
     },
+
     buildDiagnosis() {
       const diagnosis = [];
-      if (this.inputFields[0]?.value?.name) {
+      const existingDiagnoses = this.OPDdiagnosis[0].selectedData.map((d: { name: string }) => d.name);
+
+      if (this.inputFields[0]?.value?.name && !existingDiagnoses.includes(this.inputFields[0].value.name)) {
         diagnosis.push({
           actionBtn: true,
           btn: ["delete"],
@@ -198,7 +200,7 @@ export default defineComponent({
           id: this.inputFields[0].value.concept_id,
           display: [this.inputFields[0].value.name, "Primary diagnosis"],
           data: {
-            concept_id: 6542, //Primary diagnosis
+            concept_id: 6542, // Primary diagnosis concept ID
             value_coded: this.inputFields[0].value.concept_id,
             obs_datetime: Service.getSessionDate(),
           },
@@ -207,24 +209,28 @@ export default defineComponent({
 
       if (this.inputFields[1].value) {
         this.inputFields[1].value.forEach((item: any) => {
-          diagnosis.push({
-            actionBtn: true,
-            btn: ["delete"],
-            name: item.name,
-            id: item.concept_id,
-            display: [item.name, "Secondary diagnosis"],
-            data: {
-              concept_id: 6543, //Secondary diagnosis
-              value_coded: item.concept_id,
-              obs_datetime: Service.getSessionDate(),
-            },
-          });
+          if (!existingDiagnoses.includes(item.name)) {
+            diagnosis.push({
+              actionBtn: true,
+              btn: ["delete"],
+              name: item.name,
+              id: item.concept_id,
+              display: [item.name, "Secondary diagnosis"],
+              data: {
+                concept_id: 6543, // Secondary diagnosis concept ID
+                value_coded: item.concept_id,
+                obs_datetime: Service.getSessionDate(),
+              },
+            });
+          }
         });
       }
 
       this.OPDdiagnosis[0].selectedData = [...this.OPDdiagnosis[0].selectedData, ...diagnosis];
+
       return true;
     },
+
     compareArrays(array1: any, array2: any) {
       return array1.reduce((result: any, obj1: any) => {
         const match = array2.find((obj2: any) => obj2.name === obj1.name);
