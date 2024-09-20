@@ -50,6 +50,11 @@
         </ion-card>
       </ion-col>
     </ion-row>
+
+    <bottomNavBar 
+        :totalItems="89" 
+        @update:pagination="handlePaginationUpdate"
+    />
   </ion-content>
 
   <ion-footer collapse="fade" class="ion-no-border">
@@ -67,6 +72,7 @@ import { IonGrid, IonRow, IonCol, IonCard, IonContent, IonCardContent, IonFooter
 import { calendarOutline, personOutline, locationOutline, eyeOutline, searchOutline } from 'ionicons/icons';
 import BasicInputField from "@/components/BasicInputField.vue"
 import HisDate from "@/utils/Date";
+import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
 
 interface Person {
   id: string;
@@ -81,7 +87,7 @@ interface Person {
 export default defineComponent({
   name: 'PersonCardComponent',
   components: {
-    IonGrid, IonRow, IonCol, BasicInputField, IonContent, IonCard, IonHeader, IonFooter, IonTitle, IonCardContent, IonCardTitle, IonCardSubtitle, IonList, IonItem, IonLabel, IonIcon
+    IonGrid, IonRow, bottomNavBar, IonCol, BasicInputField, IonContent, IonCard, IonHeader, IonFooter, IonTitle, IonCardContent, IonCardTitle, IonCardSubtitle, IonList, IonItem, IonLabel, IonIcon
   },
   props: {
     people: {
@@ -136,6 +142,11 @@ export default defineComponent({
       }
     };
 
+    const handlePaginationUpdate = ({ page, itemsPerPage }: any) => {
+      // Handle pagination updates here, e.g., fetch new data
+      console.log(`Page: ${page}, Items per page: ${itemsPerPage}`);
+    };
+
     return {
       calendarOutline,
       personOutline,
@@ -148,7 +159,8 @@ export default defineComponent({
       getBirthdateAge: HisDate.getBirthdateAge,
       searchTextUpdated,
       viewPatientProfile,
-      dismiss
+      dismiss,
+      handlePaginationUpdate
     };
   },
 });
