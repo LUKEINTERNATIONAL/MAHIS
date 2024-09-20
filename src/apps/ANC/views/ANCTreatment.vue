@@ -36,7 +36,7 @@ import { mapState } from "pinia";
 import { useDiagnosisStore } from "../store/diagnosisStore";
 import { useMedicationDispensedStore } from "../store/medicationDispensed";
 import { useImmunizationStore } from "../store/immunizationStore";
-import { useIntimatePartnerStore } from "../store/intimatePartnerStore";
+//import { useIntimatePartnerStore } from "../store/intimatePartnerStore";
 import { useDewormingStore } from "../store/dewormingStore";
 import { Service } from "@/services/service";
 import {
@@ -106,20 +106,20 @@ export default defineComponent({
                     number: 3,
                     last_step: "",
                 },
-                {
-                    title: "Intimate Partner Violence",
-                    class: "common_step",
-                    checked: false,
-                    disabled: false,
-                    number: 4,
-                    last_step: "",
-                },
+                // {
+                //     title: "Intimate Partner Violence",
+                //     class: "common_step",
+                //     checked: false,
+                //     disabled: false,
+                //     number: 4,
+                //     last_step: "",
+                // },
                 {
                     title: "Deworming & Malaria Prophylaxis",
                     class: "common_step",
                     checked: false,
                     disabled: false,
-                    number: 5,
+                    number: 4,
                     last_step: "last_step",
                 },
             ],
@@ -139,15 +139,15 @@ export default defineComponent({
                     component: "Immunization",
                     value: "3",
                 },
-                {
-                    title: "Intimate Partner Violence",
-                    component: "IntimatePartner",
-                    value: "4",
-                },
+                // {
+                //     title: "Intimate Partner Violence",
+                //     component: "IntimatePartner",
+                //     value: "4",
+                // },
                 {
                     title: "Deworming & Malaria Prophylaxis",
                     component: "Deworming",
-                    value: "5",
+                    value: "4",
                 },
             ],
             isOpen: false,
@@ -166,18 +166,18 @@ export default defineComponent({
         ]),
         ...mapState(useMedicationDispensedStore, ["iron", "folicAcid"]),
         ...mapState(useImmunizationStore, ["ttDoses", "HepBCounselling", "HepB1", "HepB2", "HepB3", "hepBReason"]),
-        ...mapState(useIntimatePartnerStore, [
-            "ipv",
-            "additionalCare",
-            "safety_assessment",
-            "physical_violence",
-            "beaten_pregnant",
-            "woman_threatened",
-            "constant_jealous",
-            "strangling",
-            "murder_threat",
-            "referrals",
-        ]),
+        // ...mapState(useIntimatePartnerStore, [
+        //     "ipv",
+        //     "additionalCare",
+        //     "safety_assessment",
+        //     "physical_violence",
+        //     "beaten_pregnant",
+        //     "woman_threatened",
+        //     "constant_jealous",
+        //     "strangling",
+        //     "murder_threat",
+        //     "referrals",
+        // ]),
         ...mapState(useDewormingStore, ["treatment", "malaria"]),
         // ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
         folicAcidPrescription() {
@@ -195,7 +195,7 @@ export default defineComponent({
             // this.saveIntimatePartner();
             // this.saveDeworming();
             // resetPatientData();
-            // this.$router.push('ANCHome');
+            this.$router.push('ANCHome');
         },
         validationRules(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
@@ -270,16 +270,16 @@ export default defineComponent({
         },
         async buildIntimatePartner() {
             return [
-                ...(await formatRadioButtonData(this.ipv)),
-                ...(await formatRadioButtonData(this.additionalCare)),
-                ...(await formatRadioButtonData(this.safety_assessment)),
-                ...(await formatRadioButtonData(this.physical_violence)),
-                ...(await formatRadioButtonData(this.beaten_pregnant)),
-                ...(await formatRadioButtonData(this.woman_threatened)),
-                ...(await formatRadioButtonData(this.constant_jealous)),
-                ...(await formatRadioButtonData(this.strangling)),
-                ...(await formatRadioButtonData(this.murder_threat)),
-                ...(await formatCheckBoxData(this.referrals)),
+                // ...(await formatRadioButtonData(this.ipv)),
+                // ...(await formatRadioButtonData(this.additionalCare)),
+                // ...(await formatRadioButtonData(this.safety_assessment)),
+                // ...(await formatRadioButtonData(this.physical_violence)),
+                // ...(await formatRadioButtonData(this.beaten_pregnant)),
+                // ...(await formatRadioButtonData(this.woman_threatened)),
+                // ...(await formatRadioButtonData(this.constant_jealous)),
+                // ...(await formatRadioButtonData(this.strangling)),
+                // ...(await formatRadioButtonData(this.murder_threat)),
+                // ...(await formatCheckBoxData(this.referrals)),
             ];
         },
         async buildDeworming() {
