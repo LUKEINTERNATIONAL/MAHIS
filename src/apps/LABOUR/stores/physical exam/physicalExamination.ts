@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
+   
+
 export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
     state: () => ({
 
@@ -99,7 +101,21 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                             }
                         ]
                     },
+                alerts: [
+                        {
+                          backgroundColor: "",
+                          status: "",
+                          icon: "",
+                          textColor: "",
+                          value: "",
+                          name: "",
+                          index: "",
+                        },
+                      ],
             },
+            ] as any,
+
+        anaemia:[
             {
                 isFinishBtn: false,
                 sectionHeader: '',
@@ -126,9 +142,58 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                         ]
                     },
             },
-            ] as any,
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
 
-        anaemia:[
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Fundus',
+                                        unit: '',
+                                        icon: icons.bmi,
+                                        value: '',
+                                        name: 'Fundus',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Fundus'
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Fundal Height',
+                                        unit: '',
+                                        icon: icons.bmi,
+                                        value: '',
+                                        name: 'Fundal Height',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Fundal Height'
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
             {
                 selectdData: [],
                 isFinishBtn: false,

@@ -27,7 +27,7 @@ import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import { IonContent, IonHeader, IonItem, IonPage, IonList, IonMenu, IonTitle,IonToolbar } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
-import { useReferralStore } from "../store/referral/referralStore";
+import {ReferralValidationSchema, useReferralStore} from "../store/referral/referralStore";
 import { mapState } from "pinia";
 import { formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Service } from "@/services/service";
@@ -38,6 +38,7 @@ import {ConfirmPregnancyService} from "@/apps/ANC/service/confirm_pregnancy_serv
 import {ReferralService} from "@/apps/ANC/service/referral_service";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
+import * as yup from 'yup';
 
 
 
@@ -94,10 +95,29 @@ export default defineComponent ({
     },
   methods: {
     markWizard() {},
-    saveData() {
-      this.saveReferral
-      resetPatientData();
-      this.$router.push("ANCHome");
+    async saveData() {
+      try {
+        // Validate the entire referralInfo against the schema
+        await ReferralValidationSchema.validate(this.referralInfo, { abortEarly: false });
+
+        // Proceed with saving the referral if validation passes
+        await this.saveReferral();
+        resetPatientData();  // Reset patient data after saving
+        this.$router.push("ANCHome");  // Redirect to ANCHome after saving
+
+      } catch (error) {
+
+        if (error instanceof yup.ValidationError) {
+          // Handle specific field validation errors here
+          error.inner.forEach(err => {
+            console.log(`Validation error in ${err.path}: ${err.message}`);
+          });
+          toastWarning("Please correct the highlighted errors before saving.");
+        } else {
+          console.error("Unexpected error:", error);
+          toastWarning("An unexpected error occurred. Please try again.");
+        }
+      }
     },
     async buildReferral() {
        return [
