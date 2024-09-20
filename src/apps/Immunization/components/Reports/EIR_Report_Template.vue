@@ -184,6 +184,29 @@ export default defineComponent({
               let value =  t_data.fixed[r_key];
               t_data.fixed[r_key] = value+1
               t_data.fixed[data_key].push(AV)
+
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
+              // t_data.fixed[data_key].push(AV)
             }
           }
         })

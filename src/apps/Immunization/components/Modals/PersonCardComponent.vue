@@ -24,36 +24,55 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
-      <ion-col v-for="person in displayPeople" :key="person.id">
-        <ion-card class="person-card">
-          <ion-card-content>
-            <div class="card-header">
-              <div>
-                <ion-card-title>{{ person.given_name }} {{ person.family_name }}</ion-card-title>
-                <ion-label style="font-size: 17px;">{{ getBirthdateAge(person.birthdate) }}</ion-label>
-              </div>
-              <ion-icon :icon="eyeOutline" @click="viewPatientProfile(person.patient_id)" class="eye-icon" aria-label="View patient profile"></ion-icon>
-            </div>
-            <ion-list lines="none" style="border-radius: 6px;">
-              <ion-item class="p-inf">
-                <ion-icon :icon="personOutline" slot="start" aria-hidden="true"></ion-icon>
-                <ion-label> <span class="s-inf">Gender:</span> {{ person.gender }}</ion-label>
-              </ion-item>
-              <hr class="solid-line">
-              <ion-item class="p-inf">
-                <ion-icon :icon="locationOutline" slot="start" aria-hidden="true"></ion-icon>
-                <ion-label> <span class="s-inf">Village:</span> {{ person.city_village }}</ion-label>
-              </ion-item>
-            </ion-list>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+    <div v-if="isLoading" class="loading-spinner">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
 
-    <bottomNavBar 
-        :totalItems="89" 
-        @update:pagination="handlePaginationUpdate"
+    <div v-else-if="error" class="error-message">
+      <ion-icon :icon="alertCircleOutline"></ion-icon>
+      <p>{{ error }}</p>
+    </div>
+
+    <div v-else-if="paginatedItems.length === 0" class="no-results">
+      <p>No results found</p>
+    </div>
+
+    <div v-else style="overflow-y: auto;">
+      <ion-row>
+        <ion-col v-for="person in paginatedItems" :key="person.id">
+          <ion-card class="person-card">
+            <ion-card-content>
+              <div class="card-header">
+                <div>
+                  <ion-card-title>{{ person.given_name }} {{ person.family_name }}</ion-card-title>
+                  <ion-label style="font-size: 17px;">{{ getBirthdateAge(person.birthdate) }}</ion-label>
+                </div>
+                <ion-icon :icon="eyeOutline" @click="viewPatientProfile(person.patient_id)" class="eye-icon" aria-label="View patient profile"></ion-icon>
+              </div>
+              <ion-list lines="none" style="border-radius: 6px;">
+                <ion-item class="p-inf">
+                  <ion-icon :icon="personOutline" slot="start" aria-hidden="true"></ion-icon>
+                  <ion-label> <span class="s-inf">Gender:</span> {{ person.gender }}</ion-label>
+                </ion-item>
+                <hr class="solid-line">
+                <ion-item class="p-inf">
+                  <ion-icon :icon="locationOutline" slot="start" aria-hidden="true"></ion-icon>
+                  <ion-label> <span class="s-inf">Village:</span> {{ person.city_village }}</ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <bottomNavBar
+      v-if="displayPeople.length > 0"
+      style="margin-left: 14px; margin-right: 14px;"
+      :totalItems="displayPeople.length" 
+      :currentPage="pagination.page"
+      :itemsPerPage="pagination.itemsPerPage"
+      @update:pagination="handlePaginationUpdate"
     />
   </ion-content>
 
@@ -67,9 +86,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
-import { IonGrid, IonRow, IonCol, IonCard, IonContent, IonCardContent, IonFooter, IonCardTitle, IonHeader, IonTitle, IonCardSubtitle, IonList, IonItem, IonLabel, IonIcon, modalController } from '@ionic/vue';
-import { calendarOutline, personOutline, locationOutline, eyeOutline, searchOutline } from 'ionicons/icons';
+import { defineComponent, ref, computed, reactive, onMounted, watch } from 'vue';
+import { IonGrid, IonRow, IonCol, IonCard, IonContent, IonCardContent, IonFooter, IonCardTitle, IonHeader, IonTitle, IonCardSubtitle, IonList, IonItem, IonLabel, IonIcon, modalController, IonSpinner } from '@ionic/vue';
+import { calendarOutline, personOutline, locationOutline, eyeOutline, searchOutline, alertCircleOutline } from 'ionicons/icons';
 import BasicInputField from "@/components/BasicInputField.vue"
 import HisDate from "@/utils/Date";
 import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
@@ -87,7 +106,7 @@ interface Person {
 export default defineComponent({
   name: 'PersonCardComponent',
   components: {
-    IonGrid, IonRow, bottomNavBar, IonCol, BasicInputField, IonContent, IonCard, IonHeader, IonFooter, IonTitle, IonCardContent, IonCardTitle, IonCardSubtitle, IonList, IonItem, IonLabel, IonIcon
+    IonGrid, IonRow, bottomNavBar, IonCol, BasicInputField, IonContent, IonCard, IonHeader, IonFooter, IonTitle, IonCardContent, IonCardTitle, IonCardSubtitle, IonList, IonItem, IonLabel, IonIcon, IonSpinner
   },
   props: {
     people: {
@@ -103,6 +122,12 @@ export default defineComponent({
   setup(props) {
     const searchText = ref('');
     const searchTextError = ref(false);
+    const isLoading = ref(false);
+    const error = ref('');
+    const pagination = reactive({
+      page: 1,
+      itemsPerPage: 10
+    });
 
     const displayPeople = computed(() => {
       if (!searchText.value) return props.people;
@@ -110,6 +135,12 @@ export default defineComponent({
       return props.people.filter(person => 
         nameRegex.test(person.given_name) || nameRegex.test(person.family_name)
       );
+    });
+
+    const paginatedItems = computed(() => {
+      const start = (pagination.page - 1) * pagination.itemsPerPage;
+      const end = start + pagination.itemsPerPage;
+      return displayPeople.value.slice(start, end);
     });
 
     const isValidString = (input: string): boolean => {
@@ -121,6 +152,7 @@ export default defineComponent({
       const target = event.target as HTMLInputElement;
       searchText.value = target.value;
       searchTextError.value = !isValidString(searchText.value);
+      pagination.page = 1; // Reset to first page when search changes
     };
 
     const viewPatientProfile = async (clientId: string) => {
@@ -142,10 +174,35 @@ export default defineComponent({
       }
     };
 
-    const handlePaginationUpdate = ({ page, itemsPerPage }: any) => {
-      // Handle pagination updates here, e.g., fetch new data
-      console.log(`Page: ${page}, Items per page: ${itemsPerPage}`);
+    const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
+      pagination.page = page;
+      pagination.itemsPerPage = itemsPerPage;
     };
+
+    // Simulating an API call to fetch data
+    const fetchData = async () => {
+      isLoading.value = true;
+      error.value = '';
+      try {
+        // Simulating an API delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        // If the API call was real, we would update props.people here
+        isLoading.value = false;
+      } catch (err) {
+        isLoading.value = false;
+        error.value = 'Failed to fetch data. Please try again.';
+        console.error('Error fetching data:', err);
+      }
+    };
+
+    onMounted(() => {
+      fetchData();
+    });
+
+    // Reset page when search changes
+    watch(searchText, () => {
+      pagination.page = 1;
+    });
 
     return {
       calendarOutline,
@@ -153,14 +210,19 @@ export default defineComponent({
       locationOutline,
       eyeOutline,
       searchOutline,
+      alertCircleOutline,
       searchText,
       searchTextError,
+      isLoading,
+      error,
       displayPeople,
+      paginatedItems,
       getBirthdateAge: HisDate.getBirthdateAge,
       searchTextUpdated,
       viewPatientProfile,
       dismiss,
-      handlePaginationUpdate
+      handlePaginationUpdate,
+      pagination,
     };
   },
 });
@@ -224,6 +286,19 @@ ion-item {
 .s-inf {
   font-size: 16px; 
   color: gray;
+}
+
+.loading-spinner, .error-message, .no-results {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  flex-direction: column;
+}
+
+.error-message ion-icon {
+  font-size: 48px;
+  color: var(--ion-color-danger);
 }
 
 @media (max-width: 768px) {

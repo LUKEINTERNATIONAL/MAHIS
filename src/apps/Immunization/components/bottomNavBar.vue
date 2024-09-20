@@ -3,7 +3,7 @@
       <div class="pagination-controls">
         <div class="items-per-page">
           <label for="itemsPerPage">Items per page:</label>
-          <select id="itemsPerPage" v-model="itemsPerPage" @change="updatePagination">
+          <select id="itemsPerPage" v-model="localItemsPerPage" @change="updatePagination">
             <option v-for="option in itemsPerPageOptions" :key="option" :value="option">
               {{ option }}
             </option>
@@ -14,7 +14,7 @@
         </div>
         <div class="page-nav">
           <label for="currentPage">Page</label>
-          <select id="currentPage" v-model="currentPage" @change="updatePagination">
+          <select id="currentPage" v-model="localCurrentPage" @change="updatePagination">
             <option v-for="page in totalPages" :key="page" :value="page">
               {{ page }}
             </option>
@@ -23,10 +23,10 @@
         </div>
       </div>
       <div class="navigation-buttons">
-        <button @click="previousPage" :disabled="currentPage === 1" class="nav-button prev">
+        <button @click="previousPage" :disabled="localCurrentPage === 1" class="nav-button prev" aria-label="Previous page">
           &lt;
         </button>
-        <button @click="nextPage" :disabled="currentPage === totalPages" class="nav-button next">
+        <button @click="nextPage" :disabled="localCurrentPage === totalPages" class="nav-button next" aria-label="Next page">
           &gt;
         </button>
       </div>
@@ -34,7 +34,7 @@
   </template>
   
   <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
+  import { defineComponent, ref, computed, watch, onMounted, onUnmounted } from 'vue';
   
   interface PaginationUpdateEvent {
     page: number;
@@ -42,45 +42,62 @@
   }
   
   export default defineComponent({
-    name: 'Pagination',
+    name: 'bottomNavBar',
     props: {
       totalItems: {
         type: Number,
         required: true
+      },
+      currentPage: {
+        type: Number,
+        required: true
+      },
+      itemsPerPage: {
+        type: Number,
+        required: true
       }
     },
+    emits: ['update:pagination'],
     setup(props, { emit }) {
-      const currentPage = ref(1);
-      const itemsPerPage = ref(10);
+      const localCurrentPage = ref(props.currentPage);
+      const localItemsPerPage = ref(props.itemsPerPage);
       const itemsPerPageOptions = [10, 20, 30, 50];
       const isMobileView = ref(false);
   
-      const totalPages = computed(() => Math.ceil(props.totalItems / itemsPerPage.value));
-      const startItem = computed(() => (currentPage.value - 1) * itemsPerPage.value + 1);
-      const endItem = computed(() => Math.min(currentPage.value * itemsPerPage.value, props.totalItems));
+      const totalPages = computed(() => Math.max(1, Math.ceil(props.totalItems / localItemsPerPage.value)));
+      const startItem = computed(() => props.totalItems === 0 ? 0 : (localCurrentPage.value - 1) * localItemsPerPage.value + 1);
+      const endItem = computed(() => Math.min(localCurrentPage.value * localItemsPerPage.value, props.totalItems));
+  
+      watch(() => props.currentPage, (newValue) => {
+        localCurrentPage.value = newValue;
+      });
+  
+      watch(() => props.itemsPerPage, (newValue) => {
+        localItemsPerPage.value = newValue;
+      });
   
       const updatePagination = () => {
         emitUpdate();
       };
   
       const previousPage = () => {
-        if (currentPage.value > 1) {
-          currentPage.value--;
+        if (localCurrentPage.value > 1) {
+          localCurrentPage.value--;
           emitUpdate();
         }
       };
   
       const nextPage = () => {
-        if (currentPage.value < totalPages.value) {
-          currentPage.value++;
+        if (localCurrentPage.value < totalPages.value) {
+          localCurrentPage.value++;
           emitUpdate();
         }
       };
   
       const emitUpdate = () => {
         emit('update:pagination', {
-          page: currentPage.value,
-          itemsPerPage: itemsPerPage.value
+          page: localCurrentPage.value,
+          itemsPerPage: localItemsPerPage.value
         } as PaginationUpdateEvent);
       };
   
@@ -98,8 +115,8 @@
       });
   
       return {
-        currentPage,
-        itemsPerPage,
+        localCurrentPage,
+        localItemsPerPage,
         itemsPerPageOptions,
         totalPages,
         startItem,
@@ -123,7 +140,7 @@
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     font-family: Arial, sans-serif;
-    font-size: 18px;
+    font-size: 14px;
   }
   
   .pagination-controls {
@@ -143,6 +160,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: white;
+    font-size: 14px;
   }
   
   .navigation-buttons {
@@ -155,7 +173,7 @@
     color: white;
     border: none;
     padding: 5px 10px;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 500;
     cursor: pointer;
     border-radius: 4px;
@@ -212,6 +230,7 @@
   @media (max-width: 480px) {
     .pagination-container {
       padding: 10px;
+      font-size: 12px;
     }
   
     .pagination-container.mobile .items-per-page,
@@ -224,6 +243,12 @@
   
     .pagination-container.mobile select {
       width: 100%;
+      font-size: 12px;
+    }
+  
+    .nav-button {
+      font-size: 16px;
+      padding: 3px 8px;
     }
   }
   </style>
