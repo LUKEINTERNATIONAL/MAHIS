@@ -1,5 +1,10 @@
 <template>
     <ion-page>
+        <!-- Spinner -->
+        <div v-if="isLoading" class="spinner-overlay">
+            <ion-spinner name="bubbles"></ion-spinner>
+            <div class="loading-text">Please wait...</div>
+        </div>
         <Toolbar />
         <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14">
             <div id="container">
@@ -254,6 +259,7 @@ export default defineComponent({
             appointments: [] as any,
             programBtn: {} as any,
             base_url: "backgroundImg.png",
+            isLoading: false,
             totalStats: [
                 {
                     name: "Total vaccinated this year",
@@ -314,6 +320,7 @@ export default defineComponent({
         },
     },
     async mounted() {
+        this.isLoading = true;
         await setOfflineLocation();
         await setOfflineRelationship();
         resetDemographics();
@@ -321,6 +328,7 @@ export default defineComponent({
         this.setView();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
+        this.isLoading = false;
     },
     methods: {
         dueCardStyle(type: "success" | "warning" | "info" | "danger") {
