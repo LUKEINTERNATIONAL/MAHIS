@@ -30,12 +30,11 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import {
-  dynamicValue,
-  getCheckboxSelectedValue,
-  getFieldValue,
+ getCheckboxSelectedValue,
+
 getRadioSelectedValue,
 modifyCheckboxHeader,
-modifyCheckboxValue,
+
 modifyFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
@@ -106,34 +105,7 @@ export default defineComponent({
         modifyFieldValue(this.labourReferral,"specify" ,'displayNone',true)
       }
     },
- handleBaby(){
-      //     if(getRadioSelectedValue(this.labourReferral,'referred')=='baby'){
-      //     modifyCheckboxValue(this.labourReferral, "Asphyxia" ,'displayNone',false);
-      //     modifyCheckboxValue(this.labourReferral, "Preterm" ,'displayNone',false);
-      //     modifyCheckboxValue(this.labourReferral, "Under weight" ,'displayNone',false);
-      //     modifyCheckboxValue(this.labourReferral, "Congenital abnormalities" ,'displayNone',false);
-      //     modifyCheckboxValue(this.labourReferral, "Sepsi" ,'displayNone',false);
-      //     modifyCheckboxValue(this.labourReferral, "Other reason" ,'displayNone',false);
-      //     modifyFieldValue(this.labourReferral,"treatment given to baby before referral" ,'displayNone',false)
-      //     modifyFieldValue(this.labourReferral,"Time of referral" ,'displayNone',false)
-      //     modifyFieldValue(this.labourReferral,"Date of referral" ,'displayNone',false)
-      //     modifyFieldValue(this.labourReferral,"Provider who made referral" ,'displayNone',false)
-      //     modifyFieldValue(this.labourReferral,"Phone number for provider" ,'displayNone',false)
 
-      // }else{
-      //     modifyCheckboxValue(this.labourReferral, "Asphyxia" ,'displayNone',true);
-      //     modifyCheckboxValue(this.labourReferral, "Preterm" ,'displayNone',true);
-      //     modifyCheckboxValue(this.labourReferral, "Under weight" ,'displayNone',true);
-      //     modifyCheckboxValue(this.labourReferral, "Congenital abnormalities" ,'displayNone',true);
-      //     modifyCheckboxValue(this.labourReferral, "Sepsi" ,'displayNone',true);
-      //     modifyCheckboxValue(this.labourReferral, "Other reason" ,'displayNone',true);
-      //      modifyFieldValue(this.labourReferral,"treatment given to baby before referral" ,'displayNone',true)
-      //     modifyFieldValue(this.labourReferral,"Time of referral" ,'displayNone',true)
-      //     modifyFieldValue(this.labourReferral,"Date of referral" ,'displayNone',true)
-      //     modifyFieldValue(this.labourReferral,"Provider who made referral" ,'displayNone',true)
-      //     modifyFieldValue(this.labourReferral,"Phone number for provider" ,'displayNone',true)
-      // }
-    },
   handleOtherBaby(){
       if(getCheckboxSelectedValue(this.labourReferral,"Other reason")?.value =='other reason'){
         modifyFieldValue(this.labourReferral,"other" ,'displayNone',false)
