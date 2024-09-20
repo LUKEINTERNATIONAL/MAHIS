@@ -1,7 +1,16 @@
 import { defineStore } from "pinia";
 import { icons } from '@/utils/svg';
 import _ from "lodash";
+import * as yup from "yup";
 
+export const ANCEndValidationSchema = yup.object().shape({
+    'Weight': yup.number()
+        .required("Weight is required")
+        .typeError("Value should be a number")
+        .min(0)
+        .max(6000)
+        .label("Weight"),
+});
 const initialANCend=[
     {
         selectdData: [],

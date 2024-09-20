@@ -176,7 +176,7 @@ export default defineComponent ({
     //   }
     // },
     handleNone(){
-        const checkBoxes=['Hypertension','Pre-eclampsia','HIV','Hepatitis B','Hepatitis C','Syphilis',]
+        const checkBoxes=['Hypertension','Pre-eclampsia','HIV','Hepatitis B','Hepatitis C','Syphilis','Pre-eclampsia with Severe Features']
 
       if (getCheckboxSelectedValue(this.diagnoses, 'None')?.checked) {
         checkBoxes.forEach((checkbox) => {

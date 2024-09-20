@@ -5,6 +5,8 @@
         <basic-form
             :contentData="ancInfo"
             :initialData="initialData"
+            @update:selected="handleInputData" @update:inputValue="handleInputData"
+
         ></basic-form>
       </ion-card-content>
     </ion-card>
@@ -16,7 +18,7 @@
  import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useAncEndStore} from "@/apps/ANC/store/ancEnd/ancEndStore";
+ import {ANCEndValidationSchema, useAncEndStore} from "@/apps/ANC/store/ancEnd/ancEndStore";
  import BasicForm from '@/components/BasicForm.vue';
 import { modifyRadioValue,
     getRadioSelectedValue,
@@ -24,6 +26,8 @@ import { modifyRadioValue,
     getFieldValue,
     modifyFieldValue,
     modifyCheckboxValue} from '@/services/data_helpers'
+ import {YupValidateField} from "@/services/validation_service";
+ import {ReferralValidationSchema} from "@/apps/ANC/store/referral/referralStore";
 
 
 export default defineComponent({
@@ -71,6 +75,14 @@ export default defineComponent({
     },
   
     methods:{
+      async handleInputData(col: any) {
+        YupValidateField(
+            this.ancInfo,
+            ANCEndValidationSchema,
+            col.name,
+            col.value
+        )
+      },
         handleOther(){
             if(getRadioSelectedValue(this.ancInfo,'ANC pregnancy outcome')=='Other outcome'){
                 modifyFieldValue(this.ancInfo,'Pregnancy outcome notes','displayNone',false)

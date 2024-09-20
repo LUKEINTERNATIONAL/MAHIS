@@ -70,6 +70,7 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      showPulsingAlert: false as boolean
 
     };
   },
@@ -83,8 +84,14 @@ export default defineComponent({
       handler(){
         this.handleShow();
         this.handleRupturedMembrane();
+        this.showPulsingAlert = getRadioSelectedValue(this.firstVaginalExamination, 'Is Cord Pulsating')=="yes"
       },
       deep:true
+    },
+    showPulsingAlert: {
+      handler(){
+        this.handleShowAlertCordPulsating();
+      }
     }
   },
   setup() {
@@ -111,8 +118,24 @@ export default defineComponent({
         event.value
       );
     },
-    handleRupturedMembrane(){
+    handleShowAlertCordPulsating(){
+      const value = getRadioSelectedValue(this.firstVaginalExamination, 'Is Cord Pulsating');
+      const inputItem =this.firstVaginalExamination.find((item:any)=>item?.radioBtnContent?.header?.name=="Is Cord Pulsating");
 
+      if(value== "yes"){
+        inputItem.alerts.push({
+              backgroundColor: "#FF9999",
+              status: "info",
+              icon: "info-circle",
+              textColor: "#000000",
+              value: "emergency",
+              name: "Is Cord Pulsating",
+            });
+            return
+      }
+      inputItem.alerts = []
+    },
+    handleRupturedMembrane(){
       const stateOfMembrane = getRadioSelectedValue(this.firstVaginalExamination, "State of membranes");
       const cord = getRadioSelectedValue(this.firstVaginalExamination, "Cord");
       const liquor = getRadioSelectedValue(this.firstVaginalExamination, "Liquor");
@@ -157,6 +180,7 @@ export default defineComponent({
       modifyRadioValue(this.firstVaginalExamination,"Level in relation to ischial spines","displayNone",!(whatIsPresenting=="head"))
       modifyRadioValue(this.firstVaginalExamination,"Caput","displayNone",!(whatIsPresenting=="head"))
       modifyRadioValue(this.firstVaginalExamination,"Moulding","displayNone",!(whatIsPresenting=="head"))
+      modifyRadioValue(this.firstVaginalExamination,"Is Cord Pulsating","displayNone",!(cord=="presenting" || cord=="prolapsed"))
     },
   }
 });

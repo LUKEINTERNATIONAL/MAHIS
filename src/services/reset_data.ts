@@ -40,7 +40,7 @@ import { useMedicStore } from "@/apps/ANC/store/symptomsFollowUp/MedicStore";
 import {usePreventativeCounsellingStore} from "@/apps/ANC/store/counselling/preventativeCounsellingStore";
 import { useDewormingStore } from "@/apps/ANC/store/dewormingStore";
 import { useImmunizationStore } from "@/apps/ANC/store/immunizationStore";
-import { useIntimatePartnerStore } from "@/apps/ANC/store/intimatePartnerStore";
+//import { useIntimatePartnerStore } from "@/apps/ANC/store/intimatePartnerStore";
 import { useLabTestsStore } from "@/apps/ANC/store/LabTestsStore";
 import { useMedicationDispensedStore } from "@/apps/ANC/store/medicationDispensed";
 import { useTBScreeningStore } from "@/apps/ANC/store/TBScreeningStore";
@@ -114,7 +114,7 @@ export async function resetPatientData() {
     const ANCdeworming = useDewormingStore();
     const ANCdiagnosis = useDiagnosisStore();
     const ANCimmunisation = useImmunizationStore();
-    const ANCintimatePartner = useIntimatePartnerStore();
+    //const ANCintimatePartner = useIntimatePartnerStore();
     const ANCLabTest = useLabTestsStore();
     const ANCmedicationDispensed = useMedicationDispensedStore();
     const ANCtbScreening = useTBScreeningStore();
@@ -197,7 +197,7 @@ export async function resetPatientData() {
     ANCdeworming.$reset();
     ANCdiagnosis.$reset();
     ANCimmunisation.$reset();
-    ANCintimatePartner.$reset();
+    //ANCintimatePartner.$reset();
     ANCLabTest.$reset();
     ANCmedicationDispensed.$reset();
     ANCtbScreening.$reset();
