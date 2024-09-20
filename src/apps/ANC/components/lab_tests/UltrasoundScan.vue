@@ -65,6 +65,7 @@ export default defineComponent({
     mounted(){
         this.handleUltraDate()
         this.handleReason()
+        this.handleUltraNotDone()
     },
     watch:{
         ultrasound:{
@@ -74,6 +75,11 @@ export default defineComponent({
             },
             deep:true
         },
+        reason:{
+          handler(){
+            this.handleUltraNotDone()
+          }, deep:true
+        }
 
     },
     computed:{
@@ -109,6 +115,14 @@ export default defineComponent({
               modifyRadioValue(this.reason,'Reason not done','displayNone',true)
             }
         },
+        handleUltraNotDone(){
+          if(getRadioSelectedValue(this.reason, 'Reason not done')=='Other reason'){
+            modifyFieldValue(this.reason,'specify','diplayNone',false)
+          }else{
+            modifyFieldValue(this.reason,'specify','diplayNone',true)
+          }
+          console.log("======>lets see",getRadioSelectedValue(this.reason, 'Reason not done')=='Other reason')
+        }
       
    
     }

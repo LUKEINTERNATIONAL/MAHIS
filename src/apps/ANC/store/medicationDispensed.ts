@@ -713,5 +713,5 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
         //   this.calciumReason = data;
         // },
     },
-    // persist: true,
+     persist: true,
 });
