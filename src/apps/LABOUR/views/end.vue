@@ -86,9 +86,7 @@ export default defineComponent ({
   methods: {
     markWizard(){},
     saveData(){
-
-      this.$router.push("labourHome");
-
+      this.$router.push("labourHome")
 
     },
   }

@@ -121,6 +121,7 @@ export default defineComponent({
           "Asphyxia",
           "Other complications",
           "Low birthweight",
+          "Nursery"
         ];
         const managementNewborn = [
           "Kangaroo mother care",
