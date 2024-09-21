@@ -48,4 +48,4 @@ jobs:
                   cd MAHIS-Release
                   git add .
                   git commit -m "Automated build and deployment"
-                  git push https://<USERNAME>:${{ secrets.RELEASE_TOKEN }}@github.com/LUKEINTERNATIONAL/MAHIS-Release.git
+                  git push https://petroskayange:${{ secrets.RELEASE_TOKEN }}@github.com/LUKEINTERNATIONAL/MAHIS-Release.git
