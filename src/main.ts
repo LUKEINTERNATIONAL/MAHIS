@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-// import { Vue3EasyDataTable } from "vue3-easy-data-table";
+import { Vue3EasyDataTable } from "vue3-easy-data-table";
 import vSelect from "vue-select";
 
 import { IonicVue } from "@ionic/vue";
@@ -48,7 +48,7 @@ const pinia = createPinia();
 const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePaginate);
 
 app.component("VueDatePicker", VueDatePicker);
-app.component("EasyDataTable", "" as any);
+app.component("EasyDataTable", Vue3EasyDataTable);
 app.component("v-select", vSelect);
 app.use(VCalendar, {});
 pinia.use(piniaPluginPersistedState);
