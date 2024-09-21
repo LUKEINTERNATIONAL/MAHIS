@@ -1,10 +1,16 @@
 <template>
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
-    <CheckInConfirmationModal :closeModalFunc="closeCheckInModal" :onYes="handleCheckInYes" :onNo="handleCheckInNo"  :isOpen="checkInModalOpen" :title="`Do you want to check in the patient?`" />
-    
-    <div style="display: flex; align-items: center">
+    <CheckInConfirmationModal
+        :closeModalFunc="closeCheckInModal"
+        :onYes="handleCheckInYes"
+        :onNo="handleCheckInNo"
+        :isOpen="checkInModalOpen"
+        :title="`Do you want to check in the patient?`"
+    />
+
+    <div style="display: flex; width: 100%; justify-content: center">
         <ion-input
-            style="color: #000; width: 100%"
+            style="color: #000; width: 70%"
             @ionInput="handleInput"
             fill="outline"
             :value="searchValue"
@@ -178,7 +184,6 @@ import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useProgramStore } from "@/stores/ProgramStore";
 
-
 export default defineComponent({
     name: "Home",
     mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
@@ -199,7 +204,7 @@ export default defineComponent({
         RoleSelectionModal,
         IonButton,
         IonInput,
-        CheckInConfirmationModal
+        CheckInConfirmationModal,
     },
     setup() {
         return { checkmark, add, search, camera };
@@ -455,8 +460,7 @@ export default defineComponent({
             const userPrograms: any = JSON.parse(userProgramsData);
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
 
-           
-            const roles: any =  roleData ? roleData : [];
+            const roles: any = roleData ? roleData : [];
             UserService.setProgramUserActions();
 
             if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
@@ -673,29 +677,28 @@ export default defineComponent({
                 return [entity, errors.join(", ")];
             });
         },
-        closeCheckInModal(){
-    this.checkInModalOpen=false
-},
+        closeCheckInModal() {
+            this.checkInModalOpen = false;
+        },
         handleCheckInNo() {
-          
-            this.openNewPage('patientProfile', this.selectedPatient);
+            this.openNewPage("patientProfile", this.selectedPatient);
             this.toggleCheckInModal();
         },
-        handleCheckInYes(){
+        handleCheckInYes() {
             // console.log(this.selectedPatient)
         },
-        toggleCheckInModal(){
-            this.checkInModalOpen=!this.checkInModalOpen
+        toggleCheckInModal() {
+            this.checkInModalOpen = !this.checkInModalOpen;
         },
         openCheckInModal(item: any) {
             console.log(this.programs?.program?.applicationName);
-            if(this.programs?.program?.applicationName=="OPD Program"){
-                        this.checkInModalOpen=true;
-                        this.selectedPatient = item;
-                        return
+            if (this.programs?.program?.applicationName == "OPD Program") {
+                this.checkInModalOpen = true;
+                this.selectedPatient = item;
+                return;
             }
-            this.openNewPage('patientProfile', item);
-}
+            this.openNewPage("patientProfile", item);
+        },
     },
 });
 </script>
