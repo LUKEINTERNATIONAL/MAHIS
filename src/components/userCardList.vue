@@ -1,44 +1,64 @@
 <template>
-  <ion-grid class="dynamic-grid">
-    <ion-row>
-      <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userid">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-subtitle>{{ user.roles.join(', ') }}</ion-card-subtitle>
-            <ion-card-title>{{ user.firstName }} {{ user.lastName }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-list>
-              <ion-item>
-                <ion-label>
-                  <h3>User ID</h3>
-                  <p>{{ user.userId }}</p>
-                </ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-label>
-                  <h3>Username</h3>
-                  <p>{{ user.username }}</p>
-                </ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-label>
-                  <h3>Gender</h3>
-                  <p>{{ user.gender }}</p>
-                </ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-label>
-                  <h3>Programs</h3>
-                  <p>{{ user.programs.join(', ') }}</p>
-                </ion-label>
-              </ion-item>
-            </ion-list>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+
+    <ion-grid class="dynamic-grid">
+      <ion-row v-if="error">
+        <ion-col size="12" class="ion-text-center">
+          <ion-text color="danger">
+            <p>{{ error }}</p>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row v-else-if="isLoading">
+        <ion-col size="12" class="ion-text-center">
+          <ion-spinner name="circular"></ion-spinner>
+          <p>Loading users...</p>
+        </ion-col>
+      </ion-row>
+      <ion-row v-else-if="paginatedUsers.length === 0">
+        <ion-col size="12" class="ion-text-center">
+          <p>No users found.</p>
+        </ion-col>
+      </ion-row>
+      <ion-row v-else>
+        <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userid">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>{{ user.roles.join(', ') }}</ion-card-subtitle>
+              <ion-card-title>{{ user.firstName }} {{ user.lastName }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <ion-item>
+                  <ion-label>
+                    <h3>User ID</h3>
+                    <p>{{ user.userId }}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    <h3>Username</h3>
+                    <p>{{ user.username }}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    <h3>Gender</h3>
+                    <p>{{ user.gender }}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    <h3>Programs</h3>
+                    <p>{{ user.programs.join(', ') }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
 
   <ion-footer collapse="fade">
     <ion-row>
@@ -57,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, ref, watch } from 'vue';
+import { defineComponent, reactive, computed, ref, watch, onMounted } from 'vue';
 import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
 import {
   IonContent,
@@ -74,6 +94,8 @@ import {
   IonItem,
   IonLabel,
   IonFooter,
+  IonSpinner,
+  IonText,
 } from '@ionic/vue';
 
 interface User {
@@ -104,6 +126,8 @@ export default defineComponent({
     IonLabel,
     bottomNavBar,
     IonFooter,
+    IonSpinner,
+    IonText,
   },
   props: {
     users: {
@@ -116,7 +140,9 @@ export default defineComponent({
       page: 1,
       itemsPerPage: 6
     });
-    const usersCopy = ref([]) as any
+    const usersCopy = ref([]) as any;
+    const isLoading = ref(true);
+    const error = ref('');
 
     const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
       pagination.page = page;
@@ -132,10 +158,21 @@ export default defineComponent({
     const showNavBar = ref(false);
 
     watch(() => props.users, (newUsers) => {
+      console.log('Users updated. Received users:', newUsers);
+      isLoading.value = false;
       showNavBar.value = newUsers.length > 0;
-      usersCopy.value = props.users
-      console.log('Users updated. Total users:', newUsers.length, 'Show nav bar:', showNavBar.value);
+      usersCopy.value = newUsers;
+      
+      if (newUsers.length === 0) {
+        error.value = 'No users data received.';
+      } else {
+        error.value = '';
+      }
     }, { immediate: true });
+
+    onMounted(() => {
+      console.log('Component mounted. Initial users:', props.users);
+    });
 
     return {
       pagination,
@@ -143,7 +180,9 @@ export default defineComponent({
       paginatedUsers,
       users: props.users,
       showNavBar,
-      usersCopy
+      usersCopy,
+      isLoading,
+      error,
     };
   }
 });
@@ -172,7 +211,7 @@ ion-list {
   }
 }
 .dynamic-grid {
-  max-height: calc(69vh - 1px); /* Adjust the 100px as necessary */
+  max-height: calc(69vh - 1px);
   overflow: auto;
 }
 </style>
