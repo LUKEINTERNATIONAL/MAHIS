@@ -1,64 +1,77 @@
 <template>
-
-    <ion-grid class="dynamic-grid">
-      <ion-row v-if="error">
-        <ion-col size="12" class="ion-text-center">
-          <ion-text color="danger">
-            <p>{{ error }}</p>
-          </ion-text>
-        </ion-col>
-      </ion-row>
-      <ion-row v-else-if="isLoading">
-        <ion-col size="12" class="ion-text-center">
-          <ion-spinner name="circular"></ion-spinner>
-          <p>Loading users...</p>
-        </ion-col>
-      </ion-row>
-      <ion-row v-else-if="paginatedUsers.length === 0">
-        <ion-col size="12" class="ion-text-center">
-          <p>No users found.</p>
-        </ion-col>
-      </ion-row>
-      <ion-row v-else>
-        <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userid">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-subtitle>{{ user.roles.join(', ') }}</ion-card-subtitle>
-              <ion-card-title>{{ user.firstName }} {{ user.lastName }}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-list>
-                <ion-item>
-                  <ion-label>
-                    <h3>User ID</h3>
-                    <p>{{ user.userId }}</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h3>Username</h3>
-                    <p>{{ user.username }}</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h3>Gender</h3>
-                    <p>{{ user.gender }}</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>
-                    <h3>Programs</h3>
-                    <p>{{ user.programs.join(', ') }}</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
+  <ion-grid class="dynamic-grid">
+    <ion-row v-if="error">
+      <ion-col size="12" class="ion-text-center">
+        <ion-text color="danger">
+          <p>{{ error }}</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row v-else-if="isLoading">
+      <ion-col size="12" class="ion-text-center">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Loading users...</p>
+      </ion-col>
+    </ion-row>
+    <ion-row v-else-if="paginatedUsers.length === 0">
+      <ion-col size="12" class="ion-text-center">
+        <p>No users found.</p>
+      </ion-col>
+    </ion-row>
+    <ion-row v-else>
+      <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userid">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>
+              <ion-icon :icon="personCircleOutline" size="small" style="margin-bottom: -3px;"></ion-icon>
+              {{ user.roles.join(', ') }}
+            </ion-card-subtitle>
+            <ion-card-title>
+              {{ user.firstName }} {{ user.lastName }}
+              <ion-icon :icon="createOutline" size="small" class="edit-icon"></ion-icon>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h3>
+                    User ID
+                  </h3>
+                  <p>{{ user.userId }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>
+                    Username
+                  </h3>
+                  <p>{{ user.username }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>
+                    Gender
+                  </h3>
+                  <p>{{ user.gender }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>
+                    <ion-icon :icon="appsOutline" size="small" style="margin-bottom: -3px;"></ion-icon>
+                    Programs
+                  </h3>
+                  <p>{{ user.programs.join(', ') }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <ion-footer collapse="fade">
     <ion-row>
@@ -96,7 +109,9 @@ import {
   IonFooter,
   IonSpinner,
   IonText,
+  IonIcon,
 } from '@ionic/vue';
+import { personCircleOutline, createOutline, idCardOutline, personOutline, transgenderOutline, appsOutline } from 'ionicons/icons';
 
 interface User {
   userId: string;
@@ -128,6 +143,7 @@ export default defineComponent({
     IonFooter,
     IonSpinner,
     IonText,
+    IonIcon,
   },
   props: {
     users: {
@@ -183,6 +199,12 @@ export default defineComponent({
       usersCopy,
       isLoading,
       error,
+      personCircleOutline,
+      createOutline,
+      idCardOutline,
+      personOutline,
+      transgenderOutline,
+      appsOutline,
     };
   }
 });
@@ -199,6 +221,12 @@ ion-card-content {
 
 ion-list {
   padding: 0;
+}
+
+.edit-icon {
+  float: right;
+  color: #5c6ac4;
+  cursor: pointer;
 }
 
 @media (max-width: 576px) {
