@@ -44,19 +44,19 @@
             <ion-card-content class="person-card-23">
               <div class="card-header">
                 <div>
-                  <ion-card-title>{{ person.given_name }} {{ person.family_name }}</ion-card-title>
+                  <ion-card-title style="font-size: 16px;">{{ person.given_name }} {{ person.family_name }}</ion-card-title>
                   <ion-label style="font-size: 17px;">{{ getBirthdateAge(person.birthdate) }}</ion-label>
                 </div>
                 <ion-icon :icon="eyeOutline" @click="viewPatientProfile(person.patient_id)" class="eye-icon" aria-label="View patient profile"></ion-icon>
               </div>
               <ion-list lines="none" style="border-radius: 6px;">
                 <ion-item class="p-inf">
-                  <ion-icon :icon="personOutline" slot="start" aria-hidden="true"></ion-icon>
+                  <ion-icon class="eye-icon" :icon="personOutline" slot="start" aria-hidden="true"></ion-icon>
                   <ion-label> <span class="s-inf">Gender:</span> {{ person.gender }}</ion-label>
                 </ion-item>
                 <hr class="solid-line">
                 <ion-item class="p-inf">
-                  <ion-icon :icon="locationOutline" slot="start" aria-hidden="true"></ion-icon>
+                  <ion-icon class="eye-icon" :icon="locationOutline" slot="start" aria-hidden="true"></ion-icon>
                   <ion-label> <span class="s-inf">Village:</span> {{ person.city_village }}</ion-label>
                 </ion-item>
               </ion-list>
@@ -259,7 +259,7 @@ ion-card-subtitle {
 }
 
 .eye-icon {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
