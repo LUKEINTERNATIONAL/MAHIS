@@ -99,8 +99,8 @@
           programs: userProgramsStr(item.programs),
           gender: item.person.gender,
           status: item.deactivated_on,
-          firstname: userFirstname(item.person.names),
-          lastname: userLastname(item.person.names),
+          firstName: userFirstname(item.person.names),
+          lastName: userLastname(item.person.names),
         }));
       }
   

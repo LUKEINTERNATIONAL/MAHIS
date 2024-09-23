@@ -19,7 +19,7 @@
       </ion-col>
     </ion-row>
     <ion-row v-else>
-      <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userid">
+      <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userId">
         <ion-card>
           <ion-card-header>
             <ion-card-subtitle>
@@ -28,7 +28,7 @@
             </ion-card-subtitle>
             <ion-card-title>
               {{ user.firstName }} {{ user.lastName }}
-              <ion-icon :icon="createOutline" size="small" class="edit-icon"></ion-icon>
+              <ion-icon @click="openUserProfile(user.userId)" :icon="createOutline" size="small" class="edit-icon"></ion-icon>
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
@@ -87,9 +87,17 @@
       </ion-col>
     </ion-row>
   </ion-footer>
+
+  <editUserModal 
+    :is_open="isPopooverOpen" 
+    :user_id="user_id" 
+    @close-popoover="modalClosed" 
+  />
 </template>
 
 <script lang="ts">
+import editUserModal from "../views/UserManagement/editUserModal.vue";
+import { createModal } from "@/utils/Alerts";
 import { defineComponent, reactive, computed, ref, watch, onMounted } from 'vue';
 import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
 import {
@@ -144,6 +152,7 @@ export default defineComponent({
     IonSpinner,
     IonText,
     IonIcon,
+    editUserModal,
   },
   props: {
     users: {
@@ -152,6 +161,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const isPopooverOpen = ref(false);
     const pagination = reactive({
       page: 1,
       itemsPerPage: 6
@@ -159,6 +169,7 @@ export default defineComponent({
     const usersCopy = ref([]) as any;
     const isLoading = ref(true);
     const error = ref('');
+    const user_id = ref("") as any;
 
     const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
       pagination.page = page;
@@ -190,6 +201,15 @@ export default defineComponent({
       console.log('Component mounted. Initial users:', props.users);
     });
 
+    const openUserProfile = (userId: any) => {
+      isPopooverOpen.value = true;
+      user_id.value = userId;
+    }
+
+    const modalClosed = ()=> {
+      isPopooverOpen.value = false;
+    }
+
     return {
       pagination,
       handlePaginationUpdate,
@@ -205,7 +225,14 @@ export default defineComponent({
       personOutline,
       transgenderOutline,
       appsOutline,
+      openUserProfile,
+      user_id,
+      isPopooverOpen,
+      modalClosed,
     };
+  },
+  methods: {
+
   }
 });
 </script>
