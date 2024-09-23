@@ -41,9 +41,9 @@
     <ion-row>
       <ion-col>
         <bottomNavBar
-          v-if="users.length > 0"
+          v-if="showNavBar"
           style="margin-left: 20px; margin-right: 20px;"
-          :totalItems="users.length" 
+          :totalItems="usersCopy.length"
           :currentPage="pagination.page"
           :itemsPerPage="pagination.itemsPerPage"
           @update:pagination="handlePaginationUpdate"
@@ -54,18 +54,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed } from 'vue';
+import { defineComponent, reactive, computed, ref, watch } from 'vue';
 import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
-import { 
-  IonContent, 
-  IonPage, 
-  IonGrid, 
-  IonRow, 
-  IonCol, 
-  IonCard, 
-  IonCardHeader, 
-  IonCardSubtitle, 
-  IonCardTitle, 
+import {
+  IonContent,
+  IonPage,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
   IonCardContent,
   IonList,
   IonItem,
@@ -84,21 +84,21 @@ interface User {
 
 export default defineComponent({
   name: 'UserCardList',
-  components: { 
-    IonContent, 
-    IonPage, 
-    IonGrid, 
-    IonRow, 
-    IonCol, 
-    IonCard, 
-    IonCardHeader, 
-    IonCardSubtitle, 
-    IonCardTitle, 
+  components: {
+    IonContent,
+    IonPage,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
     IonCardContent,
     IonList,
     IonItem,
     IonLabel,
-    bottomNavBar
+    bottomNavBar,
   },
   props: {
     users: {
@@ -111,6 +111,7 @@ export default defineComponent({
       page: 1,
       itemsPerPage: 6
     });
+    const usersCopy = ref([]) as any
 
     const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
       pagination.page = page;
@@ -123,11 +124,21 @@ export default defineComponent({
       return props.users.slice(start, end);
     });
 
+    const showNavBar = ref(false);
+
+    watch(() => props.users, (newUsers) => {
+      showNavBar.value = newUsers.length > 0;
+      usersCopy.value = props.users
+      console.log('Users updated. Total users:', newUsers.length, 'Show nav bar:', showNavBar.value);
+    }, { immediate: true });
+
     return {
       pagination,
       handlePaginationUpdate,
       paginatedUsers,
-      users: props.users
+      users: props.users,
+      showNavBar,
+      usersCopy
     };
   }
 });
