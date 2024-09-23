@@ -55,12 +55,8 @@
             @close-popoover="isPopooverOpen = false"
         />
 
-      
-
 </template>
-  
-  <script setup lang="ts">
-  import type { Header, Item, BodyRowClassNameFunction, HeaderItemClassNameFunction, BodyItemClassNameFunction } from "vue3-easy-data-table"
+<script setup lang="ts">
   import { IonRow, IonPage, IonContent, IonCard, IonCol, IonButton, IonLabel } from "@ionic/vue"
   import { ref, watch, computed, onMounted, onUpdated } from "vue"
   import BasicInputField from "@/components/BasicInputField.vue"
@@ -86,12 +82,6 @@
   const isPopooverOpen = ref(false)
   const user_id = ref('')
 
-  const items_local = ref<Item[]>([])
-
-  type ClickRowArgument = Item & {
-    isSelected?: boolean,
-    indexInCurrentPage?: number,
-  }
 
   const props = defineProps<{
     colums: any,
@@ -183,10 +173,6 @@ const emit = defineEmits<{
 
 function clickRow(data: any) {
     emit("clickRow", data)
-}
-
-const showRow = (item: ClickRowArgument) => {
-  clickRow(item)
 }
 </script>
 <style scoped>
