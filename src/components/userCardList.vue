@@ -1,5 +1,5 @@
 <template>
-  <ion-grid>
+  <ion-grid style="max-height: 650px; overflow: auto;">
     <ion-row>
       <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userid">
         <ion-card>
@@ -38,6 +38,9 @@
         </ion-card>
       </ion-col>
     </ion-row>
+  </ion-grid>
+
+  <ion-footer>
     <ion-row>
       <ion-col>
         <bottomNavBar
@@ -50,7 +53,7 @@
         />
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-footer>
 </template>
 
 <script lang="ts">
@@ -69,7 +72,8 @@ import {
   IonCardContent,
   IonList,
   IonItem,
-  IonLabel
+  IonLabel,
+  IonFooter,
 } from '@ionic/vue';
 
 interface User {
@@ -99,6 +103,7 @@ export default defineComponent({
     IonItem,
     IonLabel,
     bottomNavBar,
+    IonFooter,
   },
   props: {
     users: {
