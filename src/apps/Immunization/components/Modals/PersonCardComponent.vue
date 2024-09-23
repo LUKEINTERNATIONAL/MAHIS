@@ -318,15 +318,31 @@ ion-item {
   .s-inf {
     font-size: 14px;
   }
+}
 
+.person-card-23 {
+  min-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
   .person-card-23 {
     min-width: 30rem;
   }
 }
 
-.person-card-23 {
+@media (min-width: 1024px) {
+  .person-card-23 {
     min-width: 30rem;
   }
+}
+
+@media (min-width: 1440px) {
+  .person-card-23 {
+    min-width: 30rem;
+  }
+}
 
 .modalTitle {
   font-size: 17px;
