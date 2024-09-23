@@ -223,9 +223,7 @@ export default defineComponent({
         function navigationMenu(url: string) {
             menuController.close();
             router.push(url).then(() => {
-                if (url === "users") {
-                    router.go(0);
-                }
+                
             });
         }
         return {
