@@ -233,7 +233,7 @@ export default defineComponent({
             this.openPatientProfile(event.detail.client_id)
         };
 
-        const dataToPass = {'people': clients, heading_text: `Immunization (Client Drill Down | ${this.navigationPayload.subTxt})`}
+        const dataToPass = {'people': clients, headingText: `Immunization (Client Drill Down | ${this.navigationPayload.subTxt})`}
         createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass, { 'view-client': handleModalAction });
       },
       async openPatientProfile(client_id: any) {
