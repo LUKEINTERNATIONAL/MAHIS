@@ -35,25 +35,19 @@
             <ion-list>
               <ion-item>
                 <ion-label>
-                  <h3>
-                    User ID
-                  </h3>
+                  <h3>User ID</h3>
                   <p>{{ user.userId }}</p>
                 </ion-label>
               </ion-item>
               <ion-item>
                 <ion-label>
-                  <h3>
-                    Username
-                  </h3>
+                  <h3>Username</h3>
                   <p>{{ user.username }}</p>
                 </ion-label>
               </ion-item>
               <ion-item>
                 <ion-label>
-                  <h3>
-                    Gender
-                  </h3>
+                  <h3>Gender</h3>
                   <p>{{ user.gender }}</p>
                 </ion-label>
               </ion-item>
@@ -79,7 +73,7 @@
         <bottomNavBar
           v-if="showNavBar"
           style="margin-left: 20px; margin-right: 20px;"
-          :totalItems="usersCopy.length"
+          :totalItems="filteredUsers.length"
           :currentPage="pagination.page"
           :itemsPerPage="pagination.itemsPerPage"
           @update:pagination="handlePaginationUpdate"
@@ -96,9 +90,8 @@
 </template>
 
 <script lang="ts">
-import editUserModal from "../views/UserManagement/editUserModal.vue";
-import { createModal } from "@/utils/Alerts";
 import { defineComponent, reactive, computed, ref, watch, onMounted } from 'vue';
+import editUserModal from "../views/UserManagement/editUserModal.vue";
 import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
 import {
   IonContent,
@@ -119,7 +112,7 @@ import {
   IonText,
   IonIcon,
 } from '@ionic/vue';
-import { personCircleOutline, createOutline, idCardOutline, personOutline, transgenderOutline, appsOutline } from 'ionicons/icons';
+import { personCircleOutline, createOutline, appsOutline } from 'ionicons/icons';
 
 interface User {
   userId: string;
@@ -159,6 +152,10 @@ export default defineComponent({
       type: Array as () => User[],
       required: true,
     },
+    filterValue: {
+      type: String,
+      required: true,
+    }
   },
   setup(props) {
     const isPopooverOpen = ref(false);
@@ -166,30 +163,36 @@ export default defineComponent({
       page: 1,
       itemsPerPage: 6
     });
-    const usersCopy = ref([]) as any;
     const isLoading = ref(true);
     const error = ref('');
     const user_id = ref("") as any;
+
+    const filteredUsers = computed(() => {
+      if (!props.filterValue) return props.users;
+      return props.users.filter(user => 
+        user.username.toLowerCase().includes(props.filterValue.toLowerCase()) ||
+        user.firstName.toLowerCase().includes(props.filterValue.toLowerCase()) ||
+        user.lastName.toLowerCase().includes(props.filterValue.toLowerCase())
+        // user.lastName.toLowerCase().includes(props.filterValue.toLowerCase()) ||
+        // user.userId.toLowerCase().includes(props.filterValue.toLowerCase())
+      );
+    });
+
+    const paginatedUsers = computed(() => {
+      const start = (pagination.page - 1) * pagination.itemsPerPage;
+      const end = start + pagination.itemsPerPage;
+      return filteredUsers.value.slice(start, end);
+    });
+
+    const showNavBar = computed(() => filteredUsers.value.length > 0);
 
     const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
       pagination.page = page;
       pagination.itemsPerPage = itemsPerPage;
     };
 
-    const paginatedUsers = computed(() => {
-      const start = (pagination.page - 1) * pagination.itemsPerPage;
-      const end = start + pagination.itemsPerPage;
-      return props.users.slice(start, end);
-    });
-
-    const showNavBar = ref(false);
-
     watch(() => props.users, (newUsers) => {
-      console.log('Users updated. Received users:', newUsers);
       isLoading.value = false;
-      showNavBar.value = newUsers.length > 0;
-      usersCopy.value = newUsers;
-      
       if (newUsers.length === 0) {
         error.value = 'No users data received.';
       } else {
@@ -197,33 +200,33 @@ export default defineComponent({
       }
     }, { immediate: true });
 
+    watch(() => props.filterValue, () => {
+      pagination.page = 1; // Reset to first page when filter value changes
+    });
+
     onMounted(() => {
       console.log('Component mounted. Initial users:', props.users);
     });
 
-    const openUserProfile = (userId: any) => {
+    const openUserProfile = (userId: string) => {
       isPopooverOpen.value = true;
       user_id.value = userId;
-    }
+    };
 
-    const modalClosed = ()=> {
+    const modalClosed = () => {
       isPopooverOpen.value = false;
-    }
+    };
 
     return {
+      filteredUsers,
       pagination,
       handlePaginationUpdate,
       paginatedUsers,
-      users: props.users,
       showNavBar,
-      usersCopy,
       isLoading,
       error,
       personCircleOutline,
       createOutline,
-      idCardOutline,
-      personOutline,
-      transgenderOutline,
       appsOutline,
       openUserProfile,
       user_id,
@@ -231,9 +234,6 @@ export default defineComponent({
       modalClosed,
     };
   },
-  methods: {
-
-  }
 });
 </script>
 
@@ -265,6 +265,7 @@ ion-list {
     font-size: 0.9rem;
   }
 }
+
 .dynamic-grid {
   max-height: calc(69vh - 1px);
   overflow: auto;

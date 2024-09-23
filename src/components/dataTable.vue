@@ -46,7 +46,7 @@
       </ion-row>
 
       <ion-row>
-        <user-card-list :users="items" style="margin-left: 20px;"/>
+        <user-card-list :users="items" style="margin-left: 20px;" :filterValue="searchValue"/>
       </ion-row>
 
       <addUserModal
