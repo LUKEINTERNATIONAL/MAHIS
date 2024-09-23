@@ -79,7 +79,11 @@ export default defineComponent({
             // console.log('Current value:', JSON.stringify(ev.detail.value));
         },
         dismiss() {
-            modalController.dismiss();
+            try {
+                modalController.dismiss();
+            } catch (error) {
+                
+            }
         },
         checkIfSelected() {
             if (_.has(this.selectedOption, "name") == true) {
