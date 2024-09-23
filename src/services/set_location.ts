@@ -33,5 +33,6 @@ export async function getTAs() {
     return await LocationService.getAllTraditionalAuthorities();
 }
 export async function getVillages() {
-    return await LocationService.getAllVillages();
+    return "";
+    // return await LocationService.getAllVillages();
 }

@@ -1,18 +1,22 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+      <ion-card-header>
+        <ion-card-title
+          class="dashed_bottom_border sub_item_header"
+        ></ion-card-title
+      ></ion-card-header>
       <ion-card-content>
         <basic-form
-            :contentData="pncEnd"
-            :initialData="initialData"
+          :contentData="pncEnd"
+          :initialData="initialData"
         ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
 </template>
 <script lang="ts">
-import {defineComponent} from 'vue';
+import { defineComponent } from "vue";
 import {
   IonContent,
   IonHeader,
@@ -27,18 +31,24 @@ import {
   IonSelect,
   IonRadio,
   IonRadioGroup,
-} from '@ionic/vue';
-import BasicForm from '../../../../components/BasicForm.vue';
-import { icons } from '../../../../utils/svg';
-import BasicInputField from '../../../../components/BasicInputField.vue';
-import { mapState } from 'pinia';
-import { checkmark, pulseOutline } from 'ionicons/icons';
+} from "@ionic/vue";
+import BasicForm from "../../../../components/BasicForm.vue";
+import { icons } from "../../../../utils/svg";
+import BasicInputField from "../../../../components/BasicInputField.vue";
+import { mapState } from "pinia";
+import { checkmark, pulseOutline } from "ionicons/icons";
 import BasicCard from "@/components/BasicCard.vue";
-import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
-import {usePNCEndStore} from "@/apps/PNC/stores/others/pncEnd";
+import { useDeliveryDetailsStore } from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
+import { usePNCEndStore } from "@/apps/PNC/stores/others/pncEnd";
+import PncEnd from "../../views/pncEnd.vue";
+import {
+  getRadioSelectedValue,
+  modifyCheckboxInputField,
+  modifyFieldValue,
+} from "@/services/data_helpers";
 export default defineComponent({
   name: "PNCEnd",
-  components:{
+  components: {
     BasicCard,
     IonContent,
     IonHeader,
@@ -54,34 +64,57 @@ export default defineComponent({
     BasicInputField,
     BasicForm,
     IonRadio,
-    IonRadioGroup
+    IonRadioGroup,
   },
 
   data() {
     return {
       iconsContent: icons,
-      vValidations: '' as any,
+      vValidations: "" as any,
       hasValidationErrors: [] as any,
-      inputField: '' as any,
-      initialData:[] as any,
-
+      inputField: "" as any,
+      initialData: [] as any,
     };
   },
-  computed:{
-    ...mapState(usePNCEndStore,["pncEnd"]),
+  computed: {
+    ...mapState(usePNCEndStore, ["pncEnd"]),
   },
-  mounted(){
-    const pncEnd=usePNCEndStore();
-    this.initialData=pncEnd.getInitial()
+  mounted() {
+    const pncEnd = usePNCEndStore();
+    this.initialData = pncEnd.getInitial();
+    this.handleSelection();
   },
-  watch:{
+  watch: {
+    pncEnd: {
+      handler(col) {
+        this.handleSelection();
+      },
+      deep: true,
+    },
   },
   setup() {
-    return { checkmark,pulseOutline };
+    return { checkmark, pulseOutline };
   },
-  methods: {}
-});
+  methods: {
+    handleSelection() {
+      if (
+        getRadioSelectedValue(this.pncEnd, "Reason for ending PNC") == "Refer"
+      ) {
+        modifyFieldValue(this.pncEnd, "facility for art", "displayNone", false);
+      } else {
+        modifyFieldValue(this.pncEnd, "facility for art", "displayNone", true);
+      }
 
+      if (
+        getRadioSelectedValue(this.pncEnd, "Reason for ending PNC") == "Death"
+      ) {
+        modifyFieldValue(this.pncEnd, "Date of Death", "displayNone", false);
+      } else {
+        modifyFieldValue(this.pncEnd, "Date of Death", "displayNone", true);
+      }
+    },
+  },
+});
 </script>
 
 <style scoped>
@@ -114,9 +147,9 @@ ion-card {
     padding: 10px;
   }
 }
-.sub_item_header{
+.sub_item_header {
   font-weight: bold;
   font-size: 14px;
 }
-
-</style>yle>
+</style>
+yle>
