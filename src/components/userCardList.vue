@@ -1,60 +1,90 @@
 <template>
-        <ion-grid>
-          <ion-row>
-            <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in users" :key="user.userid">
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-subtitle>{{ user.roles.join(', ') }}</ion-card-subtitle>
-                  <ion-card-title>{{ user.firstName }} {{ user.lastName }}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-list>
-                    <ion-item>
-                      <ion-label>
-                        <h3>User ID</h3>
-                        <p>{{ user.userid }}</p>
-                      </ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label>
-                        <h3>Username</h3>
-                        <p>{{ user.username }}</p>
-                      </ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label>
-                        <h3>Gender</h3>
-                        <p>{{ user.gender }}</p>
-                      </ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label>
-                        <h3>Programs</h3>
-                        <p>{{ user.programs.join(', ') }}</p>
-                      </ion-label>
-                    </ion-item>
-                  </ion-list>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <bottomNavBar
-              v-if="users.length > 0"
-              style="margin-left: 20px; margin-right: 20px;"
-              :totalItems="users.length" 
-              :currentPage="pagination.page"
-              :itemsPerPage="pagination.itemsPerPage"
-              @update:pagination="handlePaginationUpdate"
-            />
-          </ion-row>
-        </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userid">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>{{ user.roles.join(', ') }}</ion-card-subtitle>
+            <ion-card-title>{{ user.firstName }} {{ user.lastName }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h3>User ID</h3>
+                  <p>{{ user.userid }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Username</h3>
+                  <p>{{ user.username }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Gender</h3>
+                  <p>{{ user.gender }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <h3>Programs</h3>
+                  <p>{{ user.programs.join(', ') }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <bottomNavBar
+          v-if="users.length > 0"
+          style="margin-left: 20px; margin-right: 20px;"
+          :totalItems="users.length" 
+          :currentPage="pagination.page"
+          :itemsPerPage="pagination.itemsPerPage"
+          @update:pagination="handlePaginationUpdate"
+        />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </template>
-  
-  <script lang="ts">
-  import { defineComponent, reactive } from 'vue';
-  import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
-  import { 
+
+<script lang="ts">
+import { defineComponent, reactive, computed } from 'vue';
+import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
+import { 
+  IonContent, 
+  IonPage, 
+  IonGrid, 
+  IonRow, 
+  IonCol, 
+  IonCard, 
+  IonCardHeader, 
+  IonCardSubtitle, 
+  IonCardTitle, 
+  IonCardContent,
+  IonList,
+  IonItem,
+  IonLabel
+} from '@ionic/vue';
+
+interface User {
+  userid: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  roles: string[];
+  programs: string[];
+}
+
+export default defineComponent({
+  name: 'UserCardList',
+  components: { 
     IonContent, 
     IonPage, 
     IonGrid, 
@@ -67,77 +97,62 @@
     IonCardContent,
     IonList,
     IonItem,
-    IonLabel
-  } from '@ionic/vue';
-  
-  interface User {
-    userid: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    gender: string;
-    role: string;
-    programs: string[];
-  }
-  
-  export default defineComponent({
-    name: 'UserCardList',
-    components: { 
-      IonContent, 
-      IonPage, 
-      IonGrid, 
-      IonRow, 
-      IonCol, 
-      IonCard, 
-      IonCardHeader, 
-      IonCardSubtitle, 
-      IonCardTitle, 
-      IonCardContent,
-      IonList,
-      IonItem,
-      IonLabel,
-      bottomNavBar
+    IonLabel,
+    bottomNavBar
+  },
+  props: {
+    users: {
+      type: Array as () => User[],
+      required: true,
     },
-    props: {
-      users: {
-        type: Array as () => User[],
-        required: true,
-      },
-    },
-    setup(props) {
-      const pagination = reactive({
-        page: 1,
-        itemsPerPage: 6
-      });
+  },
+  setup(props) {
+    const pagination = reactive({
+      page: 1,
+      itemsPerPage: 6
+    });
 
-      const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
-        pagination.page = page;
-        pagination.itemsPerPage = itemsPerPage;
-      };
-    }
-  });
-  </script>
-  
-  <style scoped>
-  ion-card {
-    margin-bottom: 1rem;
+    const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
+      pagination.page = page;
+      pagination.itemsPerPage = itemsPerPage;
+    };
+
+    const paginatedUsers = computed(() => {
+      const start = (pagination.page - 1) * pagination.itemsPerPage;
+      const end = start + pagination.itemsPerPage;
+      return props.users.slice(start, end);
+    });
+
+    return {
+      pagination,
+      handlePaginationUpdate,
+      paginatedUsers,
+      users: props.users
+    };
+  }
+});
+</script>
+
+<style scoped>
+ion-card {
+  margin-bottom: 1rem;
+}
+
+ion-card-content {
+  padding-top: 0;
+}
+
+ion-list {
+  padding: 0;
+}
+
+@media (max-width: 576px) {
+  ion-card-title {
+    font-size: 1.2rem;
   }
   
-  ion-card-content {
-    padding-top: 0;
+  ion-card-subtitle {
+    font-size: 0.9rem;
   }
-  
-  ion-list {
-    padding: 0;
-  }
-  
-  @media (max-width: 576px) {
-    ion-card-title {
-      font-size: 1.2rem;
-    }
-    
-    ion-card-subtitle {
-      font-size: 0.9rem;
-    }
-  }
-  </style>
+}
+</style>
