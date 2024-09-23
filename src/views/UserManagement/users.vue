@@ -58,7 +58,7 @@
           name: "username",
           selected: true,
         },
-      ]);
+      ]) as any;
       const user_id = ref("");
       const _items_ = ref<[]>([]);
   
