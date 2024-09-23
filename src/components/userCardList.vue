@@ -1,75 +1,77 @@
 <template>
-  <ion-grid class="dynamic-grid">
-    <ion-row v-if="error">
-      <ion-col size="12" class="ion-text-center">
-        <ion-text color="danger">
-          <p>{{ error }}</p>
-        </ion-text>
-      </ion-col>
-    </ion-row>
-    <ion-row v-else-if="isLoading">
-      <ion-col size="12" class="ion-text-center">
-        <ion-spinner name="circular"></ion-spinner>
-        <p>Loading users...</p>
-      </ion-col>
-    </ion-row>
-    <ion-row v-else-if="paginatedUsers.length === 0">
-      <ion-col size="12" class="ion-text-center">
-        <p>No users found.</p>
-      </ion-col>
-    </ion-row>
-    <ion-row v-else>
-      <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userId">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-subtitle>
-              <ion-icon :icon="personCircleOutline" size="small" style="margin-bottom: -3px;"></ion-icon>
-              {{ user.roles.join(', ') }}
-            </ion-card-subtitle>
-            <ion-card-title>
-              {{ user.firstName }} {{ user.lastName }}
-              <ion-icon @click="openUserProfile(user.userId)" :icon="createOutline" size="small" class="edit-icon"></ion-icon>
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-list>
-              <ion-item>
-                <ion-label>
-                  <h3>User ID</h3>
-                  <p>{{ user.userId }}</p>
-                </ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-label>
-                  <h3>Username</h3>
-                  <p>{{ user.username }}</p>
-                </ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-label>
-                  <h3>Gender</h3>
-                  <p>{{ user.gender }}</p>
-                </ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-label>
-                  <h3>
-                    <ion-icon :icon="appsOutline" size="small" style="margin-bottom: -3px;"></ion-icon>
-                    Programs
-                  </h3>
-                  <p>{{ user.programs.join(', ') }}</p>
-                </ion-label>
-              </ion-item>
-            </ion-list>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="container">
+    <ion-grid class="dynamic-grid">
+      <ion-row v-if="error">
+        <ion-col size="12" class="ion-text-center">
+          <ion-text color="danger">
+            <p>{{ error }}</p>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row v-else-if="isLoading">
+        <ion-col size="12" class="ion-text-center">
+          <ion-spinner name="circular"></ion-spinner>
+          <p>Loading users...</p>
+        </ion-col>
+      </ion-row>
+      <ion-row v-else-if="paginatedUsers.length === 0">
+        <ion-col size="12" class="ion-text-center">
+          <p>No users found.</p>
+        </ion-col>
+      </ion-row>
+      <ion-row v-else class="user-cards-row">
+        <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userId">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>
+                <ion-icon :icon="personCircleOutline" size="small" style="margin-bottom: -3px;"></ion-icon>
+                {{ user.roles.join(', ') }}
+              </ion-card-subtitle>
+              <ion-card-title>
+                {{ user.firstName }} {{ user.lastName }}
+                <ion-icon @click="openUserProfile(user.userId)" :icon="createOutline" size="small" class="edit-icon"></ion-icon>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <ion-item>
+                  <ion-label>
+                    <h3>User ID</h3>
+                    <p>{{ user.userId }}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    <h3>Username</h3>
+                    <p>{{ user.username }}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    <h3>Gender</h3>
+                    <p>{{ user.gender }}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    <h3>
+                      <ion-icon :icon="appsOutline" size="small" style="margin-bottom: -3px;"></ion-icon>
+                      Programs
+                    </h3>
+                    <p>{{ user.programs.join(', ') }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
   <ion-footer collapse="fade">
     <ion-row>
-      <ion-col>
+      <ion-col style="flex: none; max-width: 100%">
         <bottomNavBar
           v-if="showNavBar"
           style="margin-left: 20px; margin-right: 20px;"
@@ -238,8 +240,27 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.dynamic-grid {
+  max-height: calc(69vh - 1px);
+  overflow: auto;
+}
+
+.user-cards-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
 ion-card {
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 ion-card-content {
@@ -266,8 +287,20 @@ ion-list {
   }
 }
 
-.dynamic-grid {
-  max-height: calc(69vh - 1px);
-  overflow: auto;
+/* Center grid contents on larger screens */
+@media (min-width: 1024px) {
+  .container {
+    padding: 0;
+  }
+
+  .user-cards-row {
+    justify-content: center;
+  }
+
+  ion-col {
+    flex: 0 0 calc(25% - 20px);
+    max-width: calc(25% - 20px);
+    margin: 10px;
+  }
 }
 </style>
