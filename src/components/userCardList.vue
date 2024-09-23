@@ -259,12 +259,46 @@ export default defineComponent({
 }
 
 ion-card {
-  margin-bottom: 1rem;
+  min-width: 250px;
   width: 100%;
+  margin: 10px;
 }
 
 ion-card-content {
-  padding-top: 0;
+  padding: 16px;
+}
+
+ion-card-title, ion-card-subtitle, ion-label h3, ion-label p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-cards-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+@media (min-width: 768px) {
+  ion-col {
+    flex: 0 0 calc(50% - 20px);
+    max-width: calc(50% - 20px);
+  }
+}
+
+@media (min-width: 1024px) {
+  ion-col {
+    flex: 0 0 calc(33.333% - 20px);
+    max-width: calc(33.333% - 20px);
+  }
+}
+
+@media (min-width: 1200px) {
+  ion-col {
+    flex: 0 0 calc(25% - 20px);
+    max-width: calc(25% - 20px);
+  }
 }
 
 ion-list {
