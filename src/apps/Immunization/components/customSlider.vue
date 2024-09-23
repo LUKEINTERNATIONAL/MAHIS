@@ -1,16 +1,9 @@
 <template>
     <div v-if="showCurrentMilestoneAlert" class="alert_banner">
         <apan>{{ msg }}</apan>
-        <!-- <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
-      </ion-icon> -->
-        <!-- <span style="font-weight: 700;">{{age}}</span> -->
     </div>
 
-    <div v-if="!showCurrentMilestoneAlert" class="alert_banner" style="background: inherit">
-        <!-- <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
-      </ion-icon>
-      <span style="font-weight: 700;">{{ current_milestone }}</span> -->
-    </div>
+    <div v-if="!showCurrentMilestoneAlert" class="alert_banner" style="background: inherit"></div>
 
     <!-- <div class="swipe_msg">
       <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
@@ -19,9 +12,22 @@
     <carousel v-if="vaccineSchudulesCount > 0" :items-to-show="1" :modelValue="landingSlide" @slide-end="slideEvent">
         <slide v-for="(slide, index) in vaccineSchudulesCount" :key="slide">
             <!-- {{ slide }} -->
-            <div class="container">
-                <customVaccine :vaccines="vaccine_schArray[0][index].antigens" :milestone_status="vaccine_schArray[0][index].milestone_status" />
-            </div>
+            <ion-row class="">
+                <div class="container">
+                    <customVaccine
+                        :vaccines="vaccine_schArray[0][index].antigens"
+                        :milestone_status="vaccine_schArray[0][index].milestone_status"
+                        :key="componentKey"
+                    />
+                </div>
+                <ion-row class="bottom-row">
+                    <div class="center-content">
+                        <div class="centerBtns">
+                            <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Set Next Appointment Date</ion-button>
+                        </div>
+                    </div>
+                </ion-row>
+            </ion-row>
         </slide>
         <template #addons>
             <navigation />
@@ -29,17 +35,13 @@
         </template>
     </carousel>
 
-    <carousel>
-        <slide v-for="slide in 12" :key="slide">
-            <ion-row class="bottom-row">
-                <div class="otherVaccine center-content">
-                    <div class="centerBtns">
-                        <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
-                    </div>
-                </div>
-            </ion-row>
-        </slide>
-    </carousel>
+    <ion-row class="bottom-row">
+        <div class="otherVaccine center-content">
+            <div class="centerBtns">
+                <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
+            </div>
+        </div>
+    </ion-row>
 </template>
 
 <script lang="ts">
@@ -52,8 +54,12 @@ import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/a
 import { createModal } from "@/utils/Alerts";
 import { mapState } from "pinia";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
-import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
+import { getVaccinesSchedule, checkIfLastVaccineAdministered } from "@/apps/Immunization/services/vaccines_service";
 import { icons } from "@/utils/svg";
+import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
+import { concat } from "lodash";
+import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service";
+import HisDate from "@/utils/Date";
 
 export default defineComponent({
     name: "xxxComponent",
@@ -75,10 +81,10 @@ export default defineComponent({
             milestones: [],
             iconsContent: icons,
             showCurrentMilestoneAlert: false,
-            age: "",
             landingSlide: 0,
-            msg: "Vaccines due today",
+            msg: "Upcoming Vaccines",
             current_milestone: "" as string,
+            componentKey: 0,
         };
     },
     computed: {
@@ -94,63 +100,86 @@ export default defineComponent({
             },
             deep: true,
         },
+        vaccine_schArray: {
+            handler() {
+                this.reloadVaccines();
+            },
+        },
     },
     methods: {
         openAdministerOtherVaccineModal() {
             createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
         },
         async loadVaccineSchedule() {
+            this.setAppointmentDate()
             const data__ = await getVaccinesSchedule();
             const vaccineScheduleStore = useAdministerVaccineStore();
 
             vaccineScheduleStore.setVaccineSchedule(data__);
-            let upcoming_f = false;
-            let found = false;
+            vaccineScheduleStore.setLastVaccinesGiven([]);
+            checkIfLastVaccineAdministered();
+
             this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();
-            this.vaccine_schArray.push(vaccineScheduleStore.getVaccineSchedule().vaccine_schedule);
-            vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
+            this.vaccine_schArray = [];
+            this.vaccine_schArray.push(vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule);
+
+            vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
                 this.findMissingVaccines(vaccineSchudule);
-                if (vaccineSchudule.milestone_status == "current") {
-                    vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit);
-                    vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age });
-                    this.landingSlide = vaccineSchudule.visit - 1;
-                    this.age = vaccineSchudule.age;
-                    found = true;
-                    vaccineScheduleStore.setCurrentSchedFound(true);
-                }
-
-                if (found == false && vaccineSchudule.milestone_status == "upcoming" && upcoming_f == false) {
-                    vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit);
-                    vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age });
-                    this.landingSlide = vaccineSchudule.visit - 1;
-                    this.age = vaccineSchudule.age;
-                    upcoming_f = true;
-                }
-
-                if (found == false && vaccineSchudule.visit == 12 && upcoming_f == false) {
-                    vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit);
-                    vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age });
-                    this.landingSlide = vaccineSchudule.visit - 1;
-                    this.age = vaccineSchudule.age;
-                    upcoming_f = true;
-                }
+                
+                this.findPreviouslyAdministeredVaccineSchedule(vaccineSchudule);
+                this.handleSchedule(vaccineSchudule);
                 const obj = { visit: vaccineSchudule.visit, age: vaccineSchudule.age };
                 this.milestones = this.appendUniqueObject(this.milestones, obj);
             });
 
-            if (found == false) {
+            let shouldStop = false;
+            vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
+                if (shouldStop) return;
+                if (this.findSingleUpcomingMilestone(vaccineSchudule) == true) {
+                    shouldStop = true;
+                    return;
+                }
+            });
+
+            vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
+                this.findCurrentMilestone(vaccineSchudule);
+            });
+        },
+        setSB(vaccineSchudule: any) {
+            const vaccineScheduleStore = useAdministerVaccineStore();
+            vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age });
+            this.landingSlide = vaccineSchudule.visit - 1;
+            this.current_milestone = vaccineSchudule.age;
+            vaccineScheduleStore.setCurrentMilestone(vaccineSchudule.age);
+        },
+        handleSchedule(vaccineSchudule: any) {
+            if (vaccineSchudule.milestone_status == "upcoming") {
+                const vaccineScheduleStore = useAdministerVaccineStore();
                 vaccineScheduleStore.setCurrentSchedFound(false);
-            }
-
-            if (vaccineScheduleStore.getCurrentSchedFound() == true) {
-                this.msg = "Vaccines due today";
-                this.showCurrentMilestoneAlert = true;
-            }
-
-            if (vaccineScheduleStore.getCurrentSchedFound() == false) {
                 this.msg = "Upcoming Vaccines";
                 this.showCurrentMilestoneAlert = true;
+                this.setSB(vaccineSchudule);
+            } else {
+                this.setSB(vaccineSchudule);
+                const vaccineScheduleStore = useAdministerVaccineStore();
+                vaccineScheduleStore.setCurrentSchedFound(false);
+            }
+        },
+        findSingleUpcomingMilestone(vaccineSchudule: any) {
+            if (vaccineSchudule.milestone_status == "upcoming") {
+                this.setSB(vaccineSchudule);
+                return true;
+            }
+            return false;
+        },
+        findCurrentMilestone(vaccineSchudule: any) {
+            if (vaccineSchudule.milestone_status == "current") {
+                this.msg = "Vaccines due today";
+                const vaccineScheduleStore = useAdministerVaccineStore();
+                vaccineScheduleStore.setCurrentSchedFound(true);
+                this.showCurrentMilestoneAlert = true;
+                this.setSB(vaccineSchudule);
             }
         },
         slideEvent(SlideEventData: any) {
@@ -199,19 +228,45 @@ export default defineComponent({
         findMissingVaccines(milestone: any) {
             const obj = {
                 age: milestone.age,
-                vaccines: [] as any,
+                antigens: [] as any,
             };
             if (milestone.milestone_status == "passed") {
                 milestone.antigens.forEach((vaccine: any) => {
                     if (vaccine.status == "pending") {
-                        obj.vaccines.push(vaccine);
+                        obj.antigens.push(vaccine);
                     }
                 });
             }
             const vaccineScheduleStore = useAdministerVaccineStore();
-            if (obj.vaccines.length > 0) {
+            if (obj.antigens.length > 0) {
                 vaccineScheduleStore.setMissedVaccineSchedules(obj);
             }
+        },
+        findPreviouslyAdministeredVaccineSchedule(milestone: any) {
+            const vaccinesPreviouslyAdministered = [] as any
+            milestone.antigens.forEach((vaccine: any) => {
+                    if (vaccine.status == "administered") {
+                        vaccinesPreviouslyAdministered.push(vaccine)
+                    }
+
+                })
+            if (vaccinesPreviouslyAdministered.length > 0) {
+                const vaccineScheduleStore = useAdministerVaccineStore()
+                vaccineScheduleStore.setLastVaccinesGiven(vaccinesPreviouslyAdministered)
+            }
+        },
+        reloadVaccines() {
+            this.componentKey += 1;
+        },
+        openNextVaccineAppoinment() {
+            createModal(nextAppointMent, { class: "otherVitalsModal" }, false);
+        },
+        async setAppointmentDate() {
+            const store = useAdministerVaccineStore();
+            const appointment_service = new Appointment();
+            const data = await appointment_service.getNextAppointment();
+            const appointmentDate = data.next_appointment_date ? data.next_appointment_date : ''
+            store.setNextAppointMentDate(appointmentDate)
         },
     },
 });

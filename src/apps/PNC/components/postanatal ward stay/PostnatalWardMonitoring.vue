@@ -62,6 +62,7 @@ import {
 import DangerSigns from "@/apps/PNC/components/postanatal ward stay/DangerSigns.vue";
 import Vitals from "@/apps/PNC/components/postanatal ward stay/Vitals.vue";
 import OtherExaminations from "@/apps/PNC/components/postanatal ward stay/OtherExaminations.vue";
+import { usePostnatalWardStayStore } from "../../stores/postnatal ward stay/PostnatalWardMonitoring";
 
 export default defineComponent({
   name: "Menu",
@@ -113,10 +114,15 @@ export default defineComponent({
       otherOrdersStatus: false,
     };
   },
+  mounted() {
+    this.handleLochia()
+    this. handleEpisiotomy()
+  },
   setup() {
     return { checkmark, pulseOutline };
   },
   computed: {
+    ...mapState(usePostnatalWardStayStore,['otherExams']),
     ...mapState(useInvestigationStore, ["investigations"]),
     ...mapState(useDemographicsStore, ["demographics"]),
     inputFields() {
@@ -129,11 +135,32 @@ export default defineComponent({
       },
       deep: true,
     },
+    otherExams:{
+      handler(){
+        this.handleLochia()
+        this. handleEpisiotomy()
+      },
+      deep: true,
+    }
   },
-  async mounted() {
-  },
+  // async mounted() {
+  // },
   methods: {
-
+    handleLochia(){
+          if(getCheckboxSelectedValue(this.otherExams,'Other status')?.value=='Other status')
+            {
+              modifyFieldValue(this.otherExams,'Status of lochia notes', 'displayNone', false)
+            }else {
+              modifyFieldValue(this.otherExams,'Status of lochia notes', 'displayNone', true)
+            }
+      },
+    handleEpisiotomy(){
+      if(getRadioSelectedValue(this.otherExams,'Episiotomy/tear')=='No'){
+        modifyFieldValue(this.otherExams,'Episiotomy Reason','displayNone', false)
+      }else{
+        modifyFieldValue(this.otherExams,'Episiotomy Reason','displayNone', true)
+      }
+    }  
   },
 });
 </script>

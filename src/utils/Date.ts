@@ -14,6 +14,35 @@ function calculateAge(birthdate: any, currentdate: any) {
     }
     return age;
 }
+function calculateDisplayAge(dateOfBirth: string, currentDate: string = new Date().toISOString()): string {
+    const today: Date = new Date(currentDate);
+    const birthDate: Date = new Date(dateOfBirth);
+
+    if (isNaN(today.getTime()) || isNaN(birthDate.getTime())) {
+        throw new Error("Invalid date format. Please use YYYY-MM-DD.");
+    }
+
+    if (birthDate > today) {
+        throw new Error("Birth date cannot be in the future.");
+    }
+
+    const diffTime: number = today.getTime() - birthDate.getTime();
+    const diffDays: number = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 7) {
+        return `${diffDays} day${diffDays !== 1 ? "s" : ""}`;
+    } else if (diffDays < 30) {
+        const weeks: number = Math.floor(diffDays / 7);
+        return `${weeks} week${weeks !== 1 ? "s" : ""}`;
+    } else if (diffDays < 365) {
+        const months: number = Math.floor(diffDays / 30.44); // Average days in a month
+        return `${months} month${months !== 1 ? "s" : ""}`;
+    } else {
+        const years: number = Math.floor(diffDays / 365.25); // Account for leap years
+        return `${years} year${years !== 1 ? "s" : ""}`;
+    }
+}
+
 function ageInMonths(startDateStr: string) {
     const startDate = new Date(startDateStr);
     const endDate = new Date();
@@ -30,7 +59,7 @@ function getBirthdateAge(date: any) {
     return calculateAge(date, currentDate()) + " yrs (" + toStandardHisDisplayFormat(date) + ")";
 }
 function sessionDate() {
-    return sessionStorage.getItem("sessionDate") || dayjs().format(STANDARD_DATE_FORMAT);
+    return localStorage.getItem("sessionDate") || dayjs().format(STANDARD_DATE_FORMAT);
 }
 
 function currentDisplayDate() {
@@ -163,6 +192,7 @@ export default {
     add,
     subtract,
     calculateAge,
+    calculateDisplayAge,
     getBirthdateAge,
     ageInMonths,
     getAgeInFloatYears,

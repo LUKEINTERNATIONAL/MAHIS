@@ -68,7 +68,7 @@ export default defineComponent({
         }
     },
     data: () => ({
-        defaultIcon: '../../../../public/images/reports.png' as string,
+        defaultIcon: 'reports.png' as string,
         viewableItems: REPORTS as any
     }),
     mounted() {
@@ -131,7 +131,7 @@ export default defineComponent({
             }
         },
         itemIcon(item: any) {
-            return img(item.icon ? item.icon : this.defaultIcon)
+            return this.defaultIcon
         }
     }
 })

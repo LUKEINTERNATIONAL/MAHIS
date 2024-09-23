@@ -8,6 +8,8 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -65,9 +67,12 @@ import { useFetalPresentationStore } from "../store/physical exam/FetalPresantat
 import { usePresentingSigns } from "../store/physical exam/PresentingSignsStore";
 import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "PhysicalExam",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -112,7 +117,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Fetal assessment",
+                    title: "Abdominal examination",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -121,21 +126,12 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Fetal presentation",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 4,
-                    last_step: "",
-                },
-                {
                     title: "Presenting signs for IPV",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
-                    number: 5,
+                    number: 4,
                     last_step: "last_step",
                 },
             ],
@@ -151,19 +147,14 @@ export default defineComponent({
                     value: "2",
                 },
                 {
-                    title: "Fetal assessment",
-                    component: "FetalAssessment",
+                    title: "Abdominal examination",
+                    component: "AbdominalExamination",
                     value: "3",
-                },
-                {
-                    title: "Fetal presentation",
-                    component: "FetalPresentation",
-                    value: "4",
                 },
                 {
                     title: "Presenting signs or conditions for IPV ",
                     component: "PresentingSigns",
-                    value: "5",
+                    value: "4",
                 },
             ],
             isOpen: false,
@@ -176,7 +167,7 @@ export default defineComponent({
         ...mapState(useMaternalExamStore,["pallor", "breastExam", "vaginalInspection", "cervicalExam", "oedemaPresence"]),
         ...mapState(useFetalAssessment, ["fetalAssessment"]),
         ...mapState(useFetalPresentationStore,["fetalPresentation"]),
-        ...mapState(usePresentingSigns,["signsOfInjury", "clinicalEnquiry", "intimateViolence"]),
+        ...mapState(usePresentingSigns,["presentingSigns"]),
 
     },
     mounted() {
@@ -248,8 +239,8 @@ export default defineComponent({
                 this.saveFetalAssessment();
                 this.saveFetalPresentation();
                 this.savePresentingSigns();
-                resetPatientData();
-                //this.$router.push("ANChome");
+               this.$router.push("ANChome");
+              resetPatientData();
                 toastSuccess("Physical examination data saved successfully");
             } else {
                 toastWarning("Please complete all required fields");
@@ -292,14 +283,9 @@ export default defineComponent({
 
     async buildPresentingSigns() {
         return [
-        ...(await formatInputFiledData(this.signsOfInjury)),
-        ...(await formatRadioButtonData(this.signsOfInjury)),
-        ...(await formatRadioButtonData(this.clinicalEnquiry)),
-        ...(await formatInputFiledData(this.clinicalEnquiry)),
-        ...(await formatRadioButtonData(this.intimateViolence)),
-        ...(await formatInputFiledData(this.intimateViolence)),
-
-        
+        ...(await formatInputFiledData(this.presentingSigns)),
+        ...(await formatRadioButtonData(this.presentingSigns)),
+        ...(await formatCheckBoxData(this.presentingSigns)),
         ]
 
     },

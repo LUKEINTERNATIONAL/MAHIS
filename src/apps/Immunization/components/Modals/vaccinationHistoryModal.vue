@@ -1,27 +1,37 @@
 <template>
-    <div class="OtherVitalsHeading">
-        <div class="OtherVitalsTitle">Vaccination History</div>
-    </div>
+    <ion-header>
+        <ion-title style="margin-bottom: 20px;" class="modalTitle OtherVitalsTitle">Vaccination History</ion-title>
+    </ion-header>
 
-    <div class="mod-ls" v-for="(item, index) in vaccineHistory" :key="index">
-        <row>
-            <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
-            <span> at <span style="color: #016302;">{{ item.age }}</span></span>
-            <span style="color: #316CBA; margin-left: 10%;">{{ vaccinesGivenCount(item) }}/{{ item.antigens.length }} vaccine(s) given</span>
-        </row>
+    <ion-content :fullscreen="true" class="ion-padding">
+        <div class="mod-ls" v-for="(item, index) in vaccineSchedule.vaccine_schedule" :key="index">
+            <row>
+                <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
+                <span> at <span style="color: #016302;">{{ item.age }}</span></span>
+                <span style="color: #316CBA; margin-left: 10%;">{{ vaccinesGivenCount(item) }}/{{ item.antigens.length }} vaccine(s) given</span>
+            </row>
 
-        <row>
-            <customVaccine :vaccines="item.antigens" :milestone_status="item.milestone_status" />
-        </row>
+            <row>
+                <customVaccine :vaccines="item.antigens" :milestone_status="item.milestone_status" />
+            </row>
 
-        <!-- <row>
-            <div>
-                <span style="color: #316CBA">
-                    Show more
-                </span>
-            </div>
-        </row> -->
-    </div>
+            <!-- <row>
+                <div>
+                    <span style="color: #316CBA">
+                        Show more
+                    </span>
+                </div>
+            </row> -->
+        </div>
+    </ion-content>
+
+    <ion-footer collapse="fade" class="ion-no-border">
+        <ion-row>
+            <ion-col>
+                <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="dismiss()"> Cancel </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-footer>
 </template>
 <script lang="ts">
 import {
@@ -37,7 +47,9 @@ import {
     IonLabel,
     IonPage,
     IonFooter,
-    IonIcon
+    IonIcon,
+    IonRow,
+    modalController,
 } from "@ionic/vue"
 import { createOutline } from "ionicons/icons"
 import {
@@ -49,6 +61,7 @@ import { defineComponent } from "vue";
 import { icons } from "@/utils/svg"
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
+import { mapState } from "pinia";
 
 export default defineComponent({
     name: "Home",
@@ -56,6 +69,12 @@ export default defineComponent({
         IonIcon,
         IonButton,
         customVaccine,
+        IonHeader,
+        IonTitle,
+        IonFooter,
+        IonCol,
+        IonRow,
+        IonContent
     },
     data() {
         return {
@@ -66,16 +85,10 @@ export default defineComponent({
     setup() {
         return { closeOutline, checkmarkOutline }
     },
-    async mounted() {
-        this.populateHistory()
+    computed: {
+        ...mapState(useAdministerVaccineStore, ["vaccineReload", "vaccineSchedule"]),
     },
     methods: {
-        populateHistory() {
-            const vaccineScheduleStore = useAdministerVaccineStore();
-            const vaccinSchedules = vaccineScheduleStore.getVaccineSchedule().vaccine_schedule
-            console.log(vaccinSchedules)
-            this.vaccineHistory = vaccinSchedules
-        },
         vaccinesGivenCount(vaccinSchedule: any) {
             const administeredVaccines = []
             vaccinSchedule.antigens.forEach((vaccine: any) => {
@@ -84,7 +97,10 @@ export default defineComponent({
                 }
             })
             return administeredVaccines.length
-        }
+        },
+        dismiss() {
+            modalController.dismiss();
+        },
     }
 })
 
@@ -128,7 +144,6 @@ h5 {
     line-height: 60px;
 }
 .mod-ls {
-    margin: 10px;
     border-bottom: 1px solid #ccc;
     line-height: 60px;
 }

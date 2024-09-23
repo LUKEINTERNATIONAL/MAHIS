@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.mohmw.MAHIS;
 
 import com.getcapacitor.BridgeActivity;
 

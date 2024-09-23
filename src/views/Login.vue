@@ -4,7 +4,7 @@
             <div class="login-container">
                 <ion-card style="background-color: #fff">
                     <ion-card-content>
-                        <ion-img class="login_img" :src="loginIcon" id="logo"></ion-img>
+                        <ion-img class="login_img" :src="loginIcon()" id="logo"></ion-img>
                         <ion-title class="login-title">MaHIS</ion-title>
                         <span style="text-align: left">
                             <ion-input
@@ -100,7 +100,9 @@ import { toastWarning, toastDanger } from "@/utils/Alerts";
 import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
-import ProgramData from "@/Data/ProgramData";
+import { getUserLocation } from "@/services/userService";
+import { useUserStore } from "@/stores/userStore";
+import db from "@/db";
 
 export default defineComponent({
     name: "Home",
@@ -138,11 +140,7 @@ export default defineComponent({
             showPassword: false,
         };
     },
-    computed: {
-        loginIcon() {
-            return img("mw.png");
-        },
-    },
+    computed: {},
     setup() {
         return { eye, person, eyeOff };
     },
@@ -150,11 +148,22 @@ export default defineComponent({
         this.auth = new AuthService();
     },
     async mounted() {
+        const auth = new AuthService();
+        await auth.loadConfig();
         await this.getPrograms();
     },
     methods: {
         async getPrograms() {
-            this.multiSelectData = ProgramData;
+            const programsData = await db.collection("programs").get();
+            const programs = programsData[0]?.programs;
+            if (!(programs && Object.keys(programs).length > 0)) {
+                await this.setOfflinePrograms();
+                await this.getPrograms();
+            }
+            if (programs && Object.keys(programs).length > 0) {
+                programs.sort((a: any, b: any) => a.name.localeCompare(b.name));
+                this.multiSelectData = programs;
+            }
         },
         doLogin: async function () {
             if (this.username && this.password && this.program) {
@@ -167,8 +176,13 @@ export default defineComponent({
                     //     throw "Local date does not match API date. Please Update your device's date";
                     // }
                     await this.auth.login(this.password);
-                    this.auth.startSession();
-                    this.$router.push("/home");
+
+                    if (this.auth.checkUserPrograms(this.program.name)) {
+                        this.facilityB();
+                        this.$router.push("/home");
+                    } else {
+                        toastDanger("You don't have permission to access the program.");
+                    }
                 } catch (e) {
                     if (e instanceof InvalidCredentialsError) {
                         toastDanger("Invalid username or password");
@@ -181,12 +195,29 @@ export default defineComponent({
             }
         },
         handleInput(event: any) {
-            sessionStorage.setItem("app", JSON.stringify({ programID: event.program_id, applicationName: event.name }));
+            localStorage.setItem("app", JSON.stringify({ programID: event.program_id, applicationName: event.name }));
         },
-    },
-    togglePasswordVisibility() {
-        if (!this.togglePasswordVisibility) return true;
-        else return false;
+        togglePasswordVisibility() {
+            if (!this.togglePasswordVisibility) return true;
+            else return false;
+        },
+        loginIcon() {
+            return img("mw.png");
+        },
+        async facilityB() {
+            const store = useUserStore();
+            const data = await getUserLocation();
+            store.setUserFacilityName(data.name);
+            store.setCurrentUserProgram(this.program);
+        },
+        async setOfflinePrograms() {
+            const programs = await ProgramService.getAllPrograms();
+            if (programs && Object.keys(programs).length > 0) {
+                await db.collection("programs").add({
+                    programs: programs,
+                });
+            }
+        },
     },
 });
 </script>
@@ -248,5 +279,13 @@ export default defineComponent({
 }
 .multiselect::before {
     top: -7px;
+}
+@media (max-width: 902px) {
+    .login-page {
+        --ion-background-color: #ffffff;
+    }
+    ion-card {
+        box-shadow: unset;
+    }
 }
 </style>

@@ -46,7 +46,7 @@ export default [
     },
     {
         path: '/labour/labourHome',
-        name: 'end',
+        name: 'labourHome',
         component: labourHome
     },
 

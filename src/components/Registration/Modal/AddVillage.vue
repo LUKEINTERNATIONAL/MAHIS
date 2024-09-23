@@ -88,7 +88,7 @@ export default defineComponent({
         ...mapState(useRegistrationStore, ["addVillage", "currentLocation", "homeLocation"]),
     },
     mounted() {
-        if (sessionStorage.getItem("activeLocation") == "current") {
+        if (localStorage.getItem("activeLocation") == "current") {
             this.districtType = "current_district";
             this.TAType = "current_traditional_authority";
             this.VillageType = "current_village";
@@ -107,8 +107,7 @@ export default defineComponent({
         },
         async saveData() {
             const villageValue = getFieldValue(this.addVillage, "Village", "value");
-            console.log("🚀 ~ saveData ~ villageValue:", villageValue);
-            if (Validation.isName(villageValue) == null) {
+            if (Validation.isNames(villageValue) == null) {
                 const address = await LocationService.createAddress(
                     this.validationData.address_type,
                     this.validationData.addresses_name,
@@ -135,7 +134,7 @@ export default defineComponent({
                 modifyFieldValue(this.location, this.VillageType, "value", { name: villageValue });
 
                 modifyFieldValue(this.addVillage, "Village", "value", "");
-                if (sessionStorage.getItem("activeLocation") == "current") {
+                if (localStorage.getItem("activeLocation") == "current") {
                     modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsErrorMassage", false);
                     modifyFieldValue(this.currentLocation, "current_village", "alertsErrorMassage", false);
                 } else {
@@ -151,7 +150,7 @@ export default defineComponent({
             const name = getFieldValue(this.addVillage, "Village", "value");
             const TAData = getFieldValue(this.location, this.TAType, "value");
 
-            if (Validation.isName(name) != null) {
+            if (Validation.isNames(name) != null) {
                 modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "Please enter a valid " + "Village");
                 return false;
             } else {
@@ -220,9 +219,9 @@ ion-footer {
 }
 .saveBtn {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     margin: 20px;
-    width: 330px;
+    width: 100%;
     align-items: end;
 }
 .btnContent {

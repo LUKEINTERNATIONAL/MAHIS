@@ -2,52 +2,46 @@ import { toastController, modalController, popoverController } from "@ionic/vue"
 import ConfimationSheet from "@/components/DataViews/actionsheet/ConfirmationSheet.vue";
 import { NavBtnInterface } from "@/components/HisDynamicNavFooterInterface";
 import { icons } from "@/utils/svg";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 interface AlertConfirmationOtions {
     header?: string;
     confirmBtnLabel?: string;
     cancelBtnLabel?: string;
 }
 
-async function toast(message: string, color = "primary", duration = 2000, icon = "") {
-    const toast = await toastController.create({
-        message: message,
-        position: "top",
-        animated: true,
-        duration: duration,
-        color: color,
-        cssClass: "custom-toast",
-        icon: `data:image/svg+xml;utf8,` + icon,
-        keyboardClose: false,
-        buttons: [
-            {
-                text: "X",
-                role: "cancel",
-                handler: () => {
-                    console.log("Dismiss clicked");
-                },
-            },
-        ],
+export function toastWarning(message: string, duration = 3000) {
+    toast.warn(message, {
+        theme: "colored",
+        autoClose: duration,
+        transition: "zoom",
+        dangerouslyHTMLString: true,
     });
-    return toast.present();
 }
 
-export function toastWarning(message: string, duration = 2000) {
-    return toast(message, "warning", duration, icons.warningAlert);
+export function toastSuccess(message: string, duration = 3000) {
+    toast.success(message, {
+        theme: "colored",
+        autoClose: duration,
+        transition: "zoom",
+        dangerouslyHTMLString: true,
+    });
 }
 
-export function toastSuccess(message: string, duration = 1000) {
-    return toast(message, "success", duration, icons.successAlert);
-}
-
-export function toastDanger(message: string, duration = 2000) {
-    return toast(message, "danger", duration, icons.dangerAlert);
+export function toastDanger(message: string, duration = 3000) {
+    toast.error(message, {
+        theme: "colored",
+        autoClose: duration,
+        transition: "zoom",
+        dangerouslyHTMLString: true,
+    });
 }
 
 export function createAlert(message: string, header = "" as string, btns = [] as Array<NavBtnInterface>) {
     return modalController.create({
         component: ConfimationSheet,
         backdropDismiss: false,
-        cssClass: "small-modal custom-modal-backdrop",
+        cssClass: "otherVitalsModal",
         componentProps: {
             subtitle: header,
             body: message,
@@ -60,7 +54,7 @@ export async function alertConfirmation(message: string, options = {} as AlertCo
     const alert = await createAlert(message, options.header || "Confirmation", [
         {
             name: options.cancelBtnLabel || "No",
-            size: "large",
+            size: "Default",
             slot: "start",
             color: "danger",
             visible: true,
@@ -69,7 +63,7 @@ export async function alertConfirmation(message: string, options = {} as AlertCo
         },
         {
             name: options.confirmBtnLabel || "Yes",
-            size: "large",
+            size: "Default",
             slot: "end",
             color: "success",
             visible: true,
@@ -97,14 +91,30 @@ export async function infoAlert(message: string, header = "Information") {
     alert.present();
 }
 
-export async function createModal(modalComponent: any, options = {} as any, BACKDROPDISMISS = true) {
+export async function createModal(
+    modalComponent: any, 
+    options: any = {}, 
+    BACKDROPDISMISS = true, 
+    props = {},
+    eventHandlers: {[key: string]: (event: CustomEvent<any>) => void} = {}
+) {
     const modal = await modalController.create({
         component: modalComponent,
         backdropDismiss: BACKDROPDISMISS,
         cssClass: options.class || "large-modal",
+        componentProps: props,
     });
 
-    modal.present();
+    // Set up event listeners
+    Object.entries(eventHandlers).forEach(([eventName, handler]) => {
+        modal.addEventListener(eventName, (event: Event) => {
+            if (event instanceof CustomEvent) {
+                handler(event);
+            }
+        });
+    });
+
+    await modal.present();
 
     const { data } = await modal.onDidDismiss();
     return data;
@@ -129,7 +139,7 @@ export function createPopover(massege: any, e: any, btns = [] as Array<NavBtnInt
 export async function popoverConfirmation(massege: string, e: any, options = {} as AlertConfirmationOtions) {
     const popover = await createPopover(massege, e, [
         {
-            name: "Delete",
+            name: options.confirmBtnLabel || "Delete",
             size: "small",
             slot: "start",
             color: "danger",

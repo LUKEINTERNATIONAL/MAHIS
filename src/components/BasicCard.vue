@@ -1,5 +1,5 @@
 <template>
-    <div class="demographics">
+    <div class="demographics" v-if="!editable">
         <ion-card class="registration_ion_card" v-for="(card, cardIndex) in content.cards" :key="cardIndex">
             <div class="card_content">
                 <div class="card_hearder">
@@ -11,15 +11,34 @@
                     @update:selected="$emit('update:selected', $event)"
                     @update:inputValue="$emit('update:inputValue', $event)"
                     @clicked:button="$emit('clicked:button', $event)"
+                    @countryChanged="(c: any,$event) => $emit('countryChanged', c,$event)"
                 ></basic-form>
                 <basic-form
                     :contentData="card.contentTwo"
                     @update:selected="$emit('update:selected', $event)"
                     @update:inputValue="$emit('update:inputValue', $event)"
+                    @countryChanged="(c: any,$event) => $emit('countryChanged', c, $event)"
                     @clicked:button="$emit('clicked:button', $event)"
                 ></basic-form>
             </div>
         </ion-card>
+    </div>
+    <div v-else v-for="(card, cardIndex) in content.cards" :key="cardIndex">
+        <basic-form
+            :contentData="card.content"
+            :initialData="card.initialData"
+            @update:selected="$emit('update:selected', $event)"
+            @update:inputValue="$emit('update:inputValue', $event)"
+            @countryChanged="(c: any,$event) => $emit('countryChanged', c, $event)"
+            @clicked:button="$emit('clicked:button', $event)"
+        ></basic-form>
+        <basic-form
+            :contentData="card.contentTwo"
+            @update:selected="$emit('update:selected', $event)"
+            @countryChanged="(c: any,$event) => $emit('countryChanged', c, $event)"
+            @update:inputValue="$emit('update:inputValue', $event)"
+            @clicked:button="$emit('clicked:button', $event)"
+        ></basic-form>
     </div>
 </template>
 
@@ -30,9 +49,11 @@ import BasicForm from "@/components/BasicForm.vue";
 import { grid, list } from "ionicons/icons";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { mapState } from "pinia";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 
 export default defineComponent({
     name: "Menu",
+    mixins: [ScreenSizeMixin],
     components: {
         IonContent,
         IonHeader,
@@ -45,6 +66,7 @@ export default defineComponent({
             iconGridStatus: "inactive_icon",
         };
     },
+    emits: ["countryChanged", "update:selected", "update:inputValue", "clicked:button"],
     computed: {
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
     },
@@ -57,6 +79,9 @@ export default defineComponent({
         },
         size: {
             default: "" as any,
+        },
+        editable: {
+            default: false as any,
         },
     },
 });

@@ -72,6 +72,7 @@ export function modifyGroupedRadioValue(data: any, radioBtnName: any, element: a
 export function modifyCheckboxValue(data: any, checkboxName: any, element: any, newValue: any, initialData = []) {
     data.forEach((item: any) => {
         const checkbox = item.checkboxBtnContent?.data.find((checkbox: any) => checkbox.name === checkboxName);
+      
         if (checkbox) {
             checkbox[element] = newValue;
             if (initialData.length > 0) {
@@ -93,6 +94,14 @@ export function modifyCheckboxHeader(data: any, headerName: any, element: any, n
     data.forEach((item: any) => {
         if (item?.checkboxBtnContent?.header?.name === headerName) {
             item.checkboxBtnContent.header[element] = newValue;
+        }
+    });
+}
+
+export function modifyCheckboxData(data: any, type: any, headerName: any, newValue: any) {
+    data.forEach((item: any) => {
+        if (item[type]?.header?.name === headerName) {
+            item[type].data = newValue;
         }
     });
 }

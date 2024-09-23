@@ -1,5 +1,7 @@
 import EventBus from "@/utils/EventBus";
 
+import { getFileConfig2, Config } from "@/utils/GeneralUti"
+
 export enum ApiBusEvents {
     BEFORE_API_REQUEST = "before_api_request",
     AFTER_API_REQUEST = "after_api_request",
@@ -7,42 +9,10 @@ export enum ApiBusEvents {
 }
 
 const ApiClient = (() => {
-    interface Config {
-        host: string;
-        port: string;
-        protocol: string;
-        thirdpartyapps: string;
-        otherApps: Array<any>;
-    }
+    const baseURL = ''
 
     async function getFileConfig(): Promise<Config> {
-        const response = await fetch("/config.json");
-        // const response = await fetch("/config.json");
-        if (!response.ok) {
-            throw "Unable to retrieve configuration file/ Invalid config.json";
-        }
-        try {
-            const { apiURL, apiPort, apiProtocol, appConf, apps, thirdpartyApps, platformProfiles, otherApps } = await response.json();
-            sessionStorage.setItem("apiURL", apiURL);
-            sessionStorage.setItem("apiPort", apiPort);
-            sessionStorage.setItem("apiProtocol", apiProtocol);
-            sessionStorage.setItem("appConf", JSON.stringify(appConf));
-            sessionStorage.setItem("apps", JSON.stringify(apps));
-            // sessionStorage.setItem("app", JSON.stringify({ programID: 29, applicationName: "PATIENT REGISTRATION PROGRAM" }));
-            sessionStorage.setItem("thirdpartyApps", JSON.stringify(thirdpartyApps));
-            sessionStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
-            sessionStorage.setItem("otherApps", JSON.stringify(otherApps));
-            return {
-                host: apiURL,
-                port: apiPort,
-                protocol: apiProtocol,
-                thirdpartyapps: thirdpartyApps,
-                otherApps,
-            };
-        } catch (e) {
-            console.error(e);
-            throw 'API Configuration file "/config.json" has errors. Please check console log for more details';
-        }
+        return await getFileConfig2()
     }
 
     function getLocalConfig(): Config | undefined {
@@ -52,26 +22,26 @@ const ApiClient = (() => {
         const thirdpartyapps = localStorage.thirdpartyApps;
         const otherApps = localStorage.otherApps || [];
 
-        if (host && port && protocol) return { host, port, protocol, thirdpartyapps, otherApps };
+        if (host && port && protocol) return { host, port, protocol, thirdpartyapps, otherApps, baseURL };
     }
 
     function getSessionConfig(): Config | undefined {
-        const host = sessionStorage.apiURL;
-        const port = sessionStorage.apiPort;
-        const protocol = sessionStorage.apiProtocol;
-        const thirdpartyapps = sessionStorage.thirdpartyApps;
-        const otherApps = sessionStorage.otherApps;
+        const host = localStorage.apiURL;
+        const port = localStorage.apiPort;
+        const protocol = localStorage.apiProtocol;
+        const thirdpartyapps = localStorage.thirdpartyApps;
+        const otherApps = localStorage.otherApps;
 
-        if (host && port && protocol) return { host, port, protocol, thirdpartyapps, otherApps };
+        if (host && port && protocol) return { host, port, protocol, thirdpartyapps, otherApps, baseURL };
     }
 
     function getConfig(): Promise<Config> | Config {
-        const localConfig: Config | undefined = getLocalConfig();
-        const sessionConfig: Config | undefined = getSessionConfig();
+        // const localConfig: Config | undefined = getLocalConfig();
+        // const sessionConfig: Config | undefined = getSessionConfig();
 
-        if (localStorage.useLocalStorage && localConfig) return localConfig;
+        // if (localStorage.useLocalStorage && localConfig) return localConfig;
 
-        if (sessionConfig) return sessionConfig;
+        // if (sessionConfig) return sessionConfig;
 
         return getFileConfig();
     }
@@ -83,7 +53,7 @@ const ApiClient = (() => {
 
     function headers() {
         return {
-            Authorization: sessionStorage.apiKey,
+            Authorization: localStorage.apiKey,
             "Content-Type": "application/json",
         };
     }
@@ -117,7 +87,7 @@ const ApiClient = (() => {
             handleUnauthorized(response.statusText);
             return response;
         } catch (e) {
-            console.error(e);
+            // console.error(e);
             if (`${e}`.match(/NetworkError|Failed to fetch/i)) {
                 EventBus.emit(ApiBusEvents.ON_API_CRASH, e);
             } else {
@@ -127,7 +97,7 @@ const ApiClient = (() => {
     }
     function handleUnauthorized(response: any) {
         if (response == "Unauthorized") {
-            sessionStorage.setItem("apiKey", "");
+            localStorage.setItem("apiKey", "");
         }
     }
     // /**

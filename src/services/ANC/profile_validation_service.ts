@@ -3,22 +3,22 @@ import Validation from "@/validations/StandardValidations";
 
 export function validateField(data: any, fieldName: string, value: any) {
     const validationRules: any = {
-        LMNP: () => Validation.required(value),
+        // LMNP: () => Validation.required(value),
         Gravida: () => MultValidations(fieldName, value),
         lmnpEED: () => Validation.required(value),
         Stillbirths: () => MultValidations(fieldName, value),
         LiveBirths: () => Validation.required(value),
         Parity: () => Validation.required(value),
-        Abortions: () => MultValidations(fieldName, value),
-        lmnpDate: () => MultValidations(fieldName, value),
-        lmnpGestationAge: () => Validation.required(value),
-        LNMPKnown: () => Validation.required(value),
-        UltrasoundDone: () => Validation.required(value),
-        UltrasoundDate: () => MultValidations(fieldName, value),
+        "Abortions/Miscarriages": () => MultValidations(fieldName, value),
+        // lmnpDate: () => MultValidations(fieldName, value),
+        // lmnpGestationAge: () => Validation.required(value),
+        // LNMPKnown: () => Validation.required(value),
+        // UltrasoundDone: () => Validation.required(value),
+        // UltrasoundDate: () => MultValidations(fieldName, value),
         specify: () => MultValidations(fieldName, value),
-        GestationAgeByPalpationKnown: () => Validation.required(value),
-        "Gestation age by palpation": () => MultValidations(fieldName, value),
-        GestationAgeUsed: () => Validation.required(value),
+        // GestationAgeByPalpationKnown: () => Validation.required(value),
+        // "Gestation age by palpation": () => MultValidations(fieldName, value),
+        // GestationAgeUsed: () => Validation.required(value),
         TetanusDosesForImmunisation: () => Validation.required(value),
         NumberOfUnderImmunisedDoses: () => Validation.required(value),
         tt1Date: () => Validation.required(value),
@@ -75,7 +75,7 @@ function MultValidations(fieldName: string, value: any): null | any {
         if (minMaxError !== null) {
             return minMaxError;
         }
-    } else if (fieldName === "Abortions") {
+    } else if (fieldName === "Abortions/Miscarriages") {
         const requiredError: any | null = Validation.required(value);
         if (requiredError !== null) {
             return requiredError;

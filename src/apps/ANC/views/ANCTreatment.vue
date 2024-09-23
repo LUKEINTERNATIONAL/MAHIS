@@ -4,10 +4,12 @@
         <ion-content :fullscreen="true">
             <DemographicBar />
             <Stepper
-                stepperTitle="Treament and Diagnosis"
+                stepperTitle="Diagnosis and Treatment"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -17,7 +19,6 @@
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonPage, IonList, IonTitle, IonToolbar, IonMenu } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
-import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
@@ -28,18 +29,21 @@ import { icons } from "@/utils/svg";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import DiagnosisCounselling from "@/apps/ANC/components/Treatment/DiagnosisCounselling.vue";
 import Immunization from "@/apps/ANC/components/Treatment/Immunization.vue";
-import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
+//import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
 import Deworming from "@/apps/ANC/components/Treatment/Deworming.vue";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { mapState } from "pinia";
 import { useDiagnosisStore } from "../store/diagnosisStore";
 import { useMedicationDispensedStore } from "../store/medicationDispensed";
-import { useDiagnosisCounsellingStore } from "../store/diagnosisCounsellingStore";
 import { useImmunizationStore } from "../store/immunizationStore";
-import { useIntimatePartnerStore } from "../store/intimatePartnerStore";
+//import { useIntimatePartnerStore } from "../store/intimatePartnerStore";
 import { useDewormingStore } from "../store/dewormingStore";
 import { Service } from "@/services/service";
-import { ImmunizationService, MedicationDispensedService } from "@/services/anc_treatment_service";
+import {
+  DiagnosisTreatmentService,
+  ImmunizationService,
+  MedicationDispensedService
+} from "@/services/anc_treatment_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { resetPatientData } from "@/services/reset_data";
@@ -47,10 +51,14 @@ import { getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/treatement_validation_service";
 import StandardValidations from "@/validations/StandardValidations";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "Treatment",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -68,14 +76,14 @@ export default defineComponent({
         MedicationDispensed,
         DiagnosisCounselling,
         Immunization,
-        IntimatePartner,
+       // IntimatePartner,
         Deworming,
     },
     data() {
         return {
             wizardData: [
                 {
-                    title: "Diagnosis and Treatment",
+                    title: "Diagnosis",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -83,7 +91,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Medication Dispensed",
+                    title: "Medication dispensed",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -91,41 +99,33 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Counselling",
+                    title: "Immunization",
                     class: "common_step",
                     checked: false,
                     disabled: false,
                     number: 3,
                     last_step: "",
                 },
-                {
-                    title: "Immunization",
-                    class: "common_step",
-                    checked: false,
-                    disabled: false,
-                    number: 4,
-                    last_step: "",
-                },
-                {
-                    title: "Intimate Partner Violence",
-                    class: "common_step",
-                    checked: false,
-                    disabled: false,
-                    number: 5,
-                    last_step: "",
-                },
+                // {
+                //     title: "Intimate Partner Violence",
+                //     class: "common_step",
+                //     checked: false,
+                //     disabled: false,
+                //     number: 4,
+                //     last_step: "",
+                // },
                 {
                     title: "Deworming & Malaria Prophylaxis",
                     class: "common_step",
                     checked: false,
                     disabled: false,
-                    number: 6,
+                    number: 4,
                     last_step: "last_step",
                 },
             ],
             StepperData: [
                 {
-                    title: "Diagnosis and Treatment",
+                    title: "Diagnosis",
                     component: "DiagnosisTreatment",
                     value: "1",
                 },
@@ -135,24 +135,19 @@ export default defineComponent({
                     value: "2",
                 },
                 {
-                    title: "Counselling",
-                    component: "DiagnosisCounselling",
-                    value: "3",
-                },
-                {
                     title: "Immunization",
                     component: "Immunization",
-                    value: "4",
+                    value: "3",
                 },
-                {
-                    title: "Intimate Partner Violence",
-                    component: "IntimatePartner",
-                    value: "5",
-                },
+                // {
+                //     title: "Intimate Partner Violence",
+                //     component: "IntimatePartner",
+                //     value: "4",
+                // },
                 {
                     title: "Deworming & Malaria Prophylaxis",
                     component: "Deworming",
-                    value: "6",
+                    value: "4",
                 },
             ],
             isOpen: false,
@@ -167,52 +162,22 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useDiagnosisStore, [
             "diagnoses",
-            "hypertension",
-            "preEclampsia",
-            "hyper",
-            "hiv",
-            "hepatitisB",
-            "hepatitisC",
-            "syphilis",
-            "syphilisTesting",
-            "tbScreening",
-            "GDM",
-            "diabetes",
-            "anaemia",
-            "hypertensionReason",
+          
         ]),
         ...mapState(useMedicationDispensedStore, ["iron", "folicAcid"]),
-        ...mapState(useDiagnosisCounsellingStore, [
-            "preEclampsia",
-            "aspirin",
-            "gdm",
-            "gdmCounselling",
-            "hivRisk",
-            "aspirin",
-            "gdm",
-            "gdmCounselling",
-            "hivRisk",
-            "prEp",
-            "birth",
-            "modeOfTransport",
-            "intrapartum",
-            "birthPlace",
-            "postpartum",
-            "breastFeeding",
-        ]),
         ...mapState(useImmunizationStore, ["ttDoses", "HepBCounselling", "HepB1", "HepB2", "HepB3", "hepBReason"]),
-        ...mapState(useIntimatePartnerStore, [
-            "ipv",
-            "additionalCare",
-            "safety_assessment",
-            "physical_violence",
-            "beaten_pregnant",
-            "woman_threatened",
-            "constant_jealous",
-            "strangling",
-            "murder_threat",
-            "referrals",
-        ]),
+        // ...mapState(useIntimatePartnerStore, [
+        //     "ipv",
+        //     "additionalCare",
+        //     "safety_assessment",
+        //     "physical_violence",
+        //     "beaten_pregnant",
+        //     "woman_threatened",
+        //     "constant_jealous",
+        //     "strangling",
+        //     "murder_threat",
+        //     "referrals",
+        // ]),
         ...mapState(useDewormingStore, ["treatment", "malaria"]),
         // ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
         folicAcidPrescription() {
@@ -222,26 +187,32 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
-        async saveData() {
+        saveData() {
             this.saveDiagnosis();
-            this.saveMedicationDispensed();
-            this.saveCouselling();
-            this.saveImmunisation();
-            this.saveIntimatePartner();
-            this.saveDeworming();
-            toastSuccess("Treament and Diagnosis saved successfully");
-            resetPatientData();
-            //this.$router.push('counselling');
+            // this.saveMedicationDispensed();
+            // this.saveCouselling();
+            // this.saveImmunisation();
+            // this.saveIntimatePartner();
+            // this.saveDeworming();
+            // resetPatientData();
+            this.$router.push('ANCHome');
         },
         validationRules(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
         async saveDiagnosis() {
-            console.log(await this.buildDiagnosis());
+          if (this.diagnoses.length > 0) {
+            const userID: any = Service.getUserID();
+            const medicationDispensed = new DiagnosisTreatmentService(this.demographics.patient_id, userID);
+            const encounter = await medicationDispensed.createEncounter();
+            if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
+            const patientStatus = await medicationDispensed.saveObservationList(await this.buildDiagnosis());
+            if (!patientStatus) return toastWarning("Unable to create medication dispensed!");
+            toastSuccess("Diagnosis saved");
+
+          }
         },
         async saveMedicationDispensed() {
-            const fields: any = ["folicAcidPrescription"]; //'ironPrescription',
-            if (await this.validationRules(this.folicAcid, fields)) {
                 if (this.folicAcid.length > 0) {
                     const userID: any = Service.getUserID();
                     const medicationDispensed = new MedicationDispensedService(this.demographics.patient_id, userID);
@@ -249,16 +220,12 @@ export default defineComponent({
                     if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
                     const patientStatus = await medicationDispensed.saveObservationList(await this.buildMedicationDispensed());
                     if (!patientStatus) return toastWarning("Unable to create medication dispensed!");
-                    toastSuccess("Medication Dispensed has been created");
-                }
-            } else {
-                await toastWarning("Please complete all required fields");
+                    toastSuccess("Medication Dispensed saved");
+
             }
             console.log(await this.buildMedicationDispensed());
         },
-        async saveCouselling() {
-            console.log(await this.buildCouselling());
-        },
+
         async saveImmunisation() {
             if (this.HepB1.length > 0) {
                 const userID: any = Service.getUserID();
@@ -280,47 +247,16 @@ export default defineComponent({
         async buildDiagnosis() {
             return [
                 ...(await formatCheckBoxData(this.diagnoses)),
-                ...(await formatRadioButtonData(this.hypertension)),
-                ...(await formatRadioButtonData(this.preEclampsia)),
-                ...(await formatRadioButtonData(this.hyper)),
-                ...(await formatRadioButtonData(this.hiv)),
-                ...(await formatInputFiledData(this.hiv)),
-                ...(await formatInputFiledData(this.hypertensionReason)),
-                ...(await formatRadioButtonData(this.hepatitisB)),
-                ...(await formatRadioButtonData(this.hepatitisC)),
-                ...(await formatRadioButtonData(this.syphilis)),
-                ...(await formatRadioButtonData(this.syphilisTesting)),
-                ...(await formatRadioButtonData(this.tbScreening)),
-                ...(await formatRadioButtonData(this.GDM)),
-                ...(await formatRadioButtonData(this.diabetes)),
-                ...(await formatRadioButtonData(this.anaemia)),
+        
             ];
         },
         async buildMedicationDispensed() {
             return [
                 ...(await formatRadioButtonData(this.iron)),
-                // ...(await formatRadioButtonData(this.calcium)),
+               
             ];
         },
-        async buildCouselling() {
-            return [
-                ...(await formatRadioButtonData(this.preEclampsia)),
-                // ...(await formatRadioButtonData(this.preEclampsiaCounselling)),
-                ...(await formatRadioButtonData(this.aspirin)),
-                ...(await formatRadioButtonData(this.gdm)),
-                ...(await formatRadioButtonData(this.gdmCounselling)),
-                ...(await formatRadioButtonData(this.hivRisk)),
-                ...(await formatRadioButtonData(this.prEp)),
-                //  ...(await formatRadioButtonData(this.seekingCare)),
-                //  ...(await formatRadioButtonData(this.dangerSigns)),
-                ...(await formatRadioButtonData(this.birth)),
-                ...(await formatRadioButtonData(this.modeOfTransport)),
-                ...(await formatRadioButtonData(this.intrapartum)),
-                ...(await formatRadioButtonData(this.birthPlace)),
-                ...(await formatRadioButtonData(this.postpartum)),
-                ...(await formatRadioButtonData(this.breastFeeding)),
-            ];
-        },
+    
         async buildImmunisation() {
             return [
                 ...(await formatRadioButtonData(this.ttDoses)),
@@ -334,16 +270,16 @@ export default defineComponent({
         },
         async buildIntimatePartner() {
             return [
-                ...(await formatRadioButtonData(this.ipv)),
-                ...(await formatRadioButtonData(this.additionalCare)),
-                ...(await formatRadioButtonData(this.safety_assessment)),
-                ...(await formatRadioButtonData(this.physical_violence)),
-                ...(await formatRadioButtonData(this.beaten_pregnant)),
-                ...(await formatRadioButtonData(this.woman_threatened)),
-                ...(await formatRadioButtonData(this.constant_jealous)),
-                ...(await formatRadioButtonData(this.strangling)),
-                ...(await formatRadioButtonData(this.murder_threat)),
-                ...(await formatCheckBoxData(this.referrals)),
+                // ...(await formatRadioButtonData(this.ipv)),
+                // ...(await formatRadioButtonData(this.additionalCare)),
+                // ...(await formatRadioButtonData(this.safety_assessment)),
+                // ...(await formatRadioButtonData(this.physical_violence)),
+                // ...(await formatRadioButtonData(this.beaten_pregnant)),
+                // ...(await formatRadioButtonData(this.woman_threatened)),
+                // ...(await formatRadioButtonData(this.constant_jealous)),
+                // ...(await formatRadioButtonData(this.strangling)),
+                // ...(await formatRadioButtonData(this.murder_threat)),
+                // ...(await formatCheckBoxData(this.referrals)),
             ];
         },
         async buildDeworming() {

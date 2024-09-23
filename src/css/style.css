@@ -12,7 +12,14 @@
     --border-color: transparent;
 }
 .solid_bottom_border {
-    border-bottom: 1px solid #b3b3b3;
+    border-bottom: 1px solid #eee;
+}
+.display_center {
+    display: flex;
+    align-items: center;
+}
+.popover {
+    --bs-popover-max-width: none;
 }
 .ellipsis {
     text-overflow: ellipsis;
@@ -303,8 +310,28 @@ ion-modal > .ion-page {
     --max-width: 550px;
     --max-height: 95vh;
     --border-radius: 10px;
-    --overflow: scroll;
+    --overflow: auto;
 }
+.large-modal {
+    --width: 90%;
+    --height: 90%;
+    --border-radius: 16px;
+    --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  @media (min-width: 768px) {
+    .large-modal {
+      --width: 90%;
+      --height: 90%;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .large-modal {
+      --width: 90%;
+      --height: 90%;
+    }
+  }
 .vaccineHistoryModal {
     --height: 90vh;
     --max-width: 500px;
@@ -313,7 +340,7 @@ ion-modal > .ion-page {
     background-color: #fff;
 }
 ion-modal > .ion-page {
-    overflow: scroll;
+    overflow: auto;
 }
 .content_manager {
     justify-content: space-around;
@@ -342,7 +369,7 @@ ion-button {
 
 ion-card {
     background-color: #fff;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 video {
     border-radius: 16px;
@@ -506,6 +533,11 @@ ion-accordion {
     width: 60vw;
     padding: 10px;
     text-align: left;
+    /* max-width: 800px; */
+    color: #000;
+    background-color: #fff;
+    border-radius: 5px;
+    margin: 5px;
 }
 .search_card {
     width: 1290px;
@@ -537,7 +569,7 @@ ion-button {
     --width: 95vw;
     --max-width: 550px;
     --border-radius: 10px;
-    overflow: scroll;
+    overflow: auto;
 }
 .spinner-overlay {
     position: fixed;
@@ -565,4 +597,130 @@ ion-spinner {
 
 .loading {
     pointer-events: none;
+}
+.modalTitle {
+    padding: 10px;
+}
+.largeModal {
+    --height: 95vh;
+}
+ion-header {
+    background: #fff;
+}
+ion-footer {
+    background: #fff;
+}
+.carousel__pagination-button--active::after {
+    background-color: #cfcfcf;
+}
+.carousel__pagination-button--active::after {
+    background-color: #cfcfcf;
+}
+.carousel__pagination-button::after {
+    display: block;
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #39bca4;
+}
+.carousel__pagination-button--active {
+    background-color: #e7e7e7;
+    border-radius: 50%;
+}
+.fullScreenModal {
+    --height: 100vh;
+    --width: 100vh;
+}
+@media only screen and (max-width: 480px) {
+    .Toastify__toast-container {
+        left: unset;
+        margin: 0;
+        padding: 0;
+        width: unset;
+    }
+}
+.Toastify__toast-container--top-right {
+    right: 0.3em;
+    top: 0.5em;
+}
+.Toastify__toast {
+    padding: 3px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: solid 1px transparent;
+    box-shadow: 0 0 0 1px rgba(230, 230, 230, 0.5);
+}
+.Toastify__toast-body > div:last-child {
+    font-size: 12px;
+}
+.barcode-scanner-active {
+    background: transparent;
+    --background: transparent;
+}
+
+.scanning-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.scanning-frame {
+    width: 80vw;
+    height: 80vw;
+    max-width: 300px;
+    max-height: 300px;
+    border: 2px solid white;
+    position: relative;
+}
+
+.zoom-slider {
+    width: 80vw;
+    max-width: 300px;
+    margin-top: 20px;
+}
+
+.stop-scanning-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.torch-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}
+
+.torch-btn.torch-on {
+    background: yellow;
+}
+
+.torch-btn svg {
+    width: 24px;
+    height: 24px;
+}
+.vti__dropdown-list {
+    z-index: 10;
+}
+.vue-tel-input {
+    height: 56px;
 }

@@ -1,49 +1,94 @@
 <template>
-    <div class="modal_wrapper">
-        <div class="modal_title diplay_space_between">
-            <span></span>
-            <span @click="dismiss()" style="cursor: pointer; font-weight: 300">x</span>
-        </div>
-        <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle">Follow up visits</div>
-        </div>
-
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Change guarding</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content" style="padding-bottom: 200px">
-                    <div class="">
-                        <basic-form :contentData="changeGuardianInfo" @update:inputValue="handleInputData"></basic-form>
+    <ion-header style="display: flex; justify-content: space-between">
+        <ion-title class="modalTitle">Follow up visits</ion-title>
+        <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="iconsContent.cancel"></ion-icon>
+    </ion-header>
+    <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
+        <div class="">
+            <ion-accordion-group ref="accordionGroup" class="">
+                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Change Guardian</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content" style="padding-bottom: 200px">
+                        <div class="">
+                            <basic-form :contentData="changeGuardianInfo" @update:inputValue="handleInputData"></basic-form>
+                        </div>
                     </div>
-                </div>
-            </ion-accordion>
-            <ion-accordion value="second" toggle-icon-slot="start" class="custom_card">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Vaccine adverse effects</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content" style="padding-bottom: 200px">
-                    <basic-form :contentData="vaccineAdverseEffects" @update:inputValue="handleInputData"></basic-form>
-                </div>
-            </ion-accordion>
-            <ion-accordion value="third" toggle-icon-slot="start" class="custom_card">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Child protected at birth</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content" style="padding-bottom: 120px">
-                    <basic-form :contentData="protectedAtBirth" @update:inputValue="handleInputData"></basic-form>
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-        <div style="display: flex; justify-content: end; padding-bottom: 3px">
-            <DynamicButton @click="saveData()" fill="solid" name="Save Changes" />
+                </ion-accordion>
+                <ion-accordion value="second" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Vaccine adverse effects</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <div>
+                            <div slot="content">
+                                <basic-form :contentData="vaccineAdverseEffects" @update:inputValue="handleInputData"></basic-form>
+                            </div>
+                        </div>
+                        <div>
+                            <div slot="content">
+                                <basic-form
+                                    :contentData="serious"
+                                    :initialData="initialSeriousData"
+                                    @update:inputValue="handleInputData"
+                                ></basic-form>
+                            </div>
+                        </div>
+                        <div>
+                            <div slot="content">
+                                <basic-form
+                                    :contentData="outcome"
+                                    :initialData="initialOutcomeData"
+                                    @update:inputValue="handleInputData"
+                                ></basic-form>
+                            </div>
+                        </div>
+                        <div>
+                            <div slot="content">
+                                <basic-form
+                                    :contentData="firstDecision"
+                                    :initialData="initialFirstDecisionData"
+                                    @update:inputValue="handleInputData"
+                                ></basic-form>
+                            </div>
+                        </div>
+                    </div>
+                </ion-accordion>
+                <ion-accordion value="third" toggle-icon-slot="start" class="custom_card" v-if="protectedStatus != 'Yes'">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Child protected at birth</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content" style="padding-bottom: 120px">
+                        <basic-form :contentData="protectedAtBirth" @update:inputValue="handleInputData"></basic-form>
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
         </div>
-    </div>
+    </ion-content>
+    <ion-footer collapse="fade" class="ion-no-border">
+        <ion-row>
+            <ion-col>
+                <DynamicButton @click="saveData()" name="Save" fill="solid" style="float: right; margin: 2%; width: 130px" />
+            </ion-col>
+        </ion-row>
+    </ion-footer>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue";
+import {
+    IonContent,
+    IonHeader,
+    IonFooter,
+    IonItem,
+    IonList,
+    IonTitle,
+    IonToolbar,
+    IonMenu,
+    menuController,
+    IonInput,
+    modalController,
+} from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
@@ -59,7 +104,7 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
@@ -70,6 +115,7 @@ import {
     getFieldValue,
     modifyRadioValue,
     modifyFieldValue,
+    modifyCheckboxData,
 } from "@/services/data_helpers";
 import { RelationsService } from "@/services/relations_service";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -81,6 +127,7 @@ import { PatientRegistrationService } from "@/services/patient_registration_serv
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { RelationshipService } from "@/services/relationship_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
+import { DrugOrderService } from "@/services/drug_order_service";
 
 export default defineComponent({
     mixins: [Relationship],
@@ -98,6 +145,7 @@ export default defineComponent({
         PreviousVitals,
         customDatePicker,
         DynamicButton,
+        IonFooter,
     },
     data() {
         return {
@@ -109,19 +157,32 @@ export default defineComponent({
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
             showPD: false as boolean,
+            initialSeriousData: [] as any,
+            initialFirstDecisionData: [] as any,
+            initialOutcomeData: [] as any,
         };
     },
+    props: {
+        protectedStatus: String,
+    },
     watch: {
-        relationships: {
-            handler() {
-                modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", this.relationships);
+        personInformation: {
+            async handler() {
+                await this.setRelationShip();
             },
             deep: true,
         },
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useFollowUpStoreStore, ["changeGuardianInfo", "vaccineAdverseEffects", "protectedAtBirth"]),
+        ...mapState(useFollowUpStoreStore, [
+            "changeGuardianInfo",
+            "vaccineAdverseEffects",
+            "protectedAtBirth",
+            "serious",
+            "outcome",
+            "firstDecision",
+        ]),
 
         guardianFirstname() {
             return getFieldValue(this.changeGuardianInfo, "guardianFirstname", "value");
@@ -140,17 +201,22 @@ export default defineComponent({
         },
     },
     async mounted() {
+        const followUp = useFollowUpStoreStore();
+        this.initialSeriousData = followUp.getInitialSerious();
+        this.initialFirstDecisionData = followUp.getInitialFirstDecision();
+        this.initialOutcomeData = followUp.getInitialOutcome();
         const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
-        modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0].relation));
-        modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0].relation.names[0].given_name);
-        modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0].relation.names[0].family_name);
-        modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0].relation.names[0].middle_name);
-        modifyFieldValue(this.changeGuardianInfo, "guardianPhoneNumber", "value", this.setAttribute("Cell Phone Number", guardianData[0].relation));
+
+        modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
+        modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianPhoneNumber", "value", this.setAttribute("Cell Phone Number", guardianData[0]?.relation));
         modifyFieldValue(this.changeGuardianInfo, "relationship", "value", {
-            id: guardianData[0].type.relationship_type_id,
-            name: guardianData[0].type.b_is_to_a,
+            id: guardianData[0]?.type.relationship_type_id,
+            name: guardianData[0]?.type.b_is_to_a,
         });
-        console.log("mmmmm", guardianData);
+        await this.setRelationShip();
         this.resetData();
         await this.getVaccineAdverseEffects();
     },
@@ -158,15 +224,20 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        async setRelationShip() {
+            if (this.gender) {
+                await this.getRelationships();
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "displayNone", false);
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", this.relationships);
+            } else {
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "displayNone", true);
+            }
+        },
         setAttribute(name: string | undefined, data: any) {
-            if (Object.keys(data).length === 0) return;
+            if (!data || Object.keys(data).length === 0) return;
             let str = data.person_attributes.find((x: any) => x.type.name == name);
             if (str == undefined) return;
             else return str.value;
-        },
-        navigationMenu(url: any) {
-            menuController.close();
-            this.$router.push(url);
         },
         resetData() {
             const rest = useFollowUpStoreStore();
@@ -191,25 +262,68 @@ export default defineComponent({
 
         async getVaccineAdverseEffects() {
             const vaccineEffect = await ConceptService.getConceptSet("Vaccine adverse effects");
-            modifyFieldValue(this.vaccineAdverseEffects, "Vaccine adverse effects", "multiSelectData", vaccineEffect);
+            const Seriousness = await ConceptService.getConceptSet("Seriousness of adverse effects");
+            const outcome = await ConceptService.getConceptSet("Adverse effects outcome");
+            modifyCheckboxData(
+                this.vaccineAdverseEffects,
+                "checkboxBtnContent",
+                "Vaccine adverse effects",
+                this.buildCheckboxData(vaccineEffect, 12)
+            );
+            modifyCheckboxData(this.serious, "checkboxBtnContent", "Seriousness of adverse effects", this.buildCheckboxData(Seriousness, ""));
+            modifyCheckboxData(this.outcome, "radioBtnContent", "Adverse effects outcome", this.buildCheckboxData(outcome, ""));
+        },
+        buildCheckboxData(data: any, colSize: any) {
+            return data.map((item: any) => {
+                return {
+                    name: item.name == "Patient died" ? "Died" : item.name == "Cured - TB" ? "Recovered" : item.name,
+                    value: item.name,
+                    colSize: colSize,
+                    checked: false,
+                };
+            });
         },
         async saveData() {
-            if ((await this.createGuardian()) || (await this.saveVaccineAdverseEffects())) modalController.dismiss();
-        },
-        async saveVaccineAdverseEffects() {
-            const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects);
-            const userID: any = Service.getUserID();
-            if (vaccineAdverseEffects.length > 0) {
-                const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
-                await registration.createEncounter();
-                await registration.saveObservationList(vaccineAdverseEffects);
-                toastSuccess("Vaccine adverse effects saved success", 1500);
-                return true;
-            } else {
-                toastWarning("Vaccine adverse effects not saved", 1500);
-                return false;
+            const guardianCreated = await this.createGuardian();
+            const vaccineAdverseEffectsSaved = await this.saveVaccineAdverseEffects();
+            if (guardianCreated && vaccineAdverseEffectsSaved) {
+                modalController.dismiss();
             }
         },
+        async saveVaccineAdverseEffects() {
+            if (this.demographics.patient_id) {
+                const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+                const date = getFieldValue(this.outcome, "Date of death", "value") || HisDate.currentDate();
+                const serious = await formatCheckBoxData(this.serious, HisDate.currentDate(), lastVaccine);
+                const outcome = await formatRadioButtonData(this.outcome, date, lastVaccine);
+                const vaccineAdverseEffects = await formatCheckBoxData(this.vaccineAdverseEffects, HisDate.currentDate(), lastVaccine);
+                const investigationDate = getFieldValue(this.firstDecision, "Investigation needed", "value");
+                let investigationNeeded: any = [];
+                if (investigationDate) {
+                    investigationNeeded = [
+                        {
+                            concept_id: 11887,
+                            value_text: investigationDate,
+                            obs_datetime: HisDate.currentDate(),
+                        },
+                    ];
+                }
+                const result = [...serious, ...outcome, ...vaccineAdverseEffects, ...investigationNeeded].filter((item) => item !== undefined);
+
+                const userID: any = Service.getUserID();
+                if (vaccineAdverseEffects.length > 0) {
+                    const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
+                    await registration.createEncounter();
+                    await registration.saveObservationList(result);
+                    toastSuccess("Vaccine adverse effects saved success", 1500);
+                    return true;
+                } else {
+                    toastWarning("Vaccine adverse effects not saved", 1500);
+                    return false;
+                }
+            }
+        },
+
         async guardianData() {
             return {
                 person_id: this.demographics.patient_id,
@@ -233,7 +347,12 @@ export default defineComponent({
                 national_id: getFieldValue(this.changeGuardianInfo, "guardianNationalID", "value"),
             };
         },
-        handleInputData(event: any) {},
+        handleInputData(event: any) {
+            // if (event.name == "SeriousCheck") {
+            //     if(displayNext)
+            // }
+            console.log("🚀 ~ handleInputData ~ event:", event);
+        },
 
         dismiss() {
             modalController.dismiss();

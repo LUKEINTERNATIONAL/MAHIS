@@ -1,59 +1,67 @@
 import { AppEncounterService } from "@/services/app_encounter_service";
 import { DrugOrderService } from "@/services/drug_order_service";
+import { PatientService } from "@/services/patient_service";
 
 export class DispensationService extends AppEncounterService {
   drugHistory: Array<any>;
   currentDrugOrder: Array<any>;
 
   constructor(patientID: number, providerID: number) {
-    super(patientID, 54, providerID)
-    this.drugHistory = []
-    this.currentDrugOrder = []
+    super(patientID, 54, providerID);
+    this.drugHistory = [];
+    this.currentDrugOrder = [];
   }
 
   getDrugHistory() {
-    return this.drugHistory
+    return this.drugHistory;
   }
 
   getCurrentOrder() {
-    return this.currentDrugOrder
+    return this.currentDrugOrder;
   }
 
   buildDispensations(orderId: number, quantity: number) {
-    return [{
-      'drug_order_id': orderId,
-      date: this.date,
-      quantity: quantity
-    }]
+    return [
+      {
+        drug_order_id: orderId,
+        date: this.date,
+        quantity: quantity,
+      },
+    ];
   }
 
   saveDispensations(dispensations: Array<any>) {
-    return AppEncounterService.postJson('/dispensations', { 
-      dispensations, 
-      'program_id': AppEncounterService.getProgramID()
-    })
+    const patient = new PatientService();
+    const patientId = patient.getID();
+    return AppEncounterService.postJson(
+      `/dispensations?patient_id=${patientId}`,
+      {
+        dispensations,
+        program_id: AppEncounterService.getProgramID(),
+      }
+    );
   }
 
   async voidOrder(orderId: number) {
-    return AppEncounterService.void(`/dispensations/${orderId}`, {})
+    return AppEncounterService.void(`/dispensations/${orderId}`, {});
   }
 
   async loadDrugHistory() {
-    const res = await DrugOrderService.getDrugOrderHistory(this.patientID)
+    const res = await DrugOrderService.getDrugOrderHistory(this.patientID);
     if (res) {
-      this.drugHistory = res
+      this.drugHistory = res;
     }
   }
 
   async loadCurrentDrugOrder() {
-    const res = await DrugOrderService.getDrugOrders(this.patientID)
+    const res = await DrugOrderService.getDrugOrders(this.patientID);
     if (res) {
-      this.currentDrugOrder = await Promise.all(res)        
+      this.currentDrugOrder = await Promise.all(res);
     }
   }
 
   calcCompletePack(drug: any, units: number) {
-     //sorting in an ascending order by tabs
+    //sorting in an ascending order by tabs
     const drugOrderBarcodes = drug.barcodes.sort(function (a: any, b: any) {
       return a.tabs - b.tabs;
     });
@@ -65,11 +73,13 @@ export class DispensationService extends AppEncounterService {
         return drugOrderBarcodes[i].tabs;
       }
     }
-    const smallestAvailableTab = parseInt(drugOrderBarcodes[0].tabs)
-    let completePack = parseInt(drugOrderBarcodes[drugOrderBarcodes.length - 1].tabs)
+    const smallestAvailableTab = parseInt(drugOrderBarcodes[0].tabs);
+    let completePack = parseInt(
+      drugOrderBarcodes[drugOrderBarcodes.length - 1].tabs
+    );
     while (completePack < units) {
-      completePack += smallestAvailableTab
+      completePack += smallestAvailableTab;
     }
-    return completePack
+    return completePack;
   }
 }

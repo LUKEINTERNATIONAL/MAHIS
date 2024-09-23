@@ -1,13 +1,32 @@
 import { ConceptService } from "@/services/concept_service";
 
-export async function formatRadioButtonData(data: any) {
+export async function formatRadioButtonData(data: any, date: any = ConceptService.getSessionDate(), childData = []) {
     const buildObjPromises: Promise<any>[] = data.map(async (item: any) => {
         if (item && item.radioBtnContent && item.radioBtnContent.header && item.radioBtnContent.header.selectedValue) {
-            return {
-                concept_id: await ConceptService.getConceptID(item.radioBtnContent.header.name, true),
-                value_coded: await ConceptService.getConceptID(item.radioBtnContent.header.selectedValue, true),
-                obs_datetime: ConceptService.getSessionDate(),
-            };
+            const value_coded = await ConceptService.getConceptID(item.radioBtnContent.header.selectedValue, true);
+            const concept_id = await ConceptService.getConceptID(item.radioBtnContent.header.name, true);
+            const obs_datetime = date || ConceptService.getSessionDate();
+            const childNames = childData.map((item: any) => {
+                return {
+                    concept_id: value_coded,
+                    value_coded: item.drug_inventory_id,
+                    obs_datetime: obs_datetime,
+                };
+            });
+            if (childData) {
+                return {
+                    concept_id,
+                    value_coded,
+                    obs_datetime,
+                    child: childNames,
+                };
+            } else {
+                return {
+                    concept_id,
+                    value_coded,
+                    obs_datetime,
+                };
+            }
         } else {
             return null;
         }
@@ -16,7 +35,7 @@ export async function formatRadioButtonData(data: any) {
     return (await Promise.all(buildObjPromises)).filter((obj) => obj !== null);
 }
 
-export async function formatInputFiledData(data: any, obs_datetime = ConceptService.getSessionDate()) {
+export async function formatInputFiledData(data: any, obs_datetime: any = ConceptService.getSessionDate(), childData = "") {
     const buildObjPromises = data.map(async (item: any) => {
         if (!item?.data?.rowData) return [];
 
@@ -28,7 +47,7 @@ export async function formatInputFiledData(data: any, obs_datetime = ConceptServ
                     // Use map with Promise.all instead of forEach
                     value = await Promise.all(
                         element?.value.map(async (item: any) => {
-                            return await getValue(element, item.concept_id, obs_datetime);
+                            return await getValue(element, item.concept_id, obs_datetime, childData);
                         })
                     );
                 } else if (element.isSingleSelect) {
@@ -52,10 +71,30 @@ export async function formatInputFiledData(data: any, obs_datetime = ConceptServ
     return results.flat().flat();
 }
 
-async function getValue(element: any, value: any, obs_datetime: any) {
+async function getValue(element: any, value: any, obs_datetime: any, childData = "") {
     const concept_id = await ConceptService.getConceptID(element.name, true);
+    // return {
+    //     categories: [],
+    //     concept_id: concept_id,
+    //     name: element.name,
+    // };
     if (element.valueType === "coded") {
-        return { concept_id, value_coded: value, obs_datetime };
+        if (childData) {
+            return {
+                concept_id,
+                value_coded: value,
+                obs_datetime,
+                child: [
+                    {
+                        concept_id: concept_id,
+                        value_text: childData,
+                        obs_datetime: obs_datetime,
+                    },
+                ],
+            };
+        } else {
+            return { concept_id, value_coded: value, obs_datetime };
+        }
     } else if (element.valueType === "text") {
         return { concept_id, value_text: value, obs_datetime };
     } else if (element.valueType === "number") {
@@ -64,19 +103,35 @@ async function getValue(element: any, value: any, obs_datetime: any) {
         return null;
     }
 }
-export async function formatCheckBoxData(data: any) {
+export async function formatCheckBoxData(data: any, obs_datetime: any = ConceptService.getSessionDate(), childData = []) {
     const buildObjPromises: Promise<any>[] = data.flatMap(async (item: any) => {
         if (item?.checkboxBtnContent?.data && item.checkboxBtnContent.data.length > 0) {
             return await Promise.all(
                 item.checkboxBtnContent.data.map(async (checkboxData: any) => {
                     if (checkboxData.checked && !checkboxData.buildConceptIgnore) {
-                        return {
-                            concept_id: await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true),
-                            value_coded: await ConceptService.getConceptID(checkboxData.value, true),
-                            obs_datetime: ConceptService.getSessionDate(),
-                        };
-                    } else {
-                        return null;
+                        const value_coded = await ConceptService.getConceptID(checkboxData.value, true);
+                        const concept_id = await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true);
+                        const childNames = childData.map((item: any) => {
+                            return {
+                                concept_id: value_coded,
+                                value_coded: item.drug_inventory_id,
+                                obs_datetime: obs_datetime,
+                            };
+                        });
+                        if (childData) {
+                            return {
+                                concept_id,
+                                value_coded: value_coded,
+                                obs_datetime,
+                                child: childNames,
+                            };
+                        } else {
+                            return {
+                                concept_id: concept_id,
+                                value_coded: value_coded,
+                                obs_datetime: obs_datetime,
+                            };
+                        }
                     }
                 })
             );

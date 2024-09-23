@@ -50,6 +50,11 @@ import administerVaccineModal from "@/apps/Immunization/components/Modals/admini
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { PatientService } from "@/services/patient_service";
+import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdminstredVaccine.vue";
+import { StockService } from '@/services/stock_service';
+import alert from "@/apps/Immunization/components/Modals/alert.vue";
+import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
+import { mapState } from "pinia";
 export default defineComponent({
     name: "Home",
     components: {
@@ -72,10 +77,12 @@ export default defineComponent({
         IonModal,
         IonCol,
         IonRow,
+        alert,
     },
     data() {
         return {
             iconsContent: icons,
+            fowardData: {} as any,
         };
     },
     computed: {},
@@ -83,8 +90,8 @@ export default defineComponent({
     mounted() {},
     props: {
         vaccines: {
-            type: [],
-            default: [],
+            type: {},
+            default: {},
         } as any,
         milestone_status: {
             type: String,
@@ -93,9 +100,8 @@ export default defineComponent({
     },
     watch: {},
     setup() {
-        return {};
+        return {}
     },
-
     methods: {
         getColorForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
@@ -138,14 +144,34 @@ export default defineComponent({
                 }
             }
         },
-        openAdministerVaccineModal(data: any) {
+        async openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore();
-            store.setCurrentSelectedDrug(data.drug_id as number, data.drug_name, data.vaccine_batch_number as string);
-            createModal(administerVaccineModal, { class: "otherVitalsModal" });
+            store.setCurrentSelectedDrug(data)
+            const stockService = new StockService();
+            const data_ = await stockService.getItem(data.drug_id)
+            store.setLotNumberData(data_)
+
+            if(data_.length == 0) {
+                if (this.checkIfAdminstredAndAskToVoid() == false) {
+                    if(checkDrugName(data) == false) {
+                        createModal(alert, { class: "otherVitalsModal" })
+                    }
+
+                    if (checkDrugName(data) == true) {
+                        createModal(administerVaccineModal, { class: "otherVitalsModal" });
+                    } 
+                }
+            }
+
+            if(data_.length > 0) {
+                if (this.checkIfAdminstredAndAskToVoid() == false) {
+                    createModal(administerVaccineModal, { class: "otherVitalsModal" });
+                }
+            }
         },
         disableVaccine(vaccine: any) {
             if (vaccine.status != null && vaccine.status == "administered") {
-                return true;
+                return false;
             }
 
             if (vaccine.can_administer != null && vaccine.can_administer == false) {
@@ -155,10 +181,24 @@ export default defineComponent({
             if (vaccine.can_administer != null && vaccine.can_administer == true) {
                 return false;
             }
-            return false;
+            // return true;
         },
         checkVaccineName(name: string) {
             return name.replace(/Pentavalent/g, "Penta");
+        },
+        checkIfAdminstredAndAskToVoid() {
+            const store = useAdministerVaccineStore();
+            const vaccine_to_void = store.getCurrentSelectedDrug()
+            if(vaccine_to_void.drug.status == 'administered') {
+                store.setVaccineToBeVoided(vaccine_to_void)
+                createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+                // const data = await createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+                // if(data?.voided == true) {
+                //     // this.dismiss()
+                // }
+                return true
+            }
+            return false
         },
     },
 });
@@ -435,8 +475,13 @@ export default defineComponent({
     align-items: center;
 }
 .administerVac {
-    height: 58px;
-    width: 160px;
-    margin: 7px;
+  height: 58px;
+  min-width: 160px;
+  max-width: 100%; 
+  width: auto; 
+  margin: 7px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 </style>

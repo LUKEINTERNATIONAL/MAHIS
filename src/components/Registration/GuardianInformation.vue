@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData" @countryChanged="handleCountryChange"></basic-card>
 </template>
 
 <script lang="ts">
@@ -17,7 +17,8 @@ import HisDate from "@/utils/Date";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
-
+import { RelationshipService } from "@/services/relationship_service";
+import { Service } from "@/services/service";
 export default defineComponent({
     name: "Menu",
     mixins: [Relationship],
@@ -39,8 +40,14 @@ export default defineComponent({
             deep: true,
         },
         relationships: {
-            handler() {
-                modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", this.relationships);
+            async handler() {
+                // await this.setRelationShip();
+            },
+            deep: true,
+        },
+        personInformation: {
+            async handler() {
+                await this.setRelationShip();
             },
             deep: true,
         },
@@ -50,6 +57,7 @@ export default defineComponent({
             cardData: {} as any,
             inputField: "" as any,
             setName: "" as any,
+            selectedCountry: [] as any,
         };
     },
     computed: {
@@ -73,11 +81,62 @@ export default defineComponent({
             return getFieldValue(this.guardianInformation, "relationship", "value");
         },
     },
+    props: {
+        editable: {
+            default: false as any,
+        },
+    },
     async mounted() {
-        this.updateRegistrationStores();
+        await this.setRelationShip();
         this.buildCards();
+        this.setData();
     },
     methods: {
+        async setData() {
+            if (Service.getProgramID() == 33) {
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to client *");
+            } else {
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient *");
+            }
+            if (this.editable) {
+                const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
+                modifyFieldValue(
+                    this.guardianInformation,
+                    "guardianNationalID",
+                    "value",
+                    this.setAttribute("Regiment ID", guardianData[0]?.relation)
+                );
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+                modifyFieldValue(this.guardianInformation, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+                modifyFieldValue(
+                    this.guardianInformation,
+                    "guardianPhoneNumber",
+                    "value",
+                    this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
+                );
+                modifyFieldValue(this.guardianInformation, "relationship", "value", {
+                    id: guardianData[0]?.type.relationship_type_id,
+                    name: guardianData[0]?.type.b_is_to_a,
+                });
+                await this.setRelationShip();
+            }
+        },
+        setAttribute(name: string | undefined, data: any) {
+            if (!data || Object.keys(data).length === 0) return;
+            let str = data.person_attributes.find((x: any) => x.type.name == name);
+            if (str == undefined) return;
+            else return str.value;
+        },
+        async setRelationShip() {
+            if (this.gender) {
+                await this.getRelationships();
+                modifyFieldValue(this.guardianInformation, "relationship", "displayNone", false);
+                modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", this.relationships);
+            } else {
+                modifyFieldValue(this.guardianInformation, "relationship", "displayNone", true);
+            }
+        },
         buildCards() {
             this.cardData = {
                 mainTitle: "Demographics",
@@ -91,10 +150,6 @@ export default defineComponent({
         },
         openModal() {
             createModal(DispositionModal);
-        },
-        updateRegistrationStores() {
-            const registrationStore = useRegistrationStore();
-            registrationStore.setGuardianInformation(this.guardianInformation);
         },
         buildGuardianInformation() {
             this.guardianInformation[0].selectedData = {
@@ -124,8 +179,24 @@ export default defineComponent({
             return validateField(this.guardianInformation, event.name, (this as any)[event.name]);
         },
         async handleInputData(event: any) {
+            if (event.name == "guardianPhoneNumber") {
+                const phone = `+${this.selectedCountry.dialCode}${event.value}`
+                const message = await Validation.validateMobilePhone(phone,this.selectedCountry);
+                this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = null;
+                if(!message.includes("+")){
+                    this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
+                }  
+                else{
+                    modifyFieldValue(this.guardianInformation, "guardianPhoneNumber", "value", phone);
+                }
+                return true 
+            }
             this.validationRules(event);
             this.buildGuardianInformation();
+
+        },
+        async handleCountryChange(country: any) {
+            this.selectedCountry = country.event
         },
     },
 });

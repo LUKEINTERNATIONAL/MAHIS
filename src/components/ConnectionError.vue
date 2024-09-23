@@ -1,5 +1,5 @@
 <template>
-    <div id="api-error" class="his-card">
+    <div id="api-error" class="his-card" v-if="!apiStatus">
         <p>Cannot connect to the server</p>
         <ion-button router-link="/settings/host" color="warning"> New Config </ion-button>
         <ion-button @click="refresh" color="warning"> Refresh </ion-button>
@@ -17,6 +17,11 @@ export default defineComponent({
         return {
             refresh,
         };
+    },
+    props: {
+        apiStatus: {
+            default: true as any,
+        },
     },
 });
 </script>

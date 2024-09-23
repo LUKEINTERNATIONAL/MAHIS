@@ -12,6 +12,7 @@
             :type="inputType"
             :disabled="disabled"
             class="custom"
+            :style="{ minHeight: minHeight + 'px' }"
         >
             <ion-label v-if="InnerActionBtnPropeties.show" style="display: flex" slot="end">
                 <ion-button slot="end" @click="handleInnerActionBtnPropetiesFn">{{ InnerActionBtnPropeties.name }}</ion-button>
@@ -144,6 +145,10 @@ export default defineComponent({
                 show: false,
             },
         },
+        minHeight: {
+            type: [String, Number],
+            default: "",
+        }
     },
     methods: {
         handleClick(event: any) {
@@ -159,6 +164,7 @@ export default defineComponent({
         },
         handleBlur(event: any) {
             this.$emit("update:inputValue", event);
+            this.$emit("ionBlur", event);
         },
         setEvent(event: Event) {
             this.event = event;
@@ -206,5 +212,7 @@ h6 {
 }
 .custom {
     --background: #fff;
+    --custom-min-height: 56px; /* Default min-height */
+    min-height: var(--custom-min-height);
 }
 </style>

@@ -5,7 +5,8 @@ import { defineConfig } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 import basicSsl from "@vitejs/plugin-basic-ssl";
 
-// https://vitejs.dev/config/
+const baseURL = "mahis";
+
 export default defineConfig({
     plugins: [vue(), legacy()],
     resolve: {
@@ -22,5 +23,10 @@ export default defineConfig({
             plugins: [visualizer()],
         },
     },
+<<<<<<< HEAD
     base: "/",
 });
+=======
+    base: baseURL,
+});
+>>>>>>> main

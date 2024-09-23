@@ -3,13 +3,41 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title style="cursor: pointer" @click="nav('/home')"
-                    ><b>MaHIS</b><small>({{ programName }})</small></ion-title
-                >
-                <ion-buttons slot="end" class="search-input-desktop" style="max-width: 800px">
+                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px" @click="nav('/home')">
+                    <div style="display: block">
+                        <div style="font-size: 16px">
+                            <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
+                        </div>
+                        <div>
+                            <small class="facility-name" style="font-size: 68%">
+                                {{ userFacilityName }}
+                            </small>
+                            <small style="font-size: 68%"> | {{ sessionDate }} </small>
+                        </div>
+                    </div>
+                </ion-title>
+                <div slot="end" class="search-input-desktop" style="width: 100%" v-if="screenWidth > 980">
                     <ToolbarSearch />
-                </ion-buttons>
+                </div>
                 <div class="notifaction_person" slot="end">
+                    <ion-buttons
+                        v-if="apiStatus"
+                        style="cursor: pointer; margin-right: 15px; color: #74ff15"
+                        slot="end"
+                        class="iconFont"
+                        id="popover-button"
+                    >
+                        <ion-icon :icon="iconsContent.wifiOn"></ion-icon>
+                    </ion-buttons>
+                    <ion-buttons
+                        v-if="!apiStatus"
+                        style="cursor: pointer; margin-right: 15px; color: #f00"
+                        slot="end"
+                        class="iconFont"
+                        id="popover-button"
+                    >
+                        <ion-icon :icon="iconsContent.WifiOff"></ion-icon>
+                    </ion-buttons>
                     <ion-buttons style="cursor: pointer; margin-right: 5px" slot="end" class="iconFont">
                         <ion-icon :icon="notificationsOutline"></ion-icon>
                         <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
@@ -21,28 +49,54 @@
                 <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
                     <ion-content>
                         <ion-list>
-                            <ion-item :button="true" :detail="false" style="cursor: pointer">Profile</ion-item>
+                            <ion-item :button="true" :detail="false" @click="showUserProfile()" style="cursor: pointer">Profile</ion-item>
                             <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer">Logout</ion-item>
                         </ion-list>
                     </ion-content>
                 </ion-popover>
             </ion-toolbar>
 
-            <ion-buttons slot="end" class="search-input-mobile" style="max-width: 600px">
+            <div slot="end" v-if="screenWidth <= 980" style="width: 100%">
                 <ToolbarSearch />
-            </ion-buttons>
+            </div>
         </div>
     </ion-header>
+    <!-- <ion-header>
+        <ion-toolbar color="dark" class="compact-toolbar">
+            <ion-grid class="ion-no-padding content_width" style="margin-top: -3px">
+                <ion-row class="ion-align-items-center">
+                    <ion-col size="6">
+                        <TruncateText style="margin-left: 10px" class="date-value" :text="userFacilityName" :maxLines="1" />
+                    </ion-col>
+                    <ion-col size="6" class="ion-text-right">
+                        <TruncateText style="margin-right: 10px" class="date-value" :text="sessionDate" :maxLines="1" />
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-toolbar>
+    </ion-header> -->
+
+    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed"/>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonRow, IonCol, IonLabel, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
 import { notificationsOutline, personCircleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
+import userProfile from "@/views/UserManagement/userProfile.vue"
+import { useProgramStore } from "@/stores/ProgramStore";
+import { useStatusStore } from "@/stores/StatusStore";
+import { mapState } from "pinia";
+import HisDate from "@/utils/Date";
+import TruncateText from '@/components/TruncateText.vue'
+import { useUserStore } from "@/stores/userStore";
+import { icons } from "@/utils/svg";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 export default defineComponent({
+    mixins: [ScreenSizeMixin],
     name: "Home",
     components: {
         IonContent,
@@ -55,29 +109,59 @@ export default defineComponent({
         ToolbarSearch,
         IonIcon,
         IonPopover,
+        userProfile,
+        IonRow,
+        IonCol,
+        IonLabel,
+        TruncateText,
     },
     data() {
         return {
             popoverOpen: false,
+            iconsContent: icons,
             event: null as any,
             locationName: "",
             programName: "",
+            showUserProfileModal: false,
+            sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
         };
     },
+    watch: {
+        programs: {
+            handler() {
+                this.updateData();
+            },
+            deep: true,
+        },
+    },
+    computed: {
+        ...mapState(useProgramStore, ["programs"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
+        ...mapState(useUserStore, ["userFacilityName"]),
+    },
     mounted() {
-        this.programName = Service.getProgramName();
+        this.updateData();
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
         return { notificationsOutline, personCircleOutline, facilityName };
     },
     methods: {
+        updateData() {
+            this.programName = Service.getProgramName();
+        },
         nav(url: any) {
             this.$router.push(url);
         },
         openPopover(e: Event) {
             this.event = e;
             this.popoverOpen = true;
+        },
+        showUserProfile() {
+            this.showUserProfileModal = true;
+        },
+        modalClosed() {
+           this.showUserProfileModal = false;
         },
     },
 });
@@ -134,5 +218,23 @@ export default defineComponent({
     margin-right: 20px;
     align-items: center;
     /* justify-content: center; */
+}
+.compact-toolbar {
+    --min-height: 11px;
+  }
+
+.date-value {
+    color: #ffffff;
+    font-size: 14px;
+}
+@media (max-width: 200px) {
+    .facility-name {
+        display: inline-block;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: bottom;
+    }
 }
 </style>

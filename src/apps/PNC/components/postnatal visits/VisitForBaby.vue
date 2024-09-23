@@ -38,6 +38,7 @@ import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/Deliv
 import {useDischargeWomanStore} from "@/apps/PNC/stores/others/DischargeWoman";
 import {useVisitForBabyStore} from "@/apps/PNC/stores/postnatal visits/VisitForBaby";
 import {useVisitForMotherStore} from "@/apps/PNC/stores/postnatal visits/VisitForMother";
+import { getRadioSelectedValue, modifyFieldValue } from '@/services/data_helpers';
 export default defineComponent({
   name: "VisitForBaby",
   components:{
@@ -66,23 +67,42 @@ export default defineComponent({
       hasValidationErrors: [] as any,
       inputField: '' as any,
       initialData:[] as any,
-
-
     };
   },
   computed:{
-    ...mapState(useVisitForBabyStore,["visitForBaby"]),
+    visitForBaby() {
+      return useVisitForBabyStore().visitForBaby;
+    }
   },
   mounted(){
-    const visitForBaby=useVisitForBabyStore()
-    this.initialData=visitForBaby.getInitial()
+    this.initialData = useVisitForBabyStore().getInitial();
+    this.handleSelection();
   },
   watch:{
+    visitForBaby: {
+      handler() {
+        this.handleSelection();
+      },
+      deep: true
+    },
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    handleSelection() {
+      const outcome = getRadioSelectedValue(this.visitForBaby, 'Status of baby');
+      if (outcome === 'Dead') {
+        modifyFieldValue(this.visitForBaby, "Date of Death", 'displayNone', false);
+        modifyFieldValue(this.visitForBaby, "Cause of Death", 'displayNone', false);
+        modifyFieldValue(this.visitForBaby, "Condition of the Umbilical Cord", 'displayNone', false);
+      } else {
+        modifyFieldValue(this.visitForBaby, "Date of Death", 'displayNone', true);
+        modifyFieldValue(this.visitForBaby, "Cause of Death", 'displayNone', true);
+        modifyFieldValue(this.visitForBaby, "Condition of the Umbilical Cord", 'displayNone', true);
+      }
+    }
+  }
 });
 
 </script>

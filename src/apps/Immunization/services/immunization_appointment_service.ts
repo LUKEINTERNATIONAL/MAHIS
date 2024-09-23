@@ -4,17 +4,18 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore"
 import HisDate from "@/utils/Date";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
-
 export class Appointment extends AppEncounterService {
     
     patientID: number
     providerID: number
 
-    constructor() {
-        const patientID = Appointment.getPatientID()
+    constructor()
+    constructor(patientID: number)
+    constructor(patientID?: number) {
+        const actualPatientID = patientID !== undefined ? patientID : Appointment.getPatientID()
         const providerID = Appointment.getProviderID()
-        super(patientID, 7, providerID)
-        this.patientID = patientID
+        super(actualPatientID, 7, providerID)
+        this.patientID = actualPatientID
         this.providerID = providerID
     }
 
@@ -30,6 +31,10 @@ export class Appointment extends AppEncounterService {
         return providerID
     }
 
+    async setPatientID(patientID: string): Promise<void> {
+        this.patientID = patientID as any
+    }
+
     async createAppointment() {
         const _appointment_ = [] as any
         const store = useImmunizationAppointMentStore()
@@ -42,16 +47,17 @@ export class Appointment extends AppEncounterService {
         // const nextAppointmentDate = res.appointment_date;
         // const n_a_obs = await this.buildValueDate("Estimated date", nextAppointmentDate)
         const a_obs = await this.buildValueDate("Appointment date", _appointment_[0]) as any
-        const appointment_onbs = await this.saveObservationList([a_obs])
+        const appointment_onbs = await this.saveObservationList([a_obs])        
         if (!appointment_onbs) return toastWarning("Unable set Next Appointment")
         toastSuccess("next Appointment Set Successfully")
+        return [this.patientID,_appointment_[0]]
     }
 
     async getNextAppointment() {
         return AppEncounterService.getJson(`/programs/${this.programID}/patients/${this.patientID}/next_appointment_date`, {date: this.date})
     }
       
-    static async getDailiyAppointments(date: any) {
+    async getDailiyAppointments(date: any) {
         const programID = AppEncounterService.getProgramID();
         return AppEncounterService.getJson(`/programs/${programID}/booked_appointments`, {date: date, paginate: false})
     }

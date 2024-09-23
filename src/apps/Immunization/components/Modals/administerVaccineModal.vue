@@ -4,7 +4,7 @@
             <ion-col style="margin-left: -3px">
                 <div class="om">Administer Vaccine</div>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="6" style="text-align: right">
                 <ion-label class="lbl-tl" style="font-size: 13">
                     Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label
                 >
@@ -14,13 +14,13 @@
         <ion-row>
             <ion-label style="font-weight: 600px; font-size: 20px; margin: 10px; margin-left: 0px">{{ drugName }}</ion-label>
         </ion-row>
-        <ion-row>
+        <ion-row v-show="is_a_vaccine">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Batch number<span style="color: #b42318">*</span></ion-label
+                >Select Batch number<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
-        <div>
-            <BasicInputField
+        <div v-show="is_a_vaccine">
+            <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
                 :inputValue="batchNumber"
@@ -34,14 +34,15 @@
                 <ion-label v-if="is_batch_number_valid" class="error-label">
                     {{ batch_number_error_message }}
                 </ion-label>
-            </div>
+            </div> -->
+            <lotNumberList :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered" @emptyList="ShowAlert"/>
         </div>
 
         <div class="client_admi">
             <span class="client_admi_sub">Vaccination done by: </span><span class="client_admin_sub_x">{{ full_name }}</span>
         </div>
 
-        <customDatePicker v-if="showPD" @dateChange="updateDate" />
+        <customDatePicker v-if="showPD" @dateChange="updateDate"/>
         <div class="btnContent">
             <div class="saveBtn" v-if="showDateBtns">
                 <div>
@@ -60,18 +61,16 @@
             </div>
 
             <div class="saveBtn" v-if="!showDateBtns">
-                <ion-row>
-                    <ion-col>
-                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
+                <ion-row justify-content-between>
+                    <ion-col size="auto">
+                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px;">
                             Cancel
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                         </ion-button>
                     </ion-col>
 
-                    <ion-col>
-                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px">
-                            save
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
+                    <ion-col size="auto" class="ion-text-end" style="margin-left: auto;">
+                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px;">
+                            Save
                         </ion-button>
                     </ion-col>
                 </ion-row>
@@ -82,7 +81,7 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -92,12 +91,13 @@ import { Service } from "@/services/service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import BasicInputField from "@/components/BasicInputField.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { isEmpty } from "lodash";
-import QRCodeReadersrc from "@/components/QRCodeReader.vue"
+import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
+import alert from "./alert.vue"
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -107,6 +107,8 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { useUserStore } from "@/stores/userStore";
+import lotNumberList from "./lotNumberList.vue"
+import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
 
 export default defineComponent({
     components: {
@@ -121,6 +123,8 @@ export default defineComponent({
         BasicInputField,
         PreviousVitals,
         customDatePicker,
+        lotNumberList,
+        alert,
     },
     data() {
         return {
@@ -142,10 +146,25 @@ export default defineComponent({
                     createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false);
                 },
             },
+            selected_date_: '',
+            is_a_vaccine: true,
         };
     },
     computed: {
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
+    },
+
+    setup() {
+        const childComponentRef = ref<InstanceType<typeof lotNumberList> | null>(null);
+        const triggerChildAction = () => {
+            if (childComponentRef.value) {
+                childComponentRef.value.performAction();
+            }
+        };
+        return {
+            childComponentRef,
+            triggerChildAction,
+        };
     },
     async mounted() {
         this.loadCurrentSelectedDrug();
@@ -153,9 +172,6 @@ export default defineComponent({
         const store = useAdministerVaccineStore();
         this.showPD = store.isVaccinePassed();
         this.showDateBtns = !this.showPD;
-    },
-    setup() {
-        return { checkmark, pulseOutline };
     },
     props: {
         customSchedule: {
@@ -183,8 +199,13 @@ export default defineComponent({
         loadCurrentSelectedDrug() {
             const store = useAdministerVaccineStore();
             this.currentDrug = store.getCurrentSelectedDrug();
-            this.drugName = this.currentDrug.drug_name;
-            this.batchNumber = this.currentDrug.vaccine_batch_number ? this.currentDrug.vaccine_batch_number : "";
+            this.drugName = this.currentDrug.drug.drug_name;
+            this.batchNumber = this.currentDrug.drug.vaccine_batch_number ? this.currentDrug.drug.vaccine_batch_number : "";
+
+            if (checkDrugName(this.currentDrug.drug) == true) {
+                this.is_a_vaccine = false;
+                this.batchNumber = 'unknown';
+            }
         },
         showCPD() {
             this.showPD = true as boolean;
@@ -212,23 +233,14 @@ export default defineComponent({
         },
         updateBatchNumber(event: any) {
             const input = event.target.value;
-            this.batchNumber = input || this.tempScannedBatchNumber?.text || '';
+            this.batchNumber = input || this.tempScannedBatchNumber?.text || "";
         },
-        saveDta(date_: any) {
-            this.validateBatchNumber();
-            if (this.is_batch_number_valid == true) {
-                toastWarning("Enter batch number!");
-                return;
-            }
-
-            if (this.batchNumber == "") {
-                toastWarning("Enter batch number!");
-                return;
-            }
+        ActionTriggered(selectedOption: any) {
             const dta = {
-                batch_number: this.batchNumber,
-                date_administered: date_,
-                drug_id: this.currentDrug.drug_id,
+                batch_number: selectedOption.lotNumber,
+                date_administered: this.selected_date_,
+                drug_id: this.currentDrug.drug.drug_id,
+                drug_: this.currentDrug,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
@@ -236,8 +248,32 @@ export default defineComponent({
             store.setTempScannedBatchNumber(null);
             this.dismiss();
         },
+        saveDta(date_: any) {
+            this.selected_date_ = date_
+            this.triggerChildAction()
+            // this.validateBatchNumber();
+            // if (this.is_batch_number_valid == true) {
+            //     toastWarning("Enter batch number!");
+            //     return;
+            // }
+
+            // if (this.batchNumber == "") {
+            //     toastWarning("Enter batch number!");
+            //     return;
+            // }
+            // const dta = {
+            //     batch_number: this.batchNumber,
+            //     date_administered: date_,
+            //     drug_id: this.currentDrug.drug.drug_id,
+            // };
+            // const store = useAdministerVaccineStore();
+            // store.setAdministeredVaccine(dta);
+            // saveVaccineAdministeredDrugs();
+            // store.setTempScannedBatchNumber(null);
+            // this.dismiss();
+        },
         isAlphaNumeric(text: string) {
-            const regex = /^[a-zA-Z0-9]+$/;
+            const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
             return regex.test(text);
         },
         validateBatchNumber() {
@@ -249,7 +285,6 @@ export default defineComponent({
             }
         },
         updateBatchNumberByPassValue(input: any) {
-            console.log(input, "qqqqqqqwwwwwwwwwwww");
             this.batchNumber = input;
         },
         displayUserNames() {
@@ -259,9 +294,13 @@ export default defineComponent({
             const last_name = user.person.names[0].family_name;
             this.full_name = first_name + " " + last_name;
         },
-        showQRcode() {
-            // createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)
+        childAction() {
+           
         },
+        ShowAlert() {
+            // createModal(alert, { class: "otherVitalsModal" }, false);
+            // this.dismiss()
+        }
     },
 });
 </script>
@@ -308,11 +347,9 @@ h5 {
     display: flex;
     justify-content: space-between;
     margin: 20px;
-    width: 330px;
     align-items: center;
 }
 .btnContent {
-    display: flex;
     justify-content: center;
     line-height: 60px;
 }

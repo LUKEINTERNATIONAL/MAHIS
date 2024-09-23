@@ -5,6 +5,7 @@
         <basic-form
             :contentData="obstetricComplications"
             :initialData2="initialData"
+         
 
         ></basic-form>
       </ion-card-content>
@@ -37,11 +38,15 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  modifyCheckboxHeader,
+  modifyCheckboxValue,
+  modifyFieldValue,
+  modifyRadioValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
-import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
+
 import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
+
 export default defineComponent({
   name: "SecondStageDelivery",
   components:{
@@ -83,11 +88,67 @@ export default defineComponent({
     this.initialData=obstetricComplications.getInitialObstetricDetails()
   },
   watch:{
+    obstetricComplications:  {
+      handler(){
+        this.handleOtherComplications();
+        this.handlePerinealTear()
+
+        const obstetricComplications = ["Perineal tear","Sepsis","Pre-Eclampsia","Retained placenta","Postpartum haemorrhage"]
+        const obstetricCareProvided = ["Oxytocin/cabitocin/tranexamic acid","Anticonvulsants","Antibiotics","Blood transfusion","Manual removal of placenta","Non-pneumatic Anti-shock Garment (NASG)","Manual Removal of Retained Products of Conception","Evacuation","Misoprostol","Other care"]
+        this.handleObstetricComplicationCheck(obstetricComplications)
+        this.handleNone([...obstetricComplications,'Other complications'],"No complications")
+        this.handleNone(obstetricCareProvided, "None")
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    handleOtherComplications() {
+      const checked= getCheckboxSelectedValue(this.obstetricComplications, "Other complications")?.checked;
+      modifyFieldValue(
+        this.obstetricComplications,
+        "Other notes",
+        "displayNone",
+        !checked
+      );
+    },
+    handlePerinealTear(){
+      const checked= getCheckboxSelectedValue(this.obstetricComplications, "Perineal tear")?.checked;
+      modifyRadioValue(
+        this.obstetricComplications,
+        "Severity",
+        "displayNone",
+        !checked
+      );
+    },
+    handleObstetricComplicationCheck(checkBoxes: any) {
+      let checked=false;
+      checkBoxes.forEach((checkbox: string) => {
+        checked =
+          checked ||
+          getCheckboxSelectedValue(this.obstetricComplications, checkbox)?.checked;
+      });
+
+      modifyCheckboxHeader(this.obstetricComplications,"Obstetric care","displayNone", !checked);
+    },
+
+    handleNone(checkBoxes: Array<any>, noneConcept: string) {
+      if (getCheckboxSelectedValue(this.obstetricComplications, noneConcept)?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.obstetricComplications, checkbox, "checked", false);
+          modifyCheckboxValue(this.obstetricComplications, checkbox, "disabled", true);
+        });
+      } else {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.obstetricComplications, checkbox, "disabled", false);
+        });
+      }
+    },
+
+  }
 });
 
 </script>

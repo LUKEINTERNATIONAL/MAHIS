@@ -78,7 +78,7 @@ import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
-
+import db from "@/db";
 export default defineComponent({
     name: "Home",
     components: {
@@ -128,16 +128,11 @@ export default defineComponent({
         nav(url: any) {
             this.$router.push(url);
         },
-        openPopover(e: Event) {
-            this.event = e;
-            this.popoverOpen = true;
-        },
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
         controlHeight() {
             if (this.checkUnderSixWeeks) {
-                console.log("Llllllllllllll", this.checkUnderSixWeeks);
                 modifyFieldValue(this.vitalsWeightHeight, "height", "inputHeader", "Height");
                 modifyFieldValue(this.vitalsWeightHeight, "height", "inputDisplayNone", true);
             } else {
@@ -173,6 +168,14 @@ export default defineComponent({
             let height = null;
             if (heightValue) height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
+            db.collection("patientRecords")
+                .doc({ patientID: 1721822809464 })
+                .update({
+                    vitals: {
+                        weight: weightValue,
+                        height: heightValue,
+                    },
+                });
             if (weight == null && height == null) {
                 const encounter = await vitalsInstance.createEncounter();
                 if (!encounter) return toastWarning("Unable to create vitals encounter");
@@ -211,7 +214,7 @@ export default defineComponent({
             vitalsWeightHeight.icon = BMIService.iconBMI(bmiColor);
             vitalsWeightHeight.backgroundColor = bmiColor[0];
             vitalsWeightHeight.textColor = bmiColor[1];
-            vitalsWeightHeight.index = "BMI " + this.BMI?.index ?? "";
+            vitalsWeightHeight.index = "BMI " + (this.BMI?.index ?? "");
             vitalsWeightHeight.value = this.BMI?.result ?? "";
         },
         showCPD() {

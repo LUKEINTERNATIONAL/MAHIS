@@ -36,6 +36,20 @@
         display: none !important;
     }
 }
+@media (max-width: 980px) {
+    .searchField {
+        width: 100vw !important;
+    }
+    .search-input-desktop {
+        display: none !important;
+    }
+    .search-input-mobile {
+        display: block !important;
+    }
+    .content_manager {
+        display: block !important;
+    }
+}
 @media (max-width: 768px) {
     .regDisplayFlex {
         display: inline;
@@ -98,9 +112,9 @@
     .login-page {
         --ion-background-color: #ffffff;
     }
-    ion-card {
+    /* ion-card {
         box-shadow: unset;
-    }
+    } */
     ion-popover[mobilePopover] {
         --offset-x: 35%;
     }

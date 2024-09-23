@@ -134,7 +134,7 @@ export default defineComponent({
 .text_12 {
     font-size: 14px;
     height: 510px;
-    overflow: scroll;
+    overflow: auto;
 }
 .large-modal {
     --width: 80vw;
