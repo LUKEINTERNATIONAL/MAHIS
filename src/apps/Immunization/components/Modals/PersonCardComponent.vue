@@ -12,6 +12,7 @@
           :icon="searchOutline"
           :inputValue="searchText"
           @update:inputValue="searchTextUpdated"
+          :minHeight="40"
         />
         <div>
           <ion-label v-if="searchTextError" class="error-label">
@@ -319,6 +320,6 @@ ion-item {
   }
 }
 .modalTitle {
-  font-size: 18px;
+  font-size: 17px;
 }
 </style>
