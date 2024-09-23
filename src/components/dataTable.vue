@@ -1,9 +1,21 @@
 <template>
-
+      <ion-row>
+        <ion-col>
+          <dynamic-button
+            class="btn-cls-2"
+              v-if="dynamic_button_properties[2].addItemButton"
+                  :name="dynamic_button_properties[2].name"
+                  :fill="dynamic_button_properties[2].btnFill"
+                  :icon="personAddOutline"
+                  @clicked:btn="OpenAddUserModal"
+                  :color="'secondary'"
+            />
+        </ion-col>
+      </ion-row>
       <ion-row>
         <ion-col>
           <ListPicker
-              style="margin-left: 10px"
+              style="margin-left: 30px"
               :multiSelection="list_picker_prperties[0].multi_Selection"
               :show_label="list_picker_prperties[0].show_list_label"
               :uniqueId="list_picker_prperties[0].unqueId"
@@ -20,7 +32,7 @@
         
         <ion-col>
             <ion-row>
-              <ion-col size="9">
+              <ion-col size="10">
                 <BasicInputField
                   :placeholder="note_properties[0].placeHolder"
                   :icon="searchOutline"
@@ -29,23 +41,12 @@
                   :minHeight="40"
                 />
               </ion-col>
-              <ion-col>
-                <dynamic-button
-                  class="btn-cls-2"
-                    v-if="dynamic_button_properties[2].addItemButton"
-                        :name="dynamic_button_properties[2].name"
-                        :fill="dynamic_button_properties[2].btnFill"
-                        :icon="personAddOutline"
-                        @clicked:btn="OpenAddUserModal"
-                        :color="'secondary'"
-                  />
-              </ion-col>
             </ion-row>
         </ion-col>
       </ion-row>
 
       <ion-row>
-        <user-card-list :users="userArray" />
+        <user-card-list :users="userArray" style="margin-left: 20px;"/>
       </ion-row>
 
       <addUserModal
@@ -174,7 +175,7 @@ function loadData() {
 
 const note_properties = [
     {
-        placeHolder: searchValue.value,
+        placeHolder: 'search for user (based on search field)',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
@@ -205,7 +206,7 @@ const dynamic_button_properties = [
     {
         showAddItemButton: true,
         addItemButton: true,
-        name: "ADD USER",
+        name: "Add User",
         btnFill: 'fill',
         fn: ()=>{},
     },
