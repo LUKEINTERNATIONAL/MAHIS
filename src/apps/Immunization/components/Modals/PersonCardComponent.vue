@@ -41,7 +41,7 @@
       <ion-row>
         <ion-col style="width: 900px;"v-for="person in paginatedItems" :key="person.id">
           <ion-card class="person-card">
-            <ion-card-content style="min-width: 500px;">
+            <ion-card-content class="person-card-23">
               <div class="card-header">
                 <div>
                   <ion-card-title>{{ person.given_name }} {{ person.family_name }}</ion-card-title>
@@ -318,8 +318,19 @@ ion-item {
   .s-inf {
     font-size: 14px;
   }
+
+  .person-card-23 {
+    min-width: 30rem;
+  }
 }
+
+.person-card-23 {
+    min-width: 30rem;
+  }
+
 .modalTitle {
   font-size: 17px;
+  padding: 0px;
+  margin-left: 16px
 }
 </style>
