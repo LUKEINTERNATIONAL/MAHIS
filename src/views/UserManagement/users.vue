@@ -79,8 +79,8 @@
       ];
   
       onMounted(async () => {
-        await getUsers();
         initNavData()
+        await getUsers();
       });
   
       async function getUsers() {
@@ -95,7 +95,7 @@
         _items_.value = userData.map((item: any) => ({
           userId: item.user_id,
           username: item.username,
-          role: userRolesStr(item.roles),
+          roles: userRolesStr(item.roles),
           programs: userProgramsStr(item.programs),
           gender: item.person.gender,
           status: item.deactivated_on,
@@ -105,7 +105,7 @@
       }
   
       function userRolesStr(items: any) {
-        return items.map((item: any) => item.role).join(", ");
+        return items.map((item: any) => item.role)
       }
   
       function userFirstname(items: any) {
@@ -117,7 +117,7 @@
       }
   
       function userProgramsStr(items: any) {
-        return items.map((item: any) => item.name).join(", ");
+        return items.map((item: any) => item.name)
       }
   
       function clickRow(data: any) {
@@ -149,7 +149,8 @@
         modalClosed,
         nav,
         chevronBackOutline,
-        initNavData
+        initNavData,
+        getUsers
       };
     },
     watch: {
@@ -157,6 +158,7 @@
         async handler(data) {
           if (data.name == "users")
           this.initNavData()
+          await this.getUsers();
         },
             deep: true,
         },

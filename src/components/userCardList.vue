@@ -4,7 +4,7 @@
             <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in users" :key="user.userid">
               <ion-card>
                 <ion-card-header>
-                  <ion-card-subtitle>{{ user.role }}</ion-card-subtitle>
+                  <ion-card-subtitle>{{ user.roles.join(', ') }}</ion-card-subtitle>
                   <ion-card-title>{{ user.firstName }} {{ user.lastName }}</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
@@ -38,11 +38,22 @@
               </ion-card>
             </ion-col>
           </ion-row>
+          <ion-row>
+            <bottomNavBar
+              v-if="users.length > 0"
+              style="margin-left: 20px; margin-right: 20px;"
+              :totalItems="users.length" 
+              :currentPage="pagination.page"
+              :itemsPerPage="pagination.itemsPerPage"
+              @update:pagination="handlePaginationUpdate"
+            />
+          </ion-row>
         </ion-grid>
-  </template>
+</template>
   
   <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, reactive } from 'vue';
+  import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
   import { 
     IonContent, 
     IonPage, 
@@ -84,7 +95,8 @@
       IonCardContent,
       IonList,
       IonItem,
-      IonLabel
+      IonLabel,
+      bottomNavBar
     },
     props: {
       users: {
@@ -92,6 +104,17 @@
         required: true,
       },
     },
+    setup(props) {
+      const pagination = reactive({
+        page: 1,
+        itemsPerPage: 6
+      });
+
+      const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
+        pagination.page = page;
+        pagination.itemsPerPage = itemsPerPage;
+      };
+    }
   });
   </script>
   

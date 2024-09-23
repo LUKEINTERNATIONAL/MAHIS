@@ -46,7 +46,7 @@
       </ion-row>
 
       <ion-row>
-        <user-card-list :users="userArray" style="margin-left: 20px;"/>
+        <user-card-list :users="items" style="margin-left: 20px;"/>
       </ion-row>
 
       <addUserModal
@@ -81,37 +81,12 @@
 
   const searchField = ref("username")
   const searchValue = ref("")
-  const route = useRoute();
-
-  const getBodyRowClassName: BodyRowClassNameFunction = (item: Item, rowNumber: number): string => {
-    let cls = rowNumber % 2 === 0 ? "even-row" : "odd-row"
-    return cls
-  }
-
-  const bodyRowClassNameFunction: BodyRowClassNameFunction = (item: Item, rowNumber: number): string => {
-    if (item.score < 60) return 'fail-row'
-    return 'pass-row'
-  }
 
   const searchFieldS = ref([]) as any
-  const pageIsLoading = ref(true)
   const isPopooverOpen = ref(false)
   const user_id = ref('')
 
-  const headers = ref<Header[]>( [] )
   const items_local = ref<Item[]>([])
-
-  const userArray = ref([
-        {
-          userid: '1',
-          username: 'johndoe',
-          firstName: 'John',
-          lastName: 'Doe',
-          gender: 'Male',
-          role: 'Developer',
-          programs: ['Web Dev', 'Mobile Dev']
-        }
-      ])
 
   type ClickRowArgument = Item & {
     isSelected?: boolean,
@@ -124,54 +99,11 @@
     search_fields: [{}],
   }>()
 
-watch(
-    () => props.colums,
-    async (newValue) => {
-      headers.value = newValue 
-    }
-)
-
-watch(
-    () => props.items,
-    async (newValue) => {
-    items_local.value = newValue 
-    }
-)
-
 watch(() => props.search_fields,
     async (newValue) => {
       // searchFieldS.value = newValue 
     }
 )
-
-watch(() => props.items,
-    async (newValue) => {
-      items_local.value = newValue
-      pageIsLoading.value = false 
-    }
-)
-
-watch(
-  () => route.name,
-  async (newRouteName) => {
-    if (newRouteName === "users") {
-      await loadData();
-    }
-  },
-  { deep: true }
-);
-
-function loadData() {
-  items_local.value = props.items
-  searchFieldS.value = props.search_fields
-  headers.value = props.colums
-
-  console.log("Mount", headers.value)
-
-  headers.value.forEach((item: any) => {
-    console.log(item.text)
-  })
-}
 
 const note_properties = [
     {
