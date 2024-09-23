@@ -74,8 +74,15 @@
             @didDismiss="popoverOpen = false"
         >
             <div>
-                <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
-                    <ion-item :button="true" :detail="false" style="cursor: pointer"></ion-item>
+                <ion-list
+                    :class="item == village ? 'active_village' : 'inactive_village'"
+                    style="--offset-x: -30px"
+                    v-for="(item, index) in villageList"
+                    :key="index"
+                >
+                    <ion-item :button="true" :detail="false" style="--border-style: none; cursor: pointer" @click="handleVillageClick(item)">{{
+                        item
+                    }}</ion-item>
                 </ion-list>
             </div>
         </ion-popover>
@@ -170,10 +177,15 @@ export default defineComponent({
             over_five_missed_visits: [] as any,
             popoverOpen: false,
             event: null as any,
+            tableEvent: null as any,
+            drug_name: null as any,
+            village: null as any,
             iconsContent: icons,
             showPD: false as boolean,
             batchNumber: "" as any,
             clientDetails: [] as any,
+            UnchangedClientDetails: [] as any,
+            villageList: [] as any,
             tableData: [] as any,
             options: {
                 responsive: true,
@@ -210,7 +222,7 @@ export default defineComponent({
         this.isLoading = true;
         this.data = await getVaccinesData();
 
-        this.processData();
+        this.tableData = this.processData();
 
         this.isLoading = false;
     },
@@ -248,17 +260,22 @@ export default defineComponent({
             this.$router.push("patientProfile");
         },
         processData() {
-            this.data.map((item: any) => {
+            const data = this.data.map((item: any) => {
                 if (item.name == "missed_immunizations") {
-                    const uniqueClients = new Set<number>();
                     this.clientDetails = []; //Ressetting client details
+                    this.villageList = ["All"]; //Ressetting client details
+                    let processedData: any = [];
 
                     const processAntigensClients = (antigens: any[]) => {
                         return antigens.map((antigen: any) => {
                             antigen.clients.map((client: any) => {
-                                if (!uniqueClients.has(client.table.patient_id)) {
-                                    uniqueClients.add(client.table.patient_id);
-
+                                if (
+                                    (antigen.drug_name == this.drug_name && (this.village == client.table.city_village || this.village == "All")) ||
+                                    ((antigen.drug_name == this.drug_name || this.village == client.table.city_village) &&
+                                        (!this.drug_name || !this.village)) ||
+                                    (!this.drug_name && !this.village) ||
+                                    (!this.drug_name && this.village == "All")
+                                ) {
                                     this.clientDetails.push({
                                         given_name: client.table.given_name,
                                         family_name: client.table.family_name,
@@ -267,6 +284,8 @@ export default defineComponent({
                                         city_village: client.table.city_village,
                                     });
                                 }
+
+                                this.villageList.push(client.table.city_village);
                             });
 
                             return [antigen.drug_name, antigen.clients.length, antigen.clients];
@@ -274,50 +293,47 @@ export default defineComponent({
                     };
 
                     if (this.title == "Client due today") {
-                        this.tableData = processAntigensClients(item.value.due_today_antigens);
+                        processedData = processAntigensClients(item.value.due_today_antigens);
                     }
                     if (this.title == "Client due this week") {
-                        this.tableData = processAntigensClients(item.value.due_this_week_antigens);
+                        processedData = processAntigensClients(item.value.due_this_week_antigens);
                     }
                     if (this.title == "Client due this month") {
-                        this.tableData = processAntigensClients(item.value.due_this_month_antigens);
+                        processedData = processAntigensClients(item.value.due_this_month_antigens);
                     }
                     if (this.title == "Client overdue over 5yrs") {
-                        this.tableData = processAntigensClients(item.value.over_five_missed_doses);
+                        processedData = processAntigensClients(item.value.over_five_missed_doses);
                     }
                     if (this.title == "Client overdue under 5yrs") {
-                        this.tableData = processAntigensClients(item.value.under_five_missed_doses);
+                        processedData = processAntigensClients(item.value.under_five_missed_doses);
                     }
+
+                    this.clientDetails = [...new Set(this.clientDetails.map((item: any) => JSON.stringify(item)))].map((item: any) =>
+                        JSON.parse(item)
+                    );
+                    this.villageList = [...new Set(this.villageList)];
+                    return processedData;
                 }
             });
+            return data[0];
+        },
+        handleVillageClick(village: any) {
+            this.village = village;
+            this.processData();
         },
         handleRowClick(event: Event) {
-            const target = event.target as HTMLElement;
-            const row = target.closest("tr");
+            this.tableEvent = event.target as HTMLElement;
+            const row = this.tableEvent.closest("tr");
 
             if (row) {
                 const rowIndex = Array.from(row.parentNode?.children || []).indexOf(row);
                 const selectedData = this.tableData[rowIndex];
-
-                //Check if the row is already selected
-                if (this.selectedRow && this.selectedRow.vaccine === selectedData[0] && this.selectedRow.quantity === selectedData[1]) {
-                    this.selectedRow = null;
+                this.drug_name = selectedData[0];
+                if (!row.className) {
                     this.processData();
                 } else {
-                    this.selectedRow = {
-                        vaccine: selectedData[0],
-                        quantity: selectedData[1],
-                    };
-
-                    this.clientDetails = selectedData[2].map((item: any) => {
-                        return {
-                            given_name: item.table.given_name,
-                            family_name: item.table.family_name,
-                            patient_id: item.table.patient_id,
-                            birthdate: item.table.birthdate,
-                            city_village: item.table.city_village,
-                        };
-                    });
+                    this.drug_name = "";
+                    this.tableData = this.processData();
                 }
             }
         },
@@ -412,6 +428,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.active_village {
+    --ion-background-color: #e8fee6;
+    border-bottom: 1px solid #006401;
+}
+.inactive_village {
+    --ion-background-color: #fff;
+    border-bottom: 1px solid #ccc;
+}
 .appointments {
     transition: background-color 0.6s, color 0.6s, transform 0.2s;
     user-select: none;
