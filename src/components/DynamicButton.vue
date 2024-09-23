@@ -70,7 +70,7 @@ export default defineComponent({
             default: "" 
         },
         style: {
-      type: [String, Object] as PropType<string | Record<string, any>>,
+      type: String as any,
       default: '',
     },
 

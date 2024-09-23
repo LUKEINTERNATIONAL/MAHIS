@@ -1,5 +1,5 @@
 <template>
-    <table class="report-table" :class="config.tableCssTheme || ''">
+    <table class="report-table" :class="config?.tableCssTheme || ''">
         <thead class="stick-report-header" v-if="tableColumns">
             <tr v-for="(columns, colIndex) in tableColumns" :key="colIndex">
                 <th
