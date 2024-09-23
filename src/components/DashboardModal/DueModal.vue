@@ -74,6 +74,7 @@
             @didDismiss="popoverOpen = false"
         >
             <div>
+                <div style="font-weight: 700; padding-top: 10px; text-align: center">Filter by Village</div>
                 <ion-list
                     :class="item == village ? 'active_village' : 'inactive_village'"
                     style="--offset-x: -30px"
