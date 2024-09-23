@@ -1,29 +1,18 @@
 <template>
     <ion-page>
-      <Toolbar />
+      <NavigationMenu/>
       <ion-content :fullscreen="true">
-        <div id="" style="margin-top: 30px; margin-left: 8%; margin-right: 8%">
-          <ion-row>
-            <ion-col>
-              <div class="back_profile" @click="nav('home')">
-                <ion-icon style="font-size: 20px" :icon="chevronBackOutline"></ion-icon>
-                <span style="cursor: pointer">Back To Home Page</span>
-              </div>
-            </ion-col>
-          </ion-row>
-  
           <dataTable 
             :colums="data_table_properties[0].columns" 
             :items="_items_" 
             :search_fields="_search_fields_" 
             @click-row="clickRow" 
           />
-          <editUserModal 
+          <!-- <editUserModal 
             :is_open="isPopooverOpen" 
             :user_id="user_id" 
             @close-popoover="modalClosed" 
-          />
-        </div>
+          /> -->
       </ion-content>
     </ion-page>
   </template>
@@ -36,15 +25,16 @@
     IonPage,
     IonRow,
     IonCol,
-    IonIcon
+    IonIcon,
   } from "@ionic/vue";
   import Toolbar from "@/components/Toolbar.vue";
   import dataTable from "@/components/dataTable.vue";
   import editUserModal from "./editUserModal.vue";
   import { UserService } from "@/services/user_service";
-  import type { Header, Item } from "vue3-easy-data-table";
+  import NavigationMenu from '@/apps/Immunization/components/Reports/NavigationMenu.vue';
   import router from "@/router";
   import { ref, onMounted } from "vue";
+  import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
   
   export default defineComponent({
     name: "Home",
@@ -56,7 +46,8 @@
       IonIcon,
       Toolbar,
       dataTable,
-      editUserModal
+      editUserModal,
+      NavigationMenu,
     },
     setup() {
       const isPopooverOpen = ref(false);
@@ -69,7 +60,7 @@
         },
       ]);
       const user_id = ref("");
-      const _items_ = ref<Item[]>([]);
+      const _items_ = ref<[]>([]);
   
       const data_table_properties = [
         {
@@ -89,6 +80,7 @@
   
       onMounted(async () => {
         await getUsers();
+        initNavData()
       });
   
       async function getUsers() {
@@ -141,6 +133,11 @@
       function nav(url: string) {
         router.push(url);
       }
+
+      function initNavData() {
+        const store = EIRreportsStore()
+        store.setNavigationPayload('Manage Users', true, false, '/', 'home', '')
+      }
   
       return {
         isPopooverOpen,
@@ -151,9 +148,19 @@
         clickRow,
         modalClosed,
         nav,
-        chevronBackOutline
+        chevronBackOutline,
+        initNavData
       };
-    }
+    },
+    watch: {
+        $route: {
+        async handler(data) {
+          if (data.name == "users")
+          this.initNavData()
+        },
+            deep: true,
+        },
+    },
   });
   </script>
   

@@ -1,62 +1,70 @@
 <template>
-        <ion-card style="margin-top: 0px; background-color: inherit;">
-          <ion-row>
-            <ion-col>
-              <ListPicker
-                  :multiSelection="list_picker_prperties[0].multi_Selection"
-                  :show_label="list_picker_prperties[0].show_list_label"
-                  :uniqueId="list_picker_prperties[0].unqueId"
-                  :name_of_list="list_picker_prperties[0].name_of_list"
-                  :choose_place_holder="list_picker_prperties[0].placeHolder"
-                  :items_-list="searchFieldS"
-                  :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                  :disabled="list_picker_prperties[0].disabled.value"
-                  @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                  @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                  @item-search-text="list_picker_prperties[0].searchTextFN"
-              />
-            </ion-col>
-            
-            <ion-col style="margin-top: 5px;">
-                <ion-row>
-                  <ion-col size="9">
-                    <BasicInputField
-                      :placeholder="note_properties[0].placeHolder"
-                      :icon="searchOutline"
-                      :inputValue="note_properties[0].dataValue.value"
-                      @update:inputValue="note_properties[0].dataHandler"
-                    />
-                  </ion-col>
-                  <ion-col>
-                    <dynamic-button
-                      class="btn-cls-2"
-                        v-if="dynamic_button_properties[2].addItemButton"
-                            :name="dynamic_button_properties[2].name"
-                            :fill="dynamic_button_properties[2].btnFill"
-                            :icon="personAddOutline"
-                            @clicked:btn="OpenAddUserModal"
-                            :color="'secondary'"
-                      />
-                  </ion-col>
-                </ion-row>
-           
-            </ion-col>
-          </ion-row>
-        </ion-card>
 
-        <addUserModal
+      <ion-row>
+        <ion-col>
+          <ListPicker
+              style="margin-left: 10px"
+              :multiSelection="list_picker_prperties[0].multi_Selection"
+              :show_label="list_picker_prperties[0].show_list_label"
+              :uniqueId="list_picker_prperties[0].unqueId"
+              :name_of_list="list_picker_prperties[0].name_of_list"
+              :choose_place_holder="list_picker_prperties[0].placeHolder"
+              :items_-list="searchFieldS"
+              :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+              :disabled="list_picker_prperties[0].disabled.value"
+              @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+              @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+              @item-search-text="list_picker_prperties[0].searchTextFN"
+          />
+        </ion-col>
+        
+        <ion-col>
+            <ion-row>
+              <ion-col size="9">
+                <BasicInputField
+                  :placeholder="note_properties[0].placeHolder"
+                  :icon="searchOutline"
+                  :inputValue="note_properties[0].dataValue.value"
+                  @update:inputValue="note_properties[0].dataHandler"
+                  :minHeight="40"
+                />
+              </ion-col>
+              <ion-col>
+                <dynamic-button
+                  class="btn-cls-2"
+                    v-if="dynamic_button_properties[2].addItemButton"
+                        :name="dynamic_button_properties[2].name"
+                        :fill="dynamic_button_properties[2].btnFill"
+                        :icon="personAddOutline"
+                        @clicked:btn="OpenAddUserModal"
+                        :color="'secondary'"
+                  />
+              </ion-col>
+            </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <user-card-list :users="userArray" />
+      </ion-row>
+
+      <addUserModal
             :is_open="isPopooverOpen"
             :user_id="user_id"
             @close-popoover="isPopooverOpen = false"
         />
-  </template>
+
+      
+
+</template>
   
   <script setup lang="ts">
   import type { Header, Item, BodyRowClassNameFunction, HeaderItemClassNameFunction, BodyItemClassNameFunction } from "vue3-easy-data-table"
-  import { IonRow, IonCard, IonCol, IonButton, IonLabel } from "@ionic/vue"
+  import { IonRow, IonPage, IonContent, IonCard, IonCol, IonButton, IonLabel } from "@ionic/vue"
   import { ref, watch, computed, onMounted, onUpdated } from "vue"
   import BasicInputField from "@/components/BasicInputField.vue"
   import ListPicker from "./ListPicker.vue"
+  import UserCardList from './userCardList.vue';
   import DynamicButton from "@/components/DynamicButton.vue"
   import addUserModal from "../views/UserManagement/addUserModal.vue"
   import { useRoute } from 'vue-router';
@@ -91,6 +99,18 @@
 
   const headers = ref<Header[]>( [] )
   const items_local = ref<Item[]>([])
+
+  const userArray = ref([
+        {
+          userid: '1',
+          username: 'johndoe',
+          firstName: 'John',
+          lastName: 'Doe',
+          gender: 'Male',
+          role: 'Developer',
+          programs: ['Web Dev', 'Mobile Dev']
+        }
+      ])
 
   type ClickRowArgument = Item & {
     isSelected?: boolean,
@@ -146,6 +166,10 @@ function loadData() {
   headers.value = props.colums
 
   console.log("Mount", headers.value)
+
+  headers.value.forEach((item: any) => {
+    console.log(item.text)
+  })
 }
 
 const note_properties = [
@@ -193,7 +217,7 @@ const list_picker_prperties = [
         multi_Selection: true as any,
         show_list_label: true as any,
         unqueId: 'qwerty_3' as any,
-        name_of_list: 'search field' as any,
+        name_of_list: 'search for' as any,
         placeHolder: 'Search for a field' as any,
         items: [],
         listUpdatedFN: listUpdated1,
