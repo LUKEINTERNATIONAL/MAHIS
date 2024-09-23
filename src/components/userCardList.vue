@@ -12,7 +12,7 @@
               <ion-item>
                 <ion-label>
                   <h3>User ID</h3>
-                  <p>{{ user.userid }}</p>
+                  <p>{{ user.userId }}</p>
                 </ion-label>
               </ion-item>
               <ion-item>
@@ -77,7 +77,7 @@ import {
 } from '@ionic/vue';
 
 interface User {
-  userid: string;
+  userId: string;
   username: string;
   firstName: string;
   lastName: string;
