@@ -1,5 +1,5 @@
 <template>
-  <ion-grid style="max-height: 650px; overflow: auto;">
+  <ion-grid class="dynamic-grid">
     <ion-row>
       <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userid">
         <ion-card>
@@ -40,7 +40,7 @@
     </ion-row>
   </ion-grid>
 
-  <ion-footer>
+  <ion-footer collapse="fade">
     <ion-row>
       <ion-col>
         <bottomNavBar
@@ -170,5 +170,9 @@ ion-list {
   ion-card-subtitle {
     font-size: 0.9rem;
   }
+}
+.dynamic-grid {
+  max-height: calc(69vh - 1px); /* Adjust the 100px as necessary */
+  overflow: auto;
 }
 </style>
