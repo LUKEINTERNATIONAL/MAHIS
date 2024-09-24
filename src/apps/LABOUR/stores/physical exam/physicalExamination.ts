@@ -1,5 +1,45 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import * as yup from "yup"
+
+export const VitalsValidationSchema = yup.object().shape({
+    'Height': yup.number()
+        .typeError("height can only be a number")
+        .min(1)
+    .label("Height"),
+    'Weight': yup.number()
+        .typeError("weight can only be a number")
+        .min(1)
+    .label("Weight"),
+    'Fetal heart rate': yup.number()
+        .typeError("Fetal heart rate can only be a number")
+        .min(1)
+    .label("Fetal heart rate"),
+    'Fundal Height': yup.number()
+        .typeError("Fundal Height can only be a number")
+        .min(1)
+    .label("Fundal Height"),
+    'Number of contraction': yup.number()
+        .typeError("Number of contraction can only be a number")
+        .min(0)
+    .label("Number of contraction")
+   
+})
+
+export const AnaemiaValidationSchema = yup.object().shape({
+    'Fetal heart rate': yup.number()
+        .typeError("Fetal heart rate can only be a number")
+        .min(1)
+    .label("Fetal heart rate"),
+    'Fundal Height': yup.number()
+        .typeError("Fundal Height can only be a number")
+        .min(1)
+    .label("Fundal Height"),
+    'Number of contraction': yup.number()
+        .typeError("Number of contraction can only be a number")
+        .min(0)
+    .label("Number of contraction")
+})
 
    
 
@@ -16,6 +56,7 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                     {
                         header:{
                             title: 'Hydration status',
+                            name: 'Hydration status',
                             selectedValue: ''
                         },
                         data:[
@@ -46,6 +87,7 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                     {
                         header:{
                             title: 'General condition',
+                            name: 'General condition',
                             selectedValue: ''
                         },
                         data:[
@@ -201,7 +243,8 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Palmer pallor?',
+                            title: 'Palmer pallor',
+                            name: 'Palmer pallor',
                             selectedValue: ''
                         },
                         data:[
@@ -230,7 +273,8 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Jaundice?',
+                            title: 'Jaundice',
+                            name: 'Jaundice',
                             selectedValue: ''
                         },
                         data:[
@@ -258,7 +302,8 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Haemoglobin low?',
+                            title: 'Haemoglobin low',
+                            name: 'Haemoglobin low',
                             selectedValue: ''
                         },
                         data:[
@@ -291,6 +336,7 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                     {
                         header:{
                             title: 'Oedema',
+                            name: 'Oedema',
                             selectedValue: ''
                         },
                         data:[
@@ -320,6 +366,7 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                     {
                         header:{
                             title: 'Lie',
+                            name: 'Lie',
                             selectedValue: ''
                         },
                         data:[
@@ -447,6 +494,7 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                     {
                         header:{
                             title: 'Choose position',
+                            name: 'Choose position',
                             selectedValue: ''
                         },
                         data:[
@@ -580,6 +628,7 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                     {
                         header:{
                             title: 'Bladder',
+                            name: 'Bladder',
                             selectedValue: ''
                         },
                         data:[
