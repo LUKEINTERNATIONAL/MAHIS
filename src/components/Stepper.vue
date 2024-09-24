@@ -1,48 +1,58 @@
 <template>
-    <ion-row>
-        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile">
-            <ion-card class="wizard_card">
-                <div class="wizard_title">
-                    <strong> {{ stepperTitle }}</strong>
+  <ion-row>
+    <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile">
+      <ion-card class="wizard_card">
+        <div class="wizard_title">
+          <strong>{{ stepperTitle }}</strong>
+        </div>
+        <ion-card-content>
+          <div id="wizard_verticle" class="form_wizard wizard_verticle">
+            <ul class="list-unstyled wizard_steps anchor">
+              <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
+                <a class="done" isdone="1" rel="1">
+                   <span :class="item.class">
+                     <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>
+                        <span v-if="!item.checked">{{ item.number }}</span>
+                        <span class="wizard_text">{{ item.title }}</span>
+                   </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+
+    <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8">
+      <div class="back_profile">
+        <DynamicButton :name="backBtn" iconSlot="start" fill="clear" :icon="chevronBackOutline" @click="openBackController()" />
+      </div>
+
+      <div class="accordion_group">
+        <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="currentOpenStepper">
+          <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
+            <ion-item slot="header">
+              <ion-label>{{ item.title }}</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <component :is="item.component" ></component>
+              <div class="button-row">
+                <!-- Next Button -->
+                <div v-if="index < StepperData.length - 1">
+                  <ion-button class="next-button" @click="NextAccordion(index)">Next</ion-button>
                 </div>
-                <ion-card-content>
-                    <div id="wizard_verticle" class="form_wizard wizard_verticle">
-                        <ul class="list-unstyled wizard_steps anchor">
-                            <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
-                                <a class="done" isdone="1" rel="1">
-                                    <span :class="item.class">
-                                        <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>
-                                        <span v-if="!item.checked" class="">{{ item.number }} </span>
-                                        <span class="wizard_text">{{ item.title }}</span>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-        </ion-col>
-
-        <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="">
-            <div class="back_profile">
-                <DynamicButton :name="backBtn" iconSlot="start" fill="clear" :icon="chevronBackOutline" @click="openBackController()" />
+                <!-- Previous Button -->
+                <div v-if="index > 0" >
+                  <ion-button class="previous-button" @click="PreviousAccordion(index)">Previous</ion-button>
+                </div>
+              </div>
             </div>
-
-            <div class="accordion_group">
-                <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="openStepper">
-                    <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
-                        <ion-item slot="header">
-                            <ion-label>{{ item.title }}</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <component :is="item.component"> </component>
-                        </div>
-                    </ion-accordion>
-                </ion-accordion-group>
-                <hr style="background: rgba(0, 0, 0, 0.13)" />
-            </div>
-        </ion-col>
-    </ion-row>
+          </ion-accordion>
+        </ion-accordion-group>
+        <hr style="background: rgba(0, 0, 0, 0.13)" />
+      </div>
+    </ion-col>
+  </ion-row>
 </template>
 
 <script lang="ts">
@@ -277,6 +287,7 @@ export default defineComponent({
         return {
             isOpen: false,
             iconsContent: icons,
+          currentOpenStepper: this.openStepper
         };
     },
     props: {
@@ -304,33 +315,74 @@ export default defineComponent({
         },
     },
     setup() {
-        return { chevronBackOutline, checkmark };
+        return { chevronBackOutline, checkmark,
+
+        };
     },
     methods: {
-        accordionGroupChange(ev: AccordionGroupCustomEvent) {
-            this.wizardData.forEach((item: any) => {
-                if (ev.target.className == "md accordion-group-expand-compact") {
-                    item.class = "common_step";
-                    item.checked = false;
-                    if (item.number == ev.detail.value) {
-                        item.class = "open_step common_step";
-                    }
-                }
-            });
-            this.$emit("updateStatus", ev);
-        },
-        openBackController() {
+      accordionGroupChange(ev: AccordionGroupCustomEvent) {
+        const event:any = ev.detail;
+        if (!event) {
+          this.wizardData.forEach((item: any) => {
+            if (event.value === item.number) {
+              item.class = "open_step common_step";
+              item.checked = true;
+            } else {
+              item.class = "common_step";
+              item.checked = false;
+            }
+          });
+          this.$emit("updateStatus", event);
+          this.currentOpenStepper = event.value;
+        }
+      },
+
+
+      openBackController() {
             if (this.backUrl) {
                 this.$router.push(this.backUrl);
             } else {
                 createModal(SaveProgressModal);
             }
         },
+      NextAccordion(currentIndex:any) {
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < this.StepperData.length) {
+          this.currentOpenStepper = this.StepperData[nextIndex].value;
+        }
+      },
+      PreviousAccordion(currentIndex:any) {
+        const prevIndex = currentIndex - 1;
+        if (prevIndex >= 0) {
+          this.currentOpenStepper = this.StepperData[prevIndex].value;
+        }
+      }
     },
 });
 </script>
 
 <style scoped>
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.previous-button {
+  --background: var(--ion-color-medium-shade);
+  color:white;
+  border-radius: 1px;
+  width: 100%;
+}
+
+.next-button {
+  background-color: var(--ion-color-primary);
+  color: white;
+  border-radius: 1px;
+  width: 100%;
+}
+
 #container {
     text-align: center;
 

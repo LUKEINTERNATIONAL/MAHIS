@@ -10,7 +10,7 @@ const initialOPDdiagnosis = [
                 {
                     colData: [
                         {
-                            inputHeader: "Primary Diagnosis*",
+                            inputHeader: "Diagnosis*",
                             value: "",
                             name: "primaryDiagnosis",
                             icon: icons.search,
@@ -22,9 +22,29 @@ const initialOPDdiagnosis = [
                             multiSelectData: [],
                             idName: "district_id",
                             validationFunctionName: "required",
-                            // inputFieldDisplayNone: true,
-                            // colSize: 0,
                         },
+                    ],
+                    btns: [
+                        {
+                            name: "Add",
+                            fill: "clear",
+                            btn_col_size: 3,
+                            icon: icons.plus,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        classDash: 'dashed_bottom_border',
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+
                         {
                             inputHeader: "Secondary Diagnosis",
                             icon: icons.search,
@@ -52,6 +72,7 @@ const initialOPDdiagnosis = [
             ],
         },
     },
+
 ];
 export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
     state: () => ({

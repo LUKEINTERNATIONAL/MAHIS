@@ -4,7 +4,7 @@
       <ion-col>
         <ion-card color="secondary" @click="navigateTo('/quickCheck')">
           <ion-card-header>
-            <ion-card-title>Quick Check</ion-card-title>
+            <ion-card-title class="ion-title">Quick Check</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <img src="../../public/icons/checkup.png" alt="Profile Icon" />
@@ -14,7 +14,7 @@
       <ion-col>
         <ion-card color="secondary" @click="navigateTo('/profile')">
           <ion-card-header>
-            <ion-card-title>Profile</ion-card-title>
+            <ion-card-title class="ion-title">Profile</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <img src="../../public/icons/checkup.png" alt="Profile Icon" />
@@ -24,7 +24,7 @@
       <ion-col>
         <ion-card color="secondary" @click="navigateTo('/symptomsFollowUp')">
           <ion-card-header>
-            <ion-card-title>Symptoms and follow up</ion-card-title>
+            <ion-card-title class="ion-title">Symptoms and follow up</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <img src="../../public/icons/symptom.png" alt="Profile Icon" />
@@ -37,10 +37,20 @@
       <ion-col>
         <ion-card color="secondary" @click="navigateTo('/physicalExamination')">
           <ion-card-header>
-            <ion-card-title>Physical Examination</ion-card-title>
+            <ion-card-title class="ion-title">Physical Examination</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <img src="../../public/icons/heart.png" alt="Profile Icon" />
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/labTests')">
+          <ion-card-header>
+            <ion-card-title class="ion-title">Lab tests and imaging</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/candidate.png" alt="Profile Icon" />
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -48,21 +58,10 @@
       <ion-col>
         <ion-card color="secondary" @click="navigateTo('/ANCtreatment')">
           <ion-card-header>
-            <ion-card-title>Treatment and prevention</ion-card-title>
+            <ion-card-title class="ion-title">Treatment and prevention</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <img src="../../public/icons/patient.png" alt="Profile Icon" />
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/labTests')">
-          <ion-card-header>
-            <ion-card-title>Lab tests and imaging</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img src="../../public/icons/candidate.png" alt="Profile Icon" />
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -72,7 +71,7 @@
       <ion-col>
         <ion-card color="secondary" @click="navigateTo('/counselling')">
           <ion-card-header>
-            <ion-card-title>Counselling</ion-card-title>
+            <ion-card-title class="ion-title">Counselling</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <img src="../../public/icons/conversation.png" alt="Profile Icon" />
@@ -83,7 +82,7 @@
       <ion-col>
         <ion-card color="secondary" @click="navigateTo('/ANCreferral')">
           <ion-card-header>
-            <ion-card-title>Referral</ion-card-title>
+            <ion-card-title class="ion-title">Referral</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <img src="../../public/icons/hospital.png" alt="Profile Icon" />
@@ -94,7 +93,7 @@
       <ion-col>
         <ion-card color="secondary" @click="navigateTo('/ancEnd')">
           <ion-card-header>
-            <ion-card-title>Pregnancy outcome</ion-card-title>
+            <ion-card-title class="ion-title">Pregnancy outcome</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <img src="../../public/icons/bed.png" alt="Profile Icon" />
@@ -150,8 +149,11 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: center;
 }
+ion-card-title {
+    font-size: 16px;
+}
 
-.card {
+ion-card  {
   width: 100%;
   max-width: 300px;
   margin: 10px;
@@ -169,8 +171,8 @@ export default defineComponent({
 }
 
 img {
-  width: 70%;
-  max-width: 70px;
+  width: 50%;
+  max-width: 50px;
   height: auto;
 }
 

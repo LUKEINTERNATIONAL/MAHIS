@@ -7,12 +7,12 @@ export const ReferralValidationSchema = yup.object().shape({
         .required("Location of referral is required")
         .label("Location of referral"),
 
-    'Referral for urgent care': yup.string()
-        .required("Referral for urgent care is required")
-        .label("Referral for urgent care")
-        .test('is-checked', 'You must select an option for urgent care', function(value) {
-            return value === 'Yes' || value === 'No';
-        }),
+    // 'Referral for urgent care': yup.string()
+    //     .required("Referral for urgent care is required")
+    //     .label("Referral for urgent care")
+    //     .test('is-checked', 'You must select an option for urgent care', function(value) {
+    //         return value === 'Yes' || value === 'No';
+    //     }),
 
     'Provider’s facility': yup.string()
         .required("Provider’s facility is required")

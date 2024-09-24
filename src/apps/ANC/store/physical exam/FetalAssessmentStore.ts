@@ -73,7 +73,7 @@ const initialFetalAssesment=[
             header: {
                 title: "Is number of fetuses known?",
                 selectedValue: "",
-                name: "Number of fetuses known",
+                name: "Oedema severity",
                 class:"bold",
                 displayNext:"Yes"
             },
@@ -93,7 +93,7 @@ const initialFetalAssesment=[
     },
 
     {
-        childName:"Number of fetuses known",
+        childName:"Oedema severity",
         sectionHeader: "",
         classDash: "dashed_bottom_border",
         header: {
@@ -324,6 +324,8 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
     state: () => ({
         fetalAssessment: [...initialFetalAssesment] as any,
         fetalDetails:[..._.cloneDeep(initialFetalDetails)] as any,
+        fetalsDetails: [] as any,
+
     }),
     actions: {
         setFetalAssessment(data: any) {
@@ -341,5 +343,5 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
             return[...data]
         }
     },
-    // persist: true,
+    persist: true,
 });

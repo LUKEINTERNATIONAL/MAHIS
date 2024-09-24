@@ -193,7 +193,8 @@ const initialANCend=[
                 selectedValue: '',
                 name:'Place of Delivery',
                 displayNone:true,
-                class:"bold"
+                class:"bold",
+                displayNext:"Other"
             },
             data:[
                 {
@@ -214,30 +215,31 @@ const initialANCend=[
             ]
         }
     },
-    // {
-    //         data:{
-    //             rowData:[
-    //                 {
-    //                     colData:[
-    //                         {
-    //                             displayNone:true,
-    //                             inputHeader: 'specify',
-    //                             icon: icons.editPen,
-    //                             value: "",
-    //                             name: "Other (specify)",
-    //                             valueType: "text",
-    //                             eventType: 'input',
-    //                             inputWidth: "82%",
-    //                             required: true
-    //                         }
+    { childName:"Place of Delivery",
+        classDash: 'dashed_bottom_border',
+        data:{
+                rowData:[
+                    {
+                        colData:[
+                            {
+                                displayNone:true,
+                                inputHeader: 'specify',
+                                icon: icons.editPen,
+                                value: "",
+                                name: "Other (specify)",
+                                valueType: "text",
+                                eventType: 'input',
+                                inputWidth: "82%",
+                                required: true
+                            }
 
-    //                     ]
-    //                 }
-    //             ],
+                        ]
+                    }
+                ],
 
-    //         }
+            }
 
-    //     },
+        },
 
     {
         childName:"ANC pregnancy outcome",
@@ -257,12 +259,12 @@ const initialANCend=[
                 {
                     name: "Yes",
                     value: "Yes",
-                    colSize: "2.5",
+                    colSize: "2",
                 },
                 {
                     name:  "No",
                     value: "No",
-                    colSize: "2.5",
+                    colSize: "2",
                 },
             ]
         }
@@ -285,22 +287,22 @@ const initialANCend=[
                 {
                     name: "Normal",
                     value: "Normal",
-                    colSize: "4.01",
+                    colSize: "3.01",
                 },
                 {
                     name: "Forceps",
                     value: "Forceps",
-                    colSize: "4.01",
+                    colSize: "6.01",
                 },
                 {
                     name: "Vacuum",
                     value: "Vacuum",
-                    colSize: "4.01",
+                    colSize: "3.01",
                 },
                 {
                     name: "Caesarean section",
                     value: "Caesarean section",
-                    colSize: "4.01",
+                    colSize: "6.01",
                 },
             ]
         }
