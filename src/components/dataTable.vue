@@ -21,7 +21,7 @@
               :uniqueId="list_picker_prperties[0].unqueId"
               :name_of_list="list_picker_prperties[0].name_of_list"
               :choose_place_holder="list_picker_prperties[0].placeHolder"
-              :items_-list="searchFieldS"
+              :items_-list="search_fields"
               :use_internal_filter="list_picker_prperties[0].use_internal_filter"
               :disabled="list_picker_prperties[0].disabled.value"
               @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
@@ -46,7 +46,7 @@
       </ion-row>
 
       <ion-row>
-        <user-card-list :users="items" style="margin-left: 20px;"/>
+        <user-card-list :users="items" style="margin-left: 20px;" :filterValue="searchValue"/>
       </ion-row>
 
       <addUserModal
@@ -84,16 +84,16 @@
 
 
   const props = defineProps<{
-    colums: any,
     items: any,
-    search_fields: [{}],
+    search_fields: any,
   }>()
 
-watch(() => props.search_fields,
-    async (newValue) => {
-      // searchFieldS.value = newValue 
-    }
-)
+  watch(() => props.search_fields,
+      async (newValue) => {
+        console.log(newValue)
+        searchFieldS.value = newValue 
+      }
+  )
 
 const note_properties = [
     {
@@ -139,7 +139,7 @@ const list_picker_prperties = [
     {
         multi_Selection: true as any,
         show_list_label: true as any,
-        unqueId: 'qwerty_3' as any,
+        unqueId: 'qwerty_390' as any,
         name_of_list: 'search for' as any,
         placeHolder: 'Search for a field' as any,
         items: [],
@@ -159,6 +159,7 @@ function notesUpDated_fn1(event: any) {
 }
 
 function listUpdated1(data: any) {
+  console.log(data)
   searchFieldS.value = data
   searchFieldS.value.forEach((item: any) => {
     if (item.selected == true) {
@@ -171,9 +172,7 @@ const emit = defineEmits<{
     (e: "clickRow", ObjectsArray: any): void
 }>()
 
-function clickRow(data: any) {
-    emit("clickRow", data)
-}
+
 </script>
 <style scoped>
 
