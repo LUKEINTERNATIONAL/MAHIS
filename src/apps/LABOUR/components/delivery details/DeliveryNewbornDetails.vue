@@ -95,13 +95,14 @@ export default defineComponent({
       arrayOfBabies: [] as any,
       babyModalOpen: false,
       selectedBaby: 0,
-      babiesDetails: [] as any,
+      // babiesDetails: [] as any,
       showSection: false
     };
   },
   computed:{
     ...mapState(useSecondStageOfLabourStore,["secondStageDetails"]),
     ...mapState(useSecondStageOfLabourStore,["babyDetails"]),
+    ...mapState(useSecondStageOfLabourStore,["babiesDetails"]),
 
   },
   mounted(){
@@ -228,10 +229,6 @@ export default defineComponent({
       modifyRadioValue(this.babyDetails,'Oxytocin 10 UI given','displayNone', visibility)
       modifyRadioValue(this.babyDetails,'Vitamin K given','displayNone', visibility)
     }
-
-
-
-  
   }
 });
 
