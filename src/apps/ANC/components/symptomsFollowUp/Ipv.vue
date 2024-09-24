@@ -148,14 +148,15 @@ export default defineComponent({
       //     modifyFieldValue(this.referrals,'Other','displayNone',true)
       //   }
       // },
+      
       handleOtherFirstline(){
-        if(getCheckboxSelectedValue(this.referrals,'first-line support')?.value=='Other'){
-          modifyFieldValue(this.referrals,'Try','displayNone',false)
+        if(getCheckboxSelectedValue(this.referrals,'first-line support')?.value=='other'){
+           modifyFieldValue(this.referrals,'specifics','displayNone',false)
         }else{
-          modifyFieldValue(this.referrals,'Try','displayNone',true)
+           modifyFieldValue(this.referrals,'specifics','displayNone',true)
         }
 
-        console.log("+++++++++",getCheckboxSelectedValue(this.referrals,'first-line support'));
+        console.log("+++++++++",getCheckboxSelectedValue(this.referrals,'first-line support')?.value=='specifics');
       },
     }
 })
