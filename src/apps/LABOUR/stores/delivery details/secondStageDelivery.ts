@@ -714,7 +714,7 @@ const initialSecondStageDetails = [
                     {
                         colData: [
                             {
-                                displayNone:false,
+                                displayNone:true,
                                 inputHeader: '',
                                 unit: 'Babies',
                                 icon: icons.editPen,
