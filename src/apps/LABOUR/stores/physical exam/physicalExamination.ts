@@ -409,7 +409,7 @@ export const useLabourPhysicalExamStore = defineStore('physicalExamStore',{
                         data:[
                             {
                                 name: 'Cephalic',
-                                value: 'Breech',
+                                value: 'Cephalic',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
