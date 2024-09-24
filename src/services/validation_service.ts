@@ -90,14 +90,15 @@ function MultValidations(fieldName: string, value: any): null | any {
   return null;
 }
 
-export  async function YupValidateField(store:any, validationSchema:any, fieldName:string, value:any) {
+export async function YupValidateField(store:any, validationSchema:any, fieldName:string, value:any) {
     try {
         const fieldSchema = validationSchema.fields[fieldName];
         if (yup.isSchema(fieldSchema)) {
             await fieldSchema.validate(value);
             setErrorOnFields(store, fieldName, false, "")
-            return true;
+         
         }
+        return true
     } catch (error: any) {
         setErrorOnFields(store, fieldName, true, error.message)
       return false;

@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
 import * as yup from "yup";
+import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers";
 
 const babyDetails = [
   {
@@ -9,6 +10,33 @@ const babyDetails = [
     isFinishBtn: false,
     data: {
       rowData: [
+        {
+          colData: [
+            {
+              displayNone: false,
+              inputHeader: "First name",
+              unit: "",
+              icon: icons.editPen,
+              value: "",
+              valueType: "text",
+              name: "First name",
+              required: true,
+              eventType: "input",
+              placeholder: "",
+            },
+            {
+              inputHeader: "Last name",
+              unit: "",
+              icon: icons.editPen,
+              value: "",
+              valueType: "text",
+              name: "Last name",
+              required: true,
+              eventType: "input",
+              placeholder: "",
+            },
+          ],
+        },
         {
           colData: [
             {
@@ -620,6 +648,12 @@ export const BabyDetailsValidationSchema = yup.object().shape({
     .required()
     .label("Circumference"),
 });
+
+export const SecondStageDetailsSchema = yup.object().shape({
+    "Time of delivery": yup.string().required().label('Time of delivery'),
+    "Date of delivery": yup.string().required().label('Date of delivery'),
+    "Baby general condition at birth": yup.string().required().label('Baby general condition at birth'),
+})
 
 const initialSecondStageDetails = [
   {
@@ -1503,6 +1537,12 @@ export const useSecondStageOfLabourStore = defineStore(
         const data = _.cloneDeep(initialObstetricDetails);
         return [...data];
       },
+      async validate(){
+        const secondStageDetails = extractArrayOfNameValue(this.secondStageDetails);
+        const secondStageDetailsValid = await validateStore(this.secondStageDetails, SecondStageDetailsSchema, secondStageDetails);
+        
+        return secondStageDetailsValid;
+      }
     },
     // persist:true,
   }
