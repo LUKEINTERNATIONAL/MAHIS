@@ -41,7 +41,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal, toastSuccess, toastWarning } from "@/utils/Alerts";
+import { createModal, toastDanger, toastSuccess, toastWarning } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import Stepper from "@/components/Stepper.vue";
 import { mapState } from "pinia";
@@ -170,9 +170,18 @@ export default defineComponent({
             });
         },
         async saveData() {
-            await this.saveSecondStageLabour();
-            toastSuccess("Delivery details data saved successfully");
-            resetPatientData();
+            const store = useSecondStageOfLabourStore();
+            const isFormValid= await store.validate();
+           
+            if(!isFormValid){
+                toastDanger('The form has has errors')
+                return;
+            }
+
+            // console.log("test","====>")
+            // await this.saveSecondStageLabour();
+            // toastSuccess("Delivery details data saved successfully");
+            // resetPatientData();
             //this.$router.push("labourHome");
         },
         async saveSecondStageLabour() {

@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { YupValidateField } from "./validation_service";
 export function modifyFieldValue(data: any, fieldName: any, element: any, newValue: any) {
     for (const item of data) {
         const colData = data.flatMap((item: any) => item.data?.rowData?.[0]?.colData).find((col: any) => col?.name === fieldName);
@@ -132,3 +133,64 @@ export function modifyWizardData(data: any, title: any, changes: any) {
         Object.assign(stepToUpdate, changes);
     }
 }
+
+
+interface ExtractedNameValue {
+    name:string,
+    value: string|number
+}
+
+
+function extractNameAndValue(obj: any, extracted: Array<any> = []): ExtractedNameValue[] {
+    if (obj.colData) {
+        obj.colData.forEach((col: any) => {
+          if (col.name && ('value' in col)) {
+            extracted.push({ name: col.name, value: col.value });
+          }
+        });
+      }
+    
+  
+      if (obj.radioBtnContent && obj.radioBtnContent.header) {
+        const header = obj.radioBtnContent.header;
+        extracted.push({ name: header.name, value: header.selectedValue });
+      }
+    
+      if (obj.checkboxBtnContent && obj.checkboxBtnContent.header) {
+        const header = obj.checkboxBtnContent.header;
+        extracted.push({ name: header.name, value: header.selectedValue });
+      }
+
+      for (const key in obj) {
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+          extractNameAndValue(obj[key], extracted);
+        }
+      }
+    
+      return extracted;
+  }
+
+  export function extractArrayOfNameValue(store:Array<any>):ExtractedNameValue[]{
+  return store.map(item => extractNameAndValue(item)).flat();
+  }
+  
+
+  export async function validateStore(store: any, schema: any, nameValues: ExtractedNameValue[]): Promise<boolean> {
+   
+    let isValid = true;
+  
+   
+    for (const currentValue of nameValues) {
+      const validationResult = await YupValidateField(store, schema, currentValue.name, currentValue.value);
+      console.log(currentValue.name, currentValue.value, validationResult);
+      
+      isValid = isValid && validationResult;
+    }
+  
+    return isValid;
+  }
+  
+
+
+
+

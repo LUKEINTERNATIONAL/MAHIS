@@ -56,7 +56,7 @@ import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details
 import DeliveryNewbornDetails from "@/apps/LABOUR/components/delivery details/DeliveryNewbornDetails.vue";
 import OtherDeliveryDetails from "@/apps/LABOUR/components/delivery details/OtherDeliveryDetails.vue";
 import ObstetricComplications from "@/apps/LABOUR/components/delivery details/ObstetricComplications.vue";
-import { getRadioSelectedValue } from "@/services/data_helpers";
+import { getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 export default defineComponent({
   name: "Menu",
   components: {
@@ -121,7 +121,7 @@ export default defineComponent({
     // this.initialData=secondStageDetails.getInitial()
     // this.initialData1=newbornComplications.getInitial1()
     // this.initialData2=obstetricComplications.getInitial2()
-    this. handleModeOfDeliver()
+    this.handleModeOfDeliver()
   },
   watch:{
     newbornComplications:{
@@ -151,7 +151,7 @@ export default defineComponent({
     },
     handleSelectedStillBirth() {
       const babyGeneralCondition = getRadioSelectedValue(this.secondStageDetails, 'Baby general condition at birth');
-
+      modifyFieldValue(this.secondStageDetails, 'Number of babies','displayNone',false)
       if (babyGeneralCondition == "Macerated stillbirth" || babyGeneralCondition == "Fresh stillbirth") {
         this.showSection = false;
         return

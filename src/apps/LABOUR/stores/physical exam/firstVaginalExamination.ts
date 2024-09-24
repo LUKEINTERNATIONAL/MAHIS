@@ -6,10 +6,13 @@ import * as yup from "yup"
 export const FirstVaginalExaminationValidationSchema = yup.object().shape({
     'cervical dilation': yup.number()
         .typeError("cervical dilation can only be a number")
-        .min(1)
-        .min(10)
+        .min(0)
+        .max(10)
         .required()
-    .label("Cervical Dilation")
+    .label("Cervical Dilation"),
+    'state of cervical': yup.string()
+    .matches(/^[^\d]+$/, "State of cervical cannot contain numbers") 
+    .label("state of cervical")
    
 })
 
@@ -297,7 +300,6 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     }
 
             },
-
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -335,7 +337,6 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     }
 
             },
-
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -475,6 +476,49 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                         ]
                     }
 
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Is the Cord Pulsating',
+                            name: 'Is Cord Pulsating',
+                            selectedValue: '',
+                            displayNone: true
+                        },
+                        data:[
+                          
+                            {
+                                name: 'Yes',
+                                value: 'yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'no',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                         
+                        ],
+                    },
+                alerts: [
+                        {
+                          backgroundColor: "",
+                          status: "",
+                          icon: "",
+                          textColor: "",
+                          value: "",
+                          name: "",
+                          index: "",
+                        },
+                      ],
             },
             {
                 selectdData: [],
