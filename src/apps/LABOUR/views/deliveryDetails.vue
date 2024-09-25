@@ -174,14 +174,14 @@ export default defineComponent({
             const isFormValid= await store.validate();
            
             if(!isFormValid){
-                toastDanger('The form has has errors')
+                toastDanger('The form has errors')
                 return;
             }
 
-            // console.log("test","====>")
-            // await this.saveSecondStageLabour();
-            // toastSuccess("Delivery details data saved successfully");
-            // resetPatientData();
+   
+            await this.saveSecondStageLabour();
+            toastSuccess("Delivery details data saved successfully");
+            resetPatientData();
             //this.$router.push("labourHome");
         },
         async saveSecondStageLabour() {
@@ -193,12 +193,19 @@ export default defineComponent({
             ) {
                 const userID: any = Service.getUserID();
                 const secondStageDelivery = new SecondStageDeliveryService(this.demographics.patient_id, userID);
+
+
                 const encounter = await secondStageDelivery.createEncounter();
                 if (!encounter) return toastWarning("Unable to create Second stage and Third stage of labour encounter");
+
+    
+                console.log(await this.buildSecondStageOfLabour())
+                return
                 const patientStatus = await secondStageDelivery.saveObservationList(await this.buildSecondStageOfLabour());
                 if (!patientStatus) return toastWarning("Unable to create patient second stage and third stage of labour details!");
                 toastSuccess("Second stage and Third stage  of labour  details have been created");
             }
+        
             console.log(await this.buildSecondStageOfLabour());
         },
 
@@ -227,3 +234,4 @@ export default defineComponent({
 </script>
 
 <style scoped></style>
+

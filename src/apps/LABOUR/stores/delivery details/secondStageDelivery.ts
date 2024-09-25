@@ -653,6 +653,11 @@ export const SecondStageDetailsSchema = yup.object().shape({
     "Time of delivery": yup.string().required().label('Time of delivery'),
     "Date of delivery": yup.string().required().label('Date of delivery'),
     "Baby general condition at birth": yup.string().required().label('Baby general condition at birth'),
+    "Number of babies":  yup.string().when('Baby general condition at birth', ([babyCondition], schema:any)=>{
+        console.log({babyCondition})
+        return babyCondition=="Live full term"? schema.required('Number of Babies required') : schema;
+    }),
+
 })
 
 const initialSecondStageDetails = [

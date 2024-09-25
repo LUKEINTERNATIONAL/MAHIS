@@ -130,7 +130,7 @@ export default defineComponent({
   },
   methods: {
     handleInputData(event:any){
-        YupValidateField(this.secondStageDetails, SecondStageDetailsSchema, event.name, event.value);
+        YupValidateField(this.secondStageDetails, SecondStageDetailsSchema, event.name, event.selectedValue || event.value);
     }
     ,
     handleNumberOfBabies() { 
