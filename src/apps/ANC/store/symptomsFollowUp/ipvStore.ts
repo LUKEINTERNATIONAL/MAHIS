@@ -605,7 +605,7 @@ export const useIpvStore = defineStore("ipvStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "dashed_bottom_border ",
+       // classDash: "dashed_bottom_border ",
         sectionHeader: "",
         checkboxBtnContent: {
           header: {
@@ -614,16 +614,39 @@ export const useIpvStore = defineStore("ipvStore", {
             name: "first-line support",
           },
           data: [
-            {
-              name: "Other",
-              value: "Other",
-              labelPlacement: "start",
-              colSize: "6",
-              justify: "space-between",
-            },
+            // {
+            //   name: "Other",
+            //   value: "Other",
+            //   labelPlacement: "start",
+            //   colSize: "6",
+            //   justify: "space-between",
+            // },
           ],
         },
       },
+      // {
+      //   isFinishBtn: false,
+      //   sectionHeader: "",
+      //   data: {
+      //     rowData: [
+      //       {
+      //         colData: [
+      //           {
+      //             //displayNone: true,
+      //             inputHeader: "specify",
+      //             value: "",
+      //             name: "Try",
+      //             icon: icons.editPen,
+      //             required: true,
+      //             eventType: "input",
+      //             inputWidth: "85%",
+      //             alertsErrorMassage: "",
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // },
       {
         isFinishBtn: false,
         sectionHeader: "",
@@ -635,12 +658,11 @@ export const useIpvStore = defineStore("ipvStore", {
                   displayNone: true,
                   inputHeader: "specify",
                   value: "",
-                  name: "Try",
+                  name: "Specify",
                   icon: icons.editPen,
                   required: true,
                   eventType: "input",
                   inputWidth: "85%",
-                  alertsErrorMassage: "",
                 },
               ],
             },

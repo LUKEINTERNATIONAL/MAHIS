@@ -210,25 +210,82 @@ onMounted(async () => {
 });
 
 async function suggestNextAppointmentDate() {
-    const patient = new PatientService();
-    const patientId = props.patient_Id !== undefined ? props.patient_Id : patient.getID();
-    const mileStone = await getFirstUpcomingVaccineMilestone(patientId as any);
-    // const patientData = await PatientService.findByID(patientId)
-    if (vaccinesPreviouslyAdministered.length > 0) {
-        const lastVaccine = vaccinesPreviouslyAdministered[vaccinesPreviouslyAdministered.length - 1];
-        date.value = addDaysAndFormat(lastVaccine.date_administered, convertToDays(mileStone.age) as any)
-        suggested_date.value = HisDate.toStandardHisDisplayFormat(date.value)
-        DateUpdated(date.value)
-        getCounter(date.value)
-        show_suggested_date.value = true
+    try {
+        const patient = new PatientService();
+        const patientId = props.patient_Id !== undefined ? props.patient_Id : patient.getID();
+        const mileStone = await getFirstUpcomingVaccineMilestone(patientId as any);
+        
+        if (vaccinesPreviouslyAdministered.length > 0) {
+            const lastVaccine = vaccinesPreviouslyAdministered[vaccinesPreviouslyAdministered.length - 1];
+            console.log(lastVaccine)
+            const is_timely_adminstred = await isTimelyAdminstred(lastVaccine, patientId as any)
+            if (is_timely_adminstred == false) {
+                date.value = addDaysAndFormat(lastVaccine.vaccine.date_administered, convertToDays(mileStone.age) as any)
+                suggested_date.value = HisDate.toStandardHisDisplayFormat(date.value)
+                DateUpdated(date.value)
+                getCounter(date.value)
+                show_suggested_date.value = true
+            }
+        }
+    } catch (error) {
+        
     }
+}
+
+async function isTimelyAdminstred(vaccine: any, patientId: number) {
+    try {
+        const patientData = await PatientService.findByID(patientId);
+        const DOB = new Date(patientData.person.birthdate);
+        const expectedAdminstrationDate = addDaysAndFormat(DOB as any, convertToDays(vaccine.age) as any)
+        const DA = convertToDate(vaccine.vaccine.date_administered)
+        const EAD = new Date(expectedAdminstrationDate)
+        console.log(isLater(DA, EAD))
+        return isLater(DA, EAD)
+    } catch (error) {
+        
+    }
+}
+
+function convertToDate(dateStr: any) {
+    const monthMap = {
+        'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+        'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+        'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+    } as any;
+    const parts = dateStr.split(/[:/ ]/);
+    const formattedDate = `${parts[2]}-${monthMap[parts[1]]}-${parts[0]}T${parts[3]}:${parts[4]}:${parts[5]}`;
+    return new Date(formattedDate);
+}
+
+function isLater(dateA: Date, dateB: Date): boolean {
+    // Extract year, month, and day from dateA
+    const yearA = dateA.getFullYear();
+    const monthA = dateA.getMonth();
+    const dayA = dateA.getDate();
+
+    // Extract year, month, and day from dateB
+    const yearB = dateB.getFullYear();
+    const monthB = dateB.getMonth();
+    const dayB = dateB.getDate();
+
+    // Compare year, month, and day
+    if (yearA !== yearB) {
+        return yearA > yearB;
+    }
+    if (monthA !== monthB) {
+        return monthA > monthB;
+    }
+    return dayA > dayB;
 }
 
 function findPreviouslyAdministeredVaccineSchedule(vaccine_schedule: any) {
     vaccine_schedule.forEach((milestone: any) => {
         milestone.antigens.forEach((vaccine: any) => {
             if (vaccine.status == "administered") {
-                vaccinesPreviouslyAdministered.push(vaccine)
+                vaccinesPreviouslyAdministered.push({
+                    age: milestone.age,
+                    vaccine: vaccine,
+                })
             }
         })
     
@@ -237,28 +294,43 @@ function findPreviouslyAdministeredVaccineSchedule(vaccine_schedule: any) {
 }
 
 async function getFirstUpcomingVaccineMilestone(patientId: string): Promise<any | null> {
-    const data = await getVaccinesSchedule(patientId as any);
+    try {
+        const data = await getVaccinesSchedule(patientId as any);
     findPreviouslyAdministeredVaccineSchedule(data.vaccine_schedule)
     for (const milestone of data.vaccine_schedule) {
+        if (milestone.milestone_status === 'current') {
+            return milestone;
+        }
         if (milestone.milestone_status === 'upcoming') {
             return milestone;
         }
     }
     
     return null;
+    } catch (error) {
+        return null;
+    }
 }
 
 async function getAppointmentMents(date: any) {
-    const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
-    appointment_count.value = res.length + 1;
+    try {
+        const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
+        appointment_count.value = res.length + 1;
+    } catch (error) {
+        
+    }
 }
 
 function dismiss() {
     modalController.dismiss();
 }
 async function getfacilityConfiguration() {
-    let data = await SmsService.getConfigurations();
-    configsSms.value = data.show_sms_popup;
+    try {
+        let data = await SmsService.getConfigurations();
+        configsSms.value = data.show_sms_popup;
+    } catch (error) {
+        
+    }
 }
 
 async function getMobilePhones(){
@@ -334,35 +406,49 @@ function convertToDays(input: string) {
   }
 }
 
-function addDaysAndFormat(dateString: string, daysToAdd: number) {
-    // Parse the original date string
-    const [datePart, timePart] = dateString.split(' ') as any;
-    const [day, month, year] = datePart.split('/') as any;
-    const [hours, minutes, seconds] = timePart.split(':');
-    
-    const months = {Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, 
-                    Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11} as any;
+function addDaysAndFormat(dateInput: string | Date, daysToAdd: number): string {
+    let date: Date;
 
-    const date = new Date(year, months[month], day, hours, minutes, seconds);
+    if (dateInput instanceof Date) {
+        // If the input is already a Date object, use it directly
+        date = new Date(dateInput);
+    } else {
+        // Parse the original date string
+        const [datePart, timePart] = dateInput.split(' ');
+        const [day, month, year] = datePart.split('/');
+        const [hours, minutes, seconds] = timePart.split(':');
+        
+        const months: { [key: string]: number } = {
+            Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, 
+            Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+        };
+
+        date = new Date(Number(year), months[month], Number(day), Number(hours), Number(minutes), Number(seconds));
+    }
+    
     date.setDate(date.getDate() + daysToAdd);
+
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const monthsArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    const formatNumber = (num: number): string => String(num).padStart(2, '0');
+
     const dayName = days[date.getDay()];
     const monthName = monthsArr[date.getMonth()];
-    const dayOfMonth = date.getDate();
+    const dayOfMonth = formatNumber(date.getDate());
     const newYear = date.getFullYear();
-    const newHours = String(date.getHours()).padStart(2, '0');
-    const newMinutes = String(date.getMinutes()).padStart(2, '0');
-    const newSeconds = String(date.getSeconds()).padStart(2, '0');
+    const newHours = formatNumber(date.getHours());
+    const newMinutes = formatNumber(date.getMinutes());
+    const newSeconds = formatNumber(date.getSeconds());
 
     const timeZoneOffset = -date.getTimezoneOffset();
     const offsetHours = Math.floor(Math.abs(timeZoneOffset) / 60);
     const offsetMinutes = Math.abs(timeZoneOffset) % 60;
-    const timeZoneString = `GMT${timeZoneOffset >= 0 ? '+' : '-'}${String(offsetHours).padStart(2, '0')}${String(offsetMinutes).padStart(2, '0')}`;
+    const timeZoneString = `GMT${timeZoneOffset >= 0 ? '+' : '-'}${formatNumber(offsetHours)}${formatNumber(offsetMinutes)}`;
 
     const timeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    let localizedTimeZoneName;
+    let localizedTimeZoneName: string;
     try {
         const timeZonePart = new Intl.DateTimeFormat('en', {
             timeZone: timeZoneName,

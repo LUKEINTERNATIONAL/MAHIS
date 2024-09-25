@@ -98,14 +98,6 @@ export const useLabTestsStore = defineStore("labTestsStore", {
             {
                 isFinishBtn: false,
                 sectionHeader: "",
-                classDash: "dashed_bottom_border _padding",
-
-                header: {
-                    title: "Reason ultrasound scan not done",
-                    selectedValue: "",
-                    name: "Other reason",
-                },
-
                 data: {
                     rowData: [
                         {
@@ -113,10 +105,9 @@ export const useLabTestsStore = defineStore("labTestsStore", {
                                 {
                                     inputHeader: "Other (specify)",
                                     displayNone: true,
-                                    unit: "",
                                     icon: icons.editPen,
                                     value: "",
-                                    name: "Other (specify)",
+                                    name: "specify",
                                     required: true,
                                     eventType: "input",
                                     inputWidth: "85%",
@@ -231,5 +222,5 @@ export const useLabTestsStore = defineStore("labTestsStore", {
             this.reason = data;
         },
     },
-    persist: true,
+  //  persist: true,
 });
