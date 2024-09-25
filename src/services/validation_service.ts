@@ -3,6 +3,7 @@ import {
   modifyRadioValue,
   modifyCheckboxValue,
   modifyCheckboxInputField,
+  extractArrayOfNameValue,
 } from "@/services/data_helpers";
 import Validation from "@/validations/StandardValidations";
 import * as yup from "yup";
@@ -96,7 +97,6 @@ export async function YupValidateField(store:any, validationSchema:any, fieldNam
         if (yup.isSchema(fieldSchema)) {
             await fieldSchema.validate(value);
             setErrorOnFields(store, fieldName, false, "")
-         
         }
         return true
     } catch (error: any) {
@@ -104,6 +104,30 @@ export async function YupValidateField(store:any, validationSchema:any, fieldNam
       return false;
     } 
 }
+
+export async function validateFormDataSchema(formObject: any, schema: any, store:any) {
+
+  // clear all validation messages
+  const nameValues = extractArrayOfNameValue(store);
+  nameValues.forEach(nameValue=>{
+    setErrorOnFields(store, nameValue.name, false, "");
+  })
+
+  try {
+  await schema.validate(formObject, { abortEarly: false });
+  return true
+
+  } catch (errors:any) {
+    
+    errors.inner.forEach((error:any)=>{
+      console.log(error.path, error.message);
+      setErrorOnFields(store,error.path,true,error.message)
+    })
+
+    return false
+  }
+}
+
 
 const setErrorOnFields = (store:any, fieldName:any, isValid:boolean, message:string)=>{
     modifyFieldValue(store, fieldName, "alertsErrorMassage", isValid);
