@@ -260,7 +260,8 @@ export default defineComponent({
 
 ion-card {
   min-width: 250px;
-  width: 36%;
+  width: 37%;
+  margin-right: auto;
 }
 
 ion-card-content {
@@ -333,7 +334,8 @@ ion-list {
   ion-col {
     flex: 0 0 calc(25% - 20px);
     max-width: calc(25% - 20px);
-    margin: 10px;
+    margin-right: auto;
+    margin-left: 10px;
   }
 }
 </style>
