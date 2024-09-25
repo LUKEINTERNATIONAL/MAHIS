@@ -268,7 +268,8 @@ export default defineComponent({
                     let processedData: any = [];
 
                     const processAntigensClients = (antigens: any[]) => {
-                        return antigens.map((antigen: any) => {
+                        let antigenData = antigens.map((antigen: any) => {
+                            let count_antigen = 0;
                             antigen.clients.map((client: any) => {
                                 if (
                                     (antigen.drug_name == this.drug_name && (this.village == client.table.city_village || this.village == "All")) ||
@@ -284,13 +285,15 @@ export default defineComponent({
                                         birthdate: client.table.birthdate,
                                         city_village: client.table.city_village,
                                     });
+                                    count_antigen++;
                                 }
 
                                 this.villageList.push(client.table.city_village);
                             });
 
-                            return [antigen.drug_name, antigen.clients.length, antigen.clients];
+                            return [antigen.drug_name, count_antigen];
                         });
+                        return antigenData.filter((subArray) => subArray[1] !== 0);
                     };
 
                     if (this.title == "Client due today") {
@@ -319,8 +322,9 @@ export default defineComponent({
             return data[0];
         },
         handleVillageClick(village: any) {
+            this.drug_name = "";
             this.village = village;
-            this.processData();
+            this.tableData = this.processData();
         },
         handleRowClick(event: Event) {
             this.tableEvent = event.target as HTMLElement;
