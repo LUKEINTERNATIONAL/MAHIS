@@ -2,15 +2,57 @@ import { defineStore } from "pinia";
 import { icons } from '@/utils/svg';
 import _ from "lodash";
 import * as yup from "yup";
+import {extractArrayOfNameValue, validateStore} from "@/services/data_helpers";
+import {ReferralValidationSchema} from "@/apps/ANC/store/referral/referralStore";
 
 export const ANCEndValidationSchema = yup.object().shape({
+    'ANC pregnancy outcome': yup.string()
+        .required("ANC pregnancy outcome is required")
+        .label("ANC pregnancy outcome"),
+
     'Weight': yup.number()
-        .required("Weight is required")
         .typeError("Value should be a number")
-        .min(0)
-        .max(6000)
+        .min(0, "Weight cannot be less than 0.")
+        .max(6000, "Weight cannot exceed 6000.")
         .label("Weight"),
+        // .when('ANC pregnancy outcome', {
+        //     is:(outcome: string) => outcome === "Live birth",
+        //     then: yup.number().required("Weight is required when ANC pregnancy outcome is Live birth."),
+        //     otherwise: yup.number().notRequired(),
+        // }),
+
+    'Place of Delivery': yup.string()
+        .required("Place of Delivery is required when ANC pregnancy outcome is Live birth.")
+        .label("Place of Delivery"),
+        // .when('ANC pregnancy outcome', {
+        //     is: "Live birth",
+        //     then: yup.string().required("Place of Delivery is required when ANC pregnancy outcome is Live birth."),
+        //     otherwise: yup.string().notRequired(),
+        // }),
+
+    'Preterm birth': yup.string(),
+        // .when('ANC pregnancy outcome', {
+        //     is: "Live birth",
+        //     then: yup.string().required("Preterm birth is required when ANC pregnancy outcome is Live birth."),
+        //     otherwise: yup.string().notRequired(),
+        // }),
+
+    'Mode of delivery': yup.string(),
+        // .when('ANC pregnancy outcome', {
+        //     is: "Live birth",
+        //     then: yup.string().required("Mode of delivery is required when ANC pregnancy outcome is Live birth."),
+        //     otherwise: yup.string().notRequired(),
+        // }),
+
+    'Cause of death': yup.string(),
+        // .when('ANC pregnancy outcome', {
+        //     is: "Death",
+        //     then: yup.string().required("Cause of death is required when ANC pregnancy outcome is Death."),
+        //     otherwise: yup.string().notRequired(),
+        // }),
 });
+
+
 const initialANCend=[
     {
         selectdData: [],
@@ -344,7 +386,12 @@ export const useAncEndStore = defineStore('ancEndStore',{
            getInitialANCend(){
                const data = _.cloneDeep(initialANCend);
                return [...data]; // Return a copy of the initial state
-           }
+           },
+            async validate(){
+                const ancInfo=extractArrayOfNameValue(this.ancInfo);
+                const ancEndValid= await validateStore(this.ancInfo, ANCEndValidationSchema,ancInfo);
+                return ancEndValid;
+            }
     },
     // persist:true
 })

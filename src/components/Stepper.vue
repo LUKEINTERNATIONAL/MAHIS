@@ -37,13 +37,20 @@
             <div class="ion-padding" slot="content">
               <component :is="item.component" ></component>
               <div class="button-row">
+                <!-- Previous Button -->
+                <div v-if="index > 0">
+                  <ion-button class="previous-button" @click="PreviousAccordion(index)">
+                    <ion-icon :icon="chevronBack()" slot="start"></ion-icon> <!-- Icon for Previous -->
+                    Previous
+                  </ion-button>
+                </div>
+
                 <!-- Next Button -->
                 <div v-if="index < StepperData.length - 1">
-                  <ion-button class="next-button" @click="NextAccordion(index)">Next</ion-button>
-                </div>
-                <!-- Previous Button -->
-                <div v-if="index > 0" >
-                  <ion-button class="previous-button" @click="PreviousAccordion(index)">Previous</ion-button>
+                  <ion-button class="next-button" @click="NextAccordion(index)">
+                    <ion-icon :icon="chevronForward()" slot="start"></ion-icon> <!-- Icon for Next -->
+                    Next
+                  </ion-button>
                 </div>
               </div>
             </div>
@@ -86,7 +93,7 @@ import Toolbar from "@/components/Toolbar.vue";
 import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
 import ClinicalAssessment from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
-import { chevronBackOutline, checkmark } from "ionicons/icons";
+import {chevronBackOutline, checkmark, chevronForward, chevronBack} from "ionicons/icons";
 import VitalSigns from "@/components/VitalSigns.vue";
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
 import OPDDiagnosis from "@/apps/OPD/components/ConsultationPlan/OPDDiagnosis.vue";
@@ -320,6 +327,12 @@ export default defineComponent({
         };
     },
     methods: {
+      chevronBack() {
+        return chevronBack
+      },
+      chevronForward() {
+        return chevronForward
+      },
       accordionGroupChange(ev: AccordionGroupCustomEvent) {
         const event:any = ev.detail;
         if (!event) {
@@ -364,16 +377,17 @@ export default defineComponent({
 <style scoped>
 .button-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   margin-top: 10px;
 }
 
 .previous-button {
+  margin-left: 30px;
   --background: var(--ion-color-medium-shade);
   color:white;
   border-radius: 1px;
-  width: 100%;
+  width: 70%;
 }
 
 .next-button {

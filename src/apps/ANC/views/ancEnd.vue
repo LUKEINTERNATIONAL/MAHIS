@@ -42,7 +42,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
+import {createModal, toastDanger} from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -61,6 +61,7 @@ import {ReferralService} from "@/apps/ANC/service/referral_service";
 import {AncEndService} from "@/services/ANC/anc_end_service";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
+import {useReferralStore} from "@/apps/ANC/store/referral/referralStore";
 export default defineComponent({
     name: "Home",
   mixins: [SetUserRole, SetEncounter],
@@ -125,9 +126,15 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
-        saveData() {
-            this.saveAncEnd();
-            resetPatientData();
+        async saveData() {
+          const store=useAncEndStore();
+          const isFormValid= await store.validate();
+          if(!isFormValid){
+            toastDanger('The form has has errors')
+            return;
+          }
+            await this.saveAncEnd();
+            await resetPatientData();
             this.$router.push("ANCHome");
         },
 
@@ -137,12 +144,12 @@ export default defineComponent({
         },
 
         async saveAncEnd() {
-          if (this.ancInfo.length > 0) {
+          if (this.ancInfo.length >= 0) {
             const userID: any = Service.getUserID();
-            const ANCpregnancyOutcome = new AncEndService(this.demographics.patient_id, userID);
-            const encounter = await ANCpregnancyOutcome.createEncounter();
+            const ANCPregnancyOutcome = new AncEndService(this.demographics.patient_id, userID);
+            const encounter = await ANCPregnancyOutcome.createEncounter();
             if (!encounter) return toastWarning("Unable to create ANC pregnancy outcome encounter");
-            const patientStatus = await ANCpregnancyOutcome.saveObservationList(await this.buildAncEnd());
+            const patientStatus = await ANCPregnancyOutcome.saveObservationList(await this.buildAncEnd());
             if (!patientStatus) return toastWarning("Unable to create pregnancy outcome details for ANC!");
             toastSuccess("ANC pregnancy outcome saved");
           }

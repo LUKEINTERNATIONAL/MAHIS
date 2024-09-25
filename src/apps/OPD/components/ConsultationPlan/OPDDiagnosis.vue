@@ -9,7 +9,6 @@
     <ion-row v-if="search_item">
       <basic-form
           :contentData="OPDdiagnosis"
-          :initialData="initialData"
           @update:selected="handleInputData"
           @update:inputValue="handleInputData"
           @clicked:button="addNewRow"
@@ -54,7 +53,6 @@ import { Service } from "@/services/service";
 import previousDiagnosis from "@/apps/NCD/components/ConsultationPlan/previousVisits/previousDiagnosis.vue";
 import { Diagnosis } from "../../services/diagnosis";
 import { getFieldValue, modifyFieldValue } from "@/services/data_helpers";
-import {initial} from "lodash";
 
 export default defineComponent({
   name: "Menu",
@@ -93,7 +91,6 @@ export default defineComponent({
       selectedCondition: "" as any,
       selected: null,
       diagnoses: [] as any,
-      initialData:[] as any,
     };
   },
   setup() {
@@ -114,14 +111,11 @@ export default defineComponent({
     },
   },
   async mounted() {
-    const diagnosis=useOPDDiagnosisStore()
-    this.initialData=diagnosis.getInitial()
     this.updateDiagnosisStores();
     this.setDashedBox();
     await this.getDiagnosis("");
   },
   methods: {
-    initial,
     displayInputFields() {
       this.conditionStatus = "";
       this.selectedText = "";

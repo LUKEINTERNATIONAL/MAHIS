@@ -2,14 +2,19 @@ import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
 import * as yup from "yup";
+import {extractArrayOfNameValue, validateStore} from "@/services/data_helpers";
+import {ReferralValidationSchema} from "@/apps/ANC/store/referral/referralStore";
 
 export const FetalAssessmentValidation=yup.object().shape({
     'Number of fetuses':yup.number()
-        .required()
+        .required("Number of fetuses is required")
         .typeError("Value can only be a number")
         .min(0,)
-        .max(5),
+        .max(5)
+        .label("Number of fetuses"),
     'Symphysis-fundal height':yup.number()
+        .required("Symphysis-fundal height is required")
+
         .typeError("SFH can only be a number")
         .min(0)
         .max(5000)
@@ -341,6 +346,11 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
         getInitialFetalDetails(){
             const data= _.cloneDeep(initialFetalDetails);
             return[...data]
+        },
+        async validate(){
+            const fetalAssessment=extractArrayOfNameValue(this.fetalAssessment);
+            const fetalAssessmentValid= await validateStore(this.fetalAssessment, FetalAssessmentValidation,fetalAssessment);
+            return fetalAssessmentValid;
         }
     },
     persist: true,

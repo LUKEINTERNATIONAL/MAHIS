@@ -45,9 +45,9 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
+import {createModal, toastDanger} from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
+import { useVitalsStore } from "@/apps/ANC/store/physical exam/ANCVitalsStore";
 import { VitalsService } from "@/services/ANC/anc_vitals_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
@@ -75,6 +75,7 @@ import BasicFooter from "@/components/BasicFooter.vue";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 import HisDate from "@/utils/Date";
+import {useAncEndStore} from "@/apps/ANC/store/ancEnd/ancEndStore";
 export default defineComponent({
     name: "PhysicalExam",
   mixins: [SetUserRole, SetEncounter],
@@ -239,7 +240,13 @@ export default defineComponent({
             return item?.data;
           });
         },
-        saveData() {
+        async saveData() {
+          const store=useFetalAssessment();
+          const isFormValid= await store.validate();
+          if(!isFormValid){
+            toastDanger('The form has has errors')
+            return;
+          }
           this.saveVitals();
           this.saveMaternalExam();
           this.saveAbdominalExam();

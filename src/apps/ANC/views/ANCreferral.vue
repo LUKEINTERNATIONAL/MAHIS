@@ -7,7 +7,6 @@
                 :backBtn="userRoleSettings.btnName"/>
     </ion-content>
     <BasicFooter @finishBtn="saveData()" />
-
   </ion-page>
 </template>
 
@@ -32,7 +31,7 @@ import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import {Service} from "@/services/service";
-import {toastSuccess, toastWarning} from "@/utils/Alerts";
+import {toastDanger, toastSuccess, toastWarning} from "@/utils/Alerts";
 import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
 import {mapState} from "pinia";
 import {useDemographicsStore} from "@/stores/DemographicStore";
@@ -99,13 +98,22 @@ export default defineComponent ({
 
   methods: {
     markWizard(){},
-    saveData(){
-    this.saveReferral();
-    this.$router.push("ANChome");
+    async saveData(){
+      console.log(this.demographics.patient_id,"++++")
+
+      const store=useReferralStore();
+      const isFormValid= await store.validate();
+      if(!isFormValid){
+        toastDanger('The form has has errors')
+        return;
+      }
+        await this.saveReferral();
+        this.$router.push("ANChome");
 
     },
     async saveReferral() {
-       if (this.referralInfo.length > 0) {
+
+      if (this.referralInfo.length > 0) {
          const userID: any = Service.getUserID();
          const ANCreferral = new ReferralService(this.demographics.patient_id, userID);
          const encounter = await ANCreferral.createEncounter();

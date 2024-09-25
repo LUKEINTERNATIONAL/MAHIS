@@ -2,24 +2,22 @@ import { defineStore } from "pinia"
 import { icons } from '@/utils/svg';
 import _ from "lodash";
 import * as yup from "yup";
+import {extractArrayOfNameValue, validateStore} from "@/services/data_helpers";
 export const ReferralValidationSchema = yup.object().shape({
     'Location of referral': yup.string()
         .required("Location of referral is required")
         .label("Location of referral"),
 
-    // 'Referral for urgent care': yup.string()
-    //     .required("Referral for urgent care is required")
-    //     .label("Referral for urgent care")
-    //     .test('is-checked', 'You must select an option for urgent care', function(value) {
-    //         return value === 'Yes' || value === 'No';
-    //     }),
+    'Referral for urgent care': yup.string()
+        .required("Referral for urgent care is required")
+        .label("Referral for urgent care"),
 
     'Provider’s facility': yup.string()
         .required("Provider’s facility is required")
         .typeError("Invalid name")
         .label("Provider’s facility"),
-
     'Provider’s phone number': yup.string()
+        .required("Provider’s phone number is required")
         .matches(/^(09|08)\d{8}$/, "Phone number must start with 09 or 08 and contain 10 digits")
         .typeError("Invalid phone number format")
         .label("Provider’s phone number"),
@@ -293,7 +291,7 @@ const initialReferral=[
                             idName: "facility_id",
                         },
                         {
-                            inputHeader: 'Provider’s phone number',
+                            inputHeader: 'Provider’s phone number *',
                             icon: icons.editPen,
                             name: 'Provider’s phone number',
                             value: '',
@@ -351,7 +349,13 @@ export const useReferralStore = defineStore('referralStore',{
             getInitialReferral(){
                 const data= _.cloneDeep(initialReferral);
                 return[...data]
+            },
+            async validate(){
+                const referralInfo=extractArrayOfNameValue(this.referralInfo);
+                const referralValid= await validateStore(this.referralInfo, ReferralValidationSchema,referralInfo);
+                return referralValid;
             }
     },
+
     // persist:true
 })
