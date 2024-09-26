@@ -200,7 +200,7 @@ export default defineComponent({
 
     
                 console.log(await this.buildSecondStageOfLabour())
-                return
+        
                 const patientStatus = await secondStageDelivery.saveObservationList(await this.buildSecondStageOfLabour());
                 if (!patientStatus) return toastWarning("Unable to create patient second stage and third stage of labour details!");
                 toastSuccess("Second stage and Third stage  of labour  details have been created");
