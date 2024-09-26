@@ -149,7 +149,7 @@
 
                         <ion-label>
                             <h3 class="ion-label-h3">Session type</h3>
-                            <p>{{ schedule.session_type }} ({{ schedule.repeat_type }} repeat)</p>
+                            <p>{{ schedule.session_type }} ({{ schedule.repeat_type }} repeat - <span><b>{{schedule.frequency}} times</b></span>)</p>
                         </ion-label>
                     </ion-item>
                     <ion-item>

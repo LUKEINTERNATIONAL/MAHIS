@@ -241,6 +241,7 @@ const updateSessionData = (): void => {
     dateRange.value = [new Date(props.data.start_date), new Date(props.data.end_date)];
     selectedRepeatType.value = props.data.repeat_type;
     selectedSessionType.value = props.data.session_type;
+    numberOfDays.value = props.data.frequency;
     selectedAssignees.value = props.data.assignees.map((assignee: User) => assignee.username);
 };
 

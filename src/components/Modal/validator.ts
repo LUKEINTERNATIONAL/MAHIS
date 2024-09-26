@@ -21,7 +21,7 @@ export const useImmunizationSessionFieldsValidator = (
         errors.push({ field: 'dateRange', message: 'Date range is required.' });
     } else {
         const [startDate, endDate] = dateRange;
-        if (startDate >= endDate) {
+        if (startDate > endDate) {
             errors.push({ field: 'dateRange', message: 'Start date must be before end date.' });
         }
     }

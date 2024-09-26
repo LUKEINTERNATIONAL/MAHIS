@@ -37,7 +37,7 @@ import { add } from 'ionicons/icons';
 import ViewImmunizationSessionModal from '@/components/Modal/ViewImmunizationSessionModal.vue';
 import AddImmunizationSessionModal from '@/components/Modal/AddImmunizationSessionModal.vue';
 import { SessionScheduleService } from '@/services/session_schedule_service';
-import { startOfMonth, endOfMonth, isAfter, format, parse, addWeeks, differenceInDays, startOfDay, addDays, subDays, isSunday, addMonths } from 'date-fns';
+import { startOfMonth, format, parse, addWeeks, differenceInDays, startOfDay, addDays, isSunday, addMonths } from 'date-fns';
 import { Assignee, SessionSchedule } from '@/types';
 import { createModal } from '@/utils/Alerts';
 import EditImmunizationSessionModal from '@/components/Modal/EditImmunizationSessionModal.vue';
@@ -60,13 +60,12 @@ const calendarApp = createCalendar({
     isDark: false,
     isResponsive: true,
     views: [
-    createViewMonthGrid(),
+        createViewMonthGrid(),
         createViewDay(),
         createViewWeek(),
         createViewMonthAgenda(),
     ],
     events: [],
-
     callbacks: {
         onEventClick(calendarEvent) {
             const eventSchedules = schedules.value.filter(
@@ -75,10 +74,6 @@ const calendarApp = createCalendar({
             onCalendarDayClick(eventSchedules)
         },
     }
-});
-
-onMounted(async (): Promise<void> => {
-    await getSessionSchedules();
 });
 
 async function getSessionSchedules(): Promise<void> {
@@ -92,21 +87,19 @@ async function getSessionSchedules(): Promise<void> {
         data.forEach((item: SessionSchedule) => {
             const datesMap: Record<string, { start_date: Date, end_date: Date }[]> = {
                 "Weekly": generateDateRangesWeekly(
-                    parseInt(format(new Date(item.start_date), 'yyyy')),
-                    parseInt(format(new Date(item.start_date), 'M')) - 1,
                     format(new Date(item.start_date), "yyyy-MM-dd '08:00'"),
-                    format(new Date(item.end_date), "yyyy-MM-dd '16:00'")
+                    format(new Date(item.end_date), "yyyy-MM-dd '16:00'"),
+                    item.frequency || 1
                 ),
                 "Never": [{ start_date: new Date(item.start_date), end_date: new Date(item.end_date) }],
                 "Daily": generateDateRangesDaily(
                     format(new Date(item.start_date), "yyyy-MM-dd '08:00'"),
-                    7
+                    item.frequency || 1
                 ),
                 "Monthly": generateDateRangesMonthly(
-                    parseInt(format(new Date(item.start_date), 'yyyy')),
-                    parseInt(format(new Date(item.start_date), 'M')) - 1,
                     format(new Date(item.start_date), "yyyy-MM-dd '08:00'"),
-                    format(new Date(item.end_date), "yyyy-MM-dd '16:00'")
+                    format(new Date(item.end_date), "yyyy-MM-dd '16:00'"),
+                    item.frequency || 1
                 ),
             };
 
@@ -130,7 +123,11 @@ async function getSessionSchedules(): Promise<void> {
     }
 }
 
-const generateDateRangesWeekly = (year: number, month: number, startDateStr: string, endDateStr: string): { start_date: Date, end_date: Date }[] => {
+const generateDateRangesWeekly = (
+  startDateStr: string, 
+  endDateStr: string, 
+  frequency: number
+): { start_date: Date, end_date: Date }[] => {
     const startDate = parse(startDateStr, 'yyyy-MM-dd HH:mm', new Date());
     const endDate = parse(endDateStr, 'yyyy-MM-dd HH:mm', new Date());
 
@@ -139,34 +136,40 @@ const generateDateRangesWeekly = (year: number, month: number, startDateStr: str
     }
 
     const dayDifference = differenceInDays(endDate, startDate);
-    const endOfMonthDate = endOfMonth(new Date(year, month));
     const dateRanges: { start_date: Date, end_date: Date }[] = [];
-
     let currentStartDate = startOfDay(startDate);
-    const yesterday = startOfDay(subDays(new Date(), 1));
-    while (currentStartDate <= endOfMonthDate) {
-        const currentEndDate = addDays(currentStartDate, dayDifference);
+    let count = 0;
 
-        if (isAfter(currentEndDate, yesterday)) {
+    while (count < frequency) {
+        const currentEndDate = addDays(currentStartDate, dayDifference);
+        if (!isSunday(currentStartDate)) {
             dateRanges.push({
-                start_date: isAfter(currentStartDate, yesterday) ? currentStartDate : addDays(yesterday, 1),
-                end_date: currentEndDate > endOfMonthDate ? endOfMonthDate : currentEndDate
+                start_date: currentStartDate,
+                end_date: currentEndDate
             });
+            count++;
         }
         currentStartDate = addWeeks(currentStartDate, 1);
     }
     return dateRanges;
-}
+};
 
-const generateDateRangesDaily = (startDateStr: string, numberOfDays: number): { start_date: Date, end_date: Date }[] => {
+
+
+const generateDateRangesDaily = (
+  startDateStr: string, 
+  frequency: number
+): { start_date: Date, end_date: Date }[] => {
     const startDate = parse(startDateStr, 'yyyy-MM-dd HH:mm', new Date());
     if (isNaN(startDate.getTime())) {
         throw new Error('Invalid start date format');
     }
+    
     const dateRanges: { start_date: Date, end_date: Date }[] = [];
     let currentStartDate = startDate;
     let count = 0;
-    while (count < numberOfDays) {
+
+    while (count < frequency) {
         if (!isSunday(currentStartDate)) {
             dateRanges.push({
                 start_date: new Date(currentStartDate.setHours(0, 0, 0, 0)),
@@ -174,39 +177,45 @@ const generateDateRangesDaily = (startDateStr: string, numberOfDays: number): { 
             });
             count++;
         }
-
         currentStartDate = addDays(currentStartDate, 1);
     }
+    
     return dateRanges;
-}
+};
 
-const generateDateRangesMonthly = (year: number, month: number, startDateStr: string, endDateStr: string): { start_date: Date, end_date: Date }[] => {
+const generateDateRangesMonthly = (
+  startDateStr: string, 
+  endDateStr: string, 
+  frequency: number
+): { start_date: Date, end_date: Date }[] => {
     const startDate = parse(startDateStr, 'yyyy-MM-dd HH:mm', new Date());
     const endDate = parse(endDateStr, 'yyyy-MM-dd HH:mm', new Date());
+
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
         throw new Error('Invalid date format');
     }
+
     const dayDifference = differenceInDays(endDate, startDate);
     const dateRanges: { start_date: Date, end_date: Date }[] = [];
     let currentStartDate = startOfMonth(startDate);
-    currentStartDate = new Date(year, month, startDate.getDate());
-    while (currentStartDate.getFullYear() <= year) {
-        const currentEndDate = endOfMonth(currentStartDate);
+    let count = 0;
+
+    while (count < frequency) {
         const rangeEndDate = addDays(currentStartDate, dayDifference);
-        if (rangeEndDate > currentStartDate) {
+        if (!isSunday(currentStartDate)) {
             dateRanges.push({
                 start_date: currentStartDate,
-                end_date: rangeEndDate > currentEndDate ? currentEndDate : rangeEndDate
+                end_date: rangeEndDate
             });
+            count++;
         }
         currentStartDate = addMonths(currentStartDate, 1);
-        if (currentStartDate.getFullYear() > year) break;
     }
 
     return dateRanges;
-}
+};
 
-async function onCalendarDayClick(selectedCalendarSchedules: any) : Promise<void> {
+async function onCalendarDayClick(selectedCalendarSchedules: any): Promise<void> {
     if (selectedCalendarSchedules.length > 0) {
         const modal = await modalController.create({
             component: ViewImmunizationSessionModal,
@@ -250,9 +259,13 @@ const openCreateModal = (): void => {
         if (update) getSessionSchedules();
     })
 }
+
+onMounted(async (): Promise<void> => {
+    await getSessionSchedules();
+});
 </script>
 
-<style lang="css"scoped>
+<style lang="css" scoped>
 .heading {
     width: 100%;
     text-align: center;

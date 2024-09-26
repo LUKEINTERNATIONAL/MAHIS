@@ -40,6 +40,7 @@ type SessionSchedule = {
   repeat_type?: RepeatType;
   repeat?: string;
   target?: string;
+  frequency?: number;
   start_date: Date;
   end_date: Date;
   session_type: SessionType;
