@@ -5,13 +5,14 @@ import {pencil} from "ionicons/icons";
 import * as yup from "yup";
 
 export const MartenalExamValidationSchema=yup.object().shape({
-    'Amniotic fluid':yup.number()
-        .required()
-        .typeError("Value can only be a number")
-        .min(0,)
-        .max(5000)
-        .label("Amniotic fluid")
-    ,
+    'Respiratory exam findings': yup.string()
+        .label("Respiratory exam findings"),
+
+    'Other notes': yup.string().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().label("Specify other respiratory findings").when('Respiratory exam findings',([treatment], schema:any)=>{
+        return treatment=="Other problems"? schema.required():schema;
+    } ),
 })
 const initialRespiratoryExam=[
     {
@@ -36,8 +37,8 @@ const initialRespiratoryExam=[
 
                     },
                     {
-                        name: 'Rapid breathing',
-                        value: 'rapid breathing',
+                        name: 'Obstructed breathing',
+                        value: 'Obstructed breathing',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -127,8 +128,8 @@ const initialRespiratoryExam=[
                 },
                 data:[
                     {
-                        name: 'Other findings',
-                        value: 'Other findings',
+                        name: 'Other problems',
+                        value: 'Other problems',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -140,7 +141,7 @@ const initialRespiratoryExam=[
 
     },
     {
-        childName:"Other findings",
+        childName:"Other problems",
         sideColSize: 0.000001,
         sectionHeader: '',
         classDash: 'dashed_bottom_border',
@@ -155,7 +156,7 @@ const initialRespiratoryExam=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other respiratory findings notes',
+                                name: 'Other notes',
                                 valueType: 'text',
                                 required: true,
                                 eventType: 'input',
@@ -378,7 +379,7 @@ const initialBreastExam=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other general exam findings',
+                                name: 'Other notes',
                                 valueType: 'text',
                                 required: true,
                                 eventType: 'input',
@@ -613,7 +614,7 @@ const initialVaginalExam=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other general exam findings',
+                                name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "100%",
@@ -625,33 +626,6 @@ const initialVaginalExam=[
                 ]
             },
     },
-    {
-        isFinishBtn: false,
-        sectionHeader: "",
-        class:"bold",
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            class: "bold",
-                            inputHeader: "Amniotic fluid level",
-                            value: "",
-                            name: "Amniotic fluid",
-                            icon: icons.editPen,
-                            required: true,
-                            valueType: "text",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            inputWidth: "100%",
-
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-
 
 ] as any;
 const initialPallor=[
@@ -779,7 +753,7 @@ const initialCervicalExam=[
                 header:{
                     title: 'Type of vaginal examination done?',
                     selectedValue: '',
-                    name:'Type of vaginal examination',
+                    name:'Types of vaginal examination',
                     class:"bold",
                     displayNone:true
                 },
@@ -787,12 +761,12 @@ const initialCervicalExam=[
                     {
                         value: 'Digital',
                         name: 'Digital',
-                        colSize: '4',
+                        colSize: '3',
 
                     },
                     {
-                        value: 'Speculum',
-                        name: 'Speculum',
+                        value: 'Speculum Exam',
+                        name: 'Speculum Exam',
                         colSize: '4',
 
                     }
@@ -825,7 +799,7 @@ const initialCervicalExam=[
     },
     {
         sectionHeader: '',
-        childName:"Speculum",
+        childName:"Speculum Exam",
         data:
             {
                 rowData:[
@@ -858,7 +832,7 @@ const initialOedema=[
                     title: 'Is oedema present?',
                     selectedValue: '',
                     class: 'bold',
-                    name:'Oedema',
+                    name:'Presence of oedema',
                     displayNext:"Yes"
                 },
                 data:[
@@ -880,7 +854,7 @@ const initialOedema=[
 
     },
     {
-        childName:"Oedema",
+        childName:"Presence of oedema",
         selectdData: [],
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
@@ -927,8 +901,8 @@ const initialOedema=[
 
                     },
                     {
-                        value: 'General body oedema',
-                        name: 'General body oedema',
+                        value: 'Generalized oedema',
+                        name: 'Generalized oedema',
                         colSize: '7',
 
 

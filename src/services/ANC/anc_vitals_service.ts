@@ -10,18 +10,25 @@ export class VitalsService extends AppEncounterService {
 
     async mapObs(vitals: any) {
         const labelsAndValues: any[] = [];
+
         // Process other vitals using Promise.all
         const promises = await Promise.all(
-            vitals.flatMap((section: any) =>
-                section.data.rowData.flat().map(async (item: any) => {
-                    item.colData.flat().map(async (item: any) => {
-                        if (item.value) {
-                            const obs = await this.appEncounterServiceInstance.buildValueNumber(item.name, item.value);
-                            labelsAndValues.push(obs);
-                        }
+            vitals.flatMap((section: any) => {
+                // Check if section.data and section.data.rowData exist
+                if (section.data && Array.isArray(section.data.rowData)) {
+                    return section.data.rowData.flat().map(async (item: any) => {
+                        item.colData.flat().map(async (item: any) => {
+                            if (item.value) {
+                                const obs = await this.appEncounterServiceInstance.buildValueNumber(item.name, item.value);
+                                labelsAndValues.push(obs);
+                            }
+                        });
                     });
-                })
-            )
+                } else {
+                    console.warn('Invalid section structure or data not found:', section);
+                    return []; // Return an empty array if the structure is not valid
+                }
+            })
         );
 
         // Process BMI
@@ -32,6 +39,7 @@ export class VitalsService extends AppEncounterService {
         }
         return labelsAndValues;
     }
+
     async onFinish(vitals: any) {
         const encounter = await this.appEncounterServiceInstance.createEncounter();
 
@@ -42,7 +50,7 @@ export class VitalsService extends AppEncounterService {
 
         if (!observations) return toastWarning("Unable to save patient observations");
 
-        toastSuccess("Observations and encounter created!");
+        toastSuccess("Vitals saved!");
 
         // this.nextTask();
     }

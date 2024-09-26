@@ -249,7 +249,7 @@ export default defineComponent({
         if (!encounter) return toastWarning("Unable to create persistent behaviour encounter");
         const patientStatus = await persistentBehaviour.saveObservationList(await this.buildPersistentBehaviours());
         if (!patientStatus) return toastWarning("Unable to create patient persistent behaviour details!");
-        toastSuccess("Persistent behaviour details have been created");
+        toastSuccess("Persistent behaviour details created");
       }
       console.log(await this.buildPersistentBehaviours())
     },
@@ -261,7 +261,7 @@ export default defineComponent({
           if (!encounter) return toastWarning("Unable to create IPV encounter");
           const patientStatus = await IPV.saveObservationList(await this.buildIPV());
           if (!patientStatus) return toastWarning("Unable to create patient IPV details!");
-          toastSuccess("IPV details have been created");
+          toastSuccess("IPV details created");
         }
         console.log(await this.buildIPV())
       },

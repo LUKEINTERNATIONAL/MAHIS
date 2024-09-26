@@ -11,10 +11,11 @@ export default defineComponent({
         $route: {
             async handler(route: any) {
                 this.userRole = Service.getUserRoles();
-                if (this.userRole == "Lab") {
+              const programID=Service.getProgramID()
+              if (this.userRole == "Lab" && programID==14) {
                     this.userRoleSettings = {
-                        url: "home",
-                        btnName: "Back to home",
+                        url: "patientProfile",
+                        btnName: "Back to profile",
                         stepperTitle: "Laboratory",
                     };
                 } else {
@@ -25,7 +26,7 @@ export default defineComponent({
                     };
                 }
 
-              if(this.userRole){
+              if(programID==12){
                 this.userRoleSettings={
                   url:"ANCHome",
                   btnName:"Back to home"

@@ -3,13 +3,15 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="vitals" ></basic-form>
+        <basic-form :contentData="vitals"  @update:selected="handleInputData"
+        @update:inputValue="handleInputData" ></basic-form>
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Abdominal Examination</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="anaemia"></basic-form>
+        <basic-form :contentData="anaemia"  @update:selected="handleInputData"
+        @update:inputValue="handleInputData" ></basic-form>
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
@@ -44,8 +46,9 @@ import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 
 import BasicCard from "@/components/BasicCard.vue";
-import {useLabourPhysicalExamStore} from "@/apps/LABOUR/stores/physical exam/physicalExamination";
+import {AnaemiaValidationSchema, useLabourPhysicalExamStore, VitalsValidationSchema} from "@/apps/LABOUR/stores/physical exam/physicalExamination";
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
+import { YupValidateField } from '@/services/validation_service';
 export default defineComponent({
   name: "History",
   components:{
@@ -109,6 +112,11 @@ export default defineComponent({
     return { checkmark,pulseOutline };
   },
   methods: {
+    handleInputData(event:any){
+      console.log({name: event.name});
+      YupValidateField(this.vitals, VitalsValidationSchema,event.name, event.value)
+      YupValidateField(this.anaemia, AnaemiaValidationSchema,event.name, event.value)
+    },
    handleVitalsChange(){
       //reset alerts
    const heightValue = getFieldValue(this.vitals, 'Height','value');
