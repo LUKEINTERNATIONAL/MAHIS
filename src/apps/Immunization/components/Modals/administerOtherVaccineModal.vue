@@ -305,7 +305,7 @@ export default defineComponent({
         async pullLotNumbersForVaccine(data: any) {
             const store = useAdministerVaccineStore();
             const stockService = new StockService();
-            const data_ = await stockService.getItem(data.drug_id)
+            const data_ = await stockService.getDrugBatches(data.drug_id)
             store.setLotNumberData(data_)
 
             if(data_.length == 0) {
