@@ -301,7 +301,7 @@ export default defineComponent({
         } else {
           await toastWarning("Please complete all required fields");
         }
-        console.log(await this.buildQuickCheck());
+        console.log("=============>>>",await this.buildQuickCheck());
 
       },
 

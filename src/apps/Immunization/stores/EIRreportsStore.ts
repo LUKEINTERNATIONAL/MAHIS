@@ -5,7 +5,7 @@ export const EIRreportsStore = defineStore("EIRreportsStore", {
         navigationPayload: {} as any,
         start_date: '',
         end_date: '',
-        immunizationMonthlyRepoartData: [],
+        immunizationMonthlyRepoartData: [] as any,
         AEFIReportData: {},
     }),
     actions: {

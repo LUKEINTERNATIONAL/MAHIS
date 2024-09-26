@@ -3,7 +3,7 @@
         <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="ipv"></basic-form>
+                <!-- <basic-form :contentData="ipv"></basic-form> -->
                 <!-- <basic-form :contentData="ipvReason"></basic-form> -->
             </ion-card-content>
         </ion-card>
@@ -12,8 +12,8 @@
         <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="additionalCare"></basic-form>
-                <basic-form :contentData="safety_assessment"></basic-form>
+                <!-- <basic-form :contentData="additionalCare"></basic-form>
+                <basic-form :contentData="safety_assessment"></basic-form> -->
             </ion-card-content>
         </ion-card>
 
@@ -21,31 +21,31 @@
         <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="physical_violence"></basic-form>
-                <basic-form :contentData="beaten_pregnant"></basic-form>
+                <!-- <basic-form :contentData="physical_violence"></basic-form>
+                <basic-form :contentData="beaten_pregnant"></basic-form> -->
             </ion-card-content>
         </ion-card>
 
         <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="woman_threatened"></basic-form>
-                <basic-form :contentData="constant_jealous"></basic-form>
+                <!-- <basic-form :contentData="woman_threatened"></basic-form>
+                <basic-form :contentData="constant_jealous"></basic-form> -->
             </ion-card-content>
         </ion-card>
 
         <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="strangling"></basic-form>
-                <basic-form :contentData="murder_threat"></basic-form>
+                <!-- <basic-form :contentData="strangling"></basic-form>
+                <basic-form :contentData="murder_threat"></basic-form> -->
             </ion-card-content>
         </ion-card>
 
         <ion-card  class="section">
             <ion-card-header> <ion-card-title class="sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="referrals"></basic-form>
+                <!-- <basic-form :contentData="referrals"></basic-form> -->
             </ion-card-content>
         </ion-card>
     </div>
@@ -73,7 +73,7 @@ import { mapState } from 'pinia';
 import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
-import {useIntimatePartnerStore } from '../../store/intimatePartnerStore';
+// import {useIntimatePartnerStore } from '../../store/intimatePartnerStore';
 import { getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 
 export default defineComponent ({
@@ -104,36 +104,36 @@ export default defineComponent ({
         return { checkmark,pulseOutline };
     },
     computed:{
-         ...mapState(useIntimatePartnerStore, ["ipv"]),
+        // ...mapState(useIntimatePartnerStore, ["ipv"]),
         //  ...mapState(useIntimatePartnerStore, ["ipvReason"]),
-         ...mapState(useIntimatePartnerStore, ["additionalCare"]),
-         ...mapState(useIntimatePartnerStore, ["safety_assessment"]),
-         ...mapState(useIntimatePartnerStore, ["physical_violence"]),
-         ...mapState(useIntimatePartnerStore, ["beaten_pregnant"]),
-         ...mapState(useIntimatePartnerStore, ["woman_threatened"]),
-         ...mapState(useIntimatePartnerStore, ["constant_jealous"]),
-         ...mapState(useIntimatePartnerStore, ["strangling"]),
-         ...mapState(useIntimatePartnerStore, ["murder_threat"]),
-         ...mapState(useIntimatePartnerStore, ["referrals"]),
+        //  ...mapState(useIntimatePartnerStore, ["additionalCare"]),
+        //  ...mapState(useIntimatePartnerStore, ["safety_assessment"]),
+        //  ...mapState(useIntimatePartnerStore, ["physical_violence"]),
+        //  ...mapState(useIntimatePartnerStore, ["beaten_pregnant"]),
+        //  ...mapState(useIntimatePartnerStore, ["woman_threatened"]),
+        //  ...mapState(useIntimatePartnerStore, ["constant_jealous"]),
+        //  ...mapState(useIntimatePartnerStore, ["strangling"]),
+        //  ...mapState(useIntimatePartnerStore, ["murder_threat"]),
+        //  ...mapState(useIntimatePartnerStore, ["referrals"]),
   
 
     },
     mounted() {
-        this.handleIntimate()
-        this.handleOtherIpv()
-        this.handleReferal()
+        // this.handleIntimate()
+        // this.handleOtherIpv()
+        // this.handleReferal()
     },
     watch:{
       ipv:{
         handler(){
-        this.handleIntimate()
-        this.handleOtherIpv()
+        // this.handleIntimate()
+        // this.handleOtherIpv()
       },
         deep:true
       },
       referrals:{
         handler(){
-          this.handleReferal()
+          // this.handleReferal()
         },deep:true
       }
     },
@@ -148,41 +148,41 @@ export default defineComponent ({
         this.currentSection--;
       }
     },
-      handleIntimate(){
-        if(getRadioSelectedValue(this.ipv,'intimateInfo')=='no'){
-          modifyRadioValue(this.ipv,'IPV firstline support','displayNone',false)
-        }else{
-          modifyRadioValue(this.ipv,'IPV firstline support','displayNone',true)
-        }
-      },
-      handleOtherIpv(){
-        if(getRadioSelectedValue(this.ipv,'IPV firstline support')=='other'){
-          modifyFieldValue(this.ipv,'other','displayNone',false)
-        }else{
-           modifyFieldValue(this.ipv,'other','displayNone',true)
-        }
-      },
-      handleReferal(){
-        if(getCheckboxSelectedValue(this.referrals,'Other')?.value =='other'){
-          modifyFieldValue(this.referrals,'Specify','displayNone',false)
-        }else{
-          modifyFieldValue(this.referrals,'Specify','displayNone',true)
-        }
+    //   handleIntimate(){
+    //     if(getRadioSelectedValue(this.ipv,'intimateInfo')=='no'){
+    //       modifyRadioValue(this.ipv,'IPV firstline support','displayNone',false)
+    //     }else{
+    //       modifyRadioValue(this.ipv,'IPV firstline support','displayNone',true)
+    //     }
+    //   },
+    //   handleOtherIpv(){
+    //     if(getRadioSelectedValue(this.ipv,'IPV firstline support')=='other'){
+    //       modifyFieldValue(this.ipv,'other','displayNone',false)
+    //     }else{
+    //        modifyFieldValue(this.ipv,'other','displayNone',true)
+    //     }
+    //   },
+    //   handleReferal(){
+    //     if(getCheckboxSelectedValue(this.referrals,'Other')?.value =='other'){
+    //       modifyFieldValue(this.referrals,'Specify','displayNone',false)
+    //     }else{
+    //       modifyFieldValue(this.referrals,'Specify','displayNone',true)
+    //     }
 
-        const checkBoxes=['Care at another facility',"         Care at another facility",'Crisis intervention or counselling','Police','Shelter or housing',
-                         'Shelter or housing','Child protection','Livelihood support','Other',]
+    //     const checkBoxes=['Care at another facility',"         Care at another facility",'Crisis intervention or counselling','Police','Shelter or housing',
+    //                      'Shelter or housing','Child protection','Livelihood support','Other',]
 
-      if (getCheckboxSelectedValue(this.referrals, 'None')?.checked) {
-        checkBoxes.forEach((checkbox) => {
-            modifyCheckboxValue(this.referrals, checkbox, 'checked', false);
-            modifyCheckboxValue(this.referrals, checkbox, 'disabled', true);
-        });
-        } else {
-        checkBoxes.forEach((checkbox) => {
-            modifyCheckboxValue(this.referrals, checkbox, 'disabled', false);
-        });
-    }
-      },
+    //   if (getCheckboxSelectedValue(this.referrals, 'None')?.checked) {
+    //     checkBoxes.forEach((checkbox) => {
+    //         modifyCheckboxValue(this.referrals, checkbox, 'checked', false);
+    //         modifyCheckboxValue(this.referrals, checkbox, 'disabled', true);
+    //     });
+    //     } else {
+    //     checkBoxes.forEach((checkbox) => {
+    //         modifyCheckboxValue(this.referrals, checkbox, 'disabled', false);
+    //     });
+    // }
+    //   },
     }
 
 })

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "vue-tsc && vite build --emptyOutDir --outDir= ../MaHIS-Release",
+    "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "test:e2e": "cypress run",
     "test:unit": "vitest",
@@ -69,7 +69,6 @@
     "vue3-apexcharts": "^1.5.2",
     "vue3-barcode-qrcode-reader": "^1.0.16",
     "vue3-carousel": "^0.3.3",
-    "vue3-easy-data-table": "^1.5.47",
     "vue3-toastify": "^0.2.2",
     "yup": "^1.4.0"
   },

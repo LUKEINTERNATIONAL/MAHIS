@@ -390,8 +390,6 @@ export default defineComponent({
 
                 await toastWarning("Please complete all required fields");
             }
-                            console.log("========>",await this.buildProfile())
-
         },
 
         async buildProfile() {

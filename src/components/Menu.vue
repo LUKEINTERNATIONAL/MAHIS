@@ -125,6 +125,7 @@
                                         <ion-item class="list-bottom" @click="navigationMenu('setSessionDate')" value="Session Date">
                                             Session Date
                                         </ion-item>
+                                        <ion-item @click="navigationMenu('Deduplicateclients')" value="Deduplicate clients"> De-Duplication </ion-item>
                                         <ion-item @click="navigationMenu('clinicaldays')" value="Session Date"> Clinical Days </ion-item>
                                         <ion-item @click="navigationMenu('setDDE')" value="DDE"> DDE </ion-item>
                                         <ion-item class="list-bottom" @click="navigationMenu('setLocation')" value="Location"> Location </ion-item>
@@ -222,9 +223,7 @@ export default defineComponent({
         function navigationMenu(url: string) {
             menuController.close();
             router.push(url).then(() => {
-                if (url === "users") {
-                    router.go(0);
-                }
+                
             });
         }
         return {

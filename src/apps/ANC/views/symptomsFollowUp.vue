@@ -157,7 +157,8 @@ export default defineComponent({
         ...mapState(useMedicalFollowUpStore,["medicalFollowUp"]),
         ...mapState(usePersistentBehaviourStore,["persistentBehaviour"]),
         ...mapState(useCurrentPhysiologicalSymptomsStore,["physiologicalSymptoms"]),
-        ...mapState(useIpvStore,["ipv"]),
+        ...mapState(useIpvStore,["ipv","ipv1","additionalCare","safety_assessment","physical_violence","beaten_pregnant"
+          ,"strangling","murder_threat","referrals","constant_jealous","woman_threatened"]),
         ...mapState(useFatalMovementStore,["fatalMovement"]),
         ...mapState(useDemographicsStore, ["demographics"]),
 
@@ -218,6 +219,7 @@ export default defineComponent({
     async buildIPV() {
        return [
          ...(await formatCheckBoxData(this.ipv)),
+         ...(await formatInputFiledData(this.ipv))
         ]
     },
     async buildFetalMovement() {
