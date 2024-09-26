@@ -15,7 +15,7 @@
     <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
         <div>
             <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Session name</label>
-            <ion-input clear fill="outline" placeholder="Enter the session name" v-model="sesssionName"></ion-input>
+            <ion-input clear fill="outline" placeholder="Enter the session name" v-model="sessionName"></ion-input>
             <div v-if="sessionNameError" class="alerts_error">{{ sessionNameError }}</div>
         </div>
         <div style="margin-top: 20px;">
@@ -144,7 +144,7 @@ const selectedSessionType = ref<string>("");
 const showNumberOfDays = ref<boolean>(false);
 const numberOfDays = ref<number>(1);
 const assigneesHolder = ref<User[]>([]);
-const sesssionName = ref<string>("");
+const sessionName = ref<string>("");
 const selectedAssignees = ref<string[]>([]);
 const sessionNameError = ref<string>("");
 const dateRangeError = ref<string>("");
@@ -176,7 +176,7 @@ const formattedRepeatText = computed((): string => {
 
 const createImmunizationSessionSchedule = async (): Promise<void> => {
     const validationResult = useImmunizationSessionFieldsValidator(
-        sesssionName.value,
+        sessionName.value,
         dateRange.value,
         selectedRepeatType.value,
         numberOfDays.value,
@@ -190,7 +190,7 @@ const createImmunizationSessionSchedule = async (): Promise<void> => {
             .map((user: User) => user.id);
 
         const data: any = {
-            session_name: sesssionName.value,
+            session_name: sessionName.value,
             start_date: startDate.value,
             end_date: endDate.value,
             session_type: selectedSessionType.value,
@@ -255,9 +255,9 @@ watch(selectedRepeatType, (value: string) => {
     }
 });
 
-watch([sesssionName, dateRange, selectedRepeatType, numberOfDays, selectedSessionType, selectedAssignees], () => {
+watch([sessionName, dateRange, selectedRepeatType, numberOfDays, selectedSessionType, selectedAssignees], () => {
     const validationResult = useImmunizationSessionFieldsValidator(
-        sesssionName.value,
+        sessionName.value,
         dateRange.value,
         selectedRepeatType.value,
         numberOfDays.value,

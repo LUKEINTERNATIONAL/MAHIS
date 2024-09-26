@@ -233,7 +233,8 @@ const showEditModal = async (props: any, origin: "modal" | "view" = "view"): Pro
         component: EditImmunizationSessionModal,
         cssClass: "otherVitalsModal",
         componentProps: {
-            data: origin === "modal" ? props.edit : props,
+            data: props.edit,
+            showName: ""
         },
     });
     await modal.present();
