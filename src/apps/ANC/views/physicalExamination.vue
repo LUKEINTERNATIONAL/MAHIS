@@ -240,22 +240,28 @@ export default defineComponent({
             return item?.data;
           });
         },
-        async saveData() {
-          const store=useFetalAssessment();
-          const isFormValid= await store.validate();
-          if(!isFormValid){
-            toastDanger('The form has has errors')
-            return;
-          }
-          this.saveVitals();
-          this.saveMaternalExam();
-          this.saveAbdominalExam();
-          this.savePresentingSigns();
-          this.$router.push("ANChome");
-          resetPatientData();
-        },
+      async saveData() {
+        const areVitalsValid = await this.validaterowData();
+        if (areVitalsValid) {
+          toastDanger("Vitals form has errors");
+          return;
+        }
+        const store = useFetalAssessment();
+        const isFormValid = await store.validate();
+        if (!isFormValid) {
+          toastDanger('Abdominal exam section has errors');
+          return;
+        }
+         this.saveVitals();
+         this.saveMaternalExam();
+         this.saveAbdominalExam();
+         this.savePresentingSigns();
+        await this.$router.push("ANChome");
+        await resetPatientData();
+      },
 
-       async buildVitals() {
+
+      async buildVitals() {
        return [
          ...(await formatInputFiledData(this.vitals)),
          ...(await formatCheckBoxData(this.vitals)),
@@ -314,47 +320,52 @@ export default defineComponent({
         const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         await vitalsInstance.onFinish(this.vitals);
       },
-      async validaterowData() {
+      async validaterowData(): Promise<boolean> {
         const userID: any = Service.getUserID();
         const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         const age = HisDate.getAgeInYears(this.demographics?.birthdate);
 
+        // Reset validation errors for new validation
+        this.hasValidationErrors = []; // Clear previous errors
+        let hasErrors = false; // Flag to track if any errors exist
+
+        // Validate each section of vitals
         this.vitals.forEach((section: any, sectionIndex: any) => {
           if (section?.data?.rowData) {
-            section?.data?.rowData.forEach((col: any, colIndex: any) => {
+            section.data.rowData.forEach((col: any, colIndex: any) => {
               col.colData.some((input: any, inputIndex: any) => {
+                const validateResult = vitalsInstance.validator(input);
+                // Check for errors based on age condition
                 if (input.name === "Respiratory rate" && age <= 5) {
-                  const validateResult = vitalsInstance.validator(input);
                   if (validateResult?.length > 0) {
-                    this.hasValidationErrors.push("false");
+                    hasErrors = true; // Set hasErrors to true if validation fails
                     this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
-                    return true;
                   } else {
-                    this.hasValidationErrors.push("true");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
                     this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                   }
                 } else {
-                  const validateResult = vitalsInstance.validator(input);
+                  // General validation for other inputs
                   if (validateResult?.length > 0) {
-                    this.hasValidationErrors.push("false");
+                    hasErrors = true; // Set hasErrors to true if validation fails
                     this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
-                    return true;
                   } else {
-                    this.hasValidationErrors.push("true");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
                     this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                   }
                 }
 
-                return false;
+                return false; // Continue looping through the column data
               });
             });
           }
         });
 
-        this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
+        // Update validation status
+        this.vitals.validationStatus = !hasErrors;
+
+        // Return whether there were errors
+        return hasErrors; // If true, there were errors; if false, validation passed
       },
+
 
 
       async saveMaternalExam() {

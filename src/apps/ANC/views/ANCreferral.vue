@@ -40,6 +40,7 @@ import {ReferralService} from "@/apps/ANC/service/referral_service";
 import BasicFooter from "@/components/BasicFooter.vue";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
+import {resetPatientData} from "@/services/reset_data";
 
 
 export default defineComponent ({
@@ -106,9 +107,13 @@ export default defineComponent ({
       if(!isFormValid){
         toastDanger('The form has has errors')
         return;
-      }
-        await this.saveReferral();
+      } else{
+        this.saveReferral();
         this.$router.push("ANChome");
+        resetPatientData();
+
+      }
+
 
     },
     async saveReferral() {

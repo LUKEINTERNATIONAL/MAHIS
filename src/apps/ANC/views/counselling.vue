@@ -203,7 +203,7 @@ export default defineComponent({
             });
         },
         async saveData() {
-          await this.saveCounselling()
+          this.saveCounselling()
           resetPatientData();
           this.$router.push("ANChome");
         },

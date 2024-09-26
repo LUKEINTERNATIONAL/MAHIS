@@ -133,8 +133,8 @@ export default defineComponent({
             toastDanger('The form has has errors')
             return;
           }
-            await this.saveAncEnd();
-            await resetPatientData();
+             this.saveAncEnd();
+            resetPatientData();
             this.$router.push("ANCHome");
         },
 
@@ -151,7 +151,7 @@ export default defineComponent({
             if (!encounter) return toastWarning("Unable to create ANC pregnancy outcome encounter");
             const patientStatus = await ANCPregnancyOutcome.saveObservationList(await this.buildAncEnd());
             if (!patientStatus) return toastWarning("Unable to create pregnancy outcome details for ANC!");
-            toastSuccess("ANC pregnancy outcome saved");
+            toastSuccess("ANC pregnancy outcome determined and saved");
           }
           console.log(await this.buildAncEnd())
 

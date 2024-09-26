@@ -10,46 +10,41 @@ export const ANCEndValidationSchema = yup.object().shape({
         .required("ANC pregnancy outcome is required")
         .label("ANC pregnancy outcome"),
 
-    'Weight': yup.number()
-        .typeError("Value should be a number")
-        .min(0, "Weight cannot be less than 0.")
-        .max(6000, "Weight cannot exceed 6000.")
-        .label("Weight"),
-        // .when('ANC pregnancy outcome', {
-        //     is:(outcome: string) => outcome === "Live birth",
-        //     then: yup.number().required("Weight is required when ANC pregnancy outcome is Live birth."),
-        //     otherwise: yup.number().notRequired(),
-        // }),
+    'Weight': yup.number().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().typeError("Weight can only be  a number").label("Weight").min(0).max(600).when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
+        return pregnancyOutcome=="Live birth"? schema.required('Weight is required'):schema;
+        } ),
 
-    'Place of Delivery': yup.string()
-        .required("Place of Delivery is required when ANC pregnancy outcome is Live birth.")
-        .label("Place of Delivery"),
-        // .when('ANC pregnancy outcome', {
-        //     is: "Live birth",
-        //     then: yup.string().required("Place of Delivery is required when ANC pregnancy outcome is Live birth."),
-        //     otherwise: yup.string().notRequired(),
-        // }),
+    'Place of Delivery': yup.string().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().label("Place of delivery").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
+        return pregnancyOutcome=="Live birth"? schema.required():schema;
+    } ),
 
-    'Preterm birth': yup.string(),
-        // .when('ANC pregnancy outcome', {
-        //     is: "Live birth",
-        //     then: yup.string().required("Preterm birth is required when ANC pregnancy outcome is Live birth."),
-        //     otherwise: yup.string().notRequired(),
-        // }),
 
-    'Mode of delivery': yup.string(),
-        // .when('ANC pregnancy outcome', {
-        //     is: "Live birth",
-        //     then: yup.string().required("Mode of delivery is required when ANC pregnancy outcome is Live birth."),
-        //     otherwise: yup.string().notRequired(),
-        // }),
+    'Preterm birth': yup.string().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().label("Preterm birth").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
+        return pregnancyOutcome=="Live birth"? schema.required():schema;
+    } ),
 
-    'Cause of death': yup.string(),
-        // .when('ANC pregnancy outcome', {
-        //     is: "Death",
-        //     then: yup.string().required("Cause of death is required when ANC pregnancy outcome is Death."),
-        //     otherwise: yup.string().notRequired(),
-        // }),
+    'Mode of delivery': yup.string().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().label("Mode of delivery").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
+        return pregnancyOutcome=="Live birth"? schema.required():schema;
+    } ),
+
+    'Cause of death': yup.string().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().label("Cause of death").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
+        return pregnancyOutcome=="Death"? schema.required():schema;
+    } ),
+    'Date of death': yup.string().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().label("Date of death").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
+        return pregnancyOutcome=="Death"? schema.required():schema;
+    } ),
 });
 
 

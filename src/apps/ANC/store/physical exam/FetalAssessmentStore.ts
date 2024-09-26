@@ -6,15 +6,14 @@ import {extractArrayOfNameValue, validateStore} from "@/services/data_helpers";
 import {ReferralValidationSchema} from "@/apps/ANC/store/referral/referralStore";
 
 export const FetalAssessmentValidation=yup.object().shape({
-    'Number of fetuses':yup.number()
-        .required("Number of fetuses is required")
-        .typeError("Value can only be a number")
-        .min(0,)
-        .max(5)
-        .label("Number of fetuses"),
+    'Oedema': yup.string()
+        .label("Oedema"),
+    'Number of fetuses':yup.number().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().label("Number of fetuses").min(1).max(8).when('Oedema',([treatment], schema:any)=>{
+        return treatment=="Yes"? schema.required():schema;
+    } ),
     'Symphysis-fundal height':yup.number()
-        .required("Symphysis-fundal height is required")
-
         .typeError("SFH can only be a number")
         .min(0)
         .max(5000)
@@ -78,7 +77,7 @@ const initialFetalAssesment=[
             header: {
                 title: "Is number of fetuses known?",
                 selectedValue: "",
-                name: "Oedema severity",
+                name: "Oedema",
                 class:"bold",
                 displayNext:"Yes"
             },
@@ -98,7 +97,7 @@ const initialFetalAssesment=[
     },
 
     {
-        childName:"Oedema severity",
+        childName:"Oedema",
         sectionHeader: "",
         classDash: "dashed_bottom_border",
         header: {
@@ -353,5 +352,5 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
             return fetalAssessmentValid;
         }
     },
-    persist: true,
+    // persist: true,
 });

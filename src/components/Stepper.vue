@@ -39,7 +39,7 @@
               <div class="button-row">
                 <!-- Previous Button -->
                 <div v-if="index > 0">
-                  <ion-button class="previous-button" @click="PreviousAccordion(index)">
+                  <ion-button class="previous-button" @click="previousAccordion(index)">
                     <ion-icon :icon="chevronBack()" slot="start"></ion-icon> <!-- Icon for Previous -->
                     Previous
                   </ion-button>
@@ -47,7 +47,7 @@
 
                 <!-- Next Button -->
                 <div v-if="index < StepperData.length - 1">
-                  <ion-button class="next-button" @click="NextAccordion(index)">
+                  <ion-button class="next-button" @click="nextAccordion(index)">
                     <ion-icon :icon="chevronForward()" slot="start"></ion-icon> <!-- Icon for Next -->
                     Next
                   </ion-button>
@@ -358,13 +358,13 @@ export default defineComponent({
                 createModal(SaveProgressModal);
             }
         },
-      NextAccordion(currentIndex:any) {
+      nextAccordion(currentIndex:any) {
         const nextIndex = currentIndex + 1;
         if (nextIndex < this.StepperData.length) {
           this.currentOpenStepper = this.StepperData[nextIndex].value;
         }
       },
-      PreviousAccordion(currentIndex:any) {
+      previousAccordion(currentIndex:any) {
         const prevIndex = currentIndex - 1;
         if (prevIndex >= 0) {
           this.currentOpenStepper = this.StepperData[prevIndex].value;

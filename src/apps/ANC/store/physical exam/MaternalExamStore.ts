@@ -5,13 +5,14 @@ import {pencil} from "ionicons/icons";
 import * as yup from "yup";
 
 export const MartenalExamValidationSchema=yup.object().shape({
-    'Amniotic fluid':yup.number()
-        .required()
-        .typeError("Value can only be a number")
-        .min(0,)
-        .max(5000)
-        .label("Amniotic fluid")
-    ,
+    'Respiratory exam findings': yup.string()
+        .label("Respiratory exam findings"),
+
+    'Other notes': yup.string().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().label("Specify other respiratory findings").when('Respiratory exam findings',([treatment], schema:any)=>{
+        return treatment=="Other problems"? schema.required():schema;
+    } ),
 })
 const initialRespiratoryExam=[
     {
@@ -760,7 +761,7 @@ const initialCervicalExam=[
                     {
                         value: 'Digital',
                         name: 'Digital',
-                        colSize: '4',
+                        colSize: '3',
 
                     },
                     {
@@ -798,7 +799,7 @@ const initialCervicalExam=[
     },
     {
         sectionHeader: '',
-        childName:"Speculum",
+        childName:"Speculum Exam",
         data:
             {
                 rowData:[
@@ -997,6 +998,6 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             return [...data]
         },
     },
-    persist:true,
+    // persist:true,
 
 })

@@ -11,7 +11,13 @@ export const ReferralValidationSchema = yup.object().shape({
     'Referral for urgent care': yup.string()
         .required("Referral for urgent care is required")
         .label("Referral for urgent care"),
-
+    'Any treatment given before referral': yup.string()
+        .label("Any treatment given before referral"),
+    'Treatment': yup.string().transform((value,originalValue)=>{
+        return originalValue===''? null:value;
+    }).nullable().label("Treatment provided").when('Any treatment given before referral',([treatment], schema:any)=>{
+        return treatment=="Yes"? schema.required():schema;
+    } ),
     'Provider’s facility': yup.string()
         .required("Provider’s facility is required")
         .typeError("Invalid name")
@@ -121,7 +127,7 @@ const initialReferral=[
                         {
                             class:"bold",
                             displayNone:true,
-                            inputHeader: "Treatment provided on referral",
+                            inputHeader: "Treatment provided on referral*",
                             unit: "",
                             icon: "",
                             value: "",
@@ -357,5 +363,5 @@ export const useReferralStore = defineStore('referralStore',{
             }
     },
 
-    // persist:true
+    persist:true
 })
