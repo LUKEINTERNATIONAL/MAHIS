@@ -307,6 +307,7 @@ export default defineComponent({
             else {
                 toastWarning ("could not find other concepts")
             }
+           // console.log('vitals data...........',data)
         },
     
      async saveMartenalExam() {
