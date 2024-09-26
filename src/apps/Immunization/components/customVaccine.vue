@@ -148,7 +148,7 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             store.setCurrentSelectedDrug(data)
             const stockService = new StockService();
-            const data_ = await stockService.getItem(data.drug_id)
+            const data_ = await stockService.getDrugBatches(data.drug_id)
             store.setLotNumberData(data_)
 
             if(data_.length == 0) {
