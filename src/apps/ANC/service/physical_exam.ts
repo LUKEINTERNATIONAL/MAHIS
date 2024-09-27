@@ -1,6 +1,4 @@
 import { VitalsService } from "@/services/ANC/anc_vitals_service"
-import {AppEncounterService} from "@/services/app_encounter_service";
-
 
 export class VitalsInstance {
   async push(patientID: any,providerID: any, vitalsData: any){
@@ -12,22 +10,20 @@ export class VitalsInstance {
 
 }
 
-export class MaternalExamService extends AppEncounterService {
-  constructor(patientID: number, providerID: number) {
-    super(patientID, 95, providerID)
+export class MartenalExamInstance {
+  async push(patientID: any,providerID: any, examData: any){
+    const martenalService = new VitalsService(patientID, providerID)
+    await martenalService.createEncounter()
+    await martenalService.saveObservationList(examData)
   }
 
 }
 
-export class AbdominalAssessmentService extends AppEncounterService {
-  constructor(patientID: number, providerID: number) {
-    super(patientID, 116, providerID)
-  }
-
-}
-export class PresentingSignsService extends AppEncounterService {
-  constructor(patientID: number, providerID: number) {
-    super(patientID, 210, providerID)
+export class FetalAssessmentInstance {
+  async push(patientID: any,providerID: any, fetalAssessmentData: any){
+    const fetalAssessmentService = new VitalsService(patientID, providerID)
+    await fetalAssessmentService.createEncounter()
+    await fetalAssessmentService.saveObservationList(fetalAssessmentData)
   }
 
 }

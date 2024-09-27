@@ -20,7 +20,7 @@ import { useBehaviourCousellingStore } from "@/apps/ANC/store/counselling/behavi
 import { useDietCounsellingStore } from "@/apps/ANC/store/counselling/dietCounsellingStore";
 import { usePhysiologicalCounselingStore } from "@/apps/ANC/store/counselling/physiologicalCounselingStore";
 import { useHeadssAssessmentStore } from "@/apps/ANC/store/others/headsAssessmentStore";
-import { useAncVitalsStore } from "@/apps/ANC/store/physical exam/Anc_VitalsStore";
+import { useAncVitalsStore } from "@/apps/ANC/store/physical exam/AncVitalsStore";
 import { useFetalAssessment } from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 import { useFetalPresentationStore } from "@/apps/ANC/store/physical exam/FetalPresantationStore";
 import { usePresentingSigns } from "@/apps/ANC/store/physical exam/PresentingSignsStore";

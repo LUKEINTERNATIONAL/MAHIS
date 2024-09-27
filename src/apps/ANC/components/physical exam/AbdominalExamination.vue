@@ -89,6 +89,7 @@ export default defineComponent({
       FeatusModalOpen: false,
       arrayOfFeatus: [] as any,
       selectedFeatus: 0,
+      fetalsDetails: [] as any,
       initialData:[] as any
 
 
@@ -97,8 +98,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useFetalAssessment, ["fetalAssessment","fetalDetails"]),
-    ...mapState(useFetalPresentationStore,["fetalPresentation"]),
-    ...mapState(useFetalAssessment,["fetalsDetails"])
+    ...mapState(useFetalPresentationStore,["fetalPresentation"])
   },
   mounted() {
     const fetalAssessment=useFetalAssessment();

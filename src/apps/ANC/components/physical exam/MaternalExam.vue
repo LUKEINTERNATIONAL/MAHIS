@@ -32,22 +32,22 @@
         ></basic-form>
       </ion-card-content>
     </ion-card>
-    <!-- Cervical exam -->
-    <ion-card  class="section">
+    <!-- Pallor -->
+    <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="cervicalExam"
-                    :initialData="initialCervicalExam"
+        <basic-form :contentData="pallor"
+                    :initialData="initialPallor"
                     @update:selected="handleInputData"
                     @update:inputValue="handleInputData"
 
         ></basic-form>
       </ion-card-content>
     </ion-card>
-    <!-- Pallor -->
-    <ion-card class="section">
+    <!-- Cervical exam -->
+    <ion-card  class="section">
       <ion-card-content>
-        <basic-form :contentData="pallor"
-                    :initialData="initialPallor"
+        <basic-form :contentData="cervicalExam"
+                    :initialData="initialCervicalExam"
                     @update:selected="handleInputData"
                     @update:inputValue="handleInputData"
 

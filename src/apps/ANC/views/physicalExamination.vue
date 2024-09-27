@@ -45,9 +45,9 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import {createModal, toastDanger} from "@/utils/Alerts";
+import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/apps/ANC/store/physical exam/ANCVitalsStore";
+import { useVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
 import { VitalsService } from "@/services/ANC/anc_vitals_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
@@ -59,12 +59,7 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import { getCheckboxSelectedValue, getFieldValue } from "@/services/data_helpers";
 import { formatInputFiledData } from "@/services/formatServerData";
 import { formatCheckBoxData } from "@/services/formatServerData";
-import {
-  VitalsInstance,
-  FetalPresentationInstance,
-  PresentingSignsInstance,
-  MaternalExamService, AbdominalAssessmentService, PresentingSignsService
-} from "@/apps/ANC/service/physical_exam"
+import {VitalsInstance, MartenalExamInstance, FetalAssessmentInstance, FetalPresentationInstance, PresentingSignsInstance} from "@/apps/ANC/service/physical_exam"
 import {useMaternalExamStore} from '@/apps/ANC/store/physical exam/MaternalExamStore'
 import { formatRadioButtonData } from "@/services/formatServerData";
 import { useFetalAssessment } from "../store/physical exam/FetalAssessmentStore";
@@ -74,8 +69,6 @@ import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
-import HisDate from "@/utils/Date";
-import {useAncEndStore} from "@/apps/ANC/store/ancEnd/ancEndStore";
 export default defineComponent({
     name: "PhysicalExam",
   mixins: [SetUserRole, SetEncounter],
@@ -171,8 +164,9 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore,["vitals",]),
-        ...mapState(useMaternalExamStore,["respiratory","pallor", "breastExam", "vaginalInspection", "cervicalExam", "oedemaPresence"]),
-        ...mapState(useFetalAssessment, ["fetalAssessment", "fetalDetails"]),
+        ...mapState(useMaternalExamStore,["pallor", "breastExam", "vaginalInspection", "cervicalExam", "oedemaPresence"]),
+        ...mapState(useFetalAssessment, ["fetalAssessment"]),
+        ...mapState(useFetalPresentationStore,["fetalPresentation"]),
         ...mapState(usePresentingSigns,["presentingSigns"]),
 
     },
@@ -206,9 +200,7 @@ export default defineComponent({
         },
     },
     setup() {
-        return { chevronBackOutline, checkmark,
-          hasValidationErrors: [] as any,
-        };
+        return { chevronBackOutline, checkmark };
     },
 
     methods: {
@@ -240,70 +232,54 @@ export default defineComponent({
             return item?.data;
           });
         },
-      async saveData() {
-        const areVitalsValid = await this.validaterowData();
-        if (areVitalsValid) {
-          toastDanger("Vitals form has errors");
-          return;
-        }
-        const store = useFetalAssessment();
-        const isFormValid = await store.validate();
-        if (!isFormValid) {
-          toastDanger('Abdominal exam section has errors');
-          return;
-        }
-         this.saveVitals();
-         this.saveMaternalExam();
-         this.saveAbdominalExam();
-         this.savePresentingSigns();
-        await this.$router.push("ANChome");
-        await resetPatientData();
-      },
+        saveData() {
+            if (this.vitals) {
+                this.saveVitals();
+                this.saveMartenalExam();
+                this.saveFetalAssessment();
+                this.saveFetalPresentation();
+                this.savePresentingSigns();
+               this.$router.push("ANChome");
+              resetPatientData();
+                toastSuccess("Physical examination data saved successfully");
+            } else {
+                toastWarning("Please complete all required fields");
+            }
+        },
 
-
-      async buildVitals() {
+       async buildVitals() {
        return [
          ...(await formatInputFiledData(this.vitals)),
          ...(await formatCheckBoxData(this.vitals)),
          // ...(await formatCheckBoxData(this.preEclampsia))
         ]
     },
-    async buildMaternalExam() {
+    async buildMartenalExam() {
         return [
             ...(await formatRadioButtonData(this.pallor)),
-            ...(await formatCheckBoxData(this.pallor)),
-            ...(await formatInputFiledData(this.pallor)),
-          ...(await formatRadioButtonData(this.respiratory)),
-          ...(await formatCheckBoxData(this.respiratory)),
-          ...(await formatInputFiledData(this.respiratory)),
             ...(await formatCheckBoxData(this.breastExam)),
-            ...(await formatInputFiledData(this.breastExam)),
-            ...(await formatRadioButtonData(this.breastExam)),
             ...(await formatCheckBoxData(this.vaginalInspection)),
-            ...(await formatInputFiledData(this.vaginalInspection)),
-            ...(await formatRadioButtonData(this.vaginalInspection)),
             ...(await formatCheckBoxData(this.cervicalExam)),
-            ...(await formatInputFiledData(this.cervicalExam)),
-            ...(await formatRadioButtonData(this.cervicalExam)),
             ...(await formatCheckBoxData(this.oedemaPresence)),
-            ...(await formatInputFiledData(this.oedemaPresence)),
-            ...(await formatRadioButtonData(this.oedemaPresence)),
         ]
 
     },
 
-    async buildAbdominalExam() {
+    async buildFetalAssessment() {
         return [
             ...(await formatInputFiledData(this.fetalAssessment)),
             ...(await formatRadioButtonData(this.fetalAssessment)),
-            ...(await formatCheckBoxData(this.fetalAssessment)),
-          ...(await formatInputFiledData(this.fetalDetails)),
-          ...(await formatRadioButtonData(this.fetalDetails)),
-          ...(await formatCheckBoxData(this.fetalDetails)),
         ]
 
     },
 
+    async buildFetalPresentation() {
+        return [
+        ...(await formatInputFiledData(this.fetalPresentation)),
+        ...(await formatRadioButtonData(this.fetalPresentation)),
+        ]
+
+    },
 
     async buildPresentingSigns() {
         return [
@@ -315,101 +291,73 @@ export default defineComponent({
     },
 
 
-      async saveVitals() {
-        const userID: any = Service.getUserID();
-        const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-        await vitalsInstance.onFinish(this.vitals);
-      },
-      async validaterowData(): Promise<boolean> {
-        const userID: any = Service.getUserID();
-        const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-        const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+    async saveVitals() {
+            const data: any = await this.buildVitals();
+            console.log(data);
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const vitalsInstance = new VitalsInstance();
+                vitalsInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Vitals saved successfully");
+            }
+            else {
+                toastWarning ("could not find other concepts")
+            }
+        },
+    
+     async saveMartenalExam() {
+            const data: any = await this.buildVitals();
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const martenalInstance = new MartenalExamInstance();
+                martenalInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Martenal exam saved successfully");
+            }
 
-        // Reset validation errors for new validation
-        this.hasValidationErrors = []; // Clear previous errors
-        let hasErrors = false; // Flag to track if any errors exist
+            else {
+                toastWarning("could not find other concepts")
+            }
+        },
 
-        // Validate each section of vitals
-        this.vitals.forEach((section: any, sectionIndex: any) => {
-          if (section?.data?.rowData) {
-            section.data.rowData.forEach((col: any, colIndex: any) => {
-              col.colData.some((input: any, inputIndex: any) => {
-                const validateResult = vitalsInstance.validator(input);
-                // Check for errors based on age condition
-                if (input.name === "Respiratory rate" && age <= 5) {
-                  if (validateResult?.length > 0) {
-                    hasErrors = true; // Set hasErrors to true if validation fails
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
-                  } else {
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-                  }
-                } else {
-                  // General validation for other inputs
-                  if (validateResult?.length > 0) {
-                    hasErrors = true; // Set hasErrors to true if validation fails
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
-                  } else {
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-                  }
-                }
+    async saveFetalAssessment() {
+            const data: any = await this.buildFetalAssessment;
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const fetalAssessmentInstance = new FetalAssessmentInstance();
+                fetalAssessmentInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Fetal assessment saved successfully")
+            }
 
-                return false; // Continue looping through the column data
-              });
-            });
-          }
-        });
+            else {
+                toastWarning("could not find other concepts")
+            }
+        },
 
-        // Update validation status
-        this.vitals.validationStatus = !hasErrors;
+    async saveFetalPresentation() {
+            const data: any = await this.buildFetalPresentation;
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const fetalPresentationInstance = new FetalPresentationInstance();
+                fetalPresentationInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Fetal presentation saved successfully")
+            }
+            else {
+                toastWarning("could not find other concepts")
+            }
+        },
+        async savePresentingSigns() {
+            const data: any = await this.buildPresentingSigns;
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const presentingSignsInstance = new PresentingSignsInstance();
+                presentingSignsInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Presenting signs saved successfully")
+            }
+            else {
+                toastWarning("could not find other concepts")
+            }
 
-        // Return whether there were errors
-        return hasErrors; // If true, there were errors; if false, validation passed
-      },
-
-
-
-      async saveMaternalExam() {
-        if (this.pallor.length >= 0  || this.cervicalExam.length>=0 || this.vaginalInspection.length>=0 || this.breastExam.length>=0) {
-          const userID: any = Service.getUserID();
-          const  maternalExam= new MaternalExamService(this.demographics.patient_id, userID);
-          const encounter = await maternalExam.createEncounter();
-          if (!encounter) return toastWarning("Unable to create maternal exam encounter");
-          const patientStatus = await maternalExam.saveObservationList(await this.buildMaternalExam());
-          if (!patientStatus) return toastWarning("Unable to create maternal exam details!");
-          toastSuccess("Maternal exam details have been created");
-        }
-        console.log(await this.buildMaternalExam())
-
-      },
-
-      async saveAbdominalExam() {
-        if (this.fetalAssessment.length >= 0  || this.fetalDetails.length>=0) {
-          const userID: any = Service.getUserID();
-          const  abdominalExam= new AbdominalAssessmentService(this.demographics.patient_id, userID);
-          const encounter = await abdominalExam.createEncounter();
-          if (!encounter) return toastWarning("Unable to create abdominal exam encounter");
-          const patientStatus = await abdominalExam.saveObservationList(await this.buildAbdominalExam());
-          if (!patientStatus) return toastWarning("Unable to create abdominal exam details!");
-          toastSuccess("Abdominal exam details have been created");
-        }
-        console.log(await this.buildAbdominalExam())
-
-      },
-
-
-      async savePresentingSigns() {
-        if (this.presentingSigns.length >= 0) {
-          const userID: any = Service.getUserID();
-          const  presentingSigns= new PresentingSignsService(this.demographics.patient_id, userID);
-          const encounter = await presentingSigns.createEncounter();
-          if (!encounter) return toastWarning("Unable to create presenting signs encounter");
-          const patientStatus = await presentingSigns.saveObservationList(await this.buildPresentingSigns());
-          if (!patientStatus) return toastWarning("Unable to create presenting signs details!");
-          toastSuccess("Presenting signs details have been created");
-        }
-        console.log(await this.buildPresentingSigns())
-
-      },
+        },
 
         openModal() {
             createModal(SaveProgressModal);

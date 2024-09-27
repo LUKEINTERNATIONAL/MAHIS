@@ -2,52 +2,15 @@ import { defineStore } from "pinia";
 import { icons } from '@/utils/svg';
 import _ from "lodash";
 import * as yup from "yup";
-import {extractArrayOfNameValue, validateStore} from "@/services/data_helpers";
-import {ReferralValidationSchema} from "@/apps/ANC/store/referral/referralStore";
 
 export const ANCEndValidationSchema = yup.object().shape({
-    'ANC pregnancy outcome': yup.string()
-        .required("ANC pregnancy outcome is required")
-        .label("ANC pregnancy outcome"),
-
-    'Weight': yup.number().transform((value,originalValue)=>{
-        return originalValue===''? null:value;
-    }).nullable().typeError("Weight can only be  a number").label("Weight").min(0).max(600).when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
-        return pregnancyOutcome=="Live birth"? schema.required('Weight is required'):schema;
-        } ),
-
-    'Place of Delivery': yup.string().transform((value,originalValue)=>{
-        return originalValue===''? null:value;
-    }).nullable().label("Place of delivery").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
-        return pregnancyOutcome=="Live birth"? schema.required():schema;
-    } ),
-
-
-    'Preterm birth': yup.string().transform((value,originalValue)=>{
-        return originalValue===''? null:value;
-    }).nullable().label("Preterm birth").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
-        return pregnancyOutcome=="Live birth"? schema.required():schema;
-    } ),
-
-    'Mode of delivery': yup.string().transform((value,originalValue)=>{
-        return originalValue===''? null:value;
-    }).nullable().label("Mode of delivery").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
-        return pregnancyOutcome=="Live birth"? schema.required():schema;
-    } ),
-
-    'Cause of death': yup.string().transform((value,originalValue)=>{
-        return originalValue===''? null:value;
-    }).nullable().label("Cause of death").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
-        return pregnancyOutcome=="Death"? schema.required():schema;
-    } ),
-    'Date of death': yup.string().transform((value,originalValue)=>{
-        return originalValue===''? null:value;
-    }).nullable().label("Date of death").when('ANC pregnancy outcome',([pregnancyOutcome], schema:any)=>{
-        return pregnancyOutcome=="Death"? schema.required():schema;
-    } ),
+    'Weight': yup.number()
+        .required("Weight is required")
+        .typeError("Value should be a number")
+        .min(0)
+        .max(6000)
+        .label("Weight"),
 });
-
-
 const initialANCend=[
     {
         selectdData: [],
@@ -230,8 +193,7 @@ const initialANCend=[
                 selectedValue: '',
                 name:'Place of Delivery',
                 displayNone:true,
-                class:"bold",
-                displayNext:"Other"
+                class:"bold"
             },
             data:[
                 {
@@ -252,31 +214,30 @@ const initialANCend=[
             ]
         }
     },
-    { childName:"Place of Delivery",
-        classDash: 'dashed_bottom_border',
-        data:{
-                rowData:[
-                    {
-                        colData:[
-                            {
-                                displayNone:true,
-                                inputHeader: 'specify',
-                                icon: icons.editPen,
-                                value: "",
-                                name: "Other (specify)",
-                                valueType: "text",
-                                eventType: 'input',
-                                inputWidth: "82%",
-                                required: true
-                            }
+    // {
+    //         data:{
+    //             rowData:[
+    //                 {
+    //                     colData:[
+    //                         {
+    //                             displayNone:true,
+    //                             inputHeader: 'specify',
+    //                             icon: icons.editPen,
+    //                             value: "",
+    //                             name: "Other (specify)",
+    //                             valueType: "text",
+    //                             eventType: 'input',
+    //                             inputWidth: "82%",
+    //                             required: true
+    //                         }
 
-                        ]
-                    }
-                ],
+    //                     ]
+    //                 }
+    //             ],
 
-            }
+    //         }
 
-        },
+    //     },
 
     {
         childName:"ANC pregnancy outcome",
@@ -296,12 +257,12 @@ const initialANCend=[
                 {
                     name: "Yes",
                     value: "Yes",
-                    colSize: "2",
+                    colSize: "2.5",
                 },
                 {
                     name:  "No",
                     value: "No",
-                    colSize: "2",
+                    colSize: "2.5",
                 },
             ]
         }
@@ -324,22 +285,22 @@ const initialANCend=[
                 {
                     name: "Normal",
                     value: "Normal",
-                    colSize: "3.01",
+                    colSize: "4.01",
                 },
                 {
                     name: "Forceps",
                     value: "Forceps",
-                    colSize: "6.01",
+                    colSize: "4.01",
                 },
                 {
                     name: "Vacuum",
                     value: "Vacuum",
-                    colSize: "3.01",
+                    colSize: "4.01",
                 },
                 {
                     name: "Caesarean section",
                     value: "Caesarean section",
-                    colSize: "6.01",
+                    colSize: "4.01",
                 },
             ]
         }
@@ -381,12 +342,7 @@ export const useAncEndStore = defineStore('ancEndStore',{
            getInitialANCend(){
                const data = _.cloneDeep(initialANCend);
                return [...data]; // Return a copy of the initial state
-           },
-            async validate(){
-                const ancInfo=extractArrayOfNameValue(this.ancInfo);
-                const ancEndValid= await validateStore(this.ancInfo, ANCEndValidationSchema,ancInfo);
-                return ancEndValid;
-            }
+           }
     },
     // persist:true
 })

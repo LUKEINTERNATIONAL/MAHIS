@@ -82,7 +82,7 @@ export class ConceptService extends Service {
     }
 
     private static resolveConcept(concepts: any, conceptName: string) {
-        if (concepts.length > 0) return concepts[0].concept_id;
+        if (concepts.length === 1) return concepts[0].concept_id;
 
         throw `Concept name ${conceptName} was not found or has a duplicates`;
     }

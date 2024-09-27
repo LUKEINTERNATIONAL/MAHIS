@@ -2,17 +2,13 @@ import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
 import * as yup from "yup";
-import {extractArrayOfNameValue, validateStore} from "@/services/data_helpers";
-import {ReferralValidationSchema} from "@/apps/ANC/store/referral/referralStore";
 
 export const FetalAssessmentValidation=yup.object().shape({
-    'Oedema': yup.string()
-        .label("Oedema"),
-    'Number of fetuses':yup.number().transform((value,originalValue)=>{
-        return originalValue===''? null:value;
-    }).nullable().label("Number of fetuses").min(1).max(8).when('Oedema',([treatment], schema:any)=>{
-        return treatment=="Yes"? schema.required():schema;
-    } ),
+    'Number of fetuses':yup.number()
+        .required()
+        .typeError("Value can only be a number")
+        .min(0,)
+        .max(5),
     'Symphysis-fundal height':yup.number()
         .typeError("SFH can only be a number")
         .min(0)
@@ -77,7 +73,7 @@ const initialFetalAssesment=[
             header: {
                 title: "Is number of fetuses known?",
                 selectedValue: "",
-                name: "Oedema",
+                name: "Number of fetuses known",
                 class:"bold",
                 displayNext:"Yes"
             },
@@ -97,7 +93,7 @@ const initialFetalAssesment=[
     },
 
     {
-        childName:"Oedema",
+        childName:"Number of fetuses known",
         sectionHeader: "",
         classDash: "dashed_bottom_border",
         header: {
@@ -328,8 +324,6 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
     state: () => ({
         fetalAssessment: [...initialFetalAssesment] as any,
         fetalDetails:[..._.cloneDeep(initialFetalDetails)] as any,
-        fetalsDetails: [] as any,
-
     }),
     actions: {
         setFetalAssessment(data: any) {
@@ -345,11 +339,6 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
         getInitialFetalDetails(){
             const data= _.cloneDeep(initialFetalDetails);
             return[...data]
-        },
-        async validate(){
-            const fetalAssessment=extractArrayOfNameValue(this.fetalAssessment);
-            const fetalAssessmentValid= await validateStore(this.fetalAssessment, FetalAssessmentValidation,fetalAssessment);
-            return fetalAssessmentValid;
         }
     },
     // persist: true,

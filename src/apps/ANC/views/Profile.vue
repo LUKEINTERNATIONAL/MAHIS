@@ -295,9 +295,9 @@ export default defineComponent({
             });
         },
 
-         saveData() {
-            this.saveProfile();
-            resetPatientData();
+        async saveData() {
+            await this.saveProfile();
+            await resetPatientData();
         },
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
