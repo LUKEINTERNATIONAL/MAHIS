@@ -5,6 +5,8 @@ export const EIRreportsStore = defineStore("EIRreportsStore", {
         navigationPayload: {} as any,
         start_date: '',
         end_date: '',
+        immunizationMonthlyRepoartData: [] as any,
+        AEFIReportData: {},
     }),
     actions: {
         setNavigationPayload(title: string, canGoBack: boolean, canGoForward: boolean,  backHref: string, previousRoute: string, subTxt=''): void{
@@ -23,6 +25,12 @@ export const EIRreportsStore = defineStore("EIRreportsStore", {
             this.start_date = startDate
             this.end_date = endDate
         },
+        setImmunizationMonthlyRepoartData(data: []) {
+            this.immunizationMonthlyRepoartData = data
+        },
+        setAEFIReportData(data: object): void {
+            this.AEFIReportData = data
+        }
     },
     persist: true,
 })

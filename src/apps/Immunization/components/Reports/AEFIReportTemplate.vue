@@ -1,6 +1,4 @@
 <template>
-
-      
       <ion-row>
         <ion-col>
             <h1 style="width: 100%; text-align: left; font-weight: 400">Adverse Events Following Immunization - AEFI</h1>
@@ -137,6 +135,9 @@ export default defineComponent({
           }
         });
       });
+
+      const store = EIRreportsStore()
+      store.setAEFIReportData({'vaccines': this.vaccines, 'categories': this.categories})
     } catch (error) {
       console.error('Error in initAefiReport:', error);
     }

@@ -145,8 +145,9 @@ import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 export default defineComponent({
-    mixins: [ScreenSizeMixin, Districts],
+    mixins: [ScreenSizeMixin, Districts, SetDemographics],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -321,8 +322,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
-            if (this.checkUnderFive || this.checkUnderOne)
-                this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
+            if (this.checkUnderFourteen) this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex < this.steps.length - 1) {
@@ -388,6 +388,7 @@ export default defineComponent({
             ) {
                 this.disableSaveBtn = true;
                 this.isLoading = true;
+
                 if (this.globalPropertyStore.dde_enabled) {
                     if (await this.possibleDuplicates()) {
                         this.disableSaveBtn = false;
@@ -398,23 +399,7 @@ export default defineComponent({
 
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const offlinePatientID = Date.now();
-                await db.collection("patientRecords").add({
-                    offlinePatientID: offlinePatientID,
-                    serverPatientID: "",
-                    personInformation: toRaw(this.personInformation[0].selectedData),
-                    guardianInformation: toRaw(this.guardianInformation[0].selectedData),
-                    birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
-                    otherPersonInformation: {
-                        nationalID: this.validatedNationalID(),
-                        birthID: this.validatedBirthID(),
-                        relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
-                    },
-                    saveStatusPersonInformation: "pending",
-                    saveStatusGuardianInformation: "pending",
-                    saveStatusBirthRegistration: "pending",
-                    date_created: "",
-                    creator: "",
-                });
+                await this.createOfflineRecord(offlinePatientID);
                 await savePatientRecord();
                 toastSuccess("Successfully Created Patient");
                 await db
@@ -423,7 +408,7 @@ export default defineComponent({
                     .get()
                     .then(async (document: any) => {
                         if (document.serverPatientID) {
-                            await this.findPatient(document.serverPatientID);
+                            this.openNewPage(document.patientData);
                         } else {
                             await this.setOfflineData(document);
                         }
@@ -431,6 +416,26 @@ export default defineComponent({
             } else {
                 toastWarning("Please complete all required fields");
             }
+        },
+        async createOfflineRecord(offlinePatientID: any) {
+            await db.collection("patientRecords").add({
+                offlinePatientID: offlinePatientID,
+                serverPatientID: "",
+                patientData: "",
+                personInformation: toRaw(this.personInformation[0].selectedData),
+                guardianInformation: toRaw(this.guardianInformation[0].selectedData),
+                birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
+                otherPersonInformation: {
+                    nationalID: this.validatedNationalID(),
+                    birthID: this.validatedBirthID(),
+                    relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
+                },
+                saveStatusPersonInformation: "pending",
+                saveStatusGuardianInformation: "pending",
+                saveStatusBirthRegistration: "pending",
+                date_created: "",
+                creator: "",
+            });
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
@@ -481,28 +486,7 @@ export default defineComponent({
         },
         async setOfflineData(item: any) {
             await resetPatientData();
-            const demographicsStore = useDemographicsStore();
-            let fullName = "";
-            if (item.personInformation.middle_name && item.personInformation.middle_name != "N/A") {
-                fullName = item.personInformation.given_name + " " + item.personInformation.middle_name + " " + item.personInformation.family_name;
-            } else {
-                fullName = item.personInformation.given_name + " " + item.personInformation.family_name;
-            }
-            demographicsStore.setDemographics({
-                name: fullName,
-                mrn: item.offlinePatientID,
-                birthdate: item.personInformation.birthdate,
-                category: "",
-                gender: item.personInformation.gender,
-                patient_id: item.offlinePatientID,
-                address:
-                    item?.personInformation?.current_district +
-                    "," +
-                    item?.personInformation?.current_traditional_authority +
-                    "," +
-                    item?.personInformation?.current_village,
-                phone: item.personInformation.cell_phone_number,
-            });
+            this.setOfflineDemographics(item);
             this.isLoading = false;
             let url = "/patientProfile";
             this.disableSaveBtn = false;
@@ -510,29 +494,7 @@ export default defineComponent({
         },
         async openNewPage(item: any) {
             await resetPatientData();
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient(item);
-            let fullName = "";
-            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
-            } else {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
-            }
-            demographicsStore.setDemographics({
-                name: fullName,
-                mrn: this.patientIdentifier(item),
-                birthdate: item.person.birthdate,
-                category: "",
-                gender: item.person.gender,
-                patient_id: item.patient_id,
-                address:
-                    item?.person?.addresses[0]?.state_province +
-                    "," +
-                    item?.person?.addresses[0]?.township_division +
-                    "," +
-                    item?.person?.addresses[0]?.city_village,
-                phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
-            });
+            this.setDemographics(item);
             this.isLoading = false;
             let url = "/patientProfile";
             this.disableSaveBtn = false;

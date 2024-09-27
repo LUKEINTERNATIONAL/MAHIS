@@ -2,33 +2,11 @@
   <div class="container">
     <!-- Signs of injury -->
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Injuries</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="signsOfInjury"></basic-form>
-       <!-- <basic-form :contentData="abdominalInjury"></basic-form> -->
-      </ion-card-content>
-    </ion-card>
+        <basic-form :contentData="presentingSigns"
+                    :initialData="initialData"
 
-    <!-- clinical enquirry -->
-    <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header"> Clinical enquiry</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="clinicalEnquiry"></basic-form>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- any form of violence -->
-    <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Violence to the woman</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <!-- <basic-form :contentData="violence"></basic-form> -->
-        <basic-form :contentData="intimateViolence"></basic-form>
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -79,52 +57,26 @@ export default defineComponent({
       currentSection: 0, // Initialize currentSection to 0
       vValidations: '' as any,
       hasValidationErrors: [] as any,
+      initialData:[] as any,
     };
   },
   computed:{
 
-    ...mapState(usePresentingSigns,["signsOfInjury"]),
-    // ...mapState(usePresentingSigns,["abdominalInjury"]),
-    // ...mapState(usePresentingSigns,["violence"]),
-    ...mapState(usePresentingSigns,["clinicalEnquiry"]),
-    ...mapState(usePresentingSigns,["intimateViolence"]),
+    ...mapState(usePresentingSigns,["presentingSigns"]),
   },
   mounted(){
-    this.handleClinicalEnquiry()
+   const presentingSigns=usePresentingSigns()
+    this.initialData=presentingSigns.getInitialPresentingSigns()
   },
   watch: {
-    clinicalEnquiry:{
-      handler(){
-        this.handleClinicalEnquiry();
-      },
-      deep:true
-    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
   methods:{
-    
-    handleClinicalEnquiry(){
-      if(getRadioSelectedValue(this.clinicalEnquiry, 'Clinical enquiry')=='yes'){
-        modifyRadioValue(this.clinicalEnquiry,'Reason not done','displayNone', false)
-      }   else {modifyRadioValue(this.clinicalEnquiry,'Reason not done','displayNone', true)}
-    },
-
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);
-    },
-    //Method for navigating
-    goToNextSection() {
-      if (this.currentSection < 2) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
     },
 
   }
@@ -162,7 +114,7 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+  width: 100%;
+  color: black;
 }
 </style>

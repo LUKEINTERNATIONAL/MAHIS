@@ -34,58 +34,58 @@ const medicalHistoryForm = {
 };
 
 const allegiesForm = {
-    albendazole: {
-        name: "Albendazole",
-        value: "albendazole",
-    },
-    aluminiumHydroxide: {
-        name: "Aluminium-hydroxide",
-        value: "aluminium-hydroxide",
-    },
-    calcium: {
-        name: "Calcium",
-        value: "calcium",
-    },
-    chamomile: {
-        name: "Chamomile",
-        value: "chamomile",
-    },
-    folicAcid: {
-        name: "Folic-acid",
-        value: "folic-acid",
-    },
-    ginger: {
-        name: "Ginger",
-        value: "ginger",
-    },
-    fish: {
-        name: "Fish",
-        value: "fish",
-    },
-    iron: {
-        name: "Iron",
-        value: "iron",
-    },
-    malariaMedication: {
-        name: "Sulfadoxine-Pyrimethamine",
-        value: "sulfadoxine-pyrimethamine",
-    },
-    mebendazole: {
-        name: "Mebendazole",
-        value: "mebendazole",
-    },
-    penicillin: {
-        name: "Penicillin",
-        value: "penicillin",
-    },
-    prEPTenofovirDisoproxilFumarate: {
-        name: "PrEP(TDF)",
-        value: "PrEP(TDF)",
-    },
-    otherAllegies: {
-        name: "Other",
-        value: "other",
-    },
+  albendazole: {
+    name: "Albendazole",
+    value: "albendazole",
+  },
+  aluminiumHydroxide: {
+    name: "Aluminium-hydroxide",
+    value: "aluminium-hydroxide",
+  },
+  calcium: {
+    name: "Calcium",
+    value: "calcium",
+  },
+  chamomile: {
+    name: "Chamomile",
+    value: "chamomile",
+  },
+  folicAcid: {
+    name: "Folic-acid",
+    value: "folic-acid",
+  },
+  ginger: {
+    name: "Ginger",
+    value: "ginger",
+  },
+  fish: {
+    name: "Fish",
+    value: "fish",
+  },
+  iron: {
+    name: "Iron",
+    value: "iron",
+  },
+  malariaMedication: {
+    name: "Sulfadoxine-Pyrimethamine",
+    value: "Sulfadoxine-Pyrimethamine",
+  },
+  mebendazole: {
+    name: "Mebendazole",
+    value: "mebendazole",
+  },
+  penicillin: {
+    name: "Penicillin",
+    value: "penicillin",
+  },
+  prEPTenofovirDisoproxilFumarate: {
+    name: "PrEP(TDF)",
+    value: "PrEP(TDF)",
+  },
+  otherAllegies: {
+    name: "Other",
+    value: "other",
+  },
 };
 
 const chronicHealthConditionsForm = {
@@ -325,7 +325,7 @@ const initialMedicalHistory = [
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
-                title: "Does the woman have any past surgeries done?",
+                title: "Does the woman have any past medical and surgical?",
                 selectedValue: "",
                 class: "bold",
                 name: "Does the woman have any past surgeries done?",
@@ -713,7 +713,7 @@ const initialChronicConditions = [
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
-                title: "Does the woman have existing Chronic Health Conditions*?",
+                title: "Does the woman have existing Chronic Health Conditions? *",
                 selectedValue: "",
                 class: "bold",
                 name: "chronic conditions",
@@ -1080,6 +1080,29 @@ const initialChronicConditions = [
                     name: "No",
                     value: "no",
                     colSize: "2.5",
+                },
+            ],
+        },
+    },
+    {
+        childName: "chronic conditions",
+        classDash: "dashed_bottom_border",
+        sideColSize: 0.5,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "ART number",
+                            value: "",
+                            name: "Art number",
+                            eventType: "blur",
+                            valueType: "text",
+                            inputWidth: "50%",
+                            required: true,
+                        },
+                    ],
                 },
             ],
         },
@@ -1567,5 +1590,5 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             return [...data];
         },
     },
-    persist: true,
+    // persist: true,
 });

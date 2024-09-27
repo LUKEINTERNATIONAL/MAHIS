@@ -28,6 +28,11 @@
                         <ion-label class="header">Inventory Management </ion-label>
                     </ion-item>
                 </ion-accordion>
+                <ion-accordion value="second" @click="navigationMenu('OfflineRecords')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Manage Offline Records </ion-label>
+                    </ion-item>
+                </ion-accordion>
                 <ion-accordion value="fourth">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Reports</ion-label>
@@ -40,14 +45,15 @@
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
-                                        <ion-item style="cursor: pointer" @click="navigationMenu('MoHReports')" class="list-content">MoH</ion-item>
+                                      <ion-item style="cursor: pointer" @click="navigationMenu('FacilityReports')" class="list-content">Facility Reports</ion-item>
+                                      <ion-item style="cursor: pointer" @click="navigationMenu('MoHReports')" class="list-content">MoH</ion-item>
                                         <ion-item style="cursor: pointer" @click="navigationMenu('ClinicalReports')" class="list-content"
                                             >Clinical Reports</ion-item
                                         >
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="second" v-if="programAttri[1].showReports">
+                            <ion-accordion value="seventh" v-if="programAttri[1].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">NCD Reports</ion-label>
                                 </ion-item>
@@ -74,11 +80,7 @@
                                 EPI Monthly Report
                             </ion-item>
 
-                            <ion-item
-                                @click="navigationMenu('OverDueReport')"
-                                class="list-content"
-                                style="cursor: pointer"
-                            >
+                            <ion-item @click="navigationMenu('OverDueReport')" class="list-content" style="cursor: pointer">
                                 EIR Overdue Report
                             </ion-item>
 
@@ -123,6 +125,7 @@
                                         <ion-item class="list-bottom" @click="navigationMenu('setSessionDate')" value="Session Date">
                                             Session Date
                                         </ion-item>
+                                        <ion-item @click="navigationMenu('Deduplicateclients')" value="Deduplicate clients"> De-Duplication </ion-item>
                                         <ion-item @click="navigationMenu('clinicaldays')" value="Session Date"> Clinical Days </ion-item>
                                         <ion-item @click="navigationMenu('setDDE')" value="DDE"> DDE </ion-item>
                                         <ion-item class="list-bottom" @click="navigationMenu('setLocation')" value="Location"> Location </ion-item>
@@ -220,9 +223,7 @@ export default defineComponent({
         function navigationMenu(url: string) {
             menuController.close();
             router.push(url).then(() => {
-                if (url === "users") {
-                    router.go(0);
-                }
+                
             });
         }
         return {

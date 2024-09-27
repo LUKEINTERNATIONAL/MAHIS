@@ -312,6 +312,26 @@ ion-modal > .ion-page {
     --border-radius: 10px;
     --overflow: auto;
 }
+.large-modal {
+    --width: 90%;
+    --height: 90%;
+    --border-radius: 16px;
+    --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  @media (min-width: 768px) {
+    .large-modal {
+      --width: 90%;
+      --height: 90%;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .large-modal {
+      --width: 90%;
+      --height: 90%;
+    }
+  }
 .vaccineHistoryModal {
     --height: 90vh;
     --max-width: 500px;
@@ -513,7 +533,7 @@ ion-accordion {
     width: 60vw;
     padding: 10px;
     text-align: left;
-    max-width: 800px;
+    /* max-width: 800px; */
     color: #000;
     background-color: #fff;
     border-radius: 5px;
@@ -705,8 +725,6 @@ ion-footer {
     height: 56px;
 }
 
-
-
 :root {
     --sx-color-primary: green;
     --sx-color-on-primary: #fff;
@@ -743,7 +761,7 @@ ion-footer {
 }
 
 .sx__month-agenda-day{
-color: #000;
+  color: #000;
 }
 
 .dp__theme_light {

@@ -3,7 +3,15 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
+            <Stepper
+                stepperTitle="Profile"
+                :wizardData="wizardData"
+                @updateStatus="markWizard"
+                :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+
+            />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
     </ion-page>
@@ -65,6 +73,9 @@ import { validateField } from "@/services/ANC/profile_validation_service";
 import Validation from "@/validations/StandardValidations";
 import HisDate from "@/utils/Date";
 import calculateAge from "@/utils/Date";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
+
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -73,7 +84,9 @@ import calculateAge from "@/utils/Date";
 // }
 export default defineComponent({
     name: "Home",
-    components: {
+   mixins: [SetUserRole, SetEncounter],
+
+  components: {
         BasicFooter,
         IonContent,
         IonHeader,
@@ -199,45 +212,47 @@ export default defineComponent({
         ...mapState(useCurrentPregnanciesStore, ["palpation", "tetanus", "lmnp", "ultrasound"]),
         ...mapState(useMedicationStore, ["Medication"]),
         ...mapState(useWomanBehaviourStore, ["dailyCaffeineIntake", "Tobacco"]),
-        LNMPKnown() {
-            return getRadioSelectedValue(this.lmnp, "LNMP Known?");
-        },
-        LMNP() {
-            return getRadioSelectedValue(this.lmnp, "LMNP");
-        },
-        lmnpEED() {
-            return getFieldValue(this.lmnp, "lmnpEED", "value");
-        },
-        lmnpGestationAge() {
-            return getFieldValue(this.lmnp, "lmnpGestationAge", "value");
-        },
-        lmnpDate() {
-            return getFieldValue(this.lmnp, "lmnpDate", "value");
-        },
-        UltrasoundDone() {
-            return getRadioSelectedValue(this.ultrasound, "Ultrasound done?");
-        },
-        UltrasoundDate() {
-            return getFieldValue(this.ultrasound, "Ultrasound", "value");
-        },
-        UltrasoundGestationAge() {
-            return getFieldValue(this.ultrasound, "specify", "value");
-        },
-        GestationAgeByPalpationKnown() {
-            return getRadioSelectedValue(this.palpation, "Gestation");
-        },
-        GestationAgeByPalpation() {
-            return getFieldValue(this.palpation, "Gestation age by palpation", "value");
-        },
-        GestationAgeUsed() {
-            return getRadioSelectedValue(this.palpation, "Gestation age to be used");
-        },
-        TetanusDosesForImmunisation() {
-            return getRadioSelectedValue(this.tetanus, "The woman received tetanus doses for immunization?");
-        },
-        NumberOfUnderImmunisedDoses() {
-            return getRadioSelectedValue(this.tetanus, "Number of tetanus doses");
-        },
+        // LNMPKnown() {
+        //     return getRadioSelectedValue(this.lmnp, "LNMP Known?");
+        // },
+        // LMNP() {
+        //     return getRadioSelectedValue(this.lmnp, "LMNP");
+        // },
+        // lmnpEED() {
+        //     return getFieldValue(this.lmnp, "lmnpEED", "value");
+        // },
+        // lmnpGestationAge() {
+        //     return getFieldValue(this.lmnp, "lmnpGestationAge", "value");
+        // },
+        // lmnpDate() {
+        //     return getFieldValue(this.lmnp, "lmnpDate", "value");
+        // },
+        // UltrasoundDone() {
+        //     return getRadioSelectedValue(this.ultrasound, "Ultrasound done?");
+        // },
+        // UltrasoundDate() {
+        //     return getFieldValue(this.ultrasound, "Ultrasound", "value");
+        // },
+        // UltrasoundGestationAge() {
+        //     return getFieldValue(this.ultrasound, "specify", "value");
+        // },
+        // GestationAgeByPalpationKnown() {
+        //     return getRadioSelectedValue(this.palpation, "Gestation");
+        // },
+        // GestationAgeByPalpation() {
+        //     return getFieldValue(this.palpation, "Gestation age by palpation", "value");
+        // },
+        // GestationAgeUsed() {
+        //     return getRadioSelectedValue(this.palpation, "Gestation age to be used");
+        // },
+        // TetanusDosesForImmunisation() {
+        //     return getRadioSelectedValue(this.tetanus, "The woman received tetanus doses for immunization?");
+        // },
+        // NumberOfUnderImmunisedDoses() {
+        //     return getRadioSelectedValue(this.tetanus, "Number of tetanus doses");
+        // },
+
+
         // tt1Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
         // tt2Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
         // tt3Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
@@ -296,13 +311,13 @@ export default defineComponent({
             //     "tt1Date","tt2Date","tt3Date","tt4Date","tt5Date","tt6Date","tt7Date","tt8Date","tt9Date","tt10Date","tt11Date","tt12Date","tt13Date","tt14Date",
             //     "tt15Date","ReasonTTVnotConducted","DailyCaffeineIntake","SubstanceAbuse","SecondHandSmoke","ExistingChronicConditions","Medications","Stillbirths",
             //     "LiveBirths","Parity","Abortions"
-            const fields: any = ["LNMPKnown", "lmnpDate"];
+            const fields: any = ["", ""];
             // if (Validation.required(this.lmnp))
             if (
                 await this.validations(
-                    this.lmnp &&
-                        this.ultrasound &&
-                        this.palpation &&
+                    // this.lmnp &&
+                        // this.ultrasound &&
+                        // this.palpation &&
                         this.exisitingChronicHealthConditions &&
                         this.Medication &&
                         this.dailyCaffeineIntake &&
@@ -315,8 +330,8 @@ export default defineComponent({
                 if (
                     this.prevPregnancies.length > 0 
                     &&
-                    this.lmnp.length > 0 
-                    &&
+                    // this.lmnp.length > 0 
+                    // &&
                     this.exisitingChronicHealthConditions.length > 0 
                     &&
                     this.allegy.length > 0 
@@ -340,7 +355,7 @@ export default defineComponent({
                     if (!patientStatus) return toastWarning("Unable to create profile information!");
                     await toastSuccess("Profile information have been created");
                 }
-                // console.log("========>",await this.buildProfile())
+                console.log("========>",await this.buildProfile())
 
                 const number = this.modeOfDelivery.length / 2;
                 const children = [];
@@ -370,8 +385,8 @@ export default defineComponent({
                     this.$router.push("ANCHome");
                 }
             } else {
-                modifyRadioValue(this.lmnp, "LNMP Known?", "alertsErrorMassage", "Value is required");
-                modifyFieldValue(this.lmnp, "lmnpDate", "alertsErrorMassage", "Value is required");
+                // modifyRadioValue(this.lmnp, "LNMP Known?", "alertsErrorMassage", "Value is required");
+                // modifyFieldValue(this.lmnp, "lmnpDate", "alertsErrorMassage", "Value is required");
 
                 await toastWarning("Please complete all required fields");
             }
