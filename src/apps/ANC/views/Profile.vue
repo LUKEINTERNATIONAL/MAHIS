@@ -296,7 +296,7 @@ export default defineComponent({
         },
 
         async saveData() {
-            await this.saveProfile();
+             this.saveProfile();
             await resetPatientData();
         },
         async validations(data: any, fields: any) {
@@ -355,7 +355,7 @@ export default defineComponent({
                     if (!patientStatus) return toastWarning("Unable to create profile information!");
                     await toastSuccess("Profile information have been created");
                 }
-                console.log("========>",await this.buildProfile())
+                console.log("========>",await this.buildProfile());
 
                 const number = this.modeOfDelivery.length / 2;
                 const children = [];
