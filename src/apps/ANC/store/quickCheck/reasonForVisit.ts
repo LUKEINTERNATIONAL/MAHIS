@@ -414,7 +414,7 @@ const initialReasonForVisit = [
               inputHeader: "Facility",
               icon: icons.search,
               value: "",
-              name: "facility for art",
+              name: "facility",
               popOver: true,
               valueType: "text",
               eventType: "input",
