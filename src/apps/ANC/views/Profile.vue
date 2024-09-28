@@ -327,35 +327,38 @@ export default defineComponent({
                     fields
                 )
             ) {
-                if (
-                    this.prevPregnancies.length > 0 
-                    &&
-                    // this.lmnp.length > 0 
-                    // &&
-                    this.exisitingChronicHealthConditions.length > 0 
-                    &&
-                    this.allegy.length > 0 
-                    &&
-                    this.medicalHistory.length > 0 
-                    &&
-                    this.Complications.length > 0 
-                    // &&
-                    // this.preterm.length > 0 
-                    &&
-                    this.Medication.length > 0 
-                    &&
-                    this.dailyCaffeineIntake.length > 0
-                    //"preterm", "prevPregnancies", "Complications", "modeOfDelivery"
-                ) {
+                // if (
+                //     this.prevPregnancies.length > 0 
+                //     &&
+                //     // this.lmnp.length > 0 
+                //     // &&
+                //     this.exisitingChronicHealthConditions.length > 0 
+                //     &&
+                //     this.allegy.length > 0 
+                //     &&
+                //     this.medicalHistory.length > 0 
+                //     &&
+                //     this.Complications.length > 0 
+                //     // &&
+                //     // this.preterm.length > 0 
+                //     &&
+                //     this.Medication.length > 0 
+                //     &&
+                //     this.dailyCaffeineIntake.length > 0
+            
+                //     //"preterm", "prevPregnancies", "Complications", "modeOfDelivery"
+                // ) {
+                    
                     const userID: any = Service.getUserID();
                     const profile = new currentPregnancyService(this.demographics.patient_id, userID);
                     const encounter = await profile.createEncounter();
                     if (!encounter) return toastWarning("Unable to create profile encounter");
+                    console.log("========>",await this.buildProfile());
                     const patientStatus = await profile.saveObservationList(await this.buildProfile());
                     if (!patientStatus) return toastWarning("Unable to create profile information!");
                     await toastSuccess("Profile information have been created");
-                }
-                console.log("========>",await this.buildProfile());
+                //}
+                //console.log("========>",await this.buildProfile());
 
                 const number = this.modeOfDelivery.length / 2;
                 const children = [];
@@ -384,7 +387,8 @@ export default defineComponent({
                 } else {
                     this.$router.push("ANCHome");
                 }
-            } else {
+            }
+             else {
                 // modifyRadioValue(this.lmnp, "LNMP Known?", "alertsErrorMassage", "Value is required");
                 // modifyFieldValue(this.lmnp, "lmnpDate", "alertsErrorMassage", "Value is required");
 

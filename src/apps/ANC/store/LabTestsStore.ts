@@ -98,7 +98,7 @@ export const useLabTestsStore = defineStore("labTestsStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "Other (specify)",
                   icon: icons.editPen,
                   value: "",

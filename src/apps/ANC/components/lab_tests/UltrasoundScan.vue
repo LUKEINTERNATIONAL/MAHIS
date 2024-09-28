@@ -3,6 +3,9 @@
         <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
+              <p @click="handleUltraNotDone()">
+                handleUltraNotDone
+              </p>
                 <basic-form :contentData="ultrasound"></basic-form>
              <basic-form :contentData="reason"></basic-form>
             </ion-card-content>
@@ -117,11 +120,12 @@ export default defineComponent({
         },
         handleUltraNotDone(){
           if(getRadioSelectedValue(this.reason, 'Reason not done')=='Other reason'){
-            modifyFieldValue(this.reason,'specify','diplayNone',false)
+            modifyFieldValue(this.reason,'specify','displayNone',false)
+            console.log("======>lets see",getRadioSelectedValue(this.reason, 'Reason not done'))
           }else{
-            modifyFieldValue(this.reason,'specify','diplayNone',true)
+            modifyFieldValue(this.reason,'specify','displayNone',true)
+            console.log("======>lets sawww",getRadioSelectedValue(this.reason, 'Reason not done'))
           }
-          console.log("======>lets see",getRadioSelectedValue(this.reason, 'Reason not done')=='Other reason')
         },
        
       
