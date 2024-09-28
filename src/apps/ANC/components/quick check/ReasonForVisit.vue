@@ -84,12 +84,16 @@ export default defineComponent({
    this.initialData = ReasonForVisit.getInitial();
    this.handleFirstAntenalVisit();
    this.handleSpecificConcernsVisit()
+   this. handleFacility()
+   this.handleReffer()
  },
  watch:{
    ReasonForVisit:{
      handler(){
        this.handleFirstAntenalVisit()
        this.handleSpecificConcernsVisit()
+       this. handleFacility()
+       this.handleReffer()
      },
      deep:true
    }
@@ -123,7 +127,28 @@ export default defineComponent({
 
 
 
+      handleFacility(){
+         if(getRadioSelectedValue(this.ReasonForVisit,'Reason for visit')=='facility')
+         {
+           modifyFieldValue(this.ReasonForVisit,'facility for art', 'displayNone', false)
+           
 
+
+         }else {
+           modifyFieldValue(this.ReasonForVisit,'facility for art', 'displayNone', true)
+         
+         }
+      },
+
+        handleReffer(){
+         if(getRadioSelectedValue(this.ReasonForVisit,'Action for danger signs')=='Yes')
+         {
+           modifyFieldValue(this.ReasonForVisit,'facility for art', 'displayNone', false)
+         }else {
+           modifyFieldValue(this.ReasonForVisit,'facility for art', 'displayNone', true)
+         
+         }
+      },
 handleFirstAntenalVisit() {
  if (getCheckboxSelectedValue(this.ReasonForVisit, 'Other danger signs')?.value == 'other danger signs') {
    modifyFieldValue(this.ReasonForVisit, 'Other notes', 'displayNone', false);
