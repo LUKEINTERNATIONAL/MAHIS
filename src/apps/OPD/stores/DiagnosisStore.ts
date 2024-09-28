@@ -10,7 +10,7 @@ const initialOPDdiagnosis = [
                 {
                     colData: [
                         {
-                            inputHeader: "Primary Diagnosis*",
+                            inputHeader: "Diagnosis*",
                             value: "",
                             name: "primaryDiagnosis",
                             icon: icons.search,
@@ -25,8 +25,29 @@ const initialOPDdiagnosis = [
                             // inputFieldDisplayNone: true,
                             // colSize: 0,
                         },
+                    ],
+                    btns: [
                         {
-                            inputHeader: "Secondary Diagnosis",
+                            name: "Add",
+                            fill: "clear",
+                            btn_col_size: 3,
+                            icon: icons.plus,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+
+                        {
+                            inputHeader: "Differential Diagnosis",
                             icon: icons.search,
                             isMultiSelect: true,
                             popOver: true,
@@ -38,6 +59,42 @@ const initialOPDdiagnosis = [
                             alertsErrorMassage: "",
                             id: "",
                             idName: "district_id",
+                        },
+                    ],
+                    btns: [
+                        {
+                            name: "Add",
+                            fill: "clear",
+                            btn_col_size: 3,
+                            icon: icons.plus,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Secondary Diagnosis*",
+                            value: "",
+                            name: "secondaryDiagnosis",
+                            icon: icons.search,
+                            required: true,
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            isSingleSelect: true,
+                            trackBy: "concept_id",
+                            multiSelectData: [],
+                            idName: "district_id",
+                            validationFunctionName: "required",
+                            // inputFieldDisplayNone: true,
+                            // colSize: 0,
                         },
                     ],
                     btns: [
