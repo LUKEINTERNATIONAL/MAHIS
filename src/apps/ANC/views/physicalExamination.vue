@@ -256,8 +256,8 @@ export default defineComponent({
          this.saveMaternalExam();
          this.saveAbdominalExam();
          this.savePresentingSigns();
-        await this.$router.push("ANChome");
-        await resetPatientData();
+        await this.$router.push("contact");
+        resetPatientData();
       },
 
 

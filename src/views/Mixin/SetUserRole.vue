@@ -28,8 +28,8 @@ export default defineComponent({
 
               if(programID==12){
                 this.userRoleSettings={
-                  url:"ANCHome",
-                  btnName:"Back to home"
+                  url:"contact",
+                  btnName:"Back"
                 }
               }
             },

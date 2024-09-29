@@ -121,8 +121,8 @@ export default defineComponent({
       },
         async saveData() {
           await this.saveLabTests();
-          // resetPatientData()
-          // this.$router.push("ANChome")
+          resetPatientData()
+          this.$router.push("contact")
         },
 
     async buildTBscreening() {
