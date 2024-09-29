@@ -154,7 +154,7 @@ export default defineComponent({
         ]
     },
       async saveLabTests() {
-        if (this.ultrasound.length > 0 && this.tbTest.length > 0 && this.urineTest>0) {
+        if (this.ultrasound.length > 0 && this.tbTest.length > 0 && this.urineTest.length >0) {
           const userID: any = Service.getUserID();
           const  labTests= new LabTestsService(this.demographics.patient_id, userID);
           const encounter = await labTests.createEncounter();

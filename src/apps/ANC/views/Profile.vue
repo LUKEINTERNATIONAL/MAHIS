@@ -296,7 +296,7 @@ export default defineComponent({
         },
 
         async saveData() {
-             this.saveProfile();
+            await this.saveProfile();
             await resetPatientData();
         },
         async validations(data: any, fields: any) {
@@ -327,38 +327,37 @@ export default defineComponent({
                     fields
                 )
             ) {
-                // if (
-                //     this.prevPregnancies.length > 0 
-                //     &&
-                //     // this.lmnp.length > 0 
-                //     // &&
-                //     this.exisitingChronicHealthConditions.length > 0 
-                //     &&
-                //     this.allegy.length > 0 
-                //     &&
-                //     this.medicalHistory.length > 0 
-                //     &&
-                //     this.Complications.length > 0 
-                //     // &&
-                //     // this.preterm.length > 0 
-                //     &&
-                //     this.Medication.length > 0 
-                //     &&
-                //     this.dailyCaffeineIntake.length > 0
+                if (
+                    this.prevPregnancies
+                    &&
+                    // this.lmnp.length > 0 
+                    // &&
+                    this.exisitingChronicHealthConditions 
+                    &&
+                    this.allegy 
+                    &&
+                    this.medicalHistory
+                    &&
+                    this.Complications
+                    // &&
+                    // this.preterm.length > 0 
+                    &&
+                    this.Medication 
+                    &&
+                    this.dailyCaffeineIntake
             
                 //     //"preterm", "prevPregnancies", "Complications", "modeOfDelivery"
-                // ) {
+                ) {
                     
                     const userID: any = Service.getUserID();
                     const profile = new currentPregnancyService(this.demographics.patient_id, userID);
                     const encounter = await profile.createEncounter();
                     if (!encounter) return toastWarning("Unable to create profile encounter");
-                    console.log("========>",await this.buildProfile());
                     const patientStatus = await profile.saveObservationList(await this.buildProfile());
                     if (!patientStatus) return toastWarning("Unable to create profile information!");
                     await toastSuccess("Profile information have been created");
-                //}
-                //console.log("========>",await this.buildProfile());
+                }
+                console.log("========>",await this.buildProfile());
 
                 const number = this.modeOfDelivery.length / 2;
                 const children = [];
