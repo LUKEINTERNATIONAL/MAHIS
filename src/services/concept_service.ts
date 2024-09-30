@@ -87,5 +87,3 @@ export class ConceptService extends Service {
         throw `Concept name ${conceptName} was not found or has a duplicates`;
     }
 }
-
-
