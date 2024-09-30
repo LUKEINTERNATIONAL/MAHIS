@@ -63,6 +63,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Percentage of effacement',
+                            name: 'Percentage of effacement',
                             selectedValue: ''
                         },
                         data:[
@@ -113,6 +114,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Application',
+                            name: 'Application',
                             selectedValue: ''
                         },
                         data:[
@@ -308,6 +310,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Soft tissues',
+                            name: 'Soft tissues',
                             selectedValue: ''
                         },
                         data:[
