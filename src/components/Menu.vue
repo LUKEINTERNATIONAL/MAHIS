@@ -261,6 +261,7 @@ ion-item {
 }
 ion-label {
     font-weight: 700;
+    --color: #7b7b7b !important;
 }
 ion-accordion.accordion-expanding,
 ion-accordion.accordion-expanded {
