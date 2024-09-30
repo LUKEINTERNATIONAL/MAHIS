@@ -250,7 +250,7 @@ export function exportReportToCSV(): void {
             link.click();
             document.body.removeChild(link);
         } else if (activePlatformProfile.value.fileExport === FileExportType.FILE_SYSTEM) {
-            exportMobile(`${reportTitle}.csv`, csvData, "text");
+            exportMobile(`${reportTitle}.csv`, csvData, "blob");
         } else {
             toastWarning("Platform not supported");
         }
