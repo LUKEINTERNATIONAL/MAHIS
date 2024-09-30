@@ -179,10 +179,23 @@ representative of the country of residence of the Data Subject.</p>
 
 
 <script lang="ts">
-import { getBaseURl } from "@/utils/GeneralUti";
-export default {
-  name: "PrivacyPolicy",
-};
+import { IonContent, IonHeader, IonToolbar, IonRow } from "@ionic/vue";
+import { defineComponent } from "vue";
+
+export default defineComponent({
+    name: "PrivacyPolicy",
+    components: {
+        IonContent,
+        IonHeader,
+        IonToolbar,
+        IonRow,
+    },
+    data() {
+        return {
+
+        };
+    },
+});
 </script>
 
 <style scoped>

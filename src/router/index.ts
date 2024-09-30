@@ -131,7 +131,9 @@ router.beforeEach((to, from, next) => {
     toastController.getTop().then((v) => (v ? toastController.dismiss() : null));
     const whitelistedUri = ["/login", "/settings/host"];
     if (!localStorage.getItem("apiKey") && !whitelistedUri.includes(to.path)) {
-        next("/login");
+        if (to.name != 'privacypolicy') {
+            next("/login");
+        }
     }
     next();
 });
