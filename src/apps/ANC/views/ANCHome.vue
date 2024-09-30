@@ -14,7 +14,7 @@
           />
           <div class="AppointmentDate">
             <span style="font-size: 14px">Next Appt. Date: </span>
-            <b>10/12/2024</b>
+            <b style="color: #0b5ed7">{{dateOfAppointment}}</b>
           </div>
         </div>
         <div class="button-container">
@@ -88,6 +88,7 @@ import {resetPatientData} from "@/services/reset_data";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 import NextAppointment from "@/apps/ANC/components/others/NextAppointment.vue";
 import HisDate from "@/utils/Date";
+import {ObservationService} from "@/services/observation_service";
 
 
 export default defineComponent({
@@ -121,14 +122,19 @@ export default defineComponent({
   data(){
     return{
       isModalOpen:false,
+      dateOfAppointment: '',
+
     }
+  },
+  mounted(){
+    this.handleAppointment();
   },
   setup() {
     return { checkmark, pulseOutline };
   },
   computed: {
     ...mapState(useScheduleNextAppointmentStore, ["nextAppointmentDate"]),
-    ...mapState(useDemographicsStore, ["demographics"]),
+    ...mapState(useDemographicsStore, ["demographics","patient"]),
 
   },
   methods: {
@@ -147,6 +153,11 @@ export default defineComponent({
       } else {
         createModal(SaveProgressModal);
       }
+    },
+    async handleAppointment(){
+      const dateOfAppointment = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Appointment date", "value_text");
+      this.dateOfAppointment = dateOfAppointment;
+
     },
    async saveData(){
       const store = useScheduleNextAppointmentStore();
@@ -227,7 +238,7 @@ export default defineComponent({
 }
 
 .AppointmentDate {
-  margin-left: auto;
+  margin-right: 5%;
 }
 ion-card {
   width: 300px;

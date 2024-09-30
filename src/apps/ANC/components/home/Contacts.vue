@@ -16,7 +16,7 @@
           </div>
           <ion-row class="card-row">
             <ion-col
-                v-for="(card, index) in cardsData"
+                v-for="(card, index) in filteredCardsData"
                 :key="index"
                 size-xs="6"
                 size-sm="6"
@@ -80,6 +80,11 @@ import {
 } from "ionicons/icons";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
+import {ObservationService} from "@/services/observation_service";
+import {mapState} from "pinia";
+import {useScheduleNextAppointmentStore} from "@/apps/ANC/store/others/scheduleNextAppointment";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 export default defineComponent({
   name: 'Home',
   components: {
@@ -102,6 +107,11 @@ export default defineComponent({
       default: "Back",
     },
   },
+ data(){
+    return{
+      gravida:'',
+    }
+ },
   setup() {
     const router = useRouter();
 
@@ -123,6 +133,20 @@ export default defineComponent({
       cardsData,
     };
   },
+  computed: {
+    ...mapState(useObstreticHistoryStore, ["prevPregnancies"]),
+    ...mapState(useDemographicsStore, ["demographics","patient"]),
+    filteredCardsData() {
+      if (this.gravida) {
+        return this.cardsData.filter(card => card.title !== "Profile");
+      }
+      return this.cardsData;
+    }
+
+  },
+  mounted(){
+    this.handleProfile();
+  },
   methods: {
     checkmarkCircle() {
       return checkmarkCircle
@@ -133,11 +157,11 @@ export default defineComponent({
     backToANChome() {
       this.$router.push('/ANCHome');
     },
-    submitDataForCard(index:any) {
-      // Submit your data logic here
-      // Example: this.cardsData[index].isSaved = true;
-      this.cardsData[index].isSaved = true; // Setting the card as saved
-    }
+
+   async handleProfile(){
+      const gravida = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Gravida", "value_text");
+      this.gravida = gravida;
+    },
   }
 });
 </script>
@@ -226,7 +250,7 @@ ion-icon {
   }
 
   .ion-grid {
-    margin-top:35%;
+    margin-top:20%;
     padding-left: 10px;
     padding-right: 10px;
   }

@@ -152,7 +152,7 @@ export default defineComponent ({
       },
         async setValues() {
             const immunisation = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Number of tetanus doses", "value_coded");
-            console.log(immunisation)
+            console.log("'''kklkkkl",immunisation)
             if(immunisation == 'Two doses'){
               modifyFieldValue(this.ttDoses,'hepb1 Date','displayNone',false)
             }else{

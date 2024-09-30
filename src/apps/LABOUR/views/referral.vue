@@ -8,6 +8,8 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -59,9 +61,13 @@ import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { ReferralService } from "@/services/LABOUR/referral_service";
 import { resetPatientData } from "@/services/reset_data";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "referral",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,

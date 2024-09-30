@@ -21,7 +21,7 @@
           <!-- anc info -->
           <div v-if="Object.values(pregnancy).every((value) => value !== '')">
             <div style="max-width: 1000px">
-              <div class="heading">ANC PROFILE DATA</div>
+              <div class="heading">ANC PROFILE</div>
               <div>
                 <ion-row>
                   <ion-col class="contentTitle">GRAVIDA</ion-col>
@@ -101,7 +101,7 @@
               </div>
             </div>
           </div>
-          <div class="noData" v-else>ANC Profile Data</div>
+          <div class="noData" v-else>No Profile data was found</div>
           <!-- end of anc info -->
 
           <div v-if="Object.values(vitals).every((value) => value !== '')">
@@ -254,7 +254,8 @@ export default defineComponent({
       vitals: {} as any,
       vitalsWeightHeight: {} as any,
       savedEncounters: [] as any,
-      pregnancy: {} as any
+      pregnancy: {} as any,
+      appointmentDate:"" as any
 
     };
   },
@@ -299,6 +300,7 @@ export default defineComponent({
       await this.setPresentingComplainsEncounters(encounters);
       await this.setTreatmentEncounters(encounters);
       await this.setANCProfileEncounters(encounters)
+      await this.setNextAppointmentEncounter(encounters)
     },
     findEncounter(data: any, encounterType: any) {
       return data.find((obj: any) => obj.type && obj.type.name === encounterType);
@@ -324,6 +326,11 @@ export default defineComponent({
       if (this.vitals.weight && this.vitals.height) {
         await this.setBMI(this.vitals.weight, this.vitals.height);
       }
+    },
+    async setNextAppointmentEncounter(data:any){
+      const observations=this.findEncounter(data, "APPOINTMENT")?.observations;
+      this.appointmentDate['Appointment date'] = this.filterObs(observations, "Appointment date")?.[0]?.value_text ?? "";
+
     },
     async setANCProfileEncounters(data:any){
       const observations = this.findEncounter(data, "CURRENT PREGNANCY")?.observations;

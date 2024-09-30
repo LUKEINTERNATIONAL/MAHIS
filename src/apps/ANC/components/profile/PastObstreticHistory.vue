@@ -263,7 +263,6 @@ export default defineComponent({
           modifyRadioValue(this.prevPregnancies, 'Last live birth preterm was full term', 'displayNone', false);
           modifyRadioValue(this.prevPregnancies, 'Last live birth had congenital abnormalities', 'displayNone', false);
           modifyCheckboxHeader(this.prevPregnancies, 'past pregnancies complications', 'displayNone', false);
-          modifyFieldValue(this.prevPregnancies,'Abortions','value',"")
           modifyFieldValue(this.prevPregnancies,'Abortions','disabled',false)
           modifyFieldValue(this.prevPregnancies,'Stillbirths','value',"")
           modifyFieldValue(this.prevPregnancies,'Stillbirths','disabled',false)
