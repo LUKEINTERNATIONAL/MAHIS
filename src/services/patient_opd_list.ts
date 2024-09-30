@@ -32,6 +32,6 @@ export class PatientOpdList extends Service {
     });
   }
   static getPatientList(stage: "VITALS" | "CONSULTATION" | "DISPENSATION") {
-    return super.getJson(`/stages?stage=${stage}`);
+    return super.getJson(`/stages`,{stage});
   }
 }
