@@ -24,7 +24,7 @@
             <tr v-for="case_ in category.cases" :key="case_.name">
               <td>{{ case_.name }}</td>
               <td v-for="vaccine in case_.data" :key="vaccine">
-                {{ vaccine.count }}
+                <div style="cursor: pointer" @click="openPersonCardComponent(vaccine.personIds)">{{ vaccine.count }}</div>
               </td>
             </tr>
           </template>
@@ -34,12 +34,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { IonContent, IonPage, IonRow, IonCol } from '@ionic/vue';
 import { ConceptService } from "@/services/concept_service";
 import { mapState } from "pinia";
 import { getAefiReport, getunderfiveImmunizationsDrugs } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { PatientService } from "@/services/patient_service";
+import { createModal } from "@/utils/Alerts";
+import PersonCardComponent from "@/apps/Immunization/components/Modals/PersonCardComponent.vue"
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 interface Category {
   cases: Case[];
 }
@@ -69,10 +73,11 @@ interface AefiReportData {
 
 export default defineComponent({
   name: 'TableComponent',
+  mixins: [SetDemographics],
   components: { IonContent, IonPage, IonRow, IonCol },
   data() {
+    const personsDemoData = ref([]) as any
     return {
-      // vaccines: ['BCG', 'OPV', 'IPV', 'DPT-HepB-Hib', 'PCV', 'ROTA', 'Measles/MR', 'TT/Td', 'MV', 'HPV'] as any,
       vaccines: [] as any,
       categories: [
         {
@@ -83,7 +88,8 @@ export default defineComponent({
           name: 'Serious AEFIs',
           cases: [] as any
         }
-      ]
+      ],
+      personsDemoData,
     };
   },
   watch: {
@@ -96,7 +102,7 @@ export default defineComponent({
     },
   },
   computed: {
-    ...mapState(EIRreportsStore, ["start_date", "end_date"]), 
+    ...mapState(EIRreportsStore, ["start_date", "end_date", "navigationPayload"]), 
   },
   async mounted() {
     await this.initReport()
@@ -109,39 +115,55 @@ export default defineComponent({
       await this.initAefiReport(this.categories)
     },
     async initAefiReport(categories: Category[]): Promise<void> {
-    try {
-      const data = await getAefiReport(this.start_date, this.end_date);
+      try {
+        const data = await getAefiReport(this.start_date, this.end_date);
 
-      // Create a map for faster lookup
-      const conceptDrugCountMap = new Map<number, Map<number, number>>();
+        // Create a map for faster lookup
+        const conceptDrugCountMap = new Map<number, Map<number, DrugData>>();
 
-      // Process data and build the map
-      data.data.forEach((item: any) => {
-        const drugCountMap = conceptDrugCountMap.get(item.concept_id) || new Map<number, number>();
-        item.drugs.forEach((drug: any) => {
-          drugCountMap.set(drug.drug_inventory_id, (drugCountMap.get(drug.drug_inventory_id) || 0) + 1);
-        });
-        conceptDrugCountMap.set(item.concept_id, drugCountMap);
-      });
+        // Process data and build the map
+        type DrugData = {
+          count: number;
+          personIds: Set<number>;
+        };
 
-      // Update categories
-      categories.forEach(category => {
-        category.cases.forEach(caseItem => {
-          const drugCountMap = conceptDrugCountMap.get(caseItem.concept_id);
-          if (drugCountMap) {
-            caseItem.data.forEach(d_d => {
-              d_d.count += drugCountMap.get(d_d.drug_id) || 0;
+        data.data.forEach((item: any) => {
+          const drugCountMap = conceptDrugCountMap.get(item.concept_id) || new Map<number, DrugData>();
+          
+          item.drugs.forEach((drug: any) => {
+            const existingData = drugCountMap.get(drug.drug_inventory_id) || { count: 0, personIds: new Set<number>() };
+            
+            drugCountMap.set(drug.drug_inventory_id, {
+              count: existingData.count + 1,
+              personIds: new Set(existingData.personIds).add(item.person_id)
             });
-          }
+          });
+          
+          conceptDrugCountMap.set(item.concept_id, drugCountMap);
         });
-      });
 
-      const store = EIRreportsStore()
-      store.setAEFIReportData({'vaccines': this.vaccines, 'categories': this.categories})
-    } catch (error) {
-      console.error('Error in initAefiReport:', error);
-    }
-  },
+        // Update categories
+        categories.forEach(category => {
+          category.cases.forEach(caseItem => {
+            const drugCountMap = conceptDrugCountMap.get(caseItem.concept_id);
+            if (drugCountMap) {
+              caseItem.data.forEach((d_d: any) => {
+                const drugData = drugCountMap.get(d_d.drug_id);
+                if (drugData) {
+                  d_d.count += drugData.count;
+                  d_d.personIds = new Set([...(d_d.personIds || []), ...drugData.personIds]);
+                }
+              });
+            }
+          });
+        });
+
+        const store = EIRreportsStore()
+        store.setAEFIReportData({'vaccines': this.vaccines, 'categories': this.categories})
+      } catch (error) {
+        console.error('Error in initAefiReport:', error);
+      }
+    },
     async UnderFiveImmunizations() {
       const data: any = [];
       const UFIs = await getunderfiveImmunizationsDrugs()
@@ -166,6 +188,60 @@ export default defineComponent({
       })
       data.sort((a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name));
       return data
+    },
+    async openPersonCardComponent(clientIds: Set<any>) {
+      this.personsDemoData.value = await this.getClientsDemoGraphicData(clientIds)
+      const iPersonObj = [] as any
+      this.personsDemoData.value.forEach((person: any) => {
+        const iPerson = {
+          ...person[0].person,
+          ...person[0].person.addresses[0],
+          ...person[0].person.names[0],
+          patient_id: person[0].patient_id,
+        };
+        iPersonObj.push(iPerson);
+      })
+
+      const handleModalAction = (event: CustomEvent<any>) => {
+        this.openPatientProfile(event.detail.client_id)
+      };
+      const dataToPass = {'people': iPersonObj, headingText: `Immunization (Client Drill Down | ${this.navigationPayload.subTxt})`}
+      createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass, { 'view-client': handleModalAction });
+    },
+    async openPatientProfile(client_id: any) {
+      this.personsDemoData.value.forEach((person: any) => {
+        if (person[0].patient_id == client_id) {
+          this.setDemographics(person[0]);
+          this.$router.push("patientProfile");
+          return;
+        }
+      })
+    },
+    async getClientsDemoGraphicData(clientIds: Set<any>): Promise<any[]> {
+      try {
+        const clientIdArray = Array.from(clientIds);
+
+        const patientDataPromises = clientIdArray.map(async (clientId: any) => {
+          try {
+            const patientData = await PatientService.findByID(clientId);
+            if (!patientData || !patientData.patient_identifiers || patientData.patient_identifiers.length === 0) {
+              console.warn(`No patient data or identifiers found for client ID: ${clientId}`);
+              return null;
+            }
+            const patientData2 = await PatientService.findByNpid(patientData.patient_identifiers[0].identifier);
+            return patientData2;
+          } catch (error) {
+            console.error(`Error processing client ID ${clientId}:`, error);
+            return null;
+          }
+        });
+
+        const results = await Promise.all(patientDataPromises);
+        return results.filter(result => result !== null);
+      } catch (error) {
+        console.error("Error in getClientsDemoGraphicData:", error);
+        throw error;
+      }
     }
   }
 });

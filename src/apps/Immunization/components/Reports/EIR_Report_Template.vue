@@ -205,6 +205,7 @@ export default defineComponent({
         store.setImmunizationMonthlyRepoartData(this.tableData)
       },
       openPersonCardComponent(clients: []) {
+        console.log(clients)
         const handleModalAction = (event: CustomEvent<any>) => {
             this.openPatientProfile(event.detail.client_id)
         };
