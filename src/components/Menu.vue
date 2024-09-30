@@ -232,7 +232,7 @@ export default defineComponent({
             return user_data.value?.roles.some((role: any) => role.role === "Superuser");
         });
         async function onMenuOpen() {
-            // await fetchUserData();
+            await fetchUserData();
         }
         function navigationMenu(url: string) {
             menuController.close();
