@@ -78,11 +78,11 @@
                                 </div>
                             </ion-accordion>
 
-                            <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer">
+                            <ion-item v-if="programAttri[3].showReports" @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer">
                                 EPI Monthly Report
                             </ion-item>
 
-                            <ion-item @click="navigationMenu('OverDueReport')" class="list-content" style="cursor: pointer">
+                            <ion-item v-if="programAttri[3].showReports" @click="navigationMenu('OverDueReport')" class="list-content" style="cursor: pointer">
                                 EIR Overdue Report
                             </ion-item>
 
