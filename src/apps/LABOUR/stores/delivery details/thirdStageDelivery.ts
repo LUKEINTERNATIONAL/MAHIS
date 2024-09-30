@@ -20,7 +20,8 @@ export const PlacentaExaminationValidationSchema = yup.object().shape({
     .required(),
     'Number of vessels': yup.number()
     .typeError("Number of Vessels can only be a number")
-    .min(0)
+    .min(1)
+    .max(5)
     .required(),
 
 })
@@ -174,7 +175,7 @@ const initialPlacentaExamination=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Placenta Weight and Length',
+                    title: 'Placenta Weight',
                     class:'bold',
                     selectedValue: ''
                 },
@@ -299,6 +300,11 @@ const initialPlacentaExamination=[
                     {
                         name: 'Lateral',
                         value: 'lateral',
+                        colSize: '3',
+                    },
+                    {
+                        name: 'Marginal',
+                        value: 'marginal',
                         colSize: '3',
                     },
 
@@ -664,6 +670,50 @@ const initialPlacentaExamination=[
                                 value: '',
                                 valueType:'text',
                                 name: 'Estimated Blood Loss',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:''
+
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Abnormalities',
+                    selectedValue: '',
+                    class:"bold",
+                    name:""
+                },
+                data:[
+
+                ]
+            }
+
+    },
+    {
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                inputHeader: '',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:'text',
+                                name: 'Abnormalities',
                                 required: true,
                                 eventType: 'input',
                                 placeholder:''
