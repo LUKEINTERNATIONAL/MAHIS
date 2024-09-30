@@ -78,7 +78,7 @@ import {
   bed,
   chevronBackOutline, pulse, checkmarkDone, notificationsOutline, documentText, medical
 } from "ionicons/icons";
-import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
+import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import {ObservationService} from "@/services/observation_service";
 import {mapState} from "pinia";
