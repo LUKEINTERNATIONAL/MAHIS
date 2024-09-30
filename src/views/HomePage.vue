@@ -223,6 +223,7 @@ import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal
 import { getBaseURl } from "@/utils/GeneralUti";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
+import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 
 export default defineComponent({
     name: "Home",
@@ -328,6 +329,7 @@ export default defineComponent({
         this.setView();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
+        await useGlobalPropertyStore().loadGlobalProperty();
         this.isLoading = false;
     },
     methods: {
