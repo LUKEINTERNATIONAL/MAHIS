@@ -10,6 +10,9 @@ import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMe
 import { ObservationService } from "@/services/observation_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { useUserStore } from "@/stores/userStore";
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { FileOpener } from '@capacitor-community/file-opener';
 
 export async function getVaccinesSchedule(patientID = null) {
     const patient = new PatientService();
@@ -221,7 +224,7 @@ function escapeCSV(str: string): string {
     return str;
 }
 
-export function exportReportToCSV(): void {
+export async function exportReportToCSV(): Promise<void> {
     try {
         const store = EIRreportsStore()
         const user_store = useUserStore()
@@ -238,18 +241,40 @@ export function exportReportToCSV(): void {
 
         const csvData = new Blob([CSVString], { type: "text/csv;charset=utf-8;" });
         const reportTitle = `${user_store.$state.userFacilityName}_${store.$state.navigationPayload.subTxt}_${store.$state.navigationPayload.title}`;
-
-        if (navigator_.msSaveBlob) {
-            navigator_.msSaveBlob(csvData, `${reportTitle}.csv`);
+        if (Capacitor.isNativePlatform()) {
+            try {
+                const directory = Capacitor.getPlatform() === 'ios' 
+                    ? Directory.Documents 
+                    : Directory.External;
+            
+                const result = await Filesystem.writeFile({
+                    path: `${reportTitle}.csv`,
+                    data: csvData,
+                    directory: directory,
+                    encoding: Encoding.UTF8,
+                });
+            
+                console.log('File saved:', result.uri);
+            
+                // Open the file (optional)
+                await FileOpener.open({ filePath: result.uri });
+            } catch (error) {
+                console.error('Error saving or opening file:', error);
+            }
         } else {
-            const link = document.createElement("a");
-            link.href = window.URL.createObjectURL(csvData);
-            link.setAttribute("download", `${reportTitle}.csv`);
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            if (navigator_.msSaveBlob) {
+                navigator_.msSaveBlob(csvData, `${reportTitle}.csv`);
+            } else {
+                const link = document.createElement("a");
+                link.href = window.URL.createObjectURL(csvData);
+                link.setAttribute("download", `${reportTitle}.csv`);
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
+
     } catch (error) {
         console.error("Error exporting CSV:", error);
     }
