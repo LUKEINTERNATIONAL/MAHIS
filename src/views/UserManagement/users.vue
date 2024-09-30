@@ -3,9 +3,8 @@
       <NavigationMenu/>
       <ion-content :fullscreen="true">
           <dataTable 
-            :colums="data_table_properties[0].columns" 
             :items="_items_" 
-            :search_fields="_search_fields_" 
+            :search_fields="search_fields_" 
             @click-row="clickRow" 
           />
           <!-- <editUserModal 
@@ -52,7 +51,7 @@
     setup() {
       const isPopooverOpen = ref(false);
       const user_data = ref([]);
-      const _search_fields_ = ref([
+      const search_fields_ = ref([
         {
           value: "username",
           name: "username",
@@ -62,21 +61,6 @@
       const user_id = ref("");
       const _items_ = ref<[]>([]);
   
-      const data_table_properties = [
-        {
-          columns: [
-            { text: "userId", value: "userId", sortable: true },
-            { text: "Username", value: "username", sortable: true },
-            { text: "First name", value: "firstname", sortable: true },
-            { text: "Last name", value: "lastname", sortable: true },
-            { text: "Gender", value: "gender", sortable: true },
-            { text: "Role", value: "role", sortable: true },
-            { text: "Programs", value: "programs", sortable: true },
-          ],
-          items: _items_,
-          search_fields: _search_fields_,
-        },
-      ];
   
       onMounted(async () => {
         initNavData()
@@ -143,8 +127,7 @@
         isPopooverOpen,
         user_id,
         _items_,
-        _search_fields_,
-        data_table_properties,
+        search_fields_,
         clickRow,
         modalClosed,
         nav,

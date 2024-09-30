@@ -6,10 +6,13 @@ import * as yup from "yup"
 export const FirstVaginalExaminationValidationSchema = yup.object().shape({
     'cervical dilation': yup.number()
         .typeError("cervical dilation can only be a number")
-        .min(1)
-        .min(10)
+        .min(0)
+        .max(10)
         .required()
-    .label("Cervical Dilation")
+    .label("Cervical Dilation"),
+    'state of cervical': yup.string()
+    .matches(/^[^\d]+$/, "State of cervical cannot contain numbers") 
+    .label("state of cervical")
    
 })
 
@@ -60,6 +63,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Percentage of effacement',
+                            name: 'Percentage of effacement',
                             selectedValue: ''
                         },
                         data:[
@@ -110,6 +114,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Application',
+                            name: 'Application',
                             selectedValue: ''
                         },
                         data:[
@@ -305,6 +310,7 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     {
                         header:{
                             title: 'Soft tissues',
+                            name: 'Soft tissues',
                             selectedValue: ''
                         },
                         data:[

@@ -99,11 +99,9 @@ export default defineComponent ({
       try {
         // Validate the entire referralInfo against the schema
         await ReferralValidationSchema.validate(this.referralInfo, { abortEarly: false });
-
-        // Proceed with saving the referral if validation passes
         await this.saveReferral();
-        resetPatientData();  // Reset patient data after saving
-        this.$router.push("ANCHome");  // Redirect to ANCHome after saving
+        resetPatientData();
+        // this.$router.push("ANCHome");
 
       } catch (error) {
 

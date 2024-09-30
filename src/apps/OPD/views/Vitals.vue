@@ -166,7 +166,7 @@ export default defineComponent({
           if (this.actionBtn != "Finish") {
             if (this.vitals.validationStatus) {
               await this.saveVitals();
-              resetOPDPatientData();
+              await resetOPDPatientData();
               this.$router.push("OPDConsultationPlan");
               // this.$router.push("patientProfile");
             } else {

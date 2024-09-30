@@ -322,8 +322,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
-            if (this.checkUnderFive || this.checkUnderOne)
-                this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
+            if (this.checkUnderFourteen) this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex < this.steps.length - 1) {
