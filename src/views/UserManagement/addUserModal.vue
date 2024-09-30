@@ -109,5 +109,9 @@ ion-footer {
 ion-modal {
     --width: 90%;
     --height: 94%;
+    --border-radius: 12px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+    --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 </style>

@@ -48,7 +48,6 @@ import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
-import {PhysiologicalCounsellingService} from "@/apps/ANC/service/physiological_counselling_service";
 export default defineComponent({
     name: "Lab",
   mixins: [SetUserRole, SetEncounter],
@@ -122,8 +121,8 @@ export default defineComponent({
       },
         async saveData() {
           await this.saveLabTests();
-          // resetPatientData()
-          // this.$router.push("ANChome")
+          resetPatientData()
+          this.$router.push("contact")
         },
 
     async buildTBscreening() {

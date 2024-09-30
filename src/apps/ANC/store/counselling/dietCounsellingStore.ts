@@ -29,6 +29,13 @@ const initialDietCounselling=[
 
                 },
                 {
+                    name: "Counselling on fluid intake",
+                    value: "Counselling on fluid intake",
+                    checked: false,
+                    colSize:12,
+
+                },
+                {
                     name: "Counselling  conducted on increasingly daily energy and protein supplementation",
                     value: "Counselling  conducted on increasingly daily energy and protein supplementation",
                     checked: false,
