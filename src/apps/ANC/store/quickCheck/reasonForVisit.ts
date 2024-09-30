@@ -44,50 +44,50 @@ const initialReasonForVisit = [
       ],
     },
   },
-  {
-    //childName: "chronic conditions",
-    sideColSize: 0.5,
-    db_data: [],
-    classDash: "dashed_bottom_border",
-    isFinishBtn: false,
-    selectdData: [],
-    displayData: [],
-    data: {
-      rowData: [
-        {
-          colData: [
-            {
-              displayNone: true,
-              inputHeader: "Facility",
-              icon: icons.search,
-              value: "",
-              name: "facility for art",
-              popOver: true,
-              valueType: "text",
-              eventType: "input",
-              required: true,
-              alertsErrorMassage: "",
-              inputWidth: "50%",
-              placeholder: "Search for facility",
-              popOverData: {
-                filterData: false,
-                data: [],
-              },
-              id: "",
-              idName: "facility_id",
-            },
-          ],
-          // btns:[
-          //     {
-          //         name: "Save",
-          //         fill: "clear",
-          //         icon: icons.plus
-          //     }
-          // ]
-        },
-      ],
-    },
-  },
+  // {
+  //   //childName: "chronic conditions",
+  //   sideColSize: 0.5,
+  //   db_data: [],
+  //   classDash: "dashed_bottom_border",
+  //   isFinishBtn: false,
+  //   selectdData: [],
+  //   displayData: [],
+  //   data: {
+  //     rowData: [
+  //       {
+  //         colData: [
+  //           {
+  //             displayNone: true,
+  //             inputHeader: "Facility",
+  //             icon: icons.search,
+  //             value: "",
+  //             name: "facility for art",
+  //             popOver: true,
+  //             valueType: "text",
+  //             eventType: "input",
+  //             required: true,
+  //             alertsErrorMassage: "",
+  //             inputWidth: "50%",
+  //             placeholder: "Search for facility",
+  //             popOverData: {
+  //               filterData: false,
+  //               data: [],
+  //             },
+  //             id: "",
+  //             idName: "facility_id",
+  //           },
+  //         ],
+  //         // btns:[
+  //         //     {
+  //         //         name: "Save",
+  //         //         fill: "clear",
+  //         //         icon: icons.plus
+  //         //     }
+  //         // ]
+  //       },
+  //     ],
+  //   },
+  // },
   {
     selectdData: [],
     classDash: "dashed_bottom_border",
@@ -397,43 +397,43 @@ const initialReasonForVisit = [
       ],
     },
   },
-  {
-    //childName: "chronic conditions",
-    sideColSize: 0.5,
-    db_data: [],
-    classDash: "dashed_bottom_border",
-    isFinishBtn: false,
-    selectdData: [],
-    displayData: [],
-    data: {
-      rowData: [
-        {
-          colData: [
-            {
-              displayNone: true,
-              inputHeader: "Facility",
-              icon: icons.search,
-              value: "",
-              name: "facility",
-              popOver: true,
-              valueType: "text",
-              eventType: "input",
-              required: true,
-              alertsErrorMassage: "",
-              inputWidth: "50%",
-              placeholder: "Search for facility",
-              popOverData: {
-                filterData: false,
-                data: [],
-              },
-              id: "",
-              idName: "facility_id",
-            },
-          ],
-        },
-      ],
-    },
-  },
+  // {
+  //   //childName: "chronic conditions",
+  //   sideColSize: 0.5,
+  //   db_data: [],
+  //   classDash: "dashed_bottom_border",
+  //   isFinishBtn: false,
+  //   selectdData: [],
+  //   displayData: [],
+  //   data: {
+  //     rowData: [
+  //       {
+  //         colData: [
+  //           {
+  //             displayNone: true,
+  //             inputHeader: "Facility",
+  //             icon: icons.search,
+  //             value: "",
+  //             name: "facility",
+  //             popOver: true,
+  //             valueType: "text",
+  //             eventType: "input",
+  //             required: true,
+  //             alertsErrorMassage: "",
+  //             inputWidth: "50%",
+  //             placeholder: "Search for facility",
+  //             popOverData: {
+  //               filterData: false,
+  //               data: [],
+  //             },
+  //             id: "",
+  //             idName: "facility_id",
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  // },
   {
     childName: "Reason for visit",
     sideColSize: 0.5,
