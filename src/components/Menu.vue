@@ -78,11 +78,21 @@
                                 </div>
                             </ion-accordion>
 
-                            <ion-item v-if="programAttri[3].showReports" @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer">
+                            <ion-item
+                                v-if="programAttri[3].showReports"
+                                @click="navigationMenu('EIPMReport')"
+                                class="list-content"
+                                style="cursor: pointer"
+                            >
                                 EPI Monthly Report
                             </ion-item>
 
-                            <ion-item v-if="programAttri[3].showReports" @click="navigationMenu('OverDueReport')" class="list-content" style="cursor: pointer">
+                            <ion-item
+                                v-if="programAttri[3].showReports"
+                                @click="navigationMenu('OverDueReport')"
+                                class="list-content"
+                                style="cursor: pointer"
+                            >
                                 EIR Overdue Report
                             </ion-item>
 
@@ -210,7 +220,7 @@ export default defineComponent({
         const router = useRouter();
         const user_data = ref<any>(null);
         onMounted(async () => {
-            await fetchUserData();
+            // await fetchUserData();
         });
         async function fetchUserData() {
             const user = await UserService.getCurrentUser();
@@ -222,7 +232,7 @@ export default defineComponent({
             return user_data.value?.roles.some((role: any) => role.role === "Superuser");
         });
         async function onMenuOpen() {
-            await fetchUserData();
+            // await fetchUserData();
         }
         function navigationMenu(url: string) {
             menuController.close();
