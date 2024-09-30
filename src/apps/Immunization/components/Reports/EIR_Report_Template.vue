@@ -206,7 +206,6 @@ export default defineComponent({
       },
       openPersonCardComponent(clients: []) {
         const handleModalAction = (event: CustomEvent<any>) => {
-            // console.log('Action received from modal:', event.detail);
             this.openPatientProfile(event.detail.client_id)
         };
 
