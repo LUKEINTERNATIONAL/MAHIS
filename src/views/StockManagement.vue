@@ -118,7 +118,7 @@ import {
     person,
 } from "ionicons/icons";
 export default defineComponent({
-    name: "Home",
+    name: "StockManagement",
     mixins: [SetUser],
     components: {
         IonContent,

@@ -185,7 +185,7 @@ import { useStatusStore } from "@/stores/StatusStore";
 import { useProgramStore } from "@/stores/ProgramStore";
 
 export default defineComponent({
-    name: "Home",
+    name: "ToolbarSearch",
     mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
     components: {
         IonContent,

@@ -12,7 +12,7 @@ import PrivacyPolicy from "@/components/PrivacyPolicy.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "Home",
+    name: "PrivacyPolicy",
     components: {
         IonContent,
         IonPage,
