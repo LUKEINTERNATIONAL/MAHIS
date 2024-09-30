@@ -1,5 +1,12 @@
 import dayjs from "dayjs";
 
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+
 export const STANDARD_DATE_FORMAT = "YYYY-MM-DD";
 const DISPLAY_DATE_FORMAT = "DD MMM, YYYY";
 const SHORT_DATE_FORMAT = "DD MMM";
@@ -171,6 +178,10 @@ function stitchDate(year: number | string, month = -1 as number | string, day = 
     return toStandardHisFormat(`${fyear}-${fmonth}-${fday}`);
 }
 
+function todayDateFormatted(){
+    return dayjs().tz("Africa/Harare").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+}
+
 export default {
     currentDate,
     getYearOfAge,
@@ -196,4 +207,5 @@ export default {
     getBirthdateAge,
     ageInMonths,
     getAgeInFloatYears,
+    todayDateFormatted
 };

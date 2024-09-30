@@ -13,6 +13,13 @@
         :isOpen="checkInModalOpen"
         :title="`Are you sure you want to check in the patient?`"
       />
+      <CheckInConfirmationModal
+        :closeModalFunc="closeCheckOutModal"
+        :onYes="handleCheckOutYes"
+        :onNo="handleCheckOutNo"
+        :isOpen="checkOutModalOpen"
+        :title="`Are you sure you want to check Out the patient?`"
+      />
       <AncEnrollmentModal
         :closeModalFunc="closeEnrollmentModal"
         :onYes="handleEnrollmentYes"
@@ -46,7 +53,16 @@
                   /> -->
                   <DynamicButton
                     name="Checkin Patient"
+                    v-if="!checkedIn"
                     @click="toggleCheckInModal()"
+                    fill="clear"
+                    iconSlot="start"
+                    :icon="closeCircleOutline"
+                  />
+                  <DynamicButton
+                    name="Checkout Patient"
+                    v-if="checkedIn"
+                    @click="toggleCheckOutModal()"
                     fill="clear"
                     iconSlot="start"
                     :icon="closeCircleOutline"
@@ -520,6 +536,8 @@ import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import { ProgramService } from "@/services/program_service";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import dates from "@/utils/Date"
 
 export default defineComponent({
   mixins: [SetPrograms],
@@ -597,11 +615,13 @@ export default defineComponent({
         High: ["#FECDCA", "#B42318", "#FDA19B"],
       } as any,
       checkInModalOpen: false,
+      checkOutModalOpen: false,
       popoverOpen: false,
       isEnrollmentModalOpen: false,
       enrolledPrograms: [],
       programToEnroll:0,
       enrollModalTitle:"",
+      checkedIn: false as Boolean
     };
   },
   computed: {
@@ -617,11 +637,15 @@ export default defineComponent({
     await this.refreshPrograms();
     this.setAlerts();
     await this.updateData();
+    await this.checkPatientIFCheckedIn()
   },
   watch: {
     demographics: {
       async handler() {
         await this.updateData();
+
+        console.log("+++++++++++++>>>>>>>>>>>>>>")
+        await this.checkPatientIFCheckedIn()
       },
       deep: true,
     },
@@ -728,17 +752,45 @@ export default defineComponent({
       modalController.dismiss();
     },
     closeCheckInModal(){
-   this.checkInModalOpen = false;
+       this.checkInModalOpen = false;
+    },
+    closeCheckOutModal(){
+       this.checkOutModalOpen = false;
     },
     toggleCheckInModal() {
       this.checkInModalOpen = !this.checkInModalOpen;
     },
-    handleCheckInYes() {
+    toggleCheckOutModal() {
+      this.checkOutModalOpen = !this.checkOutModalOpen;
+    },
+    async handleCheckInYes() {
+      try{
+                await PatientOpdList.checkInPatient(this.demographics.patient_id, dates.todayDateFormatted());
+                await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"VITALS")
+                this.toggleCheckInModal();
+                this.checkedIn=true
+            } catch(e){
+
+            }
+    },
+    async handleCheckOutYes() {
+      try{
+
+        const visit = await PatientOpdList.getCheckInStatus(this.demographics.patient_id);
+        await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
+        this.checkedIn=false
+        this.toggleCheckOutModal();
+
+      } catch(e){
+
+      }
    
-      this.toggleCheckInModal();
     },
     handleCheckInNo() {
       this.toggleCheckInModal();
+    },
+    handleCheckOutNo() {
+      this.toggleCheckOutModal();
     },
 
     togglePopover() {
@@ -842,6 +894,18 @@ export default defineComponent({
     formatBirthdate() {
       return HisDate.getBirthdateAge(this.demographics?.birthdate);
     },
+
+    async checkPatientIFCheckedIn(){
+      try{
+        const result =await PatientOpdList.getCheckInStatus(this.demographics.patient_id);
+        this.checkedIn=true
+       
+      } catch(e){
+        console.log({e})
+
+      }
+
+    }
   },
 });
 </script>

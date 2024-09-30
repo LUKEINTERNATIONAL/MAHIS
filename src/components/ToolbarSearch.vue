@@ -183,6 +183,8 @@ import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useProgramStore } from "@/stores/ProgramStore";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import dates from "@/utils/Date"
 
 export default defineComponent({
     name: "ToolbarSearch",
@@ -684,8 +686,14 @@ export default defineComponent({
             this.openNewPage("patientProfile", this.selectedPatient);
             this.toggleCheckInModal();
         },
-        handleCheckInYes() {
-            // console.log(this.selectedPatient)
+        async handleCheckInYes() {
+            try{
+                await PatientOpdList.checkInPatient(this.selectedPatient.patient_id, dates.todayDateFormatted());
+                await PatientOpdList.addPatientToStage(this.selectedPatient.patient_id,dates.todayDateFormatted(),"VITALS")
+                this.openNewPage("patientProfile", this.selectedPatient);
+            } catch(e){
+
+            }
         },
         toggleCheckInModal() {
             this.checkInModalOpen = !this.checkInModalOpen;

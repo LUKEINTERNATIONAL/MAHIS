@@ -1,10 +1,12 @@
 <template>
     <ion-page>
+
+        <!-- TODO: Please uncomment the code below. If it still commented then is was left mistakenly -->
         <!-- Spinner -->
-        <div v-if="isLoading" class="spinner-overlay">
+        <!-- <div v-if="isLoading" class="spinner-overlay">
             <ion-spinner name="bubbles"></ion-spinner>
             <div class="loading-text">Please wait...</div>
-        </div>
+        </div> -->
         <Toolbar />
         <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14">
             <div id="container">
