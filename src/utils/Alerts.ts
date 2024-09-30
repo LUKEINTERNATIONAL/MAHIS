@@ -91,12 +91,27 @@ export async function infoAlert(message: string, header = "Information") {
     alert.present();
 }
 
-export async function createModal(modalComponent: any, options = {} as any, BACKDROPDISMISS = true, props = {}) {
+export async function createModal(
+    modalComponent: any, 
+    options: any = {}, 
+    BACKDROPDISMISS = true, 
+    props = {},
+    eventHandlers: {[key: string]: (event: CustomEvent<any>) => void} = {}
+) {
     const modal = await modalController.create({
         component: modalComponent,
         backdropDismiss: BACKDROPDISMISS,
         cssClass: options.class || "large-modal",
         componentProps: props,
+    });
+
+    // Set up event listeners
+    Object.entries(eventHandlers).forEach(([eventName, handler]) => {
+        modal.addEventListener(eventName, (event: Event) => {
+            if (event instanceof CustomEvent) {
+                handler(event);
+            }
+        });
     });
 
     await modal.present();

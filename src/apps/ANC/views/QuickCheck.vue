@@ -295,7 +295,7 @@ export default defineComponent({
             if (getRadioSelectedValue(this.ReasonForVisit, "Intervention on danger signs")== "Yes") {
               this.$router.push("/ancReferral");
             } else {
-              this.$router.push("ANCHome");
+              this.$router.push("contact");
             }
           }
         } else {

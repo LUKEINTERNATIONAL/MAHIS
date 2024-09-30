@@ -295,9 +295,9 @@ export default defineComponent({
             });
         },
 
-        async saveData() {
-            await this.saveProfile();
-            await resetPatientData();
+         saveData() {
+            this.saveProfile();
+            resetPatientData();
         },
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
@@ -384,7 +384,7 @@ export default defineComponent({
                 if (age < 19) {
                     this.$router.push("headssAssessment");
                 } else {
-                    this.$router.push("ANCHome");
+                    this.$router.push("contact");
                 }
             }
              else {

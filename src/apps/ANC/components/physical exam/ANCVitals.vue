@@ -16,7 +16,7 @@ import { icons } from "@/utils/svg";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
 import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
+import { useVitalsStore } from "@/apps/ANC/store/physical exam/ANCVitalsStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import BasicInputField from "@/components/BasicInputField.vue";

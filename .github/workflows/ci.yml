@@ -1,0 +1,51 @@
+name: Build and Deploy Vue App
+
+on:
+    push:
+        branches:
+            - main # Adjust this if you want to track a different branch
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            # Step 1: Checkout the code from your current repository
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            # Step 2: Set up Node.js
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "16" # Adjust this if needed
+
+            # Step 3: Install npm dependencies
+            - name: Install dependencies
+              run: npm install
+
+            # Step 4: Build the Vue app
+            - name: Build Vue app
+              run: npm run build
+
+            # Step 5: Clone the target repository (MAHIS-Release)
+            - name: Clone target repository
+              run: |
+                  git clone https://github.com/LUKEINTERNATIONAL/MAHIS-Release.git
+                  cd MAHIS-Release
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            # Step 6: Copy the build artifacts to the target repository
+            - name: Copy build artifacts
+              run: |
+                  rm -rf MAHIS-Release/*
+                  cp -R dist/* MAHIS-Release/
+
+            # Step 7: Commit and push the changes to the target repository
+            - name: Commit and push changes
+              run: |
+                  cd MAHIS-Release
+                  git add .
+                  git commit -m "Automated build and deployment"
+                  git push https://petroskayange:${{ secrets.RELEASE_TOKEN }}@github.com/LUKEINTERNATIONAL/MAHIS-Release.git

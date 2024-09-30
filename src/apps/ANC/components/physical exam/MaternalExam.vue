@@ -5,6 +5,8 @@
       <ion-card-content>
         <basic-form :contentData="respiratory"
                     :initialData="initialRespiratory"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
         ></basic-form>
       </ion-card-content>
     </ion-card>
@@ -13,6 +15,8 @@
       <ion-card-content>
         <basic-form :contentData="breastExam"
                     :initialData="initialBreastExam"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
 
         ></basic-form>
       </ion-card-content>
@@ -22,15 +26,8 @@
       <ion-card-content>
         <basic-form :contentData="vaginalInspection"
                     :initialData="initialVaginalExam"
-
-        ></basic-form>
-      </ion-card-content>
-    </ion-card>
-    <!-- Pallor -->
-    <ion-card class="section">
-      <ion-card-content>
-        <basic-form :contentData="pallor"
-                    :initialData="initialPallor"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
 
         ></basic-form>
       </ion-card-content>
@@ -40,6 +37,19 @@
       <ion-card-content>
         <basic-form :contentData="cervicalExam"
                     :initialData="initialCervicalExam"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
+
+        ></basic-form>
+      </ion-card-content>
+    </ion-card>
+    <!-- Pallor -->
+    <ion-card class="section">
+      <ion-card-content>
+        <basic-form :contentData="pallor"
+                    :initialData="initialPallor"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
 
         ></basic-form>
       </ion-card-content>
@@ -50,6 +60,8 @@
       <ion-card-content>
         <basic-form :contentData="oedemaPresence"
                     :initialData="initialOedema"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
         ></basic-form>
       </ion-card-content>
     </ion-card>
@@ -73,7 +85,7 @@ import {
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
 import { icons } from '@/utils/svg';
-import { useMaternalExamStore} from "@/apps/ANC/store/physical exam/MaternalExamStore";
+import {MartenalExamValidationSchema, useMaternalExamStore} from "@/apps/ANC/store/physical exam/MaternalExamStore";
 import { mapState } from 'pinia';
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
@@ -88,6 +100,8 @@ import {
   modifyFieldValue,
   modifyRadioValue
 } from "@/services/data_helpers";
+import {YupValidateField} from "@/services/validation_service";
+import {FetalAssessmentValidation} from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 
 export default defineComponent({
   components:{
@@ -172,6 +186,14 @@ export default defineComponent({
     return { checkmark,pulseOutline };
   },
   methods:{
+    handleInputData(event:any){
+      YupValidateField(
+          this.vaginalInspection,
+          MartenalExamValidationSchema,
+          event.name,
+          event.value
+      )
+    },
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);

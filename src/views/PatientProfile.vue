@@ -82,7 +82,7 @@
                   <ion-col class="demoContent">{{ demographics?.mrn }}</ion-col>
                 </ion-row>
                 <ion-row>
-                  <ion-col size="4">Gendar:</ion-col>
+                  <ion-col size="4">Gender:</ion-col>
                   <ion-col class="demoContent">{{
                     covertGender(demographics?.gender)
                   }}</ion-col>

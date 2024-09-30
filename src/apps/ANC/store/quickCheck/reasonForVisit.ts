@@ -35,12 +35,12 @@ const initialReasonForVisit = [
           labelPlacement: "end",
           colSize: "7",
         },
-        {
-          name: "Referred from another facility",
-          value: "facility",
-          labelPlacement: "end",
-          colSize: "7",
-        },
+        // {
+        //   name: "Referred from another facility",
+        //   value: "facility",
+        //   labelPlacement: "end",
+        //   colSize: "7",
+        // },
       ],
     },
   },

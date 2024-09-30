@@ -10,6 +10,8 @@ import ANCTreatment from "@/apps/ANC/views/ANCTreatment.vue";
 import ANCHome from '../views/ANCHome.vue';
 import referral from "@/apps/ANC/views/referral.vue";
 import ANCreferral from "@/apps/ANC/views/ANCreferral.vue";
+import Contacts from "@/apps/ANC/components/home/Contacts.vue";
+import Appointments from "@/apps/ANC/views/Appointments.vue";
 
 export default [
   {
@@ -77,6 +79,18 @@ export default [
     path: '/ANChome',
     name:'ANCHome',
     component: ANCHome
+
+  },
+  {
+    path: '/contact',
+    name:'Contacts',
+    component: Contacts,
+
+  },
+  {
+    path: '/contacts',
+    name:'Appointments',
+    component: Appointments,
 
   }
 

@@ -36,7 +36,7 @@ import { mapState } from "pinia";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import BasicCard from "@/components/BasicCard.vue";
 import { usePostnatalWardStayStore } from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
-import { useVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
+import { useVitalsStore } from "@/apps/ANC/store/physical exam/ANCVitalsStore";
 import { BMIService } from "@/services/bmi_service";
 import HisDate from "@/utils/Date";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
