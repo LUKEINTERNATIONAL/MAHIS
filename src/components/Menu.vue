@@ -78,11 +78,21 @@
                                 </div>
                             </ion-accordion>
 
-                            <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer">
+                            <ion-item
+                                v-if="programAttri[3].showReports"
+                                @click="navigationMenu('EIPMReport')"
+                                class="list-content"
+                                style="cursor: pointer"
+                            >
                                 EPI Monthly Report
                             </ion-item>
 
-                            <ion-item @click="navigationMenu('OverDueReport')" class="list-content" style="cursor: pointer">
+                            <ion-item
+                                v-if="programAttri[3].showReports"
+                                @click="navigationMenu('OverDueReport')"
+                                class="list-content"
+                                style="cursor: pointer"
+                            >
                                 EIR Overdue Report
                             </ion-item>
 
@@ -210,7 +220,7 @@ export default defineComponent({
         const router = useRouter();
         const user_data = ref<any>(null);
         onMounted(async () => {
-            await fetchUserData();
+            // await fetchUserData();
         });
         async function fetchUserData() {
             const user = await UserService.getCurrentUser();
