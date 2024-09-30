@@ -6,7 +6,7 @@
       <div class="container">
         <div class="back_profile">
           <DynamicButton
-              :name="backBtn"
+              name="Back to home"
               iconSlot="start"
               fill="clear"
               :icon="chevronBackOutline()"
@@ -14,48 +14,10 @@
           />
           <div class="AppointmentDate">
             <span style="font-size: 14px">Next Appt. Date: </span>
-            <b>10/12/2024</b>
+            <b>12/10/2024</b>
           </div>
         </div>
-        <div class="button-container">
-          <DynamicButton
-              name="New ANC contact"
-              iconSlot="start"
-              fill="solid"
-              :icon="checkmark"
-              @click="navigateToContact"
-          />
-          <DynamicButton
-              name="View ANC contacts"
-              iconSlot="start"
-              fill="solid"
-              :icon="eye()"
-              @click="previousContacts"
-          />
-          <DynamicButton
-              name="Schedule next contact"
-              iconSlot="start"
-              fill="solid"
-              :icon="calendar()"
-              @click="nextAppointment"
-          />
-<!--          <ion-row class="bottom-row">-->
-<!--            <div class="center-content">-->
-<!--              <div class="centerBtns">-->
-<!--                <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Set Next Appointment Date</ion-button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </ion-row>-->
-        </div>
-        <NextAppointmentModal
-            :isOpen="isModalOpen"
-            :title="``"
-            :closeModalFunc="closeAppointmentModal"
-            :onYes="saveData"
-            :onNo="cancelModal"
-        />
-        <hr />
-        <LandingPage/>
+        <AppointmentsHistory/>
       </div>
     </ion-content>
   </ion-page>
@@ -64,9 +26,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {
-  IonButton,
   IonContent,
-  IonPage, IonRow
+  IonPage
 } from '@ionic/vue';
 import {calendar, checkmark, chevronBackOutline, eye, pulseOutline} from 'ionicons/icons';
 import Toolbar from "@/components/Toolbar.vue";
@@ -85,15 +46,11 @@ import {formatCheckBoxData, formatInputFiledData} from "@/services/formatServerD
 import {NextAppointmentService} from "@/apps/ANC/service/next_appointment";
 import {useFetalAssessment} from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 import {resetPatientData} from "@/services/reset_data";
-import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
-import NextAppointment from "@/apps/ANC/components/others/NextAppointment.vue";
-import HisDate from "@/utils/Date";
-
+import AppointmentsHistory from "@/apps/ANC/components/others/AppointmentsHistory.vue";
 
 export default defineComponent({
   name: "TB screening",
   components: {
-    IonRow, IonButton,
     FeatusModal,
     DynamicButton,
     IonContent,
@@ -102,6 +59,7 @@ export default defineComponent({
     DemographicBar,
     LandingPage,
     NextAppointmentModal,
+    AppointmentsHistory,
   },
   props: {
     backBtn: {
@@ -142,11 +100,7 @@ export default defineComponent({
       return chevronBackOutline;
     },
     openBackController() {
-      if (this.backUrl) {
-        this.$router.push(this.backUrl);
-      } else {
-        createModal(SaveProgressModal);
-      }
+      this.$router.push('/ANCHome');
     },
    async saveData(){
       const store = useScheduleNextAppointmentStore();
@@ -173,9 +127,6 @@ export default defineComponent({
       }
       console.log(await this.buildNextAppointment())
     },
-    openNextVaccineAppoinment() {
-      createModal(NextAppointment, { class: "otherVitalsModal" }, false);
-    },
     async buildNextAppointment() {
       return [
         ...(await formatInputFiledData(this.nextAppointmentDate)),
@@ -194,9 +145,6 @@ export default defineComponent({
     closeAppointmentModal() {
       this.isModalOpen = false;
     },
-    previousContacts(){
-      this.$router.push('/contacts');
-    },
     navigateToContact() {
       this.$router.push('/contact');
     }
@@ -210,7 +158,7 @@ export default defineComponent({
   position: absolute;
   left: 0;
   right: 0;
-  top: 35%;
+  top: 50%;
   transform: translateY(-50%);
 }
 

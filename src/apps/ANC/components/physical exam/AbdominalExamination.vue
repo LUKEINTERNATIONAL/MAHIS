@@ -89,7 +89,7 @@ export default defineComponent({
       FeatusModalOpen: false,
       arrayOfFeatus: [] as any,
       selectedFeatus: 0,
-      initialData:[] as any
+      initialData:[] as any,
 
 
 
