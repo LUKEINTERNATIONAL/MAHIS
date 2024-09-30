@@ -2,44 +2,13 @@ import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import { getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 import * as yup from 'yup'
+import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers";
 
 export const pastObstreticValidationShema = yup.object().shape({
   "Gravida":yup.number().typeError("Gravida can only be number").min(0).max(30),
   "Abortions":yup.number().typeError("Abortions can only be number").min(0),
   "Stillbirths":yup.number().typeError("Stillbirths can only be number").min(0),
 })
-
-// import * as yup from 'yup';
-
-// export const pastObstetricValidationSchema = yup.object().shape({
-//   Gravida: yup
-//     .number()
-//     .typeError("Gravida can only be a number")
-//     .min(0)
-//     .max(30, "Gravida must be at most 30")
-//     .required("Gravida is required"),
-
-//   Abortions: yup
-//     .number()
-//     .typeError("Abortions can only be a number")
-//     .min(0)
-//     .required("Abortions are required")
-//     .test(
-//       "abortions-less-than-gravida",
-//       "Abortions cannot be equal to or greater than Gravida",
-//       function (value) {
-//         const { Gravida } = this.parent;
-//         return value < Gravida;
-//       }
-//     ),
-
-//   Stillbirths: yup
-//     .number()
-//     .typeError("Stillbirths can only be a number")
-//     .min(0)
-//     .required("Stillbirths are required"),
-// });
-
 
 export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
   state: () => ({
@@ -545,6 +514,12 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     },
     setComplications(data: any) {
       this.Complications = data;
+    },
+    async validate(){
+      const obstetricHistory = extractArrayOfNameValue(this.prevPregnancies);
+      const obstetricHistoryValid = await validateStore(this.prevPregnancies,pastObstreticValidationShema,obstetricHistory)
+
+      return obstetricHistoryValid;
     },
   },
   // persist: true,
