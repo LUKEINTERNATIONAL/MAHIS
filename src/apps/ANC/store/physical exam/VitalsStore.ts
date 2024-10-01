@@ -351,5 +351,5 @@ export const useVitalsStore = defineStore("vitalsStore", {
             return [...data];
         },
     },
-    // persist: true,
+    persist: true,
 });

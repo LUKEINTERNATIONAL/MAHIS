@@ -18,8 +18,8 @@ export const useGlobalPropertyStore = defineStore("globalPropertyStore", {
             this.globalPropertyStore.dde_enabled = req["dde_enabled"];
         },
         async loadGlobalProperty() {
-            await this.loadSitePrefix();
             await this.loadDDEStatus();
+            await this.loadSitePrefix();
         },
         async setGlobalProperty(prop: any, val: any) {
             await Service.postJson("global_properties", {

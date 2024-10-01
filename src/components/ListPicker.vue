@@ -21,6 +21,7 @@
                             <ion-icon :icon="addOutline"></ion-icon>
                     </ion-button>
                     <ion-popover
+                        side="right"
                         class="popover-al"
                         :show-backdrop="false"
                         :trigger="uniqueId"
@@ -251,6 +252,7 @@ ion-icon.icon-al {
     border-radius: 3px;
 }
 .popover-al {
+    margin-top: -50px;
     --width: 300px;
     --max-width: 90%;
     --background: #ffffff;
@@ -341,6 +343,7 @@ ion-list.list-al {
     border-radius: 8px;
     outline: none;
     transition: all 0.3s ease;
+    background-color: #e8e8e8;;
 }
 
 .modern-input:focus {

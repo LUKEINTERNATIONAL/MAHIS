@@ -14,7 +14,7 @@
           />
           <div class="AppointmentDate" >
             <span style="font-size: 14px">Next Appt. Date: </span>
-            <b style="color: #0b5ed7">{{dateOfAppointment}}</b>
+            <b style="color: #0b5ed7">{{ dateOfAppointment || 'Not scheduled' }}</b>
           </div>
         </div>
         <AppointmentsHistory/>

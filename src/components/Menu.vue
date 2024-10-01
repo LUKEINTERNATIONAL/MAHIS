@@ -6,34 +6,34 @@
             </ion-toolbar>
         </ion-header>
         <ion-content style="--background: #fff">
-            <ion-accordion-group expand="inset">
-                <ion-accordion value="first" @click="navigationMenu('home')" toggle-icon="">
+            <ion-accordion-group expand="inset" style="margin-inline: unset; margin-top: unset">
+                <ion-accordion value="1" @click="navigationMenu('home')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Home</ion-label>
                     </ion-item>
                 </ion-accordion>
 
-                <ion-accordion value="third" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
+                <ion-accordion value="2" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Schedule Immunization</ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="fifth" @click="navigationMenu('manageAppointMents')" toggle-icon="">
+                <ion-accordion value="3" @click="navigationMenu('manageAppointMents')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Manage Appointments</ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="second" @click="navigationMenu('stockManagement')" toggle-icon="">
+                <ion-accordion value="4" @click="navigationMenu('stockManagement')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Inventory Management </ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="second" @click="navigationMenu('OfflineRecords')" toggle-icon="">
+                <ion-accordion value="5" @click="navigationMenu('OfflineRecords')" toggle-icon="">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Manage Offline Records </ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="fourth">
+                <ion-accordion value="6">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Reports</ion-label>
                     </ion-item>
@@ -45,8 +45,10 @@
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
-                                      <ion-item style="cursor: pointer" @click="navigationMenu('FacilityReports')" class="list-content">Facility Reports</ion-item>
-                                      <ion-item style="cursor: pointer" @click="navigationMenu('MoHReports')" class="list-content">MoH</ion-item>
+                                        <ion-item style="cursor: pointer" @click="navigationMenu('FacilityReports')" class="list-content"
+                                            >Facility Reports</ion-item
+                                        >
+                                        <ion-item style="cursor: pointer" @click="navigationMenu('MoHReports')" class="list-content">MoH</ion-item>
                                         <ion-item style="cursor: pointer" @click="navigationMenu('ClinicalReports')" class="list-content"
                                             >Clinical Reports</ion-item
                                         >
@@ -110,7 +112,7 @@
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
-                <ion-accordion value="sixth" v-if="isSuperuser">
+                <ion-accordion value="7" v-if="isSuperuser" style="border-radius: 0px">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Settings</ion-label>
                     </ion-item>
@@ -125,7 +127,9 @@
                                         <ion-item class="list-bottom" @click="navigationMenu('setSessionDate')" value="Session Date">
                                             Session Date
                                         </ion-item>
-                                        <ion-item @click="navigationMenu('Deduplicateclients')" value="Deduplicate clients"> De-Duplication </ion-item>
+                                        <ion-item @click="navigationMenu('Deduplicateclients')" value="Deduplicate clients">
+                                            De-Duplication
+                                        </ion-item>
                                         <ion-item @click="navigationMenu('clinicaldays')" value="Session Date"> Clinical Days </ion-item>
                                         <ion-item @click="navigationMenu('setDDE')" value="DDE"> DDE </ion-item>
                                         <ion-item class="list-bottom" @click="navigationMenu('setLocation')" value="Location"> Location </ion-item>
@@ -222,9 +226,7 @@ export default defineComponent({
         }
         function navigationMenu(url: string) {
             menuController.close();
-            router.push(url).then(() => {
-                
-            });
+            router.push(url).then(() => {});
         }
         return {
             isSuperuser,
@@ -249,12 +251,24 @@ export default defineComponent({
 <style scoped>
 ion-accordion {
     margin: 0 auto;
+    border-radius: 0px;
+    background-color: #fff;
+    font-weight: 700;
 }
-
+ion-item {
+    --background: #fff;
+    --color: #7b7b7b !important;
+}
+ion-label {
+    font-weight: 700;
+}
 ion-accordion.accordion-expanding,
 ion-accordion.accordion-expanded {
     width: calc(100% - 32px);
-
     margin: 16px auto;
+    background-color: #fff;
+}
+.list-md {
+    background: unset;
 }
 </style>

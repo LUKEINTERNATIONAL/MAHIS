@@ -5,8 +5,6 @@
         <basic-form
             :contentData="secondStageDetails"
             :initialData="initialData"
-              @update:selected="handleInputData"
-        @update:inputValue="handleInputData"
         ></basic-form>
         
         <BabyDetailsModal  
@@ -50,7 +48,7 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import BasicCard from "@/components/BasicCard.vue";
-import { SecondStageDetailsSchema, useSecondStageOfLabourStore } from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
+import { useSecondStageOfLabourStore } from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
 import { modifyRadioValue,
     getRadioSelectedValue,
     getCheckboxSelectedValue,
@@ -63,7 +61,6 @@ import { modifyRadioValue,
 } from '@/services/data_helpers'
 import BabyDetailsModal from './BabyDetailsModal.vue';
 import _ from "lodash";
-import { YupValidateField } from '@/services/validation_service';
 
 export default defineComponent({
   name: "SecondStageDelivery",
@@ -98,14 +95,13 @@ export default defineComponent({
       arrayOfBabies: [] as any,
       babyModalOpen: false,
       selectedBaby: 0,
-      // babiesDetails: [] as any,
+      babiesDetails: [] as any,
       showSection: false
     };
   },
   computed:{
     ...mapState(useSecondStageOfLabourStore,["secondStageDetails"]),
     ...mapState(useSecondStageOfLabourStore,["babyDetails"]),
-    ...mapState(useSecondStageOfLabourStore,["babiesDetails"]),
 
   },
   mounted(){
@@ -129,10 +125,6 @@ export default defineComponent({
     return { checkmark,pulseOutline };
   },
   methods: {
-    handleInputData(event:any){
-        YupValidateField(this.secondStageDetails, SecondStageDetailsSchema, event.name, event.selectedValue || event.value);
-    }
-    ,
     handleNumberOfBabies() { 
       const numberOfBabies = getFieldValue(this.secondStageDetails, 'Number of babies', 'value');
       this.arrayOfBabies = [...Array(Number(numberOfBabies)).keys()]
@@ -236,6 +228,10 @@ export default defineComponent({
       modifyRadioValue(this.babyDetails,'Oxytocin 10 UI given','displayNone', visibility)
       modifyRadioValue(this.babyDetails,'Vitamin K given','displayNone', visibility)
     }
+
+
+
+  
   }
 });
 

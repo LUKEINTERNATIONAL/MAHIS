@@ -249,6 +249,9 @@ export class StockService extends Service {
     getItems(filters: any) {
         return Service.getJson("pharmacy/items", filters);
     }
+    getDrugBatches(drug_inventory_id: string|number, show_depleted=false, show_expired=false) {
+        return Service.getJson(`pharmacy/items/${drug_inventory_id}?show_depleted=${show_depleted}]&show_expired=${show_expired}`)
+    }
     getItem(drugID: number) {
         return Service.getJson("pharmacy/items", { drug_id: drugID });
     }
