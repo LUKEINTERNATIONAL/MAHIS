@@ -11,14 +11,17 @@ export default defineComponent({
         $route: {
             async handler(route: any) {
                 this.userRole = Service.getUserRoles();
-              const programID=Service.getProgramID()
+              const programID=Service.getProgramID();
+              const programName=Service.getProgramName();
               if (this.userRole == "Lab" && programID==14) {
                     this.userRoleSettings = {
                         url: "patientProfile",
                         btnName: "Back to profile",
                         stepperTitle: "Laboratory",
                     };
-                } else {
+                }
+
+              if(programID==14){
                     this.userRoleSettings = {
                         url: "OPDvitals",
                         btnName: "Back to vitals",
@@ -30,6 +33,21 @@ export default defineComponent({
                 this.userRoleSettings={
                   url:"contact",
                   btnName:"Back"
+                }
+              }
+
+              if(programName=="LABOUR AND DELIVERY PROGRAM"){
+                this.userRoleSettings={
+                  url:"labour/labourHome",
+                  btnName:"Back to home"
+                }
+              }
+
+
+              if(programName=="PNC PROGRAM"){
+                this.userRoleSettings={
+                  url:"pnc/home",
+                  btnName:"Back to home"
                 }
               }
             },
