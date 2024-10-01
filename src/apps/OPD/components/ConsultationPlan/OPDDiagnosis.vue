@@ -114,7 +114,8 @@ export default defineComponent({
   },
   async mounted() {
     this.updateDiagnosisStores();
-    this.ini
+    const OPDdiagnosis=useOPDDiagnosisStore();
+    this.initialData=OPDdiagnosis.getInitial()
     this.setDashedBox();
     await this.getDiagnosis("");
   },
