@@ -7,7 +7,7 @@ interface ValidationResult {
 
 export const useImmunizationSessionFieldsValidator = (
     sessionName: string,
-    dateRange: Date[],
+    dateRange: Date[] | string,
     selectedRepeatType: string,
     numberOfDays: number,
     selectedSessionType: string,
@@ -19,16 +19,20 @@ export const useImmunizationSessionFieldsValidator = (
         errors.push({ field: "sessionName", message: "Session name is required." });
     }
 
-    if (dateRange.length !== 2) {
-        errors.push({ field: "dateRange", message: "Date range is required." });
-    } else {
-        const [startDate, endDate] = dateRange;
-        if (startDate > endDate) {
-            errors.push({
-                field: "dateRange",
-                message: "Start date must be before end date.",
-            });
+    if (Array.isArray(dateRange)) {
+        if (dateRange.length !== 2) {
+            errors.push({ field: "dateRange", message: "Date range is required." });
+        } else {
+            const [startDate, endDate] = dateRange;
+            if (startDate > endDate) {
+                errors.push({
+                    field: "dateRange",
+                    message: "Start date must be before end date.",
+                });
+            }
         }
+    } else if (typeof dateRange === "string" && dateRange.trim() === "") {
+        errors.push({ field: "dateRange", message: "A date is required." });
     }
 
     if (!selectedRepeatType) {
