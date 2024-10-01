@@ -55,6 +55,10 @@ import { useVitalsStore } from "@/stores/VitalsStore";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import {getFieldValue} from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import dates from "@/utils/Date"
+
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -167,15 +171,16 @@ export default defineComponent({
             if (this.vitals.validationStatus) {
               await this.saveVitals();
               resetOPDPatientData();
+              await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"CONSULTATION")
               this.$router.push("OPDConsultationPlan");
-              // this.$router.push("patientProfile");
+            
             } else {
               await this.validaterowData();
               toastWarning("Please fill all required fields");
             }
           } else {
             this.$router.push("OPDConsultationPlan");
-            // this.$router.push("patientProfile");
+          
           }
         } catch (error) {
           console.error("Error in saveData: ", error);
