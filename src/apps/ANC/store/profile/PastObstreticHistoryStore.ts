@@ -6,7 +6,7 @@ import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers"
 
 export const pastObstreticValidationShema = yup.object().shape({
   "Gravida":yup.number().typeError("Gravida can only be number").min(0).max(30),
-  "Abortions":yup.number().typeError("Abortions can only be number").min(0),
+  "Abortions/Miscarriages":yup.number().typeError("Abortions/Miscarriages can only be number").min(0),
   "Stillbirths":yup.number().typeError("Stillbirths can only be number").min(0),
 })
 
@@ -60,7 +60,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   inputHeader: "Abortions/Miscarriages*",
                   value: "",
                   icon: icons.editPen,
-                  name: "Abortions",
+                  name: "Abortions/Miscarriages",
                   required: true,
                   disabled:false,
                   valueType: "text",
