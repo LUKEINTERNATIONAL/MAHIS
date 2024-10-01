@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import Vue3EasyDataTable from "vue3-easy-data-table";
 import vSelect from "vue-select";
 
 import { IonicVue } from "@ionic/vue";
@@ -13,7 +12,6 @@ import VueAwesomePaginate from "vue-awesome-paginate";
 import "vue-awesome-paginate/dist/style.css";
 
 import "@vuepic/vue-datepicker/dist/main.css";
-import "vue3-easy-data-table/dist/style.css";
 import "vue-select/dist/vue-select.css";
 
 /* Core CSS required for Ionic components to work properly */
@@ -45,7 +43,6 @@ const pinia = createPinia();
 const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePaginate);
 
 app.component("VueDatePicker", VueDatePicker);
-app.component("EasyDataTable", Vue3EasyDataTable);
 app.component("v-select", vSelect);
 pinia.use(piniaPluginPersistedState);
 DataTable.use(DataTablesCore);

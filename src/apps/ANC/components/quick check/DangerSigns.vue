@@ -118,7 +118,7 @@ export default defineComponent({
     },
     handleDangerSigns(){
 
-      const checkBoxes=['Pre-term labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
+      const checkBoxes=['Preterm labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
                         'Severe headache', 'Severe vomiting','Severe abdominal pain','Draining liquor',
                         'Respiratory problems','Convulsion history','Vomiting' , 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other']
       if (getCheckboxSelectedValue(this.DangerSigns, 'None')?.checked) {

@@ -1,5 +1,11 @@
-import { LabTestsService } from "@/services/ANC/lab_tests_service"
+import {AppEncounterService} from "@/services/app_encounter_service";
 
+export class LabTestsService extends AppEncounterService {
+  constructor(patientID: number, providerID: number) {
+    super(patientID, 151, providerID)
+  }
+
+}
 export class UltrasoundInstance {
   async push(patientID: any,providerID: any, ultrasoundData: any){
     const labTestService = new LabTestsService(patientID, providerID)

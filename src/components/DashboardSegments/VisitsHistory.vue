@@ -24,17 +24,79 @@
                             <div class="heading">ANC PROFILE DATA</div>
                             <div>
                                 <ion-row>
-                                    <ion-col class="contentTitle">Gravida</ion-col>
-                                    <ion-col class="contentTitle">Stillbirths</ion-col>
-                                    <ion-col class="contentTitle">Live births</ion-col>
-                                    <ion-col class="contentTitle">pregnancies complications</ion-col>
+                                    <ion-col class="contentTitle">GRAVIDA</ion-col>
+                                    <ion-col class="contentTitle">STILLBIRTHS</ion-col>
+                                    <ion-col class="contentTitle">LIVE BIRTHS</ion-col>
+                                    <ion-col class="contentTitle">PREGNANCY COMPLICATIONS</ion-col>
                                 </ion-row>
-                                <ion-row></ion-row>
                                 <ion-row>
                                     <ion-col>{{pregnancy.Gravida}}</ion-col>
                                     <ion-col>{{pregnancy.Stillbirths}}</ion-col>
                                     <ion-col>{{pregnancy['Abortions/Miscarriages']}}</ion-col> 
-                                    <ion-col>{{pregnancy['past pregnancies complications']}}</ion-col> 
+                                    <ion-col>{{pregnancy.test}}</ion-col> 
+                                </ion-row>
+                                <br/>
+                                <ion-row>
+                                    <ion-col class="contentTitle">PAST SURGERIES</ion-col>
+                                    <ion-col class="contentTitle">OTHER SURGERIES</ion-col>
+                                    <ion-col class="contentTitle">ALLERGIES</ion-col>
+                                    <ion-col class="contentTitle">CHRONIC CONDITIONS</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{pregnancy.surgeries}}</ion-col>
+                                    <ion-col>{{pregnancy['Other notes']}}</ion-col>
+                                    <ion-col>{{pregnancy.allergies}}</ion-col>
+                                    <ion-col>{{pregnancy.chronic}}</ion-col> 
+                                </ion-row>
+                                <br/>
+                                <ion-row>
+                                    <ion-col class="contentTitle">LNMP</ion-col>
+                                    <ion-col class="contentTitle">LIVE BIRTHS</ion-col>
+                                    <ion-col class="contentTitle">PARITY</ion-col>
+                                    <ion-col class="contentTitle">OTHER ALLERGIES</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{pregnancy.lnmp}}</ion-col>
+                                    <ion-col>{{pregnancy.LiveBirths}}</ion-col>
+                                    <ion-col>{{pregnancy.Parity}}</ion-col>
+                                    <ion-col>{{pregnancy.Other}}</ion-col> 
+                                </ion-row>
+                                <br/>
+                                <ion-row>
+                                    <ion-col class="contentTitle">ULTRASOUND DONE</ion-col>
+                                    <ion-col class="contentTitle">GESTATION AGE BY PALPATION</ion-col>
+                                    <ion-col class="contentTitle">GESTATION USED</ion-col>
+                                    <ion-col class="contentTitle">TETANUS DOSES</ion-col>
+                                
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{pregnancy.Ultrasound}}</ion-col>
+                                    <ion-col>{{pregnancy.Gestation}}</ion-col>
+                                    <ion-col>{{pregnancy.gestationUsed }}</ion-col>
+                                    <ion-col>{{pregnancy.tetanus}}</ion-col>
+                                    
+                                </ion-row>
+                                <br/>
+                                <ion-row>
+                                    <ion-col class="contentTitle">MEDICATIONS CURRENTLY PRESCRIBED</ion-col>
+                                    <ion-col class="contentTitle">DAILY CAFFEINE INTAKE</ion-col>
+                                    <ion-col class="contentTitle">RECENTLY QUIT TOBACCO PRODUCTS</ion-col>
+                                    <ion-col class="contentTitle">EXPOSURE TO SECOND HAND SMOKE</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{pregnancy.prescription}}</ion-col>
+                                    <ion-col>{{pregnancy.caffeine}}</ion-col>
+                                    <ion-col>{{pregnancy.tobacco}}</ion-col>
+                                    <ion-col>{{pregnancy.smoke}}</ion-col>
+                                </ion-row>
+                                <br/>
+                                <ion-row>
+                                    <!-- <ion-col class="contentTitle">Tetanus doses</ion-col>
+                                    <ion-col class="contentTitle">Medications currently prescribed</ion-col> -->
+                                </ion-row>
+                                <ion-row>
+                                    <!-- <ion-col>{{}}</ion-col> -->
+                                    <!-- <ion-col>{{}}</ion-col> -->
                                 </ion-row>
                             </div>
                         </div>
@@ -267,9 +329,37 @@ export default defineComponent({
             const observations = this.findEncounter(data, "CURRENT PREGNANCY")?.observations;
             this.pregnancy.Gravida = this.filterObs(observations, "Gravida")?.[0]?.value_text ?? "";
             this.pregnancy.Stillbirths = this.filterObs(observations, "Stillbirths")?.[0]?.value_text ?? "";
+            //this.pregnancy.LiveBirths = this.filterObs(observations, "LiveBirths")?.[0]?.value_text ?? "";
+            //this.pregnancy.Parity = this.filterObs(observations, "Parity")?.[0]?.value_text ?? "";
             this.pregnancy['Abortions/Miscarriages'] = this.filterObs(observations, "Abortions/Miscarriages")?.[0]?.value_text ?? "";
-           // this.pregnancy.Parity = this.filterObs(observations, "Parity")?.[0]?.value_text ?? "";
-           // this.pregnancy = await this.getConceptValues(this.filterObs(observations, "past pregnancies complications"), "coded");
+            console.log("lets seeee",observations);
+            this.pregnancy.test = (await this.getConceptValues(this.filterObs(observations, "past pregnancies complications"), "coded"))?.[0];
+            this.pregnancy.surgeries = (await this.getConceptValues(this.filterObs(observations, "Does the woman have any past surgeries done?"), "coded"))?.[0];
+            this.pregnancy['Other notes'] = this.filterObs(observations, "Other notes")?.[0]?.value_text ?? "";
+            this.pregnancy.allergies = (await this.getConceptValues(this.filterObs(observations, "Does the woman have any allergies?"), "coded"))?.[0];
+            this.pregnancy.chronic = (await this.getConceptValues(this.filterObs(observations, "chronic conditions"), "coded"))?.[0];
+            this.pregnancy.lnmp = (await this.getConceptValues(this.filterObs(observations, "LNMP Known?"), "coded"))?.[0];
+            //this.pregnancy.lmnpDate = this.filterObs(observations, "lmnpDate")?.[0]?.value_text ?? "";
+            //this.pregnancy.lmnpGestationAge = this.filterObs(observations, "lmnpGestationAge")?.[0]?.value_text ?? "";
+            this.pregnancy['Other'] = this.filterObs(observations, "Other notes")?.[0]?.value_text ?? "";
+            this.pregnancy.Ultrasound = (await this.getConceptValues(this.filterObs(observations, "Ultrasound done?"), "coded"))?.[0];
+            this.pregnancy.Gestation = (await this.getConceptValues(this.filterObs(observations, "Gestation"), "coded"))?.[0];
+            this.pregnancy.gestationUsed = (await this.getConceptValues(this.filterObs(observations, "Gestation age to be used"), "coded"))?.[0];
+            this.pregnancy.tetanus = (await this.getConceptValues(this.filterObs(observations, "The woman received tetanus doses for immunization?"), "coded"))?.[0];
+            this.pregnancy.prescription = (await this.getConceptValues(this.filterObs(observations, "Which medications is the woman currently prescribed?"), "coded"))?.[0];
+            this.pregnancy.caffeine = (await this.getConceptValues(this.filterObs(observations, "Daily caffeine use"), "coded"))?.[0];
+            this.pregnancy.tobacco = (await this.getConceptValues(this.filterObs(observations, "Recently quit tobacco products"), "coded"))?.[0];
+            this.pregnancy.smoke = (await this.getConceptValues(this.filterObs(observations, "Exposure to second hand smoke"), "coded"))?.[0];
+            //
+            // this.pregnancy['HIV test date'] = this.filterObs(observations, "HIV test date")?.[0]?.value_text ?? "";
+            // this.pregnancy.art = (await this.getConceptValues(this.filterObs(observations, "chronic conditions"), "coded"))?.[0];
+            // this.pregnancy['facility for art'] = this.filterObs(observations, "facility for art")?.[0]?.value_text ?? "";
+            // this.pregnancy['Estimated date of delivery'] = this.filterObs(observations, "Estimated date of delivery")?.[0]?.value_text ?? "";
+            // this.pregnancy['Date for ultrasound'] = this.filterObs(observations, "Ultrasound")?.[0]?.value_text ?? "";
+            // this.pregnancy['Gestation age from ultrasound'] = this.filterObs(observations, "specify")?.[0]?.value_text ?? "";
+            // this.pregnancy.smoke = (await this.getConceptValues(this.filterObs(observations, "The woman received tetanus doses for immunization?"), "coded"))?.[0];
+            
+
         },
         async setTreatmentEncounters(data: any) {},
         async setPresentingComplainsEncounters(data: any) {
@@ -312,7 +402,7 @@ export default defineComponent({
             this.vitalsWeightHeight.icon = BMIService.iconBMI(bmiColor);
             this.vitalsWeightHeight.backgroundColor = bmiColor[0];
             this.vitalsWeightHeight.textColor = bmiColor[1];
-            this.vitalsWeightHeight.index = "BMI " + this.BMI?.index ?? "";
+            this.vitalsWeightHeight.index = "BMI " + (this.BMI?.index ?? "");
             this.vitalsWeightHeight.value = this.BMI?.result ?? "";
         },
     },

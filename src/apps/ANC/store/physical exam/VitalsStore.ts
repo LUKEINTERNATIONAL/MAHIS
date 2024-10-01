@@ -1,18 +1,14 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
-import _, { initial } from "lodash";
-
+import _ from "lodash";
 const initialVitals = [
     {
         isFinishBtn: false,
-        selectedData: [],
         validationStatus: "",
         sectionHeader: "Height and weight",
-        classDash: "dashed_bottom_border _padding",
-        name: "vitals",
+        actionBtn: "Finish and Save",
 
         data: {
-            header: {},
             rowData: [
                 {
                     colData: [
@@ -21,11 +17,11 @@ const initialVitals = [
                             unit: "cm",
                             icon: icons.height,
                             value: "",
-                            name: "Height",
-                            valueType: "number",
+                            name: "Height (cm)",
                             required: true,
                             eventType: "input",
                             alertsErrorMassage: "",
+                            disabled: false,
                         },
                         {
                             inputHeader: "Weight*",
@@ -33,15 +29,11 @@ const initialVitals = [
                             icon: icons.weight,
                             value: "",
                             name: "Weight",
-                            valueType: "number",
                             required: true,
                             eventType: "input",
                             alertsErrorMassage: "",
+                            disabled: false,
                         },
-                    ],
-                },
-                {
-                    colData: [
                         {
                             inputHeader: "Pre-gestation weight",
                             unit: "kg",
@@ -72,9 +64,58 @@ const initialVitals = [
             name: "vitals",
         },
     },
+
+    {
+        classDash: "dashed_bottom_border",
+        selectedData: [],
+        sideColSize: 3.8,
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: " ",
+            },
+            data: [
+                {
+                    colSize: "5.8",
+                    name: "Height And Weight Not Done",
+                    value: "Height And Weight Not Done",
+                    checked: false,
+                    displayNone: false,
+                },
+            ],
+            inputFields: [
+                {
+                    inputHeader: "Specify Reason",
+                    icon: icons.search,
+                    isMultiSelect: true,
+                    popOver: true,
+                    value: "",
+                    name: "Height Weight Reason",
+                    multiSelectData: [
+                        {
+                            id: 1,
+                            name: "Patient uncooperative",
+                        },
+                        {
+                            id: 2,
+                            name: "Machine not working",
+                        },
+                        {
+                            id: 3,
+                            name: "Machine not available",
+                        },
+                    ],
+                    eventType: "input",
+                    required: true,
+                    id: "",
+                    idName: "district_id",
+                    displayNone: true,
+                },
+            ],
+        },
+    },
     {
         sectionHeader: "Blood pressure",
-        classDash: "dashed_bottom_border _padding",
         data: {
             rowData: [
                 {
@@ -84,10 +125,10 @@ const initialVitals = [
                             unit: "mmHg",
                             icon: icons.systolicPressure,
                             value: "",
-                            name: "Systolic blood pressure",
-                            valueType: "number",
+                            name: "Systolic",
                             required: true,
                             eventType: "input",
+                            disabled: false,
                         },
                         {
                             inputHeader: "Diastolic pressure*",
@@ -95,33 +136,9 @@ const initialVitals = [
                             icon: icons.diastolicPressure,
                             value: "",
                             name: "Diastolic",
-                            valueType: "number",
                             required: true,
                             eventType: "input",
-                        },
-                    ],
-                },
-                {
-                    colData: [
-                        {
-                            inputHeader: "Repeated systolic pressure",
-                            unit: "mmHg",
-                            icon: icons.systolicPressure,
-                            value: "",
-                            name: "Repeated Systolic",
-                            valueType: "number",
-                            required: true,
-                            eventType: "input",
-                        },
-                        {
-                            inputHeader: "Repeated diastolic pressure",
-                            unit: "mmHg",
-                            icon: icons.diastolicPressure,
-                            value: "",
-                            name: "Repeated diastolic",
-                            valueType: "number",
-                            required: true,
-                            eventType: "input",
+                            disabled: false,
                         },
                     ],
                 },
@@ -143,9 +160,58 @@ const initialVitals = [
         },
     },
     {
-        sectionHeader: "Temperature and Pulse",
-        classDash: "dashed_bottom_border _padding",
-
+        classDash: "dashed_bottom_border",
+        selectedData: [],
+        sideColSize: 3.8,
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: " ",
+                name: "Primary diagnosis",
+            },
+            data: [
+                {
+                    colSize: "5.8",
+                    name: "Blood Pressure Not Done",
+                    value: "Blood Pressure Not Done",
+                    checked: false,
+                    displayNone: false,
+                },
+            ],
+            inputFields: [
+                {
+                    inputHeader: "Specify Reason",
+                    icon: icons.search,
+                    isMultiSelect: true,
+                    popOver: true,
+                    value: "",
+                    name: "Blood Pressure Reason",
+                    multiSelectData: [
+                        {
+                            id: 1,
+                            name: "Patient uncooperative",
+                        },
+                        {
+                            id: 2,
+                            name: "Machine not working",
+                        },
+                        {
+                            id: 3,
+                            name: "Machine not available",
+                        },
+                    ],
+                    eventType: "input",
+                    required: true,
+                    alertsErrorMassage: "",
+                    id: "",
+                    idName: "district_id",
+                    displayNone: true,
+                },
+            ],
+        },
+    },
+    {
+        sectionHeader: "Temperature and rates",
         data: {
             rowData: [
                 {
@@ -155,406 +221,135 @@ const initialVitals = [
                             unit: "C",
                             icon: icons.temprature,
                             value: "",
-                            name: "Temperature",
-                            valueType: "number",
+                            name: "Temp",
                             eventType: "input",
                         },
                         {
-                            inputHeader: "Pulse rate",
+                            inputHeader: "Pulse rate*",
                             unit: "BMP",
                             icon: icons.pulse,
                             value: "",
                             name: "Pulse",
-                            valueType: "number",
                             eventType: "input",
                         },
                     ],
                 },
             ],
         },
-        previousView: {
-            name: "vitals",
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "",
+                index: "",
+            },
+        ],
+    },
+    {
+        classDash: "dashed_bottom_border",
+        selectedData: [],
+        sideColSize: 3.8,
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: " ",
+                name: "Primary diagnosis",
+            },
+            data: [
+                {
+                    colSize: "5.8",
+                    name: "Pulse Rate Not Done",
+                    value: "Pulse Rate Not Done",
+                    checked: false,
+                    displayNone: false,
+                },
+            ],
+            inputFields: [
+                {
+                    inputHeader: "Specify Reason",
+                    icon: icons.search,
+                    isMultiSelect: true,
+                    popOver: true,
+                    value: "",
+                    name: "Pulse Rate Reason",
+                    multiSelectData: [
+                        {
+                            id: 1,
+                            name: "Patient uncooperative",
+                        },
+                        {
+                            id: 2,
+                            name: "Machine not working",
+                        },
+                        {
+                            id: 3,
+                            name: "Machine not available",
+                        },
+                    ],
+                    eventType: "input",
+                    required: true,
+                    alertsErrorMassage: "",
+                    id: "",
+                    idName: "district_id",
+                    displayNone: true,
+                },
+            ],
         },
     },
     {
-        sectionHeader: "Oximetry and Respiratory rate",
-        classDash: "dashed_bottom_border _padding",
-
+        sectionHeader: "null",
         data: {
             rowData: [
                 {
                     colData: [
-                        {
-                            inputHeader: "Oxygen saturation",
-                            unit: "%",
-                            icon: icons.oxgenStaturation,
-                            value: "",
-                            name: "Blood oxygen saturation",
-                            valueType: "number",
-                            eventType: "input",
-                        },
                         {
                             inputHeader: "Respiratory rate",
                             unit: "BMP",
                             icon: icons.respiratory,
                             value: "",
                             name: "Respiratory rate",
-                            valueType: "number",
+                            eventType: "input",
+                        },
+                        {
+                            inputHeader: "Oxygen saturation",
+                            unit: "%",
+                            icon: icons.oxgenStaturation,
+                            value: "",
+                            name: "SP02",
                             eventType: "input",
                         },
                     ],
                 },
             ],
         },
-        previousView: {
-            name: "vitals",
-        },
-    },
-    // {
-    //     selectdData: [],
-    //     classDash: "dashed_bottom_border",
-    //     checkboxBtnContent: {
-    //         header: {
-    //             title: "Respiratory exam findings",
-    //             selectedValue: "",
-    //             name: "Respiratory exam findings",
-    //             class: "bold",
-    //         },
-    //         data: [
-    //             {
-    //                 name: "Exam not done",
-    //                 value: "exam not done",
-    //                 checked: false,
-    //                 labelPlacement: "start",
-    //                 colSize: "6",
-    //                 justify: "space-between",
-    //             },
-    //             {
-    //                 name: "Normal exam",
-    //                 value: "normal exam",
-    //                 checked: false,
-    //                 labelPlacement: "start",
-    //                 colSize: "6",
-    //                 justify: "space-between",
-    //             },
-    //         ],
-    //     },
-    // },
-
-    // {
-    //     selectdData: [],
-    //     classDash: "dashed_bottom_border",
-    //     checkboxBtnContent: {
-    //         header: {
-    //             title: "",
-    //             selectedValue: "",
-    //             name: "Respiratory exam findings",
-    //         },
-    //         data: [
-    //             {
-    //                 name: "Cough",
-    //                 value: "cough",
-    //                 checked: false,
-    //                 labelPlacement: "start",
-    //                 colSize: "6",
-    //                 justify: "space-between",
-    //             },
-    //             {
-    //                 name: "Rapid breathing",
-    //                 value: "rapid breathing",
-    //                 checked: false,
-    //                 labelPlacement: "start",
-    //                 colSize: "6",
-    //                 justify: "space-between",
-    //             },
-    //         ],
-    //     },
-    // },
-
-    // {
-    //     selectdData: [],
-    //     classDash: "dashed_bottom_border",
-    //     checkboxBtnContent: {
-    //         header: {
-    //             title: "",
-    //             selectedValue: "",
-    //             name: "Respiratory exam findings",
-    //         },
-    //         data: [
-    //             {
-    //                 name: "Slow breathing",
-    //                 value: "Slow breathing",
-    //                 checked: false,
-    //                 labelPlacement: "start",
-    //                 colSize: "6",
-    //                 justify: "space-between",
-    //             },
-    //             {
-    //                 name: "Wheezing",
-    //                 value: "wheezing",
-    //                 checked: false,
-    //                 labelPlacement: "start",
-    //                 colSize: "6",
-    //                 justify: "space-between",
-    //             },
-    //         ],
-    //     },
-    // },
-    // {
-    //     selectdData: [],
-    //     classDash: "dashed_bottom_border",
-    //     checkboxBtnContent: {
-    //         header: {
-    //             title: "",
-    //             selectedValue: "",
-    //             name: "Respiratory exam findings",
-    //         },
-    //         data: [
-    //             {
-    //                 name: "Rales",
-    //                 value: "Rales",
-    //                 checked: false,
-    //                 labelPlacement: "start",
-    //                 colSize: "6",
-    //                 justify: "space-between",
-    //             },
-    //             {
-    //                 name: "Respiratory distress",
-    //                 value: "respiratory distress",
-    //                 checked: false,
-    //                 labelPlacement: "start",
-    //                 colSize: "6",
-    //                 justify: "space-between",
-    //             },
-    //         ],
-    //     },
-    // },
-
-    // {
-    //     classDash: "dashed_bottom_border",
-    //     checkboxBtnContent: {
-    //         header: {
-    //             title: "",
-    //             selectedValue: "",
-    //             name: "Respiratory exam findings",
-    //         },
-    //         data: [
-    //             {
-    //                 name: "Other",
-    //                 value: "Other",
-    //                 checked: false,
-    //                 labelPlacement: "start",
-    //                 colSize: "6",
-    //                 justify: "space-between",
-    //             },
-    //         ],
-    //     },
-    // },
-    // {
-    //     sideColSize: 0.000001,
-    //     sectionHeader: "",
-    //     classDash: "dashed_bottom_border",
-    //     data: {
-    //         rowData: [
-    //             {
-    //                 colData: [
-    //                     {
-    //                         displayNone: true,
-    //                         inputHeader: "Specify",
-    //                         unit: "",
-    //                         icon: icons.editPen,
-    //                         value: "",
-    //                         name: "Other notes",
-    //                         valueType: "text",
-    //                         required: true,
-    //                         eventType: "input",
-    //                         inputWidth: "100%",
-    //                     },
-    //                 ],
-    //             },
-    //         ],
-    //     },
-    // },
-    {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
-        checkboxBtnContent: {
-            header: {
-                title: "Severe pre-eclampsia exam",
-                selectedValue: "",
-                name: "Severe pre-eclampsia",
-                class: "bold",
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "",
+                index: "",
             },
-            data: [
-                {
-                    name: "No severe pre-eclampsia",
-                    value: "No severe pre-eclampsia",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-                {
-                    name: "Severe headache",
-                    value: "Severe headache",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-            ],
-        },
+        ],
     },
-
-    {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
-        checkboxBtnContent: {
-            header: {
-                title: "",
-                selectedValue: "",
-                name: "Severe pre-eclampsia",
-            },
-            data: [
-                {
-                    name: "Visual disturbance",
-                    value: "Visual disturbance",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-                {
-                    name: "Vomiting",
-                    value: "Vomiting",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-            ],
-        },
-    },
-    {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
-        checkboxBtnContent: {
-            header: {
-                title: "",
-                selectedValue: "",
-                name: "Severe pre-eclampsia",
-            },
-            data: [
-                {
-                    name: "PIH",
-                    value: "PIH",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-                {
-                    name: "Epigastric pain",
-                    value: "Epigastric pain symptom",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-            ],
-        },
-    },
-
-    {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
-        checkboxBtnContent: {
-            header: {
-                title: "",
-                selectedValue: "",
-                name: "Severe pre-eclampsia",
-            },
-            data: [
-                {
-                    name: "Dizziness",
-                    value: "Dizziness symptom",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-                {
-                    name: "Blood Pressure",
-                    value: "Blood Pressure",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-            ],
-        },
-    },
-    {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
-        checkboxBtnContent: {
-            header: {
-                title: "",
-                selectedValue: "",
-                name: "Severe pre-eclampsia",
-            },
-            data: [
-                {
-                    name: "Urine Protein",
-                    value: "Urine Protein",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-                {
-                    name: "Oedema",
-                    value: "Oedema",
-                    checked: false,
-                    labelPlacement: "start",
-                    colSize: "6",
-                    justify: "space-between",
-                },
-            ],
-        },
-    },
-
 ] as any;
-
-// const initialRespiration=[
-
-// ] as any;
-// const initialPreEclampsia=[
-
-// ] as any;
 export const useVitalsStore = defineStore("vitalsStore", {
     state: () => ({
         vitals: [...initialVitals] as any,
-        // respiration: [...initialRespiration ] as any,
-        // preEclampsia: [ ...initialPreEclampsia] as any,
     }),
     actions: {
         setVitals(data: any) {
             this.vitals = data;
         },
-
-        getInitial() {
+        getInitialVitals() {
             const data = _.cloneDeep(initialVitals);
             return [...data];
         },
-        // getInitial1(){
-        //     const data=_.cloneDeep(initialRespiration)
-        //     return[...data]
-        // },
-        // getInitial2(){
-        //     const data=_.cloneDeep(initialPreEclampsia)
-        //     return [...data]
-        // }
     },
-    // persist:true,
+    persist: true,
 });

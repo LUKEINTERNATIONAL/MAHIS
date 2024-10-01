@@ -1,9 +1,11 @@
 <template>
   <div class="container">
-    <ion-label>Which of the following medications and supplements is the woman taking and any side effects?</ion-label>
     <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="trial" ></basic-form>
+        <basic-form :contentData="medicalFollowUp"
+                     :initialData="initialData" >
+
+        </basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -14,9 +16,10 @@
 import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useMedicalFollowUpStore} from "@/apps/ANC/store/symptomsFollowUp/medicalFollowUpStore";
+ import {useMedicalFollowUpStore} from "@/apps/ANC/store/symptomsFollowUp/medicalFollowUp";
  import BasicForm from '@/components/BasicForm.vue';
  import { validateField } from "@/services/ANC/symptoms_validation";
+ import {checkmark, pulseOutline} from "ionicons/icons";
 
 
 export default defineComponent({
@@ -27,12 +30,22 @@ export default defineComponent({
         BasicInputField,
         BasicForm
     },
+  data() {
+    return {
+      initialData:[] as any,
+
+    }
+  },
+  setup(){
+    return { checkmark,pulseOutline };
+  },
 
     mounted(){
-        const trial =useMedicalFollowUpStore()
+        const medicalFollowUp =useMedicalFollowUpStore();
+      this.initialData=medicalFollowUp.getInitial()
     },
       computed:{
-        ...mapState(useMedicalFollowUpStore,["trial"]),
+        ...mapState(useMedicalFollowUpStore,["medicalFollowUp"]),
     },
     methods: {
    

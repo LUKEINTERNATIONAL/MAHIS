@@ -26,11 +26,12 @@ async function savePersonInformation(record: any) {
             const registration = new PatientRegistrationService();
             await registration.registerPatient(record.personInformation, []);
             const patientID = registration.getPersonID();
+            await updatePatientInformation(record, patientID);
             await updateSaveStatus(record, {
                 saveStatusPersonInformation: "complete",
                 serverPatientID: patientID,
             });
-            createIDs(record.otherPersonInformation);
+            createIDs(record.otherPersonInformation, patientID);
             enrollProgram(patientID);
             createRegistrationEncounter(patientID);
             return patientID;
@@ -41,10 +42,16 @@ async function savePersonInformation(record: any) {
     return record.serverPatientID;
 }
 
-async function createIDs({ nationalID, birthID }: any) {
+async function updatePatientInformation(record: any, patientID: any) {
+    const patientData = await PatientService.findByID(patientID);
+    await db.collection("patientRecords").doc({ offlinePatientID: record.offlinePatientID }).update({
+        patientData: patientData,
+    });
+}
+async function createIDs({ nationalID, birthID }: any, patientID: any) {
     const patient = new PatientService();
-    if (nationalID) await patient.updateMWNationalId(nationalID);
-    if (birthID) await patient.updateBirthId(birthID);
+    if (nationalID) await patient.updateMWNationalId(nationalID, patientID);
+    if (birthID) await patient.updateBirthId(birthID, patientID);
 }
 
 async function createGuardian(patientID: any, record: any) {
@@ -55,25 +62,31 @@ async function createGuardian(patientID: any, record: any) {
                 await guardian.registerGuardian(record.guardianInformation);
                 const guardianID = guardian.getPersonID();
                 await RelationsService.createRelation(patientID, guardianID, record.otherPersonInformation.relationshipID);
+                await updateSaveStatus(record, { saveStatusGuardianInformation: "complete" });
             } catch (error) {
                 toastDanger("Failed to save guardian information");
             }
+        } else {
+            await updateSaveStatus(record, { saveStatusGuardianInformation: "Not recorded" });
         }
-        await updateSaveStatus(record, { saveStatusGuardianInformation: "complete" });
     }
 }
 
 async function saveBirthdayData(patientID: any, record: any) {
-    if (record.saveStatusBirthRegistration === "pending" && record.birthRegistration.length > 0) {
-        try {
-            const userID: any = Service.getUserID();
-            const registration = new AppEncounterService(patientID, 5, userID);
-            await registration.createEncounter();
-            await registration.saveObservationList(record.birthRegistration);
-        } catch (error) {
-            toastDanger("Failed to save birth information");
+    if (record.saveStatusBirthRegistration === "pending") {
+        if (record.birthRegistration.length > 0) {
+            try {
+                const userID: any = Service.getUserID();
+                const registration = new AppEncounterService(patientID, 5, userID);
+                await registration.createEncounter();
+                await registration.saveObservationList(record.birthRegistration);
+                await updateSaveStatus(record, { saveStatusBirthRegistration: "complete" });
+            } catch (error) {
+                toastDanger("Failed to save birth information");
+            }
+        } else {
+            await updateSaveStatus(record, { saveStatusBirthRegistration: "Not recorded" });
         }
-        await updateSaveStatus(record, { saveStatusBirthRegistration: "complete" });
     }
 }
 

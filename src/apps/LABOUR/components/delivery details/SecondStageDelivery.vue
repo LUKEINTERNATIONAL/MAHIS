@@ -6,11 +6,11 @@
           <ion-label class="previousLabel">Delivery and newborn details</ion-label>
         </ion-item>
         <div class="ion-padding" slot="content">
-          <DeliveryNewbornDetails/>
+          <DeliveryNewbornDetails />
         </div>
       </ion-accordion>
     </ion-accordion-group>
-    <ion-accordion-group ref="accordionGroup" class="previousView">
+    <ion-accordion-group v-if="showSection" ref="accordionGroup" class="previousView">
       <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
         <ion-item slot="header" color="light">
           <ion-label class="previousLabel">Other delivery details</ion-label>
@@ -21,7 +21,7 @@
       </ion-accordion>
     </ion-accordion-group>
 
-    <ion-accordion-group ref="accordionGroup" class="previousView">
+    <ion-accordion-group v-if="showSection" ref="accordionGroup" class="previousView">
       <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
         <ion-item slot="header" color="light">
           <ion-label class="previousLabel">Obstetric complications</ion-label>
@@ -50,22 +50,13 @@ import BasicForm from "@/components/BasicForm.vue";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import labOrderResults from "@/components/Lab/labOrderResults.vue";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import {
-  modifyCheckboxInputField,
-  getCheckboxSelectedValue,
-  //getRadioSelectedValue,
-  getFieldValue,
-  getRadioSelectedValue,
-  modifyFieldValue,
-} from '@/services/data_helpers';
-import BasicCard from "@/components/BasicCard.vue";
-//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
+
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
 import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
 import DeliveryNewbornDetails from "@/apps/LABOUR/components/delivery details/DeliveryNewbornDetails.vue";
 import OtherDeliveryDetails from "@/apps/LABOUR/components/delivery details/OtherDeliveryDetails.vue";
 import ObstetricComplications from "@/apps/LABOUR/components/delivery details/ObstetricComplications.vue";
+import { getRadioSelectedValue } from "@/services/data_helpers";
 export default defineComponent({
   name: "Menu",
   components: {
@@ -114,6 +105,7 @@ export default defineComponent({
       specimen: "" as any,
       radiologyOrdersStatus: false,
       otherOrdersStatus: false,
+      showSection: true
     };
   },
   computed:{
@@ -137,6 +129,12 @@ export default defineComponent({
         this.handleModeOfDeliver()
       },
       deep:true
+    },
+    secondStageDetails: {
+      handler() {
+        this.handleSelectedStillBirth();
+      },
+      deep:true
     }
   },
   setup() {
@@ -151,6 +149,15 @@ export default defineComponent({
       //    modifyFieldValue(this.newbornComplications,'Other notes','displayNone',true)
       // }
     },
+    handleSelectedStillBirth() {
+      const babyGeneralCondition = getRadioSelectedValue(this.secondStageDetails, 'Baby general condition at birth');
+
+      if (babyGeneralCondition == "Macerated stillbirth" || babyGeneralCondition == "Fresh stillbirth") {
+        this.showSection = false;
+        return
+      }
+      this.showSection = true;
+    }
   }
 });
 

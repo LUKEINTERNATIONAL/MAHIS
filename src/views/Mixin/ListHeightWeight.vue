@@ -95,27 +95,32 @@ export default defineComponent({
             await this.updateData();
         },
         processObservations() {
-            let result: any = [];
-            let weightData = this.weight?.filter((item: any) => item.concept.concept_id === 5089);
-            let heightData = this.height?.filter((item: any) => item.concept.concept_id === 5090);
-            let allDates: any = "";
-            if (weightData && heightData)
-                allDates = new Set([...weightData?.map((w: any) => w.obs_datetime), ...heightData?.map((h: any) => h?.obs_datetime)]);
-            else if (weightData) allDates = new Set([...weightData?.map((w: any) => w.obs_datetime)]);
-            else if (heightData) allDates = new Set([...heightData?.map((h: any) => h?.obs_datetime)]);
+            try {
+                let result: any = [];
+                let weightData = this.weight?.filter((item: any) => item.concept.concept_id === 5089);
+                let heightData = this.height?.filter((item: any) => item.concept.concept_id === 5090);
+                let allDates: any = "";
+                if (weightData && heightData)
+                    allDates = new Set([...weightData?.map((w: any) => w.obs_datetime), ...heightData?.map((h: any) => h?.obs_datetime)]);
+                else if (weightData) allDates = new Set([...weightData?.map((w: any) => w.obs_datetime)]);
+                else if (heightData) allDates = new Set([...heightData?.map((h: any) => h?.obs_datetime)]);
 
-            allDates?.forEach((datetime: any) => {
-                let weightObs = weightData?.find((w: any) => w.obs_datetime === datetime);
-                let heightObs = heightData?.find((h: any) => h.obs_datetime === datetime);
+                allDates?.forEach((datetime: any) => {
+                    let weightObs = weightData?.find((w: any) => w.obs_datetime === datetime);
+                    let heightObs = heightData?.find((h: any) => h.obs_datetime === datetime);
 
-                result.push({
-                    ids: { weightObsId: weightObs?.obs_id, heightObsId: heightObs?.obs_id },
-                    obs_datetime: datetime,
-                    weight: weightObs ? weightObs?.value_numeric : null,
-                    height: heightObs ? heightObs?.value_numeric : null,
+                    result.push({
+                        ids: { weightObsId: weightObs?.obs_id, heightObsId: heightObs?.obs_id },
+                        obs_datetime: datetime,
+                        weight: weightObs ? weightObs?.value_numeric : null,
+                        height: heightObs ? heightObs?.value_numeric : null,
+                    });
                 });
-            });
-            return result;
+                return result;
+            } catch (error) {
+                
+            }
+
         },
         async updateData() {
             this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
@@ -150,26 +155,30 @@ export default defineComponent({
             else if (active == "BMI") this.activeBMI = "_active";
         },
         setListData(data: any) {
-            this.list = [];
-            this.list.push({
-                containSize: 2.6,
-                actionBtn: false,
-                class: "col_background display_center",
-                header: true,
-                minHeight: "--min-height: 25px;",
-                display: ["Date", "Height(cm)", "Weight(kg)", "Action"],
-            });
-            data.forEach((item: any) => {
+            try {
+                this.list = [];
                 this.list.push({
-                    id: item.ids,
-                    actionBtn: true,
+                    containSize: 2.6,
+                    actionBtn: false,
+                    class: "col_background display_center",
+                    header: true,
                     minHeight: "--min-height: 25px;",
-                    class: "col_background",
-                    display: [HisDate.toStandardHisDisplayFormat(item.obs_datetime), item.height, item.weight],
-                    btn: ["void"],
-                    name: `height: ${item.height} and weight: ${item.weight} captured on ${HisDate.toStandardHisDisplayFormat(item.obs_datetime)} `,
+                    display: ["Date", "Height(cm)", "Weight(kg)", "Action"],
                 });
-            });
+                data.forEach((item: any) => {
+                    this.list.push({
+                        id: item.ids,
+                        actionBtn: true,
+                        minHeight: "--min-height: 25px;",
+                        class: "col_background",
+                        display: [HisDate.toStandardHisDisplayFormat(item.obs_datetime), item.height, item.weight],
+                        btn: ["void"],
+                        name: `height: ${item.height} and weight: ${item.weight} captured on ${HisDate.toStandardHisDisplayFormat(item.obs_datetime)} `,
+                    });
+                });
+            } catch (error) {
+                
+            }
         },
     },
 });

@@ -2,10 +2,16 @@
 
         <ion-row>
           <ion-col>
-              <h1 style="width: 100%; text-align: left; font-weight: 400">Immunisation</h1>
+              <h1 style="width: 100%; text-align: left; font-weight: 400">Immunization</h1>
           </ion-col>
         </ion-row>
-  
+
+        <ion-fab slot="fixed" horizontal="end" vertical="top" @click="exportReportToCSV">
+          <ion-fab-button>
+            <ion-icon :icon="downloadOutline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+
         <table class="custom-table">
           <colgroup>
             <col style="width: 20%;" />
@@ -71,14 +77,14 @@
                   'selected': selectedSection === 'fixed' || selectedColumn === 'fixedLessThan1y'
                 }"
               >
-                {{ row.fixed.lessThan1y }}
+                 <pan @click="openPersonCardComponent(row.fixed.lessThan1yPersons)"> {{ row.fixed.lessThan1y }}</pan>
               </td>
               <td
                 :class="{
                   'selected': selectedSection === 'fixed' || selectedColumn === 'fixedMoreThan1y'
                 }"
               >
-                {{ row.fixed.moreThan1y }}
+                <pan @click="openPersonCardComponent(row.fixed.moreThan1yPersons)"> {{ row.fixed.moreThan1y }}</pan>
               </td>
               <td
                 :class="{
@@ -109,20 +115,34 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonContent , IonPage, IonRow, IonCol } from '@ionic/vue';
+import { IonContent , IonPage, IonRow, IonCol, IonFab, IonFabButton, } from '@ionic/vue';
 import NavigationMenu from './NavigationMenu.vue';
 import { mapState } from "pinia";
-import { getVaccinesAdministered, getImmunizationDrugs } from "@/apps/Immunization/services/vaccines_service";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { getVaccinesAdministered, getImmunizationDrugs, exportReportToCSV } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { add, fileTray, downloadOutline } from 'ionicons/icons';
+import PersonCardComponent from "@/apps/Immunization/components/Modals/PersonCardComponent.vue"
+import { createModal } from "@/utils/Alerts";
+import { PatientService } from "@/services/patient_service";
 
 export default defineComponent({
     name: 'TableComponent',
-    components: { IonContent, IonPage, NavigationMenu,  IonRow, IonCol },
+    mixins: [SetDemographics],
+    components: { IonContent, IonPage, IonFab, IonFabButton, NavigationMenu,  IonRow, IonCol, PersonCardComponent },
     data() {
       return {
         selectedSection: '', // To keep track of the selected section
         selectedColumn: '',  // To keep track of the selected column
         tableData: [] as any,
+        fileTray,
+        downloadOutline,
+        exportReportToCSV,
+        peopleArray: [
+        { id: 1, firstName: 'John', lastName: 'Doe', age: 30, dob: '1993-05-15', sex: 'Male' },
+        { id: 2, firstName: 'Jane', lastName: 'Smith', age: 28, dob: '1995-09-22', sex: 'Female' },
+        // Add more people as needed
+      ],
       };
     },
     watch: {
@@ -136,12 +156,12 @@ export default defineComponent({
       },
     },
     computed: {
-      ...mapState(EIRreportsStore, ["start_date", "end_date"]), 
+      ...mapState(EIRreportsStore, ["start_date", "end_date", "navigationPayload"]), 
     },
     async mounted() {
       await this.getDrugs()
       await this.initReport()
-  },
+    },
     methods: {
       selectSection(section: string) {
         this.selectedSection = section;
@@ -160,8 +180,10 @@ export default defineComponent({
         this.tableData.forEach((t_data: any) => {
           if (t_data.drug.drug_id == AV.drug_inventory_id) {
             if (r_key in t_data.fixed) {
+              let data_key = r_key+'Persons'
               let value =  t_data.fixed[r_key];
               t_data.fixed[r_key] = value+1
+              t_data.fixed[data_key].push(AV)
             }
           }
         })
@@ -172,13 +194,30 @@ export default defineComponent({
         data.forEach((drug: any) => {
           const row_item = {
             label: drug.name,
-            fixed: { lessThan1y: 0, moreThan1y: 0 },
+            fixed: { lessThan1y: 0, moreThan1y: 0, lessThan1yPersons: [], moreThan1yPersons: []},
             outreach: { lessThan1y: 0, moreThan1y: 0 },
             drug: drug
           }
           items.push(row_item)
         })
         this.tableData = items
+        const store = EIRreportsStore()
+        store.setImmunizationMonthlyRepoartData(this.tableData)
+      },
+      openPersonCardComponent(clients: []) {
+        const handleModalAction = (event: CustomEvent<any>) => {
+            // console.log('Action received from modal:', event.detail);
+            this.openPatientProfile(event.detail.client_id)
+        };
+
+        const dataToPass = {'people': clients, headingText: `Immunization (Client Drill Down | ${this.navigationPayload.subTxt})`}
+        createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass, { 'view-client': handleModalAction });
+      },
+      async openPatientProfile(client_id: any) {
+        const patientData = await PatientService.findByID(client_id);
+        const patientData2 = await PatientService.findByNpid(patientData.patient_identifiers[0].identifier);
+        this.setDemographics(patientData2[0]);
+        this.$router.push("patientProfile");
       }
     },
   });

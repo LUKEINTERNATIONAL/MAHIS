@@ -3,7 +3,7 @@
     <ion-header :translucent="true" class="primary_color_background">
       <div class="content_manager" style="margin-top: unset">
         <ion-toolbar class="content_width primary_color_background">
-          <ion-title style="cursor: pointer" @click="">
+          <ion-title>
             <b>Privacy Policy</b>
           </ion-title>
         </ion-toolbar>

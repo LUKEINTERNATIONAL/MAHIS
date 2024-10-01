@@ -32,7 +32,6 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     ],
                 },
             },
-
             {
                 selectdData: [],
                 classDash: "dashed_bottom_border",
@@ -90,7 +89,6 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     ],
                 },
             },
-
             {
                 classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
@@ -145,7 +143,6 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     ],
                 },
             },
-
             {
                 classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
@@ -193,7 +190,6 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     ],
                 },
             },
-
             {
                 isFinishBtn: false,
                 sectionHeader: "",

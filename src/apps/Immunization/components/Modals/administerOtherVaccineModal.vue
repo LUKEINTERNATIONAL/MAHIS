@@ -197,7 +197,7 @@ export default defineComponent({
                 {
                     concept_id: 11592,
                     drug_id: 1301,
-                    drug_name: "Albendazole (200mg tablet)",
+                    drug_name: "Albendazole (200mg tablet) 1",
                     status: "administered",
                     date_administered: "31/May/2024 15:33:44",
                     vaccine_batch_number: null,
@@ -305,7 +305,7 @@ export default defineComponent({
         async pullLotNumbersForVaccine(data: any) {
             const store = useAdministerVaccineStore();
             const stockService = new StockService();
-            const data_ = await stockService.getItem(data.drug_id)
+            const data_ = await stockService.getDrugBatches(data.drug_id)
             store.setLotNumberData(data_)
 
             if(data_.length == 0) {

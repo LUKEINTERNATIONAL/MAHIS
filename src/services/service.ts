@@ -187,12 +187,12 @@ export class Service {
 
     static getProgramName() {
         let app: any = localStorage.getItem("app");
+        if (!app) return "";
         app = JSON.parse(app);
-
         if ("applicationName" in app) return app.applicationName;
-
         return "";
     }
+
 
     static getSuspendedProgram() {
         return localStorage.getItem("suspendedApp") || "";
@@ -200,9 +200,13 @@ export class Service {
 
     static getProgramID() {
         let app: any = localStorage.getItem("app");
-        app = JSON.parse(app);
 
-        if ("programID" in app) return app.programID;
+        if (app) {
+            app = JSON.parse(app);
+            if ("programID" in app) {
+                return app.programID;
+            }
+        }
 
         return "";
     }

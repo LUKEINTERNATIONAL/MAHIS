@@ -1,7 +1,16 @@
 import { defineStore } from "pinia";
 import { icons } from '@/utils/svg';
 import _ from "lodash";
+import * as yup from "yup";
 
+export const ANCEndValidationSchema = yup.object().shape({
+    'Weight': yup.number()
+        .required("Weight is required")
+        .typeError("Value should be a number")
+        .min(0)
+        .max(6000)
+        .label("Weight"),
+});
 const initialANCend=[
     {
         selectdData: [],
@@ -32,8 +41,8 @@ const initialANCend=[
                     colSize: "4.01",
                 },
                 {
-                    name: "Miscarriage",
-                    value:"Miscarriage",
+                    name: "Pregnancy, miscarriage",
+                    value:"Pregnancy, miscarriage",
                     colSize: "4.01",
                 },
                 {
@@ -54,16 +63,6 @@ const initialANCend=[
                 {
                     name:  "Moved away",
                     value: "Moved away",
-                    colSize: "4.01",
-                },
-                {
-                    name: "False pregnancy",
-                    value: "False pregnancy",
-                    colSize: "4.01",
-                },
-                {
-                    name:"Wrong entry",
-                    value: "Wrong entry",
                     colSize: "4.01",
                 },
                 {
@@ -89,6 +88,7 @@ const initialANCend=[
                             name: "Pregnancy outcome notes",
                             inputType:"text",
                             eventType: 'input',
+                            valueType:'text',
                             inputWidth: "82%",
                             required: true
                         }
@@ -114,6 +114,7 @@ const initialANCend=[
                             eventType: 'input',
                             minDate:"",
                             maxDate:"",
+                            valueType:"text",
                             inputWidth: "82%",
                             isDatePopover:true,
                             placeholder:"Pick date",
@@ -153,32 +154,6 @@ const initialANCend=[
 
     },
     {
-        classDash: 'dashed_bottom_border',
-        selectdData: [],
-        isFinishBtn: false,
-        radioBtnContent:{
-            header:{
-                title: 'Client record will no longer be  viewed?',
-                selectedValue: '',
-                name:'Client record will no longer be  viewed',
-                displayNone:true,
-                class:"bold"
-            },
-            data:[
-                {
-                    name: 'Yes',
-                    value: 'yes',
-                    colSize: "7",
-                },
-                {
-                    name:  'No',
-                    value: 'no',
-                    colSize: "7",
-                },
-            ]
-        }
-    },
-    {
         childName:"ANC pregnancy outcome",
         classDash: 'dashed_bottom_border',
         data:{
@@ -187,13 +162,14 @@ const initialANCend=[
                     colData:[
                         {
                             displayNone:true,
-                            inputHeader: 'Date of delivery *',
+                            inputHeader: 'Estimated date of delivery *',
                             icon: icons.calenderPrimary,
                             value: "",
-                            name: "Date of delivery",
+                            name: "Estimated date of delivery",
                             eventType: 'input',
                             inputWidth: "82%",
                             inputType:"text",
+                            valueType:"text",
                             placeholder:"Pick date",
                             required: true,
                             isDatePopover: true
@@ -222,7 +198,7 @@ const initialANCend=[
             data:[
                 {
                     name: "Home",
-                    value: "Home",
+                    value: "Home or TBA",
                     colSize: "6.01",
                 },
                 {
@@ -281,12 +257,12 @@ const initialANCend=[
                 {
                     name: "Yes",
                     value: "Yes",
-                    colSize: "7",
+                    colSize: "2.5",
                 },
                 {
                     name:  "No",
                     value: "No",
-                    colSize: "7",
+                    colSize: "2.5",
                 },
             ]
         }
@@ -322,8 +298,8 @@ const initialANCend=[
                     colSize: "4.01",
                 },
                 {
-                    name: "C-section",
-                    value: "C-section",
+                    name: "Caesarean section",
+                    value: "Caesarean section",
                     colSize: "4.01",
                 },
             ]
