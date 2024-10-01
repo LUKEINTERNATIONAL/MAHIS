@@ -108,7 +108,7 @@ import { useImmunizationSessionFieldsValidator } from "./validator";
 const immunizationSessionsStore = useImmunizationSessionsStore();
 const isSaving = ref<boolean>(false);
 const dateRange = ref<Date[] | string>();
-const formatDate = (date: Date | string) => format(new Date(date), "yyyy-mm-DD");
+const formatDate = (date: Date | string) => format(new Date(date), "yyyy-mm-dd");
 const repeatTypes = ref<Record<string, string>[]>([{
     id: "1",
     name: "Never",

@@ -142,8 +142,7 @@ const repeatTypeError = ref<string>("");
 const numberOfDaysError = ref<string>("");
 const sessionTypeError = ref<string>("");
 const assigneesError = ref<string>("");
-const formatDate = (date: Date | string) => format(new Date(date), "yyyy-mm-DD");
-
+const formatDate = (date: Date | string) => format(new Date(date), "yyyy-mm-dd");
 
 const formattedDateRange = computed((): string => {
     if (Array.isArray(dateRange.value)) {
