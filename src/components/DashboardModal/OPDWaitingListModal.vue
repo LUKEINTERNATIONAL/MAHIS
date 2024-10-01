@@ -21,16 +21,8 @@
                 <ion-card-header> <ion-card-title class="sectionTitle"> </ion-card-title></ion-card-header>
                 <ion-card-content>
                     <div class="dueCardContent">
-                        <DataTable :options="options" :data="dueData" class="display nowrap" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Action</th>
-
-                                </tr>
-                            </thead>
-                        </DataTable>
+                        <DataTable :options="options" :columns="tableColumns" :data="patients" class="display nowrap" width="100%" />
+                      
                     </div>
                 </ion-card-content>
             </ion-card>
@@ -144,7 +136,7 @@ export default defineComponent({
             dueData: [] as any,
             options: {
                 responsive: true,
-                select: true,
+                select: false,
                 searching: false,
                 ordering: false,
                 pageLength: 25,
@@ -152,12 +144,21 @@ export default defineComponent({
             } as any,
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
             showDateBtns: true as boolean,
+            tableColumns:[
+                {title:"Patient Name", data: 'fullName', },
+                {title:"Action", data: null,  render: (data:any,type:any,row:any)=>{
+                    return `<ion-button class="btn-edit" @click="openProfile(${row})">Open Profile</ion-button>`
+                }},
+            ]
         };
     },
     props: {
         title: {
             default: [] as any,
         },
+        patients: {
+            default: [] as any
+        }
     },
     computed: {
 
@@ -165,8 +166,11 @@ export default defineComponent({
     async mounted() {
         this.isLoading = true;
         const data = await getPatientsList();
+
     },
     watch: {
+       
+
     },
     setup() {
         return { person, pulseOutline, clipboardOutline };
@@ -179,6 +183,9 @@ export default defineComponent({
       dismiss() {
         modalController.dismiss();
       },
+      openProfile(id:any){
+        console.log({id})
+      }
     }
 
 });
