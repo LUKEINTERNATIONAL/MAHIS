@@ -267,6 +267,31 @@ watch([sessionName, dateRange, selectedRepeatType, numberOfDays, selectedSession
     handleValidationErrors(validationResult.errors);
 });
 
+const isDailyRepeatTypePresent = () =>
+    repeatTypes.value.some(item => item.name === "Daily");
+
+const addDailyRepeatType = () => {
+    if (!isDailyRepeatTypePresent()) {
+        repeatTypes.value.push({ id: "2", name: "Daily" });
+        repeatTypes.value.sort((a, b) => Number(a.id) - Number(b.id));
+    }
+};
+
+const removeDailyRepeatType = () => {
+    repeatTypes.value = repeatTypes.value.filter(item => item.name !== "Daily");
+};
+
+watch(dateRange, (newDateRange) => {
+    if (newDateRange) {
+        const [startDate, endDate] = newDateRange;
+        if (startDate.toDateString() === endDate.toDateString()) {
+            removeDailyRepeatType();
+        } else {
+            addDailyRepeatType();
+        }
+    }
+});
+
 onMounted(async (): Promise<void> => {
     await getAssignees();
 });
