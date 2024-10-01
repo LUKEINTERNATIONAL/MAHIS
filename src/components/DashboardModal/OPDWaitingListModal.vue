@@ -44,6 +44,7 @@
               <ion-grid>
                 <ion-row class="table-header">
                   <ion-col>Patient Name</ion-col>
+                  <ion-col>Waiting Time</ion-col>
                   <ion-col>Actions</ion-col>
                 </ion-row>
 
@@ -54,6 +55,7 @@
                   class="table-row"
                 >
                   <ion-col>{{ patient.fullName }}</ion-col>
+                  <ion-col>{{ waitingTime(patient.arrivalTime) }}</ion-col>
                   <ion-col>
                     <ion-button
                       size="small"
@@ -289,6 +291,10 @@ export default defineComponent({
 
       this.patients = listMapping[this.list] || [];
     },
+
+    waitingTime(timeStamp:any){
+        return dates.calculateTimeDifference(timeStamp)
+    }
   },
 });
 </script>

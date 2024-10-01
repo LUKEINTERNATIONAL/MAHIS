@@ -182,6 +182,18 @@ function todayDateFormatted(){
     return dayjs().tz("Africa/Harare").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
 }
 
+function calculateTimeDifference(timestamp:any){
+    const currentTime = dayjs(); 
+    const startTime = dayjs(timestamp); 
+    const duration = currentTime.diff(startTime);
+
+    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+
+    return `${days} days, ${hours} hours, ${minutes} minutes`;
+}
+
 export default {
     currentDate,
     getYearOfAge,
@@ -207,5 +219,6 @@ export default {
     getBirthdateAge,
     ageInMonths,
     getAgeInFloatYears,
-    todayDateFormatted
+    todayDateFormatted,
+    calculateTimeDifference
 };
