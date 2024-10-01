@@ -41,7 +41,7 @@
         <div style="margin-top: 20px;" v-if="showNumberOfDays">
             <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Number of {{ formattedRepeatText
                 }}</label>
-            <ion-input v-model="numberOfDays" clear fill="outline" placeholder="Enter the number of days"></ion-input>
+            <ion-input v-model="numberOfDays" clear fill="outline" :placeholder="numberOfDaysPlaceholder"></ion-input>
             <div v-if="numberOfDaysError" class="alerts_error">{{ numberOfDaysError }}</div>
         </div>
         <div style="margin-top: 20px;">
@@ -174,6 +174,10 @@ const formattedRepeatText = computed((): string => {
     return repeatMap[selectedRepeatType.value as RepeatType] || "";
 });
 
+const numberOfDaysPlaceholder = computed((): string => {
+    return `Enter number of ${formattedRepeatText.value}`;
+});
+
 const createImmunizationSessionSchedule = async (): Promise<void> => {
     const validationResult = useImmunizationSessionFieldsValidator(
         sessionName.value,
@@ -252,6 +256,7 @@ watch(selectedRepeatType, (value: string) => {
         showNumberOfDays.value = false;
     } else {
         showNumberOfDays.value = true;
+        numberOfDays.value = 1;
     }
 });
 
