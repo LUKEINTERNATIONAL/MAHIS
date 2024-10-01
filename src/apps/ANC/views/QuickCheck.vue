@@ -277,14 +277,14 @@ export default defineComponent({
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
         async saveData() {
-            await this.saveQuickCheck();
+             this.saveQuickCheck();
             resetPatientData();
         },
       async saveQuickCheck() {
         const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
 
         if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
-          if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {
+          if (this.ConfirmPregnancy && this.ReasonForVisit) {
             const userID: any = Service.getUserID();
             const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
             const encounter = await quickCheck.createEncounter();
@@ -295,7 +295,7 @@ export default defineComponent({
             if (getRadioSelectedValue(this.ReasonForVisit, "Intervention on danger signs")== "Yes") {
               this.$router.push("/ancReferral");
             } else {
-              this.$router.push("ANCHome");
+              this.$router.push("contact");
             }
           }
         } else {

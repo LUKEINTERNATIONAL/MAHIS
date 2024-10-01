@@ -1,554 +1,355 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import _ from "lodash";
+const initialVitals = [
+    {
+        isFinishBtn: false,
+        validationStatus: "",
+        sectionHeader: "Height and weight",
+        actionBtn: "Finish and Save",
 
-export const useAncVitalsStore = defineStore("ancVitalsStore", {
-    state: () => ({
-        heightWeight: [
-            {
-                isFinishBtn: false,
-                sectionHeader: "",
-                classDash: "dashed_bottom_border",
-
-                data: {
-                    rowData: [
+        data: {
+            rowData: [
+                {
+                    colData: [
                         {
-                            colData: [
-                                {
-                                    inputHeader: "Height*",
-                                    unit: "cm",
-                                    icon: icons.height,
-                                    value: "",
-                                    name: "Height",
-                                    required: true,
-                                    eventType: "input",
-                                    alertsErrorMassage: "",
-                                },
-                            ],
+                            inputHeader: "Height*",
+                            unit: "cm",
+                            icon: icons.height,
+                            value: "",
+                            name: "Height (cm)",
+                            required: true,
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            disabled: false,
                         },
                         {
-                            colData: [
-                                {
-                                    inputHeader: "Pre-gestation weight",
-                                    unit: "kg",
-                                    icon: icons.weight,
-                                    value: "",
-                                    name: "PregestationWeight",
-                                    required: true,
-                                    eventType: "input",
-                                    alertsErrorMassage: "",
-                                },
-                                {
-                                    inputHeader: "Current weight*",
-                                    unit: "kg",
-                                    icon: icons.weight,
-                                    value: "",
-                                    name: "CurrentWeight",
-                                    required: true,
-                                    eventType: "input",
-                                    alertsErrorMassage: "",
-                                },
-                            ],
+                            inputHeader: "Weight*",
+                            unit: "kg",
+                            icon: icons.weight,
+                            value: "",
+                            name: "Weight",
+                            required: true,
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            disabled: false,
+                        },
+                        {
+                            inputHeader: "Pre-gestation weight",
+                            unit: "kg",
+                            icon: icons.weight,
+                            value: "",
+                            name: "Pre-gestation weight",
+                            valueType: "number",
+                            required: true,
+                            eventType: "input",
+                            alertsErrorMassage: "",
                         },
                     ],
                 },
-            },
-        ],
-        respiration: [
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Exam not done",
-                            value: "exam not done",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Normal exam",
-                            value: "normal exam",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Cough",
-                            value: "cough",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Rapid breathing",
-                            value: "rapid breathing",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Slow breathing",
-                            value: "slow breathing",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Wheezing",
-                            value: "wheezing",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Rales",
-                            value: "rales",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Respiratory distress",
-                            value: "respiratory distress",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                        name: "OtherRespiratoryExam",
-                    },
-                    data: [
-                        {
-                            name: "Other respiratory exam",
-                            value: "other respiratory exam",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: "",
-                classDash: "",
-
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    displayNone: true,
-                                    inputHeader: "Specify",
-                                    unit: "",
-                                    icon: icons.editPen,
-                                    value: "",
-                                    name: "Other",
-                                    required: true,
-                                    eventType: "input",
-                                    inputWidth: "100%",
-                                },
-                            ],
-                        },
-                        {
-                            colData: [
-                                {
-                                    displayNone: true,
-                                    inputHeader: "Oximetry",
-                                    unit: "%",
-                                    icon: icons.respiratory,
-                                    value: "",
-                                    name: "Oximetry",
-                                    required: true,
-                                    eventType: "input",
-                                },
-                                {
-                                    displayNone: true,
-                                    inputHeader: "Respiratory rate",
-                                    unit: "bpm",
-                                    icon: icons.respiratory,
-                                    value: "",
-                                    name: "RespiratoryRate",
-                                    required: true,
-                                    eventType: "input",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ],
-        bloodPressure: [
-            {
-                sectionHeader: "",
-
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Systolic Pressure*",
-                                    unit: "mmHg",
-                                    icon: icons.systolicPressure,
-                                    value: "",
-                                    name: "Systolic",
-                                    required: true,
-                                    eventType: "input",
-                                },
-                                {
-                                    inputHeader: "Diastolic pressure*",
-                                    unit: "mmHg",
-                                    icon: icons.diastolicPressure,
-                                    value: "",
-                                    name: "Diastolic",
-                                    required: true,
-                                    eventType: "input",
-                                },
-                            ],
-                        },
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Repeated systolic Pressure*",
-                                    unit: "mmHg",
-                                    icon: icons.systolicPressure,
-                                    value: "",
-                                    name: "RepeatedSystolic",
-                                    required: true,
-                                    eventType: "input",
-                                },
-                                {
-                                    inputHeader: "Repeated diastolic pressure*",
-                                    unit: "mmHg",
-                                    icon: icons.diastolicPressure,
-                                    value: "",
-                                    name: "RepeatedDiastolic",
-                                    required: true,
-                                    eventType: "input",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                        name: "UnAbleToRecordBloodPressure",
-                    },
-                    data: [
-                        {
-                            name: "Unable to record blood pressure",
-                            value: "unable to record blood pressure",
-                            checked: false,
-                            labelPlacement: "start",
-                        },
-                    ],
-                },
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: "",
-                radioBtnContent: {
-                    header: {
-                        title: "Reason blood pressure cannot be taken",
-                        selectedValue: "",
-                        name: "reasonsBloodPressureCannotBeTaken",
-                        displayNone: true,
-                    },
-                    data: [
-                        {
-                            value: "BPCuffNotAvailable",
-                            name: "BP cuff (sphygmomanometer) not available",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            value: "BPCuffBroken",
-                            name: "BP cuff (sphygmomanometer) is broken",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        // {
-                        //     value: 'otherBloodPressure',
-                        //     name: 'Other reason',
-                        //     labelPlacement: 'start',
-                        //     colSize: '7',
-                        //     justify: 'space-between'
-                        //
-                        // },
-                    ],
-                },
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: "",
-                classDash: "",
-
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    displayNone: true,
-                                    inputHeader: "Specify",
-                                    unit: "",
-                                    icon: icons.editPen,
-                                    value: "",
-                                    name: "OtherReasonForNotRecordingBloodPressure",
-                                    required: true,
-                                    eventType: "input",
-                                    inputWidth: "100%",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ],
-        temperature: [
-            {
-                sectionHeader: "",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "First temperature",
-                                    unit: "C",
-                                    icon: icons.temprature,
-                                    value: "",
-                                    name: "FirstTemp",
-                                    eventType: "input",
-                                },
-                                {
-                                    inputHeader: "Second Temperature",
-                                    unit: "C",
-                                    icon: icons.temprature,
-                                    value: "",
-                                    name: "SecondTemp",
-                                    eventType: "input",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ],
-        pulse: [
-            {
-                sectionHeader: "",
-                classDash: "dashed_bottom_border",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Pulse rate",
-                                    unit: "BMP",
-                                    icon: icons.respiratory,
-                                    value: "",
-                                    name: "FirstRespiratory",
-                                    eventType: "input",
-                                },
-                                {
-                                    inputHeader: "Second pulse rate",
-                                    unit: "BMP",
-                                    icon: icons.respiratory,
-                                    value: "",
-                                    name: "SecondRespiratory",
-                                    eventType: "input",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ],
-        preEclampsia: [
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "No severe pre-eclampsia",
-                            value: "NoSymptomsOfEclampsia",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Severe headache",
-                            value: "SevereHeadache",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Visual disturbance",
-                            value: "VisualDisturbance",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Vomiting",
-                            value: "Vomiting",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Vomiting",
-                            value: "Vomiting",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Epigastric pain",
-                            value: "EpigastricPain",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Dizziness",
-                            value: "Dizziness",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-        ],
-    }),
-    actions: {
-        setBloodPressure(data: any) {
-            this.bloodPressure = data;
+            ],
         },
-        setHeightWeight(data: any) {
-            this.heightWeight = data;
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "",
+                index: "",
+            },
+        ],
+        previousView: {
+            name: "vitals",
         },
     },
-    persist: true,
+
+    {
+        classDash: "dashed_bottom_border",
+        selectedData: [],
+        sideColSize: 3.8,
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: " ",
+            },
+            data: [
+                {
+                    colSize: "5.8",
+                    name: "Height And Weight Not Done",
+                    value: "Height And Weight Not Done",
+                    checked: false,
+                    displayNone: false,
+                },
+            ],
+            inputFields: [
+                {
+                    inputHeader: "Specify Reason",
+                    icon: icons.search,
+                    isMultiSelect: true,
+                    popOver: true,
+                    value: "",
+                    name: "Height Weight Reason",
+                    multiSelectData: [
+                        {
+                            id: 1,
+                            name: "Patient uncooperative",
+                        },
+                        {
+                            id: 2,
+                            name: "Machine not working",
+                        },
+                        {
+                            id: 3,
+                            name: "Machine not available",
+                        },
+                    ],
+                    eventType: "input",
+                    required: true,
+                    id: "",
+                    idName: "district_id",
+                    displayNone: true,
+                },
+            ],
+        },
+    },
+    {
+        sectionHeader: "Blood pressure",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Systolic Pressure*",
+                            unit: "mmHg",
+                            icon: icons.systolicPressure,
+                            value: "",
+                            name: "Systolic",
+                            required: true,
+                            eventType: "input",
+                            disabled: false,
+                        },
+                        {
+                            inputHeader: "Diastolic pressure*",
+                            unit: "mmHg",
+                            icon: icons.diastolicPressure,
+                            value: "",
+                            name: "Diastolic",
+                            required: true,
+                            eventType: "input",
+                            disabled: false,
+                        },
+                    ],
+                },
+            ],
+        },
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "",
+                index: "",
+            },
+        ],
+        previousView: {
+            name: "vitals",
+        },
+    },
+    {
+        classDash: "dashed_bottom_border",
+        selectedData: [],
+        sideColSize: 3.8,
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: " ",
+                name: "Primary diagnosis",
+            },
+            data: [
+                {
+                    colSize: "5.8",
+                    name: "Blood Pressure Not Done",
+                    value: "Blood Pressure Not Done",
+                    checked: false,
+                    displayNone: false,
+                },
+            ],
+            inputFields: [
+                {
+                    inputHeader: "Specify Reason",
+                    icon: icons.search,
+                    isMultiSelect: true,
+                    popOver: true,
+                    value: "",
+                    name: "Blood Pressure Reason",
+                    multiSelectData: [
+                        {
+                            id: 1,
+                            name: "Patient uncooperative",
+                        },
+                        {
+                            id: 2,
+                            name: "Machine not working",
+                        },
+                        {
+                            id: 3,
+                            name: "Machine not available",
+                        },
+                    ],
+                    eventType: "input",
+                    required: true,
+                    alertsErrorMassage: "",
+                    id: "",
+                    idName: "district_id",
+                    displayNone: true,
+                },
+            ],
+        },
+    },
+    {
+        sectionHeader: "Temperature and rates",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Temperature",
+                            unit: "C",
+                            icon: icons.temprature,
+                            value: "",
+                            name: "Temp",
+                            eventType: "input",
+                        },
+                        {
+                            inputHeader: "Pulse rate*",
+                            unit: "BMP",
+                            icon: icons.pulse,
+                            value: "",
+                            name: "Pulse",
+                            eventType: "input",
+                        },
+                    ],
+                },
+            ],
+        },
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "",
+                index: "",
+            },
+        ],
+    },
+    {
+        classDash: "dashed_bottom_border",
+        selectedData: [],
+        sideColSize: 3.8,
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: " ",
+                name: "Primary diagnosis",
+            },
+            data: [
+                {
+                    colSize: "5.8",
+                    name: "Pulse Rate Not Done",
+                    value: "Pulse Rate Not Done",
+                    checked: false,
+                    displayNone: false,
+                },
+            ],
+            inputFields: [
+                {
+                    inputHeader: "Specify Reason",
+                    icon: icons.search,
+                    isMultiSelect: true,
+                    popOver: true,
+                    value: "",
+                    name: "Pulse Rate Reason",
+                    multiSelectData: [
+                        {
+                            id: 1,
+                            name: "Patient uncooperative",
+                        },
+                        {
+                            id: 2,
+                            name: "Machine not working",
+                        },
+                        {
+                            id: 3,
+                            name: "Machine not available",
+                        },
+                    ],
+                    eventType: "input",
+                    required: true,
+                    alertsErrorMassage: "",
+                    id: "",
+                    idName: "district_id",
+                    displayNone: true,
+                },
+            ],
+        },
+    },
+    {
+        sectionHeader: "null",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Respiratory rate",
+                            unit: "BMP",
+                            icon: icons.respiratory,
+                            value: "",
+                            name: "Respiratory rate",
+                            eventType: "input",
+                        },
+                        {
+                            inputHeader: "Oxygen saturation",
+                            unit: "%",
+                            icon: icons.oxgenStaturation,
+                            value: "",
+                            name: "SP02",
+                            eventType: "input",
+                        },
+                    ],
+                },
+            ],
+        },
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "",
+                index: "",
+            },
+        ],
+    },
+] as any;
+export const useVitalsStore = defineStore("vitalsStore", {
+    state: () => ({
+        vitals: [...initialVitals] as any,
+    }),
+    actions: {
+        setVitals(data: any) {
+            this.vitals = data;
+        },
+        getInitialVitals() {
+            const data = _.cloneDeep(initialVitals);
+            return [...data];
+        },
+    },
+    // persist: true,
 });

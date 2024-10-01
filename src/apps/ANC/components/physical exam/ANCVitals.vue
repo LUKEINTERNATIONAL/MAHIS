@@ -72,6 +72,8 @@ export default defineComponent({
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         await this.validaterowData("onload");
+
+        this.handleVital()
     },
     watch: {
         vitals: {
@@ -92,7 +94,15 @@ export default defineComponent({
     setup() {
         return { checkmark, pulseOutline };
     },
-    methods: {async setTodayVitals() {
+    methods: {
+        async handleVital(){
+            this.setVitalValue
+        },
+        async setVitalValue(){
+           const vital = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Systolic", "value_numeric");
+            console.log("+++++ lets see",vital)
+        },
+        async setTodayVitals() {
             const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
             const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
             const mandatoryDone = [] as any;

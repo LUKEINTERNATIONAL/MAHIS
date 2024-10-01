@@ -185,7 +185,7 @@ export default defineComponent({
             this.savePersistentBehaviours()
             this.saveIPV()
             resetPatientData();
-            this.$router.push("ANChome");
+            this.$router.push("contact");
         },
 
 

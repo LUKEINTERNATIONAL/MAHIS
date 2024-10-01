@@ -8,6 +8,8 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -53,9 +55,12 @@ import { useSecondStageOfLabourStore } from "@/apps/LABOUR/stores/delivery detai
 import { SecondStageDeliveryService } from "@/apps/LABOUR/services/labour_delivery_details_service";
 import { useThirdStageOfLabourStore } from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
 import { resetPatientData } from "@/services/reset_data";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "deliveryDetails",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
