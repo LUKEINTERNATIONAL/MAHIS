@@ -323,8 +323,9 @@ watch(dateRange, (newDateRange) => {
     const [startDate, endDate] = newDateRange;
     const daysDifference = differenceInDays(endDate, startDate);
 
-    daysDifference > 7
-        && warnWeeklyRepeatType();
+    if(selectedRepeatType.value === "Weekly" && daysDifference > 7) {
+        warnWeeklyRepeatType();
+    }
 });
 
 onMounted(async (): Promise<void> => {
