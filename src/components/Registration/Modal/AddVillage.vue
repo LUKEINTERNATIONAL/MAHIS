@@ -59,7 +59,7 @@ import Validation from "@/validations/StandardValidations";
 import { isPlainObject, isEmpty } from "lodash";
 
 export default defineComponent({
-    name: "Home",
+    name: "AddVillage",
     components: {
         IonContent,
         IonHeader,

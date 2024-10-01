@@ -1,43 +1,43 @@
 <template>
-    <ion-page>
-        <Toolbar />
-        <ion-content :fullscreen="true">
-            <DemographicBar />
-            <Stepper
-                stepperTitle="Counselling"
-                :wizardData="wizardData"
-                @updateStatus="markWizard"
-                :StepperData="StepperData"
-                :backUrl="userRoleSettings.url"
-                :backBtn="userRoleSettings.btnName"
-            />
-        </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
+  <ion-page>
+      <Toolbar />
+      <ion-content :fullscreen="true">
+          <DemographicBar />
+          <Stepper
+              stepperTitle="Counselling"
+              :wizardData="wizardData"
+              @updateStatus="markWizard"
+              :StepperData="StepperData"
+              :backUrl="userRoleSettings.url"
+              :backBtn="userRoleSettings.btnName"
+          />
+      </ion-content>
+    <BasicFooter @finishBtn="saveData()" />
 
-    </ion-page>
+  </ion-page>
 </template>
 
 <script lang="ts">
 import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonAccordion,
-    IonAccordionGroup,
-    IonItem,
-    IonLabel,
-    IonModal,
-    modalController,
-    AccordionGroupCustomEvent,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonAccordion,
+  IonAccordionGroup,
+  IonItem,
+  IonLabel,
+  IonModal,
+  modalController,
+  AccordionGroupCustomEvent,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -72,174 +72,174 @@ import {usePreventativeCounsellingStore} from "@/apps/ANC/store/counselling/prev
 import {CounsellingService} from "@/apps/ANC/service/physiological_counselling_service";
 
 export default defineComponent({
-    name: "Home",
-  mixins: [SetUserRole, SetEncounter],
+  name: "Home",
+mixins: [SetUserRole, SetEncounter],
 
-  components: {
-      BasicFooter,
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        Toolbar,
-        ToolbarSearch,
-        DemographicBar,
-        IonButton,
-        IonCard,
-        IonCardContent,
-        IonCardHeader,
-        IonCardSubtitle,
-        IonCardTitle,
-        IonAccordion,
-        IonAccordionGroup,
-        IonItem,
-        IonLabel,
-        IonModal,
-        Stepper,
-    },
-    data() {
-        return {
-            wizardData: [
-                {
-                    title: "Behavior counselling",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 1,
-                    last_step: "",
-                },
-                {
-                    title: "Physiological counselling",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 2,
-                    last_step: "",
-                },
-                {
-                    title: "Diet counselling",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 3,
-                    last_step: "",
-                },
-              {
-                title: "Clinical counselling",
-                class: "common_step",
-                checked: "",
-                icon: false,
-                disabled: false,
-                number: 4,
-                last_step: "",
-              },
-              {
-                title: "Preventative counselling",
-                class: "common_step",
-                checked: "",
-                icon: false,
-                disabled: false,
-                number: 5,
-                last_step: "last_step",
-              },
-
-            ],
-            StepperData: [
-                {
-                    title: "Behavior counselling",
-                    component: "BehaviourCounselling",
-                    value: "1",
-                },
-                {
-                    title: "Physiological counselling",
-                    component: "PhysiologicalCounseling",
-                    value: "2",
-                },
-                {
-                    title: "Diet counselling",
-                    component: "DietCounselling",
-                    value: "3",
-                },
-              {
-                title: "Clinical counselling",
-                component: "ClinicalCounselling",
-                value: "4",
-              },
-              {
-                title: "Preventative counselling",
-                component: "DiagnosisCounselling",
-                value: "5",
-              },
-            ],
-            isOpen: false,
-            iconsContent: icons,
-        };
-    },
-    mounted() {
-        this.markWizard();
-    },
-  computed:{
-    ...mapState(useDemographicsStore, ["demographics"]),
-    ...mapState(useBehaviourCousellingStore,["behaviourInfo"]),
-    ...mapState(usePhysiologicalCounselingStore,["physiologicalCounselingInfo"]),
-    ...mapState(useDietCounsellingStore,["dietCounsellingInfo"]),
-    ...mapState(useClinicalCounsellingStore,["clinicalCounselling"]),
-    ...mapState(usePreventativeCounsellingStore,["preventativeCounselling"]),
+components: {
+    BasicFooter,
+      IonContent,
+      IonHeader,
+      IonMenuButton,
+      IonPage,
+      IonTitle,
+      IonToolbar,
+      Toolbar,
+      ToolbarSearch,
+      DemographicBar,
+      IonButton,
+      IonCard,
+      IonCardContent,
+      IonCardHeader,
+      IonCardSubtitle,
+      IonCardTitle,
+      IonAccordion,
+      IonAccordionGroup,
+      IonItem,
+      IonLabel,
+      IonModal,
+      Stepper,
   },
-    setup() {
-        return { chevronBackOutline, checkmark };
-    },
+  data() {
+      return {
+          wizardData: [
+              {
+                  title: "Behavior counselling",
+                  class: "common_step",
+                  checked: "",
+                  icon: false,
+                  disabled: false,
+                  number: 1,
+                  last_step: "",
+              },
+              {
+                  title: "Physiological counselling",
+                  class: "common_step",
+                  checked: "",
+                  icon: false,
+                  disabled: false,
+                  number: 2,
+                  last_step: "",
+              },
+              {
+                  title: "Diet counselling",
+                  class: "common_step",
+                  checked: "",
+                  icon: false,
+                  disabled: false,
+                  number: 3,
+                  last_step: "",
+              },
+            {
+              title: "Clinical counselling",
+              class: "common_step",
+              checked: "",
+              icon: false,
+              disabled: false,
+              number: 4,
+              last_step: "",
+            },
+            {
+              title: "Preventative counselling",
+              class: "common_step",
+              checked: "",
+              icon: false,
+              disabled: false,
+              number: 5,
+              last_step: "last_step",
+            },
 
-    methods: {
-        markWizard() {},
-        getFormatedData(data: any) {
-            return data.map((item: any) => {
-                return item?.data;
-            });
-        },
-        async saveData() {
-          this.saveCounselling()
-          resetPatientData();
-          this.$router.push("contact");
-        },
-      async saveCounselling() {
-        if (this.physiologicalCounselingInfo.length >= 0 || this.dietCounsellingInfo>=0 || this.behaviourInfo>=0 || this.clinicalCounselling>=0 || this.preventativeCounselling>=0 ) {
-          const userID: any = Service.getUserID();
-          const  counsellingInfo= new CounsellingService(this.demographics.patient_id, userID);
-          const encounter = await counsellingInfo.createEncounter();
-          if (!encounter) return toastWarning("Unable to create patient counselling encounter");
-          const patientStatus = await counsellingInfo.saveObservationList(await this.buildCounselling());
-          if (!patientStatus) return toastWarning("Unable to create counselling details!");
-          toastSuccess("Counselling details have been saved");
-        }
-        console.log(await this.buildCounselling())
+          ],
+          StepperData: [
+              {
+                  title: "Behavior counselling",
+                  component: "BehaviourCounselling",
+                  value: "1",
+              },
+              {
+                  title: "Physiological counselling",
+                  component: "PhysiologicalCounseling",
+                  value: "2",
+              },
+              {
+                  title: "Diet counselling",
+                  component: "DietCounselling",
+                  value: "3",
+              },
+            {
+              title: "Clinical counselling",
+              component: "ClinicalCounselling",
+              value: "4",
+            },
+            {
+              title: "Preventative counselling",
+              component: "DiagnosisCounselling",
+              value: "5",
+            },
+          ],
+          isOpen: false,
+          iconsContent: icons,
+      };
+  },
+  mounted() {
+      this.markWizard();
+  },
+computed:{
+  ...mapState(useDemographicsStore, ["demographics"]),
+  ...mapState(useBehaviourCousellingStore,["behaviourInfo"]),
+  ...mapState(usePhysiologicalCounselingStore,["physiologicalCounselingInfo"]),
+  ...mapState(useDietCounsellingStore,["dietCounsellingInfo"]),
+  ...mapState(useClinicalCounsellingStore,["clinicalCounselling"]),
+  ...mapState(usePreventativeCounsellingStore,["preventativeCounselling"]),
+},
+  setup() {
+      return { chevronBackOutline, checkmark };
+  },
 
+  methods: {
+      markWizard() {},
+      getFormatedData(data: any) {
+          return data.map((item: any) => {
+              return item?.data;
+          });
       },
-      async buildCounselling() {
-        return [
-          ...(await formatCheckBoxData(this.dietCounsellingInfo)),
-          ...(await formatRadioButtonData(this.dietCounsellingInfo)),
-          ...(await formatInputFiledData(this.dietCounsellingInfo)),
-          ...(await formatCheckBoxData(this.behaviourInfo)),
-          ...(await formatRadioButtonData(this.behaviourInfo)),
-          ...(await formatInputFiledData(this.behaviourInfo)),
-          ...(await formatCheckBoxData(this.physiologicalCounselingInfo)),
-          ...(await formatRadioButtonData(this.physiologicalCounselingInfo)),
-          ...(await formatInputFiledData(this.physiologicalCounselingInfo)),
-          ...(await formatCheckBoxData(this.clinicalCounselling)),
-          ...(await formatRadioButtonData(this.clinicalCounselling)),
-          ...(await formatInputFiledData(this.clinicalCounselling)),
-          ...(await formatCheckBoxData(this.preventativeCounselling)),
-          ...(await formatRadioButtonData(this.preventativeCounselling)),
-          ...(await formatInputFiledData(this.preventativeCounselling)),
-        ];
+      async saveData() {
+        this.saveCounselling()
+        resetPatientData();
+        this.$router.push("contact");
       },
+    async saveCounselling() {
+      if (this.physiologicalCounselingInfo.length >= 0 || this.dietCounsellingInfo>=0 || this.behaviourInfo>=0 || this.clinicalCounselling>=0 || this.preventativeCounselling>=0 ) {
+        const userID: any = Service.getUserID();
+        const  counsellingInfo= new CounsellingService(this.demographics.patient_id, userID);
+        const encounter = await counsellingInfo.createEncounter();
+        if (!encounter) return toastWarning("Unable to create patient counselling encounter");
+        const patientStatus = await counsellingInfo.saveObservationList(await this.buildCounselling());
+        if (!patientStatus) return toastWarning("Unable to create counselling details!");
+        toastSuccess("Counselling details have been saved");
+      }
+      console.log(await this.buildCounselling())
+
     },
+    async buildCounselling() {
+      return [
+        ...(await formatCheckBoxData(this.dietCounsellingInfo)),
+        ...(await formatRadioButtonData(this.dietCounsellingInfo)),
+        ...(await formatInputFiledData(this.dietCounsellingInfo)),
+        ...(await formatCheckBoxData(this.behaviourInfo)),
+        ...(await formatRadioButtonData(this.behaviourInfo)),
+        ...(await formatInputFiledData(this.behaviourInfo)),
+        ...(await formatCheckBoxData(this.physiologicalCounselingInfo)),
+        ...(await formatRadioButtonData(this.physiologicalCounselingInfo)),
+        ...(await formatInputFiledData(this.physiologicalCounselingInfo)),
+        ...(await formatCheckBoxData(this.clinicalCounselling)),
+        ...(await formatRadioButtonData(this.clinicalCounselling)),
+        ...(await formatInputFiledData(this.clinicalCounselling)),
+        ...(await formatCheckBoxData(this.preventativeCounselling)),
+        ...(await formatRadioButtonData(this.preventativeCounselling)),
+        ...(await formatInputFiledData(this.preventativeCounselling)),
+      ];
+    },
+  },
 });
 </script>
 

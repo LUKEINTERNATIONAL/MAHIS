@@ -97,6 +97,8 @@ import {
     modifyFieldValue,
     modifyCheckboxValue,
 } from "@/services/data_helpers";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import dates from "@/utils/Date"
 
 export default defineComponent({
     name: "Home",
@@ -336,6 +338,9 @@ export default defineComponent({
             await this.saveConsciousness();
             await this.savePhysicalExam();
             resetOPDPatientData();
+
+            await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"DISPENSATION");
+            
             if (this.userRole == "Lab") {
               this.$router.push("home");
             } else {

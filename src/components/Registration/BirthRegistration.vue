@@ -73,7 +73,7 @@ import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegis
 import BasicCard from "@/components/BasicCard.vue";
 
 export default defineComponent({
-    name: "Home",
+    name: "BirthRegistration",
     components: {
         IonContent,
         IonHeader,

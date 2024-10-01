@@ -13,6 +13,13 @@
         :isOpen="checkInModalOpen"
         :title="`Are you sure you want to check in the patient?`"
       />
+      <CheckInConfirmationModal
+        :closeModalFunc="closeCheckOutModal"
+        :onYes="handleCheckOutYes"
+        :onNo="handleCheckOutNo"
+        :isOpen="checkOutModalOpen"
+        :title="`Are you sure you want to check Out the patient?`"
+      />
       <AncEnrollmentModal
         :closeModalFunc="closeEnrollmentModal"
         :onYes="handleEnrollmentYes"
@@ -20,7 +27,6 @@
         :isOpen="isEnrollmentModalOpen"
         :title="enrollModalTitle"
       />
-
 
       <PatientProfile v-if="activeProgramID == 33" />
       <div
@@ -46,7 +52,16 @@
                   /> -->
                   <DynamicButton
                     name="Checkin Patient"
+                    v-if="!checkedIn"
                     @click="toggleCheckInModal()"
+                    fill="clear"
+                    iconSlot="start"
+                    :icon="closeCircleOutline"
+                  />
+                  <DynamicButton
+                    name="Checkout Patient"
+                    v-if="checkedIn"
+                    @click="toggleCheckOutModal()"
                     fill="clear"
                     iconSlot="start"
                     :icon="closeCircleOutline"
@@ -82,7 +97,7 @@
                   <ion-col class="demoContent">{{ demographics?.mrn }}</ion-col>
                 </ion-row>
                 <ion-row>
-                  <ion-col size="4">Gender:</ion-col>
+                  <ion-col size="4">Gendar:</ion-col>
                   <ion-col class="demoContent">{{
                     covertGender(demographics?.gender)
                   }}</ion-col>
@@ -101,8 +116,8 @@
             </ion-card>
             <div style="margin-left: 10px">
               <DynamicButton
-              :style="'margin-bottom: 5px; width: 96%; height: 45px'"
-               @click="handleProgramClick(btn)"
+                :style="'margin-bottom: 5px; width: 96%; height: 45px'"
+                @click="handleProgramClick(btn)"
                 v-for="(btn, index) in programBtn"
                 :key="index"
                 :name="checkProgram(btn)"
@@ -464,7 +479,7 @@ import {
   add,
   person,
   checkboxOutline,
-  closeCircleOutline
+  closeCircleOutline,
 } from "ionicons/icons";
 
 import { modalController } from "@ionic/vue";
@@ -496,12 +511,12 @@ import { Service } from "@/services/service";
 import { ObservationService } from "@/services/observation_service";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import {
-    modifyCheckboxInputField,
-    getCheckboxSelectedValue,
-    getRadioSelectedValue,
-    getFieldValue,
-    modifyRadioValue,
-    modifyFieldValue,
+  modifyCheckboxInputField,
+  getCheckboxSelectedValue,
+  getRadioSelectedValue,
+  getFieldValue,
+  modifyRadioValue,
+  modifyFieldValue,
 } from "@/services/data_helpers";
 import { toastWarning } from "@/utils/Alerts";
 import { ref } from "vue";
@@ -520,6 +535,8 @@ import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import { ProgramService } from "@/services/program_service";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import dates from "@/utils/Date";
 
 export default defineComponent({
   mixins: [SetPrograms],
@@ -570,7 +587,7 @@ export default defineComponent({
     Programs,
     CheckInConfirmationModal,
     OPDPopover,
-    AncEnrollmentModal
+    AncEnrollmentModal,
   },
   data() {
     return {
@@ -597,11 +614,13 @@ export default defineComponent({
         High: ["#FECDCA", "#B42318", "#FDA19B"],
       } as any,
       checkInModalOpen: false,
+      checkOutModalOpen: false,
       popoverOpen: false,
       isEnrollmentModalOpen: false,
       enrolledPrograms: [],
-      programToEnroll:0,
-      enrollModalTitle:"",
+      programToEnroll: 0,
+      enrollModalTitle: "",
+      checkedIn: false as Boolean,
     };
   },
   computed: {
@@ -617,11 +636,15 @@ export default defineComponent({
     await this.refreshPrograms();
     this.setAlerts();
     await this.updateData();
+    await this.checkPatientIFCheckedIn();
   },
   watch: {
     demographics: {
       async handler() {
         await this.updateData();
+
+        console.log("+++++++++++++>>>>>>>>>>>>>>");
+        await this.checkPatientIFCheckedIn();
       },
       deep: true,
     },
@@ -642,7 +665,7 @@ export default defineComponent({
       add,
       person,
       checkboxOutline,
-      closeCircleOutline
+      closeCircleOutline,
     };
   },
 
@@ -703,7 +726,9 @@ export default defineComponent({
       ];
     },
     openPIM() {
-      createModal(personalInformationModal, { class: "otherVitalsModal largeModal" });
+      createModal(personalInformationModal, {
+        class: "otherVitalsModal largeModal",
+      });
     },
     convertToDisplayDate(date: any) {
       return HisDate.toStandardHisDisplayFormat(date);
@@ -727,18 +752,51 @@ export default defineComponent({
     dismiss() {
       modalController.dismiss();
     },
-    closeCheckInModal(){
-   this.checkInModalOpen = false;
+    closeCheckInModal() {
+      this.checkInModalOpen = false;
+    },
+    closeCheckOutModal() {
+      this.checkOutModalOpen = false;
     },
     toggleCheckInModal() {
       this.checkInModalOpen = !this.checkInModalOpen;
     },
-    handleCheckInYes() {
-   
-      this.toggleCheckInModal();
+    toggleCheckOutModal() {
+      this.checkOutModalOpen = !this.checkOutModalOpen;
+    },
+    async handleCheckInYes() {
+      try {
+        await PatientOpdList.checkInPatient(
+          this.demographics.patient_id,
+          dates.todayDateFormatted()
+        );
+        await PatientOpdList.addPatientToStage(
+          this.demographics.patient_id,
+          dates.todayDateFormatted(),
+          "VITALS"
+        );
+        this.toggleCheckInModal();
+        this.checkedIn = true;
+      } catch (e) {}
+    },
+    async handleCheckOutYes() {
+      try {
+        const visit = await PatientOpdList.getCheckInStatus(
+          this.demographics.patient_id
+        );
+        await PatientOpdList.checkOutPatient(
+          visit[0].id,
+          dates.todayDateFormatted()
+        );
+        this.checkedIn = false;
+        this.toggleCheckOutModal();
+      } catch (e) {}
     },
     handleCheckInNo() {
       this.toggleCheckInModal();
+    },
+    handleCheckOutNo() {
+      this.toggleCheckOutModal();
     },
 
     togglePopover() {
@@ -746,15 +804,16 @@ export default defineComponent({
     },
 
     async handleProgramClick(btn: any) {
-
       // TODO: this function is supposed to run in mounted method
       await this.refreshPrograms();
-      const lower = (title:string)=> title.toLowerCase().replace(/\s+/g, '');
+      const lower = (title: string) => title.toLowerCase().replace(/\s+/g, "");
 
-      if (lower(btn.actionName) == lower("+ Enroll in ANC Program" )||
-         lower(btn.actionName) == lower("+ Enroll in PNC Program") ||
-         lower(btn.actionName) == lower("+ Enroll in Labour and delivery program")
-         ) {
+      if (
+        lower(btn.actionName) == lower("+ Enroll in ANC Program") ||
+        lower(btn.actionName) == lower("+ Enroll in PNC Program") ||
+        lower(btn.actionName) ==
+          lower("+ Enroll in Labour and delivery program")
+      ) {
         const found: any = this.enrolledPrograms.find(
           (p: any) => p.id == btn.program_id
         );
@@ -765,7 +824,7 @@ export default defineComponent({
           this.programToEnroll = btn.program_id;
           return;
         }
-    
+
         return this.$router.push(btn.url);
       }
       this.setProgram(btn);
@@ -777,7 +836,11 @@ export default defineComponent({
       this.isEnrollmentModalOpen = !this.isEnrollmentModalOpen;
     },
     async handleEnrollmentYes() {
-      await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, (new Date()).toString());
+      await ProgramService.enrollProgram(
+        this.demographics.patient_id,
+        this.programToEnroll,
+        new Date().toString()
+      );
       await this.refreshPrograms();
       this.toggleEnrollmentModal();
       return this.$router.push("ANCHome");
@@ -786,9 +849,8 @@ export default defineComponent({
       const programs = await ProgramService.getPatientPrograms(
         this.demographics.patient_id
       );
-      
-      console.log({programs});
 
+      console.log({ programs });
 
       this.enrolledPrograms = programs.map((p: any) => ({
         name: p.program.name,
@@ -841,6 +903,17 @@ export default defineComponent({
     },
     formatBirthdate() {
       return HisDate.getBirthdateAge(this.demographics?.birthdate);
+    },
+
+    async checkPatientIFCheckedIn() {
+      try {
+        const result = await PatientOpdList.getCheckInStatus(
+          this.demographics.patient_id
+        );
+        this.checkedIn = true;
+      } catch (e) {
+        console.log({ e });
+      }
     },
   },
 });

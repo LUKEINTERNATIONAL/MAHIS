@@ -72,7 +72,7 @@ import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 // DataTable.use(DataTablesCore);
 
 export default defineComponent({
-    name: "Home",
+    name: "offline-records",
     mixins: [SetUser, SetDemographics],
     components: {
         IonContent,

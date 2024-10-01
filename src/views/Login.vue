@@ -105,7 +105,7 @@ import { useUserStore } from "@/stores/userStore";
 import db from "@/db";
 
 export default defineComponent({
-    name: "Home",
+    name: "Login",
     components: {
         IonContent,
         IonHeader,

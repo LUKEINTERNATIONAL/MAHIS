@@ -1,5 +1,105 @@
 <template>
   <ion-grid class="ion-grid">
+<<<<<<< HEAD
+    <ion-row>
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/quickCheck')">
+          <ion-card-header>
+            <ion-card-title>Quick Check</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/checkup.png" alt="Profile Icon" />
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/profile')">
+          <ion-card-header>
+            <ion-card-title>Profile</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/checkup.png" alt="Profile Icon" />
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/symptomsFollowUp')">
+          <ion-card-header>
+            <ion-card-title>Symptoms and follow up</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/symptom.png" alt="Profile Icon" />
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/physicalExamination')">
+          <ion-card-header>
+            <ion-card-title>Physical Examination</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/heart.png" alt="Profile Icon" />
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/ANCtreatment')">
+          <ion-card-header>
+            <ion-card-title>Treatment and prevention</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/patient.png" alt="Profile Icon" />
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/labTests')">
+          <ion-card-header>
+            <ion-card-title>Lab tests and imaging</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/candidate.png" alt="Profile Icon" />
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/counselling')">
+          <ion-card-header>
+            <ion-card-title>Counselling</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/conversation.png" alt="Profile Icon" />
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/ANCreferral')">
+          <ion-card-header>
+            <ion-card-title>Referral</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/hospital.png" alt="Profile Icon" />
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col>
+        <ion-card color="secondary" @click="navigateTo('/ancEnd')">
+          <ion-card-header>
+            <ion-card-title>Pregnancy outcome</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <img src="../../public/icons/bed.png" alt="Profile Icon" />
+=======
     <ion-row class="ion-justify-content-center">
       <ion-col v-for="(card, index) in cardsData" :key="index" size-xs="6" size-sm="6" size-md="6" size-lg="6" size-xl="6">
         <ion-card color="secondary" class="card" @click="navigateTo(card.path)">
@@ -8,6 +108,7 @@
           </ion-card-header>
           <ion-card-content>
             <ion-icon :icon="card.icon" :style="{ color: card.color, fontSize: '40px' }"></ion-icon>
+>>>>>>> dev
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -17,9 +118,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonIcon } from '@ionic/vue';
+import { IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/vue';
 import { useRouter } from 'vue-router';
+<<<<<<< HEAD
+=======
 import { people, bed } from "ionicons/icons";
+>>>>>>> dev
 
 export default defineComponent({
   name: 'Home',
@@ -31,7 +135,6 @@ export default defineComponent({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    IonIcon,
   },
   setup() {
     const router = useRouter();
@@ -39,14 +142,16 @@ export default defineComponent({
     const navigateTo = (path: string) => {
       router.push({ path });
     };
+<<<<<<< HEAD
+=======
     const cardsData = [
       { title: "Referral", path: "/ANCreferral", icon: people, color:"grey" },
       { title: "Pregnancy Outcome", path: "/ancEnd", icon: bed, color: "grey" },
     ];
+>>>>>>> dev
 
     return {
       navigateTo,
-      cardsData,
     };
   },
 });
@@ -64,6 +169,38 @@ export default defineComponent({
   transform: scale(1.05);
 }
 
+<<<<<<< HEAD
+.card {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px;
+}
+
+.card:hover {
+  animation: bounce 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+img {
+  width: 70%;
+  max-width: 70px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .section {
+    flex-direction: column;
+    align-items: center;
+  }
+  .ion-grid {
+    top:70%;
+=======
 ion-icon {
   width: 50px;
 }
@@ -79,11 +216,17 @@ ion-card-title {
 
   ion-card-title {
     font-size: 14px;
+>>>>>>> dev
   }
+
 
   .card {
     margin: 5px;
     width: 200px;
   }
 }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+>>>>>>> dev
