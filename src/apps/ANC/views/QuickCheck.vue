@@ -284,7 +284,7 @@ export default defineComponent({
         const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
 
         if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
-          if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {
+          if (this.ConfirmPregnancy && this.ReasonForVisit) {
             const userID: any = Service.getUserID();
             const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
             const encounter = await quickCheck.createEncounter();
