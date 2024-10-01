@@ -44,7 +44,7 @@
                 </div>
                 <div
                   class="OPDDueCard"
-                  @click="openPatientsListModal('Patients waiting for vitals', patientsWaitingForVitals)"
+                  @click="openPatientsListModal('Patients waiting for vitals', 'VITALS')"
                   :style="dueCardStyle('success')"
                 >
                   <ion-icon :icon="thermometer" class="dueCardIcon"></ion-icon>
@@ -54,7 +54,7 @@
                 <div
                   class="OPDDueCard"
                   @click="
-                    openPatientsListModal('Patients waiting for consultation', patientsWaitingForConsultation)
+                    openPatientsListModal('Patients waiting for consultation', 'CONSULTATION')
                   "
                   :style="dueCardStyle('success')"
                 >
@@ -65,7 +65,7 @@
                 <div
                   class="OPDDueCard"
                   @click="
-                    openPatientsListModal('Patients waiting for dispensation',patientsWaitingForDispensation)
+                    openPatientsListModal('Patients waiting for dispensation','DISPENSATION')
                   "
                   :style="dueCardStyle('success')"
                 >
@@ -309,6 +309,7 @@ import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import { PatientOpdList } from "@/services/patient_opd_list";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 
 export default defineComponent({
   name: "Home",
@@ -346,9 +347,6 @@ export default defineComponent({
       programBtn: {} as any,
       base_url: "backgroundImg.png",
       isLoading: false,
-      patientsWaitingForVitals: [] as any,
-      patientsWaitingForConsultation: [] as any,
-      patientsWaitingForDispensation: [] as any,
       totalStats: [
         {
           name: "Total vaccinated this year",
@@ -387,6 +385,7 @@ export default defineComponent({
   computed: {
     ...mapState(useGeneralStore, ["OPDActivities"]),
     ...mapState(useDemographicsStore, ["demographics"]),
+    ...mapState(usePatientList,["patientsWaitingForVitals","patientsWaitingForConsultation","patientsWaitingForDispensation"]),
     backgroundStyle() {
       return {
         background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(
@@ -402,7 +401,9 @@ export default defineComponent({
     $route: {
       async handler(data) {
         if (data.name == "Home") resetDemographics();
-        await this.setAppointments();
+        await this.setAppointments();  
+        await usePatientList().refresh()
+        // await this.getListValues();
         // cannot subscribe more than once
         // const wsService = new WebSocketService();
         // wsService.setMessageHandler(this.onMessage);
@@ -412,7 +413,8 @@ export default defineComponent({
   },
   async mounted() {
     this.isLoading = true;
-    await this.getListValues();
+    // await this.getListValues();
+    await usePatientList().refresh()
     await setOfflineLocation();
     await setOfflineRelationship();
     resetDemographics();
@@ -439,19 +441,19 @@ export default defineComponent({
       };
     },
 
-    async getListValues() {
-      try {
-        this.patientsWaitingForVitals = await PatientOpdList.getPatientList("VITALS");
+    // async getListValues() {
+    //   try {
+    //     this.patientsWaitingForVitals = await PatientOpdList.getPatientList("VITALS");
         
-        this.patientsWaitingForConsultation = await PatientOpdList.getPatientList(
-          "CONSULTATION"
-        );
-        this.patientsWaitingForDispensation = await PatientOpdList.getPatientList(
-          "DISPENSATION"
-        );
+    //     this.patientsWaitingForConsultation = await PatientOpdList.getPatientList(
+    //       "CONSULTATION"
+    //     );
+    //     this.patientsWaitingForDispensation = await PatientOpdList.getPatientList(
+    //       "DISPENSATION"
+    //     );
 
-      } catch (e) {}
-    },
+    //   } catch (e) {}
+    // },
 
     async setAppointments() {
       this.appointments = await AppointmentService.getDailiyAppointments(
@@ -511,8 +513,8 @@ export default defineComponent({
       createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
     },
 
-    openPatientsListModal(name: any, patients:Array<any>) {
-      const dataToPass = { title: name, patients};
+    openPatientsListModal(name: any, list:'VITALS'|'CONSULTATION'|'DISPENSATION') {
+      const dataToPass = { title: name, list};
       createModal(
         OPDWaitingListModal,
         { class: "fullScreenModal" },
