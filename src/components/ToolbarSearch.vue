@@ -698,11 +698,17 @@ export default defineComponent({
         toggleCheckInModal() {
             this.checkInModalOpen = !this.checkInModalOpen;
         },
-        openCheckInModal(item: any) {
-            console.log(this.programs?.program?.applicationName);
+        async openCheckInModal(item: any) {
+
             if (this.programs?.program?.applicationName == "OPD Program") {
-                this.checkInModalOpen = true;
-                this.selectedPatient = item;
+                try{
+                    const checkInStatus= await PatientOpdList.getCheckInStatus(item.patient_id);
+                    this.openNewPage("patientProfile", item);
+                } catch(e){
+
+                    this.checkInModalOpen = true;
+                    this.selectedPatient = item;
+                }
                 return;
             }
             this.openNewPage("patientProfile", item);
