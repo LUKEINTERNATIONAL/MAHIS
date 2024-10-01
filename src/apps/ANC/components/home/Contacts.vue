@@ -137,11 +137,8 @@ export default defineComponent({
     ...mapState(useObstreticHistoryStore, ["prevPregnancies"]),
     ...mapState(useDemographicsStore, ["demographics","patient"]),
     filteredCardsData() {
-      if (this.gravida) {
-        return this.cardsData.filter(card => card.title !== "Profile");
-      }
-      return this.cardsData;
-    }
+      return this.gravida ? this.cardsData.filter(card => card.title !== "Profile") : this.cardsData;
+    },
 
   },
   mounted(){
