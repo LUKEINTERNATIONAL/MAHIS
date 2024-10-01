@@ -229,10 +229,10 @@ export default defineComponent({
        },
       // Calculating parity.
       calculateParity(event:any){
-        if (event.name === 'Gravida' || event.name === 'Abortions') {
+        if (event.name === 'Gravida' || event.name === 'Abortions/Miscarriages') {
           let errorMessage: any = "";
           const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
-          const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
+          const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions/Miscarriages', 'value'));
           if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
             const parityValue = (gravidaValue)-abortionsValue-1
             modifyFieldValue(this.prevPregnancies, 'Parity', 'value', parityValue);
@@ -249,8 +249,8 @@ export default defineComponent({
 
     if (gravida === null || gravida === "") {
         
-        modifyFieldValue(this.prevPregnancies, 'Abortions', 'value', '');
-        modifyFieldValue(this.prevPregnancies, 'Abortions', 'disabled', false);
+        modifyFieldValue(this.prevPregnancies, 'Abortions/Miscarriages', 'value', '');
+        modifyFieldValue(this.prevPregnancies, 'Abortions/Miscarriages', 'disabled', false);
         modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'value', '');
         modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'disabled', false);
         modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', '');
@@ -269,8 +269,8 @@ export default defineComponent({
         modifyRadioValue(this.prevPregnancies, 'Last live birth preterm was full term', 'displayNone', true);
         modifyCheckboxHeader(this.prevPregnancies, 'past pregnancies complications', 'displayNone', true);
         
-        modifyFieldValue(this.prevPregnancies, 'Abortions', 'value', '');
-        modifyFieldValue(this.prevPregnancies, 'Abortions', 'disabled', true);
+        modifyFieldValue(this.prevPregnancies, 'Abortions/Miscarriages', 'value', '');
+        modifyFieldValue(this.prevPregnancies, 'Abortions/Miscarriages', 'disabled', true);
         modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'value', '');
         modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'disabled', true);
         modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', '');
@@ -295,7 +295,7 @@ export default defineComponent({
         modifyRadioValue(this.prevPregnancies, 'Last live birth had congenital abnormalities', 'displayNone', false);
         modifyCheckboxHeader(this.prevPregnancies, 'past pregnancies complications', 'displayNone', false);
         
-        modifyFieldValue(this.prevPregnancies, 'Abortions', 'disabled', false);
+        modifyFieldValue(this.prevPregnancies, 'Abortions/Miscarriages', 'disabled', false);
         modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'disabled', false);
         modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'disabled', false);
         modifyFieldValue(this.prevPregnancies, 'Parity', 'disabled', false);
