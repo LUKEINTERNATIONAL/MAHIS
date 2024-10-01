@@ -12,9 +12,9 @@
               :icon="chevronBackOutline()"
               @click="openBackController()"
           />
-          <div class="AppointmentDate">
+          <div class="AppointmentDate" >
             <span style="font-size: 14px">Next Appt. Date: </span>
-            <b>12/10/2024</b>
+            <b style="color: #0b5ed7">{{dateOfAppointment}}</b>
           </div>
         </div>
         <AppointmentsHistory/>
@@ -47,6 +47,10 @@ import {NextAppointmentService} from "@/apps/ANC/service/next_appointment";
 import {useFetalAssessment} from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 import {resetPatientData} from "@/services/reset_data";
 import AppointmentsHistory from "@/apps/ANC/components/others/AppointmentsHistory.vue";
+import {EncounterService} from "@/services/encounter_service";
+import {ConceptService} from "@/services/concept_service";
+import {PatientService} from "@/services/patient_service";
+import {ObservationService} from "@/services/observation_service";
 
 export default defineComponent({
   name: "TB screening",
@@ -79,14 +83,21 @@ export default defineComponent({
   data(){
     return{
       isModalOpen:false,
+      visitDate: [] as any,
+      appointmentDate:"" as any,
+      visits: [] as any,
+      dateOfAppointment: '',
     }
   },
   setup() {
     return { checkmark, pulseOutline };
   },
+  mounted(){
+    this.handleAppointment()
+  },
   computed: {
     ...mapState(useScheduleNextAppointmentStore, ["nextAppointmentDate"]),
-    ...mapState(useDemographicsStore, ["demographics"]),
+    ...mapState(useDemographicsStore, ["demographics", "patient"]),
 
   },
   methods: {
@@ -102,52 +113,46 @@ export default defineComponent({
     openBackController() {
       this.$router.push('/ANCHome');
     },
-   async saveData(){
-      const store = useScheduleNextAppointmentStore();
-      const isFormValid = await store.validate();
-      if (!isFormValid) {
-        toastDanger('Next appointment date has errors');
-        return;
-      }
-       await this.saveDate();
-       this.closeAppointmentModal();
-        await this.$router.push("ANCHome");
-       await resetPatientData();
+    async handleAppointment(){
+      const dateOfAppointment = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Appointment date", "value_text");
+      this.dateOfAppointment = dateOfAppointment;
 
-   },
-    async saveDate(){
-      if (this.nextAppointmentDate.length >= 0) {
-        const userID: any = Service.getUserID();
-        const  AppointmentDate= new NextAppointmentService(this.demographics.patient_id, userID);
-        const encounter = await AppointmentDate.createEncounter();
-        if (!encounter) return toastWarning("Unable to create appointment date encounter");
-        const patientStatus = await AppointmentDate.saveObservationList(await this.buildNextAppointment());
-        if (!patientStatus) return toastWarning("Unable to create date!");
-        toastSuccess("Client has been scheduled for next contact");
-      }
-      console.log(await this.buildNextAppointment())
     },
-    async buildNextAppointment() {
-      return [
-        ...(await formatInputFiledData(this.nextAppointmentDate)),
-      ]
+    async updateData() {
+      const patient = new PatientService();
+      this.visits = await PatientService.getPatientVisits(patient.getID(), false);
+      await this.loadSavedEncounters(this.visits[0]);
     },
-    cancelModal() {
-      this.closeAppointmentModal();
+    async loadSavedEncounters(patientVisitDate: any) {
+      this.visitDate = patientVisitDate;
+      const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
+      await this.setNextAppointmentEncounter(encounters)
+    },
+    findEncounter(data: any, encounterType: any) {
+      return data.find((obj: any) => obj.type && obj.type.name === encounterType);
+    },
+    async setNextAppointmentEncounter(data:any){
+      const observations=this.findEncounter(data, "APPOINTMENT")?.observations;
+      console.log('Observations:', observations); // Log to check if you have data
+      this.appointmentDate['Appointment date'] = this.filterObs(observations, "Appointment date")?.[0]?.value_text ?? "";
+      console.log('Appointment Date:', this.appointmentDate['Appointment date']);
+
     },
 
-    async nextAppointment() {
-     this.toggleAppointmentModal()
+    filterObs(observations: any, conceptName: any) {
+      return observations?.filter((obs: any) => obs.concept.concept_names.some((name: any) => name.name === conceptName));
     },
-    toggleAppointmentModal(){
-      this.isModalOpen=!this.isModalOpen
+    async getConceptValues(filteredObservations: any, type: any) {
+      if (filteredObservations) {
+        return await Promise.all(
+            filteredObservations?.map(async (item: any) => {
+              return await ConceptService.getConceptName(item.value_coded);
+            })
+        );
+      }
     },
-    closeAppointmentModal() {
-      this.isModalOpen = false;
-    },
-    navigateToContact() {
-      this.$router.push('/contact');
-    }
+
+
   }
 })
 </script>
@@ -203,7 +208,7 @@ ion-card {
     position: absolute;
     left: 0;
     right: 0;
-    top: 43%;
+    top: 60%;
     transform: translateY(-50%);
   }
   ion-card {
@@ -222,7 +227,7 @@ ion-card {
     font-weight: 400;
     font-size: 14px;
     z-index: 1000;
-    padding: 0 5%; /* Avoids too much padding */
+    padding: 0 5%;
     margin-bottom: 10px;
   }
   .AppointmentDate {
