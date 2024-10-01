@@ -101,6 +101,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   required: true,
                   valueType: "text",
                   eventType: "input",
+                
                   alertsErrorMassage: "",
                 },
                 {
