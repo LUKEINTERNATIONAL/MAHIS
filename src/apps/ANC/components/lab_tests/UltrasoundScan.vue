@@ -117,12 +117,12 @@ export default defineComponent({
         },
         handleUltraNotDone(){
           if(getRadioSelectedValue(this.reason, 'Reason not done')=='Other reason'){
-            modifyFieldValue(this.reason,'specify','diplayNone',false)
+            modifyFieldValue(this.reason,'specify','displayNone',false)
           }else{
-            modifyFieldValue(this.reason,'specify','diplayNone',true)
+            modifyFieldValue(this.reason,'specify','displayNone',true)
           }
-          console.log("======>lets see",getRadioSelectedValue(this.reason, 'Reason not done')=='Other reason')
-        }
+        },
+       
       
    
     }

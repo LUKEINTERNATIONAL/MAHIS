@@ -276,8 +276,8 @@ export default defineComponent({
 
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
-        saveData() {
-            this.saveQuickCheck();
+        async saveData() {
+             this.saveQuickCheck();
             resetPatientData();
         },
       async saveQuickCheck() {

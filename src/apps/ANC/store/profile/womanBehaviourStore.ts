@@ -158,29 +158,29 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
           ],
         },
       },
-      {
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-          header: {
-            class: "bold",
-            title: "Pica*",
-            selectedValue: "",
-            name: "Pica",
-          },
-          data: [
-            {
-              value: "Yes",
-              name: "Yes",
-              colSize: "2.5",
-            },
-            {
-              value: "No",
-              name: "No",
-              colSize: "2.5",
-            },
-          ],
-        },
-      },
+      // {
+      //   classDash: "dashed_bottom_border",
+      //   radioBtnContent: {
+      //     header: {
+      //       class: "bold",
+      //       title: "Pica*",
+      //       selectedValue: "",
+      //       name: "Pica",
+      //     },
+      //     data: [
+      //       {
+      //         value: "Yes",
+      //         name: "Yes",
+      //         colSize: "2.5",
+      //       },
+      //       {
+      //         value: "No",
+      //         name: "No",
+      //         colSize: "2.5",
+      //       },
+      //     ],
+      //   },
+      // },
       {
         classDash: "dashed_bottom_border",
         radioBtnContent: {
@@ -212,5 +212,5 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
       this.dailyCaffeineIntake = data;
     },
   },
-  persist: true,
+ // persist: true,
 });
