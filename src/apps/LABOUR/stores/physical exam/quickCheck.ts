@@ -11,6 +11,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 radioBtnContent: {
                     header: {
                         title: "What is the reason for coming to the facility?",
+                        name:"reason",
                         class: "bold",
                         selectedValue: "",
                     },
@@ -39,6 +40,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     header: {
                         title: "Danger signs",
                         class: "bold",
+                        name:"Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -67,6 +69,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
+                        name:"Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -94,6 +97,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
+                        name:"Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -121,6 +125,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
+                        name:"Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -148,6 +153,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
+                        name:"Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -176,6 +182,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
+                        name:"Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -194,7 +201,6 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 isFinishBtn: false,
                 sectionHeader: "",
                 classDash: "dashed_bottom_border _padding",
-
                 data: {
                     rowData: [
                         {
@@ -220,6 +226,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 radioBtnContent: {
                     header: {
                         title: "Labour onset type",
+                        name: "Labour onset type",
                         selectedValue: "",
                     },
                     data: [
@@ -273,13 +280,13 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     ],
                 },
             },
-
             {
                 selectdData: [],
                 isFinishBtn: false,
                 radioBtnContent: {
                     header: {
                         title: "Membranes ruptured?",
+                        name: "Membranes ruptured",
                         selectedValue: "",
                     },
                     data: [
@@ -300,7 +307,6 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     ],
                 },
             },
-
             {
                 isFinishBtn: false,
                 sectionHeader: "Date and Time membranes ruptured",
@@ -312,7 +318,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                                 {
                                     inputHeader: "Time membranes ruptured",
                                     value: "",
-                                    name: "Time",
+                                    name: "Time Membrane",
                                     icon: icons.time,
                                     required: true,
                                     eventType: "input",
@@ -322,7 +328,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                                 {
                                     inputHeader: "Date membranes ruptured",
                                     value: "",
-                                    name: "Date",
+                                    name: "Date Membrane",
                                     icon: icons.calendar,
                                     required: true,
                                     isDatePopover: true,
@@ -370,6 +376,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 radioBtnContent: {
                     header: {
                         title: "Homemade medicines taken?",
+                        name: "Homemade medicines taken",
                         selectedValue: "",
                     },
                     data: [
@@ -390,7 +397,6 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     ],
                 },
             },
-
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -398,6 +404,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 radioBtnContent: {
                     header: {
                         title: "Sleep",
+                        name: "Sleep",
                         selectedValue: "",
                     },
                     data: [
@@ -425,5 +432,5 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
             this.pastProblems = data;
         },
     },
-    persist: true,
+    // persist: true,
 });

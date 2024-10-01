@@ -1,13 +1,13 @@
 <template>
   <ion-grid class="ion-grid">
-    <ion-row>
-      <ion-col v-for="(card, index) in cardsData" :key="index" size-md="4" size-lg="4" size-xl="3">
-        <ion-card color="secondary" @click="navigateTo(card.path)">
+    <ion-row class="ion-justify-content-center">
+      <ion-col v-for="(card, index) in cardsData" :key="index" size-xs="6" size-sm="6" size-md="6" size-lg="6" size-xl="6">
+        <ion-card color="secondary" class="card" @click="navigateTo(card.path)">
           <ion-card-header>
-            <ion-card-title class="ion-title">{{ card.title }}</ion-card-title>
+            <ion-card-title class="ion-title" style="color:#0f5132">{{ card.title }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <ion-icon :icon="card.icon" :style="{ color: card.color, fontSize: '30px' }"></ion-icon>
+            <ion-icon :icon="card.icon" :style="{ color: card.color, fontSize: '40px' }"></ion-icon>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -19,7 +19,7 @@
 import { defineComponent } from 'vue';
 import { IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonIcon } from '@ionic/vue';
 import { useRouter } from 'vue-router';
-import { checkmarkCircle, personCircle, alertCircle, heart, flask, medkit, chatbubbles, people, bed } from "ionicons/icons"; // Importing the icons
+import { people, bed } from "ionicons/icons";
 
 export default defineComponent({
   name: 'Home',
@@ -40,15 +40,8 @@ export default defineComponent({
       router.push({ path });
     };
     const cardsData = [
-      { title: "Quick Check", path: "/quickCheck", icon: checkmarkCircle, color: "green" },
-      { title: "Profile", path: "/profile", icon: personCircle, color: "blue" },
-      { title: "Symptoms and Follow Up", path: "/symptomsFollowUp", icon: alertCircle, color: "orange" },
-      { title: "Physical Examination", path: "/physicalExamination", icon: heart, color: "red" },
-      { title: "Lab Tests and Imaging", path: "/labTests", icon: flask, color: "purple" },
-      { title: "Treatment and Prevention", path: "/ANCtreatment", icon: medkit, color: "teal" },
-      { title: "Counselling", path: "/counselling", icon: chatbubbles, color: "darkblue" },
-      { title: "Referral", path: "/ANCreferral", icon: people, color: "darkgreen" },
-      { title: "Pregnancy Outcome", path: "/ancEnd", icon: bed, color: "pink" },
+      { title: "Referral", path: "/ANCreferral", icon: people, color:"grey" },
+      { title: "Pregnancy Outcome", path: "/ancEnd", icon: bed, color: "grey" },
     ];
 
     return {
@@ -60,63 +53,37 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+.card {
+  width: 264px;
+  margin: 10px;
+  transition: transform 0.3s ease;
+
 }
 
-.section {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.card:hover {
+  transform: scale(1.05);
 }
 
+ion-icon {
+  width: 50px;
+}
 ion-card-title {
   font-size: 16px;
 }
 
-ion-card {
-  width: 100%;
-  max-width: 300px;
-  margin: 10px;
-}
-
-.card:hover {
-  animation: bounce 0.3s ease-in-out;
-  cursor: pointer;
-}
-
-@keyframes bounce {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
-  100% { transform: translateY(0px); }
-}
-
-ion-icon {
-  width: 40px; /* Set a fixed size for icons */
-  height: 40px; /* Set a fixed height for icons */
-}
-
 @media (max-width: 768px) {
-  .section {
-    flex-direction: column;
-    align-items: center;
-    .ion-grid {
-      top:7000%;
-    }
+  ion-icon {
+    width: 40px;
+    height: 40px;
   }
 
-  .ion-grid {
-    top:70%;
+  ion-card-title {
+    font-size: 14px;
   }
 
   .card {
-    width: 90%;
+    margin: 5px;
+    width: 200px;
   }
 }
 </style>
-

@@ -205,7 +205,7 @@ export default defineComponent({
         async saveData() {
           this.saveCounselling()
           resetPatientData();
-          this.$router.push("ANChome");
+          this.$router.push("contact");
         },
       async saveCounselling() {
         if (this.physiologicalCounselingInfo.length >= 0 || this.dietCounsellingInfo>=0 || this.behaviourInfo>=0 || this.clinicalCounselling>=0 || this.preventativeCounselling>=0 ) {
