@@ -142,7 +142,7 @@ const repeatTypeError = ref<string>("");
 const numberOfDaysError = ref<string>("");
 const sessionTypeError = ref<string>("");
 const assigneesError = ref<string>("");
-const formatDate = (date: Date | string) => format(new Date(date), "yyyy-mm-dd");
+const formatDate = (date: Date | string) => format(new Date(date), "MM/dd/yyyy");
 
 const formattedDateRange = computed((): string => {
     if (Array.isArray(dateRange.value)) {
@@ -325,8 +325,9 @@ watch(dateRange, (newDateRange) => {
     const [startDate, endDate] = newDateRange;
     const daysDifference = differenceInDays(endDate, startDate);
 
-    daysDifference > 7
-        && warnWeeklyRepeatType();
+    if(selectedRepeatType.value === "Weekly" && daysDifference > 7) {
+        warnWeeklyRepeatType();
+    }
 });
 
 onMounted(() => {

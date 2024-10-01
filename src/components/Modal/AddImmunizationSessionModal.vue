@@ -108,7 +108,7 @@ import { useImmunizationSessionFieldsValidator } from "./validator";
 const immunizationSessionsStore = useImmunizationSessionsStore();
 const isSaving = ref<boolean>(false);
 const dateRange = ref<Date[] | string>();
-const formatDate = (date: Date | string) => format(new Date(date), "yyyy-mm-dd");
+const formatDate = (date: Date | string) => format(new Date(date), "MM/dd/yyyy");
 const repeatTypes = ref<Record<string, string>[]>([{
     id: "1",
     name: "Never",
@@ -150,22 +150,22 @@ const sessionTypeError = ref<string>("");
 const assigneesError = ref<string>("");
 
 const formattedDateRange = computed((): string => {
-    if (Array.isArray(dateRange.value)) {
+    if (Array.isArray(dateRange.value) && dateRange.value !== undefined) {
         return dateRange.value.map(formatDate).join(" - ");
     }
 
-    if (!Array.isArray(dateRange.value)) {
+    if (!Array.isArray(dateRange.value) && dateRange.value !== undefined) {
         return dateRange.value !== undefined ? formatDate(String(dateRange.value)) : "";
     }
     return '';
 });
 
 const startDate = computed((): string => {
-    if (Array.isArray(dateRange.value)) {
+    if (Array.isArray(dateRange.value) && dateRange.value !== undefined) {
         return formatDate(dateRange.value[0]);
     }
 
-    if (!Array.isArray(dateRange.value)) {
+    if (!Array.isArray(dateRange.value) && dateRange.value !== undefined) {
         return dateRange.value !== undefined ? formatDate(String(dateRange.value)) : "";
     }
 
