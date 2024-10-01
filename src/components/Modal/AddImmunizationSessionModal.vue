@@ -104,13 +104,11 @@ import {
 } from "@/utils/Constants";
 import { differenceInDays, format } from "date-fns";
 import { useImmunizationSessionFieldsValidator } from "./validator";
-import { difference } from "lodash";
 
 const immunizationSessionsStore = useImmunizationSessionsStore();
 const isSaving = ref<boolean>(false);
 const dateRange = ref<Date[] | string>();
 const formatDate = (date: Date | string) => format(new Date(date), "MM-dd-yyyy");
-
 const repeatTypes = ref<Record<string, string>[]>([{
     id: "1",
     name: "Never",
@@ -273,13 +271,33 @@ const dismiss = (): void => {
     modalController.dismiss({ update: true });
 };
 
-watch(selectedRepeatType, (value: string) => {
-    if (value === "Never") {
-        showNumberOfDays.value = false;
-    } else {
-        showNumberOfDays.value = true;
-        numberOfDays.value = 1;
+watch(selectedRepeatType, (newType: string, oldType: string) => {
+  if (newType === oldType) return;
+
+  const actions: { [key: string]: () => void } = {
+    Never: () => {
+      showNumberOfDays.value = false;
+    },
+    Weekly: () => {
+      showNumberOfDays.value = true;
+      numberOfDays.value = 1;
+      if (!Array.isArray(dateRange.value)) {
+        dateRange.value = [new Date(String(dateRange.value)), new Date(String(dateRange.value))];
+      }
+    },
+    Monthly: () => {
+      showNumberOfDays.value = true;
+      numberOfDays.value = 1;
+      if (!Array.isArray(dateRange.value)) {
+        dateRange.value = [new Date(String(dateRange.value)), new Date(String(dateRange.value))];
+      }
+    },
+    default: () => {
+      showNumberOfDays.value = true;
+      numberOfDays.value = 1;
     }
+  };
+  (actions[newType] || actions.default)();
 });
 
 watch([sessionName, dateRange, selectedRepeatType, numberOfDays, selectedSessionType, selectedAssignees], () => {
@@ -294,20 +312,6 @@ watch([sessionName, dateRange, selectedRepeatType, numberOfDays, selectedSession
     handleValidationErrors(validationResult.errors);
 });
 
-const isDailyRepeatTypePresent = () =>
-    repeatTypes.value.some(item => item.name === "Daily");
-
-const addDailyRepeatType = () => {
-    if (!isDailyRepeatTypePresent()) {
-        repeatTypes.value.push({ id: "2", name: "Daily" });
-        repeatTypes.value.sort((a, b) => Number(a.id) - Number(b.id));
-    }
-};
-
-const removeDailyRepeatType = () => {
-    repeatTypes.value = repeatTypes.value.filter(item => item.name !== "Daily");
-};
-
 const warnWeeklyRepeatType = () => {
     toastWarning("Weekly repeat type is not available for more than 7 days");
     dateRange.value = undefined
@@ -318,10 +322,6 @@ watch(dateRange, (newDateRange) => {
 
     const [startDate, endDate] = newDateRange;
     const daysDifference = differenceInDays(endDate, startDate);
-
-    startDate.toDateString() === endDate.toDateString()
-        ? removeDailyRepeatType()
-        : addDailyRepeatType();
 
     daysDifference > 7
         && warnWeeklyRepeatType();
