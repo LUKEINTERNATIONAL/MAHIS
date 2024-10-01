@@ -14,6 +14,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Shape of brim',
+                            name: 'Shape of brim',
                             selectedValue: ''
                         },
                         data:[
@@ -43,6 +44,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Sacrum',
+                            name: 'Sacrum',
                             selectedValue: ''
                         },
                         data:[
@@ -72,6 +74,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Sacral promontory',
+                            name: 'Sacral promontory',
                             selectedValue: ''
                         },
                         data:[
@@ -101,6 +104,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Sacrospinous ligaments',
+                            name: 'Sacrospinous ligaments',
                             selectedValue: ''
                         },
                         data:[
@@ -130,6 +134,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Ischial spines',
+                            name: 'Ischial spines',
                             selectedValue: ''
                         },
                         data:[
@@ -159,6 +164,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Station',
+                            name: 'Station',
                             selectedValue: ''
                         },
                         data:[
@@ -237,6 +243,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Sub-pubic arch',
+                            name: 'Sub-pubic arch',
                             selectedValue: ''
                         },
                         data:[
@@ -266,6 +273,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Intertuberous diameter',
+                            name: 'Intertuberous diameter',
                             selectedValue: ''
                         },
                         data:[
@@ -345,3 +353,5 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
     // persist:true,
 
 })
+
+

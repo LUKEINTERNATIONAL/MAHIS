@@ -45,7 +45,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
+import { createModal, toastDanger } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
