@@ -1,18 +1,17 @@
 <template>
-    <div v-if="isSaving" class="spinner-overlay">
-        <ion-spinner name="bubbles"></ion-spinner>
-        <div class="loading-text">Please wait...</div>
-    </div>
     <ion-header>
         <ion-toolbar>
-            <ion-title class="modalTitle">Create Immunization Session Schedule</ion-title>
+            <ion-title class="modalTitle">Edit Immunization Session Schedule</ion-title>
             <ion-button fill="clear" slot="end" @click="dismiss()">
                 <ion-icon :icon="close" color="white" />
             </ion-button>
         </ion-toolbar>
     </ion-header>
+
     <ion-loading v-show="isSaving" trigger="open-loading" message="Saving, please wait..."> </ion-loading>
-    <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
+
+
+    <div class="ion-padding">
         <div>
             <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Session name</label>
             <ion-input clear fill="outline" placeholder="Enter the session name" v-model="sessionName"></ion-input>
@@ -28,7 +27,7 @@
         <div style="margin-top: 20px;" v-if="showNumberOfDays">
             <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Number of {{ formattedRepeatText
                 }}</label>
-            <ion-input v-model="numberOfDays" clear fill="outline" :placeholder="numberOfDaysPlaceholder"></ion-input>
+            <ion-input v-model="numberOfDays" clear fill="outline" placeholder="Enter the number of days"></ion-input>
             <div v-if="numberOfDaysError" class="alerts_error">{{ numberOfDaysError }}</div>
         </div>
         <div style="margin-top: 20px;">
@@ -60,15 +59,15 @@
                 v-model="selectedAssignees" :searchable="false" :show-labels="false" placeholder="Select assignees" />
             <div v-if="assigneesError" class="alerts_error">{{ assigneesError }}</div>
         </div>
-    </ion-content>
+    </div>
     <ion-footer collapse="fade">
         <ion-row>
             <ion-col>
-                <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="dismiss()"> Cancel
+                <ion-button @click="dismiss()" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px"> Cancel
                 </ion-button>
             </ion-col>
             <ion-col>
-                <DynamicButton @click="createImmunizationSessionSchedule()" name="Save changes" fill="solid"
+                <DynamicButton @click="editImmunizationSessionSchedule()" name="Save changes" fill="solid"
                     style="float: right; margin: 2%; width: 130px" />
             </ion-col>
         </ion-row>
@@ -77,38 +76,33 @@
 
 <script setup lang="ts">
 import {
-    IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonInput,
-    modalController,
     IonFooter,
+    IonInput,
+    IonRow,
+    IonCol,
+    IonButton,
     IonLoading,
     IonIcon,
-    IonButton
+    modalController
 } from "@ionic/vue";
 import { calendar, close } from "ionicons/icons";
-import { computed, onMounted, ref, watch } from "vue";
-import { useImmunizationSessionsStore } from "@/stores/ScheduleImmunizationSession";
-import { toastWarning, toastSuccess } from "@/utils/Alerts";
 import DynamicButton from "@/components/DynamicButton.vue";
-import { UserService } from "@/services/user_service";
-import { SessionScheduleService } from "@/services/session_schedule_service";
-import { RepeatType, User } from "@/types";
+import { UserService } from '@/services/user_service';
 import VueMultiselect from "vue-multiselect";
-
-import {
-    IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR,
-    IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS
-} from "@/utils/Constants";
+import { computed, onMounted, ref, watch } from 'vue';
+import { RepeatType, User } from "@/types";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { SessionScheduleService } from "@/services/session_schedule_service";
 import { differenceInDays, format } from "date-fns";
 import { useImmunizationSessionFieldsValidator } from "./validator";
 
-const immunizationSessionsStore = useImmunizationSessionsStore();
+const props = defineProps({ data: { required: true, type: Object } });
+
 const isSaving = ref<boolean>(false);
 const dateRange = ref<Date[] | string>();
-const formatDate = (date: Date | string) => format(new Date(date), "MM/dd/yyyy");
 const repeatTypes = ref<Record<string, string>[]>([{
     id: "1",
     name: "Never",
@@ -148,24 +142,25 @@ const repeatTypeError = ref<string>("");
 const numberOfDaysError = ref<string>("");
 const sessionTypeError = ref<string>("");
 const assigneesError = ref<string>("");
+const formatDate = (date: Date | string) => format(new Date(date), "MM/dd/yyyy");
 
 const formattedDateRange = computed((): string => {
-    if (Array.isArray(dateRange.value) && dateRange.value !== undefined) {
+    if (Array.isArray(dateRange.value)) {
         return dateRange.value.map(formatDate).join(" - ");
     }
 
-    if (!Array.isArray(dateRange.value) && dateRange.value !== undefined) {
+    if (!Array.isArray(dateRange.value)) {
         return dateRange.value !== undefined ? formatDate(String(dateRange.value)) : "";
     }
     return '';
 });
 
 const startDate = computed((): string => {
-    if (Array.isArray(dateRange.value) && dateRange.value !== undefined) {
+    if (Array.isArray(dateRange.value)) {
         return formatDate(dateRange.value[0]);
     }
 
-    if (!Array.isArray(dateRange.value) && dateRange.value !== undefined) {
+    if (!Array.isArray(dateRange.value)) {
         return dateRange.value !== undefined ? formatDate(String(dateRange.value)) : "";
     }
 
@@ -194,14 +189,29 @@ const formattedRepeatText = computed((): string => {
     return repeatMap[selectedRepeatType.value as RepeatType] || "";
 });
 
-const numberOfDaysPlaceholder = computed((): string => {
-    return `Enter number of ${formattedRepeatText.value}`;
-});
+const handleValidationErrors = (errors: { field: string, message: string }[]): void => {
+    const errorFieldsMap: { [key: string]: any } = {
+        sessionName: sessionNameError,
+        dateRange: dateRangeError,
+        repeatType: repeatTypeError,
+        numberOfDays: numberOfDaysError,
+        sessionType: sessionTypeError,
+        assignees: assigneesError,
+    };
+    Object.keys(errorFieldsMap).forEach(field => {
+        errorFieldsMap[field].value = '';
+    });
+    errors.forEach((error) => {
+        if (errorFieldsMap[error.field]) {
+            errorFieldsMap[error.field].value = error.message;
+        }
+    });
+};
 
-const createImmunizationSessionSchedule = async (): Promise<void> => {
+const editImmunizationSessionSchedule = async () => {
     const validationResult = useImmunizationSessionFieldsValidator(
         sessionName.value,
-        dateRange.value as Date[] || String,
+        dateRange.value as Date[] | string,
         selectedRepeatType.value,
         numberOfDays.value,
         selectedSessionType.value,
@@ -224,52 +234,44 @@ const createImmunizationSessionSchedule = async (): Promise<void> => {
         };
 
         const sessionSchedule = new SessionScheduleService();
-        await sessionSchedule.create(data);
-        data ? toastSuccess(IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS) : toastWarning(IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR);
+        console.log(props.data)
+        await sessionSchedule.update(data, props.data.session_schedule_id);
+        data ? toastSuccess("Immunization session schedule updated successfully!") : toastWarning("An error occurred, please try again later");
         isSaving.value = false;
-        immunizationSessionsStore.resetFieldValues();
         modalController.dismiss("dismiss");
     } else {
         handleValidationErrors(validationResult.errors);
         toastWarning("Please make sure to fill all required fields");
         isSaving.value = false;
     }
-};
+}
 
-const handleValidationErrors = (errors: { field: string, message: string }[]): void => {
-    const errorFieldsMap: { [key: string]: any } = {
-        sessionName: sessionNameError,
-        dateRange: dateRangeError,
-        repeatType: repeatTypeError,
-        numberOfDays: numberOfDaysError,
-        sessionType: sessionTypeError,
-        assignees: assigneesError,
-    };
-    Object.keys(errorFieldsMap).forEach(field => {
-        errorFieldsMap[field].value = '';
-    });
-    errors.forEach((error) => {
-        if (errorFieldsMap[error.field]) {
-            errorFieldsMap[error.field].value = error.message;
-        }
-    });
+const updateSessionData = (): void => {
+    sessionName.value = props.data.session_name;
+    dateRange.value = props.data.repeat_type.toLowerCase() == "daily" ? props.data.start_date : [new Date(props.data.start_date), new Date(props.data.end_date)];
+    selectedRepeatType.value = props.data.repeat_type;
+    selectedSessionType.value = props.data.session_type;
+    numberOfDays.value = props.data.frequency;
+    selectedAssignees.value = props.data.assignees.map((assignee: User) => assignee.username);
 };
 
 const getAssignees = async (_filter: any = ""): Promise<void> => {
     const assignees = await UserService.getUsersByRole({
         role: "Health Surveillance"
     });
-    const modifiedAssignees = assignees.map((assignee: any) => ({
-        ...assignee,
-        name: assignee.username,
-        id: assignee.user_id
-    }));
+    const modifiedAssignees = assignees.map((assignee: any) => {
+        return {
+            ...assignee,
+            name: assignee.username,
+            id: assignee.user_id
+        };
+    });
     assigneesHolder.value = modifiedAssignees;
-};
+}
 
 const dismiss = (): void => {
-    modalController.dismiss({ update: true });
-};
+    modalController.dismiss({ update: false });
+}
 
 watch(selectedRepeatType, (newType: string, oldType: string) => {
   if (newType === oldType) return;
@@ -280,21 +282,18 @@ watch(selectedRepeatType, (newType: string, oldType: string) => {
     },
     Weekly: () => {
       showNumberOfDays.value = true;
-      numberOfDays.value = 1;
-      if (!Array.isArray(dateRange.value)) {
-        dateRange.value = [new Date(String(dateRange.value)), new Date(String(dateRange.value))];
+      if (typeof dateRange.value === "string") {
+        dateRange.value = [new Date(dateRange.value), new Date(dateRange.value)];
       }
     },
     Monthly: () => {
       showNumberOfDays.value = true;
-      numberOfDays.value = 1;
-      if (!Array.isArray(dateRange.value)) {
-        dateRange.value = [new Date(String(dateRange.value)), new Date(String(dateRange.value))];
+      if (typeof dateRange.value === "string") {
+        dateRange.value = [new Date(dateRange.value), new Date(dateRange.value)];
       }
     },
     default: () => {
       showNumberOfDays.value = true;
-      numberOfDays.value = 1;
     }
   };
   (actions[newType] || actions.default)();
@@ -303,7 +302,7 @@ watch(selectedRepeatType, (newType: string, oldType: string) => {
 watch([sessionName, dateRange, selectedRepeatType, numberOfDays, selectedSessionType, selectedAssignees], () => {
     const validationResult = useImmunizationSessionFieldsValidator(
         sessionName.value,
-        dateRange.value as Date[] || String,
+        dateRange.value as Date[] | string,
         selectedRepeatType.value,
         numberOfDays.value,
         selectedSessionType.value,
@@ -328,20 +327,8 @@ watch(dateRange, (newDateRange) => {
     }
 });
 
-onMounted(async (): Promise<void> => {
-    await getAssignees();
-});
+onMounted(() => {
+    getAssignees();
+    updateSessionData();
+})
 </script>
-
-<style scoped>
-.alerts_error {
-    margin-top: 2px;
-    color: #b42318;
-    display: flex;
-    font-size: 15px;
-    overflow: hidden;
-    overflow: auto;
-    padding: 5px;
-    border-radius: 3px;
-}
-</style>
