@@ -75,9 +75,13 @@ export default defineComponent({
             }   
         },
         async loadCurrentSelectedDrug() {
-            const store = useAdministerVaccineStore();
-            const currentDrug = store.getCurrentSelectedDrug();
-            await this.formBatchList(currentDrug.drug.drug_id)
+            try {
+                const store = useAdministerVaccineStore();
+                const currentDrug = store.getCurrentSelectedDrug();
+                await this.formBatchList(currentDrug.drug.drug_id)   
+            } catch (error) {
+                
+            }
         },
         async formBatchList(drugId: number) {
             try {
