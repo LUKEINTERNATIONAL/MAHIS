@@ -1,11 +1,7 @@
 import { LocationService } from "@/services/location_service";
 import { getBaseURl } from "@/utils/GeneralUti";
-import { useDateFormat, useTimestamp, useWebWorkerFn } from "@vueuse/core";
 import db from "@/db";
-const PAGE_SIZE = 1000; // Adjust this value based on your needs
-
 export async function setOfflineLocation() {
-    await getVillages();
     const locationData = await getOfflineLocation();
     if (!(locationData && Object.keys(locationData).length > 0) || (locationData && locationData?.villageList == "")) {
         await db.collection("location").delete();
