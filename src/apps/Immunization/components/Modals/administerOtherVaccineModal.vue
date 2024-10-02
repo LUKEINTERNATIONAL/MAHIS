@@ -61,7 +61,7 @@
                     {{ batch_number_error_message }}
                 </ion-label>
             </div> -->
-            <lotNumberList v-show="show_select_batch" :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
+            <lotNumberList :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered" :key="comp_key"/>
         </div>
 
         <customDatePicker v-if="showPD" />
@@ -163,12 +163,14 @@ export default defineComponent({
         lotNumberList,
     },
     data() {
+        const comp_key = ref(0)
         return {
             iconsContent: icons,
             showPD: false as boolean,
             batchNumber: "" as any,
             vaccineName: "" as string,
             currentDrugOb: {} as any,
+            comp_key,
             otherVaccinesList: [
                 {
                     concept_id: 11592,
@@ -227,7 +229,9 @@ export default defineComponent({
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
     },
-    async mounted() {},
+    async mounted() {
+
+    },
     watch: {
         batchNumber: {
             handler() {
@@ -307,7 +311,7 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             const stockService = new StockService();
             const data_ = await stockService.getDrugBatches(data.drug_id)
-            const isDataset = store.setLotNumberData(data_)
+            store.setLotNumberData(data_)
 
             if(data_.length == 0) {
                 if(checkDrugName(data) == false) {
@@ -320,7 +324,8 @@ export default defineComponent({
                 } 
             }
 
-            if (data_.length > 0 && isDataset == true) {
+            if (data_.length > 0) {
+                this.comp_key = this.comp_key + 1
                 this.show_select_batch = true
             }
         },

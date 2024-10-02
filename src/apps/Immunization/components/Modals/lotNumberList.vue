@@ -97,6 +97,7 @@ export default defineComponent({
                         id: drug.id,
                         lotNumber: drug.batch_number,
                     }
+                    console.log(drug)
                     this.lotNumbers.push(listItem)
                 })
                 this.checkToShow()
