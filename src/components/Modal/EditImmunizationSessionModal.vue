@@ -282,21 +282,18 @@ watch(selectedRepeatType, (newType: string, oldType: string) => {
     },
     Weekly: () => {
       showNumberOfDays.value = true;
-      numberOfDays.value = 1;
       if (typeof dateRange.value === "string") {
         dateRange.value = [new Date(dateRange.value), new Date(dateRange.value)];
       }
     },
     Monthly: () => {
       showNumberOfDays.value = true;
-      numberOfDays.value = 1;
       if (typeof dateRange.value === "string") {
         dateRange.value = [new Date(dateRange.value), new Date(dateRange.value)];
       }
     },
     default: () => {
       showNumberOfDays.value = true;
-      numberOfDays.value = 1;
     }
   };
   (actions[newType] || actions.default)();
