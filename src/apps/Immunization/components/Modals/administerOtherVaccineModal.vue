@@ -39,13 +39,13 @@
             </div>
         </div>
 
-        <ion-row v-show="show_select_batach">
+        <ion-row v-show="show_select_batch">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                 >Batch numbers<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
 
-        <div v-show="show_select_batach">
+        <div v-show="show_select_batch">
             <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
@@ -61,7 +61,7 @@
                     {{ batch_number_error_message }}
                 </ion-label>
             </div> -->
-            <lotNumberList :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
+            <lotNumberList v-show="show_select_batch" :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
         </div>
 
         <customDatePicker v-if="showPD" />
@@ -172,24 +172,24 @@ export default defineComponent({
             otherVaccinesList: [
                 {
                     concept_id: 11592,
-                    drug_id: 1287,
-                    drug_name: "OPV3",
+                    drug_id: 1284,
+                    drug_name: "OPV 3",
                     status: "administered",
                     date_administered: "01/Jun/2024 08:40:01",
                     vaccine_batch_number: null,
                 },
                 {
                     concept_id: 11592,
-                    drug_id: 1290,
-                    drug_name: "Pentavalent 3",
+                    drug_id: 1288,
+                    drug_name: "Penta 3",
                     status: "administered",
                     date_administered: "31/May/2024 15:16:03",
                     vaccine_batch_number: null,
                 },
                 {
                     concept_id: 11592,
-                    drug_id: 1293,
-                    drug_name: "PCV3",
+                    drug_id: 1291,
+                    drug_name: "PCV 3",
                     status: "administered",
                     date_administered: "01/Jun/2024 08:40:17",
                     vaccine_batch_number: null,
@@ -219,7 +219,7 @@ export default defineComponent({
             },
             showDateBtns: true as boolean,
             selected_date_: '',
-            show_select_batach: false,
+            show_select_batch: false,
             skip_validation: false,
         };
     },
@@ -303,10 +303,11 @@ export default defineComponent({
             this.pullLotNumbersForVaccine(this.currentDrugOb)
         },
         async pullLotNumbersForVaccine(data: any) {
+            this.show_select_batch = false
             const store = useAdministerVaccineStore();
             const stockService = new StockService();
             const data_ = await stockService.getDrugBatches(data.drug_id)
-            store.setLotNumberData(data_)
+            const isDataset = store.setLotNumberData(data_)
 
             if(data_.length == 0) {
                 if(checkDrugName(data) == false) {
@@ -314,13 +315,13 @@ export default defineComponent({
                 }
 
                 if (checkDrugName(data) == true) {
-                    this.show_select_batach = false;
+                    this.show_select_batch = false;
                     this.skip_validation = true;
                 } 
             }
 
-            if (data_.length > 0) {
-                this.show_select_batach = true
+            if (data_.length > 0 && isDataset == true) {
+                this.show_select_batch = true
             }
         },
         isAlphaNumeric(text: string) {
@@ -357,7 +358,7 @@ export default defineComponent({
                 this.selected_date_ = date_
                 this.triggerChildAction()
 
-                if (this.show_select_batach == false) {
+                if (this.show_select_batch == false) {
                     if (this.skip_validation == false) {
                         toastDanger("Please Update Stock for Selected Vaccine")
                     } 
