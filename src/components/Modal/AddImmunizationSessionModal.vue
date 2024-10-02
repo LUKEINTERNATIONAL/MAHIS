@@ -215,8 +215,8 @@ const createImmunizationSessionSchedule = async (): Promise<void> => {
 
         const data: any = {
             session_name: sessionName.value,
-            start_date: startDate.value,
-            end_date: endDate.value,
+            start_date: format(new Date(startDate.value), "yyyy-MM-dd"),
+            end_date: format(new Date(endDate.value), "yyyy-MM-dd"),
             session_type: selectedSessionType.value,
             repeat: selectedRepeatType.value,
             assignees: assignees,
