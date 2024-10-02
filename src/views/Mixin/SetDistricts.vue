@@ -23,7 +23,8 @@ export default defineComponent({
     },
     methods: {
         async getVillages(targetId: any) {
-            return this.villageList.filter((obj: any) => obj.traditional_authority_id === targetId);
+            if (this.villageList == "") return null;
+            return this.villageList?.filter((obj: any) => obj.traditional_authority_id === targetId);
         },
         getTAs(targetId: any) {
             return this.TAsList.filter((obj: any) => obj.district_id === targetId);
