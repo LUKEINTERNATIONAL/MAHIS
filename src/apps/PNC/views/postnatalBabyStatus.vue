@@ -8,6 +8,8 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -52,9 +54,12 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useBabyStatusStore } from "@/apps/PNC/stores/postnatal ward stay/BabyStatus";
 import { BabyMonitoringService } from "@/apps/PNC/Services/baby_monitoring_service";
 import { resetPatientData } from "@/services/reset_data";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "postnatalBabyStatus",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
         IonContent,
       BasicFooter,
         IonHeader,

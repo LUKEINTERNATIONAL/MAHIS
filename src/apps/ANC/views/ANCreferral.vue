@@ -3,7 +3,8 @@
     <Toolbar/>
     <ion-content :fullscreen="true">
       <DemographicBar/>
-      <Stepper  stepper-title="ANC referral" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData" :backUrl="userRoleSettings.url"
+      <Stepper  stepper-title="ANC referral" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"/>
     </ion-content>
     <BasicFooter @finishBtn="saveData()" />

@@ -7,7 +7,7 @@
         <ion-grid class="ion-grid">
           <div class="back_profile">
             <DynamicButton
-                name="Back to profile"
+                name="Back"
                 iconSlot="start"
                 fill="clear"
                 :icon="chevronBackOutline()"
@@ -16,7 +16,7 @@
           </div>
           <ion-row class="card-row">
             <ion-col
-                v-for="(card, index) in cardsData"
+                v-for="(card, index) in filteredCardsData"
                 :key="index"
                 size-xs="6"
                 size-sm="6"
@@ -76,9 +76,9 @@ import {
   chatbubbles,
   people,
   bed,
-  chevronBackOutline, pulse, checkmarkDone, calendarNumber, gitMerge
+  chevronBackOutline, pulse
 } from "ionicons/icons";
-import DemographicBar from "@/apps/PNC/components/DemographicBar.vue";
+import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import {ObservationService} from "@/services/observation_service";
 import {mapState} from "pinia";
@@ -107,11 +107,11 @@ export default defineComponent({
       default: "Back",
     },
   },
-  data(){
+ data(){
     return{
       gravida:'',
     }
-  },
+ },
   setup() {
     const router = useRouter();
 
@@ -119,14 +119,14 @@ export default defineComponent({
       router.push({ path });
     };
     const cardsData = [
-      { title: "Postnatal details", path: "/postnatalDetails", icon: heart, color: "grey", isSaved: false },
-      { title: "Postnatal ward monitoring for mother", path: "/postnatalWardMonitoring", icon: personCircle, color: "grey" },
-      { title: "Postnatal ward monitoring for baby", path: "/babyStatus", icon: people, color: "grey", isSaved: false },
-      { title: "Discharge woman", path: "/dischargeWoman", icon: gitMerge, color: "grey", isSaved: false },
-      { title: "Postnatal visit", path: "/postnatalVisit", icon: calendarNumber, color: "grey", isSaved: false },
-      { title: "End PNC program", path: "/pncEnd", icon: checkmarkDone, color: "grey", isSaved: false },
+      { title: "Quick Check", path: "/quickCheck", icon: pulse, color: "grey", isSaved: false },
+      { title: "Profile", path: "/profile", icon: personCircle, color: "grey" },
+      { title: "Symptoms and Follow Up", path: "/symptomsFollowUp", icon: alertCircle, color: "grey" , isSaved: false},
+      { title: "Physical Examination", path: "/physicalExamination", icon: heart, color: "grey" , isSaved: false},
+      { title: "Lab Tests and Imaging", path: "/labTests", icon: flask, color: "grey" , isSaved: false},
+      { title: "Treatment and Prevention", path: "/ANCtreatment", icon: medkit, color: "grey" , isSaved: false},
+      { title: "Counselling", path: "/counselling", icon: chatbubbles, color: "grey" , isSaved: false},
     ];
-
 
     return {
       navigateTo,
@@ -135,7 +135,13 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useObstreticHistoryStore, ["prevPregnancies"]),
-    ...mapState(useDemographicsStore, ["demographics","patient"])
+    ...mapState(useDemographicsStore, ["demographics","patient"]),
+    filteredCardsData() {
+      if (this.gravida) {
+        return this.cardsData.filter(card => card.title !== "Profile");
+      }
+      return this.cardsData;
+    }
 
   },
   mounted(){
@@ -149,10 +155,10 @@ export default defineComponent({
       return chevronBackOutline
     },
     backToANChome() {
-      this.$router.push('/patientProfile');
+      this.$router.push('/ANCHome');
     },
 
-    async handleProfile(){
+   async handleProfile(){
       const gravida = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Gravida", "value_text");
       this.gravida = gravida;
     },

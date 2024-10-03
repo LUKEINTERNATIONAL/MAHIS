@@ -1,6 +1,14 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import { getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+import * as yup from 'yup'
+import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers";
+
+export const pastObstreticValidationShema = yup.object().shape({
+  "Gravida":yup.number().typeError("Gravida can only be number").min(0).max(30),
+  "Abortions/Miscarriages":yup.number().typeError("Abortions/Miscarriages can only be number").min(0),
+  "Stillbirths":yup.number().typeError("Stillbirths can only be number").min(0),
+})
 
 export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
   state: () => ({
@@ -52,7 +60,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   inputHeader: "Abortions/Miscarriages*",
                   value: "",
                   icon: icons.editPen,
-                  name: "Abortions",
+                  name: "Abortions/Miscarriages",
                   required: true,
                   disabled:false,
                   valueType: "text",
@@ -86,19 +94,20 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
               colData: [
                 {
                   class: "bold",
-                  inputHeader: "Live births*",
+                  inputHeader: "Live births",
                   value: "",
-                  disabled:false,
+                  disabled:true,
                   name: "LiveBirths",
                   required: true,
                   valueType: "text",
                   eventType: "input",
+                
                   alertsErrorMassage: "",
                 },
                 {
                   class: "bold",
-                  inputHeader: "Parity*",
-                  disabled:false,
+                  inputHeader: "Parity",
+                  disabled:true,
                   value: "",
                   name: "Parity",
                   valueType: "text",
@@ -506,6 +515,12 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     },
     setComplications(data: any) {
       this.Complications = data;
+    },
+    async validate(){
+      const obstetricHistory = extractArrayOfNameValue(this.prevPregnancies);
+      const obstetricHistoryValid = await validateStore(this.prevPregnancies,pastObstreticValidationShema,obstetricHistory)
+
+      return obstetricHistoryValid;
     },
   },
   // persist: true,
