@@ -3,7 +3,8 @@ import { getBaseURl } from "@/utils/GeneralUti";
 import db from "@/db";
 export async function setOfflineLocation() {
     const locationData = await getOfflineLocation();
-    if (!(locationData && Object.keys(locationData).length > 0)) {
+    if (!(locationData && Object.keys(locationData).length > 0) || (locationData && locationData?.villageList == "")) {
+        await db.collection("location").delete();
         await db.collection("location").add({
             districts: await getDistricts(),
             TAs: await getTAs(),
@@ -33,6 +34,22 @@ export async function getTAs() {
     return await LocationService.getAllTraditionalAuthorities();
 }
 export async function getVillages() {
-    return "";
-    // return await LocationService.getAllVillages();
+    try {
+        const allVillage = [];
+        let page = 1;
+        const pageSize = 500;
+        while (true) {
+            const newVillages = await LocationService.getAllVillages(page, pageSize);
+            if (newVillages.length > 0) {
+                allVillage.push(...newVillages);
+                page++;
+            } else {
+                break;
+            }
+        }
+        return allVillage;
+    } catch (error) {
+        console.error("Error fetching villages:", error);
+        return "";
+    }
 }
