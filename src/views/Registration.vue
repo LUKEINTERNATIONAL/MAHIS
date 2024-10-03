@@ -85,10 +85,6 @@
                         <span class="breadcrumb-text">Location</span>
                         <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
-                    <ion-breadcrumb @click="setCurrentStep('Birth Registration')" :class="{ active: currentStep === 'Birth Registration' }">
-                        <span class="breadcrumb-text">Birth Registration</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
                     <ion-breadcrumb @click="setCurrentStep('Social History')" :class="{ active: currentStep === 'Social History' }">
                         <span class="breadcrumb-text">Social History</span>
                         <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
@@ -325,12 +321,13 @@ export default defineComponent({
         nav(url: any) {
             this.$router.push(url);
         },
-       async nextStep() {
-            if (this.checkUnderFourteen) this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
+        async nextStep() {
+            if (this.checkUnderFive || this.checkUnderOne)
+                this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex < this.steps.length - 1) {
-                
+
                 if(this.currentStep === "Personal Information"){
                     const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
                     if ((await this.validations(this.personInformation, fields))){
@@ -347,11 +344,11 @@ export default defineComponent({
                         toastWarning("Please complete all required fields before you proceed");
                     }
                 } else if(this.currentStep === "Social History"){
+                    console.log(this.currentStep);
                     this.currentStep = this.steps[currentIndex + 1];
                 }
 
                 //this.currentStep = this.steps[currentIndex + 1];
-               
             }
         },
         previousStep() {
