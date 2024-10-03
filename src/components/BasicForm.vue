@@ -368,7 +368,7 @@ import BasicPhoneInputField from "@/components/BasicPhoneInputField.vue";
 import BasicInputChangeUnits from "@/components/BasicInputChangeUnits.vue";
 import DateInputField from "@/components/DateInputField.vue";
 import DynamicButton from "./DynamicButton.vue";
-import { IonDatetime, IonDatetimeButton, IonCheckbox } from "@ionic/vue";
+import { IonDatetime, IonDatetimeButton, IonCheckbox, IonCol, IonIcon, IonRow, IonLabel, IonRadio, IonRadioGroup } from "@ionic/vue";
 import HisDate from "@/utils/Date";
 import VueMultiselect from "vue-multiselect";
 import { createModal } from "@/utils/Alerts";
@@ -396,6 +396,7 @@ export default defineComponent({
         VueMultiselect,
         BasicInputChangeUnits,
         BasicPhoneInputField,
+        IonCol, IonIcon, IonRow, IonLabel, IonRadio, IonRadioGroup
     },
     data() {
         return {

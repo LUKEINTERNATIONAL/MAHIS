@@ -10,6 +10,8 @@ import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMe
 import { ObservationService } from "@/services/observation_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { useUserStore } from "@/stores/userStore";
+import platform, { FileExportType } from "@/composables/usePlatform";
+import { exportMobile } from "@/utils/Export";
 
 export async function getVaccinesSchedule(patientID = null) {
     const patient = new PatientService();
@@ -225,7 +227,7 @@ export function exportReportToCSV(): void {
     try {
         const store = EIRreportsStore()
         const user_store = useUserStore()
-        const navigator_ = navigator as any
+        const { activePlatformProfile } = platform();
 
         let CSVString = generateCSVStringForImmunizationMonthly(store.$state.immunizationMonthlyRepoartData as any);
         CSVString += '\n';
@@ -239,9 +241,7 @@ export function exportReportToCSV(): void {
         const csvData = new Blob([CSVString], { type: "text/csv;charset=utf-8;" });
         const reportTitle = `${user_store.$state.userFacilityName}_${store.$state.navigationPayload.subTxt}_${store.$state.navigationPayload.title}`;
 
-        if (navigator_.msSaveBlob) {
-            navigator_.msSaveBlob(csvData, `${reportTitle}.csv`);
-        } else {
+        if (activePlatformProfile.value.fileExport === FileExportType.WEB) {
             const link = document.createElement("a");
             link.href = window.URL.createObjectURL(csvData);
             link.setAttribute("download", `${reportTitle}.csv`);
@@ -249,6 +249,10 @@ export function exportReportToCSV(): void {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        } else if (activePlatformProfile.value.fileExport === FileExportType.FILE_SYSTEM) {
+            exportMobile(`${reportTitle}.csv`, csvData, "blob");
+        } else {
+            toastWarning("Platform not supported");
         }
     } catch (error) {
         console.error("Error exporting CSV:", error);

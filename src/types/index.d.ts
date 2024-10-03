@@ -9,6 +9,7 @@ type Vaccine = {
  drug_id: number;
  drug_name?: string;
  voided: boolean,
+ missed_doses?: number;
  voided_by: string;
  date_voided: string;
  created_at: string;
@@ -30,16 +31,20 @@ type Assignee = {
   family_name: string;
 }
 
+type RepeatType = "Daily" | "Weekly" | "Monthly" | "Never";
+
 type SessionSchedule = {
   id?: number;
+  session_schedule_id?: number;
   session_name: string;
-  repeat_type?: string;
+  repeat_type?: RepeatType;
   repeat?: string;
   target?: string;
+  frequency?: number;
   start_date: Date;
   end_date: Date;
   session_type: SessionType;
-  session_vaccines?: { total_clients: number; vaccines: Vaccine[]; total_missed_doses:any }
+  session_vaccines?: { total_clients: number; vaccines: Vaccine[]; total_missed_doses:any };
   assignees?: Assignee[];
 };
 
@@ -138,4 +143,5 @@ export {
   User,
   PersonName,
   Program,
+  RepeatType
 };

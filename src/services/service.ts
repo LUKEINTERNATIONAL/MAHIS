@@ -102,7 +102,7 @@ export class Service {
 
             if (response.status === 404) {
                 const { errors } = await response?.json();
-                throw new NotFoundError(errors);
+                return errors;
             }
 
             if (response.status === 422) {
