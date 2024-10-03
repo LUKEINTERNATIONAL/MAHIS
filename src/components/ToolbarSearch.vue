@@ -183,9 +183,11 @@ import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useProgramStore } from "@/stores/ProgramStore";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import dates from "@/utils/Date"
 
 export default defineComponent({
-    name: "Home",
+    name: "ToolbarSearch",
     mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
     components: {
         IonContent,
@@ -684,17 +686,29 @@ export default defineComponent({
             this.openNewPage("patientProfile", this.selectedPatient);
             this.toggleCheckInModal();
         },
-        handleCheckInYes() {
-            // console.log(this.selectedPatient)
+        async handleCheckInYes() {
+            try{
+                await PatientOpdList.checkInPatient(this.selectedPatient.patient_id, dates.todayDateFormatted());
+                await PatientOpdList.addPatientToStage(this.selectedPatient.patient_id,dates.todayDateFormatted(),"VITALS")
+                this.openNewPage("patientProfile", this.selectedPatient);
+            } catch(e){
+
+            }
         },
         toggleCheckInModal() {
             this.checkInModalOpen = !this.checkInModalOpen;
         },
-        openCheckInModal(item: any) {
-            console.log(this.programs?.program?.applicationName);
+        async openCheckInModal(item: any) {
+
             if (this.programs?.program?.applicationName == "OPD Program") {
-                this.checkInModalOpen = true;
-                this.selectedPatient = item;
+                try{
+                    const checkInStatus= await PatientOpdList.getCheckInStatus(item.patient_id);
+                    this.openNewPage("patientProfile", item);
+                } catch(e){
+
+                    this.checkInModalOpen = true;
+                    this.selectedPatient = item;
+                }
                 return;
             }
             this.openNewPage("patientProfile", item);

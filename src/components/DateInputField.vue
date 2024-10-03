@@ -10,20 +10,10 @@
         :min-date="minDate"
         :max-date="maxDate"
         prevent-min-max-navigation
-        :teleport="true"
     >
         <template #trigger>
             <div class="" :style="'width:' + inputWidth">
-                <ion-input
-                    @ionInput="handleInput"
-                    @ionBlur="handleBlur"
-                    @click="$emit('clicked:inputValue', $event)"
-                    fill="outline"
-                    :value="inputValue"
-                    :placeholder="placeholder"
-                    :type="inputType"
-                    :disabled="disabled"
-                >
+                <ion-input fill="outline" :value="inputValue" :placeholder="placeholder" :type="inputType" :disabled="disabled">
                     <ion-label v-if="InnerActionBtnPropeties.show" style="display: flex" slot="end">
                         <ion-button slot="end" @click="handleInnerActionBtnPropetiesFn">{{ InnerActionBtnPropeties.name }}</ion-button>
                     </ion-label>
@@ -132,23 +122,6 @@ export default defineComponent({
         },
     },
     methods: {
-        handleInput(event: any) {
-            if (this.popOverData?.data) this.setEvent(event);
-            this.$emit("update:inputValue", event);
-        },
-        handleBlur(event: any) {
-            this.$emit("update:inputValue", event);
-        },
-        setEvent(event: Event) {
-            this.event = event;
-            this.searchInput(event);
-        },
-        async searchInput(event: any) {
-            this.popoverOpen = true;
-            if (this.popOverData.filterData)
-                this.filteredData = this.popOverData.data.filter((item: any) => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
-            else this.filteredData = this.popOverData.data;
-        },
         formatDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },

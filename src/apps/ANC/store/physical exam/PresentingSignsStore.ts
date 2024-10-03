@@ -152,7 +152,7 @@ const initialPresentingSigns=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other notes',
+                                name: 'Clinical enquiry notes',
                                 valueType: 'text',
                                 required: true,
                                 eventType: 'input',
@@ -239,7 +239,7 @@ const initialPresentingSigns=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Specify',
+                                name: 'Other (specify)',
                                 valueType: 'text',
                                 required: true,
                                 eventType: 'input',
@@ -261,7 +261,7 @@ const initialPresentingSigns=[
                 header:{
                     title: 'Has the woman been subjected to any form of violence?',
                     selectedValue: '',
-                    name:'IPV Status',
+                    name:'Woman subjected to IPV',
                     class:"bold",
                     displayNext:"Yes"
                 },
@@ -273,7 +273,7 @@ const initialPresentingSigns=[
 
                     },
                     {
-                        value: 'No',
+                        value: 'no',
                         name: 'No',
                         colSize: '2.5',
                     },
@@ -283,7 +283,7 @@ const initialPresentingSigns=[
 
     },
     {
-        childName:"IPV Status",
+        childName:"Woman subjected to IPV",
         selectdData: [],
         classDash: '',
         checkboxBtnContent:
@@ -291,14 +291,14 @@ const initialPresentingSigns=[
                 header:{
                     title: 'What type of Intimate Partner Violence the woman has been subjected to?',
                     selectedValue: '',
-                    name: "IPV",
+                    name: "Type of IPV the woman has been subjected to",
                     class:"bold",
                     displayNone:true
                 },
                 data:[
                     {
                         value: 'Physical violence (IPV)',
-                        name: 'Physical violence (IPV)',
+                        name: 'Physical violence',
                         colSize: '7',
 
                     },
@@ -344,9 +344,9 @@ const initialPresentingSigns=[
         classDash: '',
 
         header:{
-            title: '',
+            title: 'Types of IPV',
             selectedValue: '',
-            name: ""
+            name: "Other"
         },
 
         data:
@@ -359,7 +359,7 @@ const initialPresentingSigns=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other notes',
+                                name: 'Other (specify)',
                                 required: true,
                                 eventType: 'input',
                                 valueType:'text',
