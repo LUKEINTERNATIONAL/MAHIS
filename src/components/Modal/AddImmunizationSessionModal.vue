@@ -34,7 +34,7 @@
         <div style="margin-top: 20px;">
             <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Start & End Date</label>
             <VueDatePicker required position="left" placeholder="select start & end date"
-                :range="selectedRepeatType.toLowerCase() !== 'daily' ? true : false" :ui="{ input: 'datepicker' }"
+                :range="isRangeOrSingle" :ui="{ input: 'datepicker' }"
                 format="dd/MM/yyyy" v-model="dateRange" :min-date="new Date()">
                 <template #trigger>
                     <ion-input clear fill="outline" placeholder="select start & end date"
@@ -149,15 +149,21 @@ const numberOfDaysError = ref<string>("");
 const sessionTypeError = ref<string>("");
 const assigneesError = ref<string>("");
 
-const formattedDateRange = computed((): string => {
-    if (Array.isArray(dateRange.value) && dateRange.value !== undefined) {
-        return dateRange.value.map(formatDate).join(" - ");
-    }
+const isRangeOrSingle = computed((): boolean => {
+    if(selectedRepeatType.value === null) return true
+    if(selectedRepeatType.value.toLowerCase() === "daily") return false
+    return true;
+});
 
-    if (!Array.isArray(dateRange.value) && dateRange.value !== undefined) {
-        return dateRange.value !== undefined ? formatDate(String(dateRange.value)) : "";
-    }
-    return '';
+const formattedDateRange = computed((): string => {
+  if (!dateRange.value) return ''
+  if (Array.isArray(dateRange.value)) {
+    const [start, end] = dateRange.value
+    if (!start && !end) return ''
+    if (!start || !end) return formatDate(start || end)
+    return `${formatDate(start)} - ${formatDate(end)}`
+  }
+  return formatDate(dateRange.value)
 });
 
 const startDate = computed((): string => {
@@ -273,23 +279,30 @@ const dismiss = (): void => {
 
 watch(selectedRepeatType, (newType: string, oldType: string) => {
   if (newType === oldType) return;
-
   const actions: { [key: string]: () => void } = {
+    null: () => {
+      showNumberOfDays.value = false;
+    },
     Never: () => {
       showNumberOfDays.value = false;
+    },
+    Daily: () => {
+      showNumberOfDays.value = true;
+      numberOfDays.value = 1;
+      dateRange.value = "";
     },
     Weekly: () => {
       showNumberOfDays.value = true;
       numberOfDays.value = 1;
       if (!Array.isArray(dateRange.value)) {
-        dateRange.value = [new Date(String(dateRange.value)), new Date(String(dateRange.value))];
+        dateRange.value = [];
       }
     },
     Monthly: () => {
       showNumberOfDays.value = true;
       numberOfDays.value = 1;
       if (!Array.isArray(dateRange.value)) {
-        dateRange.value = [new Date(String(dateRange.value)), new Date(String(dateRange.value))];
+        dateRange.value = [];
       }
     },
     default: () => {
