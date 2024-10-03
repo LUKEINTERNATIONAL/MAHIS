@@ -178,7 +178,7 @@ export default defineComponent({
             await this.saveSecondStageLabour();
             toastSuccess("Delivery details data saved successfully");
             resetPatientData();
-            //this.$router.push("labourHome");
+            this.$router.push("/labour/labourHome");
         },
         async saveSecondStageLabour() {
             if (
