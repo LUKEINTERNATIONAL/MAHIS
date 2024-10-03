@@ -60,7 +60,13 @@
                     <ion-button
                       size="small"
                       class="btn-edit"
-                      @click="openProfile(patient.patient_id)"
+                      @click="navigateTo(patient.patient_id, buttonLink)"
+                      >{{ buttonTitle }}</ion-button
+                    >
+                    <ion-button
+                      size="small"
+                      class="btn-edit"
+                      @click="navigateTo(patient.patient_id,'/patientProfile')"
                       >Profile</ion-button
                     >
                     <ion-button
@@ -222,7 +228,7 @@ export default defineComponent({
           title: "Action",
           data: null,
           render: (data: any, type: any, row: any) => {
-            return `<ion-button class="btn-edit" @click="openProfile(${row})">Open Profile</ion-button>`;
+            return `<ion-button class="btn-edit" @click="navigateTo(${row})">Open Profile</ion-button>`;
           },
         },
       ],
@@ -236,24 +242,30 @@ export default defineComponent({
     list: {
       default: "" as any,
     },
+    buttonTitle: {
+      default: "" as string,
+    },
+    buttonLink: {
+      default: "" as string,
+    },
   },
   computed: {
     ...mapState(usePatientList, [
       "patientsWaitingForVitals",
       "patientsWaitingForConsultation",
       "patientsWaitingForDispensation",
-      "counter"
+      "counter",
     ]),
   },
   async mounted() {
- this.setList()
+    this.setList();
   },
   watch: {
-    counter:{
-        handler(){
-           this.setList(); 
-        }
-    }
+    counter: {
+      handler() {
+        this.setList();
+      },
+    },
   },
   setup() {
     return { person, pulseOutline, clipboardOutline };
@@ -266,10 +278,15 @@ export default defineComponent({
     dismiss() {
       modalController.dismiss();
     },
-    async openProfile(id: any) {
+    // async navigateToPage(){
+    //   const patient = await PatientService.findByID(id);
+    //   this.setDemographics(patient);
+    // },
+
+    async navigateTo(id: any, route:string) {
       const patient = await PatientService.findByID(id);
       this.setDemographics(patient);
-      this.$router.push("/patientProfile");
+      this.$router.push(route);
     },
     async handleAbscond(visitId: any) {
       try {
@@ -292,9 +309,9 @@ export default defineComponent({
       this.patients = listMapping[this.list] || [];
     },
 
-    waitingTime(timeStamp:any){
-        return dates.calculateTimeDifference(timeStamp)
-    }
+    waitingTime(timeStamp: any) {
+      return dates.calculateTimeDifference(timeStamp);
+    },
   },
 });
 </script>

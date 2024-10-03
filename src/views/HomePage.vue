@@ -44,7 +44,7 @@
                 </div>
                 <div
                   class="OPDDueCard"
-                  @click="openPatientsListModal('Patients waiting for vitals', 'VITALS')"
+                  @click="openPatientsListModal('Patients waiting for vitals', 'VITALS', 'Vitals','/OPDVitals')"
                   :style="dueCardStyle('success')"
                 >
                   <ion-icon :icon="thermometer" class="dueCardIcon"></ion-icon>
@@ -54,7 +54,7 @@
                 <div
                   class="OPDDueCard"
                   @click="
-                    openPatientsListModal('Patients waiting for consultation', 'CONSULTATION')
+                    openPatientsListModal('Patients waiting for consultation', 'CONSULTATION', 'Consultation', '/OPDConsultationPlan')
                   "
                   :style="dueCardStyle('success')"
                 >
@@ -65,7 +65,7 @@
                 <div
                   class="OPDDueCard"
                   @click="
-                    openPatientsListModal('Patients waiting for dispensation','DISPENSATION')
+                    openPatientsListModal('Patients waiting for dispensation','DISPENSATION','Dispensation','/dispensation')
                   "
                   :style="dueCardStyle('success')"
                 >
@@ -513,8 +513,8 @@ export default defineComponent({
       createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
     },
 
-    openPatientsListModal(name: any, list:'VITALS'|'CONSULTATION'|'DISPENSATION') {
-      const dataToPass = { title: name, list};
+    openPatientsListModal(name: any, list:'VITALS'|'CONSULTATION'|'DISPENSATION', buttonTitle:string, buttonLink:string) {
+      const dataToPass = { title: name, list, buttonTitle, buttonLink};
       createModal(
         OPDWaitingListModal,
         { class: "fullScreenModal" },

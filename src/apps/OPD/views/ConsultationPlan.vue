@@ -329,6 +329,7 @@ export default defineComponent({
             });
           }
           if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+            await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"DISPENSATION");
             await this.saveDiagnosis();
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
@@ -339,7 +340,6 @@ export default defineComponent({
             await this.savePhysicalExam();
             resetOPDPatientData();
 
-            await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"DISPENSATION");
             
             if (this.userRole == "Lab") {
               this.$router.push("home");
