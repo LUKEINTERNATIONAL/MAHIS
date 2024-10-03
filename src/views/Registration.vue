@@ -41,7 +41,7 @@
                     <div class="flex-item">
                         <CurrentLocation />
                         <SocialHistory v-if="checkUnderFourteen" />
-                        <BirthRegistration v-if="checkUnderNine" />
+                        <BirthRegistration v-if="checkUnderFive" />
                     </div>
                     <div class="flex-item">
                         <HomeLocation />
@@ -333,7 +333,7 @@ export default defineComponent({
                     if ((await this.validations(this.personInformation, fields))){
                         this.currentStep = this.steps[currentIndex + 1];
                     }else{
-                        toastWarning("Please complete all required fields before you proceed");
+                        toastWarning("Please fill fileds correctly before you proceed!");
                     }
                 } else if (this.currentStep === "Location"){
                     const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
@@ -341,14 +341,19 @@ export default defineComponent({
                         (await validateInputFiledData(this.homeLocation))){
                         this.currentStep = this.steps[currentIndex + 1];
                     }else{
-                        toastWarning("Please complete all required fields before you proceed");
+                        toastWarning("Please fill fileds correctly before you proceed!");
                     }
                 } else if(this.currentStep === "Social History"){
-                    console.log(this.currentStep);
-                    this.currentStep = this.steps[currentIndex + 1];
+                    if (this.checkUnderFive || this.checkUnderOne){
+                        if ((await validateInputFiledData(this.birthRegistration))){
+                            this.currentStep = this.steps[currentIndex + 1];
+                        } else {
+                            toastWarning("Please fill fileds correctly before you proceed!");
+                        }
+                    }else{
+                        this.currentStep = this.steps[currentIndex + 1];
+                    }
                 }
-
-                //this.currentStep = this.steps[currentIndex + 1];
             }
         },
         previousStep() {
