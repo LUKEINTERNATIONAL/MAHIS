@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -13,8 +13,16 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
-import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
-
+import { ProgramService } from "@/services/program_service";
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
+import { journalOutline } from "ionicons/icons";
 export default defineComponent({
     name: "Menu",
     components: {
@@ -37,31 +45,27 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useEnrollementStore, ["patientHistoryHIV"]),
+        ...mapState(useEnrollementStore, ["patientType"]),
     },
     watch: {
-        patientHistoryHIV: {
+        patientType: {
             handler() {
-                this.controllFields();
                 this.buildCards();
             },
             deep: true,
         },
     },
-    mounted() {
-        this.updateEnrollmentStores();
+    async mounted() {
         this.buildCards();
     },
     methods: {
         buildCards() {
-            const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
                     {
-                        cardTitle: "HIV & TB history  ",
-                        content: this.patientHistoryHIV,
-                        initialData: enrollment.getInitialPatientHistoryHIV(),
+                        cardTitle: "",
+                        content: this.patientType,
                     },
                 ],
             };
@@ -69,23 +73,8 @@ export default defineComponent({
         openModal() {
             createModal(DispositionModal);
         },
-        updateEnrollmentStores() {
-            const enrollmentStore = useEnrollementStore();
-            enrollmentStore.setPatientHistoryHIV(this.patientHistoryHIV);
-        },
-        controllFields() {
-            if (getRadioSelectedValue(this.patientHistoryHIV, "HIV") == "R") {
-                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", false);
-            } else {
-                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", true);
-            }
-        },
-        async handleInputData(event: any) {
-            console.log(event.al);
-            if (event.al) {
-                if (event.value.detail.checked) modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", false);
-                else modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", true);
-            }
+        testF(data: any) {
+            console.log(data);
         },
     },
 });
@@ -136,14 +125,12 @@ ion-radio {
     line-height: 3;
 }
 .small_font {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     color: #636363;
 }
 .checkbox_header {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
