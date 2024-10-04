@@ -70,9 +70,9 @@ export default defineComponent({
     IonCard, IonCardHeader, IonPage, IonCardTitle, IonCardContent, IonCheckbox, IonButton, NavigationMenu
   },
   setup() {
-    const clients = ref([]);
+    const clients = ref([]) as any;
     const selectedPrimaryClient = ref(null) as any;
-    const programId = ref(33); // Assuming a default program ID of 33
+    const programId = ref(33);
 
     const selectPrimaryClient = (client: any) => {
       selectedPrimaryClient.value = client;
@@ -82,6 +82,15 @@ export default defineComponent({
       return selectedPrimaryClient.value && 
              selectedPrimaryClient.value.duplicates.some((d: any) => d.selected);
     });
+
+    const resetSelections = () => {
+      selectedPrimaryClient.value = null;
+      clients.value.forEach((client: any) => {
+        client.duplicates.forEach((duplicate: any) => {
+          duplicate.selected = false;
+        });
+      });
+    };
 
     const mergeSelected = async () => {
       if (selectedPrimaryClient.value) {
@@ -97,7 +106,10 @@ export default defineComponent({
 
         console.log('Merge Payload:', mergePayload);
         await PatientService.mergePatients(mergePayload);
-        initNavData();
+        
+        // Reset selections and reload data
+        resetSelections();
+        await initNavData();
       }
     };
 
