@@ -317,21 +317,21 @@ ion-modal > .ion-page {
     --height: 90%;
     --border-radius: 16px;
     --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
-  
-  @media (min-width: 768px) {
+}
+
+@media (min-width: 768px) {
     .large-modal {
-      --width: 90%;
-      --height: 90%;
+        --width: 90%;
+        --height: 90%;
     }
-  }
-  
-  @media (min-width: 1024px) {
+}
+
+@media (min-width: 1024px) {
     .large-modal {
-      --width: 90%;
-      --height: 90%;
+        --width: 90%;
+        --height: 90%;
     }
-  }
+}
 .vaccineHistoryModal {
     --height: 90vh;
     --max-width: 500px;
@@ -400,14 +400,14 @@ video {
 .demographics {
     display: block;
     width: 570px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     text-align: center;
     margin-top: 0px;
 }
 .registration_ion_card {
     display: flex;
     justify-content: center;
-    padding: 3vw;
+    padding: 1.5vw;
     margin-bottom: 20px;
     contain: unset;
     overflow: unset;
@@ -757,11 +757,10 @@ ion-footer {
     --sx-internal-color-gray-ripple-background: #e0e0e0;
     --sx-internal-color-light-gray: #fafafa;
     --sx-internal-color-text: #000;
-    
 }
 
-.sx__month-agenda-day{
-  color: #000;
+.sx__month-agenda-day {
+    color: #000;
 }
 
 .dp__theme_light {
