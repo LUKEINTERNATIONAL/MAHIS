@@ -23,32 +23,32 @@
                 <ion-row class="card_row" v-if="enrollmentDisplayType == 'grid'">
                     <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
                         <NCDNumber />
+                        <PatientType />
+                        <FamilyHistory />
+                    </ion-col>
+                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
                         <PatientHistory />
                     </ion-col>
                     <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
                         <PatientHistoryHIV />
-                        <FamilyHistory />
-                    </ion-col>
-                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
                         <EnrollmentDiagnosis />
-                        <Substance />
                     </ion-col>
                 </ion-row>
             </div>
             <div v-if="enrollmentDisplayType == 'list'">
                 <div v-if="currentStep == 'Substance & Diagnosis'">
                     <NCDNumber />
-                    <PatientHistory />
+                    <PatientType />
+                    <FamilyHistory />
                 </div>
                 <div v-if="currentStep == 'Patient History'">
                     <div style="display: flex; justify-content: center">
-                        <PatientHistoryHIV />
-                        <FamilyHistory />
+                        <PatientHistory />
                     </div>
                 </div>
                 <div v-if="currentStep == 'Family History and NCDNumber'">
+                    <PatientHistoryHIV />
                     <EnrollmentDiagnosis />
-                    <Substance />
                 </div>
             </div>
         </ion-content>
@@ -135,6 +135,7 @@ import EnrollmentDiagnosis from "@/apps/NCD/components/Enrollment/Diagnosis.vue"
 import Substance from "@/apps/NCD/components/Enrollment/Substance.vue";
 import NCDNumber from "@/apps/NCD/components/Enrollment/NCDNumber.vue";
 import FamilyHistory from "@/apps/NCD/components/Enrollment/FamilyHistory.vue";
+import PatientType from "@/apps/NCD/components/Enrollment/PatientType.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { arrowForwardCircle, grid, list } from "ionicons/icons";
@@ -186,6 +187,7 @@ export default defineComponent({
         Substance,
         NCDNumber,
         FamilyHistory,
+        PatientType,
         DynamicButton,
     },
     data() {
