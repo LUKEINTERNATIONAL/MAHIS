@@ -36,7 +36,7 @@
                 </ion-row>
             </div>
             <div v-if="enrollmentDisplayType == 'list'">
-                <div v-if="currentStep == 'Substance & Diagnosis'">
+                <div v-if="currentStep == 'NCD Number, Patient Type & Family History'">
                     <NCDNumber />
                     <PatientType />
                     <FamilyHistory />
@@ -46,7 +46,7 @@
                         <PatientHistory />
                     </div>
                 </div>
-                <div v-if="currentStep == 'Family History and NCDNumber'">
+                <div v-if="currentStep == 'HIV & TB History & Diagnosis'">
                     <PatientHistoryHIV />
                     <EnrollmentDiagnosis />
                 </div>
@@ -57,10 +57,19 @@
         </div>
         <ion-footer v-if="enrollmentDisplayType == 'list'">
             <div class="footer position_content">
-                <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
-                <ion-breadcrumbs class="breadcrumbs">
-                    <ion-breadcrumb @click="setCurrentStep('Substance & Diagnosis')" :class="{ active: currentStep === 'Substance & Diagnosis' }">
-                        <span class="breadcrumb-text">Substance & Diagnosis</span>
+                <DynamicButton
+                    name="Cancel"
+                    v-if="currentStep == 'NCD Number, Patient Type & Family History'"
+                    color="danger"
+                    @click="nav('/patientProfile')"
+                />
+                <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
+                <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
+                    <ion-breadcrumb
+                        @click="setCurrentStep('NCD Number, Patient Type & Family History')"
+                        :class="{ active: currentStep === 'NCD Number, Patient Type & Family History' }"
+                    >
+                        <span class="breadcrumb-text">NCD Number, Patient Type & Family History</span>
                         <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
                     <ion-breadcrumb @click="setCurrentStep('Patient History')" :class="{ active: currentStep === 'Patient History' }">
@@ -68,15 +77,15 @@
                         <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
                     <ion-breadcrumb
-                        @click="setCurrentStep('Family History and NCDNumber')"
-                        :class="{ active: currentStep === 'Family History and NCDNumber' }"
+                        @click="setCurrentStep('HIV & TB History & Diagnosis')"
+                        :class="{ active: currentStep === 'HIV & TB History & Diagnosis' }"
                     >
-                        <span class="breadcrumb-text">Family History and NCDNumber</span>
+                        <span class="breadcrumb-text">HIV & TB History & Diagnosis</span>
                         <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
                 </ion-breadcrumbs>
                 <DynamicButton
-                    v-if="currentStep == 'Family History and NCDNumber'"
+                    v-if="currentStep == 'HIV & TB History & Diagnosis'"
                     name="Save"
                     iconSlot="end"
                     :icon="iconsContent.saveWhite"
@@ -194,7 +203,7 @@ export default defineComponent({
         return {
             iconsContent: icons,
             demographic: true,
-            currentStep: "Substance & Diagnosis",
+            currentStep: "NCD Number, Patient Type & Family History",
             scanner: false,
             steps: "" as any,
             isOpen: false,
@@ -270,8 +279,8 @@ export default defineComponent({
             if (type == "grid") {
                 this.currentStep = "Enrollment";
             } else {
-                this.currentStep = "Substance & Diagnosis";
-                this.steps = ["Substance & Diagnosis", "Patient History", "Family History and NCDNumber"];
+                this.currentStep = "NCD Number, Patient Type & Family History";
+                this.steps = ["NCD Number, Patient Type & Family History", "Patient History", "HIV & TB History & Diagnosis"];
             }
             const demographicsStore = useConfigurationStore();
             demographicsStore.setEnrollmentDisplayType(type);
