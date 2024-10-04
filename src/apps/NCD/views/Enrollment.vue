@@ -22,6 +22,7 @@
             <div v-if="enrollmentDisplayType == 'grid'">
                 <ion-row class="card_row" v-if="enrollmentDisplayType == 'grid'">
                     <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
+                        <NCDNumber />
                         <PatientHistory />
                     </ion-col>
                     <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
@@ -31,21 +32,23 @@
                     <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
                         <EnrollmentDiagnosis />
                         <Substance />
-                        <NCDNumber />
                     </ion-col>
                 </ion-row>
             </div>
             <div v-if="enrollmentDisplayType == 'list'">
                 <div v-if="currentStep == 'Substance & Diagnosis'">
-                    <SubstanceDiagnosis />
+                    <NCDNumber />
+                    <PatientHistory />
                 </div>
                 <div v-if="currentStep == 'Patient History'">
                     <div style="display: flex; justify-content: center">
-                        <div><PatientHistory /></div>
+                        <PatientHistoryHIV />
+                        <FamilyHistory />
                     </div>
                 </div>
                 <div v-if="currentStep == 'Family History and NCDNumber'">
-                    <FamilyHistoryNCDNumber />
+                    <EnrollmentDiagnosis />
+                    <Substance />
                 </div>
             </div>
         </ion-content>
@@ -189,7 +192,7 @@ export default defineComponent({
         return {
             iconsContent: icons,
             demographic: true,
-            currentStep: "",
+            currentStep: "Substance & Diagnosis",
             scanner: false,
             steps: "" as any,
             isOpen: false,
@@ -425,12 +428,10 @@ ion-footer {
 
 .title {
     text-align: center;
-    margin-bottom: 10px;
 }
 .demographics_title {
     font-weight: 700;
     font-size: 24px;
-    padding-top: 20px;
 }
 .demographics {
     display: flex;
