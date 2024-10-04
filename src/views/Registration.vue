@@ -389,7 +389,7 @@ export default defineComponent({
                 this.disableSaveBtn = true;
                 this.isLoading = true;
 
-                if (this.globalPropertyStore.dde_enabled) {
+                if (this.globalPropertyStore.dde_enabled === "true") {
                     if (await this.possibleDuplicates()) {
                         this.disableSaveBtn = false;
                         this.isLoading = false;
