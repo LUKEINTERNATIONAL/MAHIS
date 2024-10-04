@@ -33,6 +33,11 @@
                         <ion-label class="header">Manage Offline Records </ion-label>
                     </ion-item>
                 </ion-accordion>
+                <ion-accordion value="deduplication of client profile records" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">De-Duplication</ion-label>
+                    </ion-item>
+                </ion-accordion>
                 <ion-accordion value="6">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Reports</ion-label>
@@ -136,9 +141,6 @@
                                     <ion-list>
                                         <ion-item class="list-bottom" @click="navigationMenu('setSessionDate')" value="Session Date">
                                             Session Date
-                                        </ion-item>
-                                        <ion-item @click="navigationMenu('Deduplicateclients')" value="Deduplicate clients">
-                                            De-Duplication
                                         </ion-item>
                                         <ion-item @click="navigationMenu('clinicaldays')" value="Session Date"> Clinical Days </ion-item>
                                         <ion-item @click="navigationMenu('setDDE')" value="DDE"> DDE </ion-item>

@@ -450,4 +450,9 @@ export class PatientService extends Service {
         }
         return addressOBJ;
     }
+
+    public static async getCachedClientProfileDuplicates() {
+        const res = await Service.getJson('/dde/patients/matches')
+        return res
+    }
 }

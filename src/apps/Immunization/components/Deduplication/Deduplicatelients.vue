@@ -8,12 +8,12 @@
             <ion-col size="12" size-md="4">
               <ion-list>
                 <ion-list-header>
-                  <ion-label>Primary Clients</ion-label>
+                  <ion-label style="font-size: 18px; font-weight: 600;">Duplicate Clients</ion-label>
                 </ion-list-header>
                 <ion-item v-for="client in clients" :key="client.primary_patient_id" 
                           button @click="selectPrimaryClient(client)" 
                           :class="{ 'selected': selectedPrimaryClient === client }">
-                  <ion-label>{{ client.primary_firstname }} {{ client.primary_sirname }}</ion-label>
+                  <ion-label>{{ client.primary_given_name }} {{ client.primary_family_name }}</ion-label>
                 </ion-item>
               </ion-list>
             </ion-col>
@@ -23,7 +23,7 @@
               <!-- Middle Panel: Selected Primary Client Details -->
               <ion-card v-if="selectedPrimaryClient">
                 <ion-card-header>
-                  <ion-card-title>{{ selectedPrimaryClient.primary_firstname }} {{ selectedPrimaryClient.primary_sirname }}</ion-card-title>
+                  <ion-card-title>{{ selectedPrimaryClient.primary_given_name }} {{ selectedPrimaryClient.primary_family_name }}</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
                   <p>Birth Date: {{ selectedPrimaryClient.primary_birthdate }}</p>
@@ -70,79 +70,7 @@
       IonCard, IonCardHeader, IonPage, IonCardTitle, IonCardContent, IonCheckbox, IonButton, NavigationMenu
     },
     setup() {
-      const clients = ref(
-        [
-      {
-        primary_patient_id: 274964,
-        primary_firstname: "Ellen",
-        primary_sirname: "Degeneres",
-        primary_birthdate: "2024-08-09",
-        primary_gender: "F",
-        duplicates: [
-          {
-            secondary_patient_id: 274966,
-            secondary_firstname: "James",
-            secondary_sirname: "Kamanga",
-            match_percentage: 57,
-            selected: false
-          },
-          {
-            secondary_patient_id: 274965,
-            secondary_firstname: "Hamnna",
-            secondary_sirname: "Kamanga",
-            match_percentage: 57,
-            selected: false
-          },
-        ]
-      },
-      {
-        primary_patient_id: 274970,
-        primary_firstname: "Charles",
-        primary_sirname: "Xavier",
-        primary_birthdate: "1940-07-13",
-        primary_gender: "M",
-        duplicates: [
-          {
-            secondary_patient_id: 274971,
-            secondary_firstname: "Charlie",
-            secondary_sirname: "Xavier",
-            match_percentage: 90,
-            selected: false
-          },
-          {
-            secondary_patient_id: 274972,
-            secondary_firstname: "Charles",
-            secondary_sirname: "Francis",
-            match_percentage: 75,
-            selected: false
-          },
-        ]
-      },
-      {
-        primary_patient_id: 274975,
-        primary_firstname: "Red",
-        primary_sirname: "Hood",
-        primary_birthdate: "1995-08-16",
-        primary_gender: "M",
-        duplicates: [
-          {
-            secondary_patient_id: 274976,
-            secondary_firstname: "Jason",
-            secondary_sirname: "Todd",
-            match_percentage: 85,
-            selected: false
-          },
-          {
-            secondary_patient_id: 274977,
-            secondary_firstname: "Red",
-            secondary_sirname: "Robin",
-            match_percentage: 70,
-            selected: false
-          },
-        ]
-      }
-    ]
-      ) as any;
+      const clients = ref() as any;
   
       const selectedPrimaryClient = ref(null) as any;
       const programId = ref(33); // Assuming a default program ID of 33
@@ -169,8 +97,8 @@
           };
   
           console.log('Merge Payload:', mergePayload);
-         
         //   await PatientService.mergePatients(mergePayload);
+        this.initNavData()
         }
       };
   
@@ -180,7 +108,8 @@
         selectPrimaryClient,
         hasSelectedDuplicates,
         mergeSelected,
-        programId
+        programId,
+        initNavData
       };
     },
     watch: {
@@ -196,9 +125,15 @@
       this.initNavData()
     },
     methods: {
-      initNavData() {
+      async initNavData() {
         const store = EIRreportsStore()
         store.setNavigationPayload('Clients De-Duplication', true, false, '/', 'home', '')
+        const tmpClients = [] as any
+        const duplicateClients =  await PatientService.getCachedClientProfileDuplicates()
+        duplicateClients.forEach((client: any) => {
+          tmpClients.push(client[0])
+        })
+        this.clients = tmpClients
       },
     },
   });
