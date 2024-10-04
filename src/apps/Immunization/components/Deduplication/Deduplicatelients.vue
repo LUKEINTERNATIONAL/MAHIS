@@ -29,20 +29,27 @@
                 <p>Birth Date: {{ selectedPrimaryClient.primary_birthdate }}</p>
                 <p>Gender: {{ selectedPrimaryClient.primary_gender }}</p>
                 <p>ID: {{ selectedPrimaryClient.primary_patient_id }}</p>
+                <p>Home District: {{ selectedPrimaryClient.primary_home_district}}</p>
+                <p>TA: {{ selectedPrimaryClient.primary_home_ta	 }}</p>
+                <p>Home Village: {{ selectedPrimaryClient.primary_home_village}}</p>
               </ion-card-content>
             </ion-card>
 
             <!-- Right Panel: Duplicates -->
             <ion-list v-if="selectedPrimaryClient">
               <ion-list-header>
-                <ion-label>Potential Duplicates</ion-label>
+                <ion-label style="font-weight: 600;">Potential Duplicates</ion-label>
               </ion-list-header>
               <ion-item v-for="duplicate in selectedPrimaryClient.duplicates" :key="duplicate.secondary_patient_id">
                 <ion-checkbox slot="start" v-model="duplicate.selected"></ion-checkbox>
                 <ion-label>
-                  <h3>{{ duplicate.secondary_firstname }} {{ duplicate.secondary_sirname }}</h3>
+                  <h3>{{duplicate.secondary_given_name}} {{duplicate.secondary_family_name	}}</h3>
                   <p>ID: {{ duplicate.secondary_patient_id }}</p>
                   <p>Match: {{ duplicate.match_percentage }}%</p>
+                  <p>Birth Date: {{ duplicate.secondary_birthdate }}</p>
+                  <p>Home District: {{ duplicate.secondary_home_district}}</p>
+                  <p>TA: {{ duplicate.secondary_home_ta	 }}</p>	
+                  <p>Home Village: {{ duplicate.secondary_home_village}}</p>
                 </ion-label>
               </ion-item>
             </ion-list>
