@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
-import _ from "lodash";
-const initialOPDdiagnosis = [
+import _, {initial} from "lodash";
+
+const initialDiagnosis=[
     {
         selectedData: [],
         isFinishBtn: false,
@@ -11,59 +12,24 @@ const initialOPDdiagnosis = [
                     colData: [
                         {
                             inputHeader: "Diagnosis*",
-                            value: "",
-                            name: "primaryDiagnosis",
                             icon: icons.search,
-                            required: true,
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            isSingleSelect: true,
-                            trackBy: "concept_id",
-                            multiSelectData: [],
-                            idName: "district_id",
-                            validationFunctionName: "required",
-                            // inputFieldDisplayNone: true,
-                            // colSize: 0,
-                        },
-                    ],
-                    btns: [
-                        {
-                            name: "Add",
-                            fill: "clear",
-                            btn_col_size: 3,
-                            icon: icons.plus,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        selectedData: [],
-        isFinishBtn: false,
-        data: {
-            rowData: [
-                {
-                    colData: [
-
-                        {
-                            inputHeader: "Differential Diagnosis",
-                            icon: icons.search,
-                            isMultiSelect: true,
                             popOver: true,
                             value: "",
-                            name: "differentialDiagnosis",
-                            multiSelectData: [],
+                            name: "diagnosis",
                             eventType: "input",
-                            // required: true,
+                            required: true,
                             alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: false,
+                                data: [],
+                            },
                             id: "",
                             idName: "district_id",
                         },
                     ],
                     btns: [
                         {
-                            name: "Add",
+                            name: "Save",
                             fill: "clear",
                             btn_col_size: 3,
                             icon: icons.plus,
@@ -74,6 +40,30 @@ const initialOPDdiagnosis = [
         },
     },
     {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        sideColSize:0,
+        checkboxBtnContent:{
+            header:{
+
+            },
+            data:[
+                {
+                    name:'Secondary Diagnosis',
+                    value: 'Secondary Diagnosis',
+                    colSize: "3",
+                },
+                {
+                    name: 'Differential Diagnosis',
+                    value: 'Differential Diagnosis',
+                    colSize: "3",
+                },
+            ]
+        }
+    },
+    {
+        childName:"Secondary Diagnosis",
         selectedData: [],
         isFinishBtn: false,
         data: {
@@ -81,25 +71,26 @@ const initialOPDdiagnosis = [
                 {
                     colData: [
                         {
-                            inputHeader: "Secondary Diagnosis*",
+                            displayNone:true,
+                            inputHeader: "Secondary diagnosis",
+                            icon: icons.search,
+                            popOver: true,
                             value: "",
                             name: "secondaryDiagnosis",
-                            icon: icons.search,
-                            required: true,
                             eventType: "input",
+                            required: true,
                             alertsErrorMassage: "",
-                            isSingleSelect: true,
-                            trackBy: "concept_id",
-                            multiSelectData: [],
+                            popOverData: {
+                                filterData: false,
+                                data: [],
+                            },
+                            id: "",
                             idName: "district_id",
-                            validationFunctionName: "required",
-                            // inputFieldDisplayNone: true,
-                            // colSize: 0,
                         },
                     ],
                     btns: [
                         {
-                            name: "Add",
+                            name: "Save",
                             fill: "clear",
                             btn_col_size: 3,
                             icon: icons.plus,
@@ -109,19 +100,57 @@ const initialOPDdiagnosis = [
             ],
         },
     },
-];
-export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
+    {
+        childName:"Differential Diagnosis",
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone:true,
+                            inputHeader: "Differential diagnosis",
+                            icon: icons.search,
+                            popOver: true,
+                            value: "",
+                            name: "differentialDiagnosis",
+                            eventType: "input",
+                            required: true,
+                            alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: false,
+                                data: [],
+                            },
+                            id: "",
+                            idName: "district_id",
+                        },
+                    ],
+                    btns: [
+                        {
+                            name: "Save",
+                            fill: "clear",
+                            btn_col_size: 3,
+                            icon: icons.plus,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any
+export const useOPDDiagnosisStore = defineStore("DiagnosisStore", {
     state: () => ({
-        OPDdiagnosis: [...initialOPDdiagnosis] as any,
+        diagnosis: [...initialDiagnosis] as any,
     }),
     actions: {
         setOPDDiagnosis(data: any) {
-            this.OPDdiagnosis = data;
+            this.diagnosis = data;
         },
-        getInitial() {
-            const data = _.cloneDeep(initialOPDdiagnosis);
-            return [...data]; // Return a copy of the initial state
-        },
+        getInitial(){
+            const data = _.cloneDeep(initialDiagnosis);
+            return [...data];
+        }
     },
-    persist: true,
+    // persist: true,
 });
