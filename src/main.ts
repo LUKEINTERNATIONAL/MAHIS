@@ -9,6 +9,7 @@ import piniaPluginPersistedState from "pinia-plugin-persistedstate";
 
 import VueDatePicker from "@vuepic/vue-datepicker";
 import VueAwesomePaginate from "vue-awesome-paginate";
+import "form-wizard-vue3/dist/form-wizard-vue3.css";
 import "vue-awesome-paginate/dist/style.css";
 
 import "@vuepic/vue-datepicker/dist/main.css";
