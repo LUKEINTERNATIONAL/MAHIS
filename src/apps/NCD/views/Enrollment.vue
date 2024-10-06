@@ -218,7 +218,15 @@ export default defineComponent({
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
         ...mapState(useGeneralStore, ["NCDActivities"]),
-        ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
+        ...mapState(useEnrollementStore, [
+            "NCDNumber",
+            "enrollmentDiagnosis",
+            "substance",
+            "patientHistoryHIV",
+            "patientHistory",
+            "patientType",
+            "familyHistory",
+        ]),
     },
     async mounted() {
         this.setDisplayType(this.enrollmentDisplayType);
@@ -298,9 +306,11 @@ export default defineComponent({
         async buildEnrollmentData() {
             return [
                 ...(await formatRadioButtonData(this.patientHistoryHIV)),
+                ...(await formatRadioButtonData(this.patientType)),
                 ...(await formatRadioButtonData(this.substance)),
                 ...(await formatCheckBoxData(this.enrollmentDiagnosis)),
                 ...(await formatCheckBoxData(this.patientHistory)),
+                ...(await formatCheckBoxData(this.familyHistory)),
                 ...(await formatCheckBoxData(this.patientHistoryHIV)),
             ];
         },
