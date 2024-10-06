@@ -3,15 +3,65 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper
+            <!-- <Stepper
                 stepperTitle="The consultation plan"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 @finishBtn="saveData()"
                 :StepperData="StepperData"
-            />
+            /> -->
+            <div style="width: 85vw; margin: 0 auto; margin-top: 30px">
+                <Wizard
+                    vertical-tabs
+                    navigable-tabs
+                    scrollable-tabs
+                    :custom-tabs="[
+                        {
+                            title: 'Vitals',
+                        },
+                        {
+                            title: 'Investigations',
+                        },
+                        {
+                            title: 'Diagnosis',
+                        },
+                        {
+                            title: 'Complications Screening',
+                        },
+
+                        {
+                            title: 'Treatment Plan',
+                        },
+
+                        {
+                            title: 'Next Appointment',
+                        },
+                    ]"
+                    :beforeChange="onTabBeforeChange"
+                    @change="onChangeCurrentTab"
+                    @complete:wizard="wizardCompleted"
+                >
+                    <div>
+                        <div class="back_profile">
+                            <DynamicButton
+                                name="Back to profile"
+                                iconSlot="start"
+                                fill="clear"
+                                :icon="chevronBackOutline"
+                                @click="openBackController()"
+                            />
+                        </div>
+                    </div>
+                    <VitalSigns v-if="currentTabIndex === 0" />
+                    <Investigations v-if="currentTabIndex === 1" />
+                    <DiagnosisComponent v-if="currentTabIndex === 2" />
+                    <ComplicationsScreening v-if="currentTabIndex === 3" />
+                    <TreatmentPlan v-if="currentTabIndex === 4" />
+                    <NextAppointment v-if="currentTabIndex === 5" />
+                </Wizard>
+            </div>
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" />
+        <!-- <BasicFooter @finishBtn="saveData()" /> -->
     </ion-page>
 </template>
 
@@ -49,7 +99,9 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
+import DynamicButton from "@/components/DynamicButton.vue";
 import Stepper from "@/components/Stepper.vue";
+// import FormWizard from "@/components/FormWizard.vue";
 import { Service } from "@/services/service";
 import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
@@ -68,6 +120,14 @@ import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
 import { UserService } from "@/services/user_service";
 import BasicFooter from "@/components/BasicFooter.vue";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import FormWizard from "@/views/Mixin/FormWizard.vue";
+import DiagnosisComponent from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
+import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
+import Investigations from "@/components/Investigations.vue";
+import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
+import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
+import VitalSigns from "@/components/VitalSigns.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -77,6 +137,7 @@ import {
     modifyCheckboxValue,
 } from "@/services/data_helpers";
 export default defineComponent({
+    mixins: [ScreenSizeMixin, FormWizard],
     name: "Home",
     components: {
         IonContent,
@@ -100,7 +161,15 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
+        FormWizard,
         BasicFooter,
+        DiagnosisComponent,
+        ComplicationsScreening,
+        Investigations,
+        TreatmentPlan,
+        NextAppointment,
+        VitalSigns,
+        DynamicButton,
     },
     data() {
         return {
@@ -158,6 +227,9 @@ export default defineComponent({
     },
 
     methods: {
+        openBackController() {
+            createModal(SaveProgressModal);
+        },
         async getData() {
             // const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
             for (let i = 0; i < this.NCDActivities.length; i++) {
