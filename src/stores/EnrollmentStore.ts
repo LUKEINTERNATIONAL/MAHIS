@@ -804,13 +804,13 @@ const initialPatientType = [
         radioBtnContent: {
             header: {
                 title: "Patient Type",
-                name: "patient_type",
+                name: "Visit type",
                 selectedValue: "",
             },
             data: [
                 {
                     name: "New",
-                    value: "New",
+                    value: "New patient",
                 },
                 {
                     name: "External consultation",
@@ -818,7 +818,7 @@ const initialPatientType = [
                 },
                 {
                     name: "Transferred in",
-                    value: "Transferred in",
+                    value: "Patient transferred in",
                 },
             ],
         },
