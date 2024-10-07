@@ -396,7 +396,12 @@ export default defineComponent({
         VueMultiselect,
         BasicInputChangeUnits,
         BasicPhoneInputField,
-        IonCol, IonIcon, IonRow, IonLabel, IonRadio, IonRadioGroup
+        IonCol,
+        IonIcon,
+        IonRow,
+        IonLabel,
+        IonRadio,
+        IonRadioGroup,
     },
     data() {
         return {
@@ -440,7 +445,7 @@ export default defineComponent({
             }
             if (inputType == "updateMultiselect") {
                 const multipleValues = Array.isArray(event) ? event.map((item: any) => item.name) : [];
-                const singleValue = typeof event === "object" ? event.name : "";
+                const singleValue = typeof event === "object" ? event?.name : "";
                 this.validateData(data, col, col?.isMultiSelect ? multipleValues : singleValue);
                 modifyFieldValue(data, col.name, "value", event);
                 this.$emit("update:inputValue", col);
