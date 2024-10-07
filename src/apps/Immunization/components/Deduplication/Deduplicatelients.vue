@@ -165,7 +165,7 @@ export default defineComponent({
 
     const initNavData = async () => {
       const store = EIRreportsStore();
-      store.setNavigationPayload('Clients De-Duplication', true, false, '/', 'home', '');
+      store.setNavigationPayload('Client De-Duplication', true, false, '/', 'home', '');
       const duplicateClients = await PatientService.getCachedClientProfileDuplicates();
       clients.value = duplicateClients.map((client: any[]) => client[0]);
       filteredClients.value = clients.value;

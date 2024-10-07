@@ -173,8 +173,8 @@ export async function getunderfiveImmunizationsDrugs() {
     return data
 }
 
-export async function getImmunizationDrugs(): Promise<any> {
-    const data = await Service.getJson(`/immunization/drugs`)
+export async function getImmunizationVaccineNames(): Promise<any> {
+    const data = await Service.getJson(`/immunization/vaccine_names`)
     return data
 }
 
