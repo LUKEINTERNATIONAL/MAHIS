@@ -39,11 +39,11 @@
                         </div>
                     </div>
                     <VitalSigns v-if="currentTabIndex === 0" />
-                    <Investigations v-if="currentTabIndex === 1" />
-                    <DiagnosisComponent v-if="currentTabIndex === 2" />
-                    <ComplicationsScreening v-if="currentTabIndex === 3" />
-                    <TreatmentPlan v-if="currentTabIndex === 4" />
-                    <NextAppointment v-if="currentTabIndex === 5" />
+                    <Investigations v-if="currentTabIndex === 2" />
+                    <DiagnosisComponent v-if="currentTabIndex === 3" />
+                    <ComplicationsScreening v-if="currentTabIndex === 4" />
+                    <TreatmentPlan v-if="currentTabIndex === 5" />
+                    <NextAppointment v-if="currentTabIndex === 6" />
                 </Wizard>
             </div>
         </ion-content>
@@ -169,6 +169,10 @@ export default defineComponent({
                     icon: "",
                 },
                 {
+                    title: "Risk Assessment",
+                    icon: "",
+                },
+                {
                     title: "Investigations",
                     icon: "",
                 },
@@ -275,21 +279,21 @@ export default defineComponent({
             }
 
             if (this.investigations[0].selectedData.length > 0) {
-                this.tabs[1].icon = "check";
-            } else {
-                this.tabs[1].icon = "";
-            }
-
-            if (this.diagnosis[0].selectedData.length > 0) {
                 this.tabs[2].icon = "check";
             } else {
                 this.tabs[2].icon = "";
             }
 
-            if (this.selectedMedicalDrugsList.length > 0) {
-                this.tabs[4].icon = "check";
+            if (this.diagnosis[0].selectedData.length > 0) {
+                this.tabs[3].icon = "check";
             } else {
-                this.tabs[4].icon = "";
+                this.tabs[3].icon = "";
+            }
+
+            if (this.selectedMedicalDrugsList.length > 0) {
+                this.tabs[5].icon = "check";
+            } else {
+                this.tabs[5].icon = "";
             }
         },
 
