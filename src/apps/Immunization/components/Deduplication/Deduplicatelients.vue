@@ -81,6 +81,9 @@
                                   <ion-badge color="primary">Match: {{ duplicate.match_percentage }}%</ion-badge>
                                   <p>ID: {{ duplicate.secondary_patient_id }}</p>
                                   <p>Birth Date: {{ duplicate.secondary_birthdate }} | Gender: {{ duplicate.secondary_gender }}</p>
+                                  <p>
+                                    Address: {{ duplicate.secondary_home_village }}, {{ duplicate.secondary_home_ta }}, {{ duplicate.secondary_home_district }}
+                                  </p>
                                 </ion-label>
                               </ion-item>
                               <ion-item-options side="end">
