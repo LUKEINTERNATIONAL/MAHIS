@@ -758,7 +758,19 @@ ion-footer {
     --sx-internal-color-light-gray: #fafafa;
     --sx-internal-color-text: #000;
 }
-
+* {
+    padding: revert-layer;
+}
+.back_profile {
+    display: flex;
+    justify-content: space-between;
+    width: 140px;
+    align-items: center;
+    font-weight: 400;
+    font-size: 14px;
+    /* position: fixed; */
+    z-index: 1000;
+}
 .sx__month-agenda-day {
     color: #000;
 }
