@@ -15,31 +15,17 @@
                     vertical-tabs
                     navigable-tabs
                     scrollable-tabs
-                    :custom-tabs="[
-                        {
-                            title: 'Vitals',
-                        },
-                        {
-                            title: 'Investigations',
-                        },
-                        {
-                            title: 'Diagnosis',
-                        },
-                        {
-                            title: 'Complications Screening',
-                        },
-
-                        {
-                            title: 'Treatment Plan',
-                        },
-
-                        {
-                            title: 'Next Appointment',
-                        },
-                    ]"
+                    :doneButton="{
+                        text: 'Finish',
+                        icon: 'check',
+                        hideText: false,
+                        hideIcon: false,
+                        disabled: false,
+                    }"
+                    :custom-tabs="tabs"
                     :beforeChange="onTabBeforeChange"
                     @change="onChangeCurrentTab"
-                    @complete:wizard="wizardCompleted"
+                    @complete:wizard="saveData()"
                 >
                     <div>
                         <div class="back_profile">
@@ -177,6 +163,34 @@ export default defineComponent({
             StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
+            tabs: [
+                {
+                    title: "Vitals",
+                    icon: "",
+                },
+                {
+                    title: "Investigations",
+                    icon: "",
+                },
+                {
+                    title: "Diagnosis",
+                    icon: "",
+                },
+                {
+                    title: "Complications Screening",
+                    icon: "",
+                },
+
+                {
+                    title: "Treatment Plan",
+                    icon: "",
+                },
+
+                {
+                    title: "Next Appointment",
+                    icon: "",
+                },
+            ],
         };
     },
     computed: {
@@ -254,58 +268,28 @@ export default defineComponent({
         },
         markWizard() {
             if (this.vitals.validationStatus) {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+                this.tabs[0].icon = "check";
+                console.log("🚀 ~ markWizard ~ this.tabs[0].icon:", this.tabs);
             } else {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: false,
-                });
+                this.tabs[0].icon = "";
             }
 
             if (this.investigations[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+                this.tabs[1].icon = "check";
             } else {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: false,
-                });
+                this.tabs[1].icon = "";
             }
 
             if (this.diagnosis[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+                this.tabs[2].icon = "check";
             } else {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: false,
-                });
+                this.tabs[2].icon = "";
             }
 
             if (this.selectedMedicalDrugsList.length > 0) {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+                this.tabs[4].icon = "check";
             } else {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: false,
-                });
-            }
-
-            if (this.dispositions.length > 0) {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: false,
-                });
+                this.tabs[4].icon = "";
             }
         },
 
