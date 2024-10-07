@@ -4,89 +4,102 @@
     <ion-content>
       <ion-grid>
         <ion-row>
-          <!-- Left Panel: Primary Clients -->
-          <ion-col size="12" size-md="4">
+          <ion-col size="12" size-md="10" size-lg="8" offset-md="1" offset-lg="2">
+            <h2 class="ion-padding">Client Deduplication</h2>
             <ion-card>
-              <ion-card-header>
-                <ion-card-title>Duplicate Clients</ion-card-title>
-              </ion-card-header>
               <ion-card-content>
+                <ion-searchbar
+                  placeholder="Search clients"
+                  v-model="searchQuery"
+                  @ionInput="filterClients"
+                ></ion-searchbar>
                 <ion-list>
-                  <ion-item v-for="client in clients" :key="client.primary_patient_id" 
-                            button @click="selectPrimaryClient(client)" 
-                            :class="{ 'selected-client': selectedPrimaryClient === client }">
-                    <ion-avatar slot="start">
-                      <ion-icon :icon="personCircle" size="large" :color="selectedPrimaryClient === client ? 'primary' : 'medium'"></ion-icon>
-                    </ion-avatar>
-                    <ion-label>
-                      <h2>{{ client.primary_given_name }} {{ client.primary_family_name }}</h2>
-                      <p>ID: {{ client.primary_patient_id }}</p>
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
+                  <div v-for="client in filteredClients" :key="client.primary_patient_id" class="client-container">
+                    <div class="sticky-header">
+                      <ion-item button @click="toggleClientDetails(client)" 
+                                :class="{ 'selected-client': selectedPrimaryClient === client }">
+                        <ion-avatar slot="start">
+                          <ion-icon :icon="personCircle" size="large" :color="selectedPrimaryClient === client ? 'primary' : 'medium'"></ion-icon>
+                        </ion-avatar>
+                        <ion-label>
+                          <h2>{{ client.primary_given_name }} {{ client.primary_family_name }}</h2>
+                          <p>ID: {{ client.primary_patient_id }}</p>
+                        </ion-label>
+                        <ion-badge color="warning" slot="end">
+                          {{ client.duplicates.length }}
+                        </ion-badge>
+                        <ion-icon :icon="selectedPrimaryClient === client ? chevronUp : chevronDown" slot="end"></ion-icon>
+                      </ion-item>
+                    </div>
+                    
+                    <div v-if="selectedPrimaryClient === client" class="client-details">
+                      <ion-card>
+                        <ion-card-header color="light">
+                          <ion-card-subtitle>Primary Client Details</ion-card-subtitle>
+                        </ion-card-header>
+                        <ion-card-content>
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col size="12" size-md="6">
+                                <ion-item lines="none">
+                                  <ion-icon :icon="calendar" slot="start" color="primary"></ion-icon>
+                                  <ion-label>Birth Date: {{ client.primary_birthdate }}</ion-label>
+                                </ion-item>
+                              </ion-col>
+                              <ion-col size="12" size-md="6">
+                                <ion-item lines="none">
+                                  <ion-icon :icon="getGenderIcon(client.primary_gender)" slot="start" color="primary"></ion-icon>
+                                  <ion-label>Gender: {{ client.primary_gender }}</ion-label>
+                                </ion-item>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-item lines="none">
+                                  <ion-icon :icon="location" slot="start" color="primary"></ion-icon>
+                                  <ion-label class="ion-text-wrap">
+                                    Address: {{ client.primary_home_village }}, {{ client.primary_home_ta }}, {{ client.primary_home_district }}
+                                  </ion-label>
+                                </ion-item>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-card-content>
+                      </ion-card>
 
-          <!-- Middle and Right Panels -->
-          <ion-col size="12" size-md="8">
-            <!-- Middle Panel: Selected Primary Client Details -->
-            <ion-card v-if="selectedPrimaryClient">
-              <ion-card-header color="primary">
-                <ion-card-title>{{ selectedPrimaryClient.primary_given_name }} {{ selectedPrimaryClient.primary_family_name }}</ion-card-title>
-                <ion-card-subtitle>Primary Client Details</ion-card-subtitle>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-list lines="none">
-                  <ion-item>
-                    <ion-icon :icon="calendar" slot="start" color="primary"></ion-icon>
-                    <ion-label>Birth Date: {{ selectedPrimaryClient.primary_birthdate }}</ion-label>
-                  </ion-item>
-                  <ion-item>
-                    <ion-icon :icon="male" slot="start" color="primary"></ion-icon>
-                    <ion-label>Gender: {{ selectedPrimaryClient.primary_gender }}</ion-label>
-                  </ion-item>
-                  <ion-item>
-                    <ion-icon :icon="fingerPrint" slot="start" color="primary"></ion-icon>
-                    <ion-label>ID: {{ selectedPrimaryClient.primary_patient_id }}</ion-label>
-                  </ion-item>
-                  <ion-item>
-                    <ion-icon :icon="location" slot="start" color="primary"></ion-icon>
-                    <ion-label>
-                      <h3>Home District: {{ selectedPrimaryClient.primary_home_district }}</h3>
-                      <p>TA: {{ selectedPrimaryClient.primary_home_ta }}</p>
-                      <p>Village: {{ selectedPrimaryClient.primary_home_village }}</p>
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
-              </ion-card-content>
-            </ion-card>
+                      <ion-card>
+                        <ion-card-header color="light">
+                          <ion-card-subtitle>Potential Duplicates</ion-card-subtitle>
+                        </ion-card-header>
+                        <ion-card-content>
+                          <ion-list>
+                            <ion-item-sliding v-for="duplicate in client.duplicates" :key="duplicate.secondary_patient_id">
+                              <ion-item>
+                                <ion-checkbox slot="start" v-model="duplicate.selected"></ion-checkbox>
+                                <ion-label>
+                                  <h2>{{duplicate.secondary_given_name}} {{duplicate.secondary_family_name}}</h2>
+                                  <ion-badge color="primary">Match: {{ duplicate.match_percentage }}%</ion-badge>
+                                  <p>ID: {{ duplicate.secondary_patient_id }}</p>
+                                  <p>Birth Date: {{ duplicate.secondary_birthdate }} | Gender: {{ duplicate.secondary_gender }}</p>
+                                </ion-label>
+                              </ion-item>
+                              <ion-item-options side="end">
+                                <ion-item-option color="primary" @click="viewDetails(duplicate)">View</ion-item-option>
+                              </ion-item-options>
+                            </ion-item-sliding>
+                          </ion-list>
+                        </ion-card-content>
+                      </ion-card>
 
-            <!-- Right Panel: Duplicates -->
-            <ion-card v-if="selectedPrimaryClient">
-              <ion-card-header>
-                <ion-card-title>Potential Duplicates</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-list>
-                  <ion-item v-for="duplicate in selectedPrimaryClient.duplicates" :key="duplicate.secondary_patient_id">
-                    <ion-checkbox slot="start" v-model="duplicate.selected"></ion-checkbox>
-                    <ion-label>
-                      <h2>{{duplicate.secondary_given_name}} {{duplicate.secondary_family_name}}</h2>
-                      <ion-badge color="primary">Match: {{ duplicate.match_percentage }}%</ion-badge>
-                      <p>ID: {{ duplicate.secondary_patient_id }}</p>
-                      <p>Birth Date: {{ duplicate.secondary_birthdate }}</p>
-                      <p>Gender: {{ duplicate.secondary_gender }}</p>
-                      <p>District: {{ duplicate.secondary_home_district }} | TA: {{ duplicate.secondary_home_ta }} | Village: {{ duplicate.secondary_home_village }}</p>
-                    </ion-label>
-                  </ion-item>
+                      <ion-button expand="block" @click="mergeSelected(client)" :disabled="!hasSelectedDuplicates(client)" class="ion-margin-top">
+                        <ion-icon :icon="linkOutline" slot="start"></ion-icon>
+                        Merge Selected
+                      </ion-button>
+                    </div>
+                  </div>
                 </ion-list>
               </ion-card-content>
             </ion-card>
-            <ion-button expand="block" @click="mergeSelected" :disabled="!hasSelectedDuplicates" class="ion-margin-top">
-              <ion-icon :icon="linkOutline" slot="start"></ion-icon>
-              Merge Selected
-            </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -96,8 +109,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import { IonContent, IonGrid, IonPage, IonRow, IonCol, IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonCheckbox, IonButton, IonIcon, IonAvatar, IonBadge, IonCardSubtitle } from "@ionic/vue";
-import { personCircle, calendar, male, fingerPrint, location, linkOutline } from 'ionicons/icons';
+import { IonContent, IonGrid, IonPage, IonRow, IonCol, IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonCheckbox, IonButton, IonIcon, IonAvatar, IonBadge, IonCardSubtitle, IonSearchbar, IonItemSliding, IonItemOption, IonItemOptions } from "@ionic/vue";
+import { personCircle, calendar, male, female, fingerPrint, location, linkOutline, chevronDown, chevronUp } from 'ionicons/icons';
 import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMenu.vue";
 import { PatientService } from "@/services/patient_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
@@ -107,50 +120,44 @@ export default defineComponent({
   components: {
     IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonLabel, 
     IonCard, IonCardHeader, IonPage, IonCardTitle, IonCardContent, IonCheckbox, IonButton, 
-    IonIcon, IonAvatar, IonBadge, NavigationMenu, IonCardSubtitle
+    IonIcon, IonAvatar, IonBadge, NavigationMenu, IonCardSubtitle, IonSearchbar,
+    IonItemSliding, IonItemOption, IonItemOptions
   },
   setup() {
-    const clients = ref([]) as any;
-    const selectedPrimaryClient = ref(null) as any;
+    const clients = ref([]);
+    const filteredClients = ref([]);
+    const selectedPrimaryClient = ref(null);
     const programId = ref(33);
+    const searchQuery = ref('');
 
-    const selectPrimaryClient = (client: any) => {
-      // Reset all selections before setting the new primary client
-      resetSelections();
-      selectedPrimaryClient.value = client;
-    };
-
-    const hasSelectedDuplicates = computed(() => {
-      return selectedPrimaryClient.value && 
-             selectedPrimaryClient.value.duplicates.some((d: any) => d.selected);
-    });
-
-    const resetSelections = () => {
-      if (selectedPrimaryClient.value) {
-        selectedPrimaryClient.value.duplicates.forEach((duplicate: any) => {
-          duplicate.selected = false;
-        });
+    const toggleClientDetails = (client: any) => {
+      if (selectedPrimaryClient.value === client) {
+        selectedPrimaryClient.value = null;
+      } else {
+        selectedPrimaryClient.value = client;
       }
     };
 
-    const mergeSelected = async () => {
-      if (selectedPrimaryClient.value) {
-        const selectedDuplicates = selectedPrimaryClient.value.duplicates.filter((d: any) => d.selected);
-        
-        const mergePayload = {
-          primary: {
-            patient_id: selectedPrimaryClient.value.primary_patient_id
-          },
-          secondary: selectedDuplicates.map((d: any) => ({ patient_id: d.secondary_patient_id })),
-          program_id: programId.value
-        };
+    const hasSelectedDuplicates = (client: any) => {
+      return client.duplicates.some((d: any) => d.selected);
+    };
 
-        console.log('Merge Payload:', mergePayload);
-        await PatientService.mergePatients(mergePayload);
-        
-        resetSelections();
-        await initNavData();
-      }
+    const mergeSelected = async (client: any) => {
+      const selectedDuplicates = client.duplicates.filter((d: any) => d.selected);
+      
+      const mergePayload = {
+        primary: {
+          patient_id: client.primary_patient_id
+        },
+        secondary: selectedDuplicates.map((d: any) => ({ patient_id: d.secondary_patient_id })),
+        program_id: programId.value
+      };
+
+      console.log('Merge Payload:', mergePayload);
+      await PatientService.mergePatients(mergePayload);
+      
+      selectedPrimaryClient.value = null;
+      await initNavData();
     };
 
     const initNavData = async () => {
@@ -158,22 +165,51 @@ export default defineComponent({
       store.setNavigationPayload('Clients De-Duplication', true, false, '/', 'home', '');
       const duplicateClients = await PatientService.getCachedClientProfileDuplicates();
       clients.value = duplicateClients.map((client: any[]) => client[0]);
+      filteredClients.value = clients.value;
+    };
+
+    const getGenderIcon = (gender: string) => {
+      return gender.toUpperCase() === 'M' ? male : female;
+    };
+
+    const filterClients = () => {
+      if (!searchQuery.value) {
+        filteredClients.value = clients.value;
+      } else {
+        filteredClients.value = clients.value.filter((client: any) => {
+          const fullName = `${client.primary_given_name} ${client.primary_family_name}`.toLowerCase();
+          const query = searchQuery.value.toLowerCase();
+          const patientId = String(client.primary_patient_id);
+          return fullName.includes(query) || patientId.includes(query);
+        });
+      }
+    };
+
+    const viewDetails = (duplicate: any) => {
+      // Implement view details functionality
+      console.log('View details for:', duplicate);
     };
 
     return {
       clients,
+      filteredClients,
       selectedPrimaryClient,
-      selectPrimaryClient,
+      toggleClientDetails,
       hasSelectedDuplicates,
       mergeSelected,
       programId,
       initNavData,
+      getGenderIcon,
+      searchQuery,
+      filterClients,
+      viewDetails,
       personCircle,
       calendar,
-      male,
       fingerPrint,
       location,
-      linkOutline
+      linkOutline,
+      chevronDown,
+      chevronUp
     };
   },
   watch: {
@@ -202,19 +238,44 @@ export default defineComponent({
   font-weight: bold;
 }
 
-@media (max-width: 768px) {
-  ion-col {
-    margin-bottom: 1rem;
-  }
+.client-container {
+  position: relative;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--ion-background-color);
+}
+
+.client-details {
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 ion-badge {
   margin-right: 8px;
 }
 
-/* Styles for primary client details icons */
 ion-card-content ion-icon {
   font-size: 1.2em;
   margin-right: 8px;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--ion-color-primary);
+}
+
+ion-searchbar {
+  --background: var(--ion-color-light);
+  --border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+ion-item-sliding {
+  margin-bottom: 8px;
 }
 </style>
