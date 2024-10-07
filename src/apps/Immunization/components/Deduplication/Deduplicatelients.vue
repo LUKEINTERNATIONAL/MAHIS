@@ -5,7 +5,7 @@
       <ion-grid>
         <ion-row>
           <ion-col size="12" size-md="10" size-lg="8" offset-md="1" offset-lg="2">
-            <h2 class="ion-padding">Client Deduplication</h2>
+            <h2 class="ion-padding" style="font-size: large;">Client Deduplication</h2>
             <ion-card>
               <ion-card-content>
                 <ion-searchbar
@@ -266,8 +266,8 @@ ion-card-content ion-icon {
   margin-right: 8px;
 }
 
-h1 {
-  font-size: 2rem;
+h2 {
+  font-size: 1rem;
   font-weight: bold;
   color: var(--ion-color-primary);
 }
