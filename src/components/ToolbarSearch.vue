@@ -5,7 +5,7 @@
         :onYes="handleCheckInYes"
         :onNo="handleCheckInNo"
         :isOpen="checkInModalOpen"
-        :title="`Do you want to check in the patient?`"
+        :title="`Do you want to create visit or view profile?`"
     />
 
     <div style="display: flex; width: 100%; justify-content: center">

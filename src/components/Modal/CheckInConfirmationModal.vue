@@ -6,14 +6,14 @@
         <DynamicButton
             expand="block"
             @click="onYes()"
-            name="Yes"
+            name="Create visit"
             :style="`flex:1`"
         />
         <DynamicButton
             expand="block"
             @click="onNo()"
-            :style="`flex:1`"
-            name="No"
+            :style="`flex:1` "
+            name="View profile"
             fill="clear"
         />
       </div>
