@@ -97,6 +97,8 @@ import {
     modifyFieldValue,
     modifyCheckboxValue,
 } from "@/services/data_helpers";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import dates from "@/utils/Date"
 
 export default defineComponent({
     name: "Home",
@@ -327,6 +329,7 @@ export default defineComponent({
             });
           }
           if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+            await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"DISPENSATION");
             await this.saveDiagnosis();
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
@@ -336,6 +339,8 @@ export default defineComponent({
             await this.saveConsciousness();
             await this.savePhysicalExam();
             resetOPDPatientData();
+
+            
             if (this.userRole == "Lab") {
               this.$router.push("home");
             } else {

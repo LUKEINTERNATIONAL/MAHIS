@@ -84,7 +84,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="dismiss()"> Cancel </ion-button>
+        <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px; margin-left: 20px" @click="dismiss()"> Cancel </ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

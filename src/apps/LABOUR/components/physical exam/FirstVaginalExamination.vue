@@ -5,8 +5,7 @@
       <ion-card-content>
         <basic-form :contentData="firstVaginalExamination"   
         @update:selected="handleInputData"
-        @update:inputValue="handleInputData"
-        ></basic-form>
+        @update:inputValue="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
