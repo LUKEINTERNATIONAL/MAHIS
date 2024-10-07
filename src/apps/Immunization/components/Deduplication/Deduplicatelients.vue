@@ -128,7 +128,7 @@ export default defineComponent({
   },
   setup() {
     const clients = ref([]);
-    const filteredClients = ref([]);
+    const filteredClients = ref([]) as any;
     const selectedPrimaryClient = ref(null);
     const programId = ref(33);
     const searchQuery = ref('');
