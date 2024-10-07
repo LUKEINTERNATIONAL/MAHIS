@@ -326,6 +326,57 @@ const initialVitals = [
             },
         ],
     },
+    {
+        classDash: "dashed_bottom_border",
+        selectedData: [],
+        sideColSize: 3.8,
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: " ",
+                name: "Primary diagnosis",
+            },
+            data: [
+                {
+                    colSize: "5.8",
+                    name: "Respiratory rate Not Done",
+                    value: "Respiratory rate Not Done",
+                    checked: false,
+                    displayNone: false,
+                },
+            ],
+            inputFields: [
+                {
+                    inputHeader: "Specify Reason",
+                    icon: icons.search,
+                    isMultiSelect: true,
+                    popOver: true,
+                    value: "",
+                    name: "Respiratory rate Reason",
+                    multiSelectData: [
+                        {
+                            id: 1,
+                            name: "Patient uncooperative",
+                        },
+                        {
+                            id: 2,
+                            name: "Machine not working",
+                        },
+                        {
+                            id: 3,
+                            name: "Machine not available",
+                        },
+                    ],
+                    eventType: "input",
+                    required: true,
+                    alertsErrorMassage: "",
+                    id: "",
+                    idName: "district_id",
+                    displayNone: true,
+                },
+            ],
+        },
+    },
 ] as any;
 export const useVitalsStore = defineStore("vitalsStore", {
     state: () => ({
@@ -340,5 +391,5 @@ export const useVitalsStore = defineStore("vitalsStore", {
             return [...data];
         },
     },
-    persist: true,
+    //persist: true,
 });

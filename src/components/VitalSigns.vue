@@ -207,6 +207,19 @@ export default defineComponent({
                 modifyFieldValue(this.vitals, "Pulse", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
+            if (inputData?.col?.name == "Respiratory rate Not Done" && inputData.col.checked) {
+                modifyCheckboxInputField(this.vitals, "Respiratory rate Reason", "displayNone", false);
+                modifyFieldValue(this.vitals, "Respiratory rate", "disabled", true);
+                modifyFieldValue(this.vitals, "Respiratory rate", "inputHeader", "Respiratory rate");
+                modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
+                this.validationStatus.bloodPressure = false;
+            } else if (inputData?.col?.name == "Respiratory rate Not Done") {
+                modifyCheckboxInputField(this.vitals, "Respiratory rate Reason", "displayNone", true);
+                modifyFieldValue(this.vitals, "Respiratory rate", "disabled", false);
+                modifyFieldValue(this.vitals, "Respiratory rate", "inputHeader", "Respiratory rate*");
+                modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
+                this.validationStatus.bloodPressure = true;
+            }
         },
         async checkHeight() {
             const patient = new PatientService();
