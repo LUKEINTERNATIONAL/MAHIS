@@ -186,8 +186,6 @@
           selectedMedications.value.push(medicationData);
           treatmentPlanStore.setSelectedNCDMedicationList(medicationData)
         }
-
-        // console.log(this.selectedNCDMedicationList)
         resetForm();
       };
   

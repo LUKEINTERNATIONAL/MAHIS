@@ -40,8 +40,8 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         getPartialOPDdrugList(): any {
             return this.partialOPDdrugList;
         },
-        setSelectedNCDMedicationList(drug_items: any): void {
-            this.selectedNCDMedicationList = drug_items;
+        setSelectedNCDMedicationList(drug_item: any): void {
+            this.selectedNCDMedicationList.push(drug_item);
         },
         getSelectedNCDMedicationList() {
             return this.selectedNCDMedicationList;
