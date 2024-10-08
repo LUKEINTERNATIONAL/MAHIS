@@ -224,7 +224,7 @@
             <div>
                 <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
                     <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
-                    <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>
+                    <ion-item :button="true" :detail="false" @click="openOutCome()" style="cursor: pointer">Update outcome</ion-item>
                     <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
                     <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
                 </ion-list>
