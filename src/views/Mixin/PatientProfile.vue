@@ -16,6 +16,7 @@ export default defineComponent({
             isMobile: false as any,
             visits: [] as any,
             event: null as any,
+            popoverOpen: false,
         };
     },
     mounted() {},
@@ -23,6 +24,10 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
     },
     methods: {
+        openPopover(e: Event) {
+            this.event = e;
+            this.popoverOpen = true;
+        },
         openPIM() {
             createModal(personalInformationModal, { class: "otherVitalsModal largeModal" });
         },
