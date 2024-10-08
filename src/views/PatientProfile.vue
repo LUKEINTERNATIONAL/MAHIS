@@ -25,21 +25,18 @@
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-card-content>
                                 <div style="display: flex; justify-content: space-between">
-                                    <!-- <DynamicButton
-                    name="Checkin Patient"
-                    @click="toggleCheckInModal()"
-                    fill="clear"
-                    iconSlot="start"
-                    :icon="checkboxOutline"
-                  /> -->
                                     <DynamicButton
+                                        v-if="activeProgramID !== 32"
                                         name="Checkin Patient"
                                         @click="toggleCheckInModal()"
                                         fill="clear"
                                         iconSlot="start"
                                         :icon="closeCircleOutline"
                                     />
-                                    <DynamicButton name="Edit" fill="clear" iconSlot="start" @click="openPIM()" :icon="iconsContent.editFade" />
+                                    <div></div>
+                                    <div class="name" style="color: var(--ion-color-primary); margin-top: 10px" @click="openPopover($event)">
+                                        <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
+                                    </div>
                                 </div>
                                 <div class="p_name_image">
                                     <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
@@ -77,7 +74,6 @@
                                 :fill="activeProgramID != btn.program_id ? 'outline' : 'solid'"
                                 :color="activeProgramID == btn.program_id ? 'success' : ''"
                             />
-                            <OPDPopover :isOpen="popoverOpen" />
                         </div>
 
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
@@ -115,93 +111,6 @@
                                 </ion-accordion>
                             </ion-accordion-group>
                         </ion-card>
-                        <!-- <ion-card style="margin-bottom: 20px; background-color: #fff">
-              <ion-accordion-group :value="['first']">
-                <ion-accordion
-                  value="first"
-                  style="background-color: #fff"
-                  toggle-icon-slot="start"
-                >
-                  <ion-item slot="header" color="white">
-                    <ion-label class="side_title">Templates/Forms</ion-label>
-                  </ion-item>
-                  <ul style="list-style: none" slot="content">
-                    <li class="form_list">
-                      <ion-icon
-                        slot="start"
-                        aria-hidden="true"
-                        :icon="iconsContent.form"
-                      ></ion-icon>
-                      <div class="form_list_content">AETC Form</div>
-                    </li>
-                    <li class="form_list">
-                      <ion-icon
-                        slot="start"
-                        aria-hidden="true"
-                        :icon="iconsContent.inpatient"
-                      ></ion-icon>
-                      <div class="form_list_content">Medical Inpatient</div>
-                    </li>
-                    <li class="form_list">
-                      <ion-icon
-                        slot="start"
-                        aria-hidden="true"
-                        :icon="iconsContent.notes"
-                      ></ion-icon>
-                      <div class="form_list_content">Surgucal Notes</div>
-                    </li>
-                    <li class="form_list">
-                      <ion-icon
-                        slot="start"
-                        aria-hidden="true"
-                        :icon="iconsContent.gynacological"
-                      ></ion-icon>
-                      <div class="form_list_content">Gynacological</div>
-                    </li>
-                    <li class="form_list">
-                      <ion-icon
-                        slot="start"
-                        aria-hidden="true"
-                        :icon="iconsContent.notes"
-                      ></ion-icon>
-                      <div class="form_list_content">SOAP</div>
-                    </li>
-                    <li class="form_list">
-                      <ion-icon
-                        slot="start"
-                        aria-hidden="true"
-                        :icon="iconsContent.monitoring"
-                      ></ion-icon>
-                      <div class="form_list_content">Monitoring Chart</div>
-                    </li>
-                    <li class="form_list">
-                      <ion-icon
-                        slot="start"
-                        aria-hidden="true"
-                        :icon="iconsContent.referal"
-                      ></ion-icon>
-                      <div class="form_list_content">Referral</div>
-                    </li>
-                  </ul>
-                </ion-accordion>
-              </ion-accordion-group>
-            </ion-card>
-            <ion-card style="margin-bottom: 20px; background-color: #fff">
-              <ion-accordion-group>
-                <ion-accordion
-                  value="first"
-                  style="background-color: #fff"
-                  toggle-icon-slot="start"
-                >
-                  <ion-item slot="header" color="white">
-                    <ion-label class="side_title"
-                      >AETC Clerking Sheet</ion-label
-                    >
-                  </ion-item>
-                  <ion-card-content slot="content"> </ion-card-content>
-                </ion-accordion>
-              </ion-accordion-group>
-            </ion-card> -->
                     </ion-col>
                     <ion-col size-sm="12" size-md="12" size-lg="9.4">
                         <ion-card style="background-color: #fff; margin-inline: 0px">
@@ -304,6 +213,23 @@
             </div>
             <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
         </ion-content>
+        <ion-popover
+            style="--offset-x: -10px"
+            :is-open="popoverOpen"
+            :show-backdrop="false"
+            :dismiss-on-select="true"
+            :event="event"
+            @didDismiss="popoverOpen = false"
+        >
+            <div>
+                <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
+                    <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
+                    <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>
+                    <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
+                    <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
+                </ion-list>
+            </div>
+        </ion-popover>
     </ion-page>
 </template>
 
@@ -339,8 +265,6 @@ import {
 import { defineComponent } from "vue";
 import {
     medkit,
-    chevronBackOutline,
-    checkmark,
     grid,
     chevronDownCircle,
     chevronForwardCircle,
@@ -349,7 +273,6 @@ import {
     document,
     globe,
     add,
-    person,
     checkboxOutline,
     closeCircleOutline,
 } from "ionicons/icons";
@@ -370,6 +293,7 @@ import DiagnosesHistory from "@/components/DashboardSegments/DiagnosesHistory.vu
 import AllergiesContraindication from "@/components/DashboardSegments/AllergiesContraindication.vue";
 import VisitsHistory from "@/components/DashboardSegments/VisitsHistory.vue";
 import VitalsMeasurementsSummary from "@/components/DashboardSegments/VitalsMeasurementsSummary.vue";
+import { chevronBackOutline, checkmark, ellipsisVerticalSharp, person } from "ionicons/icons";
 
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
@@ -400,16 +324,16 @@ import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
-import OPDPopover from "@/components/Popovers/Opdpopover.vue";
 import AncEnrollmentModal from "@/components/Modal/AncEnrollmentModal.vue";
 
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
+import PatientProfileMixin from "@/views/Mixin/PatientProfile.vue";
 import { ProgramService } from "@/services/program_service";
 
 export default defineComponent({
-    mixins: [SetPrograms],
+    mixins: [SetPrograms, PatientProfileMixin],
     components: {
         WeightHeightChart,
         PreviousVitals,
@@ -456,7 +380,6 @@ export default defineComponent({
         LabTestsHistory,
         Programs,
         CheckInConfirmationModal,
-        OPDPopover,
         AncEnrollmentModal,
     },
     data() {
@@ -484,7 +407,6 @@ export default defineComponent({
                 High: ["#FECDCA", "#B42318", "#FDA19B"],
             } as any,
             checkInModalOpen: false,
-            popoverOpen: false,
             isEnrollmentModalOpen: false,
             enrolledPrograms: [],
             programToEnroll: 0,
@@ -530,6 +452,7 @@ export default defineComponent({
             person,
             checkboxOutline,
             closeCircleOutline,
+            ellipsisVerticalSharp,
         };
     },
 
@@ -576,9 +499,7 @@ export default defineComponent({
                 },
             ];
         },
-        openPIM() {
-            createModal(personalInformationModal, { class: "otherVitalsModal largeModal" });
-        },
+
         convertToDisplayDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
