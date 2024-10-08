@@ -209,9 +209,10 @@ ion-button.itemAlBtn {
     flex: 0 1 auto;
     --background: #5cc55e;
     --color: #006401;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
     text-transform: none;
+    margin: 2px;
 }
 .item-container {
   display: flex;
