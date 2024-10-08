@@ -66,12 +66,13 @@ import ListPicker from "../../../../../components/ListPicker.vue"
 const store = useAllegyStore()
 const selectedAllergiesList = computed(() => store.selectedMedicalAllergiesList) as any
 const allergiesList = computed(() => store.medicalAllergiesList)
+const uniqueId = ref(generateUniqueId(8, 'item-'))
 
 const list_picker_prperties = [
     {
         multi_Selection: true as any,
         show_list_label: true as any,
-        unqueId: 'qwerty_8_mkghy' as any,
+        unqueId:  uniqueId.value as any,
         name_of_list: 'Add/Remove allegies' as any,
         placeHolder: 'Search for an allegy' as any,
         items: [],
@@ -148,6 +149,19 @@ function setCommonAllergiesList() {
     );
     const allergyStore = store
     allergyStore.setMedicalAllergiesList(op_)
+}
+
+function generateUniqueId(length = 8, prefix = '') {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = prefix;
+
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    // Append a timestamp or random number for uniqueness
+    result += `-${Date.now()}`; // Append timestamp
+    return result;
 }
 </script>
 

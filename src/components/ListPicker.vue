@@ -64,9 +64,7 @@
 import { IonList, IonLabel, IonRow, IonCol, IonItem, IonButton, IonIcon, IonInput, IonContent } from "@ionic/vue"
 import { closeOutline, addOutline, checkmarkOutline } from "ionicons/icons"
 import { ref, watch, onMounted } from "vue"
-import BasicInputField from "@/components/BasicInputField.vue"
 
-const input = ref()
 const itemName = ref("")
 const local_itmes_List = ref([] as any)
 const local_disabled = ref(false)
@@ -143,6 +141,7 @@ async function FindItemName(text: any) {
 
 function setFocus() {
     // input.value.$el.setFocus()
+    generateUniqueId(8, 'item-')
 }
 
 const emit = defineEmits<{
@@ -179,6 +178,20 @@ function dissmissDrugAddField(): void {
     // display_item.value = true;
     // addItemButton.value = true;
 }
+
+function generateUniqueId(length = 8, prefix = '') {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = prefix;
+
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    // Append a timestamp or random number for uniqueness
+    result += `-${Date.now()}`; // Append timestamp
+    return result;
+}
+
 
 </script>
 
