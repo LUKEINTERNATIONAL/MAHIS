@@ -104,14 +104,6 @@
         },
       ]"
     ></ion-alert>
-  
-    <ion-toast
-      :is-open="showErrorToast"
-      :message="errorMessage"
-      :duration="3000"
-      @didDismiss="showErrorToast = false"
-      color="danger"
-    ></ion-toast>
   </template>
   
   <script lang="ts">
@@ -124,6 +116,7 @@
   import { 
     pencil, trash, medkit, medical, sunny, partlySunny, moon, add, save
   } from 'ionicons/icons';
+  import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
   
   export default defineComponent({
     name: 'MedicationSelector',
@@ -151,7 +144,6 @@
       const editIndex = ref(null) as any;
       const showRemoveAlert = ref(false) as any;
       const medicationToRemove = ref(null) as any;
-      const showErrorToast = ref(false) as any;
       const errorMessage = ref('') as any;
   
       const updateMedicationOptions = () => {
@@ -162,13 +154,13 @@
       const saveMedication = () => {
         if (!selectedMedication.value) {
           errorMessage.value = 'Please select a medication';
-          showErrorToast.value = true;
+          toastWarning(errorMessage.value)
           return;
         }
   
         if (!dosage.morning && !dosage.afternoon && !dosage.evening) {
           errorMessage.value = 'Please enter at least one dosage';
-          showErrorToast.value = true;
+          toastWarning(errorMessage.value)
           return;
         }
   
@@ -216,7 +208,7 @@
       return {
         categories, medications, selectedCategory, selectedMedication, medicationOptions,
         dosage, selectedMedications, editIndex, showRemoveAlert, medicationToRemove,
-        showErrorToast, errorMessage, updateMedicationOptions, saveMedication,
+        errorMessage, updateMedicationOptions, saveMedication,
         resetForm, editMedication, confirmRemoveMedication, removeMedication,
         pencil, trash, medkit, medical, sunny, partlySunny, moon, add, save
       };

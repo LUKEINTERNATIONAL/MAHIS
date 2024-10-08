@@ -51,18 +51,7 @@
             </ion-accordion>
         </ion-accordion-group>
 
-        <ion-item lines="none">
-            <ion-label>List of medications</ion-label>
-        </ion-item>
-        <div style="margin-left: 30px; margin-bottom: 14px">
-            <dynamic-list
-                :_selectedMedicalDrugsList="selectedMedicalDrugsList"
-                @edit-item="editItemAtIndex"
-                @remove-item="removeItemAtIndex"
-                :key="componentKey"
-            />
-        </div>
-
+        <ion-item/>
         <NCDMedication/>
 
         <div style="margin-top: 14px; margin-left: 10px">
