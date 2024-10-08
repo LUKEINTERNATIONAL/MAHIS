@@ -207,6 +207,19 @@ export default defineComponent({
                 modifyFieldValue(this.vitals, "Pulse", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
+            if (inputData?.col?.name == "Respiratory rate Not Done" && inputData.col.checked) {
+                modifyCheckboxInputField(this.vitals, "Respiratory rate Reason", "displayNone", false);
+                modifyFieldValue(this.vitals, "Respiratory rate", "disabled", true);
+                modifyFieldValue(this.vitals, "Respiratory rate", "inputHeader", "Respiratory rate");
+                modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
+                this.validationStatus.bloodPressure = false;
+            } else if (inputData?.col?.name == "Respiratory rate Not Done") {
+                modifyCheckboxInputField(this.vitals, "Respiratory rate Reason", "displayNone", true);
+                modifyFieldValue(this.vitals, "Respiratory rate", "disabled", false);
+                modifyFieldValue(this.vitals, "Respiratory rate", "inputHeader", "Respiratory rate*");
+                modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
+                this.validationStatus.bloodPressure = true;
+            }
         },
         async checkHeight() {
             const patient = new PatientService();
@@ -304,30 +317,28 @@ export default defineComponent({
 
             this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
         },
-      async setBMI(weight: any, height: any) {
-        if (this.demographics.gender && this.demographics.birthdate && weight && height) {
-          this.BMI = await BMIService.getBMI(
-              parseInt(weight),
-              parseInt(height),
-              this.demographics.gender,
-              HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
-          );
-          console.log("🚀 ~ setBMI ~ this.BMI:", this.BMI);
-          await this.updateBMI();
-        }
-      },
-
-      async updateBMI() {
-        const bmiColor = this.BMI?.color ?? [];
-        const vitals = this.vitals[0].alerts[0];
-        vitals.icon = BMIService.iconBMI(bmiColor);
-        vitals.backgroundColor = bmiColor[0];
-        vitals.textColor = bmiColor[1];
-        vitals.index = "BMI " + (this.BMI?.index ?? "");
-        vitals.value = this.BMI?.result ?? "";
-      },
-
-      async updateBP(systolic: any, diastolic: any) {
+        async setBMI(weight: any, height: any) {
+            if (this.demographics.gender && this.demographics.birthdate && weight && height) {
+                this.BMI = await BMIService.getBMI(
+                    parseInt(weight),
+                    parseInt(height),
+                    this.demographics.gender,
+                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                );
+                console.log("🚀 ~ setBMI ~ this.BMI:", this.BMI);
+                this.updateBMI();
+            }
+        },
+        async updateBMI() {
+            const bmiColor = this.BMI?.color ?? [];
+            const vitals = this.vitals[0].alerts[0];
+            vitals.icon = BMIService.iconBMI(bmiColor);
+            vitals.backgroundColor = bmiColor[0];
+            vitals.textColor = bmiColor[1];
+            vitals.index = "BMI " + (this.BMI?.index ?? "");
+            vitals.value = this.BMI?.result ?? "";
+        },
+        async updateBP(systolic: any, diastolic: any) {
             const vitals = this.vitals[2]?.alerts[0] ?? [];
             const bpColor = this.BPStatus?.colors ?? [];
             vitals.icon = iconBloodPressure(bpColor);
