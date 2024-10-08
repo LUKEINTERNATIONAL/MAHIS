@@ -80,7 +80,9 @@
   
     <ion-button expand="block" @click="saveMedication">
       <ion-icon :icon="editIndex !== null ? save : add" slot="start"></ion-icon>
-      {{ editIndex !== null ? 'Update' : 'Add' }} Medication
+      <span class="d-lbl">
+        {{ editIndex !== null ? 'Update' : 'Add' }} Medication
+      </span>
     </ion-button>
   
     <ion-alert
