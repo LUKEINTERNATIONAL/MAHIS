@@ -224,6 +224,7 @@ import { getBaseURl } from "@/utils/GeneralUti";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import { useWebWorker } from "@vueuse/core";
 
 export default defineComponent({
     name: "Home",
@@ -255,6 +256,7 @@ export default defineComponent({
     },
     data() {
         return {
+            workerApi: null as any,
             controlGraphs: "months" as any,
             reportData: "" as any,
             appointments: [] as any,
@@ -321,6 +323,9 @@ export default defineComponent({
         },
     },
     async mounted() {
+        // this.workerApi = useWebWorker("/src/services/worker.ts", { immediate: false });
+        // const url = `${localStorage.getItem("apiProtocol")}://${localStorage.getItem("apiURL")}:${localStorage.getItem("apiPort")}/api/v1/`;
+        // this.workerApi.post({ type: "SET_OFFLINE_LOCATION", url: url, apiKey: localStorage.getItem("apiKey") });
         this.isLoading = true;
         await setOfflineLocation();
         await setOfflineRelationship();
