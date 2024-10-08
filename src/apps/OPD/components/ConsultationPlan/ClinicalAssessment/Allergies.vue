@@ -65,8 +65,6 @@ import ListPicker from "../../../../../components/ListPicker.vue"
 
 const store = useAllegyStore()
 const selectedAllergiesList = computed(() => store.selectedMedicalAllergiesList) as any
-const input = ref()
-const drugName = ref("")
 const allergiesList = computed(() => store.medicalAllergiesList)
 
 const list_picker_prperties = [
