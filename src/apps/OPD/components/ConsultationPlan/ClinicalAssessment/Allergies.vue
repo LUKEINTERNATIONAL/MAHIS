@@ -1,5 +1,9 @@
 <template>
-    <ion-title>Allergies (Medication, Healthcare items, Environment and Food)</ion-title>
+    <ion-label>
+        <span style="font-size: 16px; font-weight: 600">
+            Allergies (Medication, Healthcare items, Environment and Food)
+        </span>
+    </ion-label>
     <ListPicker
         :multiSelection="list_picker_prperties[0].multi_Selection"
         :show_label="list_picker_prperties[0].show_list_label"
@@ -68,9 +72,9 @@ const allergiesList = computed(() => store.medicalAllergiesList)
 const list_picker_prperties = [
     {
         multi_Selection: true as any,
-        show_list_label: false as any,
+        show_list_label: true as any,
         unqueId: 'qwerty_8_mkghy' as any,
-        name_of_list: 'allegies' as any,
+        name_of_list: 'Add/Remove allegies' as any,
         placeHolder: 'Search for an allegy' as any,
         items: [],
         listUpdatedFN: listUpdated1,

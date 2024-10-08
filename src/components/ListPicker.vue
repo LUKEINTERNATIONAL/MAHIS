@@ -34,7 +34,7 @@
                             <input type="text" id="itemNameInput" class="modern-input" v-model="itemName" @input="FindItemName" placeholder="Enter name">
                         </div>
                         <ion-list class="custom-list">
-                            <div v-for="(item, index) in items_List_copy" 
+                            <div v-for="(item, index) in local_itmes_List" 
                                 @click="selectAl(item)" 
                                 :key="index"
                                 class="list-item">
@@ -50,8 +50,6 @@
                     </ion-content>
                 </ion-popover>
                 </div>
-        
-
             </ion-item>
         </ion-col>
         </ion-row>
