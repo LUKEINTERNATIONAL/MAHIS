@@ -1,24 +1,18 @@
 <template>
-    <ion-list style="margin-left: 10px;">
-        <ion-title>Allergies (Medication, Healthcare items, Environment and Food)</ion-title>
-        <ion-row>
-            <ion-item lines="none" class="medicalAl">
-            <ListPicker
-                :multiSelection="list_picker_prperties[0].multi_Selection"
-                :show_label="list_picker_prperties[0].show_list_label"
-                :uniqueId="list_picker_prperties[0].unqueId"
-                :name_of_list="list_picker_prperties[0].name_of_list"
-                :choose_place_holder="list_picker_prperties[0].placeHolder"
-                :items_-list="allergiesList"
-                :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                :disabled="list_picker_prperties[0].disabled.value"
-                @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                @item-search-text="list_picker_prperties[0].searchTextFN"
-            />
-            </ion-item>
-        </ion-row>
-    </ion-list>
+    <ion-title>Allergies (Medication, Healthcare items, Environment and Food)</ion-title>
+    <ListPicker
+        :multiSelection="list_picker_prperties[0].multi_Selection"
+        :show_label="list_picker_prperties[0].show_list_label"
+        :uniqueId="list_picker_prperties[0].unqueId"
+        :name_of_list="list_picker_prperties[0].name_of_list"
+        :choose_place_holder="list_picker_prperties[0].placeHolder"
+        :items_-list="allergiesList"
+        :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+        :disabled="list_picker_prperties[0].disabled.value"
+        @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+        @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+        @item-search-text="list_picker_prperties[0].searchTextFN"
+    />
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -94,28 +88,19 @@ onMounted(async () => {
 })
 
 function listUpdated1(data: any) {
-    const allergyStore = store
     data.forEach((item: any) => {
         if (item.selected == true) {
+            const allergyStore = store
             allergyStore.setSelectedMedicalAllergiesList(item)
         }
     })
-    allergyStore.setMedicalAllergiesList(data)
-}
-
-function setFocus() {
-    input.value.$el.setFocus();
+    setCommonAllergiesList()
 }
 
 function dissmissDrugAddField(): void {
     // search_item.value = false;
     // display_item.value = true;
     // addItemButton.value = true;
-}
-
-function saveStateValuesState() {
-    const allergyStore = store
-    allergyStore.setMedicalAllergiesList(allergiesList);
 }
 
 async function FindAllegicDrugName(text: any) {
@@ -134,10 +119,33 @@ async function FindAllegicDrugName(text: any) {
         value: drug.name,
         other: drug,
     }));
-    const allergyStore = store
+
     const temp_data_1 = searchHealthcareEquipmentAllergies(searchText)
     const temp_data_2 = concatenateArrays(temp_data_1, drugs as any)
+    const allergyStore = store
     allergyStore.setMedicalAllergiesList(temp_data_2)
+    setCommonAllergiesList()
+}
+
+function setCommonAllergiesList() {
+    const temp_data_2 = allergiesList.value
+    selectedAllergiesList.value.forEach((selected_alle: any) => {
+    let found = false;
+        temp_data_2.forEach((alle_dat_itm: any, index: number) => {
+            if (alle_dat_itm.concept_id == selected_alle.concept_id && selected_alle.selected === true) {
+                temp_data_2[index] = selected_alle;
+                found = true;
+            }
+        });
+        if (!found && selected_alle.selected === true) {
+            temp_data_2.push(selected_alle);
+        }
+    });
+    const op_ = temp_data_2.filter((item: any, index: any, self: any) =>
+        index === self.findIndex((t: { concept_id: any; }) => t.concept_id === item.concept_id)
+    );
+    const allergyStore = store
+    allergyStore.setMedicalAllergiesList(op_)
 }
 </script>
 
