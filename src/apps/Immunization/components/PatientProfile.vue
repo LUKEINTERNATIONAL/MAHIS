@@ -203,7 +203,6 @@ import { chevronBackOutline, checkmark, ellipsisVerticalSharp, person } from "io
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "@/stores/VitalsStore";
-import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
@@ -213,7 +212,6 @@ import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useOutcomeStore } from "@/stores/OutcomeStore";
-import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
@@ -242,7 +240,8 @@ import { ObservationService } from "@/services/observation_service";
 import missedVaccinesModal from "@/apps/Immunization/components/Modals/missedVaccinesModal.vue";
 import { DrugOrderService } from "@/services/drug_order_service";
 import customVaccine from "@/apps/Immunization/components/customVaccine.vue";
-import { PatientPrintoutService } from "@/services/patient_printout_service";
+import PatientProfileMixin from "@/views/Mixin/PatientProfile.vue";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 
 import {
     getFieldValue,
@@ -256,6 +255,7 @@ import {
 import PatientProfileVue from "@/views/PatientProfile.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 export default defineComponent({
+    mixins: [PatientProfileMixin],
     name: "Home",
     components: {
         IonContent,
@@ -299,12 +299,9 @@ export default defineComponent({
             todays_date: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
             lastVaccine: [] as any,
             visits: [] as any,
-            popoverOpen: false,
-            event: null as any,
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
@@ -385,22 +382,6 @@ export default defineComponent({
         getAge(dateOfBirth: string): string {
             return HisDate.calculateDisplayAge(HisDate.toStandardHisFormat(dateOfBirth));
         },
-        printID() {
-            new PatientPrintoutService(this.demographics.patient_id).printNidLbl();
-        },
-        async printVisitSummary() {
-            this.visits = await PatientService.getPatientVisits(this.demographics.patient_id, false);
-            if (this.visits.length) {
-                const lbl = new PatientPrintoutService(this.demographics.patient_id);
-                return lbl.printVisitSummaryLbl(this.visits[0]);
-            } else {
-                toastWarning("No visits available");
-            }
-        },
-        openPopover(e: Event) {
-            this.event = e;
-            this.popoverOpen = true;
-        },
         async checkProtectedStatus() {
             this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
         },
@@ -411,9 +392,6 @@ export default defineComponent({
         },
         openVitalsModal() {
             createModal(OtherVitals, { class: "otherVitalsModal" });
-        },
-        openPIM() {
-            createModal(personalInformationModal, { class: "otherVitalsModal largeModal" });
         },
         openWH() {
             createModal(weightAndHeight, { class: "otherVitalsModal" });

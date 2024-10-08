@@ -141,7 +141,7 @@ import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import PatientHistory from "@/apps/NCD/components/Enrollment/PatientHistory.vue";
 import PatientHistoryHIV from "@/apps/NCD/components/Enrollment/PatientHistoryHIV.vue";
 import EnrollmentDiagnosis from "@/apps/NCD/components/Enrollment/Diagnosis.vue";
-import Substance from "@/apps/NCD/components/Enrollment/Substance.vue";
+import Substance from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
 import NCDNumber from "@/apps/NCD/components/Enrollment/NCDNumber.vue";
 import FamilyHistory from "@/apps/NCD/components/Enrollment/FamilyHistory.vue";
 import PatientType from "@/apps/NCD/components/Enrollment/PatientType.vue";
