@@ -678,7 +678,7 @@ export default defineComponent({
 <style scoped>
 .demographics {
     box-sizing: border-box;
-    width: 95vw;
+    width: 98vw;
     /* height: 92px; */
     left: calc(50% - 461px / 2 + 27.5px);
     margin-top: 10px;
@@ -687,6 +687,7 @@ export default defineComponent({
     border-radius: 7px;
     display: flex;
     justify-content: space-between;
+    margin-left: 1vw;
 }
 .demographicsFirstRow {
     /* _Input dropdown menu item */
