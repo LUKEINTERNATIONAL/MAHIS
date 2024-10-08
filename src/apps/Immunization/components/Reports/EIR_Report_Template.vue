@@ -119,7 +119,7 @@ import { IonContent , IonPage, IonRow, IonCol, IonFab, IonFabButton, } from '@io
 import NavigationMenu from './NavigationMenu.vue';
 import { mapState } from "pinia";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
-import { getVaccinesAdministered, getImmunizationDrugs, exportReportToCSV } from "@/apps/Immunization/services/vaccines_service";
+import { getVaccinesAdministered, getImmunizationVaccineNames, exportReportToCSV } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { add, fileTray, downloadOutline } from 'ionicons/icons';
 import PersonCardComponent from "@/apps/Immunization/components/Modals/PersonCardComponent.vue"
@@ -178,7 +178,7 @@ export default defineComponent({
       },
       fillCells(AV: any, r_key: string) {
         this.tableData.forEach((t_data: any) => {
-          if (t_data.drug.drug_id == AV.drug_inventory_id) {
+          if (t_data.drug.name == AV.value_text) {
             if (r_key in t_data.fixed) {
               let data_key = r_key+'Persons'
               let value =  t_data.fixed[r_key];
@@ -189,7 +189,7 @@ export default defineComponent({
         })
       },
       async getDrugs() {
-        const data = await getImmunizationDrugs()
+        const data = await getImmunizationVaccineNames()
         const items = [] as any 
         data.forEach((drug: any) => {
           const row_item = {
