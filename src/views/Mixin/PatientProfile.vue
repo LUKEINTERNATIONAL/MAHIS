@@ -2,6 +2,7 @@
 import { defineComponent, ref } from "vue";
 import { Capacitor } from "@capacitor/core";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
+import Outcome from "@/components/Outcome.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { PatientPrintoutService } from "@/services/patient_printout_service";
 import { createModal } from "@/utils/Alerts";
@@ -30,6 +31,9 @@ export default defineComponent({
         },
         openPIM() {
             createModal(personalInformationModal, { class: "otherVitalsModal largeModal" });
+        },
+        openOutCome() {
+            createModal(Outcome, { class: "otherVitalsModal largeModal" });
         },
         async printVisitSummary() {
             this.visits = await PatientService.getPatientVisits(this.demographics.patient_id, false);
