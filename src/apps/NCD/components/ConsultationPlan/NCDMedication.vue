@@ -9,13 +9,12 @@
       <ion-card-content>
         <ion-list>
           <ion-item v-for="(med, index) in selectedMedications" :key="index">
-            <ion-icon :icon="medical" slot="start"></ion-icon>
             <ion-label>
               <h2>{{ med.medication }}</h2>
-              <p>
-                <ion-icon :icon="sunny" class="ion-margin-end"></ion-icon>Morning: {{ med.dosage.morning || '-' }},
-                <ion-icon :icon="partlySunny" class="ion-margin-end"></ion-icon>Afternoon: {{ med.dosage.afternoon || '-' }},
-                <ion-icon :icon="moon" class="ion-margin-end"></ion-icon>Evening: {{ med.dosage.evening || '-' }}
+              <p class="dosage-info">
+                <span><ion-icon :icon="sunny"></ion-icon> Morning: <ion-badge color="warning">{{ med.dosage.morning || '-' }}</ion-badge></span>
+                <span><ion-icon :icon="partlySunny"></ion-icon> Afternoon: <ion-badge color="warning">{{ med.dosage.afternoon || '-' }}</ion-badge></span>
+                <span><ion-icon :icon="moon"></ion-icon> Evening: <ion-badge color="warning">{{ med.dosage.evening || '-' }}</ion-badge></span>
               </p>
             </ion-label>
             <ion-buttons slot="end">
@@ -41,7 +40,7 @@
       <ion-card-content>
         <ion-item>
           <ion-icon :icon="medkit" slot="start"></ion-icon>
-          <ion-label position="stacked">Medication Category</ion-label>
+          <ion-label  class="d-lbl">Medication Category</ion-label>
           <ion-select v-model="selectedCategory" @ionChange="updateMedicationOptions">
             <ion-select-option v-for="category in categories" :key="category" :value="category">
               {{ category }}
@@ -51,7 +50,7 @@
   
         <ion-item>
           <ion-icon :icon="medical" slot="start"></ion-icon>
-          <ion-label position="stacked">Medication</ion-label>
+          <ion-label  class="d-lbl">Medication</ion-label>
           <ion-select v-model="selectedMedication">
             <ion-select-option v-for="medication in medicationOptions" :key="medication" :value="medication">
               {{ medication }}
@@ -62,17 +61,17 @@
         <ion-list>
           <ion-item>
             <ion-icon :icon="sunny" slot="start"></ion-icon>
-            <ion-label>Morning</ion-label>
+            <ion-label class="d-lbl">Morning</ion-label>
             <ion-input type="number" v-model="dosage.morning" placeholder="Dose"></ion-input>
           </ion-item>
           <ion-item>
             <ion-icon :icon="partlySunny" slot="start"></ion-icon>
-            <ion-label>Afternoon</ion-label>
+            <ion-label class="d-lbl">Afternoon</ion-label>
             <ion-input type="number" v-model="dosage.afternoon" placeholder="Dose"></ion-input>
           </ion-item>
           <ion-item>
             <ion-icon :icon="moon" slot="start"></ion-icon>
-            <ion-label>Evening</ion-label>
+            <ion-label class="d-lbl">Evening</ion-label>
             <ion-input type="number" v-model="dosage.evening" placeholder="Dose"></ion-input>
           </ion-item>
         </ion-list>
@@ -93,26 +92,34 @@
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            this.showRemoveAlert = false;
+            showRemoveAlert = false;
           },
         },
         {
           text: 'Remove',
           handler: () => {
-            this.removeMedication(this.medicationToRemove);
-            this.showRemoveAlert = false;
+            removeMedication(medicationToRemove);
+            showRemoveAlert = false;
           },
         },
       ]"
     ></ion-alert>
+  
+    <ion-toast
+      :is-open="showErrorToast"
+      :message="errorMessage"
+      :duration="3000"
+      @didDismiss="showErrorToast = false"
+      color="danger"
+    ></ion-toast>
   </template>
   
   <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref, reactive } from 'vue';
   import {
     IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel, 
     IonSelect, IonSelectOption, IonInput, IonList, IonButton, IonButtons,
-    IonIcon, IonAlert
+    IonIcon, IonAlert, IonToast, IonBadge
   } from '@ionic/vue';
   import { 
     pencil, trash, medkit, medical, sunny, partlySunny, moon, add, save
@@ -123,80 +130,96 @@
     components: {
       IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel, 
       IonSelect, IonSelectOption, IonInput, IonList, IonButton, IonButtons,
-      IonIcon, IonAlert
+      IonIcon, IonAlert, IonToast, IonBadge
     },
-    data() {
+    setup() {
+      const categories = ['Diuretic', 'CCB', 'ACE-I', 'BB', 'Statin', 'Other'];
+      const medications = reactive({
+        'Diuretic': ['Hydrochlorothiazide - HCTZ', 'Furosemide - FURO', 'Spironolactone - SPIRO'],
+        'CCB': ['Amlodipine - AML', 'Nifedipine Modified Release - NIF'],
+        'ACE-I': ['Enalapril - ENAL', 'Captopril - CAPT', 'Lisinopril - LISIN'],
+        'BB': ['Atenolol - ATEN', 'Bisoprolol - BIS', 'Propranolol - PROP'],
+        'Statin': ['Simvastatin - SIMVA', 'Pravastatin - PRAVA', 'Atorvastatin - ATORVA'],
+        'Other': ['Hydralazine - HYD', 'Isosorbide Mononitrate - ISSMN']
+      } as any);
+  
+      const selectedCategory = ref('') as any;
+      const selectedMedication = ref('') as any;
+      const medicationOptions = ref([]) as any;
+      const dosage = reactive({ morning: null, afternoon: null, evening: null } as any);
+      const selectedMedications = ref([]) as any;
+      const editIndex = ref(null) as any;
+      const showRemoveAlert = ref(false) as any;
+      const medicationToRemove = ref(null) as any;
+      const showErrorToast = ref(false) as any;
+      const errorMessage = ref('') as any;
+  
+      const updateMedicationOptions = () => {
+        medicationOptions.value = medications[selectedCategory.value] || [];
+        selectedMedication.value = '';
+      };
+  
+      const saveMedication = () => {
+        if (!selectedMedication.value) {
+          errorMessage.value = 'Please select a medication';
+          showErrorToast.value = true;
+          return;
+        }
+  
+        if (!dosage.morning && !dosage.afternoon && !dosage.evening) {
+          errorMessage.value = 'Please enter at least one dosage';
+          showErrorToast.value = true;
+          return;
+        }
+  
+        const medicationData = {
+          category: selectedCategory.value,
+          medication: selectedMedication.value,
+          dosage: { ...dosage }
+        };
+  
+        if (editIndex.value !== null) {
+          selectedMedications.value[editIndex.value] = medicationData;
+          editIndex.value = null;
+        } else {
+          selectedMedications.value.push(medicationData);
+        }
+  
+        resetForm();
+      };
+  
+      const resetForm = () => {
+        selectedCategory.value = '';
+        selectedMedication.value = '';
+        Object.assign(dosage, { morning: null, afternoon: null, evening: null });
+        editIndex.value = null;
+      };
+  
+      const editMedication = (index: number) => {
+        const med = selectedMedications.value[index] as any;
+        selectedCategory.value = med.category;
+        updateMedicationOptions();
+        selectedMedication.value = med.medication;
+        Object.assign(dosage, med.dosage);
+        editIndex.value = index;
+      };
+  
+      const confirmRemoveMedication = (index: number) => {
+        medicationToRemove.value = index;
+        showRemoveAlert.value = true;
+      };
+  
+      const removeMedication = (index: number) => {
+        selectedMedications.value.splice(index, 1);
+      };
+  
       return {
-        categories: ['Diuretic', 'CCB', 'ACE-I', 'BB', 'Statin', 'Other'],
-        medications: {
-          'Diuretic': ['Hydrochlorothiazide - HCTZ', 'Furosemide - FURO', 'Spironolactone - SPIRO'],
-          'CCB': ['Amlodipine - AML', 'Nifedipine Modified Release - NIF'],
-          'ACE-I': ['Enalapril - ENAL', 'Captopril - CAPT', 'Lisinopril - LISIN'],
-          'BB': ['Atenolol - ATEN', 'Bisoprolol - BIS', 'Propranolol - PROP'],
-          'Statin': ['Simvastatin - SIMVA', 'Pravastatin - PRAVA', 'Atorvastatin - ATORVA'],
-          'Other': ['Hydralazine - HYD', 'Isosorbide Mononitrate - ISSMN']
-        } as any,
-        selectedCategory: '',
-        selectedMedication: '',
-        medicationOptions: [],
-        dosage: {
-          morning: null,
-          afternoon: null,
-          evening: null
-        } as any,
-        selectedMedications: [] as any[],
-        editIndex: null as number | null,
-        showRemoveAlert: false as any,
-        medicationToRemove: null as number | null,
+        categories, medications, selectedCategory, selectedMedication, medicationOptions,
+        dosage, selectedMedications, editIndex, showRemoveAlert, medicationToRemove,
+        showErrorToast, errorMessage, updateMedicationOptions, saveMedication,
+        resetForm, editMedication, confirmRemoveMedication, removeMedication,
         pencil, trash, medkit, medical, sunny, partlySunny, moon, add, save
       };
-    },
-    methods: {
-      updateMedicationOptions() {
-        this.medicationOptions = this.medications[this.selectedCategory] || [];
-        this.selectedMedication = '';
-      },
-      saveMedication() {
-        if (this.selectedMedication && (this.dosage.morning || this.dosage.afternoon || this.dosage.evening)) {
-          const medicationData = {
-            category: this.selectedCategory,
-            medication: this.selectedMedication,
-            dosage: { ...this.dosage }
-          };
-  
-          if (this.editIndex !== null) {
-            // Update existing medication
-            this.selectedMedications[this.editIndex] = medicationData;
-            this.editIndex = null;
-          } else {
-            // Add new medication
-            this.selectedMedications.push(medicationData);
-          }
-  
-          this.resetForm();
-        }
-      },
-      resetForm() {
-        this.selectedCategory = '';
-        this.selectedMedication = '';
-        this.dosage = { morning: null, afternoon: null, evening: null };
-        this.editIndex = null;
-      },
-      editMedication(index: number) {
-        const med = this.selectedMedications[index];
-        this.selectedCategory = med.category;
-        this.updateMedicationOptions();
-        this.selectedMedication = med.medication;
-        this.dosage = { ...med.dosage };
-        this.editIndex = index;
-      },
-      confirmRemoveMedication(index: number) {
-        this.medicationToRemove = index;
-        this.showRemoveAlert = true;
-      },
-      removeMedication(index: number) {
-        this.selectedMedications.splice(index, 1);
-      }
     }
   });
   </script>
@@ -212,5 +235,24 @@
   
   ion-icon {
     vertical-align: middle;
+  }
+  
+  .dosage-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .dosage-info span {
+    display: flex;
+    align-items: center;
+  }
+  
+  .dosage-info ion-icon {
+    margin-right: 5px;
+  }
+
+  .d-lbl {
+    margin-left: 10px;
   }
   </style>
