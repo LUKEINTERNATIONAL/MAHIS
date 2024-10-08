@@ -8,38 +8,44 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         selectedMedicalAllergiesList: [] as any,
         nonPharmalogicalTherapyAndOtherNotes: '' as string,
         partialOPDdrugList: [] as any,
+        selectedNCDMedicationList: [] as any,
     }),
     actions:{
         setSelectedMedicalDrugsList(data: any) {
-            this.selectedMedicalDrugsList = data
+            this.selectedMedicalDrugsList = data;
         },
         setMedicalAllergiesList(data: any) {
-            this.medicalAllergiesList = data
+            this.medicalAllergiesList = data;
         },
         setNonPharmalogicalTherapyAndOtherNotes(value: string) {
-            this.nonPharmalogicalTherapyAndOtherNotes = value
+            this.nonPharmalogicalTherapyAndOtherNotes = value;
         },
         getNonPharmalogicalTherapyAndOtherNotes() {
-            return this.nonPharmalogicalTherapyAndOtherNotes
+            return this.nonPharmalogicalTherapyAndOtherNotes;
         },
         setSelectedMedicalAllergiesList(data: any) {
             this.selectedMedicalAllergiesList.forEach((allergy: any, index: number) => {
                 if (allergy.concept_name_id == data.concept_name_id) {
                     this.selectedMedicalAllergiesList.splice(index, 1)
                 }
-            })
-            this.selectedMedicalAllergiesList.push(data)
+            });
+            this.selectedMedicalAllergiesList.push(data);
         },
         getSelectedMedicalAllergiesList() {
-            return this.selectedMedicalAllergiesList
+            return this.selectedMedicalAllergiesList;
         },
         setPartialOPDdrugList(data: any): void {
-            this.partialOPDdrugList = data
+            this.partialOPDdrugList = data;
         },
         getPartialOPDdrugList(): any {
-            return this.partialOPDdrugList
+            return this.partialOPDdrugList;
+        },
+        setSelectedNCDMedicationList(drug_items: any): void {
+            this.selectedNCDMedicationList = drug_items;
+        },
+        getSelectedNCDMedicationList() {
+            return this.selectedNCDMedicationList;
         }
     },
     persist:true,
-
 })

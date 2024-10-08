@@ -119,6 +119,8 @@
     pencil, trash, medkit, medical, sunny, partlySunny, moon, add, save
   } from 'ionicons/icons';
   import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+  import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+  import { mapState } from "pinia";
   
   export default defineComponent({
     name: 'MedicationSelector',
@@ -126,6 +128,9 @@
       IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel, 
       IonSelect, IonSelectOption, IonInput, IonList, IonButton, IonButtons,
       IonIcon, IonAlert, IonToast, IonBadge
+    },
+    computed: {
+      ...mapState(useTreatmentPlanStore, ["selectedNCDMedicationList"]), 
     },
     setup() {
       const categories = ['Diuretic', 'CCB', 'ACE-I', 'BB', 'Statin', 'Other'];
@@ -147,6 +152,7 @@
       const showRemoveAlert = ref(false) as any;
       const medicationToRemove = ref(null) as any;
       const errorMessage = ref('') as any;
+      const treatmentPlanStore = useTreatmentPlanStore();
   
       const updateMedicationOptions = () => {
         medicationOptions.value = medications[selectedCategory.value] || [];
@@ -174,11 +180,14 @@
   
         if (editIndex.value !== null) {
           selectedMedications.value[editIndex.value] = medicationData;
+          treatmentPlanStore.setSelectedNCDMedicationList(medicationData)
           editIndex.value = null;
         } else {
           selectedMedications.value.push(medicationData);
+          treatmentPlanStore.setSelectedNCDMedicationList(medicationData)
         }
-  
+
+        // console.log(this.selectedNCDMedicationList)
         resetForm();
       };
   

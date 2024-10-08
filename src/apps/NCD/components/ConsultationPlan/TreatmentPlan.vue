@@ -165,9 +165,6 @@ import { icons } from "@/utils/svg";
 import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import { DrugService } from "@/services/drug_service";
 import { ConceptName } from "@/interfaces/conceptName";
-import DynamicButton from "@/components/DynamicButton.vue";
-import DynamicList from "@/components/DynamicList.vue";
-import { ConceptService } from "@/services/concept_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
@@ -175,11 +172,9 @@ import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
 import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue"
-import sselectionList from "@/components/SselectionList.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
-const drug_frequencies_n = DRUG_FREQUENCIES.map(drug => drug.label);
 const search_item = ref(false);
 const display_item = ref(false);
 const addItemButton = ref(true);
@@ -200,16 +195,12 @@ const duration = ref("");
 const prescription = ref("");
 const units = ref("");
 const drug_id = ref("");
-const btnName1 = "Add new medication";
-const btnFill = "clear";
 const showMoreMedicationsMsg = ref("Show more medications");
 const store = useTreatmentPlanStore();
 const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
 const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList);
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
-const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList);
-const input = ref();
 const values = ["first", "second", "third"];
 const PreviuosSelectedMedicalDrugsList = ref();
 const FirstPreviousNotes = ref();
@@ -242,32 +233,6 @@ const duration_for_insulin = ref()
 const duration_for_insulinerr_msg = ref()
 const show_err_for_duration_for_insulin = ref()
 
-const multi_Selection = false as any
-const uniqueId = "125389317452" as any
-const name_of_list = ref("List" as any)
-const list_place_holder = ref("Please select method of prescribing medication" as any)
-const route_list = ref([
-    { name: "Oral" },
-    { name: "Intravenous (IV)" },
-    { name: "Intramuscular (IM)" },
-    { name: "Intradermal" },
-    { name: "Rectally" },
-    { name: "Sublingual" },
-    { name: "Vaginally" },
-    { name: "Buccal" },
-    { name: "Subcutaneous" },
-    { name: "Intraosseous" },
-    { name: "Other"}
-] as any)
-const show_list_label = false as any
-
-function routeListUpdated(data: any) {
-
-}
-
-function routeListFiltred(data: any) {
-
-}
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment();
