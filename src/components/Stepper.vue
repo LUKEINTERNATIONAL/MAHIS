@@ -1,70 +1,87 @@
 <template>
-    <ion-row>
-        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile">
-            <ion-card class="wizard_card">
-                <div class="wizard_title">
-                    <strong> {{ stepperTitle }}</strong>
+  <ion-row>
+    <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile">
+      <ion-card class="wizard_card">
+        <div class="wizard_title">
+          <strong>{{ stepperTitle }}</strong>
+        </div>
+        <ion-card-content>
+          <div id="wizard_verticle" class="form_wizard wizard_verticle">
+            <ul class="list-unstyled wizard_steps anchor">
+              <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
+                <a class="done" isdone="1" rel="1">
+                   <span :class="item.class">
+                     <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>
+                        <span v-if="!item.checked">{{ item.number }}</span>
+                        <span class="wizard_text">{{ item.title }}</span>
+                   </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+
+    <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8">
+      <div class="back_profile">
+        <DynamicButton :name="backBtn" iconSlot="start" fill="clear" :icon="chevronBackOutline" @click="openBackController()" />
+      </div>
+
+      <div class="accordion_group">
+        <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="currentOpenStepper">
+          <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
+            <ion-item slot="header">
+              <ion-label>{{ item.title }}</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <component :is="item.component" ></component>
+              <div class="button-row">
+                <!-- Previous Button -->
+                <div v-if="index > 0">
+                  <ion-button class="previous-button" @click="previousAccordion(index)">
+                    <ion-icon :icon="chevronBack()" slot="start"></ion-icon> <!-- Icon for Previous -->
+                    Previous
+                  </ion-button>
                 </div>
-                <ion-card-content>
-                    <div id="wizard_verticle" class="form_wizard wizard_verticle">
-                        <ul class="list-unstyled wizard_steps anchor">
-                            <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
-                                <a class="done" isdone="1" rel="1">
-                                    <span :class="item.class">
-                                        <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>
-                                        <span v-if="!item.checked" class="">{{ item.number }} </span>
-                                        <span class="wizard_text">{{ item.title }}</span>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-        </ion-col>
 
-        <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="">
-            <div class="back_profile">
-                <DynamicButton :name="backBtn" iconSlot="start" fill="clear" :icon="chevronBackOutline" @click="openBackController()" />
+                <!-- Next Button -->
+                <div v-if="index < StepperData.length - 1">
+                  <ion-button class="next-button" @click="nextAccordion(index)">
+                    <ion-icon :icon="chevronForward()" slot="start"></ion-icon> <!-- Icon for Next -->
+                    Next
+                  </ion-button>
+                </div>
+              </div>
             </div>
-
-            <div class="accordion_group">
-                <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="openStepper">
-                    <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
-                        <ion-item slot="header">
-                            <ion-label>{{ item.title }}</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <component :is="item.component"> </component>
-                        </div>
-                    </ion-accordion>
-                </ion-accordion-group>
-                <hr style="background: rgba(0, 0, 0, 0.13)" />
-            </div>
-        </ion-col>
-    </ion-row>
+          </ion-accordion>
+        </ion-accordion-group>
+        <hr style="background: rgba(0, 0, 0, 0.13)" />
+      </div>
+    </ion-col>
+  </ion-row>
 </template>
 
 <script lang="ts">
 import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonAccordion,
-    IonAccordionGroup,
-    IonItem,
-    IonLabel,
-    IonModal,
-    AccordionGroupCustomEvent,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonAccordion,
+  IonAccordionGroup,
+  IonItem,
+  IonLabel,
+  IonModal,
+  AccordionGroupCustomEvent,
 } from "@ionic/vue";
 import dispensation from "@/apps/OPD/views/dispensation.vue";
 import dispensedMedication from "@/apps/OPD/components/dispensedMedication.vue";
@@ -76,7 +93,7 @@ import Toolbar from "@/components/Toolbar.vue";
 import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
 import ClinicalAssessment from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
-import { chevronBackOutline, checkmark } from "ionicons/icons";
+import {chevronBackOutline, checkmark, chevronForward, chevronBack} from "ionicons/icons";
 import VitalSigns from "@/components/VitalSigns.vue";
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
 import OPDDiagnosis from "@/apps/OPD/components/ConsultationPlan/OPDDiagnosis.vue";
@@ -165,265 +182,314 @@ import AbdominalExamination from "@/apps/ANC/components/physical exam/AbdominalE
 import ClinicalCounselling from "@/apps/ANC/components/counselling/ClinicalCounselling.vue";
 
 export default defineComponent({
-    mixins: [SetUserRole],
-    name: "Home",
-    components: {
-        dispensationSummary,
-        dispensedMedication,
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        Toolbar,
-        ToolbarSearch,
-        IonButton,
-        IonCard,
-        IonCardContent,
-        IonCardHeader,
-        IonCardSubtitle,
-        IonCardTitle,
-        IonAccordion,
-        IonAccordionGroup,
-        IonItem,
-        IonLabel,
-        VitalSigns,
-        PresentingComplaints,
-        ClinicalAssessment,
-        Diagnosis,
-        ComplicationsScreening,
-        ConfirmDiagnosis,
-        Outcome,
-        Investigations,
-        TreatmentPlan,
-        NextAppointment,
-        IonModal,
-        Medications,
-        WomanBehaviour,
-        MedicalHistory,
-        DangerSigns,
-        ReasonForVisit,
-        ConfirmPregnancy,
-        SpecificHealthConcerns,
-        FetalPresentation,
-        FetalAssessment,
-        ANCVitals,
-        MaternalExam,
-        PresentingSigns,
-        CurrentPregnancies,
-        PastObstreticHistory,
-        UltrasoundScan,
-        UrineTest,
-        TB,
-        MedicalFollowUp,
-        PersistentBehaviour,
-        CurrentPhysiologicalSymptoms,
-        Ipv,
-        FatalMovement,
-        BehaviourCounselling,
-        PhysiologicalCounseling,
-        DietCounselling,
-        Referral,
-        AncEnd,
-        DiagnosisTreatment,
-        MedicationDispensed,
-        DiagnosisCounselling,
-        Immunization,
-       // IntimatePartner,
-        Deworming,
-        OPDDiagnosis,
-        OPDTreatmentPlan,
-        OPDOutcome,
-        DynamicButton,
-        ImmunizationServices,
-        ChangeStatus,
-        ImmunizationNextAppointment,
-        HeadAssessment,
-        ANCTreatment,
-        ANCDiagnosis,
-        ANCDiagnosisCounselling,
-        ANCImmunization,
-        ANCIntimatePartner,
-        ANCDeworming,
-        ANCMedicationDispensed,
-        DischargeWoman,
-        PNCEnd,
-        BabyStatus,
-        PostnatalWardMonitoring,
-        DeliveryDetails,
-        HIVStatusAndTreatment,
-        ObstetricDetails,
-        VisitForMother,
-        VisitForBaby,
-        Labour,
-        QuickCheck,
-        PhysicalExamination,
-        PelvicAssessment,
-        PatientReferral,
-        FirstVaginalExamination,
-        SecondStageDelivery,
-        ThirdStageDelivery,
-        end,
-        OtherExams,
-        LabourVitals,
-        ImmidiatePostnatalChecksForChild,
-        ImmidiatePostnatalChecksForMother,
-        SubsequentVisits,
-       AbdominalExamination,
-      ClinicalCounselling
+  mixins: [SetUserRole],
+  name: "Home",
+  components: {
+    dispensationSummary,
+    dispensedMedication,
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    Toolbar,
+    ToolbarSearch,
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonAccordion,
+    IonAccordionGroup,
+    IonItem,
+    IonLabel,
+    VitalSigns,
+    PresentingComplaints,
+    ClinicalAssessment,
+    Diagnosis,
+    ComplicationsScreening,
+    ConfirmDiagnosis,
+    Outcome,
+    Investigations,
+    TreatmentPlan,
+    NextAppointment,
+    IonModal,
+    Medications,
+    WomanBehaviour,
+    MedicalHistory,
+    DangerSigns,
+    ReasonForVisit,
+    ConfirmPregnancy,
+    SpecificHealthConcerns,
+    FetalPresentation,
+    FetalAssessment,
+    ANCVitals,
+    MaternalExam,
+    PresentingSigns,
+    CurrentPregnancies,
+    PastObstreticHistory,
+    UltrasoundScan,
+    UrineTest,
+    TB,
+    MedicalFollowUp,
+    PersistentBehaviour,
+    CurrentPhysiologicalSymptoms,
+    Ipv,
+    FatalMovement,
+    BehaviourCounselling,
+    PhysiologicalCounseling,
+    DietCounselling,
+    Referral,
+    AncEnd,
+    DiagnosisTreatment,
+    MedicationDispensed,
+    DiagnosisCounselling,
+    Immunization,
+    // IntimatePartner,
+    Deworming,
+    OPDDiagnosis,
+    OPDTreatmentPlan,
+    OPDOutcome,
+    DynamicButton,
+    ImmunizationServices,
+    ChangeStatus,
+    ImmunizationNextAppointment,
+    HeadAssessment,
+    ANCTreatment,
+    ANCDiagnosis,
+    ANCDiagnosisCounselling,
+    ANCImmunization,
+    ANCIntimatePartner,
+    ANCDeworming,
+    ANCMedicationDispensed,
+    DischargeWoman,
+    PNCEnd,
+    BabyStatus,
+    PostnatalWardMonitoring,
+    DeliveryDetails,
+    HIVStatusAndTreatment,
+    ObstetricDetails,
+    VisitForMother,
+    VisitForBaby,
+    Labour,
+    QuickCheck,
+    PhysicalExamination,
+    PelvicAssessment,
+    PatientReferral,
+    FirstVaginalExamination,
+    SecondStageDelivery,
+    ThirdStageDelivery,
+    end,
+    OtherExams,
+    LabourVitals,
+    ImmidiatePostnatalChecksForChild,
+    ImmidiatePostnatalChecksForMother,
+    SubsequentVisits,
+    AbdominalExamination,
+    ClinicalCounselling
+  },
+  data() {
+    return {
+      isOpen: false,
+      iconsContent: icons,
+      currentOpenStepper: this.openStepper
+    };
+  },
+  props: {
+    wizardData: {
+      default: [] as any,
     },
-    data() {
-        return {
-            isOpen: false,
-            iconsContent: icons,
-        };
+    StepperData: {
+      default: [] as any,
     },
-    props: {
-        wizardData: {
-            default: [] as any,
-        },
-        StepperData: {
-            default: [] as any,
-        },
-        stepperTitle: {
-            type: String,
-            default: "",
-        },
-        openStepper: {
-            type: String,
-            default: "1",
-        },
-        backBtn: {
-            type: String,
-            default: "Back to profile",
-        },
-        backUrl: {
-            type: String,
-            default: "",
-        },
+    stepperTitle: {
+      type: String,
+      default: "",
     },
-    setup() {
-        return { chevronBackOutline, checkmark };
+    openStepper: {
+      type: String,
+      default: "1",
     },
-    methods: {
-        accordionGroupChange(ev: AccordionGroupCustomEvent) {
-            this.wizardData.forEach((item: any) => {
-                if (ev.target.className == "md accordion-group-expand-compact") {
-                    item.class = "common_step";
-                    item.checked = false;
-                    if (item.number == ev.detail.value) {
-                        item.class = "open_step common_step";
-                    }
-                }
-            });
-            this.$emit("updateStatus", ev);
-        },
-        openBackController() {
-            if (this.backUrl) {
-                this.$router.push(this.backUrl);
-            } else {
-                createModal(SaveProgressModal);
-            }
-        },
+    backBtn: {
+      type: String,
+      default: "Back to profile",
     },
+    backUrl: {
+      type: String,
+      default: "",
+    },
+  },
+  setup() {
+    return { chevronBackOutline, checkmark,
+
+    };
+  },
+  methods: {
+    chevronBack() {
+      return chevronBack
+    },
+    chevronForward() {
+      return chevronForward
+    },
+    accordionGroupChange(ev: AccordionGroupCustomEvent) {
+      const event:any = ev.detail;
+      if (!event) {
+        this.wizardData.forEach((item: any) => {
+          if (event.value === item.number) {
+            item.class = "open_step common_step";
+            item.checked = true;
+          } else {
+            item.class = "common_step";
+            item.checked = false;
+          }
+        });
+        this.$emit("updateStatus", event);
+        this.currentOpenStepper = event.value;
+      }
+    },
+
+
+    openBackController() {
+      if (this.backUrl) {
+        this.$router.push(this.backUrl);
+      } else {
+        createModal(SaveProgressModal);
+      }
+    },
+    nextAccordion(currentIndex:any) {
+      const nextIndex = currentIndex + 1;
+      if (nextIndex < this.StepperData.length) {
+        this.currentOpenStepper = this.StepperData[nextIndex].value;
+      }
+    },
+    previousAccordion(currentIndex:any) {
+      const prevIndex = currentIndex - 1;
+      if (prevIndex >= 0) {
+        this.currentOpenStepper = this.StepperData[prevIndex].value;
+      }
+    }
+  },
 });
 </script>
 
 <style scoped>
-#container {
-    text-align: center;
+.button-row {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-top: 10px;
+}
 
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+.previous-button {
+  margin-left: 30px;
+  --background: var(--ion-color-medium-shade);
+  color:white;
+  border-radius: 1px;
+  width: 70%;
+}
+
+.next-button {
+  background-color: var(--ion-color-primary);
+  color: white;
+  border-radius: 1px;
+  width: 100%;
+}
+
+#container {
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 #container strong {
-    font-size: 20px;
-    line-height: 26px;
+  font-size: 20px;
+  line-height: 26px;
 }
 
 #container p {
-    font-size: 16px;
-    line-height: 22px;
+  font-size: 16px;
+  line-height: 22px;
 
-    color: #8c8c8c;
+  color: #8c8c8c;
 
-    margin: 0;
+  margin: 0;
 }
 
 #container a {
-    text-decoration: none;
+  text-decoration: none;
 }
 .centered-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 ion-item[slot="header"] {
-    font-size: 20px;
-    padding-top: 25px;
-    font-weight: 600;
+  font-size: 20px;
+  padding-top: 25px;
+  font-weight: 600;
 }
 
 ion-accordion {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 ion-accordion.accordion-expanding,
 ion-accordion.accordion-expanded {
-    width: calc(100% - 32px);
+  width: calc(100% - 32px);
 
-    margin: 16px auto;
+  margin: 16px auto;
 }
 
 ion-accordion.accordion-collapsing ion-item[slot="header"],
 ion-accordion.accordion-collapsed ion-item[slot="header"] {
-    --color: var(--ion-color-light-contrast);
+  --color: var(--ion-color-light-contrast);
 }
 
 ion-accordion.accordion-expanding ion-item[slot="header"],
 ion-accordion.accordion-expanded ion-item[slot="header"] {
-    --background: #8a8a8a;
-    --color: var(--ion-color-primary-contrast);
+  --background: #8a8a8a;
+  --color: var(--ion-color-primary-contrast);
 }
 .back_profile {
-    display: flex;
-    justify-content: space-between;
-    width: 140px;
-    align-items: center;
-    font-weight: 400;
-    font-size: 14px;
-    /* position: fixed; */
-    z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  width: 140px;
+  align-items: center;
+  font-weight: 400;
+  font-size: 14px;
+  /* position: fixed; */
+  z-index: 1000;
 }
 .wizard_card {
-    /* position: fixed; */
-    width: 100%;
-    /* max-width: 300px; */
-    background-color: #fff;
-    /* top: 150px; */
+  /* position: fixed; */
+  width: 100%;
+  /* max-width: 300px; */
+  background-color: #fff;
+  /* top: 150px; */
 }
 .rightCol {
-    top: 100px;
-    width: 90%;
+  top: 100px;
+  width: 90%;
 }
 .accordion_group {
-    /* position: fixed; */
-    height: 78vh;
-    /* width: 58%; */
-    overflow-y: auto;
-    top: 200px;
+  /* position: fixed; */
+  height: 78vh;
+  /* width: 58%; */
+  overflow-y: auto;
+  top: 200px;
 }
 .accordion_group::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .accordion_group {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 </style>
