@@ -6,7 +6,7 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14">
+        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32">
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -154,6 +154,7 @@
                 </ion-card>
             </div>
         </ion-content>
+        <NCDHomePage v-if="programID() == 32" />
         <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
     </ion-page>
 </template>
@@ -194,6 +195,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { AppointmentService } from "@/services/appointment_service";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { PatientService } from "@/services/patient_service";
+import NCDHomePage from "@/apps/NCD/components/NCDHomePage.vue";
 import {
     medkit,
     chevronBackOutline,
@@ -253,6 +255,7 @@ export default defineComponent({
         Pagination,
         Navigation,
         getBaseURl,
+        NCDHomePage,
     },
     data() {
         return {
