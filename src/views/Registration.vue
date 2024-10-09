@@ -325,7 +325,8 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
-            if (this.checkUnderFourteen) this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
+            if (this.checkUnderFourteen || this.checkUnderFive)
+                this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex < this.steps.length - 1) {
@@ -392,7 +393,7 @@ export default defineComponent({
                 this.disableSaveBtn = true;
                 this.isLoading = true;
 
-                if (this.globalPropertyStore.dde_enabled) {
+                if (this.globalPropertyStore.dde_enabled === "true") {
                     if (await this.possibleDuplicates()) {
                         this.disableSaveBtn = false;
                         this.isLoading = false;

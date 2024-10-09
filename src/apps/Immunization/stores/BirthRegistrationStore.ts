@@ -62,16 +62,12 @@ const initialBirthRegistration = [
                             validationFunctionName: "required",
                             multiSelectData: [
                                 {
-                                    concept_id: 11760,
-                                    name: ">3 doses of TdV in past 5 years",
+                                    concept_id: 11997,
+                                    name: "0-2 doses, less than two weeks before delivery",
                                 },
                                 {
-                                    concept_id: 11761,
-                                    name: "1-4 doses of TdV in the past",
-                                },
-                                {
-                                    concept_id: 11762,
-                                    name: "Tdv not received",
+                                    concept_id: 11998,
+                                    name: "2-5 doses more than two weeks of delivery",
                                 },
                                 {
                                     concept_id: 1067,
@@ -100,6 +96,7 @@ const initialBirthRegistration = [
                             valueType: "text",
                             isSingleSelect: true,
                             popOver: true,
+                            disabled: true,
                             value: "",
                             name: "Protected at birth",
                             validationFunctionName: "required",

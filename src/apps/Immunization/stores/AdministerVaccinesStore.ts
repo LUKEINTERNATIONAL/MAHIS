@@ -125,6 +125,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         },
         setLotNumberData(data: any) {
             this.lotNumberData = data
+            return true
         },
         getLotNumberData() {
             return this.lotNumberData

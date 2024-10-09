@@ -6,7 +6,13 @@
                     <b>User Profile</b>
                 </ion-title>
                 <ion-buttons slot="end">
-                    <ion-button @click="$emit('closePopoover', false)">Close</ion-button>
+                    <ion-title>
+                        <ion-button @click="$emit('closePopoover', false)" fill="solid">
+                            <span style="font-weight: 400; font-size: 19px;">
+                                close
+                            </span>
+                        </ion-button>
+                    </ion-title>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
@@ -28,9 +34,17 @@
                 </div>
             </div>
         </ion-content>
-        <ion-footer :translucent="true">
+        <ion-footer>
             <ion-toolbar>
-                <DynamicButton @click="saveAction" name="Save" fill="clear" iconSlot="icon-only" style="float: right" />
+                <ion-buttons slot="end">
+                    <ion-title>
+                        <ion-button @click="saveAction" fill="solid" color="success">
+                            <span style="font-weight: 400; font-size: 20px;">
+                                save
+                            </span>
+                        </ion-button>
+                    </ion-title>
+                </ion-buttons>
             </ion-toolbar>
         </ion-footer>
     </ion-modal>

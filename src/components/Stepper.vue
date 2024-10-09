@@ -40,7 +40,7 @@
                 <!-- Previous Button -->
                 <div v-if="index > 0">
                   <ion-button class="previous-button" @click="previousAccordion(index)">
-                    <ion-icon :icon="chevronBack()" slot="start"></ion-icon> <!-- Icon for Previous -->
+                    <ion-icon :icon="chevronBack()" slot="start"></ion-icon>
                     Previous
                   </ion-button>
                 </div>
@@ -48,7 +48,7 @@
                 <!-- Next Button -->
                 <div v-if="index < StepperData.length - 1">
                   <ion-button class="next-button" @click="nextAccordion(index)">
-                    <ion-icon :icon="chevronForward()" slot="start"></ion-icon> <!-- Icon for Next -->
+                    <ion-icon :icon="chevronForward()" slot="start"></ion-icon>
                     Next
                   </ion-button>
                 </div>

@@ -173,8 +173,8 @@ export async function getunderfiveImmunizationsDrugs() {
     return data
 }
 
-export async function getImmunizationDrugs(): Promise<any> {
-    const data = await Service.getJson(`/immunization/drugs`)
+export async function getImmunizationVaccineNames(): Promise<any> {
+    const data = await Service.getJson(`/immunization/vaccine_names`)
     return data
 }
 
@@ -250,7 +250,7 @@ export function exportReportToCSV(): void {
             link.click();
             document.body.removeChild(link);
         } else if (activePlatformProfile.value.fileExport === FileExportType.FILE_SYSTEM) {
-            exportMobile(`${reportTitle}.csv`, csvData, "text");
+            exportMobile(`${reportTitle}.csv`, csvData, "blob");
         } else {
             toastWarning("Platform not supported");
         }
