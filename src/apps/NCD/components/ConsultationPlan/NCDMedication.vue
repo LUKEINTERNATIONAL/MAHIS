@@ -133,14 +133,25 @@
       ...mapState(useTreatmentPlanStore, ["selectedNCDMedicationList"]), 
     },
     setup() {
-      const categories = ['Diuretic', 'CCB', 'ACE-I', 'BB', 'Statin', 'Other'];
+      const categories = ['Diabetes', 'Anti-hypertensives', 'Other'];
       const medications = reactive({
-        'Diuretic': ['Hydrochlorothiazide - HCTZ', 'Furosemide - FURO', 'Spironolactone - SPIRO'],
-        'CCB': ['Amlodipine - AML', 'Nifedipine Modified Release - NIF'],
-        'ACE-I': ['Enalapril - ENAL', 'Captopril - CAPT', 'Lisinopril - LISIN'],
-        'BB': ['Atenolol - ATEN', 'Bisoprolol - BIS', 'Propranolol - PROP'],
-        'Statin': ['Simvastatin - SIMVA', 'Pravastatin - PRAVA', 'Atorvastatin - ATORVA'],
-        'Other': ['Hydralazine - HYD', 'Isosorbide Mononitrate - ISSMN']
+        'Diabetes': [
+          'Long acting Insulin',
+          'Short Acting Insulin',
+          'Metformin',
+          'Glibenclamide'
+        ],
+        'Anti-hypertensives': [
+          'Diuretic',
+          'CCB',
+          'ACE-I',
+          'BB'
+        ],
+        'Other': [
+          'Aspirin',
+          'Statin',
+          'Other'
+        ]
       } as any);
   
       const selectedCategory = ref('') as any;
