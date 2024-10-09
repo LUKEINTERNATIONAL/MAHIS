@@ -695,9 +695,6 @@ export default defineComponent({
             }
             this.openNewPage("patientProfile", item);
         },
-        programID() {
-            return Service.getProgramID();
-        },
     },
 });
 </script>
