@@ -102,7 +102,7 @@ export default defineComponent({
 }
 
 .nav-menu li.active {
-    border-left: 0.25rem solid green;
+    border-left: 0.25rem solid var(--ion-color-primary);
     background-color: #e0e0e0;
     outline: none;
 }
