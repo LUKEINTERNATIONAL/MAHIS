@@ -50,6 +50,10 @@
                                     <ion-col size="4">MRN:</ion-col>
                                     <ion-col class="demoContent">{{ demographics?.mrn }}</ion-col>
                                 </ion-row>
+                                <ion-row v-if="activeProgramID === 32">
+                                    <ion-col size="4">NCDNumber:</ion-col>
+                                    <ion-col class="demoContent">{{ demographics?.NCDNumber }}</ion-col>
+                                </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Gendar:</ion-col>
                                     <ion-col class="demoContent">{{ covertGender(demographics?.gender) }}</ion-col>
@@ -130,7 +134,7 @@
                                 <ion-row>
                                     <ion-col class="vitalsValue">{{ vitals["Weight"] }} <span class="vitalsUnits">kg</span></ion-col>
                                     <ion-col class="vitalsValue">{{ vitals["Height"] }} <span class="vitalsUnits">cm</span></ion-col>
-                                    <ion-col class="vitalsValue">{{ vitals["Temp"] }} <span class="vitalsUnits">C</span></ion-col>
+                                    <ion-col class="vitalsValue">{{ vitals["Temp"] }} <span class="vitalsUnits">&deg;C</span></ion-col>
                                     <ion-col class="vitalsValue">0 <span class="vitalsUnits">mg/dL</span></ion-col>
                                     <ion-col class="vitalsValue">{{ vitals["Pulse"] }} <span class="vitalsUnits">bpm </span></ion-col>
                                     <ion-col class="vitalsValue"
@@ -224,7 +228,7 @@
             <div>
                 <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
                     <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
-                    <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>
+                    <ion-item :button="true" :detail="false" @click="openOutCome()" style="cursor: pointer">Update outcome</ion-item>
                     <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
                     <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
                 </ion-list>
