@@ -11,14 +11,14 @@
         :onYes="handleCheckInYes"
         :onNo="handleCheckInNo"
         :isOpen="checkInModalOpen"
-        :title="`Are you sure you want to check in the patient?`"
+        :title="`Are you sure you want to create the visit?`"
       />
       <CheckInConfirmationModal
         :closeModalFunc="closeCheckOutModal"
         :onYes="handleCheckOutYes"
         :onNo="handleCheckOutNo"
         :isOpen="checkOutModalOpen"
-        :title="`Are you sure you want to check Out the patient?`"
+        :title="`Are you sure you want to close the visit?`"
       />
       <AncEnrollmentModal
         :closeModalFunc="closeEnrollmentModal"
@@ -51,7 +51,7 @@
                     :icon="checkboxOutline"
                   /> -->
                   <DynamicButton
-                    name="Checkin Patient"
+                    name="Activate visit"
                     v-if="!checkedIn"
                     @click="toggleCheckInModal()"
                     fill="clear"
@@ -59,13 +59,15 @@
                     :icon="closeCircleOutline"
                   />
                   <DynamicButton
-                    name="Checkout Patient"
-                    v-if="checkedIn"
-                    @click="toggleCheckOutModal()"
-                    fill="clear"
-                    iconSlot="start"
-                    :icon="closeCircleOutline"
+                      name="Deactivate visit"
+                      v-if="checkedIn"
+                      @click="toggleCheckOutModal()"
+                      fill="solid"
+                      iconSlot="start"
+                      :icon="closeCircleOutline"
+                      color="danger"
                   />
+
                   <DynamicButton
                     name="Edit"
                     fill="clear"
@@ -518,7 +520,7 @@ import {
   modifyRadioValue,
   modifyFieldValue,
 } from "@/services/data_helpers";
-import { toastWarning } from "@/utils/Alerts";
+import {toastSuccess, toastWarning} from "@/utils/Alerts";
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Programs from "@/components/Programs.vue";
@@ -745,7 +747,6 @@ export default defineComponent({
         return false;
       }
     },
-
     openModal() {
       this.isModalOpen = true;
     },
@@ -777,6 +778,8 @@ export default defineComponent({
         );
         this.toggleCheckInModal();
         this.checkedIn = true;
+        toastSuccess("The patient's visit is now active. Patient is on the waiting list for vitals");
+
       } catch (e) {}
     },
     async handleCheckOutYes() {
@@ -790,6 +793,8 @@ export default defineComponent({
         );
         this.checkedIn = false;
         this.toggleCheckOutModal();
+        toastSuccess("The patient's visit is now closed");
+
       } catch (e) {}
     },
     handleCheckInNo() {

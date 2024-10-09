@@ -22,7 +22,7 @@
             </ion-label>
             <ion-label style="display: flex" slot="end">
                 <ion-buttons style="cursor: pointer; color: #74ff15" slot="end" class="iconFont">
-                    <ion-icon :icon="iconContent.addPerson" @click="nav('registration/manual')" aria-hidden="true"></ion-icon>
+                  <ion-icon :icon="iconContent.addPerson" @click="navToManualRegistration()" aria-hidden="true"></ion-icon>
                 </ion-buttons>
             </ion-label>
             <ion-label style="display: flex" slot="end" v-if="isMobile">
@@ -309,10 +309,12 @@ export default defineComponent({
         this.offlinePatients = await db.collection("patientRecords").get();
     },
     methods: {
-        nav(url: any) {
-            resetPatientData();
-            this.$router.push(url);
-        },
+
+      navToManualRegistration() {
+        resetPatientData();
+        const resolvedUrl = this.$router.resolve({ path: 'registration/manual' }).href;
+        window.location.href = resolvedUrl;
+      },
         async scanCode() {
             const dataScanned: any = await scannedData();
             const dataExtracted: any = await extractDetails(dataScanned);
@@ -686,16 +688,41 @@ export default defineComponent({
             this.openNewPage("patientProfile", this.selectedPatient);
             this.toggleCheckInModal();
         },
-        async handleCheckInYes() {
-            try{
-                await PatientOpdList.checkInPatient(this.selectedPatient.patient_id, dates.todayDateFormatted());
-                await PatientOpdList.addPatientToStage(this.selectedPatient.patient_id,dates.todayDateFormatted(),"VITALS")
-                this.openNewPage("patientProfile", this.selectedPatient);
-            } catch(e){
+      async handleCheckInYes() {
+        try {
+          // Define stages using the literals expected by the function
+          const stages: Array<"VITALS" | "CONSULTATION" | "DISPENSATION"> = ["VITALS", "CONSULTATION", "DISPENSATION"];
+          let isAlreadyCheckedIn = false;
 
+          // Iterate over each stage
+          for (const stage of stages) {
+            const patientList = await PatientOpdList.getPatientList(stage) as Array<{ patient_id: string }>;
+
+            // Check if the patient_id exists in any of the retrieved patient lists
+            if (patientList.some((patient) => patient.patient_id === this.selectedPatient.patient_id)) {
+              isAlreadyCheckedIn = true;
+              break;
             }
-        },
-        toggleCheckInModal() {
+          }
+
+          if (isAlreadyCheckedIn) {
+            toastDanger("Failed, the patient's visit is already active");
+            return;
+          }
+          // Proceed if the patient is not checked-in
+          await PatientOpdList.checkInPatient(this.selectedPatient.patient_id, dates.todayDateFormatted());
+          await PatientOpdList.addPatientToStage(this.selectedPatient.patient_id, dates.todayDateFormatted(), "VITALS");
+          await this.openNewPage("home", this.selectedPatient);
+          this.closeCheckInModal();
+          toastSuccess("Patient's visit is now active, check on the waiting list of vitals");
+        } catch (e) {
+          console.error("Error during patient check-in process:", e);
+          toastDanger("An error occurred while attempting to check in the patient. Please try again.");
+        }
+      },
+
+
+      toggleCheckInModal() {
             this.checkInModalOpen = !this.checkInModalOpen;
         },
         async openCheckInModal(item: any) {

@@ -4,9 +4,12 @@ export interface Bmi {
     colors: { [key: string]: string };
 }
 
-function removeQuotes(str: string) {
+function removeQuotes(str: string | undefined) {
+    if (typeof str !== 'string') {
+        return '';
+    }
     if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
-      return str.substring(1, str.length - 1);
+        return str.substring(1, str.length - 1);
     }
     return str;
 }

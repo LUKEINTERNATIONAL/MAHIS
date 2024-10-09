@@ -1,8 +1,13 @@
 <template>
-  <ion-modal  :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
-   <ion-content>
-      <ion-title style="color:black">{{title}}</ion-title>
-      <div style="display:flex;">
+  <ion-modal :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
+        <ion-buttons slot="start" >
+          <ion-title style="color: #0c0c0c">{{ title }}</ion-title>
+          <ion-button @click="closeModal">
+            <ion-icon slot="icon-only" :icon="closeOutline()" style="color: #b02a37"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+    <ion-content>
+      <div v-if="isCheckInPrompt" style="display:flex;">
         <DynamicButton
             expand="block"
             @click="onYes()"
@@ -12,14 +17,30 @@
         <DynamicButton
             expand="block"
             @click="onNo()"
-            :style="`flex:1` "
+            :style="`flex:1`"
             name="View profile"
+            fill="clear"
+        />
+      </div>
+      <div v-else style="display:flex;">
+        <DynamicButton
+            expand="block"
+            @click="onYes()"
+            name="Yes"
+            :style="`flex:1`"
+        />
+        <DynamicButton
+            expand="block"
+            @click="onNo()"
+            :style="`flex:1`"
+            name="No"
             fill="clear"
         />
       </div>
     </ion-content>
   </ion-modal>
 </template>
+
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
@@ -75,7 +96,13 @@ export default defineComponent({
         required: true
     }
   },
+  computed: {
+    isCheckInPrompt() {
+      return this.title === "Do you want to create visit or view profile?";
+    }
+  },
   methods: {
+
     closeOutline() {
       return closeOutline;
     },
@@ -94,8 +121,8 @@ export default defineComponent({
 ion-modal {
   --background: rgba(0, 0, 0, 0.9);
   --width: 90%;
-  --height: 10%;
-  --max-width: 500px;
+  --height: 20%;
+  --max-width: 550px;
   --max-height: 100px;
 }
 
