@@ -1,5 +1,5 @@
 <template>
-    <ion-card v-if="selectedMedications.length > 0">
+    <ion-card v-if="selectedNCDMedicationList.length > 0">
       <ion-card-header>
         <ion-card-title>
           <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
@@ -8,7 +8,7 @@
       </ion-card-header>
       <ion-card-content>
         <ion-list>
-          <ion-item v-for="(med, index) in selectedMedications" :key="index">
+          <ion-item v-for="(med, index) in selectedNCDMedicationList" :key="index">
             <ion-label>
               <h2>{{ med.medication }}</h2>
               <p class="dosage-info">
@@ -109,7 +109,7 @@
   </template>
   
   <script lang="ts">
-  import { defineComponent, ref, reactive } from 'vue';
+  import { defineComponent, ref, reactive, computed } from 'vue';
   import {
     IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel, 
     IonSelect, IonSelectOption, IonInput, IonList, IonButton, IonButtons,
@@ -133,26 +133,37 @@
       ...mapState(useTreatmentPlanStore, ["selectedNCDMedicationList"]), 
     },
     setup() {
-      const categories = ['Diuretic', 'CCB', 'ACE-I', 'BB', 'Statin', 'Other'];
+      const categories = ['Diabetes', 'Anti-hypertensives', 'Other'];
       const medications = reactive({
-        'Diuretic': ['Hydrochlorothiazide - HCTZ', 'Furosemide - FURO', 'Spironolactone - SPIRO'],
-        'CCB': ['Amlodipine - AML', 'Nifedipine Modified Release - NIF'],
-        'ACE-I': ['Enalapril - ENAL', 'Captopril - CAPT', 'Lisinopril - LISIN'],
-        'BB': ['Atenolol - ATEN', 'Bisoprolol - BIS', 'Propranolol - PROP'],
-        'Statin': ['Simvastatin - SIMVA', 'Pravastatin - PRAVA', 'Atorvastatin - ATORVA'],
-        'Other': ['Hydralazine - HYD', 'Isosorbide Mononitrate - ISSMN']
+        'Diabetes': [
+          'Long acting Insulin',
+          'Short Acting Insulin',
+          'Metformin',
+          'Glibenclamide'
+        ],
+        'Anti-hypertensives': [
+          'Diuretic',
+          'CCB',
+          'ACE-I',
+          'BB'
+        ],
+        'Other': [
+          'Aspirin',
+          'Statin',
+          'Other'
+        ]
       } as any);
   
       const selectedCategory = ref('') as any;
       const selectedMedication = ref('') as any;
       const medicationOptions = ref([]) as any;
       const dosage = reactive({ morning: null, afternoon: null, evening: null } as any);
-      const selectedMedications = ref([]) as any;
       const editIndex = ref(null) as any;
       const showRemoveAlert = ref(false) as any;
       const medicationToRemove = ref(null) as any;
       const errorMessage = ref('') as any;
       const treatmentPlanStore = useTreatmentPlanStore();
+      const selected_NCD_Medication_List = computed(() => treatmentPlanStore.selectedNCDMedicationList) as any;
   
       const updateMedicationOptions = () => {
         medicationOptions.value = medications[selectedCategory.value] || [];
@@ -179,11 +190,9 @@
         };
   
         if (editIndex.value !== null) {
-          selectedMedications.value[editIndex.value] = medicationData;
-          treatmentPlanStore.setSelectedNCDMedicationList(medicationData)
+          selected_NCD_Medication_List.value[editIndex.value] = medicationData;
           editIndex.value = null;
         } else {
-          selectedMedications.value.push(medicationData);
           treatmentPlanStore.setSelectedNCDMedicationList(medicationData)
         }
         resetForm();
@@ -197,7 +206,7 @@
       };
   
       const editMedication = (index: number) => {
-        const med = selectedMedications.value[index] as any;
+        const med = selected_NCD_Medication_List.value[index] as any;
         selectedCategory.value = med.category;
         updateMedicationOptions();
         selectedMedication.value = med.medication;
@@ -211,15 +220,15 @@
       };
   
       const removeMedication = (index: number) => {
-        selectedMedications.value.splice(index, 1);
+        selected_NCD_Medication_List.value.splice(index, 1);
       };
   
       return {
         categories, medications, selectedCategory, selectedMedication, medicationOptions,
-        dosage, selectedMedications, editIndex, showRemoveAlert, medicationToRemove,
+        dosage, editIndex, showRemoveAlert, medicationToRemove,
         errorMessage, updateMedicationOptions, saveMedication,
         resetForm, editMedication, confirmRemoveMedication, removeMedication,
-        pencil, trash, medkit, medical, sunny, partlySunny, moon, add, save
+        pencil, trash, medkit, medical, sunny, partlySunny, moon, add, save, selected_NCD_Medication_List
       };
     }
   });
