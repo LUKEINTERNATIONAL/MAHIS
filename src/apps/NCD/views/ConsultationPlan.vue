@@ -39,6 +39,7 @@
                         </div>
                     </div>
                     <VitalSigns v-if="currentTabIndex === 0" />
+                    <RiskAssessment v-if="currentTabIndex === 1" />
                     <Investigations v-if="currentTabIndex === 2" />
                     <DiagnosisComponent v-if="currentTabIndex === 3" />
                     <ComplicationsScreening v-if="currentTabIndex === 4" />
@@ -112,6 +113,9 @@ import DiagnosisComponent from "@/apps/NCD/components/ConsultationPlan/Diagnosis
 import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
 import Investigations from "@/components/Investigations.vue";
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
+import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
+import { useEnrollementStore } from "@/stores/EnrollmentStore";
+import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 import VitalSigns from "@/components/VitalSigns.vue";
 import {
@@ -156,6 +160,7 @@ export default defineComponent({
         NextAppointment,
         VitalSigns,
         DynamicButton,
+        RiskAssessment,
     },
     data() {
         return {
@@ -205,6 +210,7 @@ export default defineComponent({
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useGeneralStore, ["NCDActivities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
+        ...mapState(useEnrollementStore, ["substance"]),
     },
     created() {
         this.getData();
@@ -273,7 +279,6 @@ export default defineComponent({
         markWizard() {
             if (this.vitals.validationStatus) {
                 this.tabs[0].icon = "check";
-                console.log("🚀 ~ markWizard ~ this.tabs[0].icon:", this.tabs);
             } else {
                 this.tabs[0].icon = "";
             }
@@ -323,6 +328,14 @@ export default defineComponent({
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
                 diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+            }
+        },
+        async saveSubstanceAbuse() {
+            const data: any = await formatRadioButtonData(this.substance);
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const diagnosisInstance = new Diagnosis();
+                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
             }
         },
         async saveTreatmentPlan() {

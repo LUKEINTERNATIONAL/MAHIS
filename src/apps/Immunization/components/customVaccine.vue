@@ -54,7 +54,6 @@ import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdm
 import { StockService } from '@/services/stock_service';
 import alert from "@/apps/Immunization/components/Modals/alert.vue";
 import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
-import { mapState } from "pinia";
 export default defineComponent({
     name: "Home",
     components: {

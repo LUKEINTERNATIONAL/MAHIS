@@ -1,5 +1,4 @@
 <template>
-
         <ion-row>
           <ion-col>
               <h1 style="width: 100%; text-align: left; font-weight: 400">Immunization</h1>

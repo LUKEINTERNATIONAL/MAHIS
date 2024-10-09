@@ -28,30 +28,33 @@
                         trigger-action="click"
                         @didPresent="dissmissDrugAddField"
                     >
-                    <ion-content color="light" class="ion-padding content-al popover-content">
-                        <ion-label>{{ choose_place_holder }}:</ion-label>
-                        <div class="modern-input-container">
-                            <input type="text" id="itemNameInput" class="modern-input" v-model="itemName" @input="FindItemName" placeholder="Enter name">
-                        </div>
-                        <ion-list class="custom-list">
-                            <div v-for="(item, index) in items_List_copy" 
-                                @click="selectAl(item)" 
-                                :key="index"
-                                class="list-item">
-                                <div class="item-content">
-                                    <span class="item-name">{{ item.name }}</span>
-                                    <ion-icon v-if="item.selected" 
-                                            class="icon-al" 
-                                            :icon="checkmarkOutline">
-                                    </ion-icon>
+                        <ion-content color="light" class="ion-padding content-al popover-content">
+                            <!-- Search Input Container (Fixed at the top) -->
+                            <div class="search-container">
+                                <ion-label>{{ choose_place_holder }}:</ion-label>
+                                <div class="modern-input-container">
+                                    <input type="text" id="itemNameInput" class="modern-input" v-model="itemName" @input="FindItemName" placeholder="Enter name">
                                 </div>
                             </div>
-                        </ion-list>
-                    </ion-content>
-                </ion-popover>
-                </div>
-        
+                            <!-- Scrollable List -->
+                            <ion-list class="custom-list scrollable-list">
+                                <div v-for="(item, index) in local_itmes_List" 
+                                    @click="selectAl(item)" 
+                                    :key="index"
+                                    class="list-item">
+                                    <div class="item-content">
+                                        <span class="item-name">{{ item.name }}</span>
+                                        <ion-icon v-if="item.selected" 
+                                                class="icon-al" 
+                                                :icon="checkmarkOutline">
+                                        </ion-icon>
+                                    </div>
+                                </div>
+                            </ion-list>
+                        </ion-content>
+                    </ion-popover>
 
+                </div>
             </ion-item>
         </ion-col>
         </ion-row>
@@ -61,9 +64,7 @@
 import { IonList, IonLabel, IonRow, IonCol, IonItem, IonButton, IonIcon, IonInput, IonContent } from "@ionic/vue"
 import { closeOutline, addOutline, checkmarkOutline } from "ionicons/icons"
 import { ref, watch, onMounted } from "vue"
-import BasicInputField from "@/components/BasicInputField.vue"
 
-const input = ref()
 const itemName = ref("")
 const local_itmes_List = ref([] as any)
 const local_disabled = ref(false)
@@ -116,7 +117,6 @@ function isDisabled() {
     }
 }
 
-
 function selectAl(sel_item: any) {
     if (props.multiSelection == false) {
         props.items_List.forEach((item: any) =>{
@@ -141,6 +141,7 @@ async function FindItemName(text: any) {
 
 function setFocus() {
     // input.value.$el.setFocus()
+    generateUniqueId(8, 'item-')
 }
 
 const emit = defineEmits<{
@@ -178,6 +179,20 @@ function dissmissDrugAddField(): void {
     // addItemButton.value = true;
 }
 
+function generateUniqueId(length = 8, prefix = '') {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = prefix;
+
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    // Append a timestamp or random number for uniqueness
+    result += `-${Date.now()}`; // Append timestamp
+    return result;
+}
+
+
 </script>
 
 <style scoped>
@@ -209,9 +224,10 @@ ion-button.itemAlBtn {
     flex: 0 1 auto;
     --background: #5cc55e;
     --color: #006401;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
     text-transform: none;
+    margin: 2px;
 }
 .item-container {
   display: flex;
@@ -252,11 +268,12 @@ ion-icon.icon-al {
     border-radius: 3px;
 }
 .popover-al {
-    margin-top: -50px;
+    margin-top: -200px;
     --width: 300px;
     --max-width: 90%;
     --background: #ffffff;
     --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    
     --backdrop-opacity: 0.3;
 }
 .popover-content {
@@ -387,5 +404,25 @@ ion-list.list-al {
     font-size: 20px;
 }
 
+.search-container {
+    background-color: #fff;
+    padding-bottom: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.scrollable-list {
+    max-height: 300px; /* Adjust based on how much space you want for the list */
+    overflow-y: auto;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+}
+
+.list-item {
+    padding: 11px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s;
+}
 
 </style>

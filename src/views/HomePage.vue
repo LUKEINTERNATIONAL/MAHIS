@@ -6,7 +6,7 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14">
+        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32">
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -154,6 +154,7 @@
                 </ion-card>
             </div>
         </ion-content>
+        <NCDHomePage v-if="programID() == 32" />
         <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
     </ion-page>
 </template>
@@ -194,6 +195,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { AppointmentService } from "@/services/appointment_service";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { PatientService } from "@/services/patient_service";
+import NCDHomePage from "@/apps/NCD/components/NCDHomePage.vue";
 import {
     medkit,
     chevronBackOutline,
@@ -224,6 +226,7 @@ import { getBaseURl } from "@/utils/GeneralUti";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import { useWebWorker } from "@vueuse/core";
 
 export default defineComponent({
     name: "Home",
@@ -252,9 +255,11 @@ export default defineComponent({
         Pagination,
         Navigation,
         getBaseURl,
+        NCDHomePage,
     },
     data() {
         return {
+            workerApi: null as any,
             controlGraphs: "months" as any,
             reportData: "" as any,
             appointments: [] as any,
@@ -321,6 +326,9 @@ export default defineComponent({
         },
     },
     async mounted() {
+        // this.workerApi = useWebWorker("/src/services/worker.ts", { immediate: false });
+        // const url = `${localStorage.getItem("apiProtocol")}://${localStorage.getItem("apiURL")}:${localStorage.getItem("apiPort")}/api/v1/`;
+        // this.workerApi.post({ type: "SET_OFFLINE_LOCATION", url: url, apiKey: localStorage.getItem("apiKey") });
         this.isLoading = true;
         await setOfflineLocation();
         await setOfflineRelationship();

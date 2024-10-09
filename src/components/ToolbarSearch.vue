@@ -459,10 +459,8 @@ export default defineComponent({
             const userProgramsData: any = localStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
-
             const roles: any = roleData ? roleData : [];
-            UserService.setProgramUserActions();
-
+            await UserService.setProgramUserActions();
             if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
@@ -470,15 +468,13 @@ export default defineComponent({
             } else if (roles.some((role: any) => role.role === "Lab")) {
                 this.$router.push("OPDConsultationPlan");
             } else if (userPrograms?.length == 1) {
-                let NCDUserAction: any = "";
-                if (this.NCDUserActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.NCDUserActions;
-                if (NCDUserAction && userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "NCD PROGRAM")) {
-                    this.$router.push(NCDUserAction.url);
-                } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
+                if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
                     this.$router.push("OPDvitals");
                 } else {
                     this.$router.push(url);
                 }
+            } else if (this.programID() == 32) {
+                this.$router.push(this.NCDUserActions.url);
             } else {
                 this.$router.push(url);
             }
