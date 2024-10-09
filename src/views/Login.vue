@@ -280,6 +280,9 @@ export default defineComponent({
 .multiselect::before {
     top: -7px;
 }
+ion-card {
+    min-width: 330px;
+}
 @media (max-width: 902px) {
     .login-page {
         --ion-background-color: #ffffff;
