@@ -275,6 +275,21 @@ const healthcareEquipmentAllergies = [
         "uuid": "e3e71b3e-8d80-11d8-abbb-0024217bb78e",
         "concept_name_type": "FULLY_SPECIFIED",
         "locale_preferred": 0
+      },
+      {
+        "concept_id": 6408,
+        "name": "Other",
+        "locale": "en",
+        "creator": 1,
+        "date_created": "2024-03-26T12:00:00.000Z",
+        "concept_name_id": 161,
+        "voided": 0,
+        "voided_by": null,
+        "date_voided": null,
+        "void_reason": null,
+        "uuid": "e3e71b3e-8d80-11d8-abbb-0024217bb78e",
+        "concept_name_type": "FULLY_SPECIFIED",
+        "locale_preferred": 0
       }
 ];
 

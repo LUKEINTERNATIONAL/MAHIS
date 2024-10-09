@@ -167,15 +167,15 @@ export default defineComponent({
             if (this.vitals.validationStatus) {
               await this.saveVitals();
               await resetOPDPatientData();
-              this.$router.push("OPDConsultationPlan");
-              // this.$router.push("patientProfile");
+              //this.$router.push("OPDConsultationPlan");
+               this.$router.push("patientProfile");
             } else {
               await this.validaterowData();
               toastWarning("Please fill all required fields");
             }
           } else {
-            this.$router.push("OPDConsultationPlan");
-            // this.$router.push("patientProfile");
+            //this.$router.push("OPDConsultationPlan");
+             this.$router.push("patientProfile");
           }
         } catch (error) {
           console.error("Error in saveData: ", error);

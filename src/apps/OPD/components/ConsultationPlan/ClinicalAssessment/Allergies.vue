@@ -101,6 +101,11 @@ function selectAl(item: any) {
     console.log("selectAl: ", !item.selected)
     item.selected = !item.selected
     const AllergyStore = store
+
+    // if item = other
+    // display text input
+
+    console.log({item})
     AllergyStore.setSelectedMedicalAllergiesList(item)
     //saveStateValuesState()
 }
