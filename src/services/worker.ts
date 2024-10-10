@@ -1,7 +1,4 @@
-// import { LocationService } from "@/services/location_service";
-// import db from "@/db";
-import { build } from "ionicons/icons";
-
+// start common code
 type WorkerMessage<T> = {
     type: string;
     payload: T;
@@ -11,19 +8,15 @@ type WorkerResponse<T> = {
     type: string;
     payload: T;
 };
+
 let URL = "";
 let APIKEY = "";
 let db: IDBDatabase | null = null;
-interface YourDataType {
-    id?: number; // Make id optional
-    name: string;
-    age: number;
-}
 
 // Function to open the database
 function openDatabase(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
-        const request = indexedDB.open("MaHis", 4);
+        const request = indexedDB.open("MaHis");
 
         request.onerror = (event) => {
             reject("Database error: " + (event.target as IDBOpenDBRequest).error);
@@ -36,73 +29,74 @@ function openDatabase(): Promise<IDBDatabase> {
 
         request.onupgradeneeded = (event) => {
             const database = (event.target as IDBOpenDBRequest).result;
-            const objectStore = database.createObjectStore("relationship", {});
-            // Add any other object stores or indexes here
+            const objectStores = ["relationship", "location", "programs", "patientRecords"];
+
+            objectStores.forEach((storeName) => {
+                if (!database.objectStoreNames.contains(storeName)) {
+                    database.createObjectStore(storeName, { keyPath: "id", autoIncrement: true });
+                }
+            });
         };
     });
 }
-self.onmessage = async (event) => {
-    const { type, payload, url, apiKey } = event.data;
+
+self.onmessage = async (event: any) => {
+    const { type, url, apiKey } = event.data;
     URL = url;
     APIKEY = apiKey;
+
     try {
         await openDatabase();
 
-        // Correct data format
-        const validData: YourDataType = { name: "John Doe", age: 30 };
-        await addData(validData);
-        console.log("Valid data added successfully");
-
-        // Incorrect data format (this will throw an error)
-        const invalidData = { name: "Jane Doe", age: 25 };
-        await addData(invalidData as YourDataType);
+        switch (type) {
+            case "SET_OFFLINE_LOCATION":
+                try {
+                    await setOfflineLocation();
+                    console.log({ type: "SET_OFFLINE_LOCATION_RESULT", payload: "Success" });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error setting offline location: " + error });
+                }
+                break;
+            case "GET_OFFLINE_LOCATION":
+                try {
+                    const result = await getOfflineLocation();
+                    console.log({ type: "GET_OFFLINE_LOCATION_RESULT", payload: result });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error getting offline location: " + error });
+                }
+                break;
+            default:
+                console.log({ type: "ERROR", payload: "Unknown message type" });
+        }
     } catch (error) {
-        console.error("Error:", error);
-    }
-    const village = await getVillages();
-    console.log("🚀 ~ self.onmessage= ~ village:", village);
-    switch (type) {
-        case "SET_OFFLINE_LOCATION":
-            try {
-                // await setOfflineLocation();
-                self.postMessage({ type: "SET_OFFLINE_LOCATION_RESULT", payload: "Success" });
-            } catch (error) {
-                self.postMessage({ type: "ERROR", payload: "Error setting offline location" });
-            }
-            break;
-        case "GET_OFFLINE_LOCATION":
-            try {
-                const result = await getOfflineLocation();
-                self.postMessage({ type: "GET_OFFLINE_LOCATION_RESULT", payload: result });
-            } catch (error) {
-                self.postMessage({ type: "ERROR", payload: "Error getting offline location" });
-            }
-            break;
-        default:
-            self.postMessage({ type: "ERROR", payload: "Unknown message type" });
+        console.log({ type: "ERROR", payload: "Database initialization error: " + error });
     }
 };
-function addData(data: YourDataType): Promise<void> {
+
+function validateData(data: any): boolean {
+    return data && typeof data === "object";
+}
+
+function addData(storeName: string, data: any): Promise<void> {
     return new Promise((resolve, reject) => {
         if (!db) {
             reject(new Error("Database not initialized. Call openDatabase() first."));
             return;
         }
 
-        // Validate data before adding
-        if (typeof data.name !== "string" || typeof data.age !== "number") {
-            reject(new Error("Invalid data format. Name must be a string and age must be a number."));
+        if (!validateData(data)) {
+            reject(new Error("Invalid data format. Please check your data structure."));
             return;
         }
 
-        const transaction = db.transaction(["relationship"], "readwrite");
-        const objectStore = transaction.objectStore("relationship");
+        const transaction = db.transaction([storeName], "readwrite");
+        const objectStore = transaction.objectStore(storeName);
 
-        // If id is provided and not auto-incremented, use put instead of add
-        const request = data.id ? objectStore.put(data) : objectStore.add(data);
+        const request = objectStore.add(data);
 
         request.onerror = (event) => {
-            reject("Error adding data: " + (event.target as IDBRequest).error);
+            const error = (event.target as IDBRequest).error;
+            reject(new Error(`Error adding data: ${error?.name} - ${error?.message}`));
         };
 
         request.onsuccess = () => {
@@ -110,32 +104,69 @@ function addData(data: YourDataType): Promise<void> {
         };
     });
 }
+async function execFetch(url: string, params: any = "") {
+    return await fetch(url, { headers: headers() });
+}
 
+function headers() {
+    return {
+        Authorization: APIKEY,
+        "Content-Type": "application/json",
+    };
+}
+
+function buildUrl(url: string, params: any) {
+    const transformedUrl = `${url}?${parameterizeObjToString(params)}`;
+    return URL + transformedUrl;
+}
+
+function parameterizeObjToString(obj: Record<string, any>) {
+    return Object.entries(obj)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join("&");
+}
+// end common code
+
+// start location code
 async function setOfflineLocation() {
-    const locationData = await getOfflineLocation();
-    // if (!(locationData && Object.keys(locationData).length > 0) || (locationData && locationData?.villageList == "")) {
-    //     await db.collection("location").delete();
-    //     await db.collection("location").add({
-    //         districts: await getDistricts(),
-    //         TAs: await getTAs(),
-    //         villageList: await getVillages(),
-    //     });
-    // }
+    const locationData: any = await getOfflineLocation();
+    if (!locationData || Object.keys(locationData).length === 0 || !locationData.villageList) {
+        const newLocationData = {
+            districts: await getDistricts(),
+            TAs: await getTAs(),
+            villageList: await getVillages(),
+        };
+        await addData("location", newLocationData);
+    }
 }
 
 async function getOfflineLocation() {
-    // return await db
-    //     .collection("location")
-    //     .get()
-    //     .then(async (locationData: any) => {
-    //         return locationData[0];
-    //     });
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized."));
+            return;
+        }
+
+        const transaction = db.transaction(["location"], "readonly");
+        const objectStore = transaction.objectStore("location");
+        const request = objectStore.getAll();
+
+        request.onerror = (event) => {
+            const error = (event.target as IDBRequest).error;
+            reject(new Error(`Error getting data: ${error?.name} - ${error?.message}`));
+        };
+
+        request.onsuccess = (event) => {
+            const result = (event.target as IDBRequest).result;
+            resolve(result.length > 0 ? result[0] : null);
+        };
+    });
 }
 
 async function getDistricts() {
     let districtList = [];
     for (let i of [1, 2, 3]) {
-        const response: any = await fetch(buildUrl("/districts", { region_id: i, page_size: 1000 }));
+        const response: any = await execFetch(buildUrl("/districts", { region_id: i, page_size: 1000 }));
         const districts = await response.json();
         districtList.push(...districts);
     }
@@ -143,7 +174,7 @@ async function getDistricts() {
 }
 
 async function getTAs() {
-    const response: any = await fetch(buildUrl("/traditional_authorities", { paginate: false }));
+    const response: any = await execFetch(buildUrl("/traditional_authorities", { paginate: false }));
     return response.json();
 }
 
@@ -155,7 +186,6 @@ async function getVillages() {
         while (true) {
             const response: any = await execFetch(buildUrl("/villages", { page, page_size: pageSize }));
             const newVillages = await response.json();
-            console.log("🚀 ~ getVillages ~ newVillages:", newVillages);
             if (newVillages.length > 0) {
                 allVillage.push(...newVillages);
                 page++;
@@ -166,28 +196,7 @@ async function getVillages() {
         return allVillage;
     } catch (error) {
         console.error("Error fetching villages:", error);
-        return "";
+        return [];
     }
 }
-async function execFetch(url: string, params: any = "") {
-    return await fetch(url, { headers: headers() });
-}
-function headers() {
-    return {
-        Authorization: APIKEY,
-        "Content-Type": "application/json",
-    };
-}
-function buildUrl(url: string, params: any) {
-    const transformedUrl = `${url}?${parameterizeObjToString(params)}`;
-    const data = URL + transformedUrl;
-    console.log("🚀 ~ buildUrl ~ data:", data);
-    return data;
-}
-function parameterizeObjToString(obj: Record<string, any>) {
-    let str = "";
-    for (const [key, value] of Object.entries(obj)) {
-        str += `${key}=${value}&`;
-    }
-    return str;
-}
+// end location code
