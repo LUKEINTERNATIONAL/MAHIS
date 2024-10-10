@@ -102,7 +102,7 @@ import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
 import { getUserLocation } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
-import workerData from "@/workerData";
+import workerData from "@/activate_worker";
 
 export default defineComponent({
     name: "Login",
