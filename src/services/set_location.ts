@@ -3,10 +3,6 @@ import { getBaseURl } from "@/utils/GeneralUti";
 import db from "@/db";
 import { useWebWorker } from "@vueuse/core";
 export async function setOfflineLocation() {
-    // const { data, post, terminate, worker } = useWebWorker("/src/services/worker.ts");
-    // console.log("🚀 ~ setOfflineLocation ~ data:", data);
-    // const url = `${localStorage.getItem("apiProtocol")}://${localStorage.getItem("apiURL")}:${localStorage.getItem("apiPort")}/api/v1/`;
-    // post({ type: "SET_OFFLINE_LOCATION", url: url, apiKey: localStorage.getItem("apiKey") });
     const locationData = await getOfflineLocation();
     if (!(locationData && Object.keys(locationData).length > 0) || (locationData && locationData?.villageList == "")) {
         await db.collection("location").delete();
