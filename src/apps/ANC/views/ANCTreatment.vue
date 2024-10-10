@@ -195,7 +195,7 @@ export default defineComponent({
             // this.saveIntimatePartner();
             // this.saveDeworming();
             // resetPatientData();
-            this.$router.push('ANCHome');
+            this.$router.push('contact');
         },
         validationRules(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));

@@ -206,6 +206,9 @@ export default defineComponent({
         lastname() {
             return getFieldValue(this.personInformation, "lastname", "value");
         },
+      phoneNumber() {
+        return getFieldValue(this.personInformation, "phoneNumber", "value");
+      },
         gender() {
             return getRadioSelectedValue(this.personInformation, "gender");
         },

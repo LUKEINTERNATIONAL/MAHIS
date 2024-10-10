@@ -135,7 +135,7 @@ export default defineComponent({
       }
       },
       handleOtherNotDone(){
-        if(getCheckboxSelectedValue(this.urineTest,'Reason not done')=='Other'){
+        if(getCheckboxSelectedValue(this.urineTest,'Other')?.value=='Other'){
           modifyFieldValue(this.urineTest,'Other (specify)','displayNone',false)
         }else{
            modifyFieldValue(this.urineTest,'Other (specify)','displayNone',true)

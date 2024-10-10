@@ -121,7 +121,7 @@ export default defineComponent({
                     if (!patientStatus) return toastWarning("Unable to create patient HEADSS assessment  !");
                     toastSuccess("HEADSS assessment details have been created");
 
-                    this.$router.push("ANCHome");
+                    this.$router.push("contact");
                 }
             } else {
                 modifyRadioValue(this.headssAssesment, "Who does the client live with", "alertsErrorMassage", "This is a mandatory question");

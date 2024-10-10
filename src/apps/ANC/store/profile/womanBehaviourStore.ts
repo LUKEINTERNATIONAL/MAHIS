@@ -212,5 +212,5 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
       this.dailyCaffeineIntake = data;
     },
   },
-  persist: true,
+ // persist: true,
 });

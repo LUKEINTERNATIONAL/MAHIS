@@ -73,10 +73,13 @@ const initialPresentingComplaint = [
                 backgroundColor: "",
                 status: "",
                 icon: "",
+                colSize:"",
                 textColor: "",
                 value: "",
                 name: "",
                 index: "",
+                justify:"",
+                alignText:""
             },
         ],
     },
@@ -119,5 +122,5 @@ export const usePresentingComplaintsStore = defineStore("PresentingComplaintsSto
             return [...data];
         },
     },
-    persist: true,
+    // persist: true,
 });
