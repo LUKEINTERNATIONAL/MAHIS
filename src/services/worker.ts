@@ -45,9 +45,8 @@ self.onmessage = async (event: any) => {
     URL = url;
     APIKEY = apiKey;
 
+    await openDatabase();
     try {
-        await openDatabase();
-
         switch (type) {
             case "SET_OFFLINE_LOCATION":
                 try {
@@ -57,12 +56,29 @@ self.onmessage = async (event: any) => {
                     console.log({ type: "ERROR", payload: "Error setting offline location: " + error });
                 }
                 break;
+
             case "GET_OFFLINE_LOCATION":
                 try {
                     const result = await getOfflineLocation();
                     console.log({ type: "GET_OFFLINE_LOCATION_RESULT", payload: result });
                 } catch (error) {
                     console.log({ type: "ERROR", payload: "Error getting offline location: " + error });
+                }
+                break;
+            case "SET_OFFLINE_PROGRAMS":
+                try {
+                    self.postMessage({ payload: await setOfflinePrograms() });
+                    console.log({ type: "SET_OFFLINE_PROGRAMS_RESULTS", payload: "Success" });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error setting offline programs: " + error });
+                }
+                break;
+            case "SET_OFFLINE_RELATIONSHIPS":
+                try {
+                    await setOfflineRelationship();
+                    console.log({ type: "SET_OFFLINE_PROGRAMS_RESULTS", payload: "Success" });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error setting offline programs: " + error });
                 }
                 break;
             default:
@@ -146,20 +162,24 @@ async function getOfflineLocation() {
             reject(new Error("Database not initialized."));
             return;
         }
+        try {
+            const transaction = db.transaction(["location"], "readonly");
+            const objectStore = transaction.objectStore("location");
+            const request = objectStore.getAll();
 
-        const transaction = db.transaction(["location"], "readonly");
-        const objectStore = transaction.objectStore("location");
-        const request = objectStore.getAll();
+            request.onerror = (event) => {
+                const error = (event.target as IDBRequest).error;
+                reject(new Error(`Error getting data: ${error?.name} - ${error?.message}`));
+            };
 
-        request.onerror = (event) => {
-            const error = (event.target as IDBRequest).error;
-            reject(new Error(`Error getting data: ${error?.name} - ${error?.message}`));
-        };
-
-        request.onsuccess = (event) => {
-            const result = (event.target as IDBRequest).result;
-            resolve(result.length > 0 ? result[0] : null);
-        };
+            request.onsuccess = (event) => {
+                const result = (event.target as IDBRequest).result;
+                resolve(result.length > 0 ? result[0] : null);
+            };
+        } catch (error) {
+            console.log("failed to get locations", error);
+            return null;
+        }
     });
 }
 
@@ -200,3 +220,24 @@ async function getVillages() {
     }
 }
 // end location code
+
+async function setOfflinePrograms() {
+    const response = await fetch(buildUrl("/programs", { page_size: 1000 }));
+    const programs = await response.json();
+    if (programs && Object.keys(programs).length > 0) {
+        await addData("programs", {
+            programs: programs,
+        });
+    }
+    return programs;
+}
+async function setOfflineRelationship() {
+    const response = await execFetch(buildUrl("types/relationships", { paginate: false }));
+    const relationships = await response.json();
+    if (relationships && Object.keys(relationships).length > 0) {
+        await addData("relationship", {
+            relationships: relationships,
+        });
+    }
+    return relationships;
+}
