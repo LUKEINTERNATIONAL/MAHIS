@@ -8,6 +8,7 @@
 
     <ion-row v-if="search_item">
       <basic-form
+          initialData="initialData"
           :contentData="OPDdiagnosis"
           @update:selected="handleInputData"
           @update:inputValue="handleInputData"
@@ -91,6 +92,7 @@ export default defineComponent({
       selectedCondition: "" as any,
       selected: null,
       diagnoses: [] as any,
+      initialData:[] as any,
     };
   },
   setup() {
@@ -112,6 +114,8 @@ export default defineComponent({
   },
   async mounted() {
     this.updateDiagnosisStores();
+    const OPDDiagnosis=useOPDDiagnosisStore()
+    this.initialData=OPDDiagnosis.getInitial()
     this.setDashedBox();
     await this.getDiagnosis("");
   },

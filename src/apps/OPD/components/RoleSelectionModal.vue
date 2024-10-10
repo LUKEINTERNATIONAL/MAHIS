@@ -31,6 +31,7 @@
             :style="buttonStyle"
         />
       </div>
+
     </ion-content>
   </ion-modal>
 </template>
