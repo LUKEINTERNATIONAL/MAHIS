@@ -115,8 +115,6 @@ function selectAl(item: any) {
     // if item = other
     // display text input
 
-
-    // Check if selected item is 'Other'
     if (item.name === 'Other') {
         showOtherInput.value = true
     } else {
