@@ -893,10 +893,7 @@ export default defineComponent({
         return { [item]: dd };
       });
 
-      // Wait for all promises to resolve
       const resultsArray = await Promise.all(promises);
-
-      // Combine the objects in resultsArray into a single object
       this.vitals = Object.assign({}, ...resultsArray);
     },
     covertGender(gender: any) {
@@ -915,7 +912,11 @@ export default defineComponent({
         const result = await PatientOpdList.getCheckInStatus(
           this.demographics.patient_id
         );
-        this.checkedIn = true;
+
+        if(Boolean(result)){
+          this.checkedIn = true;
+        }
+
       } catch (e) {
         console.log({ e });
       }
