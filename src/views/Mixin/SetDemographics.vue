@@ -25,6 +25,7 @@ export default defineComponent({
             demographicsStore.setDemographics({
                 name: fullName,
                 mrn: this.patientIdentifier(item),
+                NCDNumber: this.patientIdentifierNCD(item),
                 birthdate: item.person.birthdate,
                 category: "",
                 gender: item.person.gender,
@@ -62,6 +63,16 @@ export default defineComponent({
             if (identifiers) {
                 return identifiers.patient_identifiers
                     .filter((identifier: any) => identifier.identifier_type === 3)
+                    .map((identifier: any) => identifier.identifier)
+                    .join(", ");
+            } else {
+                return "";
+            }
+        },
+        patientIdentifierNCD(identifiers: any) {
+            if (identifiers) {
+                return identifiers.patient_identifiers
+                    .filter((identifier: any) => identifier.identifier_type === 31)
                     .map((identifier: any) => identifier.identifier)
                     .join(", ");
             } else {

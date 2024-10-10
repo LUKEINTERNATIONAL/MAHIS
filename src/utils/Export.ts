@@ -12,7 +12,7 @@ function convertToCsv(list: Array<any>) {
     }, "");
 }
 
-function exportMobile(file: string, data: any, type: "blob" | "text") {
+export function exportMobile(file: string, data: any, type: "blob" | "text") {
     let promiseObj: any = null;
     const path = `MaHIS/${file.replaceAll("/", "_")}`;
     toastSuccess(`Exporting file to "Documents/${path}"...`);

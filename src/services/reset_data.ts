@@ -20,7 +20,6 @@ import { useBehaviourCousellingStore } from "@/apps/ANC/store/counselling/behavi
 import { useDietCounsellingStore } from "@/apps/ANC/store/counselling/dietCounsellingStore";
 import { usePhysiologicalCounselingStore } from "@/apps/ANC/store/counselling/physiologicalCounselingStore";
 import { useHeadssAssessmentStore } from "@/apps/ANC/store/others/headsAssessmentStore";
-import { useAncVitalsStore } from "@/apps/ANC/store/physical exam/Anc_VitalsStore";
 import { useFetalAssessment } from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 import { useFetalPresentationStore } from "@/apps/ANC/store/physical exam/FetalPresantationStore";
 import { usePresentingSigns } from "@/apps/ANC/store/physical exam/PresentingSignsStore";
@@ -93,7 +92,7 @@ export async function resetPatientData() {
     const ANCdietCounselling = useDietCounsellingStore();
     const ANCphysCounselling = usePhysiologicalCounselingStore();
     const heads = useHeadssAssessmentStore();
-    const ANCancvitals = useAncVitalsStore();
+   
     const ANCfatalAssment = useFetalAssessment();
     const ANCfatalPres = useFetalPresentationStore();
     const ANCpresSigns = usePresentingSigns();
@@ -176,7 +175,7 @@ export async function resetPatientData() {
     ANCwomanBehavior.$reset();
     ANCphysCounselling.$reset();
     heads.$reset();
-    ANCancvitals.$reset();
+   
     ANCfatalAssment.$reset();
     ANCfatalPres.$reset();
     ANCpresSigns.$reset();

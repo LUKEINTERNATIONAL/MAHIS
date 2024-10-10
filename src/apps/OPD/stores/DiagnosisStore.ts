@@ -152,5 +152,6 @@ export const useOPDDiagnosisStore = defineStore("DiagnosisStore", {
             return [...data];
         }
     },
-    // persist: true,
+    persist: true,
 });
+

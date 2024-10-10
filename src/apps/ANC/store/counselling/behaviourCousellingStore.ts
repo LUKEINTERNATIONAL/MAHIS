@@ -10,7 +10,7 @@ const initialBehaviourInfo=[
             header: {
                 title: "Behaviour counselling done",
                 selectedValue: "",
-                name:'Counselling',
+                name:'Behaviour counselling',
                 class:'bold'
 
             },

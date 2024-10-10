@@ -146,14 +146,24 @@ const props = defineProps<{
 
 
 async function save() {
-    await voidApt()
-    await getMobilePhones()
-    const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
-    const appointmentDetails = await appointment_service.createAppointment();
-    setMilestoneReload();
-    setAppointmentMentsReload();
-    dismiss();
-    smspost(appointmentDetails);
+    const store = useImmunizationAppointMentStore()
+    if (store.selectedAppointmentMent.length >0) {
+        try {
+            await voidApt()
+            await getMobilePhones()
+            const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
+            const appointmentDetails = await appointment_service.createAppointment();
+            setMilestoneReload();
+            setAppointmentMentsReload();
+            dismiss();
+            smspost(appointmentDetails);
+        } catch (error) {
+            
+        }
+    } else {
+        toastWarning("please select next appointment date on the calendar");
+    }
+
 }
 
 async function smspost(appointmentDetails:any){

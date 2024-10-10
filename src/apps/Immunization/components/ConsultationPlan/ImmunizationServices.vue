@@ -160,7 +160,6 @@ import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import labOrderResults from "@/components/Lab/labOrderResults.vue";
 import { LabOrder } from "@/services/lab_order";
-import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue";
 import LevelOfConsciousness from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/LevelOfConsciousness.vue";
 import PhysicalExamination from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PhysicalExamination.vue";
 import PregnancyBreastfeeding from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PregnancyBreastfeeding.vue";
@@ -197,7 +196,6 @@ export default defineComponent({
         List,
         DynamicButton,
         labOrderResults,
-        Allergies,
         LevelOfConsciousness,
         PhysicalExamination,
         PregnancyBreastfeeding,

@@ -6,13 +6,10 @@ import * as yup from "yup"
 export const FirstVaginalExaminationValidationSchema = yup.object().shape({
     'cervical dilation': yup.number()
         .typeError("cervical dilation can only be a number")
-        .min(0)
-        .max(10)
+        .min(1)
+        .min(10)
         .required()
-    .label("Cervical Dilation"),
-    'state of cervical': yup.string()
-    .matches(/^[^\d]+$/, "State of cervical cannot contain numbers") 
-    .label("state of cervical")
+    .label("Cervical Dilation")
    
 })
 

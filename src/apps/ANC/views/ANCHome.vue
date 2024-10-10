@@ -152,19 +152,19 @@ export default defineComponent({
       this.dateOfAppointment = dateOfAppointment;
 
     },
-   async saveData(){
+    async saveData(){
       const store = useScheduleNextAppointmentStore();
       const isFormValid = await store.validate();
       if (!isFormValid) {
         toastDanger('Next appointment date has errors');
         return;
       }
-       await this.saveDate();
-       this.closeAppointmentModal();
-        await this.$router.push("ANCHome");
-       await resetPatientData();
+      await this.saveDate();
+      this.closeAppointmentModal();
+      await this.$router.push("ANCHome");
+      await resetPatientData();
 
-   },
+    },
     async saveDate(){
       if (this.nextAppointmentDate.length >= 0) {
         const userID: any = Service.getUserID();
@@ -190,7 +190,7 @@ export default defineComponent({
     },
 
     async nextAppointment() {
-     this.toggleAppointmentModal()
+      this.toggleAppointmentModal()
     },
     toggleAppointmentModal(){
       this.isModalOpen=!this.isModalOpen
@@ -283,7 +283,7 @@ ion-card {
   }
   .AppointmentDate {
     margin-left: 0;
-      }
+  }
 }
 
 hr {

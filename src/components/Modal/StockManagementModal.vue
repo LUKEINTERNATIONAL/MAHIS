@@ -17,6 +17,7 @@
                 <div class="drug_container">
                     <div class="drug_content" v-for="(item, index) in reportData" :key="index">
                         <div class="watermark" v-if="!checkExpired(item)">EXPIRED</div>
+                        <div class="watermark" v-if="item.current_quantity <= 0">Stock out</div>
                         <ion-row class="search_header">
                             <ion-col class="">
                                 <span style="font-weight: 700; font-size: 16px; color: #939393">{{ item.drug_legacy_name }}</span>
@@ -60,11 +61,22 @@
                                 size="small"
                                 color="danger"
                                 name="Discard Stock"
-                                v-if="checkExpired(item)"
+                                v-if="checkExpired(item) && item.current_quantity > 0"
                                 style="font-size: 12px"
                                 @click="openPopover($event, item)"
-                                >Discard Stock</ion-button
                             >
+                                Discard Stock
+                            </ion-button>
+                            <ion-button
+                                v-else
+                                size="small"
+                                color="danger"
+                                name="Discard Stock"
+                                style="font-size: 12px"
+                                @click="voidStock($event, item)"
+                            >
+                                Void Stock
+                            </ion-button>
                             <!-- <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openAddStockModal(item)"
                                 >Update Stock</ion-button
                             > -->
@@ -175,7 +187,7 @@ import {
     person,
 } from "ionicons/icons";
 export default defineComponent({
-    name: "Home",
+    name: "StockManagementModal",
     mixins: [SetUser],
     components: {
         IonContent,
@@ -320,7 +332,6 @@ export default defineComponent({
             this.event = e;
             this.popoverOpen = true;
         },
-
         closePopover() {
             this.event = null;
             this.popoverOpen = false;
@@ -341,7 +352,7 @@ export default defineComponent({
                 await this.buildTableData();
             }
         },
-        async discardStock(e: any, item: any) {
+        async voidStock(e: any, item: any) {
             const deleteConfirmed = await popoverConfirmation(`Do you want to void "${item.drug_legacy_name}", batch: ${item.batch_number} ?`, e, {
                 confirmBtnLabel: "Void",
             });
