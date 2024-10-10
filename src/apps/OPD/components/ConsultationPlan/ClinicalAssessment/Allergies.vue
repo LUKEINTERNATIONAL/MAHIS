@@ -1,47 +1,55 @@
 <template>
     <ion-list style="margin-left: 10px;">
-        
         <ion-label>Allergies (Medication, Healthcare items, Environment and Food)</ion-label>
         <ion-row>
             <ion-item lines="none" class="medicalAl">
-            <ion-row>
-            <div v-for="(item, index) in selectedAllergiesList" :key="index">
-                <ion-button v-if="item.selected" @click="selectAl(item)" class="medicalAlBtn">
-                    {{ item.name }}
-                    <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
-                </ion-button>
-            </div>
+                <ion-row>
+                    <div v-for="(item, index) in selectedAllergiesList" :key="index">
+                        <ion-button v-if="item.selected" @click="selectAl(item)" class="medicalAlBtn">
+                            {{ item.name }}
+                            <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
+                        </ion-button>
+                    </div>
 
-            <div>
-                <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn" @click="setFocus">
-                    <ion-icon :icon="addOutline"></ion-icon>
-                </ion-button>
-                <ion-popover
-                    class="popover-al"
-                    :show-backdrop="false"
-                    trigger="click-trigger"
-                    trigger-action="click"
-                    @didPresent="dissmissDrugAddField"
-                >
-                    <ion-content color="light" class="ion-padding content-al">
-                        <ion-label>Choose the allergy:</ion-label>
-                        <ion-input ref="input" v-model="drugName" @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
-                        <ion-list class="list-al">
-                            <div class="item-al" v-for="(item, index) in allergiesList" @click="selectAl(item)" :key="index">
-                                <ion-label style="display: flex; justify-content: space-between">
-                                    {{ item.name }}
-                                    <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
-                                </ion-label>
-                            </div>
-                        </ion-list>
-                    </ion-content>
-                </ion-popover>
-            </div>
-            </ion-row>
+                    <div v-if="showOtherInput">
+                        <ion-input v-model="otherAllergy" placeholder="Please specify the allergy" fill="outline"></ion-input>
+                        
+                        <ion-button @click="addCustomAllergy" class="addCustomAllergyBtn">
+                            Add Allergy
+                        </ion-button>
+                    </div>
+
+                    <div>
+                        <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn" @click="setFocus">
+                            <ion-icon :icon="addOutline"></ion-icon>
+                        </ion-button>
+                        <ion-popover
+                            class="popover-al"
+                            :show-backdrop="false"
+                            trigger="click-trigger"
+                            trigger-action="click"
+                            @didPresent="dissmissDrugAddField"
+                        >
+                            <ion-content color="light" class="ion-padding content-al">
+                                <ion-label>Choose the allergy:</ion-label>
+                                <ion-input ref="input" v-model="drugName" @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
+                                <ion-list class="list-al">
+                                    <div class="item-al" v-for="(item, index) in allergiesList" @click="selectAl(item)" :key="index">
+                                        <ion-label style="display: flex; justify-content: space-between">
+                                            {{ item.name }}
+                                            <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
+                                        </ion-label>
+                                    </div>
+                                </ion-list>
+                            </ion-content>
+                        </ion-popover>
+                    </div>
+                </ion-row>
             </ion-item>
         </ion-row>
     </ion-list>
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -90,6 +98,8 @@ const store = useAllegyStore()
 const selectedAllergiesList = computed(() => store.selectedMedicalAllergiesList)
 const input = ref()
 const drugName = ref("")
+const otherAllergy = ref("") 
+const showOtherInput = ref(false)
 const allergiesList = computed(() => store.medicalAllergiesList)
 
 onMounted(async () => {
@@ -104,6 +114,14 @@ function selectAl(item: any) {
 
     // if item = other
     // display text input
+
+
+    // Check if selected item is 'Other'
+    if (item.name === 'Other') {
+        showOtherInput.value = true
+    } else {
+        showOtherInput.value = false
+    }
 
     console.log({item})
     AllergyStore.setSelectedMedicalAllergiesList(item)
@@ -145,6 +163,24 @@ async function FindAllegicDrugName(text: any) {
     const temp_data_1 = searchHealthcareEquipmentAllergies(searchText)
     const temp_data_2 = concatenateArrays(temp_data_1, drugs as any)
     allergyStore.setMedicalAllergiesList(temp_data_2)
+}
+
+function addCustomAllergy() {
+    const customAllergy = otherAllergy.value.trim()
+    if (customAllergy) {
+        const newAllergy = {
+            name: customAllergy,
+            selected: true
+        }
+
+        store.setMedicalAllergiesList([...allergiesList.value, newAllergy])
+        store.setSelectedMedicalAllergiesList(newAllergy)
+
+        otherAllergy.value = ""
+        showOtherInput.value = false
+    } else {
+        console.log("Allergy name cannot be empty")
+    }
 }
 </script>
 
