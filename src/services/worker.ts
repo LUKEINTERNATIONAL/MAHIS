@@ -9,7 +9,7 @@ type WorkerResponse<T> = {
     payload: T;
 };
 
-let URL = "";
+let APIURL = "";
 let APIKEY = "";
 let TOTALS: any = "";
 let db: IDBDatabase | null = null;
@@ -85,6 +85,10 @@ async function upsertSingleRecord(storeName: string, data: any): Promise<void> {
     }
 
     return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized. Call openDatabase() first."));
+            return;
+        }
         const transaction = db.transaction([storeName], "readwrite");
         const objectStore = transaction.objectStore(storeName);
 
@@ -166,7 +170,7 @@ async function getOfflineData(storeName: any) {
  **********************************************************************/
 self.onmessage = async (event: any) => {
     const { type, url, apiKey } = event.data;
-    URL = url;
+    APIURL = url;
     APIKEY = apiKey;
     TOTALS = await getTotals();
 
@@ -242,7 +246,7 @@ function headers() {
 
 function buildUrl(url: string, params: any) {
     const transformedUrl = `${url}?${parameterizeObjToString(params)}`;
-    return URL + transformedUrl;
+    return APIURL + transformedUrl;
 }
 
 function parameterizeObjToString(obj: Record<string, any>) {
