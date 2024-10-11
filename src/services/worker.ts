@@ -14,6 +14,11 @@ let APIKEY = "";
 let TOTALS: any = "";
 let db: IDBDatabase | null = null;
 
+/**********************************************************************
+ **********************************************************************
+                            Index DB                                                        
+ **********************************************************************
+ **********************************************************************/
 // Function to open the database
 function openDatabase(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
@@ -105,12 +110,65 @@ async function upsertSingleRecord(storeName: string, data: any): Promise<void> {
         getAllRequest.onerror = (event) => reject((event.target as IDBRequest).error);
     });
 }
+
+function addData(storeName: string, data: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized. Call openDatabase() first."));
+            return;
+        }
+
+        const transaction = db.transaction([storeName], "readwrite");
+        const objectStore = transaction.objectStore(storeName);
+
+        const request = objectStore.add(data);
+
+        request.onerror = (event) => {
+            const error = (event.target as IDBRequest).error;
+            reject(new Error(`Error adding data: ${error?.name} - ${error?.message}`));
+        };
+
+        request.onsuccess = () => {
+            resolve();
+        };
+    });
+}
+async function getOfflineData(storeName: any) {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized."));
+            return;
+        }
+        try {
+            const transaction = db.transaction([storeName], "readonly");
+            const objectStore = transaction.objectStore(storeName);
+            const request = objectStore.getAll();
+
+            request.onerror = (event) => {
+                const error = (event.target as IDBRequest).error;
+                reject(new Error(`Error getting data: ${error?.name} - ${error?.message}`));
+            };
+
+            request.onsuccess = (event) => {
+                const result = (event.target as IDBRequest).result;
+                resolve(result.length > 0 ? result[0] : null);
+            };
+        } catch (error) {
+            console.log("failed to get locations", error);
+            return null;
+        }
+    });
+}
+/**********************************************************************
+ **********************************************************************
+                            Web worker                                                       
+ **********************************************************************
+ **********************************************************************/
 self.onmessage = async (event: any) => {
     const { type, url, apiKey } = event.data;
     URL = url;
     APIKEY = apiKey;
     TOTALS = await getTotals();
-    console.log("🚀 ~ self.onmessage= ~ totals:", TOTALS);
 
     await openDatabase();
     try {
@@ -165,37 +223,11 @@ self.onmessage = async (event: any) => {
     }
 };
 
-function validateData(data: any): boolean {
-    return data && typeof data === "object";
-}
-
-function addData(storeName: string, data: any): Promise<void> {
-    return new Promise((resolve, reject) => {
-        if (!db) {
-            reject(new Error("Database not initialized. Call openDatabase() first."));
-            return;
-        }
-
-        if (!validateData(data)) {
-            reject(new Error("Invalid data format. Please check your data structure."));
-            return;
-        }
-
-        const transaction = db.transaction([storeName], "readwrite");
-        const objectStore = transaction.objectStore(storeName);
-
-        const request = objectStore.add(data);
-
-        request.onerror = (event) => {
-            const error = (event.target as IDBRequest).error;
-            reject(new Error(`Error adding data: ${error?.name} - ${error?.message}`));
-        };
-
-        request.onsuccess = () => {
-            resolve();
-        };
-    });
-}
+/**********************************************************************
+ **********************************************************************
+                            Backend Requests                                                       
+ **********************************************************************
+ **********************************************************************/
 async function execFetch(url: string, params: any = "") {
     const response = await fetch(url, { headers: headers() });
     return await response.json();
@@ -218,8 +250,16 @@ function parameterizeObjToString(obj: Record<string, any>) {
         .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
         .join("&");
 }
-// end common code
 
+async function getTotals() {
+    return await execFetch(buildUrl("/totals", { paginate: false }));
+}
+
+/**********************************************************************
+ **********************************************************************
+                          Location code                                                       
+ **********************************************************************
+ **********************************************************************/
 // start location code
 async function setOfflineLocation() {
     const locationData: any = await getOfflineData("location");
@@ -236,33 +276,6 @@ async function setOfflineLocation() {
         };
         await upsertSingleRecord("location", newLocationData);
     }
-}
-
-async function getOfflineData(storeName: any) {
-    return new Promise((resolve, reject) => {
-        if (!db) {
-            reject(new Error("Database not initialized."));
-            return;
-        }
-        try {
-            const transaction = db.transaction([storeName], "readonly");
-            const objectStore = transaction.objectStore(storeName);
-            const request = objectStore.getAll();
-
-            request.onerror = (event) => {
-                const error = (event.target as IDBRequest).error;
-                reject(new Error(`Error getting data: ${error?.name} - ${error?.message}`));
-            };
-
-            request.onsuccess = (event) => {
-                const result = (event.target as IDBRequest).result;
-                resolve(result.length > 0 ? result[0] : null);
-            };
-        } catch (error) {
-            console.log("failed to get locations", error);
-            return null;
-        }
-    });
 }
 
 async function getDistricts() {
@@ -298,8 +311,12 @@ async function getVillages() {
         return [];
     }
 }
-// end location code
 
+/**********************************************************************
+ **********************************************************************
+                          Program code                                                        
+ **********************************************************************
+ **********************************************************************/
 async function setOfflinePrograms() {
     const programsData: any = await getOfflineData("programs");
     if (!programsData || TOTALS.total_programs > programsData.length) {
@@ -315,9 +332,11 @@ async function setOfflinePrograms() {
     }
 }
 
-async function getTotals() {
-    return await execFetch(buildUrl("/totals", { paginate: false }));
-}
+/**********************************************************************
+ **********************************************************************
+                          Relationship code                                                       
+ **********************************************************************
+ **********************************************************************/
 async function setOfflineRelationship() {
     const relationshipsData: any = await getOfflineData("relationship");
     if (!relationshipsData || TOTALS.total_relationships > relationshipsData.length) {
