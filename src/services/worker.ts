@@ -11,6 +11,7 @@ type WorkerResponse<T> = {
 
 let URL = "";
 let APIKEY = "";
+let TOTALS: any = "";
 let db: IDBDatabase | null = null;
 
 // Function to open the database
@@ -40,10 +41,76 @@ function openDatabase(): Promise<IDBDatabase> {
     });
 }
 
+// New function to delete an object store
+function deleteObjectStore(storeName: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized. Call openDatabase() first."));
+            return;
+        }
+
+        if (!db.objectStoreNames.contains(storeName)) {
+            reject(new Error(`Object store "${storeName}" does not exist.`));
+            return;
+        }
+
+        const version = db.version + 1;
+        db.close();
+
+        const request = indexedDB.open("MaHis", version);
+
+        request.onerror = (event) => {
+            reject("Database error: " + (event.target as IDBOpenDBRequest).error);
+        };
+
+        request.onupgradeneeded = (event) => {
+            const database = (event.target as IDBOpenDBRequest).result;
+            database.deleteObjectStore(storeName);
+        };
+
+        request.onsuccess = (event) => {
+            db = (event.target as IDBOpenDBRequest).result;
+            resolve();
+        };
+    });
+}
+async function upsertSingleRecord(storeName: string, data: any): Promise<void> {
+    if (!db) {
+        throw new Error("Database not initialized. Call openDatabase() first.");
+    }
+
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction([storeName], "readwrite");
+        const objectStore = transaction.objectStore(storeName);
+
+        // Get all records (should be only one or none)
+        const getAllRequest = objectStore.getAll();
+
+        getAllRequest.onsuccess = (event) => {
+            const existingRecords = (event.target as IDBRequest).result;
+
+            if (existingRecords.length > 0) {
+                // Update existing record
+                const updateRequest = objectStore.put({ ...existingRecords[0], ...data });
+                updateRequest.onsuccess = () => resolve();
+                updateRequest.onerror = (event) => reject((event.target as IDBRequest).error);
+            } else {
+                // Add new record
+                const addRequest = objectStore.add(data);
+                addRequest.onsuccess = () => resolve();
+                addRequest.onerror = (event) => reject((event.target as IDBRequest).error);
+            }
+        };
+
+        getAllRequest.onerror = (event) => reject((event.target as IDBRequest).error);
+    });
+}
 self.onmessage = async (event: any) => {
     const { type, url, apiKey } = event.data;
     URL = url;
     APIKEY = apiKey;
+    TOTALS = await getTotals();
+    console.log("🚀 ~ self.onmessage= ~ totals:", TOTALS);
 
     await openDatabase();
     try {
@@ -59,7 +126,7 @@ self.onmessage = async (event: any) => {
 
             case "GET_OFFLINE_LOCATION":
                 try {
-                    const result = await getOfflineLocation();
+                    const result = await getOfflineData("location");
                     console.log({ type: "GET_OFFLINE_LOCATION_RESULT", payload: result });
                 } catch (error) {
                     console.log({ type: "ERROR", payload: "Error getting offline location: " + error });
@@ -76,9 +143,18 @@ self.onmessage = async (event: any) => {
             case "SET_OFFLINE_RELATIONSHIPS":
                 try {
                     await setOfflineRelationship();
-                    console.log({ type: "SET_OFFLINE_PROGRAMS_RESULTS", payload: "Success" });
+                    console.log({ type: "SET_OFFLINE_RELATIONSHIPS_RESULTS", payload: "Success" });
                 } catch (error) {
-                    console.log({ type: "ERROR", payload: "Error setting offline programs: " + error });
+                    console.log({ type: "ERROR", payload: "Error setting offline relationship: " + error });
+                }
+                break;
+            case "DELETE_OBJECT_STORE":
+                try {
+                    const { storeName } = event.data;
+                    await deleteObjectStore(storeName);
+                    console.log({ type: "DELETE_OBJECT_STORE_RESULT", payload: "Success" });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error deleting object store: " + error });
                 }
                 break;
             default:
@@ -121,7 +197,8 @@ function addData(storeName: string, data: any): Promise<void> {
     });
 }
 async function execFetch(url: string, params: any = "") {
-    return await fetch(url, { headers: headers() });
+    const response = await fetch(url, { headers: headers() });
+    return await response.json();
 }
 
 function headers() {
@@ -145,8 +222,13 @@ function parameterizeObjToString(obj: Record<string, any>) {
 
 // start location code
 async function setOfflineLocation() {
-    const locationData: any = await getOfflineLocation();
-    if (!locationData || Object.keys(locationData).length === 0 || !locationData.villageList) {
+    const locationData: any = await getOfflineData("location");
+    if (
+        !locationData ||
+        locationData.districts.length !== 32 ||
+        TOTALS.total_TA > locationData.TAs.length ||
+        TOTALS.total_village > locationData.villageList.length
+    ) {
         const newLocationData = {
             districts: await getDistricts(),
             TAs: await getTAs(),
@@ -156,15 +238,15 @@ async function setOfflineLocation() {
     }
 }
 
-async function getOfflineLocation() {
+async function getOfflineData(storeName: any) {
     return new Promise((resolve, reject) => {
         if (!db) {
             reject(new Error("Database not initialized."));
             return;
         }
         try {
-            const transaction = db.transaction(["location"], "readonly");
-            const objectStore = transaction.objectStore("location");
+            const transaction = db.transaction([storeName], "readonly");
+            const objectStore = transaction.objectStore(storeName);
             const request = objectStore.getAll();
 
             request.onerror = (event) => {
@@ -186,16 +268,14 @@ async function getOfflineLocation() {
 async function getDistricts() {
     let districtList = [];
     for (let i of [1, 2, 3]) {
-        const response: any = await execFetch(buildUrl("/districts", { region_id: i, page_size: 1000 }));
-        const districts = await response.json();
+        const districts: any = await execFetch(buildUrl("/districts", { region_id: i, page_size: 1000 }));
         districtList.push(...districts);
     }
     return districtList;
 }
 
 async function getTAs() {
-    const response: any = await execFetch(buildUrl("/traditional_authorities", { paginate: false }));
-    return response.json();
+    return await execFetch(buildUrl("/traditional_authorities", { paginate: false }));
 }
 
 async function getVillages() {
@@ -204,8 +284,7 @@ async function getVillages() {
         let page = 1;
         const pageSize = 500;
         while (true) {
-            const response: any = await execFetch(buildUrl("/villages", { page, page_size: pageSize }));
-            const newVillages = await response.json();
+            const newVillages: any = await execFetch(buildUrl("/villages", { page, page_size: pageSize }));
             if (newVillages.length > 0) {
                 allVillage.push(...newVillages);
                 page++;
@@ -222,22 +301,34 @@ async function getVillages() {
 // end location code
 
 async function setOfflinePrograms() {
-    const response = await fetch(buildUrl("/programs", { page_size: 1000 }));
-    const programs = await response.json();
-    if (programs && Object.keys(programs).length > 0) {
-        await addData("programs", {
-            programs: programs,
-        });
+    const programsData: any = await getOfflineData("programs");
+    if (TOTALS.total_programs > programsData.length) {
+        const programs = await execFetch(buildUrl("/programs", { page_size: 1000 }));
+        if (programs && Object.keys(programs).length > 0) {
+            await addData("programs", {
+                programs: programs,
+            });
+        }
+        return programs;
+    } else {
+        return programsData.programs;
     }
-    return programs;
+}
+
+async function getTotals() {
+    return await execFetch(buildUrl("/totals", { paginate: false }));
 }
 async function setOfflineRelationship() {
-    const response = await execFetch(buildUrl("types/relationships", { paginate: false }));
-    const relationships = await response.json();
-    if (relationships && Object.keys(relationships).length > 0) {
-        await addData("relationship", {
-            relationships: relationships,
-        });
+    const relationshipsData: any = await getOfflineData("relationship");
+    if (TOTALS.total_relationships > relationshipsData.length) {
+        const relationships = await execFetch(buildUrl("/types/relationships", { paginate: false }));
+        if (relationships && Object.keys(relationships).length > 0) {
+            await addData("relationship", {
+                relationships: relationships,
+            });
+        }
+        return relationships;
+    } else {
+        return relationshipsData.relationships;
     }
-    return relationships;
 }
