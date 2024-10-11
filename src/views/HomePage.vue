@@ -215,6 +215,7 @@ import {
 } from "ionicons/icons";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import DueModal from "@/components/DashboardModal/DueModal.vue";
+import OfflineStatusModal from "@/components/Modal/OfflineStatus.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
 import "vue3-carousel/dist/carousel.css";
@@ -327,6 +328,7 @@ export default defineComponent({
     },
     async mounted() {
         this.isLoading = true;
+        this.openOfflineStatusModal("data");
         this.workerApi = workerData.workerApi;
         workerData.postData("SET_OFFLINE_LOCATION");
         workerData.postData("SET_OFFLINE_RELATIONSHIPS");
@@ -399,6 +401,11 @@ export default defineComponent({
         openDueModal(name: any) {
             const dataToPass = { title: name };
             createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
+        },
+
+        openOfflineStatusModal(name: any) {
+            const dataToPass = { title: name };
+            createModal(OfflineStatusModal, { class: "" }, true, dataToPass);
         },
 
         openPatientsListModal(name: any) {
