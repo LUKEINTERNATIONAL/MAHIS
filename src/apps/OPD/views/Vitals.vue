@@ -160,29 +160,75 @@ export default defineComponent({
                 this.wizardData[0].checked = false;
             }
         },
-      async saveData() {
+        //usernurse
+        //userclinician
+        //Nurse
+        //Clinician
+
+      // async saveData() {
+      //   const userID: any = Service.getUserID();
+      //   console.log("Lets the name of the user: ",Service.getUserRoles())
+      //   this.isLoading = true;
+      //   try {
+      //     if (this.actionBtn != "Finish") {
+      //       if (this.vitals.validationStatus) {
+      //         await this.saveVitals();
+      //         await resetOPDPatientData();
+      //         //this.$router.push("OPDConsultationPlan");
+      //         this.$router.push("patientProfile");
+      //       } else {
+      //         await this.validaterowData();
+      //         toastWarning("Please fill all required fields");
+      //       }
+      //     } else {
+      //       //this.$router.push("OPDConsultationPlan");
+      //       this.$router.push("patientProfile");
+      //     }
+      //   } catch (error) {
+      //     console.error("Error in saveData: ", error);
+      //   } finally {
+      //     this.isLoading = false;
+      //   }
+      // },
+
+async saveData() {
+        const userID: any = Service.getUserID();
+        const userRoles = Service.getUserRoles();
+        console.log("Lets the name of the user: ", userRoles);
         this.isLoading = true;
+
         try {
           if (this.actionBtn != "Finish") {
             if (this.vitals.validationStatus) {
               await this.saveVitals();
               await resetOPDPatientData();
-              //this.$router.push("OPDConsultationPlan");
-              this.$router.push("patientProfile");
+
+              if (userRoles.includes("Nurse")) {
+                this.$router.push("patientProfile");
+              } else if (userRoles.includes("Clinician")) {
+                this.$router.push("OPDConsultationPlan");
+              } else {
+                console.error("Unknown user role:", userRoles);
+              }
             } else {
               await this.validaterowData();
               toastWarning("Please fill all required fields");
             }
           } else {
-            //this.$router.push("OPDConsultationPlan");
-            this.$router.push("patientProfile");
+            if (userRoles.includes("Nurse")) {
+              this.$router.push("patientProfile");
+            } else if (userRoles.includes("Clinician")) {
+              this.$router.push("OPDConsultationPlan");
+            } else {
+              console.error("Unknown user role:", userRoles);
+            }
           }
         } catch (error) {
           console.error("Error in saveData: ", error);
         } finally {
           this.isLoading = false;
         }
-      },
+},
 
       async saveVitals() {
             const userID: any = Service.getUserID();
