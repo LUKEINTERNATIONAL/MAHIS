@@ -234,7 +234,7 @@ async function setOfflineLocation() {
             TAs: await getTAs(),
             villageList: await getVillages(),
         };
-        await addData("location", newLocationData);
+        await upsertSingleRecord("location", newLocationData);
     }
 }
 
@@ -302,10 +302,10 @@ async function getVillages() {
 
 async function setOfflinePrograms() {
     const programsData: any = await getOfflineData("programs");
-    if (TOTALS.total_programs > programsData.length) {
+    if (!programsData || TOTALS.total_programs > programsData.length) {
         const programs = await execFetch(buildUrl("/programs", { page_size: 1000 }));
         if (programs && Object.keys(programs).length > 0) {
-            await addData("programs", {
+            await upsertSingleRecord("programs", {
                 programs: programs,
             });
         }
@@ -320,10 +320,10 @@ async function getTotals() {
 }
 async function setOfflineRelationship() {
     const relationshipsData: any = await getOfflineData("relationship");
-    if (TOTALS.total_relationships > relationshipsData.length) {
+    if (!relationshipsData || TOTALS.total_relationships > relationshipsData.length) {
         const relationships = await execFetch(buildUrl("/types/relationships", { paginate: false }));
         if (relationships && Object.keys(relationships).length > 0) {
-            await addData("relationship", {
+            await upsertSingleRecord("relationship", {
                 relationships: relationships,
             });
         }
