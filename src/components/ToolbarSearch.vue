@@ -13,7 +13,7 @@
             style="color: #000; width: 70%"
             @ionInput="handleInput"
             fill="outline"
-            :value="searchValue"
+            v-model="searchValue"
             placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
             class="searchField"
         >
@@ -183,6 +183,7 @@ import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useProgramStore } from "@/stores/ProgramStore";
+import router from "@/router";
 
 export default defineComponent({
     name: "ToolbarSearch",
@@ -295,6 +296,13 @@ export default defineComponent({
         searchText() {
             this.page = 1;
         },
+        $router: {
+            handler() {
+                this.searchValue = "";
+                console.log("lllllll", this.searchValue);
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
@@ -315,23 +323,23 @@ export default defineComponent({
             const dataScanned: any = await scannedData();
             const dataExtracted: any = await extractDetails(dataScanned);
             if (await this.searchByNpid(dataScanned + "$")) {
-                this.searchValue = dataScanned;
                 return;
             } else if (dataExtracted && (await this.searchByMWNationalID(dataExtracted?.idNumber))) {
-                this.searchValue = dataScanned?.idNumber;
                 return;
             } else if (dataExtracted) {
                 await this.setPersonInformation(dataExtracted);
                 this.$router.push("/registration/manual");
                 return;
+            } else {
+                toastWarning("Invalid Scan");
             }
-            this.searchValue = dataScanned;
         },
         programID() {
             return Service.getProgramID();
         },
         async handleInput(ev: any) {
             this.searchText = ev.target.value;
+            console.log("inside handle", this.searchText);
             this.patients = [];
             this.popoverOpen = false;
             if (this.searchText.length > 0) {
@@ -446,6 +454,7 @@ export default defineComponent({
         },
         async openNewPage(url: any, item: any) {
             this.popoverOpen = false;
+            this.searchValue = "";
             this.setDemographics(item);
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
                 resetNCDPatientData();
