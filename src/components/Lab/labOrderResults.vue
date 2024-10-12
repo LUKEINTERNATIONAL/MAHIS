@@ -1,30 +1,46 @@
 <template>
+  <SendToLabConfirmationModal
+      :closeModalFunc="closeSendToLabModal"
+      :onYes="handleSendToLabYes"
+      :onNo="handleSendToLabNo"
+      :isOpen="sendToLabModalOpen"
+      :title="`Do you really want to send patient to lab?`"
+  />
     <DashBox v-if="listResults.length < 1 && listOrders.length < 1" :content="'No Investigations added '" />
     <div class="modal_wrapper" v-if="listResults.length > 1">
         <div style="font-weight: 700">Lab Results</div>
-        <div style="--background: #fff">
-            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"></list>
+        <div style="--background: #fff" class="scrollable-container">
+            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder">
+            </list>
         </div>
-        <div style="margin-top: 5px" v-if="listResults.length <= 3 && listSeeMoreResults.length >= 3">
+        <div style="margin-top: 5px" v-if="listResults.length <= 4 && listSeeMoreResults.length >= 4">
             <DynamicButton @click="seeOrderStatus('more')" name="Show More Lab Results" fill="clear" iconSlot="icon-only" />
         </div>
-
-        <div style="margin-top: 5px" v-else-if="listResults.length >= 4">
+        <div style="margin-top: 5px" v-else-if="listResults.length >= 5">
             <DynamicButton @click="seeOrderStatus('less')" name="Show Less Lab Results" fill="clear" iconSlot="icon-only" />
         </div>
     </div>
 
     <div class="modal_wrapper" v-if="listOrders.length > 1">
         <div style="font-weight: 700">Lab Orders</div>
-        <div>
+        <div class="scrollable-container">
             <list :listData="listOrders" @clicked:delete="voidLabOrder" @clicked:results="openResultsForm"></list> 
         </div>
-        <div style="margin-top: 5px" v-if="listOrders.length <= 3 && listSeeMoreOrders.length >= 3">
+        <div style="margin-top: 5px" v-if="listOrders.length <= 4 && listSeeMoreOrders.length >= 4">
             <DynamicButton @click="seeResultsStatus('more')" name="Show More Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
-        <div style="margin-top: 5px" v-if="listOrders.length >= 4">
+        <div style="margin-top: 5px" v-if="listOrders.length >= 5">
             <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
+      <div v-if="hasEnterResults">
+        <DynamicButton
+            fill="solid"
+            :icon="iconsContent.plus"
+            iconSlot="icon-only"
+            @click="toggleCheckInModal()"
+            name="Send to Lab"
+        />
+      </div>
     </div>
     <LabModal :popoverOpen="openModal" @saved="updateLabList" @closeModal="openModal = false" />
     <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
@@ -56,10 +72,13 @@ import LabModal from "@/components/Lab/LabModal.vue";
 import LabViewResultsModal from "@/components/Lab/LabViewResultsModal.vue";
 import labOrderResults from "@/components/Lab/labOrderResults.vue";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
+import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
+import SendToLabConfirmationModal from "@/components/Lab/SendToLabConfirmationModal.vue";
 
 export default defineComponent({
     name: "Menu",
     components: {
+      CheckInConfirmationModal,
         IonContent,
         IonHeader,
         IonItem,
@@ -73,12 +92,18 @@ export default defineComponent({
         DashBox,
         LabModal,
         LabViewResultsModal,
+      SendToLabConfirmationModal
     },
 
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useLabResultsStore, ["labResults"]),
         ...mapState(useInvestigationStore, ["investigations"]),
+      hasEnterResults(): boolean {
+        return this.listOrders.some((item: any) =>
+            item.btn && item.btn.includes("enter_results")
+        );
+      }
     },
     props: {
         propOrders: {
@@ -87,12 +112,14 @@ export default defineComponent({
     },
     data() {
         return {
-            valueNumericArray: [] as any,
+          iconsContent: icons,
+          valueNumericArray: [] as any,
             obsDatetime: [] as any,
             graphIcon: iconGraph(["#006401"]),
             listIcon: iconList(["#636363"]),
             displayGraph: true,
-            orders: [] as any,
+          sendToLabModalOpen: false,
+          orders: [] as any,
             height: [] as any,
             BMI: [] as any,
             iconBg: {} as any,
@@ -143,6 +170,18 @@ export default defineComponent({
         },
     },
     methods: {
+      toggleCheckInModal() {
+        this.sendToLabModalOpen = !this.sendToLabModalOpen;
+      },
+      async handleSendToLabYes(){
+
+      },
+      async handleSendToLabNo(){
+        this.toggleCheckInModal();
+      },
+      closeSendToLabModal() {
+        this.sendToLabModalOpen = false;
+      },
         async updateLabList() {
             this.openModal = false;
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
@@ -462,4 +501,10 @@ export default defineComponent({
     color: #006401;
     padding: 10px;
 }
+.scrollable-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
 </style>

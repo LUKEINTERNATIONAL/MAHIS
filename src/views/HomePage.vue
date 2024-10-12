@@ -22,13 +22,13 @@
         </div>
       </div>
     </ion-content>
-    <ion-content :fullscreen="true" v-else-if="programID() == 14">
-      <div id="containertwo">
+    <ion-content :fullscreen="true" v-else-if="programID() == 14" >
+      <div id="containertwo" >
         <div class="centered-content OPDDueCardWrapper">
-          <ion-card class="section">
+          <ion-card class="section" style="width: 80%">
             <ion-card-header>
               <ion-card-title class="cardTitle"
-                >Today's patients waiting list</ion-card-title
+                >Today's patients list</ion-card-title
               >
             </ion-card-header>
             <ion-card-content>
@@ -46,6 +46,7 @@
                   class="OPDDueCard"
                   @click="openPatientsListModal('Patients waiting for vitals', 'VITALS', 'Vitals','/OPDVitals')"
                   :style="dueCardStyle('success')"
+                  v-if="isUserRole('Clinician') || isUserRole('Nurse') || isUserRole('Superuser')"
                 >
                   <ion-icon :icon="thermometer" class="dueCardIcon"></ion-icon>
                   <div class="OPDStatsValue">{{ patientsWaitingForVitals.length }}</div>
@@ -57,6 +58,7 @@
                     openPatientsListModal('Patients waiting for consultation', 'CONSULTATION', 'Consultation', '/OPDConsultationPlan')
                   "
                   :style="dueCardStyle('success')"
+                  v-if="isUserRole('Clinician') || isUserRole('Superuser')"
                 >
                   <ion-icon :icon="clipboard" class="dueCardIcon"></ion-icon>
                   <div class="OPDStatsValue">{{ patientsWaitingForConsultation.length }}</div>
@@ -68,6 +70,7 @@
                     openPatientsListModal('Patients waiting for dispensation','DISPENSATION','Dispensation','/dispensation')
                   "
                   :style="dueCardStyle('success')"
+                  v-if="isUserRole('Clinician') || isUserRole('Pharmacist') || isUserRole('Superuser')"
                 >
                   <ion-icon :icon="medkit" class="dueCardIcon"></ion-icon>
                   <div class="OPDStatsValue">{{ patientsWaitingForDispensation.length }}</div>
@@ -345,6 +348,7 @@ export default defineComponent({
       reportData: "" as any,
       appointments: [] as any,
       programBtn: {} as any,
+      userRoles: [] as any,
       base_url: "backgroundImg.png",
       isLoading: false,
       totalStats: [
@@ -424,6 +428,11 @@ export default defineComponent({
     wsService.setMessageHandler(this.onMessage);
     await useGlobalPropertyStore().loadGlobalProperty();
     this.isLoading = false;
+    try {
+      this.userRoles = await Service.getUserRoles();
+    } catch (error) {
+      console.error("Error fetching user roles:", error);
+    }
   },
   methods: {
     dueCardStyle(type: "success" | "warning" | "info" | "danger") {
@@ -505,6 +514,10 @@ export default defineComponent({
     programID() {
       return Service.getProgramID();
     },
+
+    isUserRole(role:any) {
+      return this.userRoles.includes(role);
+    },
     loadImage(name: any) {
       return img(name);
     },
@@ -539,6 +552,9 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.section{
+  top: 20%;
+}
 .centered-content {
   display: flex;
   justify-content: center;

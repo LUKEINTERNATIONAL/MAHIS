@@ -17,6 +17,7 @@
                 :openStepper="openStepper"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" v-if="userRole != 'Lab'" />
@@ -200,7 +201,34 @@ export default defineComponent({
     },
 
     methods: {
-        async getData() {
+      getSaveFunction(index: any) {
+        if (index < this.StepperData.length - 1) {
+          switch (index) {
+            case 0:
+              return this.saveClinicalAssessment;
+            case 1:
+              return
+            case 2:
+              return this.saveDiagnosis;
+            case 3:
+              return this.saveDiagnosis;
+            case 4:
+              return this.saveTreatmentPlan;
+            default:
+              return () => Promise.resolve();
+          }
+        } else {
+          return async () => {
+            await this.saveOutComeStatus();
+            // this.$router.push("home");
+            // toastSuccess("Patient has finished consultation!");
+
+          };
+        }
+      },
+
+
+      async getData() {
             this.wizardData = [];
             this.StepperData = [];
             const { name } = await WorkflowService.nextTask(this.demographics.patient_id);
@@ -318,6 +346,42 @@ export default defineComponent({
                 return item?.data[0] || item?.data;
             });
         },
+      async saveClinicalAssessment(){
+        this.isLoading = true;
+        try {
+          const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+          let filteredArray = [];
+          if (obs) {
+            filteredArray = obs.filter((obj:any) => {
+              return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+            });
+          }
+          if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+            // await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"DISPENSATION");
+            // await this.saveDiagnosis();
+            // await this.saveTreatmentPlan();
+            // await this.saveOutComeStatus();
+            await this.saveWomenStatus();
+            await this.savePresentingComplaints();
+            await this.savePastMedicalHistory();
+            await this.saveConsciousness();
+            await this.savePhysicalExam();
+            resetOPDPatientData();
+
+
+            if (this.userRole == "Lab") {
+              this.$router.push("home");
+            }
+          }
+          else {
+            toastWarning("Patient complaints are required");
+          }
+        } catch (error) {
+          console.error("Error in saveData: ", error);
+        } finally {
+          this.isLoading = false;
+        }
+      },
       async saveData() {
         this.isLoading = true;
         try {
@@ -467,16 +531,16 @@ export default defineComponent({
         },
 
         async saveOutComeStatus() {
-            // const userID: any = Service.getUserID()
-            // const patientID = this.demographics.patient_id
-            // if (!isEmpty(this.dispositions)) {
-            //     for (let key in this.dispositions) {
-            //         if (this.dispositions[key].type == 'Admit') {
-            //             console.log(this.dispositions[key])
-            //         } else {
-            //         }
-            //     }
-            // }
+            const userID: any = Service.getUserID()
+            const patientID = this.demographics.patient_id
+            if (!isEmpty(this.dispositions)) {
+                for (let key in this.dispositions) {
+                    if (this.dispositions[key].type == 'Admit') {
+                        console.log(this.dispositions[key])
+                    } else {
+                    }
+                }
+            }
         },
         openModal() {
             createModal(SaveProgressModal);

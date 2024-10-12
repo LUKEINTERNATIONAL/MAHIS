@@ -46,10 +46,10 @@
                 </div>
 
                 <!-- Next Button -->
-                <div v-if="index < StepperData.length - 1">
+                <div>
                   <ion-button class="next-button" @click="nextAccordion(index)">
-                    <ion-icon :icon="chevronForward()" slot="start"></ion-icon>
-                    Next
+                    <ion-icon :icon="index < StepperData.length - 1 ? chevronForward() : checkmark" slot="start"></ion-icon>
+                    {{ index < StepperData.length - 1 ? 'Next' : 'Finish and Save' }}
                   </ion-button>
                 </div>
               </div>
@@ -144,7 +144,7 @@ import ANCVitals from "../apps/ANC/components/physical exam/ANCVitals.vue"
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
 import ImmunizationServices from "@/apps/Immunization/components/ConsultationPlan/ImmunizationServices.vue";
 import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue";
-import { createModal } from "@/utils/Alerts";
+import {createModal, toastSuccess} from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
 import HeadAssessment from "@/apps/ANC/components/others/headAssessment.vue";
@@ -320,6 +320,10 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    getSaveFunction: {
+      type: Function,
+      required: true,
+    },
   },
   setup() {
     return { chevronBackOutline, checkmark,
@@ -358,12 +362,19 @@ export default defineComponent({
         createModal(SaveProgressModal);
       }
     },
-    nextAccordion(currentIndex:any) {
+    async nextAccordion(currentIndex: any) {
+      const saveFunction = this.getSaveFunction(currentIndex);
+      if (saveFunction) {
+        await saveFunction();
+      }
       const nextIndex = currentIndex + 1;
       if (nextIndex < this.StepperData.length) {
         this.currentOpenStepper = this.StepperData[nextIndex].value;
+      } else {
+
       }
     },
+
     previousAccordion(currentIndex:any) {
       const prevIndex = currentIndex - 1;
       if (prevIndex >= 0) {

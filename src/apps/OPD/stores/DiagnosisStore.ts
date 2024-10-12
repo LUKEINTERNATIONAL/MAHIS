@@ -25,14 +25,7 @@ const initialOPDdiagnosis = [
 
                         },
                     ],
-                    btns: [
-                        {
-                            name: "Add",
-                            fill: "clear",
-                            btn_col_size: 3,
-                            icon: icons.plus,
-                        },
-                    ],
+
                 },
             ],
         },
@@ -50,12 +43,12 @@ const initialOPDdiagnosis = [
                 {
                     name:'Secondary Diagnosis',
                     value: 'Secondary Diagnosis',
-                    colSize: "3",
+                    colSize: "5",
                 },
                 {
                     name: 'Differential Diagnosis',
                     value: 'Differential Diagnosis',
-                    colSize: "3",
+                    colSize: "7",
                 },
             ]
         }
@@ -112,6 +105,27 @@ const initialOPDdiagnosis = [
                             idName: "district_id",
                         },
                     ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    btns: [
+                        {
+                            name: "Save",
+                            fill: "solid",
+                            btn_col_size: 3,
+                            icon: icons.plus,
+                        },
+                    ],
+                    colData: [
+                    ],
+
                 },
             ],
         },
