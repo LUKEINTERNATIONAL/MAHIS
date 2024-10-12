@@ -299,7 +299,6 @@ export default defineComponent({
         $router: {
             handler() {
                 this.searchValue = "";
-                console.log("lllllll", this.searchValue);
             },
             deep: true,
         },
@@ -339,7 +338,6 @@ export default defineComponent({
         },
         async handleInput(ev: any) {
             this.searchText = ev.target.value;
-            console.log("inside handle", this.searchText);
             this.patients = [];
             this.popoverOpen = false;
             if (this.searchText.length > 0) {
