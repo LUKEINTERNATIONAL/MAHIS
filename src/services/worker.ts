@@ -35,7 +35,7 @@ function openDatabase(): Promise<IDBDatabase> {
 
         request.onupgradeneeded = (event) => {
             const database = (event.target as IDBOpenDBRequest).result;
-            const objectStores = ["relationship", "location", "programs", "patientRecords"];
+            const objectStores = ["relationship", "districts", "TAs", "villages", "programs", "patientRecords"];
 
             objectStores.forEach((storeName) => {
                 if (!database.objectStoreNames.contains(storeName)) {
@@ -100,7 +100,7 @@ async function upsertSingleRecord(storeName: string, data: any): Promise<void> {
 
             if (existingRecords.length > 0) {
                 // Update existing record
-                const updateRequest = objectStore.put({ ...existingRecords[0], ...data });
+                const updateRequest = objectStore.put([...existingRecords[0], ...data]);
                 updateRequest.onsuccess = () => resolve();
                 updateRequest.onerror = (event) => reject((event.target as IDBRequest).error);
             } else {
@@ -180,6 +180,7 @@ self.onmessage = async (event: any) => {
             case "SET_OFFLINE_LOCATION":
                 try {
                     await setOfflineLocation();
+
                     console.log({ type: "SET_OFFLINE_LOCATION_RESULT", payload: "Success" });
                 } catch (error) {
                     console.log({ type: "ERROR", payload: "Error setting offline location: " + error });
@@ -266,19 +267,38 @@ async function getTotals() {
  **********************************************************************/
 // start location code
 async function setOfflineLocation() {
-    const locationData: any = await getOfflineData("location");
-    if (
-        !locationData ||
-        locationData.districts.length !== 32 ||
-        TOTALS.total_TA > locationData.TAs.length ||
-        TOTALS.total_village > locationData.villageList.length
-    ) {
-        const newLocationData = {
-            districts: await getDistricts(),
-            TAs: await getTAs(),
-            villageList: await getVillages(),
-        };
-        await upsertSingleRecord("location", newLocationData);
+    const districtsData: any = await getOfflineData("districts");
+    if (!districtsData || districtsData.length !== 32) {
+        await upsertSingleRecord("districts", await getDistricts());
+    } else {
+        self.postMessage({
+            payload: {
+                total_districts: 32,
+                total: 32,
+            },
+        });
+    }
+    const TAsData: any = await getOfflineData("TAs");
+    if (!TAsData || TOTALS.total_TA > TAsData.length) {
+        await upsertSingleRecord("TAs", await getTAs());
+    } else {
+        self.postMessage({
+            payload: {
+                total_TAs: TOTALS.total_TA,
+                total: TOTALS.total_TA,
+            },
+        });
+    }
+    const villagesData: any = await getOfflineData("villages");
+    if (!villagesData || TOTALS.total_village > villagesData.length) {
+        await upsertSingleRecord("villages", await getVillages());
+    } else {
+        self.postMessage({
+            payload: {
+                total_village: TOTALS.total_village,
+                total: TOTALS.total_village,
+            },
+        });
     }
 }
 
@@ -298,17 +318,33 @@ async function getTAs() {
 async function getVillages() {
     try {
         const allVillage = [];
-        let page = 1;
-        const pageSize = 500;
+        let page: any = 1;
+        let pageSize: any = 500;
+        const villagesData: any = await getOfflineData("villages");
+        if (villagesData && villagesData.length > 0) {
+            console.log("🚀 ~ getVillages ~ villagesData:", villagesData);
+            page = parseInt(villagesData.length) / 500;
+            page = parseInt(page);
+            allVillage.push(...villagesData);
+        }
+
         while (true) {
             const newVillages: any = await execFetch(buildUrl("/villages", { page, page_size: pageSize }));
             if (newVillages.length > 0) {
                 allVillage.push(...newVillages);
                 page++;
+                self.postMessage({
+                    payload: {
+                        type: "OFFLINE_VILLAGES",
+                        total_village: allVillage.length,
+                        total: TOTALS.total_village,
+                    },
+                });
             } else {
                 break;
             }
         }
+        console.log("🚀 ~ getVillages ~ allVillage:", allVillage);
         return allVillage;
     } catch (error) {
         console.error("Error fetching villages:", error);
