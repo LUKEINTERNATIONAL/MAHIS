@@ -5,7 +5,10 @@
       <DemographicBar/>
       <Stepper  stepper-title="ANC referral" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
-                :backBtn="userRoleSettings.btnName"/>
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+
+      />
     </ion-content>
     <BasicFooter @finishBtn="saveData()" />
 
@@ -100,6 +103,9 @@ export default defineComponent ({
 
   methods: {
     markWizard(){},
+    getSaveFunction(){
+
+    },
     saveData(){
     this.saveReferral();
     this.$router.push("ANChome");

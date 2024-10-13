@@ -11,6 +11,7 @@
           :StepperData="StepperData"
           :backUrl="userRoleSettings.url"
           :backBtn="userRoleSettings.btnName"
+          :getSaveFunction="getSaveFunction"
       ></Stepper>
     </ion-content>
   </ion-page>
@@ -95,6 +96,9 @@ export default defineComponent ({
     },
   methods: {
     markWizard() {},
+    getSaveFunction(){
+
+    },
     async saveData() {
       try {
         // Validate the entire referralInfo against the schema

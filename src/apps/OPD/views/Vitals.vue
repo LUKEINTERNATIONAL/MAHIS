@@ -8,7 +8,14 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Vitals" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData" />
+            <Stepper stepperTitle="Vitals"
+                     :wizardData="wizardData"
+                     @updateStatus="markWizard"
+                     @finishBtn="saveData()"
+                     :StepperData="StepperData"
+                     :getSaveFunction="getSaveFunction"
+
+            />
         </ion-content>
         <BasicFooter :name="actionBtn" @finishBtn="saveData()" />
     </ion-page>
@@ -164,6 +171,9 @@ export default defineComponent({
                 this.wizardData[0].checked = false;
             }
         },
+      getSaveFunction(){
+
+      },
       async saveData() {
         this.isLoading = true;
         try {

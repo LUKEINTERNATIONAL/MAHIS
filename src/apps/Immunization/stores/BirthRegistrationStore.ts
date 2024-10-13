@@ -9,7 +9,7 @@ const initialBirthRegistration = [
                     colData: [
                         {
                             inputHeader: "Birth certificate number",
-                            iconRight: icons.scannerIcon,
+                            iconRight: "",
                             icon: icons.nationalID,
                             buildConceptIgnore: true,
                             value: "",

@@ -10,6 +10,8 @@
               :StepperData="StepperData"
               :backUrl="userRoleSettings.url"
               :backBtn="userRoleSettings.btnName"
+              :getSaveFunction="getSaveFunction"
+
           />
       </ion-content>
     <BasicFooter @finishBtn="saveData()" />
@@ -197,6 +199,9 @@ computed:{
 
   methods: {
       markWizard() {},
+    getSaveFunction(){
+
+    },
       getFormatedData(data: any) {
           return data.map((item: any) => {
               return item?.data;

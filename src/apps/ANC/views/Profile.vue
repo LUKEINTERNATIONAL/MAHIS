@@ -10,6 +10,8 @@
               :StepperData="StepperData"
               :backUrl="userRoleSettings.url"
               :backBtn="userRoleSettings.btnName"
+              :getSaveFunction="getSaveFunction"
+
 
           />
       </ion-content>
@@ -222,6 +224,9 @@ components: {
 
   methods: {
       markWizard() {},
+    getSaveFunction(){
+
+    },
       deleteDisplayData(data: any) {
           return data.map((item: any) => {
               delete item?.display;
