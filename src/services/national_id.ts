@@ -61,30 +61,30 @@ export async function extractDetails(inputString: string) {
                 let FatherLastName = "";
                 let FatherMiddleName = "";
                 if (nameParts.length > 3) {
-                    firstName = nameParts[1];
-                    lastName = nameParts[3];
-                    middleName = nameParts[2];
-                } else {
-                    firstName = nameParts[1];
+                    firstName = nameParts[0];
                     lastName = nameParts[2];
+                    middleName = nameParts[1];
+                } else {
+                    firstName = nameParts[0];
+                    lastName = nameParts[1];
                 }
 
                 if (MotherNameParts.length > 3) {
-                    MotherFirstName = MotherNameParts[1];
-                    MotherLastName = MotherNameParts[3];
-                    MotherMiddleName = MotherNameParts[2];
-                } else {
-                    MotherFirstName = MotherNameParts[1];
+                    MotherFirstName = MotherNameParts[0];
                     MotherLastName = MotherNameParts[2];
+                    MotherMiddleName = MotherNameParts[1];
+                } else {
+                    MotherFirstName = MotherNameParts[0];
+                    MotherLastName = MotherNameParts[1];
                 }
 
                 if (FatherNameParts.length > 3) {
-                    FatherFirstName = FatherNameParts[1];
-                    FatherLastName = FatherNameParts[3];
-                    FatherMiddleName = FatherNameParts[2];
-                } else {
-                    FatherFirstName = FatherNameParts[1];
+                    FatherFirstName = FatherNameParts[0];
                     FatherLastName = FatherNameParts[2];
+                    FatherMiddleName = FatherNameParts[1];
+                } else {
+                    FatherFirstName = FatherNameParts[0];
+                    FatherLastName = FatherNameParts[1];
                 }
 
                 return {

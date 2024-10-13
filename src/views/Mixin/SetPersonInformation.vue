@@ -14,7 +14,7 @@ export default defineComponent({
     },
     mounted() {},
     computed: {
-        ...mapState(useRegistrationStore, ["personInformation"]),
+        ...mapState(useRegistrationStore, ["personInformation", "guardianInformation"]),
     },
     methods: {
         async setPersonInformation(extractedDetails: any) {
@@ -24,8 +24,16 @@ export default defineComponent({
             modifyFieldValue(this.personInformation, "lastname", "value", extractedDetails.lastName);
             modifyFieldValue(this.personInformation, "birthdate", "value", extractedDetails.dob);
             modifyRadioValue(this.personInformation, "gender", "selectedValue", extractedDetails.sex);
-            console.log("🚀 ~ setPersonInformation ~ extractedDetails.firstName:", extractedDetails.firstName);
-            console.log("🚀 ~ setPersonInformation ~ this.personInformation:", this.personInformation);
+
+            if (extractedDetails?.MotherFirstName) {
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "value", extractedDetails?.MotherFirstName);
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "value", extractedDetails?.MotherLastName);
+                modifyFieldValue(this.guardianInformation, "guardianMiddleName", "value", extractedDetails?.MotherMiddleName);
+                modifyFieldValue(this.guardianInformation, "relationship", "value", {
+                    id: "",
+                    name: "Mother",
+                });
+            }
         },
     },
 });

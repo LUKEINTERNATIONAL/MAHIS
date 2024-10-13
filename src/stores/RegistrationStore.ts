@@ -11,7 +11,7 @@ const initialPersonalInformation = [
                     colData: [
                         {
                             inputHeader: "National ID",
-                            iconRight: icons.scannerIcon,
+                            iconRight: "",
                             icon: icons.nationalID,
                             value: "",
                             name: "nationalID",
@@ -723,7 +723,7 @@ const initialGuardianInformation = [
                     colData: [
                         {
                             inputHeader: "Guardian National ID",
-                            iconRight: icons.scannerIcon,
+                            iconRight: "",
                             icon: icons.nationalID,
                             value: "",
                             name: "guardianNationalID",
