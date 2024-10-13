@@ -79,6 +79,36 @@ function deleteObjectStore(storeName: string): Promise<void> {
         };
     });
 }
+async function overRideRecord(storeName: string, data: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized. Call openDatabase() first."));
+            return;
+        }
+        const transaction = db.transaction([storeName], "readwrite");
+        const objectStore = transaction.objectStore(storeName);
+
+        // Clear all existing data
+        const clearRequest = objectStore.clear();
+
+        clearRequest.onerror = (event) => {
+            reject((event.target as IDBRequest).error);
+        };
+
+        clearRequest.onsuccess = () => {
+            // After clearing, add the new data
+            const addRequest = objectStore.add(data);
+
+            addRequest.onerror = (event) => {
+                reject((event.target as IDBRequest).error);
+            };
+
+            addRequest.onsuccess = () => {
+                resolve();
+            };
+        };
+    });
+}
 async function upsertSingleRecord(storeName: string, data: any): Promise<void> {
     if (!db) {
         throw new Error("Database not initialized. Call openDatabase() first.");
@@ -269,7 +299,7 @@ async function getTotals() {
 async function setOfflineLocation() {
     const districtsData: any = await getOfflineData("districts");
     if (!districtsData || districtsData.length !== 32) {
-        await upsertSingleRecord("districts", await getDistricts());
+        await overRideRecord("districts", await getDistricts());
     } else {
         self.postMessage({
             payload: {
@@ -280,7 +310,7 @@ async function setOfflineLocation() {
     }
     const TAsData: any = await getOfflineData("TAs");
     if (!TAsData || TOTALS.total_TA > TAsData.length) {
-        await upsertSingleRecord("TAs", await getTAs());
+        await overRideRecord("TAs", await getTAs());
     } else {
         self.postMessage({
             payload: {
@@ -291,7 +321,8 @@ async function setOfflineLocation() {
     }
     const villagesData: any = await getOfflineData("villages");
     if (!villagesData || TOTALS.total_village > villagesData.length) {
-        await upsertSingleRecord("villages", await getVillages());
+        await getVillages();
+        // await overRideRecord("villages", await getVillages());
     } else {
         self.postMessage({
             payload: {
@@ -325,6 +356,7 @@ async function getVillages() {
             console.log("🚀 ~ getVillages ~ villagesData:", villagesData);
             page = parseInt(villagesData.length) / 500;
             page = parseInt(page);
+            console.log("🚀 ~ getVillages ~ page:", page);
             allVillage.push(...villagesData);
         }
 
@@ -332,6 +364,7 @@ async function getVillages() {
             const newVillages: any = await execFetch(buildUrl("/villages", { page, page_size: pageSize }));
             if (newVillages.length > 0) {
                 allVillage.push(...newVillages);
+                await overRideRecord("villages", allVillage);
                 page++;
                 self.postMessage({
                     payload: {
@@ -344,7 +377,6 @@ async function getVillages() {
                 break;
             }
         }
-        console.log("🚀 ~ getVillages ~ allVillage:", allVillage);
         return allVillage;
     } catch (error) {
         console.error("Error fetching villages:", error);
@@ -362,7 +394,7 @@ async function setOfflinePrograms() {
     if (!programsData || TOTALS.total_programs > programsData.length) {
         const programs = await execFetch(buildUrl("/programs", { page_size: 1000 }));
         if (programs && Object.keys(programs).length > 0) {
-            await upsertSingleRecord("programs", {
+            await overRideRecord("programs", {
                 programs: programs,
             });
         }
@@ -382,7 +414,7 @@ async function setOfflineRelationship() {
     if (!relationshipsData || TOTALS.total_relationships > relationshipsData.length) {
         const relationships = await execFetch(buildUrl("/types/relationships", { paginate: false }));
         if (relationships && Object.keys(relationships).length > 0) {
-            await upsertSingleRecord("relationship", {
+            await overRideRecord("relationship", {
                 relationships: relationships,
             });
         }
