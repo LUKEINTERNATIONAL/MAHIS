@@ -174,6 +174,7 @@ import {
     IonToolbar,
     IonRow,
     IonCol,
+    modalController,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -224,10 +225,10 @@ import { createModal } from "@/utils/Alerts";
 import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
 import { getBaseURl } from "@/utils/GeneralUti";
-import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import workerData from "@/activate_worker";
+import { useStatusStore } from "@/stores/StatusStore";
 
 export default defineComponent({
     name: "Home",
@@ -264,6 +265,7 @@ export default defineComponent({
             controlGraphs: "months" as any,
             reportData: "" as any,
             appointments: [] as any,
+            dataToPass: { payloadData: "tes" } as any,
             programBtn: {} as any,
             base_url: "backgroundImg.png",
             isLoading: false,
@@ -305,6 +307,8 @@ export default defineComponent({
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
         ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useStatusStore, ["offlineVillageStatus", "offlineDistrictStatus", "offlineTAsStatus"]),
+
         backgroundStyle() {
             return {
                 background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(this.base_url)})`,
@@ -322,6 +326,15 @@ export default defineComponent({
                 // cannot subscribe more than once
                 // const wsService = new WebSocketService();
                 // wsService.setMessageHandler(this.onMessage);
+            },
+            deep: true,
+        },
+        workerApi: {
+            handler() {
+                const status = useStatusStore();
+                if (this.workerApi?.data?.payload?.total_village) status.setOfflineVillageStatus(this.workerApi?.data?.payload);
+                if (this.workerApi?.data?.payload?.total_districts) status.setOfflineDistrictStatus(this.workerApi?.data?.payload);
+                if (this.workerApi?.data?.payload?.total_TAs) status.setOfflineTAsStatusStatus(this.workerApi?.data?.payload);
             },
             deep: true,
         },
@@ -404,8 +417,16 @@ export default defineComponent({
         },
 
         openOfflineStatusModal(name: any) {
+            // if (
+            //     !(
+            //         this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
+            //         this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
+            //         this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
+            //     )
+            // ) {
             const dataToPass = { title: name };
-            createModal(OfflineStatusModal, { class: "" }, true, dataToPass);
+            createModal(OfflineStatusModal, { class: "fullScreenModal" }, false, this.dataToPass);
+            // }
         },
 
         openPatientsListModal(name: any) {
