@@ -97,6 +97,25 @@
                     :onLabel="'active'"
                 />
             </ion-col>
+
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Role(s)<span style="color: #b42318">*</span></ion-label
+                >
+                <ListPicker
+                    :multiSelection="list_picker_prperties[0].multi_Selection"
+                    :show_label="list_picker_prperties[0].show_list_label"
+                    :uniqueId="list_picker_prperties[0].unqueId"
+                    :name_of_list="list_picker_prperties[0].name_of_list"
+                    :choose_place_holder="list_picker_prperties[0].placeHolder"
+                    :items_-list="user_roles"
+                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                    :disabled="list_picker_prperties[0].disabled.value"
+                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                    @item-search-text="list_picker_prperties[0].searchTextFN"
+                />
+            </ion-col>
         </ion-row>
 
         <ion-row v-if="isSuperUser">
@@ -220,27 +239,6 @@
             </div>
         </ion-col>
     </ion-row>
-
-        <ion-row v-if="isSuperUser">
-            <ion-col>
-                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Role(s)<span style="color: #b42318">*</span></ion-label
-                >
-                <ListPicker
-                    :multiSelection="list_picker_prperties[0].multi_Selection"
-                    :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
-                    :name_of_list="list_picker_prperties[0].name_of_list"
-                    :choose_place_holder="list_picker_prperties[0].placeHolder"
-                    :items_-list="user_roles"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[0].disabled.value"
-                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                    @item-search-text="list_picker_prperties[0].searchTextFN"
-                />
-            </ion-col>
-        </ion-row>
 
         <ion-row v-if="isSuperUser">
             <ion-col>
@@ -478,8 +476,8 @@ const input_properties = [
         dataHandler: inputUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
-        type: 'text',
+        error_message: 'Input required, Only letters and numbers are allowed',
+        type: 'alphanumeric',
     },
     {
         placeHolder: 'firstname',

@@ -50,7 +50,7 @@ export function isInputValid(txt: string): boolean {
 
 export function isPasswordValid(txt: string): boolean {
     const trimmedText = txt.trim();
-    const regex = /^(?!.*\s)[a-zA-Z0-9@#$%^&+=*!-]{4,}$/;
+    const regex = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=*!-])[a-zA-Z0-9@#$%^&+=*!-]{8,}$/;
     return regex.test(trimmedText);
 }
 

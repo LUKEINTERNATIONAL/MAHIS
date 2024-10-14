@@ -57,31 +57,75 @@
 
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Phone<span style="color: #b42318">*</span></ion-label
-            >
-                <BasicInputField
-                    :placeholder="'phone number'"
-                    :icon="phonePortraitOutline"
-                    :inputValue="''"
-                    @update:inputValue=""
+                    >Gender<span style="color: #b42318">*</span></ion-label
+                >
+                <sselectionList
+                    :labels="isSSelection_properties[0].labels"
+                    @selection-event="isSSelection_properties[0].dataHandler"
                 />
-                <!-- <BasicInputField
-                    :placeholder="input_properties[3].placeHolder"
-                    :icon="phonePortraitOutline"
-                    :inputValue="user_name"
-                    @update:inputValue="input_properties[3].dataHandler"
-                /> -->
 
-                <!-- <div>
-                    <ion-label v-if="input_properties[3].show_error.value" class="error-label">
-                        {{ input_properties[3].error_message }}
+                <div>
+                    <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
+                        {{ isSSelection_properties[0].error_message }}
                     </ion-label>
-                </div> -->
+                </div>
             </ion-col>
     </ion-row>
 
     <ion-row>
-        <ion-col size="6" v-if="false">
+        <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+            >Phone<span style="color: #b42318">*</span></ion-label
+        >
+            <BasicInputField
+                :placeholder="'phone number'"
+                :icon="phonePortraitOutline"
+                :inputValue="''"
+                @update:inputValue=""
+            />
+            <!-- <BasicInputField
+                :placeholder="input_properties[3].placeHolder"
+                :icon="phonePortraitOutline"
+                :inputValue="user_name"
+                @update:inputValue="input_properties[3].dataHandler"
+            /> -->
+
+            <!-- <div>
+                <ion-label v-if="input_properties[3].show_error.value" class="error-label">
+                    {{ input_properties[3].error_message }}
+                </ion-label>
+            </div> -->
+        </ion-col>
+        <ion-col>
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Role(s)<span style="color: #b42318">*</span></ion-label
+                >
+                <ListPicker
+                    :multiSelection="list_picker_prperties[0].multi_Selection"
+                    :show_label="list_picker_prperties[0].show_list_label"
+                    :uniqueId="list_picker_prperties[0].unqueId"
+                    :name_of_list="list_picker_prperties[0].name_of_list"
+                    :choose_place_holder="list_picker_prperties[0].placeHolder"
+                    :items_-list="user_roles"
+                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                    :disabled="list_picker_prperties[0].disabled.value"
+                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                    @item-search-text="list_picker_prperties[0].searchTextFN"
+                />
+
+                <div>
+                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">
+                        {{ list_picker_prperties[0].error_message }}
+                    </ion-label>
+                </div>
+            </ion-col>
+        </ion-col>
+    </ion-row>
+
+    <ion-row>
+        <ion-col size="6" v-if="true">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >District(s)<span style="color: #b42318">*</span></ion-label
             >
@@ -140,8 +184,6 @@
             </div>
         </ion-col>
     </ion-row>
-
- 
 
     <ion-row>
         <ion-col size="6">
@@ -205,36 +247,6 @@
     </ion-row>
 
     <ion-row>
-
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Role(s)<span style="color: #b42318">*</span></ion-label
-            >
-            <ListPicker
-                :multiSelection="list_picker_prperties[0].multi_Selection"
-                :show_label="list_picker_prperties[0].show_list_label"
-                :uniqueId="list_picker_prperties[0].unqueId"
-                :name_of_list="list_picker_prperties[0].name_of_list"
-                :choose_place_holder="list_picker_prperties[0].placeHolder"
-                :items_-list="user_roles"
-                :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                :disabled="list_picker_prperties[0].disabled.value"
-                @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                @item-search-text="list_picker_prperties[0].searchTextFN"
-            />
-
-            <div>
-                <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">
-                    {{ list_picker_prperties[0].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-        <ion-col></ion-col>
-    </ion-row>
-
-
-    <ion-row>
         <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                 >Program(s)<span style="color: #b42318">*</span></ion-label
@@ -256,25 +268,6 @@
             <div>
                 <ion-label v-if="list_picker_prperties[1].show_error.value" class="error-label">
                     {{ list_picker_prperties[1].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-        <ion-col></ion-col>
-    </ion-row>
-
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Gender<span style="color: #b42318">*</span></ion-label
-            >
-            <sselectionList
-                :labels="isSSelection_properties[0].labels"
-                @selection-event="isSSelection_properties[0].dataHandler"
-            />
-
-            <div>
-                <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
-                    {{ isSSelection_properties[0].error_message }}
                 </ion-label>
             </div>
         </ion-col>
@@ -363,7 +356,7 @@ const selectedVillageIds: any[] = []
 const selectedTAIds: any[] = []
 const selectedDistrictIds : any[] = []
 const passwordErrorMsgs = [
-    'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
+    'Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (@#$%^&+=*!-), without spaces',
     'Password does not match'
 ]
 const selected_location = ref()
@@ -487,7 +480,7 @@ async function trigerSaveFn() {
             programs: selectedProgramIds,
             villages: selectedVillageIds,
             roles: selectedRoleNames,
-            gender: isSSelection_properties[0].dataValue.value,
+            gender: getGenderCode(isSSelection_properties[0].dataValue.value),
             location_id: selected_location.value.location_id
         }
 
@@ -857,7 +850,12 @@ const isSSelection_properties = [
 ]
 
 function sselectionListUpdated(data: any) {
-    isSSelection_properties[0].dataValue.value = data.label 
+    try {
+        isSSelection_properties[0].dataValue.value = data.label 
+    } catch (error) {
+        isSSelection_properties[0].dataValue.value = undefined 
+    }
+    isSSelectionValid()
 }
 
 function inputUpDated_fn1(event: any) {
@@ -937,6 +935,18 @@ function findVillages(district_id: any) {
     selected_villages.value = []
     
     fetchVillages(district_id, '')
+}
+
+function getGenderCode(gender) {
+  const lowercaseGender = gender.toLowerCase().trim();
+  
+  if (lowercaseGender === 'male') {
+    return 'M';
+  } else if (lowercaseGender === 'female') {
+    return 'F';
+  } else {
+    return 'Invalid gender';
+  }
 }
 
 </script>

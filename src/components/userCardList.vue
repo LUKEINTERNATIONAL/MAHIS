@@ -207,7 +207,7 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      console.log('Component mounted. Initial users:', props.users);
+      // 
     });
 
     const openUserProfile = (userId: string) => {
