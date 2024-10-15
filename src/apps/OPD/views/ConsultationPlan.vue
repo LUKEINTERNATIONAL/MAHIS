@@ -316,17 +316,53 @@ export default defineComponent({
                 return item?.data[0] || item?.data;
             });
         },
-      async saveData() {
+    //   async saveData() {
+    //     this.isLoading = true;
+    //     try {
+    //       const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+    //       let filteredArray = [];
+    //       if (obs) {
+    //         filteredArray = obs.filter((obj:any) => {
+    //           return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+    //         });
+    //       }
+    //       if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+    //         await this.saveDiagnosis();
+    //         await this.saveTreatmentPlan();
+    //         await this.saveOutComeStatus();
+    //         await this.saveWomenStatus();
+    //         await this.savePresentingComplaints();
+    //         await this.savePastMedicalHistory();
+    //         await this.saveConsciousness();
+    //         await this.savePhysicalExam();
+    //         resetOPDPatientData();
+    //         if (this.userRole == "Lab") {
+    //           this.$router.push("home");
+    //         } else {
+    //           this.$router.push("patientProfile");
+    //         }
+    //       } else {
+    //         toastWarning("Patient complaints are required");
+    //       }
+    //     } catch (error) {
+    //       console.error("Error in saveData: ", error);
+    //     } finally {
+    //       this.isLoading = false;
+    //     }
+    //   },
+
+    async saveData() {
         this.isLoading = true;
         try {
-          const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
-          let filteredArray = [];
-          if (obs) {
-            filteredArray = obs.filter((obj:any) => {
-              return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+            const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+            let filteredArray = [];
+            if (obs) {
+            filteredArray = obs.filter((obj: any) => {
+                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
             });
-          }
-          if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+            }
+
+            if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
             await this.saveDiagnosis();
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
@@ -336,20 +372,24 @@ export default defineComponent({
             await this.saveConsciousness();
             await this.savePhysicalExam();
             resetOPDPatientData();
-            if (this.userRole == "Lab") {
-              this.$router.push("home");
+
+            if (this.userRole === "Lab") {
+                this.$router.push("home");
+            } else if (this.userRole === "Clinician") {
+                this.$router.push("patientProfile");
             } else {
-              this.$router.push("patientProfile");
+               // console.error("Unknown user role:", this.userRole);
             }
-          } else {
+            } else {
             toastWarning("Patient complaints are required");
-          }
+            }
         } catch (error) {
-          console.error("Error in saveData: ", error);
+            console.error("Error in saveData: ", error);
         } finally {
-          this.isLoading = false;
+            this.isLoading = false;
         }
-      },
+    },
+
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
             const userID: any = Service.getUserID();

@@ -161,44 +161,80 @@ export default defineComponent({
             }
         },
 
+      // async saveData() {
+      //         const userID: any = Service.getUserID();
+      //         const userRoles = Service.getUserRoles();
+      //         console.log("Lets the name of the user: ", userRoles);
+      //         this.isLoading = true;
+
+      //         try {
+      //           if (this.actionBtn != "Finish") {
+      //             if (this.vitals.validationStatus) {
+      //               await this.saveVitals();
+      //               await resetOPDPatientData();
+
+      //               if (userRoles.includes("Nurse")) {
+      //                 this.$router.push("patientProfile");
+      //               } else if (userRoles.includes("Clinician")) {
+      //                 this.$router.push("OPDConsultationPlan");
+      //               } else {
+      //                 console.error("Unknown user role:", userRoles);
+      //               }
+      //             } else {
+      //               await this.validaterowData();
+      //               toastWarning("Please fill all required fields");
+      //             }
+      //           } else {
+      //             if (userRoles.includes("Nurse")) {
+      //               this.$router.push("patientProfile");
+      //             } else if (userRoles.includes("Clinician")) {
+      //               this.$router.push("OPDConsultationPlan");
+      //             } else {
+      //               console.error("Unknown user role:", userRoles);
+      //             }
+      //           }
+      //         } catch (error) {
+      //           console.error("Error in saveData: ", error);
+      //         } finally {
+      //           this.isLoading = false;
+      //         }
+      // },
+
       async saveData() {
-              const userID: any = Service.getUserID();
-              const userRoles = Service.getUserRoles();
-              console.log("Lets the name of the user: ", userRoles);
-              this.isLoading = true;
+          const userID: any = Service.getUserID();
+          const userRoles = Service.getUserRoles();
+          console.log("Lets the name of the user: ", userRoles);
+          this.isLoading = true;
 
-              try {
-                if (this.actionBtn != "Finish") {
-                  if (this.vitals.validationStatus) {
-                    await this.saveVitals();
-                    await resetOPDPatientData();
+          try {
+            if (this.actionBtn != "Finish") {
+              if (this.vitals.validationStatus) {
+                await this.saveVitals();
+                await resetOPDPatientData();
 
-                    if (userRoles.includes("Nurse")) {
-                      this.$router.push("patientProfile");
-                    } else if (userRoles.includes("Clinician")) {
-                      this.$router.push("OPDConsultationPlan");
-                    } else {
-                      console.error("Unknown user role:", userRoles);
-                    }
-                  } else {
-                    await this.validaterowData();
-                    toastWarning("Please fill all required fields");
-                  }
+                if (userRoles.includes("Nurse")) {
+                  this.$router.push("patientProfile");
                 } else {
-                  if (userRoles.includes("Nurse")) {
-                    this.$router.push("patientProfile");
-                  } else if (userRoles.includes("Clinician")) {
-                    this.$router.push("OPDConsultationPlan");
-                  } else {
-                    console.error("Unknown user role:", userRoles);
-                  }
+                  console.error("Unknown user role:", userRoles);
                 }
-              } catch (error) {
-                console.error("Error in saveData: ", error);
-              } finally {
-                this.isLoading = false;
+              } else {
+                await this.validaterowData();
+                toastWarning("Please fill all required fields");
               }
-      },
+            } else {
+              if (userRoles.includes("Nurse")) {
+                this.$router.push("patientProfile");
+              } else {
+                console.error("Unknown user role:", userRoles);
+              }
+            }
+          } catch (error) {
+            console.error("Error in saveData: ", error);
+          } finally {
+            this.isLoading = false;
+          }
+        },
+
 
       async saveVitals() {
             const userID: any = Service.getUserID();
