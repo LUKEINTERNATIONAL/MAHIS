@@ -654,72 +654,45 @@ function validateTAz() {
     }
 }
 
-function ValidatePassword(): boolean {
-    let is_valid = false
-    let error_foundP_p1 = false
-    let error_foundP_p2 = false
-    let is_password1_valid
-    let is_password2_valid
-    
+function ValidatePassword() {
+    const [password1, password2] = password_input_properties.map(prop => prop.dataValue.value);
+    const defaultErrorMsg = passwordErrorMsgs[0];
+    const mismatchErrorMsg = passwordErrorMsgs[1];
 
-    password_input_properties[0].error_message = passwordErrorMsgs[0]
-    password_input_properties[1].error_message = passwordErrorMsgs[0]
+    password_input_properties.forEach(prop => {
+        prop.error_message = defaultErrorMsg;
+        prop.show_error.value = false;
+    });
 
-    if (password_input_properties[0].dataValue.value == undefined || password_input_properties[0].dataValue.value == "") {
-        password_input_properties[0].show_error.value = true
-        error_foundP_p1 = true
+    const emptyPasswords = password_input_properties.map((prop, index) => {
+        const isEmpty = !prop.dataValue.value;
+        prop.show_error.value = isEmpty;
+        return isEmpty;
+    });
+
+    if (emptyPasswords.some(isEmpty => isEmpty)) {
+        return false;
     }
 
-    if (password_input_properties[1].dataValue.value == undefined || password_input_properties[1].dataValue.value == "") {
-        password_input_properties[1].show_error.value = true
-        error_foundP_p2 = true
+    const validPasswords = password_input_properties.map((prop, index) => {
+        const isValid = isPasswordValid(prop.dataValue.value);
+        prop.show_error.value = !isValid;
+        return isValid;
+    });
+
+    if (validPasswords.some(isValid => !isValid)) {
+        return false;
     }
 
-
-    if (error_foundP_p1 == false) {
-        is_password1_valid = isPasswordValid(password_input_properties[0].dataValue.value)
-
-        if (is_password1_valid == false) {
-            password_input_properties[0].show_error.value = true
-            error_foundP_p1 = true
-        }
-
-        if (is_password1_valid == true) {
-            password_input_properties[0].show_error.value = false
-        }
+    if (password1 !== password2) {
+        password_input_properties.forEach(prop => {
+            prop.error_message = mismatchErrorMsg;
+            prop.show_error.value = true;
+        });
+        return false;
     }
 
-    if (error_foundP_p2 == false) {
-        is_password2_valid = isPasswordValid(password_input_properties[1].dataValue.value)
-
-        if (is_password2_valid == false) {
-            password_input_properties[1].show_error.value = true
-            error_foundP_p2 = true
-        }
-
-        if (is_password2_valid == true) {
-            password_input_properties[1].show_error.value = false
-        }
-    }
-
-    if (error_foundP_p1 == false && error_foundP_p2 == false) {
-        if (is_password1_valid == true && is_password2_valid == true) {
-            if (password_input_properties[0].dataValue.value === password_input_properties[1].dataValue.value) {
-                password_input_properties[0].show_error.value = false
-                password_input_properties[1].show_error.value = false
-                is_valid = true
-            }
-
-            if (password_input_properties[0].dataValue.value != password_input_properties[1].dataValue.value) {
-                password_input_properties[0].error_message = passwordErrorMsgs[1]
-                password_input_properties[1].error_message = passwordErrorMsgs[1]
-                password_input_properties[0].show_error.value = true
-                password_input_properties[1].show_error.value = true
-                is_valid = false
-            }
-        }
-    }
-    return is_valid
+    return true;
 }
 
 const input_properties = [
@@ -937,7 +910,7 @@ function findVillages(district_id: any) {
     fetchVillages(district_id, '')
 }
 
-function getGenderCode(gender) {
+function getGenderCode(gender: string) {
   const lowercaseGender = gender.toLowerCase().trim();
   
   if (lowercaseGender === 'male') {
