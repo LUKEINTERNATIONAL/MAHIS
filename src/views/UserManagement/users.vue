@@ -2,12 +2,7 @@
     <ion-page>
         <NavigationMenu />
         <ion-content :fullscreen="true">
-            <dataTable :items="_items_" :search_fields="search_fields_" @click-row="clickRow" />
-            <!-- <editUserModal 
-            :is_open="isPopooverOpen" 
-            :user_id="user_id" 
-            @close-popoover="modalClosed" 
-          /> -->
+            <dataTable :items="_items_" :search_fields="search_fields_" @click-row="clickRow" @reload="getUsers"/>
         </ion-content>
     </ion-page>
 </template>

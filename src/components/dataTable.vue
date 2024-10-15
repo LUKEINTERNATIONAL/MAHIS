@@ -1,19 +1,6 @@
 <template>
       <ion-row>
         <ion-col>
-          <dynamic-button
-            class="btn-cls-2"
-              v-if="dynamic_button_properties[2].addItemButton"
-                  :name="dynamic_button_properties[2].name"
-                  :fill="dynamic_button_properties[2].btnFill"
-                  :icon="personAddOutline"
-                  @clicked:btn="OpenAddUserModal"
-                  :color="'secondary'"
-            />
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
           <ListPicker
               style="margin-left: 30px"
               :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -31,17 +18,28 @@
         </ion-col>
         
         <ion-col>
-            <ion-row>
-              <ion-col size="10">
-                <BasicInputField
-                  :placeholder="note_properties[0].placeHolder"
-                  :icon="searchOutline"
-                  :inputValue="note_properties[0].dataValue.value"
-                  @update:inputValue="note_properties[0].dataHandler"
-                  :minHeight="40"
-                />
-              </ion-col>
-            </ion-row>
+          <ion-row>
+            <ion-col size="9">
+              <BasicInputField
+                :placeholder="note_properties[0].placeHolder"
+                :icon="searchOutline"
+                :inputValue="note_properties[0].dataValue.value"
+                @update:inputValue="note_properties[0].dataHandler"
+                :minHeight="40"
+              />
+            </ion-col>
+            <ion-col size="2">
+              <ion-button
+                fill="solid"
+                @click="OpenAddUserModal"
+                class="btn-cls-2"
+                expand="block"
+              >
+                <ion-icon :icon="personAddOutline" slot="start" style="margin-right: 10px;"></ion-icon>
+                {{ 'Add User' }}
+              </ion-button>
+            </ion-col>
+          </ion-row>
         </ion-col>
       </ion-row>
 
@@ -50,14 +48,14 @@
       </ion-row>
 
       <addUserModal
-            :is_open="isPopooverOpen"
-            :user_id="user_id"
-            @close-popoover="isPopooverOpen = false"
-        />
-
+        :is_open="isPopooverOpen"
+        :user_id="user_id"
+        @close-popoover="isPopooverOpen = false"
+        @updated="reload"
+      />
 </template>
 <script setup lang="ts">
-  import { IonRow, IonPage, IonContent, IonCard, IonCol, IonButton, IonLabel } from "@ionic/vue"
+  import { IonRow, IonPage, IonContent, IonCard, IonCol, IonIcon, IonButton, IonLabel } from "@ionic/vue"
   import { ref, watch, computed, onMounted, onUpdated } from "vue"
   import BasicInputField from "@/components/BasicInputField.vue"
   import ListPicker from "./ListPicker.vue"
@@ -90,7 +88,6 @@
 
   watch(() => props.search_fields,
       async (newValue) => {
-        console.log(newValue)
         searchFieldS.value = newValue 
       }
   )
@@ -109,31 +106,6 @@ function OpenAddUserModal() {
     isPopooverOpen.value = true
     user_id.value = ''
 }
-
-const dynamic_button_properties = [
-    {
-        showAddItemButton: true,
-        addItemButton: true,
-        name: "prev page",
-        btnFill: 'clear',
-        fn: ()=>{},
-    },
-    {
-        showAddItemButton: true,
-        addItemButton: true,
-        name: "next page",
-        btnFill: 'clear',
-        fn: ()=>{},
-    },
-    {
-        showAddItemButton: true,
-        addItemButton: true,
-        name: "Add User",
-        btnFill: 'fill',
-        fn: ()=>{},
-    },
-    
-  ]
 
 const list_picker_prperties = [
     {
@@ -159,7 +131,6 @@ function notesUpDated_fn1(event: any) {
 }
 
 function listUpdated1(data: any) {
-  console.log(data)
   searchFieldS.value = data
   searchFieldS.value.forEach((item: any) => {
     if (item.selected == true) {
@@ -168,10 +139,14 @@ function listUpdated1(data: any) {
   })
 }
 
-const emit = defineEmits<{
-    (e: "clickRow", ObjectsArray: any): void
-}>()
+function reload(user_id: any) {
+  emit("reload", user_id)
+}
 
+const emit = defineEmits<{
+  (e: "clickRow", ObjectsArray: any): void
+  (e: "reload", ObjectsArray: any): void
+}>()
 
 </script>
 <style scoped>
@@ -183,9 +158,8 @@ const emit = defineEmits<{
 }
 
 .btn-cls-2 {
-  font-size: 30px;
+  font-size: 18px;
   font-weight: 400;
-  color: #1d1d16 !important;
 }
 
 </style>
