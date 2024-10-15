@@ -69,7 +69,7 @@
     </ion-grid>
   </div>
 
-  <ion-footer collapse="fade">
+  <ion-footer collapse="fade" style="margin-top: 62px;">
     <ion-row>
       <ion-col style="flex: none; max-width: 100%">
         <bottomNavBar
@@ -248,7 +248,7 @@ export default defineComponent({
 }
 
 .dynamic-grid {
-  max-height: calc(69vh - 1px);
+  max-height: calc(69.8vh - 1px);
   overflow: auto;
 }
 

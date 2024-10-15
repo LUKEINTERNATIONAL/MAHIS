@@ -827,53 +827,6 @@ async function setSelectedUserPrograms() {
 
 }
 
-
-const note_properties = [
-    {
-        placeHolder: 'username',
-        dataHandler: usernameupdated,
-        dataValue: ref() as any,
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-    {
-        placeHolder: 'firstname',
-        dataHandler: ()=>{},
-        dattrueaValue: ref() as any,
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-    {
-        placeHolder: 'lastname',
-        dataHandler: ()=>{},
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-]
-
-function usernameupdated(event: any) {
-    const input = event.target.value
-    user_name.value = input
-}
-
-const dynamic_button_properties = [
-    {
-        showAddItemButton: true,
-        addItemButton: true,
-        name: "save",
-        btnFill: 'clear',
-        fn: ()=>{},
-    },
-    {
-        showAddItemButton: true,
-        addItemButton: true,
-        name: "cancel",
-        btnFill: 'clear',
-        fn: ()=>{},
-    }
-]
-
 const list_picker_prperties = [
     {
         multi_Selection: true as any,
