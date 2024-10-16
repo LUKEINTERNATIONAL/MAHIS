@@ -159,7 +159,7 @@ function itemSearchText(searchString: string) {
 }
 
 function itemListFiltered(searchString: string) {
-    if (props.use_internal_filter == true) {
+    try {
         const items =  [...props.items_List]
         const filtered_items = [] as any
         searchString = searchString ? searchString.toString() : "";
@@ -169,8 +169,15 @@ function itemListFiltered(searchString: string) {
             }
         })
         items_List_copy.value = filtered_items
-        emit("itemListFiltered", filtered_items)
+
+        if (props.use_internal_filter == true) {
+            local_itmes_List.value = items_List_copy.value
+            emit("itemListFiltered", filtered_items)
+        }
+    } catch (error) {
+        
     }
+
 }
 
 function dissmissDrugAddField(): void {

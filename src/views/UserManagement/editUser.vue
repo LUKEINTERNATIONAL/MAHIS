@@ -97,6 +97,25 @@
                     :onLabel="'active'"
                 />
             </ion-col>
+
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Role(s)<span style="color: #b42318">*</span></ion-label
+                >
+                <ListPicker
+                    :multiSelection="list_picker_prperties[0].multi_Selection"
+                    :show_label="list_picker_prperties[0].show_list_label"
+                    :uniqueId="list_picker_prperties[0].unqueId"
+                    :name_of_list="list_picker_prperties[0].name_of_list"
+                    :choose_place_holder="list_picker_prperties[0].placeHolder"
+                    :items_-list="user_roles"
+                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                    :disabled="list_picker_prperties[0].disabled.value"
+                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                    @item-search-text="list_picker_prperties[0].searchTextFN"
+                />
+            </ion-col>
         </ion-row>
 
         <ion-row v-if="isSuperUser">
@@ -220,27 +239,6 @@
             </div>
         </ion-col>
     </ion-row>
-
-        <ion-row v-if="isSuperUser">
-            <ion-col>
-                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Role(s)<span style="color: #b42318">*</span></ion-label
-                >
-                <ListPicker
-                    :multiSelection="list_picker_prperties[0].multi_Selection"
-                    :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
-                    :name_of_list="list_picker_prperties[0].name_of_list"
-                    :choose_place_holder="list_picker_prperties[0].placeHolder"
-                    :items_-list="user_roles"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[0].disabled.value"
-                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                    @item-search-text="list_picker_prperties[0].searchTextFN"
-                />
-            </ion-col>
-        </ion-row>
 
         <ion-row v-if="isSuperUser">
             <ion-col>
@@ -380,7 +378,7 @@ const locationId = ref();
 const location_error_message = ref('Select location');
 const location_show_error = ref(false);
 const passwordErrorMsgs = [
-    'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
+    'Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (@#$%^&+=*!-), without spaces',
     'Password does not match'
 ]
 const isSuperUser = ref(false);
@@ -478,8 +476,8 @@ const input_properties = [
         dataHandler: inputUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
-        type: 'text',
+        error_message: 'Input required, Only letters and numbers are allowed',
+        type: 'alphanumeric',
     },
     {
         placeHolder: 'firstname',
@@ -554,100 +552,60 @@ function validateLocation() {
     }
 }
 
-
-function validatePasswordMatch(){
-     const password = password_input_properties[0].dataValue.value;
-    const confirm = password_input_properties[1].dataValue.value;
-
-       if(password!=confirm) {
-         password_input_properties[0].show_error.value=true;
-         password_input_properties[0].error_message="Passwords don't match";
-         return false
-    } 
-         password_input_properties[0].show_error.value=false;
-         password_input_properties[0].error_message="";
-         return true
-    
+async function updatePassword() {
+    if (checkPasswordFieldsEmpty() == false) {
+        if (ValidatePassword() == true) {
+            const new_password = password_input_properties[0].dataValue.value 
+            await UserService.updateUser(userId.value, {new_password});
+        }
+    }
 }
 
-async function updatePassword() {
+function checkPasswordFieldsEmpty() {
+  return password_input_properties.slice(0, 2).every(prop =>
+    !prop.dataValue.value || prop.dataValue.value.trim() === ""
+  );
+}
 
-    if(!validatePasswordMatch())  return
+function ValidatePassword() {
+    const [password1, password2] = password_input_properties.map(prop => prop.dataValue.value);
+    const defaultErrorMsg = passwordErrorMsgs[0];
+    const mismatchErrorMsg = passwordErrorMsgs[1];
 
-    const password =password_input_properties[0].dataValue.value;
+    password_input_properties.forEach(prop => {
+        prop.error_message = defaultErrorMsg;
+        prop.show_error.value = false;
+    });
 
-    if(password=="") return
+    const emptyPasswords = password_input_properties.map((prop, index) => {
+        const isEmpty = !prop.dataValue.value;
+        prop.show_error.value = isEmpty;
+        return isEmpty;
+    });
 
-    await UserService.updateUser(userId.value, {password});
- }
-
-function ValidatePassword(): boolean {
-    let is_valid = false
-    let error_foundP_p1 = false
-    let error_foundP_p2 = false
-    let is_password1_valid
-    let is_password2_valid
-    
-
-    password_input_properties[0].error_message = passwordErrorMsgs[0]
-    password_input_properties[1].error_message = passwordErrorMsgs[0]
-
-    if (password_input_properties[0].dataValue.value == undefined || password_input_properties[0].dataValue.value == "") {
-        password_input_properties[0].show_error.value = true
-        error_foundP_p1 = true
+    if (emptyPasswords.some(isEmpty => isEmpty)) {
+        return false;
     }
 
-    if (password_input_properties[1].dataValue.value == undefined || password_input_properties[1].dataValue.value == "") {
-        password_input_properties[1].show_error.value = true
-        error_foundP_p2 = true
+    const validPasswords = password_input_properties.map((prop, index) => {
+        const isValid = isPasswordValid(prop.dataValue.value);
+        prop.show_error.value = !isValid;
+        return isValid;
+    });
+
+    if (validPasswords.some(isValid => !isValid)) {
+        return false;
     }
 
-
-    if (error_foundP_p1 == false) {
-        is_password1_valid = isPasswordValid(password_input_properties[0].dataValue.value)
-
-        if (is_password1_valid == false) {
-            password_input_properties[0].show_error.value = true
-            error_foundP_p1 = true
-        }
-
-        if (is_password1_valid == true) {
-            password_input_properties[0].show_error.value = false
-        }
+    if (password1 !== password2) {
+        password_input_properties.forEach(prop => {
+            prop.error_message = mismatchErrorMsg;
+            prop.show_error.value = true;
+        });
+        return false;
     }
 
-    if (error_foundP_p2 == false) {
-        is_password2_valid = isPasswordValid(password_input_properties[1].dataValue.value)
-
-        if (is_password2_valid == false) {
-            password_input_properties[1].show_error.value = true
-            error_foundP_p2 = true
-        }
-
-        if (is_password2_valid == true) {
-            password_input_properties[1].show_error.value = false
-        }
-    }
-
-    if (error_foundP_p1 == false && error_foundP_p2 == false) {
-        if (is_password1_valid == true && is_password2_valid == true) {
-            if (password_input_properties[0].dataValue.value === password_input_properties[1].dataValue.value) {
-                password_input_properties[0].show_error.value = false
-                password_input_properties[1].show_error.value = false
-                is_valid = true
-            }
-
-            if (password_input_properties[0].dataValue.value != password_input_properties[1].dataValue.value) {
-                password_input_properties[0].error_message = passwordErrorMsgs[1]
-                password_input_properties[1].error_message = passwordErrorMsgs[1]
-                password_input_properties[0].show_error.value = true
-                password_input_properties[1].show_error.value = true
-                is_valid = false
-            }
-
-        }
-    }
-    return is_valid
+    return true;
 }
 
 
@@ -691,15 +649,35 @@ async function preSaveRoles() {
 }
 
 async function updateUserDemographics() {
-    const _areFieldsValid_ = areFieldsValid(input_properties)
-    const _validateLocation = validateLocation()
+  try {
+    const _areFieldsValid = areFieldsValid(input_properties);
+    const isLocationValid = validateLocation();
+    const arePasswordFieldsEmpty = checkPasswordFieldsEmpty();
 
-    if (_areFieldsValid_ == false && _validateLocation == false && !validatePasswordMatch()) {
-        saveEvent(false)
+    if (arePasswordFieldsEmpty) {
+      if (!_areFieldsValid || !isLocationValid) {
+        saveEvent(false);
+      } else {
+        saveEvent(true);
+        await updateUserDetails();
+      }
+    } else {
+      const isPasswordValid = ValidatePassword();
+      if (!_areFieldsValid || !isLocationValid || !isPasswordValid) {
+        saveEvent(false);
+      } else {
+        saveEvent(true);
+        await updateUserDetails();
+      }
     }
+  } catch (error) {
+    console.error('Error updating user demographics:', error);
+    await saveEvent(false);
+  }
+}
 
-    if (_areFieldsValid_ == true && _validateLocation == true && validatePasswordMatch()) {
-        saveEvent(true)
+async function updateUserDetails() {
+    try {
         const payload = {
             given_name: first_name.value,
             family_name: last_name.value,
@@ -707,7 +685,7 @@ async function updateUserDemographics() {
             location_id: selected_location.value.location_id,
             must_append_roles:false,
         }
-        UserService.updateUser(userId.value, payload)
+        await UserService.updateUser(userId.value, payload)
 
         const username_payload = {
             new_username: user_name.value,
@@ -720,7 +698,9 @@ async function updateUserDemographics() {
             toastWarning("username update failed, already existing")
             
         }
-    } 
+    } catch (error) {
+        
+    }
 }
 
 async function saveRoles(roleNames: any) {
@@ -846,53 +826,6 @@ async function getUserPrograms() {
 async function setSelectedUserPrograms() {
 
 }
-
-
-const note_properties = [
-    {
-        placeHolder: 'username',
-        dataHandler: usernameupdated,
-        dataValue: ref() as any,
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-    {
-        placeHolder: 'firstname',
-        dataHandler: ()=>{},
-        dattrueaValue: ref() as any,
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-    {
-        placeHolder: 'lastname',
-        dataHandler: ()=>{},
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-]
-
-function usernameupdated(event: any) {
-    const input = event.target.value
-    user_name.value = input
-}
-
-const dynamic_button_properties = [
-    {
-        showAddItemButton: true,
-        addItemButton: true,
-        name: "save",
-        btnFill: 'clear',
-        fn: ()=>{},
-    },
-    {
-        showAddItemButton: true,
-        addItemButton: true,
-        name: "cancel",
-        btnFill: 'clear',
-        fn: ()=>{},
-    }
-]
 
 const list_picker_prperties = [
     {
