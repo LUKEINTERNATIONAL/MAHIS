@@ -20,7 +20,6 @@ export const usePatientList = defineStore('counter', {
             const vitalsList = await PatientOpdList.getPatientList("VITALS", locationId);
             console.log("Patients waiting for vitals:", vitalsList);
             this.patientsWaitingForVitals = vitalsList;
-
             this.patientsWaitingForConsultation = await PatientOpdList.getPatientList("CONSULTATION",locationId);
             this.patientsWaitingForLab = await PatientOpdList.getPatientList("LAB",locationId);
             this.patientsWaitingForDispensation = await PatientOpdList.getPatientList("DISPENSATION", locationId);

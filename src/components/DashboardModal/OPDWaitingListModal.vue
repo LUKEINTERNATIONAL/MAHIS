@@ -72,7 +72,7 @@
                     <ion-button
                       size="small"
                       class="btn-edit"
-                      @click="handleAbscond(patient)"                      >Abscond</ion-button
+                      @click="handleAbscond(patient)" >Abscond</ion-button
                     >
                   </ion-col>
                 </ion-row>
@@ -253,6 +253,7 @@ export default defineComponent({
     ...mapState(usePatientList, [
       "patientsWaitingForVitals",
       "patientsWaitingForConsultation",
+      "patientsWaitingForLab",
       "patientsWaitingForDispensation",
       "counter",
     ]),
@@ -290,8 +291,11 @@ export default defineComponent({
     },
     async handleAbscond(patient: any) {
       try {
+
+        const location = await getUserLocation();
+        const locationId = location ? location.id : null;
         await PatientOpdList.checkOutPatient(patient.visit_id, dates.todayDateFormatted());
-        // Immediately remove the patient from the list
+        await usePatientList().refresh(locationId);
         this.patients = this.patients.filter((p:any) => p.patient_id !== patient.patient_id);
       } catch (e) {
         console.error("Error absconding patient:", e);
@@ -301,6 +305,7 @@ export default defineComponent({
       const listMapping: Record<string, any[]> = {
         VITALS: this.patientsWaitingForVitals,
         CONSULTATION: this.patientsWaitingForConsultation,
+        LAB: this.patientsWaitingForLab,
         DISPENSATION: this.patientsWaitingForDispensation,
       };
 

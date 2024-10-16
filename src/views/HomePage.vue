@@ -34,60 +34,60 @@
             <ion-card-content>
               <div class="OPDDueCardContent">
                 <div
-                  class="OPDDueCard"
-                  @click="openAllModal('All patients today','View profile','/patientProfile')"
-                  :style="dueCardStyle('success')"
+                    class="OPDDueCard"
+                    @click="openAllModal('All patients today','View profile','/patientProfile')"
+                    :style="dueCardStyle('success')"
                 >
                   <ion-icon :icon="people" class="dueCardIcon"></ion-icon>
                   <div class="OPDStatsValue">{{ totalPatientsToday }}</div>
                   <div class="OPDStatsText">Total patients today</div>
                 </div>
                 <div
-                  class="OPDDueCard"
-                  @click="openPatientsListModal('Patients waiting for vitals', 'VITALS', 'Vitals','/OPDVitals')"
-                  :style="dueCardStyle('success')"
-                  v-if="isUserRole('Clinician') || isUserRole('Nurse') || isUserRole('Superuser')"
+                    class="OPDDueCard"
+                    @click="openPatientsListModal('Patients waiting for vitals', 'VITALS', 'Vitals','/OPDVitals')"
+                    :style="dueCardStyle('success')"
+                    v-if="canViewVitals"
                 >
                   <ion-icon :icon="thermometer" class="dueCardIcon"></ion-icon>
                   <div class="OPDStatsValue">{{ patientsWaitingForVitals.length }}</div>
                   <div class="OPDStatsText">Waiting for vitals</div>
                 </div>
+
                 <div
-                  class="OPDDueCard"
-                  @click="
-                    openPatientsListModal('Patients waiting for consultation', 'CONSULTATION', 'Consultation', '/OPDConsultationPlan')
-                  "
-                  :style="dueCardStyle('success')"
-                  v-if="isUserRole('Clinician') || isUserRole('Superuser')"
+                    class="OPDDueCard"
+                    @click="openPatientsListModal('Patients waiting for consultation', 'CONSULTATION', 'Consultation', '/OPDConsultationPlan')
+    "
+                    :style="dueCardStyle('success')"
+                    v-if="canViewConsultation"
                 >
                   <ion-icon :icon="clipboard" class="dueCardIcon"></ion-icon>
                   <div class="OPDStatsValue">{{ patientsWaitingForConsultation.length }}</div>
                   <div class="OPDStatsText">Waiting for consultation</div>
                 </div>
+
                 <div
                     class="OPDDueCard"
-                    @click="
-                    openPatientsListModal('Patients waiting for lab', 'LAB', 'Lab', '/OPDConsultationPlan')
-                  "
+                    @click="openPatientsListModal('Patients waiting for lab', 'LAB', 'Lab', '/OPDConsultationPlan')
+    "
                     :style="dueCardStyle('success')"
-                    v-if="isUserRole('Lab')"
+                    v-if="canViewLab"
                 >
                   <ion-icon :icon="clipboard" class="dueCardIcon"></ion-icon>
                   <div class="OPDStatsValue">{{ patientsWaitingForLab.length }}</div>
                   <div class="OPDStatsText">Waiting for lab</div>
                 </div>
                 <div
-                  class="OPDDueCard"
-                  @click="
-                    openPatientsListModal('Patients waiting for dispensation','DISPENSATION','Dispensation','/dispensation')
-                  "
-                  :style="dueCardStyle('success')"
-                  v-if="isUserRole('Clinician') || isUserRole('Pharmacist') || isUserRole('Superuser')"
+                    class="OPDDueCard"
+                    @click="openPatientsListModal('Patients waiting for dispensation', 'DISPENSATION', 'Dispensation', '/dispensation')
+    "
+                    :style="dueCardStyle('success')"
+                    v-if="canViewDispensation"
                 >
                   <ion-icon :icon="medkit" class="dueCardIcon"></ion-icon>
                   <div class="OPDStatsValue">{{ patientsWaitingForDispensation.length }}</div>
                   <div class="OPDStatsText">Waiting for dispensation</div>
                 </div>
+
               </div>
             </ion-card-content>
           </ion-card>
@@ -361,7 +361,6 @@ export default defineComponent({
       reportData: "" as any,
       appointments: [] as any,
       programBtn: {} as any,
-      userRoles: [] as any,
       totalPatientsToday: 0,
       base_url: "backgroundImg.png",
       isLoading: false,
@@ -379,6 +378,11 @@ export default defineComponent({
           value: 0,
         },
       ] as any,
+      userRoles: [] as string[],
+      canViewVitals: false,
+      canViewConsultation: false,
+      canViewLab: false,
+      canViewDispensation: false,
     };
   },
   setup() {
@@ -419,7 +423,13 @@ export default defineComponent({
       async handler(data) {
         if (data.name == "Home") {
           resetDemographics();
+          await this.fetchUserData();
         }
+        this.patientsWaitingForVitals;
+        this.patientsWaitingForConsultation;
+        this.patientsWaitingForLab;
+        this.patientsWaitingForDispensation;
+        this.totalPatientsToday;
 
         await this.setAppointments();
         const location = await getUserLocation();
@@ -438,13 +448,13 @@ export default defineComponent({
     this.isLoading = true;
     const location = await getUserLocation();
     const locationId = location ? location.location_id : null;
-
     if (locationId) {
       const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
       this.totalPatientsToday = visitsToday.length;
       await usePatientList().refresh(locationId);
     }
 
+    await this.fetchUserData();
     await setOfflineLocation();
     await setOfflineRelationship();
     resetDemographics();
@@ -454,10 +464,28 @@ export default defineComponent({
     wsService.setMessageHandler(this.onMessage);
     await useGlobalPropertyStore().loadGlobalProperty();
     this.isLoading = false;
-    this.userRoles = await Service.getUserRoles();
   },
 
+
   methods: {
+
+    async fetchUserData() {
+      const user = await UserService.getCurrentUser();
+      if (user) {
+        this.userRoles = user.roles.map(role => role.role);
+        this.updateCardVisibility();
+      }
+    },
+    updateCardVisibility() {
+      this.canViewVitals = this.isUserRole('Clinician') || this.isUserRole('Nurse') || this.isUserRole('Superuser');
+      this.canViewConsultation = this.isUserRole('Clinician') || this.isUserRole('Superuser');
+      this.canViewLab = this.isUserRole('Lab');
+      this.canViewDispensation = this.isUserRole('Clinician') || this.isUserRole('Pharmacist') || this.isUserRole('Superuser');
+    },
+
+    isUserRole(role:any) {
+      return this.userRoles.includes(role);
+    },
     dueCardStyle(type: "success" | "warning" | "info" | "danger") {
       const colors = {
         success: "rgb(158, 207, 136)",
@@ -538,9 +566,6 @@ export default defineComponent({
       return Service.getProgramID();
     },
 
-    isUserRole(role:any) {
-      return this.userRoles.includes(role);
-    },
     loadImage(name: any) {
       return img(name);
     },

@@ -33,16 +33,16 @@
             <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
       <div v-if="hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
-<!--        <div v-if="patientsWaitingForLab && demographics.patient_id">-->
-<!--          <DynamicButton-->
-<!--              class="no-margin-left"-->
-<!--              fill="clear"-->
-<!--              icon="notification_icon"-->
-<!--              iconSlot="icon-only"-->
-<!--              name="Waiting for results from the lab"-->
-<!--          />-->
-<!--        </div>-->
-        <div>
+        <div v-if="hasPatientsWaitingForLab">
+          <DynamicButton
+              class="no-margin-left"
+              fill="clear"
+              icon="notification_icon"
+              iconSlot="icon-only"
+              name="Waiting for results from the lab"
+          />
+        </div>
+        <div v-else>
           <DynamicButton
               fill="solid"
               :icon="iconsContent.plus"
@@ -52,6 +52,7 @@
           />
         </div>
       </div>
+
 
     </div>
     <LabModal :popoverOpen="openModal" @saved="updateLabList" @closeModal="openModal = false" />
@@ -147,6 +148,7 @@ export default defineComponent({
             activeBMI: [] as any,
             listOrders: [] as any,
             listResults: [] as any,
+            hasPatientsWaitingForLab: false,
             listSeeMoreOrders: [] as any,
             listSeeLessOrders: [] as any,
             listSeeMoreResults: [] as any,
@@ -168,14 +170,14 @@ export default defineComponent({
     setup() {
         return { checkmark, pulseOutline };
     },
-    async mounted() {
-      this.orders = this.propOrders;
-        this.setListData(this.orders);
-        this.service = new PatientLabService(this.demographics.patient_id);
-      this.userRoles = await Service.getUserRoles();
+  async mounted() {
+    this.orders = this.propOrders;
+    this.setListData(this.orders);
+    this.service = new PatientLabService(this.demographics.patient_id);
+    this.userRoles = await Service.getUserRoles();
+  },
 
-    },
-    watch: {
+  watch: {
         propOrders: {
             handler() {
                 this.orders = this.propOrders;
@@ -194,6 +196,19 @@ export default defineComponent({
       toggleSendToLabModal() {
         this.sendToLabModalOpen = !this.sendToLabModalOpen;
       },
+     async fetchPatientLabStageData(){
+       const location = await getUserLocation();
+       const locationId = location ? location.location_id : null;
+
+       if (locationId) {
+         const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
+         if (this.demographics.patient_id) {
+           this.hasPatientsWaitingForLab = LabPatients.some((p:any) => p.patient_id === this.demographics.patient_id);
+         }
+         await usePatientList().refresh(locationId);
+
+       }
+      },
       async handleSendToLabYes(){
         const location = await getUserLocation();
         const locationId = location ? location.location_id : null;
@@ -202,7 +217,9 @@ export default defineComponent({
           return;
         }
         await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"LAB", locationId);
+        await usePatientList().refresh(locationId);
         toastSuccess("Lab orders submitted to the lab successfully")
+        await this.fetchPatientLabStageData()
         this.closeSendToLabModal()
       },
       async handleSendToLabNo(){

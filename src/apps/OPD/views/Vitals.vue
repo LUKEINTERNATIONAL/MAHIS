@@ -65,6 +65,7 @@ import HisDate from "@/utils/Date";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date"
 import {getUserLocation} from "@/services/userService";
+import {usePatientList} from "@/apps/OPD/stores/patientListStore";
 
 
 export default defineComponent({
@@ -186,8 +187,8 @@ export default defineComponent({
                 return;
               }
               await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"CONSULTATION", locationId)
+              await usePatientList().refresh(locationId);
               this.$router.push("OPDConsultationPlan");
-
             } else {
               await this.validaterowData();
               toastWarning("Please fill all required fields");

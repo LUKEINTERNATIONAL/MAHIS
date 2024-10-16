@@ -540,6 +540,7 @@ import { ProgramService } from "@/services/program_service";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
 import {getUserLocation} from "@/services/userService";
+import {usePatientList} from "@/apps/OPD/stores/patientListStore";
 
 export default defineComponent({
   mixins: [SetPrograms],
@@ -786,6 +787,7 @@ export default defineComponent({
             "VITALS",
             locationId
         );
+        await usePatientList().refresh(locationId);
         this.toggleCheckInModal();
         this.checkedIn = true;
         toastSuccess("The patient's visit is now active. Patient is on the waiting list for vitals");

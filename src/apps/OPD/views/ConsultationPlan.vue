@@ -100,6 +100,7 @@ import {
 import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date"
 import {getUserLocation} from "@/services/userService";
+import {usePatientList} from "@/apps/OPD/stores/patientListStore";
 
 export default defineComponent({
     name: "Home",
@@ -228,10 +229,12 @@ export default defineComponent({
             }
             if(this.userRole!="Lab") {
               await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "DISPENSATION", locationId);
+              await usePatientList().refresh(locationId);
               this.$router.push("home");
               toastSuccess("Patient has finished consultation!");
             } else {
               await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
+              await usePatientList().refresh(locationId);
               this.$router.push("home");
               toastSuccess("Lab results submitted!");
             }
