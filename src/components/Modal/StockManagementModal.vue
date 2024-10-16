@@ -63,7 +63,7 @@
                                 name="Discard Stock"
                                 v-if="checkExpired(item) && item.current_quantity > 0"
                                 style="font-size: 12px"
-                                @click="openPopover($event, item)"
+                                @click="whichPopover($event, item, 'discard')"
                             >
                                 Discard Stock
                             </ion-button>
@@ -77,9 +77,14 @@
                             >
                                 Void Stock
                             </ion-button>
-                            <!-- <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openAddStockModal(item)"
-                                >Update Stock</ion-button
-                            > -->
+                            <ion-button
+                                color="success"
+                                size="small"
+                                name="Update Stock"
+                                style="font-size: 12px"
+                                @click="whichPopover($event, item, 'adjust')"
+                                >Adjust Stock</ion-button
+                            >
                         </div>
                     </div>
                 </div>
@@ -109,7 +114,24 @@
                 </div>
                 <div style="display: flex; justify-content: space-between; padding: 10px">
                     <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 14px" @click="closePopover()">Cancel</ion-button>
-                    <ion-button color="success" size="small" name="Update Stock" style="font-size: 14px" @click="updateBatch()">Save</ion-button>
+                    <ion-button
+                        v-if="popoverName == 'adjust'"
+                        color="success"
+                        size="small"
+                        name="Update Stock"
+                        style="font-size: 14px"
+                        @click="adjustStock()"
+                        >Save</ion-button
+                    >
+                    <ion-button
+                        v-if="popoverName == 'discard'"
+                        color="success"
+                        size="small"
+                        name="Update Stock"
+                        style="font-size: 14px"
+                        @click="updateBatch()"
+                        >Save</ion-button
+                    >
                 </div>
             </ion-popover>
         </ion-content>
@@ -230,6 +252,7 @@ export default defineComponent({
             selectedButton: "all",
             isLoading: false,
             popoverOpen: false,
+            popoverName: "",
             event: null as any,
             stockService: {} as any,
             disabled: false,
@@ -326,9 +349,79 @@ export default defineComponent({
                 return false;
             }
         },
+        async adjustStock() {
+            let adjust_stock = parseInt(getFieldValue(this.stockDiscard, "quantity", "value"));
+            let reason = getFieldValue(this.stockDiscard, "reason", "value").name;
+            if (reason == "Positive Adjustment") {
+                adjust_stock = adjust_stock;
+            }
+            if (reason == "Negative Adjustment") {
+                if (adjust_stock > this.stockData.current_quantity) {
+                    toastWarning("Quantity Available can not be greater than adjustment quantity");
+                    return false;
+                }
+                adjust_stock = -adjust_stock;
+            }
+            if (validateInputFiledData(this.stockDiscard)) {
+                const data = {
+                    adjust_stock: adjust_stock,
+                    drug_id: this.stockData.drug_id,
+                    reallocation_code: "MA20",
+                    waste_reason: reason,
+                    date: HisDate.currentDate(),
+                    reason: reason,
+                };
+                try {
+                    await this.stockService.updateItem(this.stockData.id, data);
+                    toastSuccess("Discard successfully");
+                    await this.buildTableData();
+                    this.closePopover();
+                } catch (error: any) {
+                    toastWarning(error);
+                }
+            } else {
+                toastWarning("Failing to discard");
+                return false;
+            }
+        },
+        whichPopover(e: Event, item: any, name: any) {
+            this.popoverName = name;
+            useStockDiscard().setStockDiscard(useStockDiscard().getInitialStockDiscard());
+            if (name == "adjust") {
+                modifyFieldValue(this.stockDiscard, "reason", "multiSelectData", [
+                    {
+                        id: 1,
+                        name: "Positive Adjustment",
+                    },
+                    {
+                        id: 2,
+                        name: "Negative Adjustment",
+                    },
+                ]);
+            } else {
+                modifyFieldValue(this.stockDiscard, "reason", "multiSelectData", [
+                    {
+                        id: 1,
+                        name: "VVM stage > 2",
+                    },
+                    {
+                        id: 2,
+                        name: "Frozen",
+                    },
+                    {
+                        id: 3,
+                        name: "Damage",
+                    },
+                    {
+                        id: 4,
+                        name: "Wastage",
+                    },
+                ]);
+            }
+            this.openPopover(e, item);
+        },
         openPopover(e: Event, item: any) {
             this.stockData = item;
-            useStockDiscard().setStockDiscard(useStockDiscard().getInitialStockDiscard());
             this.event = e;
             this.popoverOpen = true;
         },
