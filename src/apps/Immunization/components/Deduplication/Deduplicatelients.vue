@@ -117,6 +117,7 @@ import { personCircle, calendar, male, female, fingerPrint, location, linkOutlin
 import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMenu.vue";
 import { PatientService } from "@/services/patient_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 
 export default defineComponent({
   name: 'ClientDeduplication',
@@ -160,6 +161,7 @@ export default defineComponent({
       await PatientService.mergePatients(mergePayload);
       
       selectedPrimaryClient.value = null;
+      toastSuccess("Successfully merged with primary client");
       await initNavData();
     };
 

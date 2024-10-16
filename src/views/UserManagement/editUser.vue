@@ -177,6 +177,23 @@
                     </ion-label>
                 </div>
             </ion-col>
+
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                    >Gender<span style="color: #b42318">*</span></ion-label
+                >
+                <sselectionList
+                    :labels="isSSelection_properties[0].labels.value"
+                    :selected-opt="isSSelection_properties[0].selectedOption.value"
+                    @selection-event="isSSelection_properties[0].dataHandler"
+                />
+
+                <div>
+                    <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
+                        {{ isSSelection_properties[0].error_message }}
+                    </ion-label>
+                </div>
+            </ion-col>
         </ion-row>
 
         <ion-row>
@@ -339,6 +356,7 @@ import { IonButtons,
 import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import Toggle from '@vueform/toggle'
 import ListPicker from "../../components/ListPicker.vue"
+import sselectionList from "@/components/SselectionList.vue"
 import userActivities from "./userActivities.vue"
 import VueMultiselect from "vue-multiselect"
 import { LocationService } from "@/services/location_service"
@@ -358,9 +376,10 @@ import { ref, onMounted, watch } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { UserService } from "@/services/user_service";
 import { ProgramService } from "@/services/program_service";
-import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti";
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid, getGenderCode } from "@/utils/GeneralUti";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { useUserStore } from "@/stores/userStore";
+import { PersonService } from "@/services/person_service";
 
 const toggle_local = ref(false);
 const user_roles = ref([] as any);
@@ -464,9 +483,31 @@ function trigerSaveFn() {
     actionN.value = props.action
     preSavePrograms()
     preSaveRoles()
+    updateuserPersoninf()
     trigerSaveStatusFn()
     updateUserDemographics()
     updatePassword()
+}
+
+
+const isSSelection_properties = [
+    {
+        labels: ref(['Male','Female',]),
+        selectedOption: ref(null),
+        dataHandler: sselectionListUpdated,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Please make a selection',
+    }
+]
+
+function sselectionListUpdated(data: any) {
+    try {
+        isSSelection_properties[0].dataValue.value = data.label 
+    } catch (error) {
+        isSSelection_properties[0].dataValue.value = undefined 
+    }
+    isSSelectionValid()
 }
 
 const input_properties = [
@@ -627,6 +668,7 @@ async function getUserData() {
     last_name.value = userLastname(user_data.value.person.names)
     input_properties[2].dataValue.value = last_name.value
 
+    selectGender(user_data.value.person)
     fillUserRoles()
     fillUserPrograms()
     getAPICounterPart() 
@@ -693,8 +735,10 @@ async function updateUserDetails() {
 
         try {
             const response = await UserService.updateusername(userId.value, username_payload)
+            saveEvent(true);
             toastSuccess("username updated successfully")
         } catch (error) {
+            saveEvent(true);
             toastWarning("username update failed, already existing")
             
         }
@@ -1006,6 +1050,42 @@ function checkIfSelectedIsHSA(role_list: any) {
         HSA_found_for_disabling_button.value = true
     }
     return is_found
+}
+
+function isSSelectionValid() {
+    let is_valid = false
+    if (isSSelection_properties[0].dataValue.value == undefined) {
+        isSSelection_properties[0].show_error.value = true
+    }
+    if (isSSelection_properties[0].dataValue.value != undefined) {
+        isSSelection_properties[0].show_error.value = false
+        is_valid = true
+    }
+    return is_valid
+}
+
+async function updateuserPersoninf() {
+    const data1 = getFieldsValuesObj(input_properties)
+    const updatedData = {
+        cell_phone_number: data1.phone_number,
+        gender: getGenderCode(isSSelection_properties[0].dataValue.value),
+    } as any
+    const personService = new PersonService(updatedData);
+    const data = await personService.update(user_data.value.person.person_id);
+    return data
+}
+
+function selectGender(person: any) {
+    let selected_opt = {} as any
+    isSSelection_properties[0].labels.value.forEach((label: string, index: number) => {
+        if (label == getGenderCode(person.gender)) {
+            selected_opt = {
+                label,
+                value: "option_"+index 
+            } as any
+        }
+    })
+    isSSelection_properties[0].selectedOption.value = selected_opt
 }
 
 </script>
