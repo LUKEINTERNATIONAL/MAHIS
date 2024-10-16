@@ -171,3 +171,19 @@ export function compareDates(currentDateStr: string, nextAppointmentDateStr: str
     }
     return true;
 }
+
+export function getGenderCode(input: string): string {
+    const lowercaseInput = input.toLowerCase().trim();
+  
+    if (lowercaseInput === 'male') {
+      return 'M';
+    } else if (lowercaseInput === 'female') {
+      return 'F';
+    } else if (lowercaseInput === 'm') {
+      return 'Male';
+    } else if (lowercaseInput === 'f') {
+      return 'Female';
+    } else {
+      return 'Invalid gender';
+    }
+  }

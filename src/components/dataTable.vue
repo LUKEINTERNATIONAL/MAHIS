@@ -19,7 +19,7 @@
         
         <ion-col>
           <ion-row>
-            <ion-col size="9">
+            <ion-col>
               <BasicInputField
                 :placeholder="note_properties[0].placeHolder"
                 :icon="searchOutline"
@@ -28,14 +28,13 @@
                 :minHeight="40"
               />
             </ion-col>
-            <ion-col size="2">
+            <ion-col >
               <ion-button
                 fill="solid"
                 @click="OpenAddUserModal"
                 class="btn-cls-2"
-                expand="block"
               >
-                <ion-icon :icon="personAddOutline" slot="start" style="margin-right: 10px;"></ion-icon>
+                <ion-icon :icon="personAddOutline" slot="start" style="margin-right: 5px;"></ion-icon>
                 {{ 'Add User' }}
               </ion-button>
             </ion-col>
@@ -44,7 +43,7 @@
       </ion-row>
 
       <ion-row>
-        <user-card-list :users="items" style="margin-left: 20px;" :filterValue="searchValue"/>
+        <user-card-list :users="items" style="margin-left: 20px;" :filterValue="searchValue" @reload="reload"/>
       </ion-row>
 
       <addUserModal
@@ -158,8 +157,9 @@ const emit = defineEmits<{
 }
 
 .btn-cls-2 {
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 500;
+  width: fit-content;
 }
 
 </style>

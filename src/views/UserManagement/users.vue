@@ -13,7 +13,6 @@ import { chevronBackOutline } from "ionicons/icons";
 import { IonContent, IonPage, IonRow, IonCol, IonIcon } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
 import dataTable from "@/components/dataTable.vue";
-import editUserModal from "./editUserModal.vue";
 import { UserService } from "@/services/user_service";
 import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMenu.vue";
 import router from "@/router";
@@ -30,7 +29,6 @@ export default defineComponent({
         IonIcon,
         Toolbar,
         dataTable,
-        editUserModal,
         NavigationMenu,
     },
     setup() {

@@ -52,6 +52,7 @@
         :is_open="isPopooverOpen"
         :user_id="user_id"
         @close-popoover="isPopooverOpen = false"
+        @updated="reload"
     />
 </template>
 
@@ -88,6 +89,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     (e: "closePopoover", ObjectsArray: any): void
     (e: "updated", ObjectsArray: any): void
+    (e: "reload", ObjectsArray: any): void
 }>()
 
 function saveAction() {
@@ -98,9 +100,13 @@ function closeModal() {
     modalController.dismiss()
 }
 
+function reload() {
+  emit("reload", '')
+}
+
 function closeModalAndOpenEditUser(data: any) {
     user_id.value = data
-    isPopooverOpen.value = true
+    // isPopooverOpen.value = true
     emit("updated", data)
     closeModal()
 }

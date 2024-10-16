@@ -61,6 +61,7 @@
                 >
                 <sselectionList
                     :labels="isSSelection_properties[0].labels"
+                    :selected-opt="isSSelection_properties[0].selectedOption.value"
                     @selection-event="isSSelection_properties[0].dataHandler"
                 />
 
@@ -316,7 +317,7 @@ export default defineComponent({
 import { IonContent, IonHeader, IonItem, IonCol, IonLabel, IonToolbar, IonMenu, IonAccordionGroup, IonAccordion, AccordionGroupCustomEvent } from "@ionic/vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import sselectionList from "@/components/SselectionList.vue"
-import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti"
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid, getGenderCode } from "@/utils/GeneralUti"
 import _ from "lodash"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import ListPicker from "../../components/ListPicker.vue"
@@ -493,13 +494,16 @@ async function trigerSaveFn() {
         try {
             const { user } = await UserService.createUser(payload)
             if (user) {
-                console.log(user)
                 await updateuserPersoninf(user.person.person_id)
                 saveEvent(user.user_id)
             }
         } catch (error) {
             //console.error(error)
+            console.error("hhhhhhhhhhhhhhhhhhhhhhhh")
+            saveEvent('')
             toastDanger("User already exists", 8000)
+
+
         }
     }
 }
@@ -821,6 +825,7 @@ function listUpdated2(data: any) {
 const isSSelection_properties = [
     {
         labels: ['Male','Female',],
+        selectedOption: ref(null),
         dataHandler: sselectionListUpdated,
         dataValue: ref(),
         show_error: ref(false),
@@ -916,17 +921,7 @@ function findVillages(district_id: any) {
     fetchVillages(district_id, '')
 }
 
-function getGenderCode(gender: string) {
-  const lowercaseGender = gender.toLowerCase().trim();
-  
-  if (lowercaseGender === 'male') {
-    return 'M';
-  } else if (lowercaseGender === 'female') {
-    return 'F';
-  } else {
-    return 'Invalid gender';
-  }
-}
+
 
 </script>
 <style scoped>

@@ -15,6 +15,7 @@ const placeholder = ref('MF')
 
 const props = defineProps<{
     labels: any,
+    selectedOpt: any,
 }>()
 
 const emit = defineEmits<{
@@ -32,12 +33,21 @@ const options = ref({
 
 onMounted(async () => {
     populateOptions()
+    selectedOption.value = props.selectedOpt
 })
 
 watch(
     () => props.labels,
     async (newValue) => {
         populateOptions()
+    }
+)
+
+watch(
+    () => props.selectedOpt,
+    async (newValue) => {
+        console.log(newValue)
+        selectedOption.value = newValue
     }
 )
 

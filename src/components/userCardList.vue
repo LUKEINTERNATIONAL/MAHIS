@@ -87,7 +87,8 @@
   <editUserModal 
     :is_open="isPopooverOpen" 
     :user_id="user_id" 
-    @close-popoover="modalClosed" 
+    @close-popoover="modalClosed"
+    @save="modalClosed" 
   />
 </template>
 
@@ -159,7 +160,7 @@ export default defineComponent({
       required: true,
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const isPopooverOpen = ref(false);
     const pagination = reactive({
       page: 1,
@@ -193,6 +194,11 @@ export default defineComponent({
       pagination.itemsPerPage = itemsPerPage;
     };
 
+
+    function reload() {
+      emit("reload", '')
+    }
+
     watch(() => props.users, (newUsers) => {
       isLoading.value = false;
       if (newUsers.length === 0) {
@@ -216,6 +222,7 @@ export default defineComponent({
     };
 
     const modalClosed = () => {
+      reload()
       isPopooverOpen.value = false;
     };
 
