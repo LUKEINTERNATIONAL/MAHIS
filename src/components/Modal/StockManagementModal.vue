@@ -305,16 +305,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        modifyFieldValue(this.stockDiscard, "reason", "multiSelectData", [
-            {
-                id: 1,
-                name: "Positive Adjustment",
-            },
-            {
-                id: 2,
-                name: "Negative Adjustment",
-            },
-        ]);
         await this.buildTableData();
     },
     methods: {
