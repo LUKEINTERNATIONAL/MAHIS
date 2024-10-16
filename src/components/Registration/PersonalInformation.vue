@@ -148,9 +148,9 @@ export default defineComponent({
             } else if (event.name == "phoneNumber") {
                 const phone = `+${this.selectedCountry.dialCode}${event.value}`;
                 const message = await Validation.validateMobilePhone(phone, this.selectedCountry);
-                this.personInformation[4].data.rowData[0].colData[0].alertsErrorMassage = null;
+                modifyFieldValue(this.personInformation, "phoneNumber", "alertsErrorMassage", "");
                 if (!message.includes("+")) {
-                    this.personInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
+                    modifyFieldValue(this.personInformation, "phoneNumber", "alertsErrorMassage", message);
                 } else {
                     modifyFieldValue(this.personInformation, "phoneNumber", "value", phone);
                 }

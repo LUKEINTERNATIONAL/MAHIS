@@ -108,7 +108,7 @@ export default defineComponent({
                         ApiClient.healthCheck();
                     }
                 }, 2500);
-                toastWarning("Unable to reach api");
+                toastWarning("Offline mode");
             }
             nprogress.done();
         });
