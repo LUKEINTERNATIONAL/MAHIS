@@ -12,7 +12,6 @@
                 :stepperTitle="userRoleSettings.stepperTitle"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
                 :openStepper="openStepper"
                 :backUrl="userRoleSettings.url"
@@ -20,7 +19,7 @@
                 :getSaveFunction="getSaveFunction"
             />
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" v-if="userRole != 'Lab'" />
+<!--        <BasicFooter @finishBtn="saveData()" v-if="userRole != 'Lab'" />-->
     </ion-page>
 </template>
 
@@ -51,7 +50,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
+import {createModal, toastDanger} from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "../stores/OpdVitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -100,6 +99,7 @@ import {
 } from "@/services/data_helpers";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date"
+import {getUserLocation} from "@/services/userService";
 
 export default defineComponent({
     name: "Home",
@@ -220,13 +220,25 @@ export default defineComponent({
         } else {
           return async () => {
             await this.saveOutComeStatus();
-            // this.$router.push("home");
-            // toastSuccess("Patient has finished consultation!");
+            const location = await getUserLocation();
+            const locationId = location ? location.location_id : null;
+            if (!locationId) {
+              toastDanger("Location ID could not be found. Please check your settings.");
+              return;
+            }
+            if(this.userRole!="Lab") {
+              await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "DISPENSATION", locationId);
+              this.$router.push("home");
+              toastSuccess("Patient has finished consultation!");
+            } else {
+              await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
+              this.$router.push("home");
+              toastSuccess("Lab results submitted!");
+            }
 
           };
         }
       },
-
 
       async getData() {
             this.wizardData = [];
@@ -368,10 +380,6 @@ export default defineComponent({
             await this.savePhysicalExam();
             resetOPDPatientData();
 
-
-            if (this.userRole == "Lab") {
-              this.$router.push("home");
-            }
           }
           else {
             toastWarning("Patient complaints are required");
@@ -393,7 +401,6 @@ export default defineComponent({
             });
           }
           if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
-            await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"DISPENSATION");
             await this.saveDiagnosis();
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();

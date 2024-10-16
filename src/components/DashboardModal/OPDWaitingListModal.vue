@@ -72,8 +72,7 @@
                     <ion-button
                       size="small"
                       class="btn-edit"
-                      @click="handleAbscond(patient.visit_id)"
-                      >Abscond</ion-button
+                      @click="handleAbscond(patient)"                      >Abscond</ion-button
                     >
                   </ion-col>
                 </ion-row>
@@ -180,6 +179,7 @@ import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import {getUserLocation} from "@/services/userService";
 
 export default defineComponent({
   mixins: [SetDemographics],
@@ -288,17 +288,15 @@ export default defineComponent({
       this.setDemographics(patient);
       this.$router.push(route);
     },
-    async handleAbscond(visitId: any) {
+    async handleAbscond(patient: any) {
       try {
-        await PatientOpdList.checkOutPatient(
-          visitId,
-          dates.todayDateFormatted()
-        );
-
-        await usePatientList().refresh();
-      } catch (e) {}
+        await PatientOpdList.checkOutPatient(patient.visit_id, dates.todayDateFormatted());
+        // Immediately remove the patient from the list
+        this.patients = this.patients.filter((p:any) => p.patient_id !== patient.patient_id);
+      } catch (e) {
+        console.error("Error absconding patient:", e);
+      }
     },
-
     setList() {
       const listMapping: Record<string, any[]> = {
         VITALS: this.patientsWaitingForVitals,

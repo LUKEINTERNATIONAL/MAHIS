@@ -1,17 +1,26 @@
 <template>
-  <!-- Spinner -->
+  <!-- Optional loading spinner -->
 <!--  <div v-if="isLoading" class="spinner-overlay">-->
 <!--    <ion-spinner name="bubbles"></ion-spinner>-->
 <!--    <div class="loading-text">Please wait...</div>-->
 <!--  </div>-->
+
   <ion-header>
     <div class="header position_content">
-      <div style="display: flex; align-items: center" @click="dismiss()">
-        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeftWhite"></ion-icon>
+      <div style="display: flex; align-items: center" @click="dismiss">
+        <ion-icon
+            slot="separator"
+            size="large"
+            :icon="iconsContent.arrowLeftWhite"
+        ></ion-icon>
       </div>
       <div style="font-size: 1.2em; font-weight: 700">{{ title }}</div>
       <div style="display: flex; align-items: center" @click="openPopover($event)">
-        <ion-icon slot="separator" size="large" :icon="iconsContent.fillerWhite"></ion-icon>
+        <ion-icon
+            slot="separator"
+            size="large"
+            :icon="iconsContent.fillerWhite"
+        ></ion-icon>
       </div>
     </div>
   </ion-header>
@@ -19,33 +28,49 @@
     <div>
       <ion-card class="section" style="margin-bottom: 25px; margin-inline: 0px">
         <ion-card-header>
+          <ion-card-title class="sectionTitle">Patient List</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <div class="dueCardContent">
-            <DataTable :options="options" :data="patientList" class="display nowrap" width="100%">
-              <thead>
-              <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td>Wisdom</td>
-                <td>Changala</td>
-                <td>Vitals</td>
-                <td>
-                  <button @click="">Go to profile</button>
-                </td>
-              </tr>
-              </tbody>
-            </DataTable>
+            <div class="table-container">
+              <ion-grid>
+                <ion-row class="table-header">
+                  <ion-col>Patient Name</ion-col>
+                  <ion-col>Waiting Time</ion-col>
+                  <ion-col>Actions</ion-col>
+                </ion-row>
+
+                <!-- Table Rows -->
+                <ion-row
+                    v-for="(patient, index) in patients"
+                    :key="index"
+                    class="table-row"
+                >
+                  <ion-col>{{ patient.fullName }}</ion-col>
+                  <ion-col>{{ waitingTime(patient.arrivalTime) }}</ion-col>
+                  <ion-col>
+                    <ion-button
+                        size="small"
+                        class="btn-edit"
+                        @click="navigateTo(patient.patient_id, '/patientProfile')"
+                    >Profile</ion-button>
+                    <ion-button
+                        size="small"
+                        class="btn-edit"
+                        @click="handleAbscond(patient.visit_id)"
+                    >Abscond</ion-button>
+                  </ion-col>
+                </ion-row>
+                <ion-row v-if="patients.length === 0 && !isLoading">
+                  <ion-col>No patients waiting for lab results.</ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
           </div>
         </ion-card-content>
       </ion-card>
     </div>
+
     <ion-popover
         style="--offset-x: -10px"
         :is-open="popoverOpen"
@@ -56,12 +81,17 @@
     >
       <div>
         <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
-          <ion-item :button="true" :detail="false" style="cursor: pointer"></ion-item>
+          <ion-item
+              :button="true"
+              :detail="false"
+              style="cursor: pointer"
+          ></ion-item>
         </ion-list>
       </div>
     </ion-popover>
   </ion-content>
 </template>
+
 
 <script lang="ts">
 import {
@@ -76,15 +106,25 @@ import {
   IonCardTitle,
   IonCardContent,
   IonPopover,
-  IonSpinner
+  IonSpinner, IonCol, IonRow
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import DataTable from "datatables.net-vue3";
 import { icons } from "@/utils/svg";
 import {getPatientsList} from "@/apps/OPD/services/opd_dashboard";
+import HisDate from "@/utils/Date";
+import {Service} from "@/services/service";
+import {PatientOpdList} from "@/services/patient_opd_list";
+import {PatientService} from "@/services/patient_service";
+import dates from "@/utils/Date";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+import {getUserLocation} from "@/services/userService";
 
 export default defineComponent({
+  mixins: [SetDemographics],
   components: {
+    IonRow, IonCol,
     IonContent,
     IonHeader,
     IonItem,
@@ -113,6 +153,19 @@ export default defineComponent({
         pageLength: 25,
         lengthChange: false,
       } as any,
+      sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
+      showDateBtns: true as boolean,
+      tableColumns: [
+        { title: "Patient Name", data: "fullName" },
+        {
+          title: "Action",
+          data: null,
+          render: (data: any, type: any, row: any) => {
+            return `<ion-button class="btn-edit" @click="navigateTo(${row})">Open Profile</ion-button>`;
+          },
+        },
+      ],
+      patients: [] as any,
     };
   },
   props: {
@@ -123,6 +176,7 @@ export default defineComponent({
   async mounted() {
     this.isLoading = true;
     this.patientList = await getPatientsList()
+    const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
     this.isLoading = false;
   },
   methods: {
@@ -133,10 +187,34 @@ export default defineComponent({
     dismiss() {
       modalController.dismiss();
     },
+    async navigateTo(id: any, route:string) {
+      const patient = await PatientService.findByID(id);
+      this.setDemographics(patient);
+      this.$router.push(route);
+    },
+    async handleAbscond(visitId: any) {
+      try {
+        await PatientOpdList.checkOutPatient(
+            visitId,
+            dates.todayDateFormatted()
+        );
+        const location = await getUserLocation();
+        const locationId = location ? location.id : null;
+        if (locationId) {
+          await usePatientList().refresh(locationId);
+        } else {
+          console.warn("Location ID could not be found. Please check your settings.");
+        }
+        await usePatientList().refresh(locationId);
+      } catch (e) {}
+    },
     goToPatientProfile(patient: any) {
       // Redirect to patient profile or handle accordingly
       console.log('Navigating to profile of:', patient.firstName, patient.lastName);
-    }
+    },
+    waitingTime(timeStamp: any) {
+      return dates.calculateTimeDifference(timeStamp);
+    },
   },
 });
 </script>

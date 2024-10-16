@@ -520,7 +520,7 @@ import {
   modifyRadioValue,
   modifyFieldValue,
 } from "@/services/data_helpers";
-import {toastSuccess, toastWarning} from "@/utils/Alerts";
+import {toastDanger, toastSuccess, toastWarning} from "@/utils/Alerts";
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Programs from "@/components/Programs.vue";
@@ -539,6 +539,7 @@ import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import { ProgramService } from "@/services/program_service";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
+import {getUserLocation} from "@/services/userService";
 
 export default defineComponent({
   mixins: [SetPrograms],
@@ -767,21 +768,33 @@ export default defineComponent({
     },
     async handleCheckInYes() {
       try {
+        const location = await getUserLocation();
+        const locationId = location ? location.location_id : null;
+        if (!locationId) {
+          toastDanger("Location ID could not be found. Please check your settings.");
+          return;
+        }
         await PatientOpdList.checkInPatient(
-          this.demographics.patient_id,
-          dates.todayDateFormatted()
+            this.demographics.patient_id,
+            dates.todayDateFormatted(),
+            locationId
         );
+
         await PatientOpdList.addPatientToStage(
-          this.demographics.patient_id,
-          dates.todayDateFormatted(),
-          "VITALS"
+            this.demographics.patient_id,
+            dates.todayDateFormatted(),
+            "VITALS",
+            locationId
         );
         this.toggleCheckInModal();
         this.checkedIn = true;
         toastSuccess("The patient's visit is now active. Patient is on the waiting list for vitals");
 
-      } catch (e) {}
+      } catch (e) {
+        toastDanger("An error occurred while attempting to check in the patient. Please try again.");
+      }
     },
+
     async handleCheckOutYes() {
       try {
         const visit = await PatientOpdList.getCheckInStatus(

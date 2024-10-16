@@ -35,11 +35,11 @@
               <div class="OPDDueCardContent">
                 <div
                   class="OPDDueCard"
-                  @click="openAllModal('All patients today')"
+                  @click="openAllModal('All patients today','View profile','/patientProfile')"
                   :style="dueCardStyle('success')"
                 >
                   <ion-icon :icon="people" class="dueCardIcon"></ion-icon>
-                  <div class="OPDStatsValue">0</div>
+                  <div class="OPDStatsValue">{{ totalPatientsToday }}</div>
                   <div class="OPDStatsText">Total patients today</div>
                 </div>
                 <div
@@ -63,6 +63,18 @@
                   <ion-icon :icon="clipboard" class="dueCardIcon"></ion-icon>
                   <div class="OPDStatsValue">{{ patientsWaitingForConsultation.length }}</div>
                   <div class="OPDStatsText">Waiting for consultation</div>
+                </div>
+                <div
+                    class="OPDDueCard"
+                    @click="
+                    openPatientsListModal('Patients waiting for lab', 'LAB', 'Lab', '/OPDConsultationPlan')
+                  "
+                    :style="dueCardStyle('success')"
+                    v-if="isUserRole('Lab')"
+                >
+                  <ion-icon :icon="clipboard" class="dueCardIcon"></ion-icon>
+                  <div class="OPDStatsValue">{{ patientsWaitingForLab.length }}</div>
+                  <div class="OPDStatsText">Waiting for lab</div>
                 </div>
                 <div
                   class="OPDDueCard"
@@ -313,6 +325,7 @@ import { setOfflineRelationship } from "@/services/set_relationships";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import {getUserLocation} from "@/services/userService";
 
 export default defineComponent({
   name: "Home",
@@ -349,6 +362,7 @@ export default defineComponent({
       appointments: [] as any,
       programBtn: {} as any,
       userRoles: [] as any,
+      totalPatientsToday: 0,
       base_url: "backgroundImg.png",
       isLoading: false,
       totalStats: [
@@ -389,36 +403,48 @@ export default defineComponent({
   computed: {
     ...mapState(useGeneralStore, ["OPDActivities"]),
     ...mapState(useDemographicsStore, ["demographics"]),
-    ...mapState(usePatientList,["patientsWaitingForVitals","patientsWaitingForConsultation","patientsWaitingForDispensation"]),
+    ...mapState(usePatientList, ["patientsWaitingForVitals", "patientsWaitingForConsultation", "patientsWaitingForLab", "patientsWaitingForDispensation"]),
     backgroundStyle() {
       return {
-        background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(
-          this.base_url
-        )})`,
+        background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(this.base_url)})`,
         backgroundSize: "cover",
         backgroundBlendMode: "overlay",
         height: "22.8vh",
       };
     },
   },
+
   watch: {
     $route: {
       async handler(data) {
-        if (data.name == "Home") resetDemographics();
-        await this.setAppointments();  
-        await usePatientList().refresh()
-        // await this.getListValues();
-        // cannot subscribe more than once
-        // const wsService = new WebSocketService();
-        // wsService.setMessageHandler(this.onMessage);
+        if (data.name == "Home") {
+          resetDemographics();
+        }
+
+        await this.setAppointments();
+        const location = await getUserLocation();
+        const locationId = location ? location.id : null;
+        if (locationId) {
+          await usePatientList().refresh(locationId);
+        } else {
+          console.warn("Location ID could not be found. Please check your settings.");
+        }
       },
       deep: true,
     },
   },
+
   async mounted() {
     this.isLoading = true;
-    // await this.getListValues();
-    await usePatientList().refresh()
+    const location = await getUserLocation();
+    const locationId = location ? location.location_id : null;
+
+    if (locationId) {
+      const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
+      this.totalPatientsToday = visitsToday.length;
+      await usePatientList().refresh(locationId);
+    }
+
     await setOfflineLocation();
     await setOfflineRelationship();
     resetDemographics();
@@ -428,12 +454,9 @@ export default defineComponent({
     wsService.setMessageHandler(this.onMessage);
     await useGlobalPropertyStore().loadGlobalProperty();
     this.isLoading = false;
-    try {
-      this.userRoles = await Service.getUserRoles();
-    } catch (error) {
-      console.error("Error fetching user roles:", error);
-    }
+    this.userRoles = await Service.getUserRoles();
   },
+
   methods: {
     dueCardStyle(type: "success" | "warning" | "info" | "danger") {
       const colors = {
@@ -526,7 +549,7 @@ export default defineComponent({
       createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
     },
 
-    openPatientsListModal(name: any, list:'VITALS'|'CONSULTATION'|'DISPENSATION', buttonTitle:string, buttonLink:string) {
+    openPatientsListModal(name: any, list:'VITALS'|'CONSULTATION'|'LAB'|'DISPENSATION', buttonTitle:string, buttonLink:string) {
       const dataToPass = { title: name, list, buttonTitle, buttonLink};
       createModal(
         OPDWaitingListModal,
@@ -535,8 +558,8 @@ export default defineComponent({
         dataToPass
       );
     },
-    openAllModal(name: any) {
-      const dataToPass = { title: name };
+    openAllModal(name: any, buttonLink:string, buttonTitle:string,) {
+      const dataToPass = { title: name,buttonLink, buttonTitle};
       createModal(
         OPDAllPatientsModal,
         { class: "fullScreenModal" },

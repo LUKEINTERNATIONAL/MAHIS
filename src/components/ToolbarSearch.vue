@@ -1,151 +1,152 @@
 <template>
-  <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
-  <CheckInConfirmationModal
-      :closeModalFunc="closeCheckInModal"
-      :onYes="handleCheckInYes"
-      :onNo="handleCheckInNo"
-      :isOpen="checkInModalOpen"
-      :title="`Do you want to create visit or view profile?`"
-  />
+    <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
+    <CheckInConfirmationModal
+        :closeModalFunc="closeCheckInModal"
+        :onYes="handleCheckInYes"
+        :onNo="handleCheckInNo"
+        :isOpen="checkInModalOpen"
+        :title="`Do you want to check in the patient?`"
+    />
 
-  <div style="display: flex; width: 100%; justify-content: center">
-    <ion-input
-        style="color: #000; width: 70%"
-        @ionInput="handleInput"
-        fill="outline"
-        :value="searchValue"
-        placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
-        class="searchField"
-    >
-      <ion-label style="display: flex" slot="start">
-        <ion-icon :icon="search" style="color: #000" aria-hidden="true"></ion-icon>
-      </ion-label>
-      <ion-label style="display: flex" slot="end">
-        <ion-buttons style="cursor: pointer; color: #74ff15" slot="end" class="iconFont">
-          <ion-icon :icon="iconContent.addPerson" @click="nav('registration/manual')" aria-hidden="true"></ion-icon>
-        </ion-buttons>
-      </ion-label>
-      <ion-label style="display: flex" slot="end" v-if="isMobile">
-        <ion-buttons style="cursor: pointer; color: #74ff15" slot="end" class="iconFont">
-          <ion-icon :icon="iconContent.scan" @click="scanCode()" aria-hidden="true"></ion-icon>
-        </ion-buttons>
-      </ion-label>
-    </ion-input>
-  </div>
-  <ion-popover
-      :is-open="popoverOpen"
-      :event="event"
-      @didDismiss="popoverOpen = false"
-      :keyboard-close="false"
-      :show-backdrop="false"
-      :dismiss-on-select="false"
-  >
-    <div style="width: 1300px" class="sticky-table">
-      <ion-row class="search_header">
-        <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
-        <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
-        <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
-        <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
-        <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
-        <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
-        <ion-col style="max-width: 25px"></ion-col>
-      </ion-row>
-      <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openCheckInModal(item)">
-        <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
-            item.person.names[0].given_name + " " + item.person.names[0].family_name
-          }}</ion-col>
-        <ion-col style="max-width: 120px; min-width: 120px">{{ item.person.birthdate }}</ion-col>
-        <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.person.gender }}</ion-col>
-        <ion-col style="max-width: 330px; min-width: 330px"
-        >{{ item?.person?.addresses[0]?.state_province }}, {{ item?.person?.addresses[0]?.township_division }},{{
-            item?.person?.addresses[0]?.city_village
-          }}</ion-col
+    <div style="display: flex; width: 100%; justify-content: center">
+        <ion-input
+            style="color: #000; width: 70%"
+            @ionInput="handleInput"
+            fill="outline"
+            :value="searchValue"
+            placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
+            class="searchField"
         >
-        <ion-col style="max-width: 330px; min-width: 330px"
-        >{{ item?.person?.addresses[0]?.address2 }}, {{ item?.person?.addresses[0]?.county_district }},{{
-            item?.person?.addresses[0]?.neighborhood_cell
-          }}</ion-col
-        >
-        <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
-        <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
-      </ion-row>
-      <ion-row
-          v-show="!apiStatus"
-          class="search_result clickable-row"
-          v-for="(item, index) in offlineFilteredPatients"
-          :key="index"
-          @click="setOfflineDemo(item)"
-      >
-        <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
-            item.personInformation.given_name + " " + item.personInformation.family_name
-          }}</ion-col>
-        <ion-col style="max-width: 120px; min-width: 120px">{{ item.personInformation.birthdate }}</ion-col>
-        <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.personInformation.gender }}</ion-col>
-        <ion-col style="max-width: 330px; min-width: 330px"
-        >{{ item?.personInformation?.current_district }}, {{ item?.personInformation?.current_traditional_authority }},{{
-            item?.personInformation?.current_village
-          }}</ion-col
-        >
-        <ion-col style="max-width: 330px; min-width: 330px"
-        >{{ item?.personInformation?.home_district }}, {{ item?.personInformation?.home_traditional_authority }},{{
-            item?.personInformation?.home_village
-          }}</ion-col
-        >
-        <ion-col style="max-width: 150px; min-width: 150px">{{ item?.personInformation?.cell_phone_number }}</ion-col>
-        <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
-      </ion-row>
-      <ion-row class="ion-justify-content-start ion-align-items-center">
-        <Pagination
-            :disablePrevious="page - 1 == 0"
-            :disableNext="patients?.length < paginationSize"
-            :page="page"
-            :onClickNext="nextPage"
-            :onClickPrevious="previousPage"
-        />
-      </ion-row>
-
-      <ion-row class="sticky-column">
-        <ion-col size="1.5" class="sticky-column">
-          <DynButton
-              :icon="add"
-              :name="programID() != 33 ? 'Add Patient' : 'Add Client'"
-              :fill="'clear'"
-              @click="openCheckPaitentNationalIDModal"
-          />
-        </ion-col>
-        <ion-col size="2" class="sticky-column">
-          <div>
-            <img id="hand" src="../../public/images/hand.svg" />
-            <img id="handinfo" src="../../public/images/swipeinfo.png" />
-          </div>
-        </ion-col>
-      </ion-row>
+            <ion-label style="display: flex" slot="start">
+                <ion-icon :icon="search" style="color: #000" aria-hidden="true"></ion-icon>
+            </ion-label>
+            <ion-label style="display: flex" slot="end">
+                <ion-buttons style="cursor: pointer; color: #74ff15" slot="end" class="iconFont">
+                    <ion-icon :icon="iconContent.addPerson" @click="nav('registration/manual')" aria-hidden="true"></ion-icon>
+                </ion-buttons>
+            </ion-label>
+            <ion-label style="display: flex" slot="end" v-if="isMobile">
+                <ion-buttons style="cursor: pointer; color: #74ff15" slot="end" class="iconFont">
+                    <ion-icon :icon="iconContent.scan" @click="scanCode()" aria-hidden="true"></ion-icon>
+                </ion-buttons>
+            </ion-label>
+        </ion-input>
     </div>
-  </ion-popover>
+
+    <ion-popover
+        :is-open="popoverOpen"
+        :event="event"
+        @didDismiss="popoverOpen = false"
+        :keyboard-close="false"
+        :show-backdrop="false"
+        :dismiss-on-select="false"
+    >
+        <div style="width: 1300px" class="sticky-table">
+            <ion-row class="search_header">
+                <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
+                <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
+                <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
+                <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
+                <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
+                <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
+                <ion-col style="max-width: 25px"></ion-col>
+            </ion-row>
+            <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openCheckInModal(item)">
+                <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
+                    item.person.names[0].given_name + " " + item.person.names[0].family_name
+                }}</ion-col>
+                <ion-col style="max-width: 120px; min-width: 120px">{{ item.person.birthdate }}</ion-col>
+                <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.person.gender }}</ion-col>
+                <ion-col style="max-width: 330px; min-width: 330px"
+                    >{{ item?.person?.addresses[0]?.state_province }}, {{ item?.person?.addresses[0]?.township_division }},{{
+                        item?.person?.addresses[0]?.city_village
+                    }}</ion-col
+                >
+                <ion-col style="max-width: 330px; min-width: 330px"
+                    >{{ item?.person?.addresses[0]?.address2 }}, {{ item?.person?.addresses[0]?.county_district }},{{
+                        item?.person?.addresses[0]?.neighborhood_cell
+                    }}</ion-col
+                >
+                <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
+                <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
+            </ion-row>
+            <ion-row
+                v-show="!apiStatus"
+                class="search_result clickable-row"
+                v-for="(item, index) in offlineFilteredPatients"
+                :key="index"
+                @click="setOfflineDemo(item)"
+            >
+                <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
+                    item.personInformation.given_name + " " + item.personInformation.family_name
+                }}</ion-col>
+                <ion-col style="max-width: 120px; min-width: 120px">{{ item.personInformation.birthdate }}</ion-col>
+                <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.personInformation.gender }}</ion-col>
+                <ion-col style="max-width: 330px; min-width: 330px"
+                    >{{ item?.personInformation?.current_district }}, {{ item?.personInformation?.current_traditional_authority }},{{
+                        item?.personInformation?.current_village
+                    }}</ion-col
+                >
+                <ion-col style="max-width: 330px; min-width: 330px"
+                    >{{ item?.personInformation?.home_district }}, {{ item?.personInformation?.home_traditional_authority }},{{
+                        item?.personInformation?.home_village
+                    }}</ion-col
+                >
+                <ion-col style="max-width: 150px; min-width: 150px">{{ item?.personInformation?.cell_phone_number }}</ion-col>
+                <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-start ion-align-items-center">
+                <Pagination
+                    :disablePrevious="page - 1 == 0"
+                    :disableNext="patients?.length < paginationSize"
+                    :page="page"
+                    :onClickNext="nextPage"
+                    :onClickPrevious="previousPage"
+                />
+            </ion-row>
+
+            <ion-row class="sticky-column">
+                <ion-col size="1.5" class="sticky-column">
+                    <DynButton
+                        :icon="add"
+                        :name="programID() != 33 ? 'Add Patient' : 'Add Client'"
+                        :fill="'clear'"
+                        @click="openCheckPaitentNationalIDModal"
+                    />
+                </ion-col>
+                <ion-col size="2" class="sticky-column">
+                    <div>
+                        <img id="hand" src="../../public/images/hand.svg" />
+                        <img id="handinfo" src="../../public/images/swipeinfo.png" />
+                    </div>
+                </ion-col>
+            </ion-row>
+        </div>
+    </ion-popover>
 </template>
 
 <script lang="ts">
 import {
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonIcon,
-  IonToolbar,
-  IonSearchbar,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonPopover,
-  popoverController,
-  IonRow,
-  IonButton,
-  IonCol,
-  IonInput,
-  isPlatform,
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonIcon,
+    IonToolbar,
+    IonSearchbar,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonPopover,
+    popoverController,
+    IonRow,
+    IonButton,
+    IonCol,
+    IonInput,
+    isPlatform,
 } from "@ionic/vue";
 import { defineComponent, onMounted } from "vue";
 import { PatientService } from "@/services/patient_service";
@@ -185,6 +186,7 @@ import { useProgramStore } from "@/stores/ProgramStore";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date"
 import router from "@/router";
+import {getUserLocation} from "@/services/userService";
 
 export default defineComponent({
     name: "ToolbarSearch",
@@ -692,36 +694,48 @@ export default defineComponent({
       this.openNewPage("patientProfile", this.selectedPatient);
       this.toggleCheckInModal();
     },
-    async handleCheckInYes() {
-      try {
-        const stages: Array<"VITALS" | "CONSULTATION" | "DISPENSATION"> = ["VITALS", "CONSULTATION", "DISPENSATION"];
-        let isAlreadyCheckedIn = false;
-        for (const stage of stages) {
-          const patientList = await PatientOpdList.getPatientList(stage) as Array<{ patient_id: string }>;
+      async handleCheckInYes() {
+        try {
+          const location = await getUserLocation();
+          const locationId = location ? location.location_id : null;
 
-          if (patientList.some((patient) => patient.patient_id === this.selectedPatient.patient_id)) {
-            isAlreadyCheckedIn = true;
-            break;
+          if (!locationId) {
+            toastDanger("Location ID could not be found.");
+            return;
           }
+
+          const stages: Array<"VITALS" | "CONSULTATION" | "DISPENSATION"> = ["VITALS", "CONSULTATION", "DISPENSATION"];
+          let isAlreadyCheckedIn = false;
+
+          for (const stage of stages) {
+            const patientList = await PatientOpdList.getPatientList(stage, locationId) as Array<{ patient_id: string }>; // pass locationId here
+
+            if (patientList.some((patient) => patient.patient_id === this.selectedPatient.patient_id)) {
+              isAlreadyCheckedIn = true;
+              break;
+            }
+          }
+
+          if (isAlreadyCheckedIn) {
+            toastDanger("Failed, the patient's visit is already active");
+            return;
+          }
+
+          await PatientOpdList.checkInPatient(this.selectedPatient.patient_id, dates.todayDateFormatted(), locationId);
+          await PatientOpdList.addPatientToStage(this.selectedPatient.patient_id, dates.todayDateFormatted(), "VITALS", locationId);
+          await this.openNewPage("home", this.selectedPatient);
+          this.closeCheckInModal();
+          toastSuccess("Patient's visit is now active, check on the waiting list of vitals");
+        } catch (e) {
+          console.error("Error during patient check-in process:", e);
+          toastDanger("An error occurred while attempting to check in the patient. Please try again.");
         }
-
-        if (isAlreadyCheckedIn) {
-          toastDanger("Failed, the patient's visit is already active");
-          return;
-        }
-        await PatientOpdList.checkInPatient(this.selectedPatient.patient_id, dates.todayDateFormatted());
-        await PatientOpdList.addPatientToStage(this.selectedPatient.patient_id, dates.todayDateFormatted(), "VITALS");
-        await this.openNewPage("home", this.selectedPatient);
-        this.closeCheckInModal();
-        toastSuccess("Patient's visit is now active, check on the waiting list of vitals");
-      } catch (e) {
-        console.error("Error during patient check-in process:", e);
-        toastDanger("An error occurred while attempting to check in the patient. Please try again.");
-      }
-    },
+      },
 
 
-    toggleCheckInModal() {
+
+
+      toggleCheckInModal() {
       this.checkInModalOpen = !this.checkInModalOpen;
     },
     async openCheckInModal(item: any) {
@@ -886,39 +900,39 @@ ion-popover {
 }
 
 @keyframes fall_2 {
-  0% {
-    top: 32.65%;
-    opacity: 0.666;
-  }
-  13% {
-    top: 32.65%;
-  }
-  53% {
-    opacity: 0;
-  }
-  60% {
-    top: 47%;
-  }
-  100% {
-    top: 47%;
-    opacity: 0;
-  }
+    0% {
+        top: 32.65%;
+        opacity: 0.666;
+    }
+    13% {
+        top: 32.65%;
+    }
+    53% {
+        opacity: 0;
+    }
+    60% {
+        top: 47%;
+    }
+    100% {
+        top: 47%;
+        opacity: 0;
+    }
 }
 
 @media (max-width: 1024px) {
-  .medium {
-    display: flex;
-    justify-content: start;
-  }
+    .medium {
+        display: flex;
+        justify-content: start;
+    }
 }
 </style>
 <style>
 ion-popover {
-  --background: #fff;
-  --backdrop-opacity: 0.6;
-  --box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.6);
-  --color: white;
-  --width: 300px;
-  --padding: 10px;
+    --background: #fff;
+    --backdrop-opacity: 0.6;
+    --box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.6);
+    --color: white;
+    --width: 300px;
+    --padding: 10px;
 }
 </style>
