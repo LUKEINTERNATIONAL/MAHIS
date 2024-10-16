@@ -78,23 +78,16 @@
             >Phone<span style="color: #b42318">*</span></ion-label
         >
             <BasicInputField
-                :placeholder="'phone number'"
-                :icon="phonePortraitOutline"
-                :inputValue="''"
-                @update:inputValue=""
-            />
-            <!-- <BasicInputField
                 :placeholder="input_properties[3].placeHolder"
                 :icon="phonePortraitOutline"
-                :inputValue="user_name"
+                :inputValue="phone_number"
                 @update:inputValue="input_properties[3].dataHandler"
-            /> -->
-
-            <!-- <div>
+            />
+            <div>
                 <ion-label v-if="input_properties[3].show_error.value" class="error-label">
                     {{ input_properties[3].error_message }}
                 </ion-label>
-            </div> -->
+            </div>
         </ion-col>
         <ion-col>
             <ion-col>
@@ -116,7 +109,7 @@
                 />
 
                 <div>
-                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">
+                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label" style="margin-top: -10px;">
                         {{ list_picker_prperties[0].error_message }}
                     </ion-label>
                 </div>
@@ -344,10 +337,12 @@ import {
 } from "ionicons/icons"
 import { UserService } from "@/services/user_service"
 import { ProgramService } from "@/services/program_service"
+import { PersonService } from "@/services/person_service";
 
 const user_name = ref()
 const first_name = ref()
 const last_name = ref()
+const phone_number = ref()
 const user_roles = ref([] as any)
 const user_programs = ref([] as any)
 const selectedRoleNames: any[] = []
@@ -404,6 +399,17 @@ watch(
         }
     }
 )
+
+async function updateuserPersoninf(personId: number) {
+    const data1 = getFieldsValuesObj(input_properties)
+    const updatedData = {
+        cell_phone_number: data1.phone_number,
+        gender: getGenderCode(isSSelection_properties[0].dataValue.value),
+    } as any
+    const personService = new PersonService(updatedData);
+    const data = await personService.update(personId);
+    return data
+}
 
 function selectedLocation(data: any) {
     locationId.value = data.location_id
@@ -487,8 +493,8 @@ async function trigerSaveFn() {
         try {
             const { user } = await UserService.createUser(payload)
             if (user) {
-                // console.log(user.user_id)
-                // console.log(user)
+                console.log(user)
+                await updateuserPersoninf(user.person.person_id)
                 saveEvent(user.user_id)
             }
         } catch (error) {
@@ -720,14 +726,14 @@ const input_properties = [
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
     },
-    // {
-    //     placeHolder: 'phone number',
-    //     property_name: 'phone_number',
-    //     dataHandler: inputUpDated_fn4,
-    //     dataValue: ref(),
-    //     show_error: ref(false),
-    //     error_message: 'Input required, valid input',
-    // },
+    {
+        placeHolder: 'phone number',
+        property_name: 'phone_number',
+        dataHandler: inputUpDated_fn4,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, valid input',
+    },
 ]
 
 const password_input_properties = [
@@ -844,8 +850,8 @@ function inputUpDated_fn3(event: any) {
     input_properties[2].dataValue.value = input
 }
 function inputUpDated_fn4(event: any) {
-    // const input = event.target.value
-    // input_properties[2].dataValue.value = input
+    const input = event.target.value
+    input_properties[3].dataValue.value = input
 }
 function passwordInputUpDated_fn1(event: any) {
     const input = event.target.value
