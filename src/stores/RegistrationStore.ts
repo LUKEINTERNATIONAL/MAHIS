@@ -83,25 +83,27 @@ const initialPersonalInformation = [
         },
     },
     {
-        data: {
-            rowData: [
+        radioBtnContent: {
+            header: {
+                title: "Gender*",
+                selectedValue: "",
+                name: "gender",
+                alertsErrorMassage: "",
+            },
+            data: [
                 {
-                    colData: [
-                        {
-                            inputHeader: "Phone number",
-                            icon: icons.phone,
-                            value: "",
-                            name: "phoneNumber",
-                            isPhoneInput: true,
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
+                    name: "Male",
+                    value: "M",
+                    colSize: "4",
+                },
+                {
+                    name: "Female",
+                    value: "F",
                 },
             ],
         },
     },
+
     {
         data: {
             rowData: [
@@ -195,22 +197,21 @@ const initialPersonalInformation = [
         },
     },
     {
-        radioBtnContent: {
-            header: {
-                title: "Gender*",
-                selectedValue: "",
-                name: "gender",
-                alertsErrorMassage: "",
-            },
-            data: [
+        data: {
+            rowData: [
                 {
-                    name: "Male",
-                    value: "M",
-                    colSize: "4",
-                },
-                {
-                    name: "Female",
-                    value: "F",
+                    colData: [
+                        {
+                            inputHeader: "Phone number",
+                            icon: icons.phone,
+                            value: "",
+                            name: "phoneNumber",
+                            isPhoneInput: true,
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
                 },
             ],
         },
