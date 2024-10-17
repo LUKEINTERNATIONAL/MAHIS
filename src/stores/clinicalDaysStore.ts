@@ -3,6 +3,9 @@ import { icons } from '@/utils/svg';
 import { combineArrays, isSameDate } from "@/utils/GeneralUti"
 import { ProgramService } from "@/services/program_service"
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useUserStore } from "@/stores/userStore";
+import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import HisDate from "@/utils/Date";
 
 export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
     state: () => ({
@@ -191,6 +194,51 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
             } else {
                 return []
             }
+        },
+        async setWeekDaysPropertiesObj() {
+            const user_store = useUserStore()
+            const global_property_store = useGlobalPropertyStore()
+            const facility_id = user_store.getfacilityLocation().location_id;
+            const sv_obj = {
+                facility_id: facility_id,
+                weekDays: {
+                    'areMondaysDisabled': this.areMondaysDisabled,
+                    'areTuesdaysDisabled': this.areTuesdaysDisabled,
+                    'areWednesdaysDisabled': this.areWednesdaysDisabled,
+                    'areThursdaysDisabled': this.areThursdaysDisabled,
+                    'areFridaysDisabled': this.areFridaysDisabled,
+                    'areSaturdaysDisabled': this.areSaturdaysDisabled,
+                    'areSundaysDisabled': this.areSundaysDisabled,
+                }
+
+            }
+            const sv_obj_string = JSON.stringify(sv_obj);
+            await global_property_store.setGlobalProperty("week_days_properties_"+facility_id, `${sv_obj_string}`);
+        },
+        async setMaximumNumberOfDaysForEachDayObj() {
+            const user_store = useUserStore()
+            const global_property_store = useGlobalPropertyStore()
+            const facility_id = user_store.getfacilityLocation().location_id;
+            const sv_obj = {
+                facility_id: facility_id,
+                maximumNumberOfDaysForEachDay: this.maximumNumberOfDaysForEachDay
+            }
+            const sv_obj_string = JSON.stringify(sv_obj);
+            await global_property_store.setGlobalProperty("maximum_number_Of_c_for_each_day_"+facility_id, `${sv_obj_string}`);
+        },
+        async setHolidayDatesObj() {
+            const user_store = useUserStore()
+            const facility_id = user_store.getfacilityLocation().location_id;
+            const global_property_store = useGlobalPropertyStore()
+            const dates = this.holidayDates.map((holiday: any) => {
+                return HisDate.toStandardHisFormat(holiday);
+            });            
+            const sv_obj = {
+                facility_id: facility_id,
+                holidayDates: dates,
+            }
+            const sv_obj_string = JSON.stringify(sv_obj);
+            await global_property_store.setGlobalProperty("holiday_date_"+facility_id, `${sv_obj_string}`);
         }
 
     },

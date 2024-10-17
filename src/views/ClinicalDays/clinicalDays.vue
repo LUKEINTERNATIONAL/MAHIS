@@ -154,6 +154,7 @@
   import HisDate from "@/utils/Date";
   import { combineArrays } from "@/utils/GeneralUti";
   import { mapState } from 'pinia';
+  import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
   
   const toggle_local = ref(false);
   const disable_weekends = ref(true);
@@ -268,8 +269,8 @@
     isFridayChecked.value = store.getAreFridaysDisabled();
     isSaturdayChecked.value = store.getAreSaturdaysDisabled();
     isSundayChecked.value = store.getAreSundaysDisabled();
-    
-    console.log(store.getHolidaydates())
+
+    // console.log(store.getWeekDaysPropertiesObj())
   
     if (isSaturdayChecked.value == true || isSundayChecked.value == true) {
       toggle_local.value = true;
@@ -299,6 +300,10 @@
 
   function saveAction() {
     saveAndReload
+    const storeClinicalDaysStore = useClinicalDaysStore();
+    storeClinicalDaysStore.setMaximumNumberOfDaysForEachDayObj()
+    storeClinicalDaysStore.setHolidayDatesObj()
+    storeClinicalDaysStore.setWeekDaysPropertiesObj()
   }
   </script>
   
