@@ -229,7 +229,6 @@ import { setOfflineRelationship } from "@/services/set_relationships";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import workerData from "@/activate_worker";
 import { useStatusStore } from "@/stores/StatusStore";
-
 export default defineComponent({
     name: "Home",
     mixins: [SetUser, SetDemographics, SetPrograms],
@@ -307,7 +306,7 @@ export default defineComponent({
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useStatusStore, ["offlineVillageStatus", "offlineDistrictStatus", "offlineTAsStatus"]),
+        ...mapState(useStatusStore, ["offlineVillageStatus", "offlineDistrictStatus", "offlineTAsStatus", "offlineRelationshipStatus"]),
 
         backgroundStyle() {
             return {
@@ -332,15 +331,36 @@ export default defineComponent({
         workerApi: {
             handler() {
                 const status = useStatusStore();
-                if (this.workerApi?.data?.payload?.total_village) status.setOfflineVillageStatus(this.workerApi?.data?.payload);
-                if (this.workerApi?.data?.payload?.total_districts) status.setOfflineDistrictStatus(this.workerApi?.data?.payload);
-                if (this.workerApi?.data?.payload?.total_TAs) status.setOfflineTAsStatusStatus(this.workerApi?.data?.payload);
+                if (this.workerApi?.data?.payload) {
+                    if (this.workerApi?.data?.payload?.total_relationships) status.setOfflineRelationshipStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_village) status.setOfflineVillageStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_districts) status.setOfflineDistrictStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_TAs) status.setOfflineTAsStatus(this.workerApi?.data?.payload);
+
+                    if (
+                        this.offlineVillageStatus?.total_village &&
+                        this.offlineRelationshipStatus?.total_relationships &&
+                        this.offlineDistrictStatus?.total_districts &&
+                        this.offlineTAsStatus?.total_TAs &&
+                        this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
+                        this.offlineRelationshipStatus?.total_relationships == this.offlineRelationshipStatus?.total &&
+                        this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
+                        this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
+                    ) {
+                        modalController.dismiss();
+                    }
+                }
             },
             deep: true,
         },
     },
     async mounted() {
         this.isLoading = true;
+        const status = useStatusStore();
+        status.setOfflineVillageStatus("");
+        status.setOfflineDistrictStatus("");
+        status.setOfflineTAsStatus("");
+        status.setOfflineRelationshipStatus("");
         this.openOfflineStatusModal("data");
         this.workerApi = workerData.workerApi;
         workerData.postData("SET_OFFLINE_LOCATION");
@@ -417,16 +437,8 @@ export default defineComponent({
         },
 
         openOfflineStatusModal(name: any) {
-            // if (
-            //     !(
-            //         this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
-            //         this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
-            //         this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
-            //     )
-            // ) {
             const dataToPass = { title: name };
             createModal(OfflineStatusModal, { class: "fullScreenModal" }, false, this.dataToPass);
-            // }
         },
 
         openPatientsListModal(name: any) {
