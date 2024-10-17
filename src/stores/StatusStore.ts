@@ -6,6 +6,7 @@ export const useStatusStore = defineStore("statusStore", {
         offlineVillageStatus: {} as any,
         offlineDistrictStatus: {} as any,
         offlineTAsStatus: {} as any,
+        offlineRelationshipStatus: {} as any,
     }),
     actions: {
         setApiStatus(data: any) {
@@ -17,8 +18,11 @@ export const useStatusStore = defineStore("statusStore", {
         setOfflineVillageStatus(data: any) {
             this.offlineVillageStatus = data;
         },
-        setOfflineTAsStatusStatus(data: any) {
+        setOfflineTAsStatus(data: any) {
             this.offlineTAsStatus = data;
+        },
+        setOfflineRelationshipStatus(data: any) {
+            this.offlineRelationshipStatus = data;
         },
     },
     persist: true,
