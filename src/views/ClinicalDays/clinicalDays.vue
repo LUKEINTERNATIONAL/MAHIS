@@ -55,15 +55,15 @@
                   >{{input_properties[0].placeHolder}}<span style="color: #b42318">*</span></ion-label
                 >
                   <BasicInputField
-                      :placeholder="input_properties[0].placeHolder"
-                      :icon="pencilOutline"
-                      :inputValue="maximumNumberOfDaysForEachDay"
-                      @update:inputValue="input_properties[0].dataHandler"
+                    :placeholder="input_properties[0].placeHolder"
+                    :icon="pencilOutline"
+                    :inputValue="maximumNumberOfDaysForEachDay"
+                    @update:inputValue="input_properties[0].dataHandler"
                   />
 
                   <div>
                       <ion-label v-if="input_properties[0].show_error.value" class="error-label">
-                          {{ input_properties[0].error_message }}
+                        {{ input_properties[0].error_message }}
                       </ion-label>
                   </div>
               </ion-col>
@@ -188,22 +188,21 @@
 
   const input_properties = [
     {
-        placeHolder: 'Set Maximum Next Appointments Visits Per Day',
-        property_name: 'visitsPerDay',
-        dataHandler: inputUpDated_fn1,
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
+      placeHolder: 'Set Maximum Next Appointments Visits Per Day',
+      property_name: 'visitsPerDay',
+      dataHandler: inputUpDated_fn1,
+      dataValue: ref(),
+      show_error: ref(false),
+      error_message: 'Input required, Only letters are allowed',
     }
   ]
 
   function inputUpDated_fn1(event: any) {
     const input = event.target.value
     maximumNumberOfDaysForEachDay.value = input
-}
+  }
   
   const onWeekendToggleChange = () => {
-    // toggle_local.value = !toggle_local.value;
     disable_weekends.value = !toggle_local.value;
     if (disable_weekends.value) {
       isSaturdayChecked.value = false;
@@ -250,7 +249,9 @@
     isThursdayChecked.value = store.getAreThursdaysDisabled();
     isFridayChecked.value = store.getAreFridaysDisabled();
     isSaturdayChecked.value = store.getAreSaturdaysDisabled();
-    isSundayChecked.value = store.getAreSundaysDisabled();  
+    isSundayChecked.value = store.getAreSundaysDisabled();
+    
+    console.log(store.getHolidaydates())
   
     if (isSaturdayChecked.value == true || isSundayChecked.value == true) {
       toggle_local.value = true;
@@ -258,8 +259,6 @@
     if (isSaturdayChecked.value == false && isSundayChecked.value == false) {
     //   toggle_local.value = false;
     }
-
-    
   }
   
   function saveAndReload() {
