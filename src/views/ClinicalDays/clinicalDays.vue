@@ -95,7 +95,20 @@
                   </ion-row>
                   <ion-row>
                     <ion-label class="text-22 m-10">
-                        <span style="font-weight: 500; font-size: 20px">{{ totalHolidaysSelected }}</span></ion-label>
+                        <span style="font-weight: 500; font-size: 20px">{{ totalHolidaysSelected }}</span>
+                      </ion-label>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col>
+                      <ion-label class="ilbl2">Holiday Date(s)</ion-label>
+                      <ion-list class="holiday-list">
+                        <ion-item v-for="(holiday, index) in Clinical_Days_Store.holidayDates()" :key="index">
+                          <ion-label>
+                            <h2>{{ HisDate.toStandardHisDisplayFormat(holiday) }}</h2>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </ion-col>
                   </ion-row>
                 </div>
               </ion-col>
@@ -126,7 +139,7 @@
   <script setup lang="ts">
   import {
     IonCard, IonCardContent, IonCardHeader, IonCardTitle,
-    IonCheckbox, IonCol, IonGrid,
+    IonCheckbox, IonCol, IonGrid, IonList, IonItem,
     IonLabel, IonRow, IonButton, IonIcon, 
   } from "@ionic/vue";
   import { pencilOutline, saveOutline } from "ionicons/icons"
@@ -140,6 +153,7 @@
   import BasicInputField from "@/components/BasicInputField.vue"
   import HisDate from "@/utils/Date";
   import { combineArrays } from "@/utils/GeneralUti";
+  import { mapState } from 'pinia';
   
   const toggle_local = ref(false);
   const disable_weekends = ref(true);
@@ -226,6 +240,10 @@
       }
     }
   );
+
+  const Clinical_Days_Store = computed(() => {
+    return mapState(useClinicalDaysStore, ["holidayDates"]) 
+})
   
   onMounted(() => {
     setNavigation();
@@ -311,5 +329,9 @@
     --toggle-border: 0.525rem;
     --toggle-font-size: 1rem;
     margin-bottom: 30px;
+  }
+  .holiday-list {
+    max-height: 200px;
+    overflow-y: auto;
   }
   </style>
