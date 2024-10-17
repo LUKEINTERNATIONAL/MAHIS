@@ -415,19 +415,16 @@ async function setOfflinePrograms() {
 async function setOfflineRelationship() {
     let relationshipsData: any = await getOfflineData("relationship");
     if (!relationshipsData || TOTALS.total_relationships > relationshipsData.length) {
-        const relationships = await execFetch(buildUrl("/types/relationships", { paginate: false }));
-        if (relationships && Object.keys(relationships).length > 0) {
-            relationshipsData = {
-                relationships: relationships,
-            };
+        relationshipsData = await execFetch(buildUrl("/types/relationships", { paginate: false }));
+        if (relationshipsData && relationshipsData.length > 0) {
             await overRideRecord("relationship", relationshipsData);
         }
     }
 
-    if (relationshipsData.relationships.length === TOTALS.total_relationships) {
+    if (relationshipsData.length === TOTALS.total_relationships) {
         self.postMessage({
             payload: {
-                total_relationships: relationshipsData.relationships.length,
+                total_relationships: relationshipsData.length,
                 total: TOTALS.total_relationships,
             },
         });
