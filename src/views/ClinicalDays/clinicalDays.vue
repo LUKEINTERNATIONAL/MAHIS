@@ -1,21 +1,5 @@
 <template>
-    <Toolbar />
-    <ion-content :fullscreen="true">
         <div id="" style="margin-top: 30px; margin-left: 8%; margin-right: 8%;">
-            clinicaldays
-            <ion-row style="margin-bottom: 10px;">
-                <ion-col>
-                    <div class="back_profile" @click="nav('home')">
-                        <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon>
-                        <span style="cursor: pointer"> Back To Home Page</span>
-                    </div>
-                </ion-col>
-            </ion-row>
-
-            <ion-row style="margin-bottom: 20px;">
-                <ion-label style="font-weight: bold; font-size: 22px;">Set Clinical Days</ion-label>
-            </ion-row>
-
             <ion-row>
                 <ion-col>
                     <ion-checkbox class="ilbl" label-placement="end" :checked="isMondayChecked" @ionChange="onCheckboxChange($event, 'monday')">Monday</ion-checkbox>
@@ -96,12 +80,12 @@
                     </ion-col>
             </ion-row>
         </div>
-    </ion-content>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
 import { text } from "ionicons/icons"
-import { it } from "date-fns/locale"
+import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import { mapState } from "pinia";
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
@@ -184,9 +168,29 @@ watch(
     }
 )
 
+watch(
+    () => router.currentRoute.value.name,
+    async (newValue) => {
+        if (newValue == 'clinicaldays') {
+            setNavigation()
+            loadDataFromStore()
+        }
+    }
+)
+
+// const navigationPayload = computed(() => {
+//     mapState(EIRreportsStore, ["navigationPayload"]) 
+// })
+
 onMounted(async () => {
+    setNavigation()
     loadDataFromStore()
 })
+
+function setNavigation() {
+    const store = EIRreportsStore()
+    store.setNavigationPayload('Clinical Days', true, false, '/', 'home')
+}
 
 function loadDataFromStore() {
     const store = useClinicalDaysStore()
@@ -242,9 +246,6 @@ function saveStateValues() {
     storeClinicalDaysStore.setAreSundaysDisabled(isSundayChecked.value)
 }
 
-function nav(url: any) {
-    router.push(url)
-}
 </script>
 
 <style scoped>
