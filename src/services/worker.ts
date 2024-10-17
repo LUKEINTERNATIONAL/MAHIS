@@ -417,9 +417,10 @@ async function setOfflineRelationship() {
     if (!relationshipsData || TOTALS.total_relationships > relationshipsData.length) {
         const relationships = await execFetch(buildUrl("/types/relationships", { paginate: false }));
         if (relationships && Object.keys(relationships).length > 0) {
-            await overRideRecord("relationship", {
+            relationshipsData = {
                 relationships: relationships,
-            });
+            };
+            await overRideRecord("relationship", relationshipsData);
         }
     }
 
