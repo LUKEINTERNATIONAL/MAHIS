@@ -13,7 +13,7 @@
         style="color: #000; width: 70%"
         @ionInput="handleInput"
         fill="outline"
-        :value="searchValue"
+        v-model="searchValue"
         placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
         class="searchField"
     >
@@ -183,10 +183,12 @@ import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useProgramStore } from "@/stores/ProgramStore";
-import { PatientOpdList } from "@/services/patient_opd_list";
-import dates from "@/utils/Date"
+import router from "@/router";
+import {PatientOpdList} from "@/services/patient_opd_list";
 import {getUserLocation} from "@/services/userService";
 import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+import dates from "@/utils/Date";
+
 
 export default defineComponent({
   name: "ToolbarSearch",
@@ -299,6 +301,12 @@ export default defineComponent({
     searchText() {
       this.page = 1;
     },
+    $router: {
+      handler() {
+        this.searchValue = "";
+      },
+      deep: true,
+    },
   },
   computed: {
     ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
@@ -319,17 +327,16 @@ export default defineComponent({
       const dataScanned: any = await scannedData();
       const dataExtracted: any = await extractDetails(dataScanned);
       if (await this.searchByNpid(dataScanned + "$")) {
-        this.searchValue = dataScanned;
         return;
       } else if (dataExtracted && (await this.searchByMWNationalID(dataExtracted?.idNumber))) {
-        this.searchValue = dataScanned?.idNumber;
         return;
       } else if (dataExtracted) {
         await this.setPersonInformation(dataExtracted);
         this.$router.push("/registration/manual");
         return;
+      } else {
+        toastWarning("Invalid Scan");
       }
-      this.searchValue = dataScanned;
     },
     programID() {
       return Service.getProgramID();
@@ -450,6 +457,7 @@ export default defineComponent({
     },
     async openNewPage(url: any, item: any) {
       this.popoverOpen = false;
+      this.searchValue = "";
       this.setDemographics(item);
       if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
         resetNCDPatientData();
@@ -463,10 +471,8 @@ export default defineComponent({
       const userProgramsData: any = localStorage.getItem("userPrograms");
       const userPrograms: any = JSON.parse(userProgramsData);
       const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
-
       const roles: any = roleData ? roleData : [];
-      UserService.setProgramUserActions();
-
+      await UserService.setProgramUserActions();
       if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
         this.isRoleSelectionModalOpen = true;
       } else if (roles.some((role: any) => role.role === "Pharmacist")) {
@@ -474,15 +480,13 @@ export default defineComponent({
       } else if (roles.some((role: any) => role.role === "Lab")) {
         this.$router.push("OPDConsultationPlan");
       } else if (userPrograms?.length == 1) {
-        let NCDUserAction: any = "";
-        if (this.NCDUserActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.NCDUserActions;
-        if (NCDUserAction && userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "NCD PROGRAM")) {
-          this.$router.push(NCDUserAction.url);
-        } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
+        if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
           this.$router.push("OPDvitals");
         } else {
           this.$router.push(url);
         }
+      } else if (this.programID() == 32) {
+        this.$router.push(this.NCDUserActions.url);
       } else {
         this.$router.push(url);
       }
@@ -688,7 +692,7 @@ export default defineComponent({
       this.openNewPage("patientProfile", this.selectedPatient);
       this.toggleCheckInModal();
     },
-    async handleCheckInYes() {
+   async handleCheckInYes() {
       try {
         const location = await getUserLocation();
         const locationId = location ? location.location_id : null;
@@ -719,10 +723,7 @@ export default defineComponent({
       } catch (e) {
         console.error("Error during patient check-in process:", e);
         toastDanger("An error occurred while attempting to check in the patient. Please try again.");
-      }
-    },
-
-
+      }    },
     toggleCheckInModal() {
       this.checkInModalOpen = !this.checkInModalOpen;
     },

@@ -47,7 +47,11 @@
 
                 <!-- Next Button -->
                 <div>
-                  <ion-button class="next-button" @click="nextAccordion(index)">
+                  <ion-button
+                      class="next-button"
+                      :disabled="userRole !== 'Lab' && hasPatientsWaitingForLab && index >= 1"
+                      @click="nextAccordion(index)"
+                  >
                     <ion-icon :icon="index < StepperData.length - 1 ? chevronForward() : checkmark" slot="start"></ion-icon>
                     {{ index < StepperData.length - 1 ? 'Next' : 'Finish and Save' }}
                   </ion-button>
@@ -323,6 +327,10 @@ export default defineComponent({
     getSaveFunction: {
       type: Function,
       required: true,
+    },
+    hasPatientsWaitingForLab: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {

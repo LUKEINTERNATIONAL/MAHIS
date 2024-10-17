@@ -32,29 +32,27 @@
         <div style="margin-top: 5px" v-if="listOrders.length >= 5">
             <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
-      <div v-if="hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
-        <div v-if="hasPatientsWaitingForLab">
-          <DynamicButton
-              class="no-margin-left"
-              fill="clear"
-              icon="notification_icon"
-              iconSlot="icon-only"
-              name="Waiting for results from the lab"
-          />
-        </div>
-        <div v-else>
-          <DynamicButton
-              fill="solid"
-              :icon="iconsContent.plus"
-              iconSlot="icon-only"
-              @click="toggleSendToLabModal()"
-              name="Send to Lab"
-          />
-        </div>
-      </div>
-
-
     </div>
+  <div v-if="activeProgramID==14 &&  hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
+    <div v-if="hasPatientsWaitingForLab">
+      <DynamicButton
+          class="no-margin-left"
+          fill="clear"
+          icon="notification_icon"
+          iconSlot="icon-only"
+          name="Waiting for results from the lab"
+      />
+    </div>
+    <div v-else>
+      <DynamicButton
+          fill="solid"
+          :icon="iconsContent.plus"
+          iconSlot="icon-only"
+          @click="toggleSendToLabModal()"
+          name="Send to Lab"
+      />
+    </div>
+  </div>
     <LabModal :popoverOpen="openModal" @saved="updateLabList" @closeModal="openModal = false" />
     <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
 </template>
@@ -92,10 +90,13 @@ import {getUserLocation} from "@/services/userService";
 import {PatientOpdList} from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
 import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 
 export default defineComponent({
     name: "Menu",
-    components: {
+  mixins: [SetPrograms],
+  components: {
       CheckInConfirmationModal,
         IonContent,
         IonHeader,
@@ -196,18 +197,17 @@ export default defineComponent({
       toggleSendToLabModal() {
         this.sendToLabModalOpen = !this.sendToLabModalOpen;
       },
-     async fetchPatientLabStageData(){
-       const location = await getUserLocation();
-       const locationId = location ? location.location_id : null;
+      async fetchPatientLabStageData() {
+        const location = await getUserLocation();
+        const locationId = location ? location.location_id : null;
 
-       if (locationId) {
-         const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
-         if (this.demographics.patient_id) {
-           this.hasPatientsWaitingForLab = LabPatients.some((p:any) => p.patient_id === this.demographics.patient_id);
-         }
-         await usePatientList().refresh(locationId);
-
-       }
+        if (locationId) {
+          const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
+          await usePatientList().refresh(locationId);
+          if (this.demographics.patient_id) {
+            this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.demographics.patient_id);
+          }
+        }
       },
       async handleSendToLabYes(){
         const location = await getUserLocation();

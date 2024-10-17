@@ -1,16 +1,12 @@
 <template>
   <ion-page>
-    <!-- TODO: Please uncomment the code below. If it still commented then is was left mistakenly -->
     <!-- Spinner -->
-    <!-- <div v-if="isLoading" class="spinner-overlay">
-            <ion-spinner name="bubbles"></ion-spinner>
-            <div class="loading-text">Please wait...</div>
-        </div> -->
+    <div v-if="isLoading" class="spinner-overlay">
+      <ion-spinner name="bubbles"></ion-spinner>
+      <div class="loading-text">Please wait...</div>
+    </div>
     <Toolbar />
-    <ion-content
-      :fullscreen="true"
-      v-if="programID() != 33 && programID() != 14"
-    >
+    <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32">
       <div id="container">
         <strong>Search your patient profile</strong>
         <p>
@@ -28,7 +24,7 @@
           <ion-card class="section" style="width: 80%">
             <ion-card-header>
               <ion-card-title class="cardTitle"
-                >Today's patients list</ion-card-title
+              >Today's patients list</ion-card-title
               >
             </ion-card-header>
             <ion-card-content>
@@ -55,8 +51,7 @@
 
                 <div
                     class="OPDDueCard"
-                    @click="openPatientsListModal('Patients waiting for consultation', 'CONSULTATION', 'Consultation', '/OPDConsultationPlan')
-    "
+                    @click="openPatientsListModal('Patients waiting for consultation', 'CONSULTATION', 'Consultation', '/OPDConsultationPlan')"
                     :style="dueCardStyle('success')"
                     v-if="canViewConsultation"
                 >
@@ -67,8 +62,7 @@
 
                 <div
                     class="OPDDueCard"
-                    @click="openPatientsListModal('Patients waiting for lab', 'LAB', 'Lab', '/OPDConsultationPlan')
-    "
+                    @click="openPatientsListModal('Patients waiting for lab', 'LAB', 'Lab', '/OPDConsultationPlan')"
                     :style="dueCardStyle('success')"
                     v-if="canViewLab"
                 >
@@ -78,8 +72,7 @@
                 </div>
                 <div
                     class="OPDDueCard"
-                    @click="openPatientsListModal('Patients waiting for dispensation', 'DISPENSATION', 'Dispensation', '/dispensation')
-    "
+                    @click="openPatientsListModal('Patients waiting for dispensation', 'DISPENSATION', 'Dispensation', '/dispensation')"
                     :style="dueCardStyle('success')"
                     v-if="canViewDispensation"
                 >
@@ -99,31 +92,11 @@
         <div>
           <div :style="backgroundStyle">
             <!-- :autoplay="4000" -->
-            <Carousel
-              :autoplay="4000"
-              :wrap-around="true"
-              :itemsToShow="1.2"
-              :transition="600"
-              style="padding-top: 20px"
-            >
+            <Carousel :autoplay="4000" :wrap-around="true" :itemsToShow="1.2" :transition="600" style="padding-top: 20px">
               <Slide v-for="slide in totalStats" :key="slide">
-                <div
-                  class="totalStats"
-                  style="
-                    background: linear-gradient(
-                      180deg,
-                      #20b2aa 0%,
-                      #40c0b0 50%,
-                      rgb(233, 233, 233) 100%
-                    );
-                  "
-                >
-                  <div class="statsValue" style="font-size: 1.4em">
-                    {{ slide.value }}
-                  </div>
-                  <div class="statsText" style="font-size: 0.9em">
-                    {{ slide.name }}
-                  </div>
+                <div class="totalStats" style="background: linear-gradient(180deg, #20b2aa 0%, #40c0b0 50%, rgb(233, 233, 233) 100%)">
+                  <div class="statsValue" style="font-size: 1.4em">{{ slide.value }}</div>
+                  <div class="statsText" style="font-size: 0.9em">{{ slide.name }}</div>
                 </div>
               </Slide>
               <template #addons>
@@ -134,70 +107,34 @@
         </div>
 
         <ion-card class="section">
-          <ion-card-header>
-            <ion-card-title class="cardTitle">
-              Clients due
-            </ion-card-title></ion-card-header
-          >
+          <ion-card-header> <ion-card-title class="cardTitle"> Clients due </ion-card-title></ion-card-header>
           <ion-card-content>
             <div class="dueCardContent">
-              <div
-                class="dueCard"
-                @click="openDueModal('Client due today')"
-                style="border: 1px solid rgb(158, 207, 136)"
-              >
-                <div class="statsValue">
-                  {{ reportData?.due_today_count || 0 }}
-                </div>
+              <div class="dueCard" @click="openDueModal('Client due today')" style="border: 1px solid rgb(158, 207, 136)">
+                <div class="statsValue">{{ reportData?.due_today_count || 0 }}</div>
                 <div class="statsText">Due today</div>
               </div>
-              <div
-                class="dueCard"
-                style="border: 1px solid rgb(239, 221, 121)"
-                @click="openDueModal('Client due this week')"
-              >
-                <div class="statsValue">
-                  {{ reportData?.due_this_week_count || 0 }}
-                </div>
+              <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)" @click="openDueModal('Client due this week')">
+                <div class="statsValue">{{ reportData?.due_this_week_count || 0 }}</div>
                 <div class="statsText">Due this week</div>
               </div>
-              <div
-                class="dueCard"
-                style="border: 1px solid rgb(241, 154, 154)"
-                @click="openDueModal('Client due this month')"
-              >
-                <div class="statsValue">
-                  {{ reportData?.due_this_month_count || 0 }}
-                </div>
+              <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)" @click="openDueModal('Client due this month')">
+                <div class="statsValue">{{ reportData?.due_this_month_count || 0 }}</div>
                 <div class="statsText">Due this month</div>
               </div>
             </div>
           </ion-card-content>
         </ion-card>
         <ion-card class="section">
-          <ion-card-header>
-            <ion-card-title class="cardTitle">
-              Clients overdue
-            </ion-card-title></ion-card-header
-          >
+          <ion-card-header> <ion-card-title class="cardTitle"> Clients overdue </ion-card-title></ion-card-header>
           <ion-card-content>
             <div class="overDueCardContent">
-              <div
-                class="overDueCard"
-                @click="openDueModal('Client overdue under 5yrs')"
-              >
-                <div class="statsValue">
-                  {{ reportData?.under_five_overdue || 0 }}
-                </div>
+              <div class="overDueCard" @click="openDueModal('Client overdue under 5yrs')">
+                <div class="statsValue">{{ reportData?.under_five_overdue || 0 }}</div>
                 <div class="statsText">Under 5yrs</div>
               </div>
-              <div
-                class="overDueCard"
-                @click="openDueModal('Client overdue over 5yrs')"
-              >
-                <div class="statsValue">
-                  {{ reportData?.over_five_overdue || 0 }}
-                </div>
+              <div class="overDueCard" @click="openDueModal('Client overdue over 5yrs')">
+                <div class="statsValue">{{ reportData?.over_five_overdue || 0 }}</div>
                 <div class="statsText">Over 5yrs</div>
               </div>
             </div>
@@ -205,44 +142,30 @@
         </ion-card>
         <ion-card class="section">
           <ion-card-header>
-            <ion-card-title class="cardTitle"
-              >Today's appointments({{ appointments?.length }})
-            </ion-card-title></ion-card-header
+            <ion-card-title class="cardTitle">Today's appointments({{ appointments?.length }}) </ion-card-title></ion-card-header
           >
           <ion-card-content>
             <div
-              class="appointments"
-              style="display: flex; margin-bottom: 10px"
-              v-for="(item, index) in appointments"
-              :key="index"
-              @click="openClientProfile(item.npid)"
+                class="appointments"
+                style="display: flex; margin-bottom: 10px"
+                v-for="(item, index) in appointments"
+                :key="index"
+                @click="openClientProfile(item.npid)"
             >
               <div style="margin-right: 15px">
-                <div
-                  :class="
-                    item.gender == 'M'
-                      ? 'initialsBox maleColor'
-                      : 'initialsBox femaleColor'
-                  "
-                >
-                  <ion-icon
-                    style="color: rgb(78, 78, 78); font-size: 30px"
-                    :icon="person"
-                  ></ion-icon>
+                <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                  <ion-icon style="color: rgb(78, 78, 78); font-size: 30px" :icon="person"></ion-icon>
                 </div>
               </div>
               <div style="align-items: center; display: flex">
                 <div style="line-height: 1">
                   <div class="client_name">
-                    <div class="name">
-                      {{ item.given_name }} {{ item.family_name }}
-                    </div>
+                    <div class="name">{{ item.given_name }} {{ item.family_name }}</div>
                   </div>
                   <div class="demographicsOtherRow">
                     <div class="demographicsText">
                       {{ item.gender == "M" ? "Male" : "Female" }}
-                      <span class="dot">.</span
-                      >{{ formatBirthdate(item.birthdate) }}
+                      <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
                     </div>
                   </div>
                   <div>Village: {{ item?.city_village }}</div>
@@ -253,6 +176,7 @@
         </ion-card>
       </div>
     </ion-content>
+    <NCDHomePage v-if="programID() == 32" />
     <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
   </ion-page>
 </template>
@@ -293,6 +217,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { AppointmentService } from "@/services/appointment_service";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { PatientService } from "@/services/patient_service";
+import NCDHomePage from "@/apps/NCD/components/NCDHomePage.vue";
 import {
   medkit,
   chevronBackOutline,
@@ -323,13 +248,15 @@ import { getBaseURl } from "@/utils/GeneralUti";
 import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import { PatientOpdList } from "@/services/patient_opd_list";
-import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import { useWebWorker } from "@vueuse/core";
 import {getUserLocation} from "@/services/userService";
+import {PatientOpdList} from "@/services/patient_opd_list";
+import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 
 export default defineComponent({
   name: "Home",
-  mixins: [SetUser, SetDemographics, SetPrograms],
+  mixins: [SetUser, SetDemographics, SetPrograms, SetUserRole],
   components: {
     IonContent,
     IonHeader,
@@ -354,9 +281,11 @@ export default defineComponent({
     Pagination,
     Navigation,
     getBaseURl,
+    NCDHomePage,
   },
   data() {
     return {
+      workerApi: null as any,
       controlGraphs: "months" as any,
       reportData: "" as any,
       appointments: [] as any,
@@ -378,11 +307,11 @@ export default defineComponent({
           value: 0,
         },
       ] as any,
-      userRoles: [] as string[],
       canViewVitals: false,
       canViewConsultation: false,
       canViewLab: false,
       canViewDispensation: false,
+      userRoles:[] as any,
     };
   },
   setup() {
@@ -408,6 +337,7 @@ export default defineComponent({
     ...mapState(useGeneralStore, ["OPDActivities"]),
     ...mapState(useDemographicsStore, ["demographics"]),
     ...mapState(usePatientList, ["patientsWaitingForVitals", "patientsWaitingForConsultation", "patientsWaitingForLab", "patientsWaitingForDispensation"]),
+
     backgroundStyle() {
       return {
         background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(this.base_url)})`,
@@ -417,44 +347,24 @@ export default defineComponent({
       };
     },
   },
-
   watch: {
     $route: {
       async handler(data) {
-        if (data.name == "Home") {
-          resetDemographics();
-          await this.fetchUserData();
-        }
-        this.patientsWaitingForVitals;
-        this.patientsWaitingForConsultation;
-        this.patientsWaitingForLab;
-        this.patientsWaitingForDispensation;
-        this.totalPatientsToday;
-
+        if (data.name == "Home") resetDemographics();
         await this.setAppointments();
-        const location = await getUserLocation();
-        const locationId = location ? location.id : null;
-        if (locationId) {
-          await usePatientList().refresh(locationId);
-        } else {
-          console.warn("Location ID could not be found. Please check your settings.");
-        }
+        await this.fetchUserData();
+        // cannot subscribe more than once
+        // const wsService = new WebSocketService();
+        // wsService.setMessageHandler(this.onMessage);
       },
       deep: true,
     },
   },
-
   async mounted() {
+    // this.workerApi = useWebWorker("/src/services/worker.ts", { immediate: false });
+    // const url = `${localStorage.getItem("apiProtocol")}://${localStorage.getItem("apiURL")}:${localStorage.getItem("apiPort")}/api/v1/`;
+    // this.workerApi.post({ type: "SET_OFFLINE_LOCATION", url: url, apiKey: localStorage.getItem("apiKey") });
     this.isLoading = true;
-    const location = await getUserLocation();
-    const locationId = location ? location.location_id : null;
-    if (locationId) {
-      const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
-      this.totalPatientsToday = visitsToday.length;
-      await usePatientList().refresh(locationId);
-    }
-
-    await this.fetchUserData();
     await setOfflineLocation();
     await setOfflineRelationship();
     resetDemographics();
@@ -463,12 +373,17 @@ export default defineComponent({
     const wsService = new WebSocketService();
     wsService.setMessageHandler(this.onMessage);
     await useGlobalPropertyStore().loadGlobalProperty();
+    await this.fetchUserData();
+    const location = await getUserLocation();
+    const locationId = location ? location.location_id : null;
+    if (locationId) {
+      const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
+      this.totalPatientsToday = visitsToday.length;
+      await usePatientList().refresh(locationId);
+    }
     this.isLoading = false;
   },
-
-
   methods: {
-
     async fetchUserData() {
       const user = await UserService.getCurrentUser();
       if (user) {
@@ -501,28 +416,9 @@ export default defineComponent({
       };
     },
 
-    // async getListValues() {
-    //   try {
-    //     this.patientsWaitingForVitals = await PatientOpdList.getPatientList("VITALS");
-        
-    //     this.patientsWaitingForConsultation = await PatientOpdList.getPatientList(
-    //       "CONSULTATION"
-    //     );
-    //     this.patientsWaitingForDispensation = await PatientOpdList.getPatientList(
-    //       "DISPENSATION"
-    //     );
-
-    //   } catch (e) {}
-    // },
-
     async setAppointments() {
-      this.appointments = await AppointmentService.getDailiyAppointments(
-        HisDate.currentDate()
-      );
-      if (this.appointments)
-        this.appointments = this.appointments.sort((a: any, b: any) =>
-          a.given_name.localeCompare(b.given_name)
-        );
+      this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
+      if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
     },
     async openClientProfile(patientID: any) {
       const patientData = await PatientService.findByNpid(patientID);
@@ -534,13 +430,7 @@ export default defineComponent({
     },
     async onMessage(event: MessageEvent) {
       const data = JSON.parse(event.data);
-      if (
-        data.identifier ===
-        JSON.stringify({
-          channel: "ImmunizationReportChannel",
-          location_id: localStorage.getItem("locationID"),
-        })
-      ) {
+      if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: localStorage.getItem("locationID") })) {
         this.reportData = data.message;
         console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
         this.totalStats = [
@@ -565,7 +455,6 @@ export default defineComponent({
     programID() {
       return Service.getProgramID();
     },
-
     loadImage(name: any) {
       return img(name);
     },
@@ -576,21 +465,11 @@ export default defineComponent({
 
     openPatientsListModal(name: any, list:'VITALS'|'CONSULTATION'|'LAB'|'DISPENSATION', buttonTitle:string, buttonLink:string) {
       const dataToPass = { title: name, list, buttonTitle, buttonLink};
-      createModal(
-        OPDWaitingListModal,
-        { class: "fullScreenModal" },
-        true,
-        dataToPass
-      );
+      createModal(OPDWaitingListModal, { class: "fullScreenModal" }, true, dataToPass);
     },
-    openAllModal(name: any, buttonLink:string, buttonTitle:string,) {
-      const dataToPass = { title: name,buttonLink, buttonTitle};
-      createModal(
-        OPDAllPatientsModal,
-        { class: "fullScreenModal" },
-        true,
-        dataToPass
-      );
+    openAllModal(name: any,buttonLink:string, buttonTitle:string,) {
+      const dataToPass = { title: name, buttonLink, buttonTitle };
+      createModal(OPDAllPatientsModal, { class: "fullScreenModal" }, true, dataToPass);
     },
     async getImagePath() {
       const BASE_URL = await getBaseURl();
@@ -600,9 +479,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.section{
-  top: 20%;
-}
 .centered-content {
   display: flex;
   justify-content: center;
@@ -679,8 +555,7 @@ export default defineComponent({
   align-content: center;
 }
 ion-card {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 1px -1px,
-    rgba(0, 0, 0, 0) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 1px -1px, rgba(0, 0, 0, 0) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
 }
 .client_name {
   font-size: 1em;

@@ -17,6 +17,7 @@
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
+                :hasPatientsWaitingForLab="hasPatientsWaitingForLab"
             />
         </ion-content>
 <!--        <BasicFooter @finishBtn="saveData()" v-if="userRole != 'Lab'" />-->
@@ -136,6 +137,7 @@ export default defineComponent({
             wizardData: [] as any,
             StepperData: [] as any,
             isOpen: false,
+            hasPatientsWaitingForLab: false,
             iconsContent: icons,
             isLoading: false,
 
@@ -158,6 +160,7 @@ export default defineComponent({
         await this.getData();
     },
     async mounted() {
+      await this.fetchPatientLabStageData();
         // if (this.activities.length == 0) {
         //     this.$router.push("patientProfile");
         // }
@@ -175,6 +178,7 @@ export default defineComponent({
             async handler() {
                 await this.getData();
                 this.markWizard();
+                this.fetchPatientLabStageData();
             },
             deep: true,
         },
@@ -196,6 +200,12 @@ export default defineComponent({
                 this.markWizard();
             },
         },
+      hasPatientsWaitingForLab: {
+        immediate: true,
+        handler(newValue) {
+          console.log("Updated lab waiting status:", newValue);
+        }
+      },
     },
     setup() {
         return { chevronBackOutline, checkmark };
@@ -203,18 +213,20 @@ export default defineComponent({
 
     methods: {
       getSaveFunction(index: any) {
+        const disableNextButton = this.userRole !== "Lab" && this.hasPatientsWaitingForLab && index >= 1;
+
         if (index < this.StepperData.length - 1) {
           switch (index) {
             case 0:
               return this.saveClinicalAssessment;
             case 1:
-              return
+              return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
             case 2:
-              return this.saveDiagnosis;
+              return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
             case 3:
-              return this.saveDiagnosis;
+              return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
             case 4:
-              return this.saveTreatmentPlan;
+              return disableNextButton ? () => Promise.resolve() : this.saveTreatmentPlan;
             default:
               return () => Promise.resolve();
           }
@@ -223,11 +235,12 @@ export default defineComponent({
             await this.saveOutComeStatus();
             const location = await getUserLocation();
             const locationId = location ? location.location_id : null;
+
             if (!locationId) {
               toastDanger("Location ID could not be found. Please check your settings.");
               return;
             }
-            if(this.userRole!="Lab") {
+            if (this.userRole !== "Lab") {
               await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "DISPENSATION", locationId);
               await usePatientList().refresh(locationId);
               this.$router.push("home");
@@ -238,8 +251,18 @@ export default defineComponent({
               this.$router.push("home");
               toastSuccess("Lab results submitted!");
             }
-
           };
+        }
+      },
+      async fetchPatientLabStageData() {
+        const location = await getUserLocation();
+        const locationId = location ? location.location_id : null;
+
+        if (locationId) {
+          const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
+          if (this.demographics.patient_id) {
+            this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.demographics.patient_id);
+          }
         }
       },
 
