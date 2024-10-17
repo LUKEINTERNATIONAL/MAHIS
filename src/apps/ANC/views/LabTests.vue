@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
 
             ></Stepper>
         </ion-content>
@@ -48,7 +49,6 @@ import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
-import {PhysiologicalCounsellingService} from "@/apps/ANC/service/physiological_counselling_service";
 export default defineComponent({
     name: "Lab",
   mixins: [SetUserRole, SetEncounter],
@@ -115,6 +115,9 @@ export default defineComponent({
     },
     methods: {
         markWizard() {},
+      getSaveFunction(){
+
+      },
       getFormatedData(data: any) {
         return data.map((item: any) => {
           return item?.data;
@@ -122,8 +125,8 @@ export default defineComponent({
       },
         async saveData() {
           await this.saveLabTests();
-          // resetPatientData()
-          // this.$router.push("ANChome")
+          resetPatientData()
+          this.$router.push("contact")
         },
 
     async buildTBscreening() {
@@ -154,7 +157,7 @@ export default defineComponent({
         ]
     },
       async saveLabTests() {
-        if (this.ultrasound.length > 0 && this.tbTest.length > 0 && this.urineTest>0) {
+        if (this.ultrasound.length > 0 && this.tbTest.length > 0 && this.urineTest.length >0) {
           const userID: any = Service.getUserID();
           const  labTests= new LabTestsService(this.demographics.patient_id, userID);
           const encounter = await labTests.createEncounter();

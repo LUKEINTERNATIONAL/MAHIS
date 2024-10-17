@@ -8,9 +8,16 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Vitals" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData" />
+            <Stepper stepperTitle="Vitals"
+                     :wizardData="wizardData"
+                     @updateStatus="markWizard"
+                     @finishBtn="saveData()"
+                     :StepperData="StepperData"
+                     :getSaveFunction="getSaveFunction"
+
+            />
         </ion-content>
-        <BasicFooter :name="actionBtn" @finishBtn="saveData()" />
+<!--        <BasicFooter :name="actionBtn" @finishBtn="saveData()" />-->
     </ion-page>
 </template>
 
@@ -42,7 +49,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
+import {createModal, toastDanger} from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
@@ -55,6 +62,12 @@ import { useVitalsStore } from "@/stores/VitalsStore";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import {getFieldValue} from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import dates from "@/utils/Date"
+import {getUserLocation} from "@/services/userService";
+import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -160,6 +173,36 @@ export default defineComponent({
                 this.wizardData[0].checked = false;
             }
         },
+      async getSaveFunction(){
+        this.isLoading = true;
+        try {
+          if (this.actionBtn != "Finish") {
+            if (this.vitals.validationStatus) {
+              await this.saveVitals();
+              resetOPDPatientData();
+              const location = await getUserLocation();
+              const locationId = location ? location.location_id : null;
+              if (!locationId) {
+                toastDanger("Location ID could not be found. Please check your settings.");
+                return;
+              }
+              await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"CONSULTATION", locationId)
+              await usePatientList().refresh(locationId);
+              this.$router.push("OPDConsultationPlan");
+            } else {
+              await this.validaterowData();
+              toastWarning("Please fill all required fields");
+            }
+          } else {
+            this.$router.push("OPDConsultationPlan");
+
+          }
+        } catch (error) {
+          console.error("Error in saveData: ", error);
+        } finally {
+          this.isLoading = false;
+        }
+      },
       async saveData() {
         this.isLoading = true;
         try {
@@ -167,15 +210,22 @@ export default defineComponent({
             if (this.vitals.validationStatus) {
               await this.saveVitals();
               resetOPDPatientData();
+              const location = await getUserLocation();
+              const locationId = location ? location.location_id : null;
+              if (!locationId) {
+                toastDanger("Location ID could not be found. Please check your settings.");
+                return;
+              }
+              await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"CONSULTATION", locationId)
               this.$router.push("OPDConsultationPlan");
-              // this.$router.push("patientProfile");
+            
             } else {
               await this.validaterowData();
               toastWarning("Please fill all required fields");
             }
           } else {
             this.$router.push("OPDConsultationPlan");
-            // this.$router.push("patientProfile");
+          
           }
         } catch (error) {
           console.error("Error in saveData: ", error);

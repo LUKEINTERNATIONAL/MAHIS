@@ -59,7 +59,7 @@ export async function resetOPDPatientData() {
     presentingComplaintsStore.setPresentingComplaints(presentingComplaintsStore.getInitial());
 
     
-    OPDDiagnosisStore.setOPDDiagnosis(OPDDiagnosisStore.getInitial());
+    // OPDDiagnosisStore.setOPDDiagnosis(OPDDiagnosisStore.getInitial());
 
     vitals.setVitals(vitals.getInitialVitals());
     registration.setPersonalInformation(registration.getInitialPersonalInformation());
@@ -82,6 +82,7 @@ export async function resetOPDPatientData() {
     diagnosis.$reset();
     enrollement.$reset();
     nextAppointment.$reset();
+    OPDDiagnosisStore.$reset();
 }
 
 export function resetDemographics() {

@@ -8,6 +8,10 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -51,9 +55,12 @@ import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from 
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useDischargeWomanStore } from "@/apps/PNC/stores/others/DischargeWoman";
 import { DischargeWomanService } from "@/apps/PNC/Services/discharge_woman_service";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "dischargeWoman",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -146,6 +153,9 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+      getSaveFunction(){
+
+      },
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;

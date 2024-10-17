@@ -1,11 +1,14 @@
 <template>
     <div class="modal_wrapper">
+      <div class="uniform_columns">
         <basic-form
             :contentData="pastMedicalHistory"
             :initialData="initialData"
             @update:inputValue="handleInputData"
             @update:selected="handleInputData"
         ></basic-form>
+      </div>
+
     </div>
 </template>
 
@@ -129,4 +132,26 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.modal_wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto; /* Center contents */
+}
+
+@media (max-width: 768px) {
+  .modal_wrapper {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal_wrapper {
+    flex-direction: column;
+  }
+}
+
+
+</style>

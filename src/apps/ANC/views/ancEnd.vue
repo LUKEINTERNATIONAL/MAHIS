@@ -7,7 +7,10 @@
                      :wizardData="wizardData" @updateStatus="markWizard"
                      :StepperData="StepperData"
                      :backUrl="userRoleSettings.url"
-                     :backBtn="userRoleSettings.btnName" />
+                     :backBtn="userRoleSettings.btnName"
+                     :getSaveFunction="getSaveFunction"
+
+            />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
     </ion-page>
@@ -124,6 +127,9 @@ export default defineComponent({
     },
 
     methods: {
+      getSaveFunction(){
+
+      },
         markWizard() {},
         saveData() {
             this.saveAncEnd();

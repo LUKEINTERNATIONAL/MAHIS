@@ -89,6 +89,11 @@ export default defineComponent({
           this.handleResults()
           this.handleDate()
           this.handleNotDone()
+        },
+        deep:true
+      },
+      reasons:{
+        handler(){
           this.handleOther()
         },
         deep:true
@@ -134,12 +139,20 @@ export default defineComponent({
     },
 
     handleOther(){
-      if(getCheckboxSelectedValue(this.reasons,'Other')=='Other'){
+      if(getCheckboxSelectedValue(this.reasons,'Other')?.value=='Other'){
         modifyFieldValue(this.reasons,'Other (specify)','displayNone',false)
       }else{
         modifyFieldValue(this.reasons,'Other (specify)','displayNone',true)
       }
     },
+
+      //     handleOtherNotDone(){
+      //   if(getCheckboxSelectedValue(this.urineTest,'Other')?.value=='Other'){
+      //     modifyFieldValue(this.urineTest,'Other (specify)','displayNone',false)
+      //   }else{
+      //      modifyFieldValue(this.urineTest,'Other (specify)','displayNone',true)
+      //   }
+      // },
     }
 })
 

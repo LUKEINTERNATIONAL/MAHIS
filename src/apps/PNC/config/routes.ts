@@ -8,28 +8,28 @@ import home from "@/apps/PNC/views/home.vue";
 
 export default [
     {
-        path: '/pnc/postnatalDetails',
+        path: '/postnatalDetails',
         name: 'postnatalDetails',
         component: postnatalDetails
     },
     {
-        path: '/pnc/postnatalWardMonitoring',
+        path: '/postnatalWardMonitoring',
         name: 'postnatalWardMonitoring',
         component: postnatalWardMonitoring
     }, {
-        path: '/pnc/babyStatus',
+        path: '/babyStatus',
         name: 'postnatalBabyStatus',
         component: postnatalBabyStatus
     }, {
-        path: '/pnc/postnatalVisit',
+        path: '/postnatalVisit',
         name: 'postnatalVisit',
         component: postnatalVisit
     }, {
-        path: '/pnc/dischargeWoman',
+        path: '/dischargeWoman',
         name: 'dischargeWoman',
         component: dischargeWoman
     }, {
-        path: '/pnc/pncEnd',
+        path: '/pncEnd',
         name: 'pncEnd',
         component: pncEnd
     },

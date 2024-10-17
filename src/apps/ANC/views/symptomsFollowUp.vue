@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
 
         </ion-content>
@@ -173,6 +174,9 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
+      getSaveFunction(){
+
+      },
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
@@ -185,7 +189,7 @@ export default defineComponent({
             this.savePersistentBehaviours()
             this.saveIPV()
             resetPatientData();
-            this.$router.push("ANChome");
+            this.$router.push("contact");
         },
 
 

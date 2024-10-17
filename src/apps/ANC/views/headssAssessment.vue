@@ -4,7 +4,9 @@
         <ion-content :fullscreen="true">
             <DemographicBar />
             <Stepper stepper-title="HEADSS Assessment" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" :backUrl="userRoleSettings.url"
-                     :backBtn="userRoleSettings.btnName" />
+                     :backBtn="userRoleSettings.btnName"
+                     :getSaveFunction="getSaveFunction"
+            />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
     </ion-page>
@@ -102,6 +104,9 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
+      getSaveFunction(){
+
+      },
         saveData() {
             this.saveHeadssAssesment();
             resetPatientData();
@@ -121,7 +126,7 @@ export default defineComponent({
                     if (!patientStatus) return toastWarning("Unable to create patient HEADSS assessment  !");
                     toastSuccess("HEADSS assessment details have been created");
 
-                    this.$router.push("ANCHome");
+                    this.$router.push("contact");
                 }
             } else {
                 modifyRadioValue(this.headssAssesment, "Who does the client live with", "alertsErrorMassage", "This is a mandatory question");

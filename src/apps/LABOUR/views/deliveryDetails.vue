@@ -8,6 +8,10 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -53,9 +57,12 @@ import { useSecondStageOfLabourStore } from "@/apps/LABOUR/stores/delivery detai
 import { SecondStageDeliveryService } from "@/apps/LABOUR/services/labour_delivery_details_service";
 import { useThirdStageOfLabourStore } from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
 import { resetPatientData } from "@/services/reset_data";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "deliveryDetails",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -163,6 +170,9 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+      getSaveFunction(){
+
+      },
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -173,7 +183,7 @@ export default defineComponent({
             await this.saveSecondStageLabour();
             toastSuccess("Delivery details data saved successfully");
             resetPatientData();
-            //this.$router.push("labourHome");
+            this.$router.push("/labour/labourHome");
         },
         async saveSecondStageLabour() {
             if (

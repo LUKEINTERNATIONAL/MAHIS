@@ -182,6 +182,6 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
         }
       
     },
-     // persist:true,
+     persist:true,
 
 })

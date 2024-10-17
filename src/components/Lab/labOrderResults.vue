@@ -1,31 +1,58 @@
 <template>
+  <SendToLabConfirmationModal
+      :closeModalFunc="closeSendToLabModal"
+      :onYes="handleSendToLabYes"
+      :onNo="handleSendToLabNo"
+      :isOpen="sendToLabModalOpen"
+      :title="`Do you really want to send patient to lab?`"
+  />
     <DashBox v-if="listResults.length < 1 && listOrders.length < 1" :content="'No Investigations added '" />
     <div class="modal_wrapper" v-if="listResults.length > 1">
         <div style="font-weight: 700">Lab Results</div>
-        <div style="--background: #fff">
-            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"></list>
+        <div style="--background: #fff" class="scrollable-container">
+            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder">
+            </list>
         </div>
-        <div style="margin-top: 5px" v-if="listResults.length <= 3 && listSeeMoreResults.length >= 3">
+        <div style="margin-top: 5px" v-if="listResults.length <= 4 && listSeeMoreResults.length >= 4">
             <DynamicButton @click="seeOrderStatus('more')" name="Show More Lab Results" fill="clear" iconSlot="icon-only" />
         </div>
-
-        <div style="margin-top: 5px" v-else-if="listResults.length >= 4">
+        <div style="margin-top: 5px" v-else-if="listResults.length >= 5">
             <DynamicButton @click="seeOrderStatus('less')" name="Show Less Lab Results" fill="clear" iconSlot="icon-only" />
         </div>
     </div>
 
     <div class="modal_wrapper" v-if="listOrders.length > 1">
         <div style="font-weight: 700">Lab Orders</div>
-        <div>
+        <div class="scrollable-container">
             <list :listData="listOrders" @clicked:delete="voidLabOrder" @clicked:results="openResultsForm"></list> 
         </div>
-        <div style="margin-top: 5px" v-if="listOrders.length <= 3 && listSeeMoreOrders.length >= 3">
+        <div style="margin-top: 5px" v-if="listOrders.length <= 4 && listSeeMoreOrders.length >= 4">
             <DynamicButton @click="seeResultsStatus('more')" name="Show More Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
-        <div style="margin-top: 5px" v-if="listOrders.length >= 4">
+        <div style="margin-top: 5px" v-if="listOrders.length >= 5">
             <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
     </div>
+  <div v-if="activeProgramID==14 &&  hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
+    <div v-if="hasPatientsWaitingForLab">
+      <DynamicButton
+          class="no-margin-left"
+          fill="clear"
+          icon="notification_icon"
+          iconSlot="icon-only"
+          name="Waiting for results from the lab"
+      />
+    </div>
+    <div v-else>
+      <DynamicButton
+          fill="solid"
+          :icon="iconsContent.plus"
+          iconSlot="icon-only"
+          @click="toggleSendToLabModal()"
+          name="Send to Lab"
+      />
+    </div>
+  </div>
     <LabModal :popoverOpen="openModal" @saved="updateLabList" @closeModal="openModal = false" />
     <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
 </template>
@@ -49,17 +76,28 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import table from "@/components/DataViews/tables/ReportDataTable";
 import DashBox from "@/components/DashBox.vue";
 import { PatientLabService } from "@/services/lab/patient_lab_service";
-import { createModal } from "@/utils/Alerts";
+import {createModal, toastDanger, toastSuccess} from "@/utils/Alerts";
 import LabResults from "@/components/Lab/LabResults.vue";
 import { PatientLabResultService } from "@/services/patient_lab_result_service";
 import LabModal from "@/components/Lab/LabModal.vue";
 import LabViewResultsModal from "@/components/Lab/LabViewResultsModal.vue";
 import labOrderResults from "@/components/Lab/labOrderResults.vue";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
+import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
+import SendToLabConfirmationModal from "@/components/Lab/SendToLabConfirmationModal.vue";
+import {Service} from "@/services/service";
+import {getUserLocation} from "@/services/userService";
+import {PatientOpdList} from "@/services/patient_opd_list";
+import dates from "@/utils/Date";
+import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 
 export default defineComponent({
     name: "Menu",
-    components: {
+  mixins: [SetPrograms],
+  components: {
+      CheckInConfirmationModal,
         IonContent,
         IonHeader,
         IonItem,
@@ -73,12 +111,19 @@ export default defineComponent({
         DashBox,
         LabModal,
         LabViewResultsModal,
+      SendToLabConfirmationModal
     },
 
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useLabResultsStore, ["labResults"]),
         ...mapState(useInvestigationStore, ["investigations"]),
+      ...mapState(usePatientList, ["patientsWaitingForVitals", "patientsWaitingForConsultation", "patientsWaitingForLab", "patientsWaitingForDispensation"]),
+      hasEnterResults(): boolean {
+        return this.listOrders.some((item: any) =>
+            item.btn && item.btn.includes("enter_results")
+        );
+      }
     },
     props: {
         propOrders: {
@@ -87,13 +132,16 @@ export default defineComponent({
     },
     data() {
         return {
-            valueNumericArray: [] as any,
+          iconsContent: icons,
+          valueNumericArray: [] as any,
             obsDatetime: [] as any,
             graphIcon: iconGraph(["#006401"]),
             listIcon: iconList(["#636363"]),
             displayGraph: true,
-            orders: [] as any,
-            height: [] as any,
+          sendToLabModalOpen: false,
+          orders: [] as any,
+          userRoles: [] as any,
+          height: [] as any,
             BMI: [] as any,
             iconBg: {} as any,
             activeWeight: [] as any,
@@ -101,6 +149,7 @@ export default defineComponent({
             activeBMI: [] as any,
             listOrders: [] as any,
             listResults: [] as any,
+            hasPatientsWaitingForLab: false,
             listSeeMoreOrders: [] as any,
             listSeeLessOrders: [] as any,
             listSeeMoreResults: [] as any,
@@ -122,12 +171,14 @@ export default defineComponent({
     setup() {
         return { checkmark, pulseOutline };
     },
-    async mounted() {
-        this.orders = this.propOrders;
-        this.setListData(this.orders);
-        this.service = new PatientLabService(this.demographics.patient_id);
-    },
-    watch: {
+  async mounted() {
+    this.orders = this.propOrders;
+    this.setListData(this.orders);
+    this.service = new PatientLabService(this.demographics.patient_id);
+    this.userRoles = await Service.getUserRoles();
+  },
+
+  watch: {
         propOrders: {
             handler() {
                 this.orders = this.propOrders;
@@ -143,6 +194,40 @@ export default defineComponent({
         },
     },
     methods: {
+      toggleSendToLabModal() {
+        this.sendToLabModalOpen = !this.sendToLabModalOpen;
+      },
+      async fetchPatientLabStageData() {
+        const location = await getUserLocation();
+        const locationId = location ? location.location_id : null;
+
+        if (locationId) {
+          const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
+          await usePatientList().refresh(locationId);
+          if (this.demographics.patient_id) {
+            this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.demographics.patient_id);
+          }
+        }
+      },
+      async handleSendToLabYes(){
+        const location = await getUserLocation();
+        const locationId = location ? location.location_id : null;
+        if (!locationId) {
+          toastDanger("Location ID could not be found. Please check your settings.");
+          return;
+        }
+        await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"LAB", locationId);
+        await usePatientList().refresh(locationId);
+        toastSuccess("Lab orders submitted to the lab successfully")
+        await this.fetchPatientLabStageData()
+        this.closeSendToLabModal()
+      },
+      async handleSendToLabNo(){
+        this.toggleSendToLabModal();
+      },
+      closeSendToLabModal() {
+        this.sendToLabModalOpen = false;
+      },
         async updateLabList() {
             this.openModal = false;
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
@@ -462,4 +547,16 @@ export default defineComponent({
     color: #006401;
     padding: 10px;
 }
+.no-margin-left {
+  margin: 0;
+  display: flex;
+  justify-content: flex-start;
+  background: lightcyan;
+}
+.scrollable-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
 </style>

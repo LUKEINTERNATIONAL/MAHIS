@@ -10,6 +10,8 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -187,6 +189,9 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
+      getSaveFunction(){
+
+      },
         saveData() {
             this.saveDiagnosis();
             // this.saveMedicationDispensed();
@@ -195,7 +200,7 @@ export default defineComponent({
             // this.saveIntimatePartner();
             // this.saveDeworming();
             // resetPatientData();
-            this.$router.push('ANCHome');
+            this.$router.push('contact');
         },
         validationRules(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));

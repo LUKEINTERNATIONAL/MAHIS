@@ -448,5 +448,5 @@ export const useUrineTestStore = defineStore("urineTestingStore", {
             this.glucose = data;
         },
     },
-    persist: true,
+  //  persist: true,
 });

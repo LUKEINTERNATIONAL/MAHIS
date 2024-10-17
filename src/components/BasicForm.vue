@@ -422,7 +422,11 @@ export default defineComponent({
             default: [] as any,
         },
     },
-    methods: {
+  watch: {
+
+  },
+  methods: {
+
         addTag(newTag: any) {
             const tag = {
                 name: newTag,
@@ -433,6 +437,11 @@ export default defineComponent({
         },
         async handleInput(data: any, col: any, event: any, inputType: any) {
             this.event = event;
+          if (inputType === "updateInput" && col.isPhoneInput) {
+            this.validateData(data, col, event?.target?.value);
+            col.value = event?.target?.value?.trim(); // Update col.value directly
+            this.$emit("update:inputValue", col);
+          }
             if (inputType == "updateInput") {
                 this.validateData(data, col, event?.target?.value);
                 if (event) modifyFieldValue(data, col?.name, "value", event?.target?.value?.trim());
