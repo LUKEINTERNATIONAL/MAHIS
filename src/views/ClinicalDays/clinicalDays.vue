@@ -49,8 +49,25 @@
           <ion-card-title>Appointment Settings</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-            <ion-label class="ilbl2">Set Maximum Next Appointments Visits Per Day</ion-label>
-            <ion-input placeholder="Enter a number" v-model="maximumNumberOfDaysForEachDay" fill="outline"></ion-input>
+            <ion-row>
+              <ion-col>
+                  <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                  >{{input_properties[0].placeHolder}}<span style="color: #b42318">*</span></ion-label
+                >
+                  <BasicInputField
+                      :placeholder="input_properties[0].placeHolder"
+                      :icon="pencilOutline"
+                      :inputValue="maximumNumberOfDaysForEachDay"
+                      @update:inputValue="input_properties[0].dataHandler"
+                  />
+
+                  <div>
+                      <ion-label v-if="input_properties[0].show_error.value" class="error-label">
+                          {{ input_properties[0].error_message }}
+                      </ion-label>
+                  </div>
+              </ion-col>
+            </ion-row>
         </ion-card-content>
       </ion-card>
   
@@ -84,17 +101,35 @@
               </ion-col>
             </ion-row>
           </ion-grid>
+          <ion-grid>
+
+          </ion-grid>
         </ion-card-content>
       </ion-card>
+
+      <ion-row>
+        <ion-col>
+          <ion-button
+            fill="solid"
+            @click="saveAction"
+            class="btn-cls-2"
+            style="float: right"
+          >
+            <ion-icon :icon="saveOutline" slot="start" style="margin-right: 5px;"></ion-icon>
+            {{ 'Save Current Settings' }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
     </div>
   </template>
   
   <script setup lang="ts">
   import {
     IonCard, IonCardContent, IonCardHeader, IonCardTitle,
-    IonCheckbox, IonCol, IonGrid, IonInput, IonItem,
-    IonLabel, IonRow
+    IonCheckbox, IonCol, IonGrid,
+    IonLabel, IonRow, IonButton, IonIcon, 
   } from "@ionic/vue";
+  import { pencilOutline, saveOutline } from "ionicons/icons"
   import { ref, computed, onMounted, watch } from "vue";
   import VueDatePicker from '@vuepic/vue-datepicker';
   import '@vuepic/vue-datepicker/dist/main.css';
@@ -102,6 +137,7 @@
   import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
   import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
   import router from '@/router';
+  import BasicInputField from "@/components/BasicInputField.vue"
   import HisDate from "@/utils/Date";
   import { combineArrays } from "@/utils/GeneralUti";
   
@@ -109,7 +145,7 @@
   const disable_weekends = ref(true);
   const totalHolidaysSelected = ref(0);
   const date = ref([]);
-  const maximumNumberOfDaysForEachDay = ref(0);
+  const maximumNumberOfDaysForEachDay = ref(0) as any;
   const disabledDates = ref([]);
   const isMondayChecked = ref(false);
   const isTuesdayChecked = ref(false);
@@ -149,6 +185,22 @@
     }
     saveAndReload();
   };
+
+  const input_properties = [
+    {
+        placeHolder: 'Set Maximum Next Appointments Visits Per Day',
+        property_name: 'visitsPerDay',
+        dataHandler: inputUpDated_fn1,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, Only letters are allowed',
+    }
+  ]
+
+  function inputUpDated_fn1(event: any) {
+    const input = event.target.value
+    maximumNumberOfDaysForEachDay.value = input
+}
   
   const onWeekendToggleChange = () => {
     // toggle_local.value = !toggle_local.value;
@@ -227,6 +279,10 @@
     storeClinicalDaysStore.setAreSaturdaysDisabled(isSaturdayChecked.value);
     storeClinicalDaysStore.setAreSundaysDisabled(isSundayChecked.value);
   }
+
+  function saveAction() {
+    saveAndReload
+  }
   </script>
   
   <style scoped>
@@ -252,7 +308,7 @@
     --toggle-bg-on: #006401;
     --toggle-border-on: #006401;
     --toggle-width: 6.3rem;
-    --toggle-height: 1.9rem;
+    --toggle-height: 1.5rem;
     --toggle-border: 0.525rem;
     --toggle-font-size: 1rem;
     margin-bottom: 30px;
