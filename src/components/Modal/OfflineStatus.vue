@@ -3,10 +3,11 @@
         <div class="title">Loading Offline Records</div>
         <div class="container">
             <div class="sub_title">
-                Relationships <span class="count"> ({{ offlineVillageStatus?.total_village }}/{{ offlineVillageStatus?.total }})</span>
+                Relationships
+                <span class="count"> ({{ offlineRelationshipStatus?.total_relationships }}/{{ offlineRelationshipStatus?.total }})</span>
             </div>
             <k-progress
-                :percent="fractionToPercentage(offlineVillageStatus?.total_village, offlineVillageStatus?.total)"
+                :percent="fractionToPercentage(offlineRelationshipStatus?.total_relationships, offlineRelationshipStatus?.total)"
                 active
                 active-color="#fff"
                 color="rgb(107, 199, 107)"
@@ -132,7 +133,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useStatusStore, ["offlineVillageStatus", "offlineDistrictStatus", "offlineTAsStatus"]),
+        ...mapState(useStatusStore, ["offlineVillageStatus", "offlineDistrictStatus", "offlineTAsStatus", "offlineRelationshipStatus"]),
     },
     watch: {
         dataToPass: {
