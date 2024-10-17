@@ -297,10 +297,13 @@ async function getTotals() {
  **********************************************************************/
 // start location code
 async function setOfflineLocation() {
-    const districtsData: any = await getOfflineData("districts");
+    let districtsData: any = await getOfflineData("districts");
     if (!districtsData || districtsData.length !== 32) {
-        await overRideRecord("districts", await getDistricts());
-    } else {
+        districtsData = await getDistricts();
+        await overRideRecord("districts", districtsData);
+    }
+
+    if (districtsData.length === 32) {
         self.postMessage({
             payload: {
                 total_districts: 32,
@@ -308,10 +311,13 @@ async function setOfflineLocation() {
             },
         });
     }
-    const TAsData: any = await getOfflineData("TAs");
+    let TAsData: any = await getOfflineData("TAs");
     if (!TAsData || TOTALS.total_TA > TAsData.length) {
-        await overRideRecord("TAs", await getTAs());
-    } else {
+        TAsData = await getTAs();
+        await overRideRecord("TAs", TAsData);
+    }
+
+    if (TAsData.length === TOTALS.total_TA) {
         self.postMessage({
             payload: {
                 total_TAs: TOTALS.total_TA,
@@ -353,10 +359,8 @@ async function getVillages() {
         let pageSize: any = 500;
         const villagesData: any = await getOfflineData("villages");
         if (villagesData && villagesData.length > 0) {
-            console.log("🚀 ~ getVillages ~ villagesData:", villagesData);
             page = parseInt(villagesData.length) / 500;
             page = parseInt(page);
-            console.log("🚀 ~ getVillages ~ page:", page);
             allVillage.push(...villagesData);
         }
 
@@ -365,14 +369,13 @@ async function getVillages() {
             if (newVillages.length > 0) {
                 allVillage.push(...newVillages);
                 await overRideRecord("villages", allVillage);
-                page++;
                 self.postMessage({
                     payload: {
-                        type: "OFFLINE_VILLAGES",
                         total_village: allVillage.length,
                         total: TOTALS.total_village,
                     },
                 });
+                page++;
             } else {
                 break;
             }
@@ -410,7 +413,7 @@ async function setOfflinePrograms() {
  **********************************************************************
  **********************************************************************/
 async function setOfflineRelationship() {
-    const relationshipsData: any = await getOfflineData("relationship");
+    let relationshipsData: any = await getOfflineData("relationship");
     if (!relationshipsData || TOTALS.total_relationships > relationshipsData.length) {
         const relationships = await execFetch(buildUrl("/types/relationships", { paginate: false }));
         if (relationships && Object.keys(relationships).length > 0) {
@@ -418,8 +421,14 @@ async function setOfflineRelationship() {
                 relationships: relationships,
             });
         }
-        return relationships;
-    } else {
-        return relationshipsData.relationships;
+    }
+
+    if (relationshipsData.relationships.length === TOTALS.total_relationships) {
+        self.postMessage({
+            payload: {
+                total_relationships: relationshipsData.relationships.length,
+                total: TOTALS.total_relationships,
+            },
+        });
     }
 }
