@@ -146,6 +146,8 @@ import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { UserService } from "@/services/user_service";
+import { useGeneralStore } from "@/stores/GeneralStore";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts, SetDemographics],
     components: {
@@ -186,6 +188,7 @@ export default defineComponent({
     },
     props: ["registrationType"],
     computed: {
+        ...mapState(useGeneralStore, ["NCDUserActions"]),
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["socialHistory"]),
@@ -496,10 +499,15 @@ export default defineComponent({
         async openNewPage(item: any) {
             await resetPatientData();
             this.setDemographics(item);
+            await UserService.setProgramUserActions();
             this.isLoading = false;
-            let url = "/patientProfile";
             this.disableSaveBtn = false;
-            this.$router.push(url);
+            if (this.programID() == 32) {
+                this.$router.push(this.NCDUserActions.url);
+            } else {
+                let url = "/patientProfile";
+                this.$router.push(url);
+            }
         },
         patientIdentifier(item: any) {
             // return item

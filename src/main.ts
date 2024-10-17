@@ -6,6 +6,7 @@ import vSelect from "vue-select";
 import { IonicVue } from "@ionic/vue";
 import { createPinia } from "pinia";
 import piniaPluginPersistedState from "pinia-plugin-persistedstate";
+import KProgress from "k-progress-v3";
 
 import VueDatePicker from "@vuepic/vue-datepicker";
 import VueAwesomePaginate from "vue-awesome-paginate";
@@ -45,6 +46,7 @@ const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePa
 
 app.component("VueDatePicker", VueDatePicker);
 app.component("v-select", vSelect);
+app.component("k-progress", KProgress);
 pinia.use(piniaPluginPersistedState);
 DataTable.use(DataTablesCore);
 router.isReady().then(() => {

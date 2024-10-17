@@ -1,7 +1,4 @@
-// import { LocationService } from "@/services/location_service";
-// import db from "@/db";
-import { build } from "ionicons/icons";
-
+// start common code
 type WorkerMessage<T> = {
     type: string;
     payload: T;
@@ -11,19 +8,21 @@ type WorkerResponse<T> = {
     type: string;
     payload: T;
 };
-let URL = "";
-let APIKEY = "";
-let db: IDBDatabase | null = null;
-interface YourDataType {
-    id?: number; // Make id optional
-    name: string;
-    age: number;
-}
 
+let APIURL = "";
+let APIKEY = "";
+let TOTALS: any = "";
+let db: IDBDatabase | null = null;
+
+/**********************************************************************
+ **********************************************************************
+                            Index DB                                                        
+ **********************************************************************
+ **********************************************************************/
 // Function to open the database
 function openDatabase(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
-        const request = indexedDB.open("MaHis", 4);
+        const request = indexedDB.open("MaHis");
 
         request.onerror = (event) => {
             reject("Database error: " + (event.target as IDBOpenDBRequest).error);
@@ -36,73 +35,131 @@ function openDatabase(): Promise<IDBDatabase> {
 
         request.onupgradeneeded = (event) => {
             const database = (event.target as IDBOpenDBRequest).result;
-            const objectStore = database.createObjectStore("relationship", {});
-            // Add any other object stores or indexes here
+            const objectStores = ["relationship", "districts", "TAs", "villages", "programs", "patientRecords"];
+
+            objectStores.forEach((storeName) => {
+                if (!database.objectStoreNames.contains(storeName)) {
+                    database.createObjectStore(storeName, { keyPath: "id", autoIncrement: true });
+                }
+            });
         };
     });
 }
-self.onmessage = async (event) => {
-    const { type, payload, url, apiKey } = event.data;
-    URL = url;
-    APIKEY = apiKey;
-    try {
-        await openDatabase();
 
-        // Correct data format
-        const validData: YourDataType = { name: "John Doe", age: 30 };
-        await addData(validData);
-        console.log("Valid data added successfully");
-
-        // Incorrect data format (this will throw an error)
-        const invalidData = { name: "Jane Doe", age: 25 };
-        await addData(invalidData as YourDataType);
-    } catch (error) {
-        console.error("Error:", error);
-    }
-    const village = await getVillages();
-    console.log("🚀 ~ self.onmessage= ~ village:", village);
-    switch (type) {
-        case "SET_OFFLINE_LOCATION":
-            try {
-                // await setOfflineLocation();
-                self.postMessage({ type: "SET_OFFLINE_LOCATION_RESULT", payload: "Success" });
-            } catch (error) {
-                self.postMessage({ type: "ERROR", payload: "Error setting offline location" });
-            }
-            break;
-        case "GET_OFFLINE_LOCATION":
-            try {
-                const result = await getOfflineLocation();
-                self.postMessage({ type: "GET_OFFLINE_LOCATION_RESULT", payload: result });
-            } catch (error) {
-                self.postMessage({ type: "ERROR", payload: "Error getting offline location" });
-            }
-            break;
-        default:
-            self.postMessage({ type: "ERROR", payload: "Unknown message type" });
-    }
-};
-function addData(data: YourDataType): Promise<void> {
+// New function to delete an object store
+function deleteObjectStore(storeName: string): Promise<void> {
     return new Promise((resolve, reject) => {
         if (!db) {
             reject(new Error("Database not initialized. Call openDatabase() first."));
             return;
         }
 
-        // Validate data before adding
-        if (typeof data.name !== "string" || typeof data.age !== "number") {
-            reject(new Error("Invalid data format. Name must be a string and age must be a number."));
+        if (!db.objectStoreNames.contains(storeName)) {
+            reject(new Error(`Object store "${storeName}" does not exist.`));
             return;
         }
 
-        const transaction = db.transaction(["relationship"], "readwrite");
-        const objectStore = transaction.objectStore("relationship");
+        const version = db.version + 1;
+        db.close();
 
-        // If id is provided and not auto-incremented, use put instead of add
-        const request = data.id ? objectStore.put(data) : objectStore.add(data);
+        const request = indexedDB.open("MaHis", version);
 
         request.onerror = (event) => {
-            reject("Error adding data: " + (event.target as IDBRequest).error);
+            reject("Database error: " + (event.target as IDBOpenDBRequest).error);
+        };
+
+        request.onupgradeneeded = (event) => {
+            const database = (event.target as IDBOpenDBRequest).result;
+            database.deleteObjectStore(storeName);
+        };
+
+        request.onsuccess = (event) => {
+            db = (event.target as IDBOpenDBRequest).result;
+            resolve();
+        };
+    });
+}
+async function overRideRecord(storeName: string, data: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized. Call openDatabase() first."));
+            return;
+        }
+        const transaction = db.transaction([storeName], "readwrite");
+        const objectStore = transaction.objectStore(storeName);
+
+        // Clear all existing data
+        const clearRequest = objectStore.clear();
+
+        clearRequest.onerror = (event) => {
+            reject((event.target as IDBRequest).error);
+        };
+
+        clearRequest.onsuccess = () => {
+            // After clearing, add the new data
+            const addRequest = objectStore.add(data);
+
+            addRequest.onerror = (event) => {
+                reject((event.target as IDBRequest).error);
+            };
+
+            addRequest.onsuccess = () => {
+                resolve();
+            };
+        };
+    });
+}
+async function upsertSingleRecord(storeName: string, data: any): Promise<void> {
+    if (!db) {
+        throw new Error("Database not initialized. Call openDatabase() first.");
+    }
+
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized. Call openDatabase() first."));
+            return;
+        }
+        const transaction = db.transaction([storeName], "readwrite");
+        const objectStore = transaction.objectStore(storeName);
+
+        // Get all records (should be only one or none)
+        const getAllRequest = objectStore.getAll();
+
+        getAllRequest.onsuccess = (event) => {
+            const existingRecords = (event.target as IDBRequest).result;
+
+            if (existingRecords.length > 0) {
+                // Update existing record
+                const updateRequest = objectStore.put([...existingRecords[0], ...data]);
+                updateRequest.onsuccess = () => resolve();
+                updateRequest.onerror = (event) => reject((event.target as IDBRequest).error);
+            } else {
+                // Add new record
+                const addRequest = objectStore.add(data);
+                addRequest.onsuccess = () => resolve();
+                addRequest.onerror = (event) => reject((event.target as IDBRequest).error);
+            }
+        };
+
+        getAllRequest.onerror = (event) => reject((event.target as IDBRequest).error);
+    });
+}
+
+function addData(storeName: string, data: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized. Call openDatabase() first."));
+            return;
+        }
+
+        const transaction = db.transaction([storeName], "readwrite");
+        const objectStore = transaction.objectStore(storeName);
+
+        const request = objectStore.add(data);
+
+        request.onerror = (event) => {
+            const error = (event.target as IDBRequest).error;
+            reject(new Error(`Error adding data: ${error?.name} - ${error?.message}`));
         };
 
         request.onsuccess = () => {
@@ -110,54 +167,214 @@ function addData(data: YourDataType): Promise<void> {
         };
     });
 }
+async function getOfflineData(storeName: any) {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized."));
+            return;
+        }
+        try {
+            const transaction = db.transaction([storeName], "readonly");
+            const objectStore = transaction.objectStore(storeName);
+            const request = objectStore.getAll();
 
-async function setOfflineLocation() {
-    const locationData = await getOfflineLocation();
-    // if (!(locationData && Object.keys(locationData).length > 0) || (locationData && locationData?.villageList == "")) {
-    //     await db.collection("location").delete();
-    //     await db.collection("location").add({
-    //         districts: await getDistricts(),
-    //         TAs: await getTAs(),
-    //         villageList: await getVillages(),
-    //     });
-    // }
+            request.onerror = (event) => {
+                const error = (event.target as IDBRequest).error;
+                reject(new Error(`Error getting data: ${error?.name} - ${error?.message}`));
+            };
+
+            request.onsuccess = (event) => {
+                const result = (event.target as IDBRequest).result;
+                resolve(result.length > 0 ? result[0] : null);
+            };
+        } catch (error) {
+            console.log("failed to get locations", error);
+            return null;
+        }
+    });
+}
+/**********************************************************************
+ **********************************************************************
+                            Web worker                                                       
+ **********************************************************************
+ **********************************************************************/
+self.onmessage = async (event: any) => {
+    const { type, url, apiKey } = event.data;
+    APIURL = url;
+    APIKEY = apiKey;
+    TOTALS = await getTotals();
+
+    await openDatabase();
+    try {
+        switch (type) {
+            case "SET_OFFLINE_LOCATION":
+                try {
+                    await setOfflineLocation();
+
+                    console.log({ type: "SET_OFFLINE_LOCATION_RESULT", payload: "Success" });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error setting offline location: " + error });
+                }
+                break;
+
+            case "GET_OFFLINE_LOCATION":
+                try {
+                    const result = await getOfflineData("location");
+                    console.log({ type: "GET_OFFLINE_LOCATION_RESULT", payload: result });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error getting offline location: " + error });
+                }
+                break;
+            case "SET_OFFLINE_PROGRAMS":
+                try {
+                    self.postMessage({ payload: await setOfflinePrograms() });
+                    console.log({ type: "SET_OFFLINE_PROGRAMS_RESULTS", payload: "Success" });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error setting offline programs: " + error });
+                }
+                break;
+            case "SET_OFFLINE_RELATIONSHIPS":
+                try {
+                    await setOfflineRelationship();
+                    console.log({ type: "SET_OFFLINE_RELATIONSHIPS_RESULTS", payload: "Success" });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error setting offline relationship: " + error });
+                }
+                break;
+            case "DELETE_OBJECT_STORE":
+                try {
+                    const { storeName } = event.data;
+                    await deleteObjectStore(storeName);
+                    console.log({ type: "DELETE_OBJECT_STORE_RESULT", payload: "Success" });
+                } catch (error) {
+                    console.log({ type: "ERROR", payload: "Error deleting object store: " + error });
+                }
+                break;
+            default:
+                console.log({ type: "ERROR", payload: "Unknown message type" });
+        }
+    } catch (error) {
+        console.log({ type: "ERROR", payload: "Database initialization error: " + error });
+    }
+};
+
+/**********************************************************************
+ **********************************************************************
+                            Backend Requests                                                       
+ **********************************************************************
+ **********************************************************************/
+async function execFetch(url: string, params: any = "") {
+    const response = await fetch(url, { headers: headers() });
+    return await response.json();
 }
 
-async function getOfflineLocation() {
-    // return await db
-    //     .collection("location")
-    //     .get()
-    //     .then(async (locationData: any) => {
-    //         return locationData[0];
-    //     });
+function headers() {
+    return {
+        Authorization: APIKEY,
+        "Content-Type": "application/json",
+    };
+}
+
+function buildUrl(url: string, params: any) {
+    const transformedUrl = `${url}?${parameterizeObjToString(params)}`;
+    return APIURL + transformedUrl;
+}
+
+function parameterizeObjToString(obj: Record<string, any>) {
+    return Object.entries(obj)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join("&");
+}
+
+async function getTotals() {
+    return await execFetch(buildUrl("/totals", { paginate: false }));
+}
+
+/**********************************************************************
+ **********************************************************************
+                          Location code                                                       
+ **********************************************************************
+ **********************************************************************/
+// start location code
+async function setOfflineLocation() {
+    let districtsData: any = await getOfflineData("districts");
+    if (!districtsData || districtsData.length !== 32) {
+        districtsData = await getDistricts();
+        await overRideRecord("districts", districtsData);
+    }
+
+    if (districtsData.length === 32) {
+        self.postMessage({
+            payload: {
+                total_districts: 32,
+                total: 32,
+            },
+        });
+    }
+    let TAsData: any = await getOfflineData("TAs");
+    if (!TAsData || TOTALS.total_TA > TAsData.length) {
+        TAsData = await getTAs();
+        await overRideRecord("TAs", TAsData);
+    }
+
+    if (TAsData.length === TOTALS.total_TA) {
+        self.postMessage({
+            payload: {
+                total_TAs: TOTALS.total_TA,
+                total: TOTALS.total_TA,
+            },
+        });
+    }
+    const villagesData: any = await getOfflineData("villages");
+    if (!villagesData || TOTALS.total_village > villagesData.length) {
+        await getVillages();
+        // await overRideRecord("villages", await getVillages());
+    } else {
+        self.postMessage({
+            payload: {
+                total_village: TOTALS.total_village,
+                total: TOTALS.total_village,
+            },
+        });
+    }
 }
 
 async function getDistricts() {
     let districtList = [];
     for (let i of [1, 2, 3]) {
-        const response: any = await fetch(buildUrl("/districts", { region_id: i, page_size: 1000 }));
-        const districts = await response.json();
+        const districts: any = await execFetch(buildUrl("/districts", { region_id: i, page_size: 1000 }));
         districtList.push(...districts);
     }
     return districtList;
 }
 
 async function getTAs() {
-    const response: any = await fetch(buildUrl("/traditional_authorities", { paginate: false }));
-    return response.json();
+    return await execFetch(buildUrl("/traditional_authorities", { paginate: false }));
 }
 
 async function getVillages() {
     try {
         const allVillage = [];
-        let page = 1;
-        const pageSize = 500;
+        let page: any = 1;
+        let pageSize: any = 500;
+        const villagesData: any = await getOfflineData("villages");
+        if (villagesData && villagesData.length > 0) {
+            page = parseInt(villagesData.length) / 500;
+            page = parseInt(page);
+            allVillage.push(...villagesData);
+        }
+
         while (true) {
-            const response: any = await execFetch(buildUrl("/villages", { page, page_size: pageSize }));
-            const newVillages = await response.json();
-            console.log("🚀 ~ getVillages ~ newVillages:", newVillages);
+            const newVillages: any = await execFetch(buildUrl("/villages", { page, page_size: pageSize }));
             if (newVillages.length > 0) {
                 allVillage.push(...newVillages);
+                await overRideRecord("villages", allVillage);
+                self.postMessage({
+                    payload: {
+                        total_village: allVillage.length,
+                        total: TOTALS.total_village,
+                    },
+                });
                 page++;
             } else {
                 break;
@@ -166,28 +383,50 @@ async function getVillages() {
         return allVillage;
     } catch (error) {
         console.error("Error fetching villages:", error);
-        return "";
+        return [];
     }
 }
-async function execFetch(url: string, params: any = "") {
-    return await fetch(url, { headers: headers() });
-}
-function headers() {
-    return {
-        Authorization: APIKEY,
-        "Content-Type": "application/json",
-    };
-}
-function buildUrl(url: string, params: any) {
-    const transformedUrl = `${url}?${parameterizeObjToString(params)}`;
-    const data = URL + transformedUrl;
-    console.log("🚀 ~ buildUrl ~ data:", data);
-    return data;
-}
-function parameterizeObjToString(obj: Record<string, any>) {
-    let str = "";
-    for (const [key, value] of Object.entries(obj)) {
-        str += `${key}=${value}&`;
+
+/**********************************************************************
+ **********************************************************************
+                          Program code                                                        
+ **********************************************************************
+ **********************************************************************/
+async function setOfflinePrograms() {
+    const programsData: any = await getOfflineData("programs");
+    if (!programsData || TOTALS.total_programs > programsData.length) {
+        const programs = await execFetch(buildUrl("/programs", { page_size: 1000 }));
+        if (programs && Object.keys(programs).length > 0) {
+            await overRideRecord("programs", {
+                programs: programs,
+            });
+        }
+        return programs;
+    } else {
+        return programsData.programs;
     }
-    return str;
+}
+
+/**********************************************************************
+ **********************************************************************
+                          Relationship code                                                       
+ **********************************************************************
+ **********************************************************************/
+async function setOfflineRelationship() {
+    let relationshipsData: any = await getOfflineData("relationship");
+    if (!relationshipsData || TOTALS.total_relationships > relationshipsData.length) {
+        relationshipsData = await execFetch(buildUrl("/types/relationships", { paginate: false }));
+        if (relationshipsData && relationshipsData.length > 0) {
+            await overRideRecord("relationship", relationshipsData);
+        }
+    }
+
+    if (relationshipsData.length === TOTALS.total_relationships) {
+        self.postMessage({
+            payload: {
+                total_relationships: relationshipsData.length,
+                total: TOTALS.total_relationships,
+            },
+        });
+    }
 }
