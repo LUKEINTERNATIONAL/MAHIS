@@ -93,28 +93,14 @@ export default defineComponent({
 </script>
 <script setup lang="ts">
 import {
-    IonContent,
-    IonHeader,
     IonCol,
     IonItem,
-    IonList,
-    IonButton,
-    IonMenu,
-    IonTitle,
-    IonToolbar,
     IonInput,
-    IonDatetime,
     IonLabel,
     IonRow,
-    IonTextarea,
-    IonAccordion,
-    IonAccordionGroup,
-    AccordionGroupCustomEvent,
     IonCheckbox
 } from "@ionic/vue"
-import Toolbar from '@/components/Toolbar.vue'
 import { ref, onMounted,computed, watch } from "vue"
-import { chevronBackOutline, checkmark } from "ionicons/icons"
 import Toggle from '@vueform/toggle'
 import router from '@/router'
 import HisDate from "@/utils/Date"
