@@ -199,7 +199,7 @@ async function getOfflineData(storeName: any) {
  **********************************************************************
  **********************************************************************/
 self.onmessage = async (event: any) => {
-    const { type, url, apiKey } = event.data;
+    const { type, url, apiKey, storeName, payload } = event.data;
     APIURL = url;
     APIKEY = apiKey;
     TOTALS = await getTotals();
@@ -211,50 +211,57 @@ self.onmessage = async (event: any) => {
                 try {
                     await setOfflineLocation();
 
-                    console.log({ type: "SET_OFFLINE_LOCATION_RESULT", payload: "Success" });
+                    console.log("SET_OFFLINE_LOCATION ~ storeName:", storeName);
                 } catch (error) {
-                    console.log({ type: "ERROR", payload: "Error setting offline location: " + error });
+                    console.log("SET_OFFLINE_LOCATION ~ error:", error);
                 }
                 break;
 
             case "GET_OFFLINE_LOCATION":
                 try {
                     const result = await getOfflineData("location");
-                    console.log({ type: "GET_OFFLINE_LOCATION_RESULT", payload: result });
+                    console.log("GET_OFFLINE_LOCATION ~ result:", result);
                 } catch (error) {
-                    console.log({ type: "ERROR", payload: "Error getting offline location: " + error });
+                    console.log("GET_OFFLINE_LOCATION ~ error:", error);
                 }
                 break;
             case "SET_OFFLINE_PROGRAMS":
                 try {
                     self.postMessage({ payload: await setOfflinePrograms() });
-                    console.log({ type: "SET_OFFLINE_PROGRAMS_RESULTS", payload: "Success" });
+                    console.log("SET_OFFLINE_PROGRAMS ~ storeName:", storeName);
                 } catch (error) {
-                    console.log({ type: "ERROR", payload: "Error setting offline programs: " + error });
+                    console.log("SET_OFFLINE_PROGRAMS ~ error:", error);
                 }
                 break;
             case "SET_OFFLINE_RELATIONSHIPS":
                 try {
                     await setOfflineRelationship();
-                    console.log({ type: "SET_OFFLINE_RELATIONSHIPS_RESULTS", payload: "Success" });
+                    console.log("SET_OFFLINE_RELATIONSHIPS ~ storeName:", storeName);
                 } catch (error) {
-                    console.log({ type: "ERROR", payload: "Error setting offline relationship: " + error });
+                    console.log("SET_OFFLINE_RELATIONSHIPS ~ error:", error);
                 }
                 break;
             case "DELETE_OBJECT_STORE":
                 try {
-                    const { storeName } = event.data;
                     await deleteObjectStore(storeName);
-                    console.log({ type: "DELETE_OBJECT_STORE_RESULT", payload: "Success" });
+                    console.log("DELETE_OBJECT_STORE ~ storeName:", storeName);
                 } catch (error) {
-                    console.log({ type: "ERROR", payload: "Error deleting object store: " + error });
+                    console.log("DELETE_OBJECT_STORE ~ error:", error);
+                }
+                break;
+            case "ADD_OBJECT_STORE":
+                try {
+                    await addData(storeName, payload);
+                    console.log("ADD_OBJECT_STORE ~ payload:", payload);
+                } catch (error) {
+                    console.log("ADD_OBJECT_STORE ~ error:", error);
                 }
                 break;
             default:
-                console.log({ type: "ERROR", payload: "Unknown message type" });
+                console.log("Unknown type: " + type);
         }
     } catch (error) {
-        console.log({ type: "ERROR", payload: "Database initialization error: " + error });
+        console.log("Error Offline database initialization: " + error);
     }
 };
 
