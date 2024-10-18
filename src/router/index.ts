@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import stockManagement from "../views/StockManagement.vue";
+import dataManagement from "../views/DataManagement.vue";
 import scheduleImmunization from "../views/ScheduleImmunizationSessions.vue";
 import manageAppointMents from "../views/ManageAppointMents.vue";
 import ManageAppointMentsTemplate from "../views/ManageAppointMentsTemplate.vue";
@@ -16,7 +17,6 @@ import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
 import setDDE from "@/views/Configurations/setDDE.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
-
 import NCD from "@/apps/NCD/config/routes";
 import OPD from "@/apps/OPD/config/routes";
 import ANC from "@/apps/ANC/config/routes";
@@ -37,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/stockManagement",
         name: "stockManagement",
         component: stockManagement,
+    },
+    {
+        path: "/dataManagement",
+        name: "dataManagement",
+        component: dataManagement,
     },
     {
         path: "/setDDE",

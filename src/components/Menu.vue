@@ -28,6 +28,11 @@
                         <ion-label class="header">Inventory Management </ion-label>
                     </ion-item>
                 </ion-accordion>
+                <ion-accordion value="second" @click="navigationMenu('dataManagement')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="header">Data Management </ion-label>
+                    </ion-item>
+                </ion-accordion>
                 <ion-accordion value="fourth">
                     <ion-item slot="header" color="light">
                         <ion-label class="header">Reports</ion-label>
