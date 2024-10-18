@@ -45,7 +45,7 @@
                 <ion-item>
                     <div class="dates_title">
                         <div>Appointment limit (per/day)</div>
-                        <div class="sub_data">{{ bookedPatient }}/120</div>
+                        <div class="sub_data">{{ bookedPatient }}/{{ maximumNumberOfDaysForEachDay }}</div>
                     </div>
                 </ion-item>
             </ion-col>
@@ -54,12 +54,10 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref, computed } from "vue";
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonDatetime } from "@ionic/vue";
-import { defineComponent } from "vue";
 import { calendar, checkmark, pulseOutline } from "ionicons/icons";
-import { ref } from "vue";
 import { icons } from "@/utils/svg";
-
 import { createModal } from "@/utils/Alerts";
 import BasicInputField from "../../../../components/BasicInputField.vue";
 import HisDate from "@/utils/Date";
@@ -71,88 +69,89 @@ import { PatientService } from "@/services/patient_service";
 import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
 
 export default defineComponent({
-    components: {
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        BasicInputField,
-        IonDatetime,
-    },
-    data() {
-        const storeClinicalDaysStore = useClinicalDaysStore()
-        return {
-            iconsContent: icons,
-            calendarDate: "" as any,
-            date: new Date(),
-            bookedPatient: 20,
-            tomorrow: new Date().getDate() + 1,
-            appointment: "" as any,
-            drugRunoutDate: "" as any,
-            nextAppointmentDate: "" as any,
-            minDate: new Date(),
-            disabledDates: ref(storeClinicalDaysStore.getDisabledDates()) as any,
-            datesCounts: ref(storeClinicalDaysStore.getAssignedAppointments()) as any,
-        };
-    },
-    computed: {
-        ...mapState(useNextAppointmentStore, ["nextAppointment"]),
-    },
-    watch: {
-        calendarDate: {
-            handler() {
-                this.updateNextAppointment();
-            },
-            deep: true,
-        },
-    },
-    async mounted() {
-        const userID: any = Service.getUserID();
-        const patient = new PatientService();
-        this.appointment = new AppointmentService(patient.getID(), userID);
-        this.nextAppointmentDate = this.appointment.date;
-        this.loadDataFromStore()
-       
-    },
-    methods: {
-        updateNextAppointment() {
-            const nextAppointmentStore = useNextAppointmentStore();
-            nextAppointmentStore.setNextAppointment(this.calendarDate);
-        },
-        handleDateUpdate(value: any) {
-            const storeClinicalDaysStore = useClinicalDaysStore()
-            storeClinicalDaysStore.setsssignedAppointmentsDates(value);
-            this.calendarDate = HisDate.toStandardHisDisplayFormat(value);
-            this.saveData();
-            this.loadDataFromStore()
-        },
-        async saveData() {
-            try {
-                const res = await this.appointment.getNextAppointment();
-                this.nextAppointmentDate = res.appointment_date;
-                this.drugRunoutDate = res.drugs_run_out_date;
-                console.log(res);
-            } catch {}
-            // const res = await this.appointment.getDailiyAppointments("2024-03-01");
-            const ttt = [
-                await this.appointment.buildValueDate("Appointment date", "2024-03-28"),
-                await this.appointment.buildValueDate("Estimated date", this.nextAppointmentDate),
-            ];
-            // await this.appointment.createEncounter();
-            // await this.appointment.saveObservationList(ttt);
-        },
-        loadDataFromStore() {
-            
-            
-            // this.date = storeClinicalDaysStore.getAssignedAppointmentsDates()
-            // console.log(storeClinicalDaysStore.getAssignedAppointmentsDates())
-            // console.log(storeClinicalDaysStore.getAssignedAppointments())
+  components: {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonMenu,
+    IonTitle,
+    IonToolbar,
+    BasicInputField,
+    IonDatetime,
+  },
+  setup() {
+    const clinicalDaysStore = useClinicalDaysStore();
+    
+    // Make disabledDates and datesCounts reactive using computed properties
+    const disabledDates = computed(() => clinicalDaysStore.getDisabledDates());
+    const datesCounts = computed(() => clinicalDaysStore.getAssignedAppointments());
 
-        }
+    return {
+      disabledDates,
+      datesCounts,
+    };
+  },
+  data() {
+    return {
+      iconsContent: icons,
+      calendarDate: "" as any,
+      date: new Date(),
+      bookedPatient: 20,
+      tomorrow: new Date().getDate() + 1,
+      appointment: "" as any,
+      drugRunoutDate: "" as any,
+      nextAppointmentDate: "" as any,
+      minDate: new Date(),
+    };
+  },
+  computed: {
+    ...mapState(useNextAppointmentStore, ["nextAppointment"]),
+    ...mapState(useClinicalDaysStore, ["maximumNumberOfDaysForEachDay"]),
+  },
+  watch: {
+    calendarDate: {
+      handler() {
+        this.updateNextAppointment();
+      },
+      deep: true,
     },
+  },
+  async mounted() {
+    const userID: any = Service.getUserID();
+    const patient = new PatientService();
+    this.appointment = new AppointmentService(patient.getID(), userID);
+    this.nextAppointmentDate = this.appointment.date;
+    this.loadDataFromStore();
+  },
+  methods: {
+    updateNextAppointment() {
+      const nextAppointmentStore = useNextAppointmentStore();
+      nextAppointmentStore.setNextAppointment(this.calendarDate);
+    },
+    handleDateUpdate(value: any) {
+      const storeClinicalDaysStore = useClinicalDaysStore();
+      storeClinicalDaysStore.setsssignedAppointmentsDates(value);
+      this.calendarDate = HisDate.toStandardHisDisplayFormat(value);
+      this.saveData();
+      this.loadDataFromStore();
+    },
+    async saveData() {
+      try {
+        const res = await this.appointment.getNextAppointment();
+        this.nextAppointmentDate = res.appointment_date;
+        this.drugRunoutDate = res.drugs_run_out_date;
+        console.log(res);
+      } catch {}
+      const ttt = [
+        await this.appointment.buildValueDate("Appointment date", "2024-03-28"),
+        await this.appointment.buildValueDate("Estimated date", this.nextAppointmentDate),
+      ];
+    },
+    loadDataFromStore() {
+      // This method can be used to perform any additional data loading if needed
+    }
+  },
 });
 </script>
 
