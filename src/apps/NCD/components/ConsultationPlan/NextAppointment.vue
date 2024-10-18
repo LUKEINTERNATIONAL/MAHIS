@@ -83,6 +83,7 @@ export default defineComponent({
         IonDatetime,
     },
     data() {
+        const storeClinicalDaysStore = useClinicalDaysStore()
         return {
             iconsContent: icons,
             calendarDate: "" as any,
@@ -93,9 +94,8 @@ export default defineComponent({
             drugRunoutDate: "" as any,
             nextAppointmentDate: "" as any,
             minDate: new Date(),
-            disabledDates: [],
-
-            datesCounts: [] as any,
+            disabledDates: ref(storeClinicalDaysStore.getDisabledDates()) as any,
+            datesCounts: ref(storeClinicalDaysStore.getAssignedAppointments()) as any,
         };
     },
     computed: {
@@ -137,23 +137,20 @@ export default defineComponent({
                 console.log(res);
             } catch {}
             // const res = await this.appointment.getDailiyAppointments("2024-03-01");
-            // console.log("🚀 ~ mounted ~ res:", res);
             const ttt = [
                 await this.appointment.buildValueDate("Appointment date", "2024-03-28"),
                 await this.appointment.buildValueDate("Estimated date", this.nextAppointmentDate),
             ];
             // await this.appointment.createEncounter();
             // await this.appointment.saveObservationList(ttt);
-            console.log("🚀 ~ mounted ~ ttt:", ttt);
         },
         loadDataFromStore() {
-            const storeClinicalDaysStore = useClinicalDaysStore()
-            this.disabledDates = storeClinicalDaysStore.getDisabledDates() as any
+            
+            
             // this.date = storeClinicalDaysStore.getAssignedAppointmentsDates()
-            console.log(storeClinicalDaysStore.getAssignedAppointmentsDates())
-            console.log(storeClinicalDaysStore.getAssignedAppointments())
+            // console.log(storeClinicalDaysStore.getAssignedAppointmentsDates())
+            // console.log(storeClinicalDaysStore.getAssignedAppointments())
 
-            this.datesCounts = storeClinicalDaysStore.getAssignedAppointments() as any
         }
     },
 });
