@@ -174,6 +174,7 @@ import {
     IonToolbar,
     IonRow,
     IonCol,
+    modalController,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -215,6 +216,7 @@ import {
 } from "ionicons/icons";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import DueModal from "@/components/DashboardModal/DueModal.vue";
+import OfflineStatusModal from "@/components/Modal/OfflineStatus.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
 import "vue3-carousel/dist/carousel.css";
@@ -223,11 +225,10 @@ import { createModal } from "@/utils/Alerts";
 import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
 import { getBaseURl } from "@/utils/GeneralUti";
-import { setOfflineLocation } from "@/services/set_location";
 import { setOfflineRelationship } from "@/services/set_relationships";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import { useWebWorker } from "@vueuse/core";
-
+import workerData from "@/activate_worker";
+import { useStatusStore } from "@/stores/StatusStore";
 export default defineComponent({
     name: "Home",
     mixins: [SetUser, SetDemographics, SetPrograms],
@@ -263,6 +264,7 @@ export default defineComponent({
             controlGraphs: "months" as any,
             reportData: "" as any,
             appointments: [] as any,
+            dataToPass: { payloadData: "tes" } as any,
             programBtn: {} as any,
             base_url: "backgroundImg.png",
             isLoading: false,
@@ -304,6 +306,8 @@ export default defineComponent({
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
         ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useStatusStore, ["offlineVillageStatus", "offlineDistrictStatus", "offlineTAsStatus", "offlineRelationshipStatus"]),
+
         backgroundStyle() {
             return {
                 background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(this.base_url)})`,
@@ -324,14 +328,43 @@ export default defineComponent({
             },
             deep: true,
         },
+        workerApi: {
+            handler() {
+                const status = useStatusStore();
+                if (this.workerApi?.data?.payload) {
+                    if (this.workerApi?.data?.payload?.total_relationships) status.setOfflineRelationshipStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_village) status.setOfflineVillageStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_districts) status.setOfflineDistrictStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_TAs) status.setOfflineTAsStatus(this.workerApi?.data?.payload);
+
+                    if (
+                        this.offlineVillageStatus?.total_village &&
+                        this.offlineRelationshipStatus?.total_relationships &&
+                        this.offlineDistrictStatus?.total_districts &&
+                        this.offlineTAsStatus?.total_TAs &&
+                        this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
+                        this.offlineRelationshipStatus?.total_relationships == this.offlineRelationshipStatus?.total &&
+                        this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
+                        this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
+                    ) {
+                        modalController.dismiss();
+                    }
+                }
+            },
+            deep: true,
+        },
     },
     async mounted() {
-        // this.workerApi = useWebWorker("/src/services/worker.ts", { immediate: false });
-        // const url = `${localStorage.getItem("apiProtocol")}://${localStorage.getItem("apiURL")}:${localStorage.getItem("apiPort")}/api/v1/`;
-        // this.workerApi.post({ type: "SET_OFFLINE_LOCATION", url: url, apiKey: localStorage.getItem("apiKey") });
         this.isLoading = true;
-        await setOfflineLocation();
-        await setOfflineRelationship();
+        const status = useStatusStore();
+        status.setOfflineVillageStatus("");
+        status.setOfflineDistrictStatus("");
+        status.setOfflineTAsStatus("");
+        status.setOfflineRelationshipStatus("");
+        this.openOfflineStatusModal("data");
+        this.workerApi = workerData.workerApi;
+        workerData.postData("SET_OFFLINE_LOCATION");
+        workerData.postData("SET_OFFLINE_RELATIONSHIPS");
         resetDemographics();
         await this.setAppointments();
         this.setView();
@@ -401,6 +434,11 @@ export default defineComponent({
         openDueModal(name: any) {
             const dataToPass = { title: name };
             createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
+        },
+
+        openOfflineStatusModal(name: any) {
+            const dataToPass = { title: name };
+            createModal(OfflineStatusModal, { class: "fullScreenModal" }, false, this.dataToPass);
         },
 
         openPatientsListModal(name: any) {

@@ -189,7 +189,7 @@ export class UserService extends Service {
             if (patient.getNcdNumber() != "Unknown") {
                 if (activities.length == 0) {
                     this.setNCDNumber();
-                    url = "patientProfile";
+                    url = "/patientProfile";
                     NCDProgramActionName = "+ Edit NCD Enrollment";
                 } else {
                     if (localStorage.getItem("saveProgressStatus") == "true") {
@@ -197,11 +197,11 @@ export class UserService extends Service {
                     } else if (visits.includes(HisDate.currentDate())) {
                         NCDProgramActionName = "+ Edit NCD consultation";
                     } else NCDProgramActionName = "+ Start new NCD consultation";
-                    url = "consultationPlan";
+                    url = "/consultationPlan";
                 }
             } else {
                 this.setNCDNumber();
-                url = "NCDEnrollment";
+                url = "/NCDEnrollment";
                 NCDProgramActionName = "+ Enroll in NCD Program";
             }
 
