@@ -21,7 +21,7 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
         areSundaysDisabled: false as boolean,
     }),
     actions:{
-        setSelectedMedicalDrugsList(data: any) {
+        setHolidayDates(data: any) {
             this.holidayDates = data
         },
         getHolidaydates() {
@@ -210,7 +210,6 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
                     'areSaturdaysDisabled': this.areSaturdaysDisabled,
                     'areSundaysDisabled': this.areSundaysDisabled,
                 }
-
             }
             const sv_obj_string = JSON.stringify(sv_obj);
             await global_property_store.setGlobalProperty("week_days_properties_"+facility_id, `${sv_obj_string}`);

@@ -102,7 +102,7 @@
                     <ion-col>
                       <ion-label class="ilbl2">Holiday Date(s)</ion-label>
                       <ion-list class="holiday-list">
-                        <ion-item v-for="(holiday, index) in Clinical_Days_Store.holidayDates()" :key="index">
+                        <ion-item v-for="(holiday, index) in clinical_Days_Store.holidayDates()" :key="index">
                           <ion-label>
                             <h2>{{ HisDate.toStandardHisDisplayFormat(holiday) }}</h2>
                           </ion-label>
@@ -236,17 +236,39 @@
     () => router.currentRoute.value.name,
     async (newValue) => {
       if (newValue == 'clinicaldays') {
+        setValueProps();
         setNavigation();
         loadDataFromStore();
       }
     }
   );
 
-  const Clinical_Days_Store = computed(() => {
+  const clinical_Days_Store = computed(() => {
     return mapState(useClinicalDaysStore, ["holidayDates"]) 
-})
-  
+  })
+
+  const global_property_store = computed(() => {
+    return mapState(useGlobalPropertyStore, ["globalPropertyStore",])
+  })
+
+  function setValueProps() {
+    const storeClinicalDaysStore = useClinicalDaysStore();
+    const holidayDatesObj = JSON.parse(global_property_store.value.globalPropertyStore().holidayDatesObj)
+    const maximumNumberOfCForEachDayObj = JSON.parse(global_property_store.value.globalPropertyStore().maximumNumberOfCForEachDayObj)
+    const weekDaysPropertiesObj = JSON.parse(global_property_store.value.globalPropertyStore().weekDaysPropertiesObj)
+    storeClinicalDaysStore.setHolidayDates(holidayDatesObj.holidayDates);
+    storeClinicalDaysStore.setMaximumNumberOfDaysForEachDay(maximumNumberOfCForEachDayObj.maximumNumberOfDaysForEachDay);
+    storeClinicalDaysStore.setAreMondaysDisabled(weekDaysPropertiesObj.weekDays.areMondaysDisabled);
+    storeClinicalDaysStore.setAreTuesdaysDisabled(weekDaysPropertiesObj.weekDays.areTuesdaysDisabled);
+    storeClinicalDaysStore.setAreWednesdaysDisabled(weekDaysPropertiesObj.weekDays.areWednesdaysDisabled);
+    storeClinicalDaysStore.setAreThursdaysDisabled(weekDaysPropertiesObj.weekDays.areThursdaysDisabled);
+    storeClinicalDaysStore.setAreFridaysDisabled(weekDaysPropertiesObj.weekDays.areFridaysDisabled);
+    storeClinicalDaysStore.setAreSaturdaysDisabled(weekDaysPropertiesObj.weekDays.areSaturdaysDisabled);
+    storeClinicalDaysStore.setAreSundaysDisabled(weekDaysPropertiesObj.weekDays.areSundaysDisabled);
+  }
+
   onMounted(() => {
+    setValueProps();
     setNavigation();
     loadDataFromStore();
   });
@@ -287,7 +309,7 @@
   
   function saveStateValues() {
     const storeClinicalDaysStore = useClinicalDaysStore();
-    storeClinicalDaysStore.setSelectedMedicalDrugsList(date.value);
+    storeClinicalDaysStore.setHolidayDates(date.value);
     storeClinicalDaysStore.setMaximumNumberOfDaysForEachDay(maximumNumberOfDaysForEachDay.value);
     storeClinicalDaysStore.setAreMondaysDisabled(isMondayChecked.value);
     storeClinicalDaysStore.setAreTuesdaysDisabled(isTuesdayChecked.value);

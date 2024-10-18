@@ -31,7 +31,7 @@ export const useGlobalPropertyStore = defineStore("globalPropertyStore", {
             const user_store = useUserStore();
             const facility_id = user_store.getfacilityLocation().location_id;
             const req = await Service.getJson("global_properties", { property: "week_days_properties_"+facility_id });
-            this.globalPropertyStore.holidayDatesObj = req["week_days_properties_"+facility_id];
+            this.globalPropertyStore.weekDaysPropertiesObj = req["week_days_properties_"+facility_id];
         },
         async loadMaximumNumberOfCForEachDayProperty() {
             const user_store = useUserStore();
