@@ -148,6 +148,7 @@ import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { UserService } from "@/services/user_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import workerData from "@/activate_worker";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts, SetDemographics],
     components: {
@@ -422,7 +423,7 @@ export default defineComponent({
             }
         },
         async createOfflineRecord(offlinePatientID: any) {
-            await db.collection("patientRecords").add({
+            const offlineRecord: any = {
                 offlinePatientID: offlinePatientID,
                 serverPatientID: "",
                 patientData: "",
@@ -439,7 +440,9 @@ export default defineComponent({
                 saveStatusBirthRegistration: "pending",
                 date_created: "",
                 creator: "",
-            });
+            };
+
+            workerData.postData({ type: "ADD_OBJECT_STORE", storeName: "patientRecords", payload: offlineRecord });
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
