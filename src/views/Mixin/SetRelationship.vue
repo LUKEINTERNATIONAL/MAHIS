@@ -5,7 +5,6 @@ import { mapState } from "pinia";
 import { RelationsService } from "@/services/relations_service";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { getOfflineRelationship } from "@/services/set_relationships";
 import { getOfflineRecords } from "@/services/offline_service";
 
 export default defineComponent({
