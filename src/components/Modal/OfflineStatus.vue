@@ -8,7 +8,7 @@
             </div>
             <k-progress
                 :percent="fractionToPercentage(offlineRelationshipStatus?.total_relationships, offlineRelationshipStatus?.total)"
-                active
+                :active="!offlineRelationshipStatus?.total_relationships == offlineRelationshipStatus?.total"
                 active-color="#fff"
                 color="rgb(107, 199, 107)"
             ></k-progress>
@@ -17,7 +17,7 @@
             </div>
             <k-progress
                 :percent="fractionToPercentage(offlineDistrictStatus?.total_districts, offlineDistrictStatus?.total)"
-                active
+                :active="!offlineDistrictStatus?.total_districts == offlineDistrictStatus?.total"
                 active-color="#fff"
                 color="rgb(107, 199, 107)"
             ></k-progress>
@@ -26,7 +26,7 @@
             </div>
             <k-progress
                 :percent="fractionToPercentage(offlineTAsStatus?.total_TAs, offlineTAsStatus?.total)"
-                active
+                :active="!offlineTAsStatus?.total_TAs == offlineTAsStatus?.total"
                 active-color="#fff"
                 color="rgb(107, 199, 107)"
             ></k-progress>
@@ -35,7 +35,7 @@
             </div>
             <k-progress
                 :percent="fractionToPercentage(offlineVillageStatus?.total_village, offlineVillageStatus?.total)"
-                active
+                :active="!offlineVillageStatus?.total_village == offlineVillageStatus?.total"
                 active-color="#fff"
                 color="rgb(107, 199, 107)"
             ></k-progress>
