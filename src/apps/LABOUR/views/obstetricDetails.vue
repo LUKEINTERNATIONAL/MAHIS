@@ -8,6 +8,10 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -47,10 +51,13 @@ import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
 import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "obstetricDetails",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -174,6 +181,9 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+      getSaveFunction(){
+
+      },
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;

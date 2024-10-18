@@ -3,11 +3,12 @@
     <DashBox :status="no_item" :content="'No Diagnosis added'" />
 
     <span v-if="display_item">
+      <div style="font-weight: 700; margin-left:2.5%">Diagnosis list</div>
             <list :listData="OPDdiagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
-        </span>
-
+    </span>
     <ion-row v-if="search_item">
       <basic-form
+          :initialData="initialData"
           :contentData="OPDdiagnosis"
           @update:selected="handleInputData"
           @update:inputValue="handleInputData"
@@ -45,7 +46,7 @@ import SelectionPopover from "@/components/SelectionPopover.vue";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
 import { mapState } from "pinia";
-import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import {toastWarning, popoverConfirmation, toastDanger} from "@/utils/Alerts";
 import List from "@/components/List.vue";
 import BasicForm from "@/components/BasicForm.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -91,6 +92,7 @@ export default defineComponent({
       selectedCondition: "" as any,
       selected: null,
       diagnoses: [] as any,
+      initialData:[] as any,
     };
   },
   setup() {
@@ -98,8 +100,14 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
-    inputFields() {
+    primaryInputField() {
       return this.OPDdiagnosis[0].data.rowData[0].colData;
+    },
+    secondaryInputField() {
+      return this.OPDdiagnosis[2].data.rowData[0].colData;
+    },
+    differentialInputField() {
+      return this.OPDdiagnosis[3].data.rowData[0].colData;
     },
   },
   watch: {
@@ -112,6 +120,8 @@ export default defineComponent({
   },
   async mounted() {
     this.updateDiagnosisStores();
+    const OPDDiagnosis=useOPDDiagnosisStore()
+    this.initialData=OPDDiagnosis.getInitial()
     this.setDashedBox();
     await this.getDiagnosis("");
   },
@@ -123,68 +133,72 @@ export default defineComponent({
       this.addItemButton = false;
       this.search_item = true;
     },
-    async validaterowData(col = { name: "differentialDiagnosis" }) {
-      modifyFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "alertsErrorMassage", "");
+    async validaterowData(col = { name: "secondaryDiagnosis" }) {
+      modifyFieldValue(this.OPDdiagnosis, "secondaryDiagnosis", "alertsErrorMassage", "");
       modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "alertsErrorMassage", "");
+      modifyFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "alertsErrorMassage", "");
+
       const primaryDiagnosis = getFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "value");
+      const secondaryDiagnosis = getFieldValue(this.OPDdiagnosis, "secondaryDiagnosis", "value");
       const differentialDiagnosis = getFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "value");
 
-      const validateSelected = this.OPDdiagnosis[0].selectedData.filter((obj: any) => {
-        if (obj.display[0] === primaryDiagnosis.name) {
-          return true;
-        }
-        const isDifferentialMatch = differentialDiagnosis?.some((diffObj: any) => diffObj?.name === obj?.display[0]);
-        if (isDifferentialMatch) {
-          return true;
-        }
-        return false;
-      });
-
-
-      if (validateSelected.length > 0) {
-        modifyFieldValue(this.OPDdiagnosis, col.name, "alertsErrorMassage", validateSelected[0].name + " is already selected");
-        return false;
-      }
-
-
-      if (primaryDiagnosis?.name || getFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone")) {
-        // if (differentialDiagnosis.length > 0) {
-        const filteredArray = differentialDiagnosis ?  differentialDiagnosis.filter((obj: any) => {
-          return obj.name === primaryDiagnosis.name;
-        }) : []
-
-        if (filteredArray.length > 0) {
-          modifyFieldValue(
-              this.OPDdiagnosis,
-              "differentialDiagnosis",
-              "alertsErrorMassage",
-              primaryDiagnosis.name + " is selected as primary diagnosis"
-          );
+      if (primaryDiagnosis.name) {
+        const primaryExists = this.OPDdiagnosis[0].selectedData.some((obj: any) => obj.data.concept_id === 6542);
+        if (primaryExists) {
+          modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "alertsErrorMassage", "Only one primary diagnosis can be added. Delete the existing one to change.");
+          toastDanger("Only one primary diagnosis is allowed. Delete one added if you want to change");
           return false;
-        } else {
-          return true;
         }
       }
-      // } else {
-      modifyFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "primaryDiagnosis", "Primary diagnosis is required");
-      return false;
-      // }
+
+      const secondaryExists = secondaryDiagnosis && secondaryDiagnosis.length > 0;
+      const differentialExists = differentialDiagnosis && differentialDiagnosis.length > 0;
+
+      if (secondaryExists && secondaryDiagnosis.some((sd: any) => sd.name === primaryDiagnosis.name)) {
+        modifyFieldValue(this.OPDdiagnosis, "secondaryDiagnosis", "alertsErrorMassage", `${primaryDiagnosis.name} is already selected as primary diagnosis.`);
+        return false;
+      }
+
+      if (differentialExists && differentialDiagnosis.some((dd: any) => dd.name === primaryDiagnosis.name)) {
+        modifyFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "alertsErrorMassage", `${primaryDiagnosis.name} is already selected as primary diagnosis.`);
+        return false;
+      }
+
+      if (secondaryExists && differentialExists) {
+        const hasOverlap = secondaryDiagnosis.some((sd:any) => differentialDiagnosis.some((dd:any) => dd.name === sd.name));
+        if (hasOverlap) {
+          modifyFieldValue(this.OPDdiagnosis, "secondaryDiagnosis", "alertsErrorMassage", "Secondary and differential diagnoses cannot overlap.");
+          return false;
+        }
+      }
+
+      if (!primaryDiagnosis?.name) {
+        modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "alertsErrorMassage", "Primary diagnosis is required.");
+        return false;
+      }
+      return true;
     },
+
+
 
     async addNewRow() {
       if (await this.validaterowData()) {
-        if (this.buildDiagnosis()) {
-          this.search_item = false;
-          this.display_item = true;
-          this.addItemButton = true;
-          this.display_primary = false;
+        this.buildDiagnosis();
 
-          this.OPDdiagnosis[0].data.rowData[0].colData[0].value = ""; // Primary diagnosis
-          this.OPDdiagnosis[0].data.rowData[0].colData[1].value = ""; // Secondary diagnosis
+        this.search_item = false;
+        this.display_item = true;
+        this.addItemButton = true;
+        this.display_primary = false;
 
-          modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone", false);
-          modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "colSize", "");
-        }
+        this.OPDdiagnosis[0].data.rowData[0].colData[0].value = "";
+        this.OPDdiagnosis[2].data.rowData[0].colData[0].value = "";
+        this.OPDdiagnosis[3].data.rowData[0].colData[0].value = "";
+
+
+
+
+        modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone", false);
+        modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "colSize", "");
       }
     },
 
@@ -192,23 +206,30 @@ export default defineComponent({
       const diagnosis = [];
       const existingDiagnoses = this.OPDdiagnosis[0].selectedData.map((d: { name: string }) => d.name);
 
-      if (this.inputFields[0]?.value?.name && !existingDiagnoses.includes(this.inputFields[0].value.name)) {
-        diagnosis.push({
-          actionBtn: true,
-          btn: ["delete"],
-          name: this.inputFields[0].value.name,
-          id: this.inputFields[0].value.concept_id,
-          display: [this.inputFields[0].value.name, "Primary diagnosis"],
-          data: {
-            concept_id: 6542, // Primary diagnosis concept ID
-            value_coded: this.inputFields[0].value.concept_id,
-            obs_datetime: Service.getSessionDate(),
-          },
-        });
+      if (this.primaryInputField[0]?.value?.name && !existingDiagnoses.includes(this.primaryInputField[0].value.name)) {
+        const primaryExists = this.OPDdiagnosis[0].selectedData.some((obj: any) => obj.data.concept_id === 6542);
+
+        if (!primaryExists) {
+          diagnosis.push({
+            actionBtn: true,
+            btn: ["delete"],
+            name: this.primaryInputField[0].value.name,
+            id: this.primaryInputField[0].value.concept_id,
+            display: [this.primaryInputField[0].value.name, "Primary diagnosis"],
+            data: {
+              concept_id: 6542,
+              value_coded: this.primaryInputField[0].value.concept_id,
+              obs_datetime: Service.getSessionDate(),
+            },
+          });
+        } else {
+          toastDanger("Only one primary diagnosis is allowed")
+          return false;
+        }
       }
 
-      if (this.inputFields[1].value) {
-        this.inputFields[1].value.forEach((item: any) => {
+      if (this.secondaryInputField[0].value) {
+        this.secondaryInputField[0].value.forEach((item: any) => {
           if (!existingDiagnoses.includes(item.name)) {
             diagnosis.push({
               actionBtn: true,
@@ -217,7 +238,7 @@ export default defineComponent({
               id: item.concept_id,
               display: [item.name, "Secondary diagnosis"],
               data: {
-                concept_id: 6543, // Secondary diagnosis concept ID
+                concept_id: 6543,
                 value_coded: item.concept_id,
                 obs_datetime: Service.getSessionDate(),
               },
@@ -226,10 +247,33 @@ export default defineComponent({
         });
       }
 
-      this.OPDdiagnosis[0].selectedData = [...this.OPDdiagnosis[0].selectedData, ...diagnosis];
+      if (this.differentialInputField[0].value) {
+        this.differentialInputField[0].value.forEach((item: any) => {
+          if (!existingDiagnoses.includes(item.name)) {
+            diagnosis.push({
+              actionBtn: true,
+              btn: ["delete"],
+              name: item.name,
+              id: item.concept_id,
+              display: [item.name, "Differential diagnosis"],
+              data: {
+                concept_id: 10201,
+                value_coded: item.concept_id,
+                obs_datetime: Service.getSessionDate(),
+              },
+            });
+          }
+        });
+      }
+
+      if (diagnosis.length > 0) {
+        this.OPDdiagnosis[0].selectedData = [...this.OPDdiagnosis[0].selectedData, ...diagnosis];
+      }
 
       return true;
     },
+
+
 
     compareArrays(array1: any, array2: any) {
       return array1.reduce((result: any, obj1: any) => {
@@ -247,12 +291,16 @@ export default defineComponent({
       this.popoverOpen = true;
     },
     async handleInputData(col: any) {
+      modifyFieldValue(this.OPDdiagnosis, "secondaryDiagnosis", "alertsErrorMassage", "");
+      modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "alertsErrorMassage", "");
+      modifyFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "alertsErrorMassage", "");
       await this.getDiagnosis(col.value);
       this.validaterowData(col);
     },
     async getDiagnosis(value: any) {
       this.diagnoses = await PatientDiagnosisService.getDiagnosis(value, 1, 5);
       modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "multiSelectData", this.diagnoses);
+      modifyFieldValue(this.OPDdiagnosis, "secondaryDiagnosis", "multiSelectData", this.diagnoses);
       modifyFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "multiSelectData", this.diagnoses);
       return this.diagnoses;
     },
@@ -285,7 +333,7 @@ export default defineComponent({
       console.log("Removed Items:", removedItems[0].data.concept_id);
     },
     setDashedBox() {
-      if (this.inputFields[0]?.value?.name || this.inputFields[1]?.value?.name) {
+      if (this.primaryInputField[0]?.value?.name || this.primaryInputField[1]?.value?.name) {
         this.addItemButton = false;
         this.search_item = true;
         this.no_item = false;

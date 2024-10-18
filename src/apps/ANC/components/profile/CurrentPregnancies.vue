@@ -34,7 +34,7 @@ import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
+import {pastObstreticValidationShema, useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
 import {
   getCheckboxSelectedValue,
   getFieldValue,
@@ -45,6 +45,7 @@ import BasicCard from "@/components/BasicCard.vue";
 import {validateField} from "@/services/ANC/profile_validation_service"
 import StandardValidations from "@/validations/StandardValidations";
 import HisDate from "@/utils/Date";
+import { YupValidateField } from '@/services/validation_service';
 
 
 export default defineComponent({
@@ -177,6 +178,14 @@ export default defineComponent({
         // },
       },
       methods:{
+        async handleImmunValidation(event:any){
+          YupValidateField(
+            this.lmnp,
+            pastObstreticValidationShema,
+            event.name,
+            event.value
+          )
+        },
         validationRules(event: any) {
           return validateField(this.lmnp,event.name, (this as any)[event.name]);
         },
@@ -188,6 +197,7 @@ export default defineComponent({
         },
 
         async handleInputData(event: any) {
+          this.handleImmunValidation(event)
           this.validaterowData(event)
           this.calculateGestationAgefromLNMP(event)
           this.calculateEDD(event)

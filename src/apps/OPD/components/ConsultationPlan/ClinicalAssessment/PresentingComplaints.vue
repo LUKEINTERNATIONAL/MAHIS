@@ -134,19 +134,29 @@ export default defineComponent({
       "Other (specify)"() {
         return getFieldValue(this.presentingComplaints, "Other (specify)", "value")
       },
+      selectedComplaintValue() {
+        return this.presentingComplaints[0].data.rowData[0].colData[0].value;
+      },
     },
     async mounted() {
         this.updatePresentingComplaintsListStores();
         this.setDashedBox();
         this.getPresenting();
-      this.validaterowData({})
+      this.validaterowData({});
+      this.checkComplaints();
 
     },
     watch: {
+      selectedComplaintValue(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.checkComplaints();
+        }
+      },
         presentingComplaints: {
-            handler() {
-                this.setDashedBox();
-            },
+          handler() {
+              this.setDashedBox();
+
+          },
             deep: true,
         },
         $router: {
@@ -239,24 +249,64 @@ export default defineComponent({
             this.event = e;
             this.popoverOpen = true;
         },
-        async handleInputData(col: any) {
-            if (col.inputHeader == "Presenting Complaints") {
-                this.checkPresentingComplaints();
-            } else if (col.inputHeader == "Duration") {
-                this.validateDuration();
-            }
+      checkComplaints() {
+        const selectedComplaint = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
 
-          if (col.inputHeader == "Presenting Complaints") {
-            const selectedLandmark = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
-            if (selectedLandmark?.name === "Other") {
-              modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", false);
-            } else {
-              modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", true);
-              modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
-            }
+        let shouldShowAlert = true;
+
+        if (selectedComplaint) {
+          const isValidComplaint = this.complaints.some((complaint: any) =>
+              complaint.name.toLowerCase() === selectedComplaint.name?.toLowerCase()
+          );
+
+          if (isValidComplaint || selectedComplaint.name === "Other") {
+            shouldShowAlert = false;
           }
+        }
 
-        },
+        if (shouldShowAlert) {
+          if (!this.presentingComplaints[0].alerts[0] || this.presentingComplaints[0].alerts[0].name !== "NoMatchAlert") {
+            this.presentingComplaints[0].alerts[0] = {
+              backgroundColor: "lightyellow",
+              status: "Warning",
+              colSize:"4px",
+              textColor: "black",
+              value: "Please search thoroughly for the complaint. If it is not listed, search and select the 'Other' option to specify the complaint.",
+              name: "noMatchAlert",
+            };
+          }
+        } else {
+          if (this.presentingComplaints[0].alerts[0]?.value) {
+            this.presentingComplaints[0].alerts[0] = {
+              backgroundColor: "",
+              status: "",
+              icon: "",
+              textColor: "",
+              value: "",
+              name: "",
+            };
+          }
+        }
+      },
+
+      async handleInputData(col: any) {
+        if (col.inputHeader === "Presenting Complaints") {
+          this.checkPresentingComplaints();
+        } else if (col.inputHeader === "Duration") {
+          this.validateDuration();
+        }
+
+        if (col.inputHeader === "Presenting Complaints") {
+          const selectedComplaint = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
+          if (selectedComplaint?.name === "Other") {
+            modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", false);
+          } else {
+            modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", true);
+            modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
+          }
+        }
+      },
+
         validateDuration() {
             this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = false;
             this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = "";

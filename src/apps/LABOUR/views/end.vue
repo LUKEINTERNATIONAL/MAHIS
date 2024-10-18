@@ -3,7 +3,15 @@
     <Toolbar/>
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepper-title="End labour and delivery" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData"/>
+      <Stepper stepper-title="End labour and delivery"
+               :wizardData="wizardData"
+               @updateStatus="markWizard"
+               :StepperData="StepperData"
+               :backUrl="userRoleSettings.url"
+               :backBtn="userRoleSettings.btnName"
+               :getSaveFunction="getSaveFunction"
+
+      />
     </ion-content>
     <BasicFooter @finishBtn="saveData()" />
 
@@ -31,11 +39,14 @@ import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import end from "@/apps/LABOUR/components/repeatable things/end.vue";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 
 
 export default defineComponent ({
   name : 'end',
+  mixins: [SetUserRole, SetEncounter],
   components : {
     BasicFooter,
     IonContent,
@@ -85,6 +96,9 @@ export default defineComponent ({
 
   methods: {
     markWizard(){},
+    getSaveFunction(){
+
+    },
     saveData(){
       this.$router.push("labourHome")
 

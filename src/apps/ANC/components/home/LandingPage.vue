@@ -1,103 +1,13 @@
 <template>
   <ion-grid class="ion-grid">
-    <ion-row>
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/quickCheck')">
+    <ion-row class="ion-justify-content-center">
+      <ion-col v-for="(card, index) in cardsData" :key="index" size-xs="6" size-sm="6" size-md="6" size-lg="6" size-xl="6">
+        <ion-card color="secondary" class="card" @click="navigateTo(card.path)">
           <ion-card-header>
-            <ion-card-title>Quick Check</ion-card-title>
+            <ion-card-title class="ion-title" style="color:#0f5132">{{ card.title }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <img src="../../public/icons/checkup.png" alt="Profile Icon" />
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/profile')">
-          <ion-card-header>
-            <ion-card-title>Profile</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img src="../../public/icons/checkup.png" alt="Profile Icon" />
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/symptomsFollowUp')">
-          <ion-card-header>
-            <ion-card-title>Symptoms and follow up</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img src="../../public/icons/symptom.png" alt="Profile Icon" />
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/physicalExamination')">
-          <ion-card-header>
-            <ion-card-title>Physical Examination</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img src="../../public/icons/heart.png" alt="Profile Icon" />
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/ANCtreatment')">
-          <ion-card-header>
-            <ion-card-title>Treatment and prevention</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img src="../../public/icons/patient.png" alt="Profile Icon" />
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/labTests')">
-          <ion-card-header>
-            <ion-card-title>Lab tests and imaging</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img src="../../public/icons/candidate.png" alt="Profile Icon" />
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/counselling')">
-          <ion-card-header>
-            <ion-card-title>Counselling</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img src="../../public/icons/conversation.png" alt="Profile Icon" />
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/ANCreferral')">
-          <ion-card-header>
-            <ion-card-title>Referral</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img src="../../public/icons/hospital.png" alt="Profile Icon" />
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col>
-        <ion-card color="secondary" @click="navigateTo('/ancEnd')">
-          <ion-card-header>
-            <ion-card-title>Pregnancy outcome</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <img src="../../public/icons/bed.png" alt="Profile Icon" />
+            <ion-icon :icon="card.icon" :style="{ color: card.color, fontSize: '40px' }"></ion-icon>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -109,6 +19,7 @@
 import { defineComponent } from 'vue';
 import { IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/vue';
 import { useRouter } from 'vue-router';
+import { people, bed } from "ionicons/icons";
 
 export default defineComponent({
   name: 'Home',
@@ -127,65 +38,52 @@ export default defineComponent({
     const navigateTo = (path: string) => {
       router.push({ path });
     };
+    const cardsData = [
+      { title: "Referral", path: "/ANCreferral", icon: people, color:"grey" },
+      { title: "Pregnancy Outcome", path: "/ancEnd", icon: bed, color: "grey" },
+    ];
 
     return {
       navigateTo,
+      cardsData
     };
   },
 });
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-.section {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 .card {
-  width: 100%;
-  max-width: 300px;
+  width: 264px;
   margin: 10px;
+  transition: transform 0.3s ease;
+
 }
 
 .card:hover {
-  animation: bounce 0.3s ease-in-out;
-  cursor: pointer;
+  transform: scale(1.05);
 }
 
-@keyframes bounce {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
-  100% { transform: translateY(0px); }
+ion-icon {
+  width: 50px;
 }
-
-img {
-  width: 70%;
-  max-width: 70px;
-  height: auto;
+ion-card-title {
+  font-size: 16px;
 }
 
 @media (max-width: 768px) {
-  .section {
-    flex-direction: column;
-    align-items: center;
+  ion-icon {
+    width: 40px;
+    height: 40px;
   }
-  .ion-grid {
-    top:70%;
+
+  ion-card-title {
+    font-size: 14px;
   }
 
 
   .card {
-    width: 90%;
+    margin: 5px;
+    width: 200px;
   }
 }
 </style>

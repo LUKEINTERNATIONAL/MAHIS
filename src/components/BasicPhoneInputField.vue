@@ -64,9 +64,12 @@ export default defineComponent({
             country: [{"dialCode": "265","iso2": "MW","name": "Malawi"}] as any
         };
     },
-    mounted() {
-        this.phone = this.inputValue;
-    },
+  watch: {
+
+  },
+
+  mounted() {
+    this.phone = this.inputValue || "";},
 
     props: {
         placeholder: {

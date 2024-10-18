@@ -6,49 +6,18 @@
       <div class="container">
         <div class="back_profile">
           <DynamicButton
-              :name="backBtn"
+              name="Back to home"
               iconSlot="start"
               fill="clear"
               :icon="chevronBackOutline()"
               @click="openBackController()"
           />
-          <div class="AppointmentDate">
+          <div class="AppointmentDate" >
             <span style="font-size: 14px">Next Appt. Date: </span>
             <b style="color: #0b5ed7">{{ dateOfAppointment || 'Not scheduled' }}</b>
           </div>
         </div>
-        <div class="button-container">
-          <DynamicButton
-              name="New ANC contact"
-              iconSlot="start"
-              fill="solid"
-              :icon="checkmark"
-              @click="navigateToContact"
-          />
-          <DynamicButton
-              name="View ANC contacts"
-              iconSlot="start"
-              fill="solid"
-              :icon="eye()"
-              @click="previousContacts"
-          />
-          <DynamicButton
-              name="Schedule next contact"
-              iconSlot="start"
-              fill="solid"
-              :icon="calendar()"
-              @click="nextAppointment"
-          />
-        </div>
-        <NextAppointmentModal
-            :isOpen="isModalOpen"
-            :title="``"
-            :closeModalFunc="closeAppointmentModal"
-            :onYes="saveData"
-            :onNo="cancelModal"
-        />
-        <hr />
-        <LandingPage/>
+        <AppointmentsHistory/>
       </div>
     </ion-content>
   </ion-page>
@@ -57,9 +26,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {
-  IonButton,
   IonContent,
-  IonPage, IonRow
+  IonPage
 } from '@ionic/vue';
 import {calendar, checkmark, chevronBackOutline, eye, pulseOutline} from 'ionicons/icons';
 import Toolbar from "@/components/Toolbar.vue";
@@ -78,16 +46,15 @@ import {formatCheckBoxData, formatInputFiledData} from "@/services/formatServerD
 import {NextAppointmentService} from "@/apps/ANC/service/next_appointment";
 import {useFetalAssessment} from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 import {resetPatientData} from "@/services/reset_data";
-import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
-import NextAppointment from "@/apps/ANC/components/others/NextAppointment.vue";
-import HisDate from "@/utils/Date";
+import AppointmentsHistory from "@/apps/ANC/components/others/AppointmentsHistory.vue";
+import {EncounterService} from "@/services/encounter_service";
+import {ConceptService} from "@/services/concept_service";
+import {PatientService} from "@/services/patient_service";
 import {ObservationService} from "@/services/observation_service";
-
 
 export default defineComponent({
   name: "TB screening",
   components: {
-    IonRow, IonButton,
     FeatusModal,
     DynamicButton,
     IonContent,
@@ -96,6 +63,7 @@ export default defineComponent({
     DemographicBar,
     LandingPage,
     NextAppointmentModal,
+    AppointmentsHistory,
   },
   props: {
     backBtn: {
@@ -115,19 +83,21 @@ export default defineComponent({
   data(){
     return{
       isModalOpen:false,
+      visitDate: [] as any,
+      appointmentDate:"" as any,
+      visits: [] as any,
       dateOfAppointment: '',
-
     }
-  },
-  mounted(){
-    this.handleAppointment();
   },
   setup() {
     return { checkmark, pulseOutline };
   },
+  mounted(){
+    this.handleAppointment()
+  },
   computed: {
     ...mapState(useScheduleNextAppointmentStore, ["nextAppointmentDate"]),
-    ...mapState(useDemographicsStore, ["demographics","patient"]),
+    ...mapState(useDemographicsStore, ["demographics", "patient"]),
 
   },
   methods: {
@@ -141,69 +111,48 @@ export default defineComponent({
       return chevronBackOutline;
     },
     openBackController() {
-      if (this.backUrl) {
-        this.$router.push(this.backUrl);
-      } else {
-        createModal(SaveProgressModal);
-      }
+      this.$router.push('/ANCHome');
     },
     async handleAppointment(){
       const dateOfAppointment = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Appointment date", "value_text");
       this.dateOfAppointment = dateOfAppointment;
 
     },
-    async saveData(){
-      const store = useScheduleNextAppointmentStore();
-      const isFormValid = await store.validate();
-      if (!isFormValid) {
-        toastDanger('Next appointment date has errors');
-        return;
-      }
-      await this.saveDate();
-      this.closeAppointmentModal();
-      await this.$router.push("ANCHome");
-      await resetPatientData();
+    async updateData() {
+      const patient = new PatientService();
+      this.visits = await PatientService.getPatientVisits(patient.getID(), false);
+      await this.loadSavedEncounters(this.visits[0]);
+    },
+    async loadSavedEncounters(patientVisitDate: any) {
+      this.visitDate = patientVisitDate;
+      const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
+      await this.setNextAppointmentEncounter(encounters)
+    },
+    findEncounter(data: any, encounterType: any) {
+      return data.find((obj: any) => obj.type && obj.type.name === encounterType);
+    },
+    async setNextAppointmentEncounter(data:any){
+      const observations=this.findEncounter(data, "APPOINTMENT")?.observations;
+      console.log('Observations:', observations); // Log to check if you have data
+      this.appointmentDate['Appointment date'] = this.filterObs(observations, "Appointment date")?.[0]?.value_text ?? "";
+      console.log('Appointment Date:', this.appointmentDate['Appointment date']);
 
     },
-    async saveDate(){
-      if (this.nextAppointmentDate.length >= 0) {
-        const userID: any = Service.getUserID();
-        const  AppointmentDate= new NextAppointmentService(this.demographics.patient_id, userID);
-        const encounter = await AppointmentDate.createEncounter();
-        if (!encounter) return toastWarning("Unable to create appointment date encounter");
-        const patientStatus = await AppointmentDate.saveObservationList(await this.buildNextAppointment());
-        if (!patientStatus) return toastWarning("Unable to create date!");
-        toastSuccess("Client has been scheduled for next contact");
+
+    filterObs(observations: any, conceptName: any) {
+      return observations?.filter((obs: any) => obs.concept.concept_names.some((name: any) => name.name === conceptName));
+    },
+    async getConceptValues(filteredObservations: any, type: any) {
+      if (filteredObservations) {
+        return await Promise.all(
+            filteredObservations?.map(async (item: any) => {
+              return await ConceptService.getConceptName(item.value_coded);
+            })
+        );
       }
-      console.log(await this.buildNextAppointment())
-    },
-    openNextVaccineAppoinment() {
-      createModal(NextAppointment, { class: "otherVitalsModal" }, false);
-    },
-    async buildNextAppointment() {
-      return [
-        ...(await formatInputFiledData(this.nextAppointmentDate)),
-      ]
-    },
-    cancelModal() {
-      this.closeAppointmentModal();
     },
 
-    async nextAppointment() {
-      this.toggleAppointmentModal()
-    },
-    toggleAppointmentModal(){
-      this.isModalOpen=!this.isModalOpen
-    },
-    closeAppointmentModal() {
-      this.isModalOpen = false;
-    },
-    previousContacts(){
-      this.$router.push('/contacts');
-    },
-    navigateToContact() {
-      this.$router.push('/contact');
-    }
+
   }
 })
 </script>
@@ -214,7 +163,7 @@ export default defineComponent({
   position: absolute;
   left: 0;
   right: 0;
-  top: 35%;
+  top: 50%;
   transform: translateY(-50%);
 }
 
@@ -231,7 +180,7 @@ export default defineComponent({
 }
 
 .AppointmentDate {
-  margin-right: 5%;
+  margin-left: auto;
 }
 ion-card {
   width: 300px;
@@ -259,7 +208,7 @@ ion-card {
     position: absolute;
     left: 0;
     right: 0;
-    top: 43%;
+    top: 60%;
     transform: translateY(-50%);
   }
   ion-card {
@@ -278,12 +227,12 @@ ion-card {
     font-weight: 400;
     font-size: 14px;
     z-index: 1000;
-    padding: 0 5%; /* Avoids too much padding */
+    padding: 0 5%;
     margin-bottom: 10px;
   }
   .AppointmentDate {
     margin-left: 0;
-  }
+      }
 }
 
 hr {
