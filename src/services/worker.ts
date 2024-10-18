@@ -193,13 +193,65 @@ async function getOfflineData(storeName: any) {
         }
     });
 }
+async function updateRecord(storeName: string, whereClause: Record<string, any>, updateData: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error("Database not initialized. Call openDatabase() first."));
+            return;
+        }
+
+        const transaction = db.transaction([storeName], "readwrite");
+        const objectStore = transaction.objectStore(storeName);
+
+        // Get all records to find matching ones
+        const getAllRequest = objectStore.getAll();
+
+        getAllRequest.onerror = (event) => {
+            reject((event.target as IDBRequest).error);
+        };
+
+        getAllRequest.onsuccess = (event) => {
+            const records = (event.target as IDBRequest).result;
+
+            // Find records that match all conditions in whereClause
+            const matchingRecords = records.filter((record: any) => {
+                return Object.entries(whereClause).every(([key, value]) => record[key] === value);
+            });
+
+            if (matchingRecords.length === 0) {
+                reject(new Error("No matching records found"));
+                return;
+            }
+
+            // Update each matching record
+            let updateCount = 0;
+            matchingRecords.forEach((record: any) => {
+                // Merge the existing record with the update data
+                const updatedRecord = { ...record, ...updateData };
+
+                const updateRequest = objectStore.put(updatedRecord);
+
+                updateRequest.onerror = (event) => {
+                    reject((event.target as IDBRequest).error);
+                };
+
+                updateRequest.onsuccess = () => {
+                    updateCount++;
+                    if (updateCount === matchingRecords.length) {
+                        resolve();
+                    }
+                };
+            });
+        };
+    });
+}
 /**********************************************************************
  **********************************************************************
                             Web worker                                                       
  **********************************************************************
  **********************************************************************/
 self.onmessage = async (event: any) => {
-    const { type, url, apiKey, storeName, payload } = event.data;
+    const { type, url, apiKey, payload } = event.data;
     APIURL = url;
     APIKEY = apiKey;
     TOTALS = await getTotals();
@@ -211,7 +263,7 @@ self.onmessage = async (event: any) => {
                 try {
                     await setOfflineLocation();
 
-                    console.log("SET_OFFLINE_LOCATION ~ storeName:", storeName);
+                    console.log("SET_OFFLINE_LOCATION ~ storeName:", type);
                 } catch (error) {
                     console.log("SET_OFFLINE_LOCATION ~ error:", error);
                 }
@@ -228,7 +280,7 @@ self.onmessage = async (event: any) => {
             case "SET_OFFLINE_PROGRAMS":
                 try {
                     self.postMessage({ payload: await setOfflinePrograms() });
-                    console.log("SET_OFFLINE_PROGRAMS ~ storeName:", storeName);
+                    console.log("SET_OFFLINE_PROGRAMS ~ storeName:", type);
                 } catch (error) {
                     console.log("SET_OFFLINE_PROGRAMS ~ error:", error);
                 }
@@ -236,25 +288,33 @@ self.onmessage = async (event: any) => {
             case "SET_OFFLINE_RELATIONSHIPS":
                 try {
                     await setOfflineRelationship();
-                    console.log("SET_OFFLINE_RELATIONSHIPS ~ storeName:", storeName);
+                    console.log("SET_OFFLINE_RELATIONSHIPS ~ storeName:", type);
                 } catch (error) {
                     console.log("SET_OFFLINE_RELATIONSHIPS ~ error:", error);
                 }
                 break;
             case "DELETE_OBJECT_STORE":
                 try {
-                    await deleteObjectStore(storeName);
-                    console.log("DELETE_OBJECT_STORE ~ storeName:", storeName);
+                    await deleteObjectStore(payload.storeName);
+                    console.log("DELETE_OBJECT_STORE ~ storeName:", type);
                 } catch (error) {
                     console.log("DELETE_OBJECT_STORE ~ error:", error);
                 }
                 break;
             case "ADD_OBJECT_STORE":
                 try {
-                    await addData(storeName, payload);
-                    console.log("ADD_OBJECT_STORE ~ payload:", payload);
+                    await addData(payload.storeName, payload.data);
+                    console.log("ADD_OBJECT_STORE ~ payload:", payload.storeName);
                 } catch (error) {
                     console.log("ADD_OBJECT_STORE ~ error:", error);
+                }
+                break;
+            case "UPDATE_RECORD":
+                try {
+                    await updateRecord(payload.storeName, payload.whereClause, payload.data);
+                    console.log("UPDATE_RECORD ~ storeName:", type);
+                } catch (error) {
+                    console.log("UPDATE_RECORD ~ error:", error);
                 }
                 break;
             default:
@@ -270,10 +330,6 @@ self.onmessage = async (event: any) => {
                             Backend Requests                                                       
  **********************************************************************
  **********************************************************************/
-async function execFetch(url: string, params: any = "") {
-    const response = await fetch(url, { headers: headers() });
-    return await response.json();
-}
 
 function headers() {
     return {
@@ -282,9 +338,37 @@ function headers() {
     };
 }
 
+async function execFetch(url: string, params: any) {
+    params = { ...params, mode: "cors" };
+
+    if (!("headers" in params)) {
+        params = { ...params, headers: headers() };
+    }
+
+    try {
+        const response = await fetch(APIURL + url, params);
+        handleUnauthorized(response.statusText);
+        return response.json();
+    } catch (e) {
+        // console.error(e);
+        if (`${e}`.match(/NetworkError|Failed to fetch/i)) {
+        } else {
+        }
+    }
+}
+function handleUnauthorized(response: any) {
+    if (response == "Unauthorized") {
+        localStorage.setItem("apiKey", "");
+    }
+}
+const get = (uri: string) => execFetch(uri, { method: "GET" });
+const post = (uri: string, data: object) => execFetch(uri, { method: "POST", body: JSON.stringify(data) });
+const remove = (uri: string, data: object) => execFetch(uri, { method: "DELETE", body: JSON.stringify(data) });
+const put = (uri: string, data: object) => execFetch(uri, { method: "PUT", body: JSON.stringify(data) });
+const healthCheck = () => get("_health");
+
 function buildUrl(url: string, params: any) {
-    const transformedUrl = `${url}?${parameterizeObjToString(params)}`;
-    return APIURL + transformedUrl;
+    return `${url}?${parameterizeObjToString(params)}`;
 }
 
 function parameterizeObjToString(obj: Record<string, any>) {
@@ -294,7 +378,11 @@ function parameterizeObjToString(obj: Record<string, any>) {
 }
 
 async function getTotals() {
-    return await execFetch(buildUrl("/totals", { paginate: false }));
+    return await getData("/totals", { paginate: false });
+}
+
+async function getData(url: any, params = {}) {
+    return await get(buildUrl(url, params));
 }
 
 /**********************************************************************
@@ -349,14 +437,14 @@ async function setOfflineLocation() {
 async function getDistricts() {
     let districtList = [];
     for (let i of [1, 2, 3]) {
-        const districts: any = await execFetch(buildUrl("/districts", { region_id: i, page_size: 1000 }));
+        const districts: any = await getData("/districts", { region_id: i, page_size: 1000 });
         districtList.push(...districts);
     }
     return districtList;
 }
 
 async function getTAs() {
-    return await execFetch(buildUrl("/traditional_authorities", { paginate: false }));
+    return await getData("/traditional_authorities", { paginate: false });
 }
 
 async function getVillages() {
@@ -372,7 +460,7 @@ async function getVillages() {
         }
 
         while (true) {
-            const newVillages: any = await execFetch(buildUrl("/villages", { page, page_size: pageSize }));
+            const newVillages: any = await getData("/villages", { page, page_size: pageSize });
             if (newVillages.length > 0) {
                 allVillage.push(...newVillages);
                 await overRideRecord("villages", allVillage);
@@ -402,7 +490,7 @@ async function getVillages() {
 async function setOfflinePrograms() {
     const programsData: any = await getOfflineData("programs");
     if (!programsData || TOTALS.total_programs > programsData.length) {
-        const programs = await execFetch(buildUrl("/programs", { page_size: 1000 }));
+        const programs = await getData("/programs", { page_size: 1000 });
         if (programs && Object.keys(programs).length > 0) {
             await overRideRecord("programs", {
                 programs: programs,
@@ -422,7 +510,7 @@ async function setOfflinePrograms() {
 async function setOfflineRelationship() {
     let relationshipsData: any = await getOfflineData("relationship");
     if (!relationshipsData || TOTALS.total_relationships > relationshipsData.length) {
-        relationshipsData = await execFetch(buildUrl("/types/relationships", { paginate: false }));
+        relationshipsData = await getData("/types/relationships", { paginate: false });
         if (relationshipsData && relationshipsData.length > 0) {
             await overRideRecord("relationship", relationshipsData);
         }
@@ -437,3 +525,136 @@ async function setOfflineRelationship() {
         });
     }
 }
+
+/**********************************************************************
+ **********************************************************************
+                          patient code                                                       
+ **********************************************************************
+ **********************************************************************/
+
+// async function saveDemographicsRecord(record: any) {
+//     if (!(await validateID(record.otherPersonInformation))) return;
+
+//     const patientID = await savePersonInformation(record);
+//     if (!patientID) return;
+
+//     await Promise.all([createGuardian(patientID, record), saveBirthdayData(patientID, record)]);
+// }
+
+// async function validateID({ nationalID, birthID }: any) {
+//     return (await validateNationalID(nationalID)) && (await validateBirthID(birthID));
+// }
+
+// async function savePersonInformation(record: any) {
+//     if (record.personInformation && record.saveStatusPersonInformation === "pending") {
+//         try {
+//             Service.postJson("/people", this.person);
+//             const registration = new PatientRegistrationService();
+//             await registration.registerPatient(record.personInformation, []);
+//             const patientID = registration.getPersonID();
+//             await updatePatientInformation(record, patientID);
+//             await updateSaveStatus(record, {
+//                 saveStatusPersonInformation: "complete",
+//                 serverPatientID: patientID,
+//             });
+//             createIDs(record.otherPersonInformation, patientID);
+//             enrollProgram(patientID);
+//             createRegistrationEncounter(patientID);
+//             return patientID;
+//         } catch (error) {
+//             toastDanger("Failed to save person information");
+//         }
+//     }
+//     return record.serverPatientID;
+// }
+
+// async function updatePatientInformation(record: any, patientID: any) {
+//     const patientData = await PatientService.findByID(patientID);
+//     // await db.collection("patientRecords").doc({ offlinePatientID: record.offlinePatientID }).update({
+//     //     patientData: patientData,
+//     // });
+//     workerData.postData("UPDATE_RECORD", {
+//         storeName: "patientRecords",
+//         whereClause: { offlinePatientID: record.offlinePatientID },
+//         data: {
+//             patientData: patientData,
+//         },
+//     });
+// }
+// async function createIDs({ nationalID, birthID }: any, patientID: any) {
+//     const patient = new PatientService();
+//     if (nationalID) await patient.updateMWNationalId(nationalID, patientID);
+//     if (birthID) await patient.updateBirthId(birthID, patientID);
+// }
+
+// async function createGuardian(patientID: any, record: any) {
+//     if (record.saveStatusGuardianInformation === "pending") {
+//         if (record.guardianInformation.given_name && record.guardianInformation.family_name && record.otherPersonInformation.relationshipID) {
+//             try {
+//                 const guardian = new PatientRegistrationService();
+//                 await guardian.registerGuardian(record.guardianInformation);
+//                 const guardianID = guardian.getPersonID();
+//                 await RelationsService.createRelation(patientID, guardianID, record.otherPersonInformation.relationshipID);
+//                 await updateSaveStatus(record, { saveStatusGuardianInformation: "complete" });
+//             } catch (error) {
+//                 toastDanger("Failed to save guardian information");
+//             }
+//         } else {
+//             await updateSaveStatus(record, { saveStatusGuardianInformation: "Not recorded" });
+//         }
+//     }
+// }
+
+// async function saveBirthdayData(patientID: any, record: any) {
+//     if (record.saveStatusBirthRegistration === "pending") {
+//         if (record.birthRegistration.length > 0) {
+//             try {
+//                 const userID: any = Service.getUserID();
+//                 const registration = new AppEncounterService(patientID, 5, userID);
+//                 await registration.createEncounter();
+//                 await registration.saveObservationList(record.birthRegistration);
+//                 await updateSaveStatus(record, { saveStatusBirthRegistration: "complete" });
+//             } catch (error) {
+//                 toastDanger("Failed to save birth information");
+//             }
+//         } else {
+//             await updateSaveStatus(record, { saveStatusBirthRegistration: "Not recorded" });
+//         }
+//     }
+// }
+
+// async function enrollProgram(patientId: any) {
+//     const program = new PatientProgramService(patientId);
+//     await program.enrollProgram();
+// }
+
+// async function createRegistrationEncounter(patientId: any) {
+//     const encounter = new AppEncounterService(patientId, 5);
+//     await encounter.createEncounter();
+//     await encounter.saveValueCodedObs("Type of patient", "New Patient");
+// }
+
+// async function updateSaveStatus(record: any, saveStatus: any) {
+//     // await db.collection("patientRecords").doc({ offlinePatientID: record.offlinePatientID }).update(saveStatus);
+//     workerData.postData("UPDATE_RECORD", {
+//         storeName: "patientRecords",
+//         whereClause: { offlinePatientID: record.offlinePatientID },
+//         data: saveStatus,
+//     });
+// }
+
+// async function validateNationalID(nationalID: any) {
+//     return (
+//         nationalID === "" ||
+//         !(await checkIDExistence(28, nationalID)) ||
+//         (toastWarning("The national ID is already assigned to another person"), false)
+//     );
+// }
+
+// async function validateBirthID(birthID: any) {
+//     return birthID === "" || !(await checkIDExistence(23, birthID)) || (toastWarning("The Birth ID is already assigned to another person"), false);
+// }
+
+// async function checkIDExistence(nid: any, identifierId: any) {
+//     return nid ? (await PatientService.findByOtherID(nid, identifierId)).length > 0 : false;
+// }
