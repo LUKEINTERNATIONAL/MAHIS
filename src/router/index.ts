@@ -9,7 +9,7 @@ import ManageAppointMentsTemplate from "../views/ManageAppointMentsTemplate.vue"
 import Scan from "../components/Registration/ScanRegistration.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
-import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
+import clinicalDaysTemplate from "@/views/ClinicalDays/clinicalDaysTemplate.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
@@ -98,7 +98,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/clinicaldays",
         name: "clinicaldays",
-        component: clinicaldays,
+        component: clinicalDaysTemplate,
     },
     {
         path: "/registration/scan",
