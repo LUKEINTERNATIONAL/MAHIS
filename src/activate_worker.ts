@@ -8,9 +8,9 @@ function updateData() {
     apiKey = localStorage.getItem("apiKey");
 }
 
-function postData(type: any) {
+function postData(type: any, payload: any = "") {
     updateData();
-    workerApi.post({ type: type, url: url, apiKey: apiKey });
+    workerApi.post({ type: type, url: url, apiKey: apiKey, payload });
 }
 export default {
     workerApi,
