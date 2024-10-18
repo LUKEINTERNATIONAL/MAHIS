@@ -225,7 +225,6 @@ import { createModal } from "@/utils/Alerts";
 import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
 import { getBaseURl } from "@/utils/GeneralUti";
-import { setOfflineRelationship } from "@/services/set_relationships";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import workerData from "@/activate_worker";
 import { useStatusStore } from "@/stores/StatusStore";
