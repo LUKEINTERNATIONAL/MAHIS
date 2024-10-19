@@ -4,8 +4,7 @@
             <ion-col size-sm="12" size-md="12" size-lg="12" size-xl="8">
                 <VueDatePicker
                     class="calender"
-                    @date-update="handleDateUpdate"
-                    v-model="date"
+                    @date-update="openCornfirmModal"
                     inline
                     auto-apply
                     :enable-time-picker="false"
@@ -68,6 +67,7 @@ import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
 import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
 import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service"
+import confirmModal from "@/apps/NCD/components/confirmModal.vue"
 
 export default defineComponent({
   components: {
@@ -141,7 +141,8 @@ export default defineComponent({
     async  getAppointmentMents(date: any) {
         try {
             const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
-            this.appointment_count = res.length + 1;
+            console.log(res.length)
+            this.appointment_count = res.length;
         } catch (error) {
             
         }
@@ -184,7 +185,24 @@ export default defineComponent({
     },
     loadDataFromStore() {
       // This method can be used to perform any additional data loading if needed
-    }
+    },
+    async openCornfirmModal(date: any) {
+        const storeClinicalDaysStore = useClinicalDaysStore();
+        storeClinicalDaysStore.setsssignedAppointmentsDates(date);
+        this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
+        this.loadDataFromStore();
+        await this.getAppointmentMents(date)
+      const handleCancel = (event: CustomEvent<any>) => {
+        console.log(event.detail)
+      };
+      const handleConfirm = async (event: CustomEvent<any>) => {
+        if (event.detail == true) {
+            await this.handleDateUpdate(date)
+        }
+      };
+      const dataToPass = { message: 'Are you sure you want add this Appointment?',}
+      createModal(confirmModal, { class: "otherVitalsModal" }, true, dataToPass, { 'cancel': handleCancel, 'confirm':  handleConfirm});
+  },
   },
 });
 </script>
