@@ -405,18 +405,21 @@ export default defineComponent({
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const offlinePatientID = Date.now();
                 await this.createOfflineRecord(offlinePatientID);
-                await savePatientRecord();
+                workerData.postData("SYNC_PATIENT_RECORD");
+
+                // await savePatientRecord();
                 toastSuccess("Successfully Created Patient");
                 await db
                     .collection("patientRecords")
                     .doc({ offlinePatientID: offlinePatientID })
                     .get()
                     .then(async (document: any) => {
-                        if (document.serverPatientID) {
-                            this.openNewPage(document.patientData);
-                        } else {
-                            await this.setOfflineData(document);
-                        }
+                        console.log("🚀 ~ .then ~ document:", document);
+                        // if (document.serverPatientID) {
+                        //     this.openNewPage(document.patientData);
+                        // } else {
+                        //     await this.setOfflineData(document);
+                        // }
                     });
             } else {
                 toastWarning("Please complete all required fields");
@@ -442,7 +445,7 @@ export default defineComponent({
                 creator: "",
             };
 
-            workerData.postData({ type: "ADD_OBJECT_STORE", storeName: "patientRecords", payload: offlineRecord });
+            workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: offlineRecord });
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
