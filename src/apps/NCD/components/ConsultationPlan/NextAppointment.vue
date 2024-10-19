@@ -11,10 +11,10 @@
                     :enable-time-picker="false"
                     :disabled-dates="disabledDates"
                 >
-                    <template #day="{ day }">
-                        <template v-if="day === tomorrow">
+                    <template #day="{ day, date }">
+                        <template v-if="true">
                             <p>
-                                {{ day }}<sup style="color: #999">{{ bookedPatient }}</sup>
+                                {{ day }}<sup style="color: #999">{{ getCounter(date) }}</sup>
                             </p>
                         </template>
                         <template v-else>
@@ -39,13 +39,13 @@
                 <ion-item>
                     <div class="dates_title">
                         <div>Appointments</div>
-                        <div class="sub_data">{{ bookedPatient }}</div>
+                        <div class="sub_data">{{ appointment_count }}</div>
                     </div>
                 </ion-item>
                 <ion-item>
                     <div class="dates_title">
                         <div>Appointment limit (per/day)</div>
-                        <div class="sub_data">{{ bookedPatient }}/{{ maximumNumberOfDaysForEachDay }}</div>
+                        <div class="sub_data">{{ appointment_count }}/{{ maximumNumberOfDaysForEachDay }}</div>
                     </div>
                 </ion-item>
             </ion-col>
@@ -67,6 +67,7 @@ import { AppointmentService } from "@/services/appointment_service";
 import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
 import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
+import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service"
 
 export default defineComponent({
   components: {
@@ -82,14 +83,14 @@ export default defineComponent({
   },
   setup() {
     const clinicalDaysStore = useClinicalDaysStore();
-    
-    // Make disabledDates and datesCounts reactive using computed properties
+    const appointment_count = ref(0);
     const disabledDates = computed(() => clinicalDaysStore.getDisabledDates());
     const datesCounts = computed(() => clinicalDaysStore.getAssignedAppointments());
 
     return {
       disabledDates,
       datesCounts,
+      appointment_count,
     };
   },
   data() {
@@ -107,7 +108,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useNextAppointmentStore, ["nextAppointment"]),
-    ...mapState(useClinicalDaysStore, ["maximumNumberOfDaysForEachDay"]),
+    ...mapState(useClinicalDaysStore, ["maximumNumberOfDaysForEachDay", "assignedAppointmentsDates"]),
   },
   watch: {
     calendarDate: {
@@ -129,24 +130,57 @@ export default defineComponent({
       const nextAppointmentStore = useNextAppointmentStore();
       nextAppointmentStore.setNextAppointment(this.calendarDate);
     },
-    handleDateUpdate(value: any) {
+    async handleDateUpdate(date: any) {
       const storeClinicalDaysStore = useClinicalDaysStore();
-      storeClinicalDaysStore.setsssignedAppointmentsDates(value);
-      this.calendarDate = HisDate.toStandardHisDisplayFormat(value);
-      this.saveData();
+      storeClinicalDaysStore.setsssignedAppointmentsDates(date);
+      this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
+      this.save();
       this.loadDataFromStore();
+      await this.getAppointmentMents(date)
     },
-    async saveData() {
-      try {
-        const res = await this.appointment.getNextAppointment();
-        this.nextAppointmentDate = res.appointment_date;
-        this.drugRunoutDate = res.drugs_run_out_date;
-        console.log(res);
-      } catch {}
-      const ttt = [
-        await this.appointment.buildValueDate("Appointment date", "2024-03-28"),
-        await this.appointment.buildValueDate("Estimated date", this.nextAppointmentDate),
-      ];
+    async  getAppointmentMents(date: any) {
+        try {
+            const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
+            this.appointment_count = res.length + 1;
+        } catch (error) {
+            
+        }
+    },
+    getCounter(date: any) {
+        const normalizeDate = (date: Date) => {
+            const d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            return d.getTime();
+        };
+        const dateTimestamp = normalizeDate(new Date(date));
+        return this.assignedAppointmentsDates.reduce((sum: any, d: any) => {
+            return normalizeDate(new Date(d.date)) === dateTimestamp ? sum + 1 : sum;
+        }, 0);
+    },
+    // async saveData() {
+    //   try {
+    //     const res = await this.appointment.getNextAppointment();
+    //     this.nextAppointmentDate = res.appointment_date;
+    //     this.drugRunoutDate = res.drugs_run_out_date;
+    //     console.log(res);
+    //   } catch {}
+    //   const ttt = [
+    //     await this.appointment.buildValueDate("Appointment date", "2024-03-28"),
+    //     await this.appointment.buildValueDate("Estimated date", this.nextAppointmentDate),
+    //   ];
+    // },
+    async save() {
+        if (this.assignedAppointmentsDates.length >0) {
+            try {
+                const appointment_service = new Appointment();
+                const appointmentDetails = await appointment_service.createAppointment();
+            } catch (error) {
+                
+            }
+        } else {
+            // toastWarning("please select next appointment date on the calendar");
+        }
+
     },
     loadDataFromStore() {
       // This method can be used to perform any additional data loading if needed

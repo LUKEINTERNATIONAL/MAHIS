@@ -383,9 +383,9 @@ function getCounter(date: any) {
         return d.getTime();
     };
 
-    const dateTimestamp = normalizeDate(new Date(date)); // Normalize input date
+    const dateTimestamp = normalizeDate(new Date(date));
     const found = _selectedAppointments.find((d: { date: any }) => {
-        return normalizeDate(new Date(d.date)) === dateTimestamp; // Normalize and compare dates
+        return normalizeDate(new Date(d.date)) === dateTimestamp;
     });
 
     return found ? found.counter : null;

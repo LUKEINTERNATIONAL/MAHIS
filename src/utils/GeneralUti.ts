@@ -190,4 +190,4 @@ export function getGenderCode(input: string): string {
     } catch (error) {
         return ''
     }
-  }
+}

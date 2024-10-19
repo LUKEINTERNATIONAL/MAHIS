@@ -252,19 +252,23 @@
   })
 
   function setValueProps() {
-    const storeClinicalDaysStore = useClinicalDaysStore();
-    const holidayDatesObj = JSON.parse(global_property_store.value.globalPropertyStore().holidayDatesObj)
-    const maximumNumberOfCForEachDayObj = JSON.parse(global_property_store.value.globalPropertyStore().maximumNumberOfCForEachDayObj)
-    const weekDaysPropertiesObj = JSON.parse(global_property_store.value.globalPropertyStore().weekDaysPropertiesObj)
-    storeClinicalDaysStore.setHolidayDates(holidayDatesObj.holidayDates);
-    storeClinicalDaysStore.setMaximumNumberOfDaysForEachDay(maximumNumberOfCForEachDayObj.maximumNumberOfDaysForEachDay);
-    storeClinicalDaysStore.setAreMondaysDisabled(weekDaysPropertiesObj.weekDays.areMondaysDisabled);
-    storeClinicalDaysStore.setAreTuesdaysDisabled(weekDaysPropertiesObj.weekDays.areTuesdaysDisabled);
-    storeClinicalDaysStore.setAreWednesdaysDisabled(weekDaysPropertiesObj.weekDays.areWednesdaysDisabled);
-    storeClinicalDaysStore.setAreThursdaysDisabled(weekDaysPropertiesObj.weekDays.areThursdaysDisabled);
-    storeClinicalDaysStore.setAreFridaysDisabled(weekDaysPropertiesObj.weekDays.areFridaysDisabled);
-    storeClinicalDaysStore.setAreSaturdaysDisabled(weekDaysPropertiesObj.weekDays.areSaturdaysDisabled);
-    storeClinicalDaysStore.setAreSundaysDisabled(weekDaysPropertiesObj.weekDays.areSundaysDisabled);
+    try {
+      const storeClinicalDaysStore = useClinicalDaysStore();
+      const holidayDatesObj = JSON.parse(global_property_store.value.globalPropertyStore().holidayDatesObj)
+      const maximumNumberOfCForEachDayObj = JSON.parse(global_property_store.value.globalPropertyStore().maximumNumberOfCForEachDayObj)
+      const weekDaysPropertiesObj = JSON.parse(global_property_store.value.globalPropertyStore().weekDaysPropertiesObj)
+      storeClinicalDaysStore.setHolidayDates(holidayDatesObj.holidayDates);
+      storeClinicalDaysStore.setMaximumNumberOfDaysForEachDay(maximumNumberOfCForEachDayObj.maximumNumberOfDaysForEachDay);
+      storeClinicalDaysStore.setAreMondaysDisabled(weekDaysPropertiesObj.weekDays.areMondaysDisabled);
+      storeClinicalDaysStore.setAreTuesdaysDisabled(weekDaysPropertiesObj.weekDays.areTuesdaysDisabled);
+      storeClinicalDaysStore.setAreWednesdaysDisabled(weekDaysPropertiesObj.weekDays.areWednesdaysDisabled);
+      storeClinicalDaysStore.setAreThursdaysDisabled(weekDaysPropertiesObj.weekDays.areThursdaysDisabled);
+      storeClinicalDaysStore.setAreFridaysDisabled(weekDaysPropertiesObj.weekDays.areFridaysDisabled);
+      storeClinicalDaysStore.setAreSaturdaysDisabled(weekDaysPropertiesObj.weekDays.areSaturdaysDisabled);
+      storeClinicalDaysStore.setAreSundaysDisabled(weekDaysPropertiesObj.weekDays.areSundaysDisabled);
+    } catch (error) {
+      
+    }
   }
 
   onMounted(() => {
