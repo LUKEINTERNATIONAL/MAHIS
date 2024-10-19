@@ -6,6 +6,8 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useUserStore } from "@/stores/userStore";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import HisDate from "@/utils/Date";
+import { Service } from '@/services/service'
+
 
 export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
     state: () => ({
@@ -31,8 +33,17 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
             return this.holidayDates.length
         },
         generateDisabledDates(): Date[] {
+            const today = new Date(Service.getSessionDate());
+            today.setHours(0, 0, 0, 0);
+        
             const disabledDates: Date[] = this.holidayDates
-                .map((dateString: string) => new Date(dateString))
+                .map((dateString: string) => new Date(dateString));
+        
+            // Add past dates to the disabled dates array
+            const startDate = new Date(0); // Start from the earliest possible date
+            for (let d = startDate; d < today; d.setDate(d.getDate() + 1)) {
+                disabledDates.push(new Date(d));
+            }
         
             return disabledDates;
         },
@@ -108,7 +119,7 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
                 this.getAllFridays() as any,
                 this.getAllSaturdays() as any,
                 this.getAllSundays() as any,
-                this.generateDisabledDates()
+                this.generateDisabledDates(),
             )
         },
         getDisabledDates2(): any[] {
