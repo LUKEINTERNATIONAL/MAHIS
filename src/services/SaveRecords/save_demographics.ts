@@ -7,6 +7,7 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import { PatientProgramService } from "@/services/patient_program_service";
 import { toastDanger, toastSuccess, toastWarning } from "@/utils/Alerts";
 import db from "@/db";
+import workerData from "@/activate_worker";
 export async function saveDemographicsRecord(record: any) {
     if (!(await validateID(record.otherPersonInformation))) return;
 
@@ -44,8 +45,15 @@ async function savePersonInformation(record: any) {
 
 async function updatePatientInformation(record: any, patientID: any) {
     const patientData = await PatientService.findByID(patientID);
-    await db.collection("patientRecords").doc({ offlinePatientID: record.offlinePatientID }).update({
-        patientData: patientData,
+    // await db.collection("patientRecords").doc({ offlinePatientID: record.offlinePatientID }).update({
+    //     patientData: patientData,
+    // });
+    workerData.postData("UPDATE_RECORD", {
+        storeName: "patientRecords",
+        whereClause: { offlinePatientID: record.offlinePatientID },
+        data: {
+            patientData: patientData,
+        },
     });
 }
 async function createIDs({ nationalID, birthID }: any, patientID: any) {
@@ -102,7 +110,12 @@ async function createRegistrationEncounter(patientId: any) {
 }
 
 async function updateSaveStatus(record: any, saveStatus: any) {
-    await db.collection("patientRecords").doc({ offlinePatientID: record.offlinePatientID }).update(saveStatus);
+    // await db.collection("patientRecords").doc({ offlinePatientID: record.offlinePatientID }).update(saveStatus);
+    workerData.postData("UPDATE_RECORD", {
+        storeName: "patientRecords",
+        whereClause: { offlinePatientID: record.offlinePatientID },
+        data: saveStatus,
+    });
 }
 
 async function validateNationalID(nationalID: any) {
