@@ -1,160 +1,213 @@
 <template>
-    <div class="ion-padding" style="max-width: 90%; margin-left: 5%">
-      <ion-card style="margin-bottom: 10px;">
-        <ion-card-header>
-          <ion-card-title>Clinical Days Settings</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-grid>
-            <ion-row>
-              <ion-col size="12" size-md="6">
-                <ion-checkbox class="ilbl" label-placement="end" v-model="isMondayChecked" @ionChange="onCheckboxChange($event, 'monday')">Monday</ion-checkbox>
-                <ion-checkbox class="ilbl" label-placement="end" v-model="isTuesdayChecked" @ionChange="onCheckboxChange($event, 'tuesday')">Tuesday</ion-checkbox>
-                <ion-checkbox class="ilbl" label-placement="end" v-model="isWednesdayChecked" @ionChange="onCheckboxChange($event, 'wednesday')">Wednesday</ion-checkbox>
-                <ion-checkbox class="ilbl" label-placement="end" v-model="isThursdayChecked" @ionChange="onCheckboxChange($event, 'thursday')">Thursday</ion-checkbox>
-                <ion-checkbox class="ilbl" label-placement="end" v-model="isFridayChecked" @ionChange="onCheckboxChange($event, 'friday')">Friday</ion-checkbox>
-              </ion-col>
-              <ion-col size="12" size-md="6">
+  <div class="ion-padding" style="max-width: 90%; margin-left: 5%">
+    <ion-card style="margin-bottom: 10px;">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon :icon="calendarOutline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
+          Clinical Days Settings
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" size-md="6">
+              <ion-checkbox class="ilbl" label-placement="end" v-model="isMondayChecked" @ionChange="onCheckboxChange($event, 'monday')">
+                <ion-icon :icon="todayOutline" style="margin-right: 5px;"></ion-icon>Monday
+              </ion-checkbox>
+              <ion-checkbox class="ilbl" label-placement="end" v-model="isTuesdayChecked" @ionChange="onCheckboxChange($event, 'tuesday')">
+                <ion-icon :icon="todayOutline" style="margin-right: 5px;"></ion-icon>Tuesday
+              </ion-checkbox>
+              <ion-checkbox class="ilbl" label-placement="end" v-model="isWednesdayChecked" @ionChange="onCheckboxChange($event, 'wednesday')">
+                <ion-icon :icon="todayOutline" style="margin-right: 5px;"></ion-icon>Wednesday
+              </ion-checkbox>
+              <ion-checkbox class="ilbl" label-placement="end" v-model="isThursdayChecked" @ionChange="onCheckboxChange($event, 'thursday')">
+                <ion-icon :icon="todayOutline" style="margin-right: 5px;"></ion-icon>Thursday
+              </ion-checkbox>
+              <ion-checkbox class="ilbl" label-placement="end" v-model="isFridayChecked" @ionChange="onCheckboxChange($event, 'friday')">
+                <ion-icon :icon="todayOutline" style="margin-right: 5px;"></ion-icon>Friday
+              </ion-checkbox>
+            </ion-col>
+            <ion-col size="12" size-md="6">
+              <ion-row>
+                <ion-col>
+                  <div>
+                    <ion-label class="ilbl2">
+                      <ion-icon :icon="toggleOutline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
+                      Enable or Disable weekends
+                    </ion-label>
+                    <Toggle
+                      class="toggle-green"
+                      :classes="{
+                        container: 'inline-block rounded-full outline-none focus:ring focus:ring-green-500 focus:ring-opacity-30',
+                      }" 
+                      v-model="toggle_local"
+                      :offLabel="'disabled'"
+                      :onLabel="'enabled'"
+                      @change="onWeekendToggleChange"
+                    />
+                  </div>
+                </ion-col>
+                <ion-col size="8">
+                  <div class="mt-30">
+                    <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end" v-model="isSaturdayChecked" @ionChange="onCheckboxChange($event, 'saturday')">
+                      <ion-icon :icon="todayOutline" style="margin-right: 5px;"></ion-icon>Saturday
+                    </ion-checkbox>
+                    <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end" v-model="isSundayChecked" @ionChange="onCheckboxChange($event, 'sunday')">
+                      <ion-icon :icon="todayOutline" style="margin-right: 5px;"></ion-icon>Sunday
+                    </ion-checkbox>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card style="margin-bottom: 10px;">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon :icon="settingsOutline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
+          Appointment Settings
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row>
+          <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey">
+              {{input_properties[0].placeHolder}}<span style="color: #b42318">*</span>
+            </ion-label>
+            <BasicInputField
+              :placeholder="input_properties[0].placeHolder"
+              :icon="pencilOutline"
+              :inputValue="maximumNumberOfDaysForEachDay"
+              @update:inputValue="input_properties[0].dataHandler"
+            />
+            <div>
+              <ion-label v-if="input_properties[0].show_error.value" class="error-label">
+                {{ input_properties[0].error_message }}
+              </ion-label>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon :icon="calendarClearOutline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
+          Set Clinical Holiday(s)
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" size-md="7">
+              <VueDatePicker
+                v-model="date"
+                :enable-time-picker="false"
+                inline
+                auto-apply
+                multi-dates
+                :disabled-dates="disabledDates"
+              />
+            </ion-col>
+
+            <ion-col size="12" size-md="3">
+              <div>
                 <ion-row>
                   <ion-col>
-                    <div>
-                      <ion-label class="ilbl2">Enable or Disable weekends</ion-label>
-                      <Toggle
-                        class="toggle-green"
-                        :classes="{
-                          container: 'inline-block rounded-full outline-none focus:ring focus:ring-green-500 focus:ring-opacity-30',
-                        }" 
-                        v-model="toggle_local"
-                        :offLabel="'disabled'"
-                        :onLabel="'enabled'"
-                        @change="onWeekendToggleChange"
-                      />
-                    </div>
-                  </ion-col>
-                  <ion-col size="8">
-                    <div class="mt-30">
-                      <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end" v-model="isSaturdayChecked" @ionChange="onCheckboxChange($event, 'saturday')">Saturday</ion-checkbox>
-                      <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end" v-model="isSundayChecked" @ionChange="onCheckboxChange($event, 'sunday')">Sunday</ion-checkbox>
-                    </div>
+                    <ion-label class="ilbl2">
+                      <ion-icon :icon="statsChartOutline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
+                      Total Holidays Set
+                    </ion-label>
                   </ion-col>
                 </ion-row>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card-content>
-      </ion-card>
-  
-      <ion-card style="margin-bottom: 10px;">
-        <ion-card-header>
-          <ion-card-title>Appointment Settings</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-            <ion-row>
-              <ion-col>
-                  <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                  >{{input_properties[0].placeHolder}}<span style="color: #b42318">*</span></ion-label
-                >
-                  <BasicInputField
-                    :placeholder="input_properties[0].placeHolder"
-                    :icon="pencilOutline"
-                    :inputValue="maximumNumberOfDaysForEachDay"
-                    @update:inputValue="input_properties[0].dataHandler"
-                  />
+                <ion-row>
+                  <ion-label class="text-22 m-10">
+                    <span style="font-weight: 500; font-size: 20px">{{ totalHolidaysSelected }}</span>
+                  </ion-label>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <ion-row>
+                      <ion-col>
+                        <ion-label class="ilbl2">
+                          <ion-icon :icon="listOutline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
+                          Holiday Date(s)
+                        </ion-label>
+                      </ion-col>
+                      <ion-col>
+                        <ion-button
+                          fill="solid"
+                          @click="saveAction"
+                          class="btn-cls-2"
+                          style="float: right"
+                        >
+                          <ion-icon :icon="refreshCircleOutline" slot="start" style="margin-right: 5px;"></ion-icon>
+                          {{ 'Auto Gen.' }}
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                    <ion-list class="holiday-list">
+                      <ion-item v-for="(holiday, index) in clinical_Days_Store.holidayDates()" :key="index">
+                        <ion-label>
+                          <h2>
+                            <ion-icon :icon="calendarOutline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
+                            {{ HisDate.toStandardHisDisplayFormat(holiday) }}
+                          </h2>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </ion-col>
+                </ion-row>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
 
-                  <div>
-                      <ion-label v-if="input_properties[0].show_error.value" class="error-label">
-                        {{ input_properties[0].error_message }}
-                      </ion-label>
-                  </div>
-              </ion-col>
-            </ion-row>
-        </ion-card-content>
-      </ion-card>
-  
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>Set Clinical Holiday(s)</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-grid>
-            <ion-row>
-              <ion-col size="12" size-md="7">
-                <VueDatePicker
-                  v-model="date"
-                  :enable-time-picker="false"
-                  inline
-                  auto-apply
-                  multi-dates
-                  :disabled-dates="disabledDates"
-                />
-              </ion-col>
-              <ion-col size="12" size-md="3">
-                <div>
-                  <ion-row>
-                    <ion-label class="ilbl2">Total Holidays Set</ion-label>
-                  </ion-row>
-                  <ion-row>
-                    <ion-label class="text-22 m-10">
-                        <span style="font-weight: 500; font-size: 20px">{{ totalHolidaysSelected }}</span>
-                      </ion-label>
-                  </ion-row>
-                  <ion-row>
-                    <ion-col>
-                      <ion-label class="ilbl2">Holiday Date(s)</ion-label>
-                      <ion-list class="holiday-list">
-                        <ion-item v-for="(holiday, index) in clinical_Days_Store.holidayDates()" :key="index">
-                          <ion-label>
-                            <h2>{{ HisDate.toStandardHisDisplayFormat(holiday) }}</h2>
-                          </ion-label>
-                        </ion-item>
-                      </ion-list>
-                    </ion-col>
-                  </ion-row>
-                </div>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-          <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          fill="solid"
+          @click="saveAction"
+          class="btn-cls-2"
+          style="float: right"
+        >
+          <ion-icon :icon="saveOutline" slot="start" style="margin-right: 5px;"></ion-icon>
+          {{ 'Save Current Settings' }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+</template>
 
-          </ion-grid>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-row>
-        <ion-col>
-          <ion-button
-            fill="solid"
-            @click="saveAction"
-            class="btn-cls-2"
-            style="float: right"
-          >
-            <ion-icon :icon="saveOutline" slot="start" style="margin-right: 5px;"></ion-icon>
-            {{ 'Save Current Settings' }}
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import {
-    IonCard, IonCardContent, IonCardHeader, IonCardTitle,
-    IonCheckbox, IonCol, IonGrid, IonList, IonItem,
-    IonLabel, IonRow, IonButton, IonIcon, 
-  } from "@ionic/vue";
-  import { pencilOutline, saveOutline } from "ionicons/icons"
-  import { ref, computed, onMounted, watch } from "vue";
-  import VueDatePicker from '@vuepic/vue-datepicker';
-  import '@vuepic/vue-datepicker/dist/main.css';
-  import Toggle from '@vueform/toggle';
-  import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
-  import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
-  import router from '@/router';
-  import BasicInputField from "@/components/BasicInputField.vue"
-  import HisDate from "@/utils/Date";
-  import { combineArrays } from "@/utils/GeneralUti";
-  import { mapState } from 'pinia';
-  import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+<script setup lang="ts">
+import {
+  IonCard, IonCardContent, IonCardHeader, IonCardTitle,
+  IonCheckbox, IonCol, IonGrid, IonList, IonItem,
+  IonLabel, IonRow, IonButton, IonIcon, 
+} from "@ionic/vue";
+import { 
+  pencilOutline, saveOutline, calendarOutline, todayOutline, 
+  toggleOutline, settingsOutline, calendarClearOutline,
+  statsChartOutline, listOutline, refreshCircleOutline
+} from "ionicons/icons"
+import { ref, computed, onMounted, watch } from "vue";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import Toggle from '@vueform/toggle';
+import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
+import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import router from '@/router';
+import BasicInputField from "@/components/BasicInputField.vue"
+import HisDate from "@/utils/Date";
+import { combineArrays } from "@/utils/GeneralUti";
+import { mapState } from 'pinia';
+import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
   
   const toggle_local = ref(false);
   const disable_weekends = ref(true);
