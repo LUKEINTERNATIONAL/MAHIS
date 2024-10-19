@@ -377,9 +377,14 @@ export default defineComponent({
     const location = await getUserLocation();
     const locationId = location ? location.location_id : null;
     if (locationId) {
-      const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
-      this.totalPatientsToday = visitsToday.length;
-      await usePatientList().refresh(locationId);
+      try {
+        const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
+        this.totalPatientsToday = visitsToday.length;
+        await usePatientList().refresh(locationId);
+      } catch (error) {
+        
+      }
+
     }
     this.isLoading = false;
   },
