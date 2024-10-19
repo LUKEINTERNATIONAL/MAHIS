@@ -401,7 +401,7 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
       storeClinicalDaysStore.setHolidayDates(r);
       saveAction();
       datePickerKey.value++;
-      window.location.reload();
+      // window.location.reload();
     }
   }
   </script>
