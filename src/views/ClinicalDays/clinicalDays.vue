@@ -170,7 +170,7 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-row>
+    <ion-row v-if="false">
       <ion-col>
         <ion-button
           fill="solid"
@@ -209,6 +209,7 @@ import HisDate from "@/utils/Date";
 import { combineArrays } from "@/utils/GeneralUti";
 import { mapState } from 'pinia';
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
   
   const toggle_local = ref(false);
   const disable_weekends = ref(true);
@@ -362,7 +363,13 @@ import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
   
   function saveAndReload() {
     saveStateValues();
+    const storeClinicalDaysStore = useClinicalDaysStore();
+    storeClinicalDaysStore.setMaximumNumberOfDaysForEachDayObj()
+    storeClinicalDaysStore.setHolidayDatesObj()
+    storeClinicalDaysStore.setWeekDaysPropertiesObj()
+    // setValueProps()
     loadDataFromStore();
+    toastSuccess("Updated successfully");
   }
   
   function saveStateValues() {
