@@ -6,7 +6,6 @@ const patientService = {
                 await this.saveDemographicsRecord(record);
             })
         );
-        self.postMessage("Done");
     },
     findByOtherID(idType, identifier) {
         return ApiService.getData("search/patients/by_identifier", {
@@ -37,11 +36,13 @@ const patientService = {
     async buildValueCoded(conceptName, valueCoded, date = DATE) {
         const concept = await this.getConceptID(conceptName);
         const coded = typeof valueCoded === "number" ? valueCoded : await this.getConceptID(valueCoded);
-        return {
-            concept_id: concept,
-            value_coded: coded,
-            obs_datetime: date,
-        };
+        return [
+            {
+                concept_id: concept,
+                value_coded: coded,
+                obs_datetime: date,
+            },
+        ];
     },
     resolveConcept(concepts, conceptName) {
         if (concepts.length >= 1) return concepts[0].concept_id;
