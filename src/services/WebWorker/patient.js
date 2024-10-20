@@ -6,12 +6,16 @@ const patientService = {
                 await this.saveDemographicsRecord(record);
             })
         );
+        self.postMessage("Done");
     },
     findByOtherID(idType, identifier) {
         return ApiService.getData("search/patients/by_identifier", {
             type_id: idType,
             identifier,
         });
+    },
+    async findByID(patientId) {
+        return await ApiService.getData(`/patients/${patientId}`);
     },
     createRelation(patientA, patientB, relationType) {
         return ApiService.post(`people/${patientA}/relationships`, {
@@ -32,7 +36,7 @@ const patientService = {
     },
     async buildValueCoded(conceptName, valueCoded, date = DATE) {
         const concept = await this.getConceptID(conceptName);
-        const coded = typeof valueCoded === "number" ? valueCoded : await getConceptID(valueCoded);
+        const coded = typeof valueCoded === "number" ? valueCoded : await this.getConceptID(valueCoded);
         return {
             concept_id: concept,
             value_coded: coded,
@@ -61,11 +65,10 @@ const patientService = {
         return data;
     },
     async createPatient(personId) {
-        await ApiService.post(`/patients/`, {
+        return await ApiService.post(`/patients/`, {
             program_id: 32,
             person_id: personId,
         });
-        return createPatient(personId);
     },
     async saveDemographicsRecord(record) {
         if (!(await this.validateID(record.otherPersonInformation))) return;
@@ -82,7 +85,8 @@ const patientService = {
                 const data = await this.createPerson(record.personInformation);
                 const patient = await this.createPatient(data.person_id);
                 const patientID = data.person_id;
-                // await updatePatientInformation(record, patientID);
+                console.log("🚀 ~ savePersonInformation ~ patientID:", patientID);
+                await this.updatePatientInformation(record, patientID);
                 await this.updateSaveStatus(record, {
                     saveStatusPersonInformation: "complete",
                     serverPatientID: patientID,
@@ -92,24 +96,21 @@ const patientService = {
                 this.createRegistrationEncounter(patientID);
                 return patientID;
             } catch (error) {
-                console.error("Failed to save person information");
+                console.error("Failed to save person information", error);
             }
         }
         return record.serverPatientID;
     },
-    // async updatePatientInformation(record, patientID) {
-    //     const patientData = await PatientService.findByID(patientID);
-    //     // await DatabaseManager.collection("patientRecords").doc({ offlinePatientID: record.offlinePatientID }).update({
-    //     //     patientData: patientData,
-    //     // });
-    //     workerData.postData("UPDATE_RECORD", {
-    //         storeName: "patientRecords",
-    //         whereClause: { offlinePatientID: record.offlinePatientID },
-    //         data: {
-    //             patientData: patientData,
-    //         },
-    //     });
-    // },
+    async updatePatientInformation(record, patientID) {
+        const patientData = await this.findByID(patientID);
+        await DatabaseManager.updateRecord(
+            "patientRecords",
+            { offlinePatientID: record.offlinePatientID },
+            {
+                patientData: patientData,
+            }
+        );
+    },
     async create_patient_identifiers(newID, type, patientID) {
         await ApiService.post("patient_identifiers", {
             identifier: newID,
@@ -168,7 +169,8 @@ const patientService = {
         await this.saveValueCodedObs("Type of patient", "New Patient", encounterID);
     },
     async updateSaveStatus(record, saveStatus) {
-        this.updateRecord("patientRecords", { offlinePatientID: record.offlinePatientID }, saveStatus);
+        console.log("🚀 ~ updateSaveStatus ~ saveStatus:", saveStatus);
+        DatabaseManager.updateRecord("patientRecords", { offlinePatientID: record.offlinePatientID }, saveStatus);
     },
     async validateNationalID(nationalID) {
         return (
