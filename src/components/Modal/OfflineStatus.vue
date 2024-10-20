@@ -175,7 +175,7 @@ export default defineComponent({
             const status = useStatusStore();
             status.setOfflineVillageStatus("");
             status.setOfflineDistrictStatus("");
-            status.setOfflineTAsStatusStatus("");
+            status.setOfflineTAsStatus("");
         },
     },
 });
