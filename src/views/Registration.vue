@@ -249,7 +249,6 @@ export default defineComponent({
 
     async mounted() {
         this.workerApi = workerData.workerApi;
-        workerData.postData("SYNC_PATIENT_RECORD");
         resetDemographics();
         this.setIconClass();
         this.disableNationalIDInput();
@@ -258,6 +257,7 @@ export default defineComponent({
     watch: {
         workerApi: {
             async handler() {
+                console.log("🚀 ~ handler ~ this.workerApi?.data :", this.workerApi?.data);
                 if (this.workerApi?.data == "Done" && this.offlinePatientID) {
                     toastSuccess("Successfully Created Patient");
                     await db
@@ -266,11 +266,11 @@ export default defineComponent({
                         .get()
                         .then(async (document: any) => {
                             console.log("🚀 ~ .then ~ document:", document);
-                            // if (document.serverPatientID) {
-                            //     this.openNewPage(document.patientData);
-                            // } else {
-                            //     await this.setOfflineData(document);
-                            // }
+                            if (document.serverPatientID) {
+                                this.openNewPage(document.patientData);
+                            } else {
+                                await this.setOfflineData(document);
+                            }
                         });
                 }
             },
