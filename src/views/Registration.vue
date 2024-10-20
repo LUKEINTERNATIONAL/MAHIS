@@ -170,6 +170,8 @@ export default defineComponent({
     },
     data() {
         return {
+            workerApi: "" as any,
+            offlinePatientID: null as any,
             iconListStatus: "active_icon",
             deduplicationData: "active_icon",
             iconGridStatus: "inactive_icon",
@@ -246,12 +248,34 @@ export default defineComponent({
     },
 
     async mounted() {
+        this.workerApi = workerData.workerApi;
+        workerData.postData("SYNC_PATIENT_RECORD");
         resetDemographics();
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
     },
     watch: {
+        workerApi: {
+            async handler() {
+                if (this.workerApi?.data == "Done" && this.offlinePatientID) {
+                    toastSuccess("Successfully Created Patient");
+                    await db
+                        .collection("patientRecords")
+                        .doc({ offlinePatientID: this.offlinePatientID })
+                        .get()
+                        .then(async (document: any) => {
+                            console.log("🚀 ~ .then ~ document:", document);
+                            // if (document.serverPatientID) {
+                            //     this.openNewPage(document.patientData);
+                            // } else {
+                            //     await this.setOfflineData(document);
+                            // }
+                        });
+                }
+            },
+            deep: true,
+        },
         personInformation: {
             handler() {
                 const data = useRegistrationStore();
@@ -403,24 +427,11 @@ export default defineComponent({
                 }
 
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-                const offlinePatientID = Date.now();
-                await this.createOfflineRecord(offlinePatientID);
+                this.offlinePatientID = Date.now();
+                await this.createOfflineRecord(this.offlinePatientID);
                 workerData.postData("SYNC_PATIENT_RECORD");
 
                 // await savePatientRecord();
-                toastSuccess("Successfully Created Patient");
-                await db
-                    .collection("patientRecords")
-                    .doc({ offlinePatientID: offlinePatientID })
-                    .get()
-                    .then(async (document: any) => {
-                        console.log("🚀 ~ .then ~ document:", document);
-                        // if (document.serverPatientID) {
-                        //     this.openNewPage(document.patientData);
-                        // } else {
-                        //     await this.setOfflineData(document);
-                        // }
-                    });
             } else {
                 toastWarning("Please complete all required fields");
             }
