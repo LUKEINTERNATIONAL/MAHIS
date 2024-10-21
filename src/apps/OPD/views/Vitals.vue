@@ -215,7 +215,7 @@ export default defineComponent({
                 if (userRoles.includes("Nurse")) {
                   this.$router.push("patientProfile");
                 } else {
-                  console.error("Unknown user role:", userRoles);
+                  this.$router.push("OPDConsultationPlan");
                 }
               } else {
                 await this.validaterowData();
@@ -225,7 +225,8 @@ export default defineComponent({
               if (userRoles.includes("Nurse")) {
                 this.$router.push("patientProfile");
               } else {
-                console.error("Unknown user role:", userRoles);
+                //Superuser
+                this.$router.push("OPDConsultationPlan");
               }
             }
           } catch (error) {
