@@ -362,8 +362,8 @@ export default defineComponent({
         status.setOfflineRelationshipStatus("");
         this.openOfflineStatusModal("data");
         this.workerApi = workerData.workerApi;
-        workerData.postData("SET_OFFLINE_LOCATION");
-        workerData.postData("SET_OFFLINE_RELATIONSHIPS");
+        await workerData.postData("SET_OFFLINE_LOCATION");
+        await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
         resetDemographics();
         await this.setAppointments();
         this.setView();
