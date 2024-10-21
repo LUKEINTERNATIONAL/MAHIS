@@ -10,7 +10,7 @@ const initialChangeGuardianInfo = [
                     colData: [
                         {
                             inputHeader: "Guardian National ID",
-                            iconRight: icons.scannerIcon,
+                            iconRight: "",
                             icon: icons.nationalID,
                             value: "",
                             valueType: "text",

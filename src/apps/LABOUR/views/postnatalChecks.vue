@@ -9,6 +9,10 @@
                 @updateStatus="markWizard"
                 @finishBtn="saveData()"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -57,9 +61,12 @@ import { useImmediatePostnatalChecksForMotherStore } from "@/apps/LABOUR/stores/
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { ImmediatePostnatalChecksForChildService } from "@/apps/LABOUR/services/immediate_postnatal_checks_for_child";
 import { resetPatientData } from "@/services/reset_data";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "postnatalChecks",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
         IonContent,
       BasicFooter,
         IonHeader,
@@ -162,6 +169,9 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+      getSaveFunction(){
+
+      },
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;

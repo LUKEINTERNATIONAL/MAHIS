@@ -234,4 +234,9 @@ export class Service {
     }
 
     static delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+    static patchJson(url: string, data: Record<string, any>) {
+        return this.jsonResponseHandler(ApiClient.patch(url, data));
+    }
+
 }

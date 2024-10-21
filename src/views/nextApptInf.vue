@@ -1,5 +1,5 @@
 <template>
-  <ion-card>
+  <ion-card style="margin-bottom: 10px;">
     <ion-card-content style="padding: 2px;">
         <ion-button 
           style="position: absolute; top: 10px; right: 10px; --padding-start: 8px; --padding-end: 8px; --padding-top: 4px; --padding-bottom: 4px; --box-shadow: none;" 

@@ -8,6 +8,10 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -51,9 +55,12 @@ import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from 
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { usePNCEndStore } from "@/apps/PNC/stores/others/pncEnd";
 import { PNCEndService } from "@/apps/PNC/Services/pnc_end_service";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "pncEnd",
-    components: {
+  mixins: [SetUserRole, SetEncounter],
+  components: {
       BasicFooter,
         IonContent,
         IonHeader,
@@ -147,6 +154,9 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+      getSaveFunction(){
+
+      },
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;

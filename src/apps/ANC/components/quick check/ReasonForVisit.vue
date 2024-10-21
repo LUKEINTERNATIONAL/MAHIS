@@ -84,12 +84,16 @@ export default defineComponent({
    this.initialData = ReasonForVisit.getInitial();
    this.handleFirstAntenalVisit();
    this.handleSpecificConcernsVisit()
+   this.handleFacility()
+   this. handleReffer()
  },
  watch:{
    ReasonForVisit:{
      handler(){
        this.handleFirstAntenalVisit()
        this.handleSpecificConcernsVisit()
+       this.handleFacility()
+       this. handleReffer()
      },
      deep:true
    }
@@ -120,6 +124,30 @@ export default defineComponent({
    //     modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
    //     modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
    //     // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+
+
+      handleFacility(){
+         if(getRadioSelectedValue(this.ReasonForVisit,'Reason for visit')=='facility')
+         {
+           modifyFieldValue(this.ReasonForVisit,'facility for art', 'displayNone', false)
+           
+
+
+         }else {
+           modifyFieldValue(this.ReasonForVisit,'facility for art', 'displayNone', true)
+         
+         }
+      },
+
+        handleReffer(){
+         if(getRadioSelectedValue(this.ReasonForVisit,'Action for danger signs')=='Yes')
+         {
+           modifyFieldValue(this.ReasonForVisit,'facility', 'displayNone', false)
+         }else {
+           modifyFieldValue(this.ReasonForVisit,'facility', 'displayNone', true)
+         
+         }
+      }, 
 
 
 
@@ -286,6 +314,3 @@ ion-card {
  color: black;
 }
 </style>
-
-
-

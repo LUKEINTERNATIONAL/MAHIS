@@ -121,7 +121,6 @@ async function getAppointmentMents(date: any) {
     const appointment_service = new Appointment()
     const res =  await appointment_service.getDailiyAppointments(HisDate.toStandardHisFormat(date))
     appointment_count.value = res.length
-    console.log(res)
 }
 
 function dismiss() {
