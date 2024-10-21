@@ -1,4 +1,4 @@
-import { addYears, startOfYear, addDays, getYear, format } from 'date-fns';
+import { addYears, startOfYear, addDays, getYear, format } from "date-fns";
 
 interface Holiday {
     name: string;
@@ -82,7 +82,7 @@ export function isSameDate(date1: Date, date2: Date) {
     return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
 }
 
-let baseURL = getBaseURl();
+let baseURL = getBaseURL();
 if (baseURL.length > 0) {
     baseURL = "/" + baseURL;
 }
@@ -166,10 +166,10 @@ function removeQuotes(str: string) {
     return str;
 }
 
-export function getBaseURl() {
-    let fromViteConfig_BaseURL = import.meta.env.BASE_URL;
-    fromViteConfig_BaseURL = fromViteConfig_BaseURL.replace("/", "");
-    return fromViteConfig_BaseURL;
+export function getBaseURL() {
+    let baseURL = import.meta.env.BASE_URL;
+    baseURL = baseURL.replace("/", "");
+    return baseURL;
 }
 
 export function compareDates(currentDateStr: string, nextAppointmentDateStr: string) {
@@ -178,7 +178,7 @@ export function compareDates(currentDateStr: string, nextAppointmentDateStr: str
     currentDate.setHours(0, 0, 0, 0);
     nextAppointmentDate.setHours(0, 0, 0, 0);
     if (nextAppointmentDate < currentDate) {
-      return false;
+        return false;
     }
     return true;
 }
@@ -186,20 +186,20 @@ export function compareDates(currentDateStr: string, nextAppointmentDateStr: str
 export function getGenderCode(input: string): string {
     try {
         const lowercaseInput = input.toLowerCase().trim();
-  
-        if (lowercaseInput === 'male') {
-          return 'M';
-        } else if (lowercaseInput === 'female') {
-          return 'F';
-        } else if (lowercaseInput === 'm') {
-          return 'Male';
-        } else if (lowercaseInput === 'f') {
-          return 'Female';
+
+        if (lowercaseInput === "male") {
+            return "M";
+        } else if (lowercaseInput === "female") {
+            return "F";
+        } else if (lowercaseInput === "m") {
+            return "Male";
+        } else if (lowercaseInput === "f") {
+            return "Female";
         } else {
-          return 'Invalid gender';
+            return "Invalid gender";
         }
     } catch (error) {
-        return ''
+        return "";
     }
 }
 
@@ -233,7 +233,7 @@ export class MalawiHolidayGenerator {
         const m = Math.floor((a + 11 * h + 22 * l) / 451);
         const month = Math.floor((h + l - 7 * m + 114) / 31) - 1;
         const day = ((h + l - 7 * m + 114) % 31) + 1;
-        
+
         const easterDate = new Date(year, month, day);
         return new Date(easterDate.getTime() + offset * 24 * 60 * 60 * 1000);
     }
@@ -241,13 +241,13 @@ export class MalawiHolidayGenerator {
     generateHolidayDates(): { name: string; date: Date }[] {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        
+
         const endDate = addYears(today, 4);
         const holidayDates: { name: string; date: Date }[] = [];
 
         // Generate holiday dates for 4 years
         for (let year = getYear(today); year <= getYear(endDate); year++) {
-            this.holidays.forEach(holiday => {
+            this.holidays.forEach((holiday) => {
                 const holidayDate = holiday.getDate(year);
                 if (holidayDate >= today && holidayDate <= endDate) {
                     holidayDates.push({ name: holiday.name, date: holidayDate });
@@ -260,9 +260,9 @@ export class MalawiHolidayGenerator {
 
     generateFormattedHolidayDates(): FormattedHoliday[] {
         const holidayDates = this.generateHolidayDates();
-        return holidayDates.map(holiday => ({
+        return holidayDates.map((holiday) => ({
             name: holiday.name,
-            date: format(holiday.date, 'yyyy-MM-dd')
+            date: format(holiday.date, "yyyy-MM-dd"),
         }));
     }
 }
