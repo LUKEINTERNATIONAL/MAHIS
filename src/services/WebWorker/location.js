@@ -1,6 +1,6 @@
 const LocationService = {
     async setOfflineLocation() {
-        let districtsData = await DatabaseManager.getOfflineData("districts");
+        let districtsData = await DatabaseManager.getOfflineData("districts").then((data) => data?.[0]);
         if (!districtsData || districtsData.length !== 32) {
             districtsData = await this.getDistricts();
             await DatabaseManager.overRideRecord("districts", districtsData);
@@ -14,7 +14,7 @@ const LocationService = {
                 },
             });
         }
-        let TAsData = await DatabaseManager.getOfflineData("TAs");
+        let TAsData = await DatabaseManager.getOfflineData("TAs").then((data) => data?.[0]);
         if (!TAsData || TOTALS.total_TA > TAsData.length) {
             TAsData = await this.getTAs();
             await DatabaseManager.overRideRecord("TAs", TAsData);
