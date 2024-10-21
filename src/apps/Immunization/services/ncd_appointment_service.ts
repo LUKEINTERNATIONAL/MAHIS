@@ -39,8 +39,11 @@ export class Appointment extends AppEncounterService {
         const _appointment_ = [] as any
         const store = useClinicalDaysStore()
         store.assignedAppointmentsDates.forEach((appointment: any) => {
-            const next_appointment_date = HisDate.toStandardHisFormat(appointment.date)
-            _appointment_.push(next_appointment_date)
+            console.log(appointment)
+            if (appointment.markedNextApt == true) {
+                const next_appointment_date = HisDate.toStandardHisFormat(appointment.date);
+                _appointment_.push(next_appointment_date);
+            }
         })
         await this.createEncounter()
         // const res = await this.getNextAppointment();

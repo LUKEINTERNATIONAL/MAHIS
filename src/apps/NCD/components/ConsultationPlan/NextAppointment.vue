@@ -132,7 +132,7 @@ export default defineComponent({
     },
     async handleDateUpdate(date: any) {
       const storeClinicalDaysStore = useClinicalDaysStore();
-      storeClinicalDaysStore.setsssignedAppointmentsDates(date);
+      storeClinicalDaysStore.setsssignedAppointmentsDates(date, true);
       this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
       this.save();
       this.loadDataFromStore();
@@ -187,8 +187,6 @@ export default defineComponent({
       // This method can be used to perform any additional data loading if needed
     },
     async openCornfirmModal(date: any) {
-        const storeClinicalDaysStore = useClinicalDaysStore();
-        storeClinicalDaysStore.setsssignedAppointmentsDates(date);
         this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
         this.loadDataFromStore();
         await this.getAppointmentMents(date)

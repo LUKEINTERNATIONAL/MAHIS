@@ -252,7 +252,7 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
 import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
-import { getBaseURl } from "@/utils/GeneralUti";
+import { getBaseURL } from "@/utils/GeneralUti";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import { useWebWorker } from "@vueuse/core";
 import { getUserLocation } from "@/services/userService";
@@ -288,7 +288,7 @@ export default defineComponent({
         Slide,
         Pagination,
         Navigation,
-        getBaseURl,
+        getBaseURL,
         NCDHomePage,
     },
     data() {
@@ -523,7 +523,7 @@ export default defineComponent({
             createModal(OPDAllPatientsModal, { class: "fullScreenModal" }, true, dataToPass);
         },
         async getImagePath() {
-            const BASE_URL = await getBaseURl();
+            const BASE_URL = await getBaseURL();
             this.base_url = BASE_URL + this.base_url;
         },
     },
