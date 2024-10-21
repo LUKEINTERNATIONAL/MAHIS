@@ -22,10 +22,7 @@ async function updateData() {
         totals = await Service.getJson("/totals", { paginate: false });
         if (totals) localStorage.setItem("totals", JSON.stringify(totals));
         else throw "Unable to get totals";
-    } catch (error) {
-        totals = localStorage.getItem("totals");
-    }
-
+    } catch (error) {}
     totals = localStorage.getItem("totals");
     try {
         const programStr = localStorage.getItem("app");
