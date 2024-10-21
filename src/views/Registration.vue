@@ -257,7 +257,6 @@ export default defineComponent({
     watch: {
         workerApi: {
             async handler() {
-                console.log("🚀 ~ handler ~ this.workerApi?.data :", this.workerApi?.data);
                 if (this.workerApi?.data == "Done" && this.offlinePatientID) {
                     toastSuccess("Successfully Created Patient");
                     await db
