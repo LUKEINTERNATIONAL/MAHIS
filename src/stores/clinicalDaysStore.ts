@@ -181,7 +181,7 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
         getAreSundaysDisabled(): boolean {
             return this.areSundaysDisabled;
         },
-        setsssignedAppointmentsDates(data: any): void {
+        setsssignedAppointmentsDates(data: any, next_apt: boolean = false): void {
             const programID = ProgramService.getProgramID()
             const patientID = useDemographicsStore().getPatient().patient_id
             if (Array.isArray(this.assignedAppointmentsDates)) {
@@ -190,7 +190,8 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
                         programID,
                         patientID,
                         date: data,
-                    })
+                        markedNextApt: next_apt,
+                    });
                 }
             } else {
                 this.assignedAppointmentsDates = []
