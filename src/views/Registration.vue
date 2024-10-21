@@ -265,7 +265,6 @@ export default defineComponent({
                         .doc({ offlinePatientID: this.offlinePatientID })
                         .get()
                         .then(async (document: any) => {
-                            console.log("🚀 ~ .then ~ document:", document);
                             if (document.serverPatientID) {
                                 this.openNewPage(document.patientData);
                             } else {
@@ -399,6 +398,7 @@ export default defineComponent({
             }
         },
         async createPatient() {
+            this.offlinePatientID = "";
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
             await this.buildPersonalInformation();
