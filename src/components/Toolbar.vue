@@ -49,8 +49,14 @@
                 <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
                     <ion-content>
                         <ion-list>
-                            <ion-item :button="true" :detail="false" @click="showUserProfile()" style="cursor: pointer">Profile</ion-item>
-                            <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer">Logout</ion-item>
+                            <ion-item :button="true" :detail="false" @click="showUserProfile()" style="cursor: pointer">
+                                <ion-icon :icon="personCircleOutline" slot="start"></ion-icon>
+                                <span class="rght-drpm">{{ user_name }}</span>
+                            </ion-item>
+                            <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer">
+                                <ion-icon :icon="logOutOutline" slot="start"></ion-icon>
+                                <span class="rght-drpm">Logout</span>
+                            </ion-item>
                         </ion-list>
                     </ion-content>
                 </ion-popover>
@@ -76,28 +82,41 @@
         </ion-toolbar>
     </ion-header> -->
 
-    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed"/>
+    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed" />
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonRow, IonCol, IonLabel, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
-import { notificationsOutline, personCircleOutline } from "ionicons/icons";
-import { defineComponent } from "vue";
+import {
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonRow,
+    IonCol,
+    IonLabel,
+    IonTitle,
+    IonIcon,
+    IonToolbar,
+    IonSearchbar,
+    IonPopover,
+} from "@ionic/vue";
+import { notificationsOutline, personCircleOutline, logOutOutline } from "ionicons/icons";
+import { defineComponent, ref } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
-import userProfile from "@/views/UserManagement/userProfile.vue"
+import userProfile from "@/views/UserManagement/userProfile.vue";
 import { useProgramStore } from "@/stores/ProgramStore";
 import { useStatusStore } from "@/stores/StatusStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
-import TruncateText from '@/components/TruncateText.vue'
+import TruncateText from "@/components/TruncateText.vue";
 import { useUserStore } from "@/stores/userStore";
 import { icons } from "@/utils/svg";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 export default defineComponent({
     mixins: [ScreenSizeMixin],
-    name: "Home",
+    name: "Toolbar",
     components: {
         IonContent,
         IonHeader,
@@ -116,6 +135,7 @@ export default defineComponent({
         TruncateText,
     },
     data() {
+        const user_name = ref()
         return {
             popoverOpen: false,
             iconsContent: icons,
@@ -124,6 +144,7 @@ export default defineComponent({
             programName: "",
             showUserProfileModal: false,
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
+            user_name,
         };
     },
     watch: {
@@ -133,18 +154,25 @@ export default defineComponent({
             },
             deep: true,
         },
+        user_ID: {
+            handler() {
+                this.assignUserName()
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useProgramStore, ["programs"]),
         ...mapState(useStatusStore, ["apiStatus"]),
-        ...mapState(useUserStore, ["userFacilityName"]),
+        ...mapState(useUserStore, ["userFacilityName", "user_ID"]),
     },
     mounted() {
         this.updateData();
+        this.assignUserName()
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
-        return { notificationsOutline, personCircleOutline, facilityName };
+        return { notificationsOutline, personCircleOutline, facilityName, logOutOutline };
     },
     methods: {
         updateData() {
@@ -161,8 +189,16 @@ export default defineComponent({
             this.showUserProfileModal = true;
         },
         modalClosed() {
-           this.showUserProfileModal = false;
+            this.showUserProfileModal = false;
         },
+        getUserName() {
+            const store = useUserStore();
+            const user = store.getUser()
+            return user.username
+        },
+        assignUserName() {
+            this.user_name = this.getUserName();
+        }
     },
 });
 </script>
@@ -176,6 +212,10 @@ export default defineComponent({
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.rght-drpm {
+    margin-left: 10px;
 }
 
 #container strong {
@@ -221,7 +261,7 @@ export default defineComponent({
 }
 .compact-toolbar {
     --min-height: 11px;
-  }
+}
 
 .date-value {
     color: #ffffff;

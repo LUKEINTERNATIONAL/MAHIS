@@ -4,6 +4,7 @@ import { Service } from "@/services/service";
 import { UserService } from "@/services/user_service";
 import { IonIcon, IonFab, IonFabButton, IonFabList } from "@ionic/vue";
 import { useProgramStore } from "@/stores/ProgramStore";
+import { useUserStore } from "@/stores/userStore";
 import {
     medkit,
     chevronBackOutline,
@@ -74,6 +75,8 @@ export default defineComponent({
     },
     methods: {
         async setProgram(program: any) {
+            const store = useUserStore();
+            store.setCurrentUserProgram(program);
             localStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
             await this.setProgramInfo();
             if (this.demographics.patient_id) await this.nav(program.url);

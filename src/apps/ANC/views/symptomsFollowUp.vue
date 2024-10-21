@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
 
         </ion-content>
@@ -173,6 +174,9 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
+      getSaveFunction(){
+
+      },
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
@@ -249,7 +253,7 @@ export default defineComponent({
         if (!encounter) return toastWarning("Unable to create persistent behaviour encounter");
         const patientStatus = await persistentBehaviour.saveObservationList(await this.buildPersistentBehaviours());
         if (!patientStatus) return toastWarning("Unable to create patient persistent behaviour details!");
-        toastSuccess("Persistent behaviour details created");
+        toastSuccess("Persistent behaviour details have been created");
       }
       console.log(await this.buildPersistentBehaviours())
     },
@@ -261,7 +265,7 @@ export default defineComponent({
           if (!encounter) return toastWarning("Unable to create IPV encounter");
           const patientStatus = await IPV.saveObservationList(await this.buildIPV());
           if (!patientStatus) return toastWarning("Unable to create patient IPV details!");
-          toastSuccess("IPV details created");
+          toastSuccess("IPV details have been created");
         }
         console.log(await this.buildIPV())
       },

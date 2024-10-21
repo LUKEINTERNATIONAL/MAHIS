@@ -1,6 +1,5 @@
 import { defineStore } from "pinia"
 import { icons } from '@/utils/svg';
-import _ from "lodash";
 
 const initialPhysiologicalCounselling=[
     {
@@ -10,7 +9,7 @@ const initialPhysiologicalCounselling=[
             header: {
                 title: "Which physiological counselling done?",
                 selectedValue: "",
-                name:'hiv Counselling',
+                name:'Physiological counselling',
                 class:'bold'
 
             },
@@ -144,9 +143,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             this.physiologicalCounselingInfo = data
         },
         getInitial(){
-            const data=_.cloneDeep(initialPhysiologicalCounselling)
+            const data=[...initialPhysiologicalCounselling]
             return [...data]
         }
     },
-    persist:true
+    // persist:true
 })

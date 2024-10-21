@@ -9,6 +9,7 @@ export const useUserStore = defineStore("userStore", {
         userFacilityName: '',
         currentUserProgram: {} as any,
         currentProgramId: 0 as number,
+        facilityLocation: {} as any,
     }),
     actions: {
         setUser(data: any): void {
@@ -26,6 +27,12 @@ export const useUserStore = defineStore("userStore", {
         },
         setUserFacilityName(name: string) {
             this.userFacilityName = name
+        },
+        setFacilityLocation(data: any) {
+            this.facilityLocation = data
+        },
+        getfacilityLocation() {
+            return this.facilityLocation
         },
         getUserId() {
             return this.user_ID

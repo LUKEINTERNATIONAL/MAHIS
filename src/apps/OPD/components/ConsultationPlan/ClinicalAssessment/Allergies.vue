@@ -93,6 +93,7 @@ import { useAllegyStore, searchHealthcareEquipmentAllergies, concatenateArrays }
 import { ConceptService } from "@/services/concept_service"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import { ConceptName } from "@/interfaces/conceptName";
+import ListPicker from "../../../../../components/ListPicker.vue"
 
 const store = useAllegyStore()
 const selectedAllergiesList = computed(() => store.selectedMedicalAllergiesList)
@@ -101,6 +102,25 @@ const drugName = ref("")
 const otherAllergy = ref("") 
 const showOtherInput = ref(false)
 const allergiesList = computed(() => store.medicalAllergiesList)
+const uniqueId = ref(generateUniqueId(8, 'item-'))
+
+const list_picker_prperties = [
+    {
+        multi_Selection: true as any,
+        show_list_label: true as any,
+        unqueId:  uniqueId.value as any,
+        name_of_list: 'Add/Remove allegies' as any,
+        placeHolder: 'Search for an allegy' as any,
+        items: [],
+        listUpdatedFN: listUpdated1,
+        listFilteredFN: ()=>{},
+        searchTextFN: FindAllegicDrugName,
+        use_internal_filter: true as any,
+        show_error: ref(false),
+        error_message: 'please select a User',
+        disabled: ref(false) as any,
+    },
+]
 
 onMounted(async () => {
     // 
@@ -136,13 +156,8 @@ function dissmissDrugAddField(): void {
     // addItemButton.value = true;
 }
 
-function saveStateValuesState() {
-    const allergyStore = store
-    allergyStore.setMedicalAllergiesList(allergiesList);
-}
-
 async function FindAllegicDrugName(text: any) {
-    const searchText = text.target.value;
+    const searchText = text;
     const page = 1,
         limit = 10;
     const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);
@@ -157,10 +172,46 @@ async function FindAllegicDrugName(text: any) {
         value: drug.name,
         other: drug,
     }));
-    const allergyStore = store
+
     const temp_data_1 = searchHealthcareEquipmentAllergies(searchText)
     const temp_data_2 = concatenateArrays(temp_data_1, drugs as any)
+    const allergyStore = store
     allergyStore.setMedicalAllergiesList(temp_data_2)
+    setCommonAllergiesList()
+}
+
+function setCommonAllergiesList() {
+    const temp_data_2 = allergiesList.value
+    selectedAllergiesList.value.forEach((selected_alle: any) => {
+    let found = false;
+        temp_data_2.forEach((alle_dat_itm: any, index: number) => {
+            if (alle_dat_itm.concept_id == selected_alle.concept_id && selected_alle.selected === true) {
+                temp_data_2[index] = selected_alle;
+                found = true;
+            }
+        });
+        if (!found && selected_alle.selected === true) {
+            temp_data_2.push(selected_alle);
+        }
+    });
+    const op_ = temp_data_2.filter((item: any, index: any, self: any) =>
+        index === self.findIndex((t: { concept_id: any; }) => t.concept_id === item.concept_id)
+    );
+    const allergyStore = store
+    allergyStore.setMedicalAllergiesList(op_)
+}
+
+function generateUniqueId(length = 8, prefix = '') {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = prefix;
+
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    // Append a timestamp or random number for uniqueness
+    result += `-${Date.now()}`; // Append timestamp
+    return result;
 }
 
 function addCustomAllergy() {

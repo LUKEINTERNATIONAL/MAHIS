@@ -9,6 +9,7 @@
                 @updateStatus="markWizard"
                 @finishBtn="saveData()"
                 :StepperData="StepperData"
+                :getSaveFunction="getSaveFunction"
                 :showSteeper="1"
             />
         </ion-content>
@@ -142,6 +143,9 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
+      getSaveFunction(){
+
+      },
         saveData() {
             this.$router.push("/pharmacy");
         },

@@ -1,4 +1,8 @@
 <template>
+    <div v-if="loading" class="spinner-overlay">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <div class="loading-text">Please wait...</div>
+    </div>
     <ion-header>
         <ion-toolbar>
             <ion-title>View Immunization Session Schedule</ion-title>
@@ -7,16 +11,26 @@
                     <ion-icon :icon="close" color="white" />
                 </ion-button>
             </ion-buttons>
+            <div slot="start">
+                <div style="margin-left: 15px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 64 64">
+                        <path fill="currentColor"
+                            d="M33.208 25.544a3.616 3.616 0 0 1 4.548 2.347a3.62 3.62 0 0 1-2.346 4.549l-9.838 3.144a3.62 3.62 0 0 1-3.331-.597l-4.069-3.184l8.835 31.777H1.267V23.208a4.32 4.32 0 0 1 4.319-4.317h6.435c.918 0 1.764.293 2.46.836l10.711 8.379l8.016-2.563zM17.486 37.718h-3.904v-3.909H8.923v3.909h-3.89v4.673h3.89v3.889h4.659v-3.889h3.904zM9.655 16.951a7.77 7.77 0 0 0 0-15.538a7.77 7.77 0 0 0-7.769 7.768a7.77 7.77 0 0 0 7.769 7.77m45.715.028a7.78 7.78 0 0 0 7.779-7.777c0-4.301-3.486-7.787-7.779-7.787a7.783 7.783 0 0 0-7.781 7.787a7.78 7.78 0 0 0 7.781 7.777" />
+                        <path fill="currentColor"
+                            d="M53.02 19.069c-3.184 0-4.628 1.089-5.837 2.975l-.782 1.504l-4.547-1.328l.192-1.239l-10.857-2.432l-.304 1.354l-2.031-.452l.302-1.358l-.815-.18l-.932 4.16l.811.18l.311-1.358l2.031.454l-.304 1.361l10.86 2.432l.351-1.274l4.399.707l-11.335 21.8a3.545 3.545 0 0 0 1.588 4.757a3.553 3.553 0 0 0 4.764-1.586l9.456-18.351h1.551v32.386h11.147V19.07H53.021z" />
+                    </svg>
+                </div>
+            </div>
         </ion-toolbar>
     </ion-header>
     <ion-content>
-        <ion-list v-if="props.data.length > 0" style="margin-top: 0px;" v-for="schedule, index in props.data"
+        <ion-list v-if="props.data.length > 0" style="margin: -10px;" v-for="schedule, index in props.data"
             v-bind:key="schedule.id">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <ion-card-header style="flex: 1;">
                     <div>
-                        <ion-card-title>
-                            ({{ index + 1 }}) {{ schedule.session_name }}
+                        <ion-card-title class="ion-text-wrap text-mobile">
+                            {{ schedule.session_name }}
                         </ion-card-title>
                         <ion-card-subtitle>
                             Scheduled from: {{ schedule.start_date }} to {{ schedule.end_date }}
@@ -24,26 +38,26 @@
                     </div>
                 </ion-card-header>
                 <div style="display: flex; align-items: center;">
-                    <ion-button fill="clear" id="click-trigger" style="margin-left: auto;">
+                    <ion-button fill="clear" :id="`click-trigger-${index}-`" style="margin-left: auto;">
                         <ion-icon :icon="ellipsisVertical" />
                     </ion-button>
                 </div>
-                <ion-popover trigger="click-trigger" trigger-action="click">
+                <ion-popover dismiss-on-select :trigger="`click-trigger-${index}-`" trigger-action="click"
+                    :ref="(el: any) => { if (el) popoverRefs[index] = el as typeof IonPopover; }">
                     <ion-content>
                         <ion-list>
-                            <ion-item button @click="handleEdit">
+                            <ion-item button @click="handleEdit(schedule)">
                                 <ion-label>Edit</ion-label>
                             </ion-item>
-                            <ion-item button @click="handleDelete">
-                                <ion-label>Delete</ion-label>
+                            <ion-item button @click="handleDelete(schedule)">
+                                <ion-label>Cancel</ion-label>
                             </ion-item>
                         </ion-list>
                     </ion-content>
                 </ion-popover>
             </div>
 
-            <ion-card-content>
-                <ion-list>
+            <ion-list style="margin: 10px;">
                     <ion-item>
                         <div slot="start" class="icon-color">
                             <svg xmlns="http://www.w3.org/2000/svg" :width="svgIconWidth" :height="svgIconHeight"
@@ -91,8 +105,9 @@
                         </div>
 
                         <ion-label>
-                            <h3 class="ion-label-h3">Target</h3>
-                            <p>{{ schedule.target }} people (Under 5)</p>
+                            <h3 class="ion-label-h3">Expected Clients</h3>
+                            <p>{{ schedule.session_vaccines?.total_clients }} people (Under 5), {{
+                                schedule.session_vaccines?.total_missed_doses }} doses required </p>
                         </ion-label>
                     </ion-item>
                     <ion-item>
@@ -113,9 +128,7 @@
                         </div>
                         <ion-label>
                             <h3 class="ion-label-h3">Vaccines</h3>
-                            <p>
-                                {{ schedule.vaccines.map((vaccine: any) => vaccine.name).join(', ')
-                                }}
+                            <p v-html="getFormattedVaccines(schedule)">
                             </p>
                         </ion-label>
                     </ion-item>
@@ -136,7 +149,7 @@
 
                         <ion-label>
                             <h3 class="ion-label-h3">Session type</h3>
-                            <p>{{ schedule.session_type }} ({{ schedule.repeat_type }} repeat)</p>
+                            <p>{{ schedule.session_type }} ({{ schedule.repeat_type }} repeat - <span><b>{{schedule.frequency}} times</b></span>)</p>
                         </ion-label>
                     </ion-item>
                     <ion-item>
@@ -161,16 +174,18 @@
                         </ion-label>
                     </ion-item>
                 </ion-list>
-            </ion-card-content>
         </ion-list>
     </ion-content>
 </template>
 
 <script lang="ts" setup>
-import { IonContent, IonHeader, IonCardHeader, IonLabel, modalController, IonCardSubtitle, IonCardTitle, IonButton, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
-
+import { SessionSchedule, Vaccine } from "@/types";
+import { IonContent, IonHeader, IonCardHeader, IonLabel, IonSpinner, IonButtons, modalController, IonCardSubtitle, IonCardTitle, IonButton, IonPopover, IonItem, IonIcon, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonCardContent, IonMenu, IonList } from "@ionic/vue";
 import { ellipsisVertical, close } from 'ionicons/icons';
-import { ref, defineExpose } from 'vue';
+import { ref } from 'vue';
+import voidReason from '@/apps/Immunization/components/Modals/voidReason.vue';
+import { SessionScheduleService } from "@/services/session_schedule_service";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
 
 const props = defineProps({
     data: {
@@ -180,32 +195,70 @@ const props = defineProps({
     }
 })
 
-const isOpen = ref<boolean>(false);
-const svgIconHeight = ref<number>(50);
-const svgIconWidth = ref<number>(50);
-const popoverOpen = ref(false);
-const event = ref(null);
-
-const openPopover = (e: Event) => {
-    popoverOpen.value = true;
-    event.value = e as unknown as null;
-    e.stopPropagation();
-};
-const closePopover = () => {
-    popoverOpen.value = false;
-};
-
-const handleEdit = () => {
-    console.log('Edit clicked');
-    closePopover();
+const svgIconHeight = ref<number>(40);
+const svgIconWidth = ref<number>(40);
+const loading = ref<boolean>(false);
+interface PopoverRefs {
+    [key: number]: typeof IonPopover | undefined;
+}
+const popoverRefs = ref<PopoverRefs>({});
+const getFormattedVaccines = (schedule: SessionSchedule): string => {
+    const vaccines = schedule.session_vaccines?.vaccines || [];
+    return vaccines
+        .map((vaccine: Vaccine) => `${vaccine.drug_name} <b>(${vaccine.missed_doses})</b>`)
+        .join(', ');
 };
 
-const handleDelete = () => {
-    console.log('Delete clicked');
-    closePopover();
+const handleEdit = async (schedule: SessionSchedule) => {
+    modalController.dismiss({ edit: schedule });
 };
 
-const closeModal = () => {
+const handleDelete = async (session: SessionSchedule) => {
+    const modal = await modalController.create({
+        component: voidReason,
+        cssClass: "otherVitalsModal",
+        componentProps: {
+            data: props.data,
+        },
+    });
+    await modal.present();
+    modal.onDidDismiss().then(async (data: any) => {
+        if (data.data) {
+            loading.value = true;
+            const sessionSchedule = new SessionScheduleService();
+            const response = await sessionSchedule.delete(Number(session.session_schedule_id), data.data.name);
+            response ? toastSuccess("Immunization schedule deleted successfully!") : toastWarning("An error occurred, please try again later.");
+            loading.value = false;
+            modalController.dismiss({ update: true });
+        }
+    });
+};
+
+const closeModal = (): void => {
     modalController.dismiss();
 }
 </script>
+
+<style scoped>
+.icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #bbf7d0;
+    padding: 5px;
+    border-radius: 5px;
+    width: 35px;
+    height: 35px;
+    margin-right: 5px;
+}
+
+.text-mobile {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .text-mobile {
+        font-size: 1.2rem;
+    }
+}
+</style>

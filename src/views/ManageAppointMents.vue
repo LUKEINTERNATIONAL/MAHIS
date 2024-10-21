@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <NavigationMenu/>
+        <NavigationMenu />
         <ion-content>
             <div class="container">
                 <ion-row>
@@ -10,7 +10,7 @@
                 </ion-row>
 
                 <ion-row>
-                    <ion-col >
+                    <ion-col>
                         <ion-button expand="block" @click="navigationMenu()" class="custom-button">
                             <span class="button-content">
                                 <span class="button-text">View Appointments</span>
@@ -25,7 +25,26 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonButton, IonMenuButton, IonLabel, IonGrid, IonPage, IonCardContent, IonTitle, IonCardTitle, IonToolbar, IonCardHeader, IonRow, IonCol, IonCard, IonIcon, IonSelect, IonSelectOption } from "@ionic/vue";
+import {
+    IonContent,
+    IonHeader,
+    IonButton,
+    IonMenuButton,
+    IonLabel,
+    IonGrid,
+    IonPage,
+    IonCardContent,
+    IonTitle,
+    IonCardTitle,
+    IonToolbar,
+    IonCardHeader,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonIcon,
+    IonSelect,
+    IonSelectOption,
+} from "@ionic/vue";
 import { defineComponent, ref, computed, onMounted, onUnmounted } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -35,9 +54,9 @@ import { AppointmentService } from "@/services/appointment_service";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
 import { mapState } from "pinia";
 import { useStartEndDate } from "@/stores/StartEndDate";
-import nextApptInf from "./nextApptInf.vue"
-import { refreshOutline } from 'ionicons/icons';
-import BasicInputField from "@/components/BasicInputField.vue"
+import nextApptInf from "./nextApptInf.vue";
+import { refreshOutline } from "ionicons/icons";
+import BasicInputField from "@/components/BasicInputField.vue";
 import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMenu.vue";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import {
@@ -53,14 +72,14 @@ import {
     globe,
     add,
     person,
-    chevronForwardOutline, 
+    chevronForwardOutline,
     bookOutline,
     searchOutline,
     arrowForward,
 } from "ionicons/icons";
 
 export default defineComponent({
-    name: "Home",
+    name: "ManageAppointMents",
     components: {
         IonContent,
         IonHeader,
@@ -89,9 +108,9 @@ export default defineComponent({
     },
     data() {
         return {
-            search_text: '',
+            search_text: "",
             search_txt_error: false,
-        }
+        };
     },
     setup() {
         const startDate = ref(HisDate.currentDate());
@@ -123,15 +142,14 @@ export default defineComponent({
     },
     watch: {
         $route: {
-        async handler(data) {
-          if (data.name == "manageAppointMents")
-          this.initNavData()
-        },
+            async handler(data) {
+                if (data.name == "manageAppointMents") this.initNavData();
+            },
             deep: true,
         },
     },
     async mounted() {
-        this.initNavData()
+        this.initNavData();
     },
     methods: {
         async handleInputData(event: any) {
@@ -142,25 +160,27 @@ export default defineComponent({
                 this.endDate = HisDate.toStandardHisFormat(event.value);
             }
 
-            const store = useImmunizationAppointMentStore()
-            store.setStartEndDate(this.startDate, this.endDate)
+            const store = useImmunizationAppointMentStore();
+            store.setStartEndDate(this.startDate, this.endDate);
         },
         initNavData() {
-            const store = EIRreportsStore()
-            store.setNavigationPayload('Manage Appointments', true, false, '/', 'home', '')
+            const store = EIRreportsStore();
+            store.setNavigationPayload("Manage Appointments", true, false, "/", "home", "");
         },
-        navigationMenu(): void{
-            const store = EIRreportsStore()
-            const date_span_substr = HisDate.toStandardHisDisplayFormat(this.startDate).concat(' To  ', HisDate.toStandardHisDisplayFormat(this.endDate))
-            store.setNavigationPayload('Manage Appointments', true, false, '/', 'manageAppointMents', date_span_substr)
-            this.$router.push('ManageAppointMentsTemplate')
+        navigationMenu(): void {
+            const store = EIRreportsStore();
+            const date_span_substr = HisDate.toStandardHisDisplayFormat(this.startDate).concat(
+                " To  ",
+                HisDate.toStandardHisDisplayFormat(this.endDate)
+            );
+            store.setNavigationPayload("Manage Appointments", true, false, "/", "manageAppointMents", date_span_substr);
+            this.$router.push("ManageAppointMentsTemplate");
         },
-    }
-})
+    },
+});
 </script>
 
 <style scoped>
-
 .appointments:hover {
     background-color: #f0f0f0;
     cursor: pointer;
@@ -215,7 +235,6 @@ export default defineComponent({
     --padding-end: 8px;
 }
 
-
 .spinner-overlay {
     position: fixed;
     top: 0;
@@ -234,18 +253,18 @@ export default defineComponent({
 }
 
 .custom-button {
-  --padding-start: 16px;
-  --padding-end: 16px;
+    --padding-start: 16px;
+    --padding-end: 16px;
 }
 
 .button-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .button-text {
-  font-size: 20px;
+    font-size: 20px;
 }
 </style>

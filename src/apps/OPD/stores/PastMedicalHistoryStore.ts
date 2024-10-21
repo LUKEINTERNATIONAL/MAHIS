@@ -42,12 +42,12 @@ const initialPastMedicalHistory = [
         {
           name: "Yes",
           value: "Yes",
-          colSize: 2,
+          colSize: 3,
         },
         {
           name: "No",
           value: "No",
-          colSize: 2,
+          colSize: 3,
         },
       ],
     },
@@ -264,12 +264,12 @@ const initialPastMedicalHistory = [
         {
           name: "Yes",
           value: "Yes",
-          colSize: 2,
+          colSize: 3,
         },
         {
           name: "No",
           value: "No",
-          colSize: 2,
+          colSize: 3,
         },
       ],
     },
@@ -331,7 +331,7 @@ const initialPastMedicalHistory = [
     childName: "HIV Positive",
     radioBtnContent: {
       header: {
-        title: "ART status",
+        title: "Is the patient on ART",
         name: "HIV status",
         selectedValue: "",
         class: "bold",
@@ -342,12 +342,12 @@ const initialPastMedicalHistory = [
         {
           name: "Yes",
           value: "Yes",
-          colSize: 2,
+          colSize: 3,
         },
         {
           name: "No",
           value: "No",
-          colSize: 2,
+          colSize: 3,
         },
       ],
     },
@@ -416,17 +416,17 @@ const initialPastMedicalHistory = [
         {
           name: "Type I",
           value: "Type 1 diabetes",
-          colSize: 2,
+          colSize: 4,
         },
         {
           name: "Type II",
           value: "Type 2 diabetes",
-          colSize: 2,
+          colSize: 4,
         },
         {
           name: "Unsure",
           value: "Unknown",
-          colSize: 2,
+          colSize: 4,
         },
       ],
     },
@@ -448,17 +448,17 @@ const initialPastMedicalHistory = [
         {
           name: "Diet",
           value: "Diet",
-          colSize: 2,
+          colSize: 4,
         },
         {
           name: "Tablets",
           value: "Tablets",
-          colSize: 2,
+          colSize: 4,
         },
         {
           name: "Insulin",
           value: "Insulin",
-          colSize: 2,
+          colSize: 4,
         },
       ],
     },

@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
             <ion-spinner v-if="isLoading" name="lines"></ion-spinner>
         </ion-content>
@@ -257,6 +258,9 @@ export default defineComponent({
             //   this.wizardData[4].checked = false;
             // }
         },
+      getSaveFunction(){
+
+      },
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data[0] || item?.data;

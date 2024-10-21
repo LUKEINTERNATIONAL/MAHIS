@@ -10,6 +10,8 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -43,7 +45,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal, toastDanger, toastSuccess, toastWarning } from "@/utils/Alerts";
+import { createModal, toastSuccess, toastWarning } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import Stepper from "@/components/Stepper.vue";
 import { mapState } from "pinia";
@@ -168,6 +170,9 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+      getSaveFunction(){
+
+      },
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -175,19 +180,10 @@ export default defineComponent({
             });
         },
         async saveData() {
-            const store = useSecondStageOfLabourStore();
-            const isFormValid= await store.validate();
-           
-            if(!isFormValid){
-                toastDanger('The form has errors')
-                return;
-            }
-
-   
             await this.saveSecondStageLabour();
             toastSuccess("Delivery details data saved successfully");
             resetPatientData();
-            //this.$router.push("labourHome");
+            this.$router.push("/labour/labourHome");
         },
         async saveSecondStageLabour() {
             if (
@@ -198,19 +194,12 @@ export default defineComponent({
             ) {
                 const userID: any = Service.getUserID();
                 const secondStageDelivery = new SecondStageDeliveryService(this.demographics.patient_id, userID);
-
-
                 const encounter = await secondStageDelivery.createEncounter();
                 if (!encounter) return toastWarning("Unable to create Second stage and Third stage of labour encounter");
-
-    
-                console.log(await this.buildSecondStageOfLabour())
-        
                 const patientStatus = await secondStageDelivery.saveObservationList(await this.buildSecondStageOfLabour());
                 if (!patientStatus) return toastWarning("Unable to create patient second stage and third stage of labour details!");
                 toastSuccess("Second stage and Third stage  of labour  details have been created");
             }
-        
             console.log(await this.buildSecondStageOfLabour());
         },
 
@@ -239,4 +228,3 @@ export default defineComponent({
 </script>
 
 <style scoped></style>
-

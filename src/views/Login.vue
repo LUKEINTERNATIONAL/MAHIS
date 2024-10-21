@@ -105,7 +105,7 @@ import { useUserStore } from "@/stores/userStore";
 import db from "@/db";
 
 export default defineComponent({
-    name: "Home",
+    name: "Login",
     components: {
         IonContent,
         IonHeader,
@@ -208,6 +208,7 @@ export default defineComponent({
             const store = useUserStore();
             const data = await getUserLocation();
             store.setUserFacilityName(data.name);
+            store.setFacilityLocation(data);
             store.setCurrentUserProgram(this.program);
         },
         async setOfflinePrograms() {
@@ -279,6 +280,9 @@ export default defineComponent({
 }
 .multiselect::before {
     top: -7px;
+}
+ion-card {
+    min-width: 330px;
 }
 @media (max-width: 902px) {
     .login-page {

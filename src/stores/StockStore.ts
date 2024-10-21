@@ -35,7 +35,7 @@ const initialStock = [
                     colData: [
                         {
                             inputHeader: "Batch No.*",
-                            iconRight: icons.scannerIcon,
+                            iconRight: "",
                             value: "",
                             name: "batch",
                             eventType: "input",

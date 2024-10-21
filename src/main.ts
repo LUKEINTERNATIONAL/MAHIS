@@ -9,6 +9,7 @@ import piniaPluginPersistedState from "pinia-plugin-persistedstate";
 
 import VueDatePicker from "@vuepic/vue-datepicker";
 import VueAwesomePaginate from "vue-awesome-paginate";
+import "form-wizard-vue3/dist/form-wizard-vue3.css";
 import "vue-awesome-paginate/dist/style.css";
 
 import "@vuepic/vue-datepicker/dist/main.css";
@@ -38,16 +39,12 @@ import "./css/style.css";
 import "./css/component_view.css";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
-//@ts-ignore
-import VCalendar from "v-calendar";
-import "v-calendar/style.css";
 
 const pinia = createPinia();
 const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePaginate);
 
 app.component("VueDatePicker", VueDatePicker);
 app.component("v-select", vSelect);
-app.use(VCalendar, {});
 pinia.use(piniaPluginPersistedState);
 DataTable.use(DataTablesCore);
 router.isReady().then(() => {

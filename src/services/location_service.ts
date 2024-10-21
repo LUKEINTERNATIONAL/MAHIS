@@ -56,8 +56,8 @@ export class LocationService extends Service {
         return await super.getJson("/districts", { paginate: false });
     }
 
-    static async getAllVillages() {
-        return await super.getJson("/villages", { paginate: false });
+    static async getAllVillages(page = 1, page_size = 10) {
+        return await super.getJson("/villages", { page: page, page_size: page_size });
     }
 
     static async getAllTraditionalAuthorities() {
