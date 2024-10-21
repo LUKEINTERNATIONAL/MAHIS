@@ -1,6 +1,6 @@
 const relationshipsService = {
     async setOfflineRelationship() {
-        let relationshipsData = await DatabaseManager.getOfflineData("relationship");
+        let relationshipsData = await DatabaseManager.getOfflineData("relationship").then((data) => data?.[0]);
         if (!relationshipsData || TOTALS.total_relationships > relationshipsData.length) {
             relationshipsData = await ApiService.getData("/types/relationships", { paginate: false });
             if (relationshipsData && relationshipsData.length > 0) {
