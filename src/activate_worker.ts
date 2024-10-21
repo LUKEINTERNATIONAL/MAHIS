@@ -1,8 +1,8 @@
 import { useWebWorker } from "@vueuse/core";
 import { Service } from "@/services/service";
-import { getBaseURl } from "@/utils/GeneralUti";
+import { getBaseURL } from "@/utils/GeneralUti";
 
-const workerApi = useWebWorker(`/${getBaseURl()}/src/services/WebWorker/worker.js`);
+const workerApi = useWebWorker(`/${getBaseURL()}/src/services/WebWorker/worker.js`);
 let url = "";
 let apiKey: string | null = "";
 let userId: string | null = "";
