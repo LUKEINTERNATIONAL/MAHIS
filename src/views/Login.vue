@@ -163,7 +163,7 @@ export default defineComponent({
 
     async mounted() {
         this.workerApi = workerData.workerApi;
-        workerData.postData("SET_OFFLINE_PROGRAMS");
+        await workerData.postData("SET_OFFLINE_PROGRAMS");
         const auth = new AuthService();
         await auth.loadConfig();
     },
