@@ -15,13 +15,13 @@ let DATE = "";
  **********************************************************************
  **********************************************************************/
 self.onmessage = async (event) => {
-    const { type, url, apiKey, userId, programId, date, payload } = event.data;
+    const { type, url, apiKey, userId, programId, totals, date, payload } = event.data;
     USERID = userId;
     PROGRAMID = programId;
     DATE = date;
     APIURL = url;
     APIKEY = apiKey;
-    TOTALS = await ApiService.getTotals();
+    TOTALS = JSON.parse(totals);
     await DatabaseManager.openDatabase();
     try {
         switch (type) {
