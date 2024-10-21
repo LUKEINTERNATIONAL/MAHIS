@@ -24,27 +24,29 @@ export const useGlobalPropertyStore = defineStore("globalPropertyStore", {
         async loadHolidayDateProperty() {
             const user_store = useUserStore();
             const facility_id = user_store.getfacilityLocation().location_id;
-            const req = await Service.getJson("global_properties", { property: "holiday_date_"+facility_id });
-            this.globalPropertyStore.holidayDatesObj = req["holiday_date_"+facility_id];
+            const req = await Service.getJson("global_properties", { property: "holiday_date_" + facility_id });
+            this.globalPropertyStore.holidayDatesObj = req["holiday_date_" + facility_id];
         },
         async loadWeekDaysProperty() {
             const user_store = useUserStore();
             const facility_id = user_store.getfacilityLocation().location_id;
-            const req = await Service.getJson("global_properties", { property: "week_days_properties_"+facility_id });
-            this.globalPropertyStore.weekDaysPropertiesObj = req["week_days_properties_"+facility_id];
+            const req = await Service.getJson("global_properties", { property: "week_days_properties_" + facility_id });
+            this.globalPropertyStore.weekDaysPropertiesObj = req["week_days_properties_" + facility_id];
         },
         async loadMaximumNumberOfCForEachDayProperty() {
             const user_store = useUserStore();
             const facility_id = user_store.getfacilityLocation().location_id;
-            const req = await Service.getJson("global_properties", { property: "maximum_number_Of_c_for_each_day_"+facility_id });
-            this.globalPropertyStore.maximumNumberOfCForEachDayObj = req["maximum_number_Of_c_for_each_day_"+facility_id]; 
+            const req = await Service.getJson("global_properties", { property: "maximum_number_Of_c_for_each_day_" + facility_id });
+            this.globalPropertyStore.maximumNumberOfCForEachDayObj = req["maximum_number_Of_c_for_each_day_" + facility_id];
         },
         async loadGlobalProperty() {
-            await this.loadDDEStatus();
-            await this.loadSitePrefix();
-            await this.loadHolidayDateProperty()
-            await this.loadWeekDaysProperty()
-            await this.loadMaximumNumberOfCForEachDayProperty()
+            try {
+                await this.loadDDEStatus();
+                await this.loadSitePrefix();
+                await this.loadHolidayDateProperty();
+                await this.loadWeekDaysProperty();
+                await this.loadMaximumNumberOfCForEachDayProperty();
+            } catch (error) {}
         },
         async setGlobalProperty(prop: any, val: any) {
             await Service.postJson("global_properties", {

@@ -28,7 +28,7 @@ import Screentimeout from "@/composables/Screentimeout";
 import useFacility from "./composables/useFacility";
 import { useStatusStore } from "@/stores/StatusStore";
 import { storeToRefs } from "pinia";
-import { savePatientRecord } from "@/services/save_records";
+import workerData from "@/activate_worker";
 
 export default defineComponent({
     name: "App",
@@ -92,7 +92,7 @@ export default defineComponent({
                 // });
                 // if (confirm) location.reload();
                 toastSuccess("Connection restored");
-                await savePatientRecord();
+                await workerData.postData("SYNC_PATIENT_RECORD");
             }
             if (res && res.status === 401 && route.name != "Login") {
                 router.push("/login");
