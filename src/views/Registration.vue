@@ -136,7 +136,6 @@ import { formatInputFiledData } from "@/services/formatServerData";
 import { validateInputFiledData } from "@/services/group_validation";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { resetDemographics } from "@/services/reset_data";
-import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
 import PersonMatchView from "@/components/PersonMatchView.vue";
 import { createModal } from "@/utils/Alerts";
@@ -428,9 +427,7 @@ export default defineComponent({
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 this.offlinePatientID = Date.now();
                 await this.createOfflineRecord(this.offlinePatientID);
-                workerData.postData("SYNC_PATIENT_RECORD");
-
-                // await savePatientRecord();
+                await workerData.postData("SYNC_PATIENT_RECORD");
             } else {
                 toastWarning("Please complete all required fields");
             }
@@ -455,7 +452,7 @@ export default defineComponent({
                 creator: "",
             };
 
-            workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: offlineRecord });
+            await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: offlineRecord });
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
