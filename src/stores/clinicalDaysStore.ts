@@ -182,9 +182,13 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
             return this.areSundaysDisabled;
         },
         setsssignedAppointmentsDates(data: any, next_apt: boolean = false): void {
-            const programID = ProgramService.getProgramID()
-            const patientID = useDemographicsStore().getPatient().patient_id
+            const programID = ProgramService.getProgramID();
+            const patientID = useDemographicsStore().getPatient().patient_id;
+
             if (Array.isArray(this.assignedAppointmentsDates)) {
+                this.assignedAppointmentsDates.forEach((appointment) => {
+                    appointment.markedNextApt = false;
+                });
                 if (!appointmentExists(this.assignedAppointmentsDates, programID, patientID, data)) {
                     this.assignedAppointmentsDates.push({
                         programID,
@@ -194,7 +198,7 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
                     });
                 }
             } else {
-                this.assignedAppointmentsDates = []
+                this.assignedAppointmentsDates = [];
             }
         },
         getAssignedAppointmentsDates() {
