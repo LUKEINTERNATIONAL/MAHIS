@@ -364,6 +364,7 @@ export default defineComponent({
         this.workerApi = workerData.workerApi;
         await workerData.postData("SET_OFFLINE_LOCATION");
         await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
+        await workerData.postData("SYNC_PATIENT_RECORD");
         resetDemographics();
         await this.setAppointments();
         this.setView();
