@@ -15,10 +15,9 @@ export class WebSocketService {
     private async init() {
         const apiURL = localStorage.getItem("apiURL");
         const apiPort = localStorage.getItem("apiPort");
-
+        
         this.location_id = localStorage.getItem("locationID");
-
-        if (apiURL && apiPort) {
+        try {
             const websocketURL = getWebsockerURL();
             const url =
                 websocketURL && websocketURL !== "undefined" && websocketURL.trim().length > 0
@@ -29,7 +28,7 @@ export class WebSocketService {
             this.socket.onopen = this.onOpen;
             this.socket.onclose = this.onClose;
             this.socket.onerror = this.onError;
-        } else {
+        } catch (error) {
             console.error("WebSocket not initialized: apiURL or apiPort is missing in localStorage.");
         }
     }
