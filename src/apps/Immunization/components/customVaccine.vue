@@ -54,7 +54,6 @@ import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdm
 import { StockService } from '@/services/stock_service';
 import alert from "@/apps/Immunization/components/Modals/alert.vue";
 import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
-import { mapState } from "pinia";
 export default defineComponent({
     name: "Home",
     components: {
@@ -148,7 +147,7 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             store.setCurrentSelectedDrug(data)
             const stockService = new StockService();
-            const data_ = await stockService.getItem(data.drug_id)
+            const data_ = await stockService.getDrugBatches(data.drug_id)
             store.setLotNumberData(data_)
 
             if(data_.length == 0) {

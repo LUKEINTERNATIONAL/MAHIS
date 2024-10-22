@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
       <BasicFooter @finishBtn="saveData()" />
@@ -227,6 +228,9 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+      getSaveFunction(){
+
+      },
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;

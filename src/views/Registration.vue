@@ -136,7 +136,6 @@ import { formatInputFiledData } from "@/services/formatServerData";
 import { validateInputFiledData } from "@/services/group_validation";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { resetDemographics } from "@/services/reset_data";
-import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
 import PersonMatchView from "@/components/PersonMatchView.vue";
 import { createModal } from "@/utils/Alerts";
@@ -146,6 +145,9 @@ import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { UserService } from "@/services/user_service";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import workerData from "@/activate_worker";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts, SetDemographics],
     components: {
@@ -167,6 +169,8 @@ export default defineComponent({
     },
     data() {
         return {
+            workerApi: "" as any,
+            offlinePatientID: null as any,
             iconListStatus: "active_icon",
             deduplicationData: "active_icon",
             iconGridStatus: "inactive_icon",
@@ -186,6 +190,7 @@ export default defineComponent({
     },
     props: ["registrationType"],
     computed: {
+        ...mapState(useGeneralStore, ["NCDUserActions"]),
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["socialHistory"]),
@@ -206,6 +211,9 @@ export default defineComponent({
         lastname() {
             return getFieldValue(this.personInformation, "lastname", "value");
         },
+      phoneNumber() {
+        return getFieldValue(this.personInformation, "phoneNumber", "value");
+      },
         gender() {
             return getRadioSelectedValue(this.personInformation, "gender");
         },
@@ -242,12 +250,32 @@ export default defineComponent({
     },
 
     async mounted() {
+        this.workerApi = workerData.workerApi;
         resetDemographics();
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
     },
     watch: {
+        workerApi: {
+            async handler() {
+                if (this.workerApi?.data == "Done" && this.offlinePatientID) {
+                    toastSuccess("Successfully Created Patient");
+                    await db
+                        .collection("patientRecords")
+                        .doc({ offlinePatientID: this.offlinePatientID })
+                        .get()
+                        .then(async (document: any) => {
+                            if (document.serverPatientID) {
+                                this.openNewPage(document.patientData);
+                            } else {
+                                await this.setOfflineData(document);
+                            }
+                        });
+                }
+            },
+            deep: true,
+        },
         personInformation: {
             handler() {
                 const data = useRegistrationStore();
@@ -322,7 +350,8 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
-            if (this.checkUnderFourteen) this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
+            if (this.checkUnderFourteen || this.checkUnderFive)
+                this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex < this.steps.length - 1) {
@@ -370,6 +399,7 @@ export default defineComponent({
             }
         },
         async createPatient() {
+            this.offlinePatientID = "";
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
             await this.buildPersonalInformation();
@@ -389,7 +419,7 @@ export default defineComponent({
                 this.disableSaveBtn = true;
                 this.isLoading = true;
 
-                if (this.globalPropertyStore.dde_enabled) {
+                if (this.globalPropertyStore.dde_enabled === "true") {
                     if (await this.possibleDuplicates()) {
                         this.disableSaveBtn = false;
                         this.isLoading = false;
@@ -398,27 +428,15 @@ export default defineComponent({
                 }
 
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-                const offlinePatientID = Date.now();
-                await this.createOfflineRecord(offlinePatientID);
-                await savePatientRecord();
-                toastSuccess("Successfully Created Patient");
-                await db
-                    .collection("patientRecords")
-                    .doc({ offlinePatientID: offlinePatientID })
-                    .get()
-                    .then(async (document: any) => {
-                        if (document.serverPatientID) {
-                            this.openNewPage(document.patientData);
-                        } else {
-                            await this.setOfflineData(document);
-                        }
-                    });
+                this.offlinePatientID = Date.now();
+                await this.createOfflineRecord(this.offlinePatientID);
+                await workerData.postData("SYNC_PATIENT_RECORD");
             } else {
                 toastWarning("Please complete all required fields");
             }
         },
         async createOfflineRecord(offlinePatientID: any) {
-            await db.collection("patientRecords").add({
+            const offlineRecord: any = {
                 offlinePatientID: offlinePatientID,
                 serverPatientID: "",
                 patientData: "",
@@ -435,7 +453,9 @@ export default defineComponent({
                 saveStatusBirthRegistration: "pending",
                 date_created: "",
                 creator: "",
-            });
+            };
+
+            await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: offlineRecord });
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
@@ -495,10 +515,15 @@ export default defineComponent({
         async openNewPage(item: any) {
             await resetPatientData();
             this.setDemographics(item);
+            await UserService.setProgramUserActions();
             this.isLoading = false;
-            let url = "/patientProfile";
             this.disableSaveBtn = false;
-            this.$router.push(url);
+            if (this.programID() == 32) {
+                this.$router.push(this.NCDUserActions.url);
+            } else {
+                let url = "/patientProfile";
+                this.$router.push(url);
+            }
         },
         patientIdentifier(item: any) {
             // return item

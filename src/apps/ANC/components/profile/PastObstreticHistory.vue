@@ -5,9 +5,6 @@
               <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
               <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
              <basic-form :contentData="preterm"></basic-form>
-              <div v-if="alertMessage" class="alert-message">
-                {{ alertMessage }}
-              </div>
             </ion-card-content>
         </ion-card>
     </div>

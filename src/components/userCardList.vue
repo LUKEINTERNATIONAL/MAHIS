@@ -69,7 +69,7 @@
     </ion-grid>
   </div>
 
-  <ion-footer collapse="fade">
+  <ion-footer collapse="fade" style="margin-top: 62px;">
     <ion-row>
       <ion-col style="flex: none; max-width: 100%">
         <bottomNavBar
@@ -87,7 +87,8 @@
   <editUserModal 
     :is_open="isPopooverOpen" 
     :user_id="user_id" 
-    @close-popoover="modalClosed" 
+    @close-popoover="modalClosed"
+    @save="modalClosed" 
   />
 </template>
 
@@ -159,7 +160,7 @@ export default defineComponent({
       required: true,
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const isPopooverOpen = ref(false);
     const pagination = reactive({
       page: 1,
@@ -193,6 +194,11 @@ export default defineComponent({
       pagination.itemsPerPage = itemsPerPage;
     };
 
+
+    function reload() {
+      emit("reload", '')
+    }
+
     watch(() => props.users, (newUsers) => {
       isLoading.value = false;
       if (newUsers.length === 0) {
@@ -207,7 +213,7 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      console.log('Component mounted. Initial users:', props.users);
+      // 
     });
 
     const openUserProfile = (userId: string) => {
@@ -216,6 +222,7 @@ export default defineComponent({
     };
 
     const modalClosed = () => {
+      reload()
       isPopooverOpen.value = false;
     };
 
@@ -248,7 +255,7 @@ export default defineComponent({
 }
 
 .dynamic-grid {
-  max-height: calc(69vh - 1px);
+  max-height: calc(69.8vh - 1px);
   overflow: auto;
 }
 

@@ -102,7 +102,7 @@ export class Service {
 
             if (response.status === 404) {
                 const { errors } = await response?.json();
-                throw new NotFoundError(errors);
+                return errors;
             }
 
             if (response.status === 422) {
@@ -234,4 +234,9 @@ export class Service {
     }
 
     static delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+    static patchJson(url: string, data: Record<string, any>) {
+        return this.jsonResponseHandler(ApiClient.patch(url, data));
+    }
+
 }

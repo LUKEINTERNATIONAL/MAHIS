@@ -11,7 +11,6 @@ export class SessionScheduleService extends Service {
     }
 
     private ENDPOINT: string = "eir/session_schedule";
-    private CREATE_ENDPOINT: string = "eir/session_schedule";
 
     /**
      * @method create create a session schedule
@@ -19,7 +18,7 @@ export class SessionScheduleService extends Service {
      * @returns @typeof Service
      */
     async create(session: SessionSchedule): Promise<Service> {
-        return Service.postJson(this.CREATE_ENDPOINT, session);
+        return Service.postJson(this.ENDPOINT, session);
     }
 
     /**
@@ -31,21 +30,34 @@ export class SessionScheduleService extends Service {
         return Service.getJson(this.ENDPOINT, { session_id: sessionId });
     }
 
+    async update(session: SessionSchedule, sessionId: number): Promise<Service> {
+        return Service.putJson(`${this.ENDPOINT}/${sessionId}`, session);
+    }
+
+    /**
+     * @method delete delete a session schedule
+     * @param sessionId 
+     * @returns 
+     */
+    async delete(sessionId: number, reason: string): Promise<Service> {
+        return Service.delete(`${this.ENDPOINT}?id=${sessionId}`, { void_reason: reason });
+    }
+
     /**
      * @method getSession get all session schedules paginated and filtered
-     * @param start_date
-     * @param end_date
-     * @param session_name
-     * @param page
-     * @param perPage
+     * @param _start_date
+     * @param _end_date
+     * @param _session_name
+     * @param _page
+     * @param _perPage
      * @returns @typeof Service
      */
     async getSessions(
-        start_date: string = '',
-        end_date: string = '',
-        session_name: string = "",
-        page: number = 1,
-        perPage: number = 10
+        _start_date: string = '',
+        _end_date: string = '',
+        _session_name: string = "",
+        _page: number = 1,
+        _perPage: number = 10
     ): Promise<Service> {
         return Service.getJson(this.ENDPOINT);
     }

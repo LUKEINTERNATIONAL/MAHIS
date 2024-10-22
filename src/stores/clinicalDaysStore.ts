@@ -1,8 +1,13 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
-import { combineArrays, isSameDate } from "@/utils/GeneralUti"
+import { combineArrays, isSameDate, MalawiHolidayGenerator } from "@/utils/GeneralUti"
 import { ProgramService } from "@/services/program_service"
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useUserStore } from "@/stores/userStore";
+import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import HisDate from "@/utils/Date";
+import { Service } from '@/services/service'
+
 
 export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
     state: () => ({
@@ -18,7 +23,7 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
         areSundaysDisabled: false as boolean,
     }),
     actions:{
-        setSelectedMedicalDrugsList(data: any) {
+        setHolidayDates(data: any) {
             this.holidayDates = data
         },
         getHolidaydates() {
@@ -28,8 +33,17 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
             return this.holidayDates.length
         },
         generateDisabledDates(): Date[] {
+            const today = new Date(Service.getSessionDate());
+            today.setHours(0, 0, 0, 0);
+        
             const disabledDates: Date[] = this.holidayDates
-                .map((dateString: string) => new Date(dateString))
+                .map((dateString: string) => new Date(dateString));
+        
+            // Add past dates to the disabled dates array
+            const startDate = new Date(0); // Start from the earliest possible date
+            for (let d = startDate; d < today; d.setDate(d.getDate() + 1)) {
+                disabledDates.push(new Date(d));
+            }
         
             return disabledDates;
         },
@@ -105,7 +119,7 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
                 this.getAllFridays() as any,
                 this.getAllSaturdays() as any,
                 this.getAllSundays() as any,
-                this.generateDisabledDates()
+                this.generateDisabledDates(),
             )
         },
         getDisabledDates2(): any[] {
@@ -167,19 +181,24 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
         getAreSundaysDisabled(): boolean {
             return this.areSundaysDisabled;
         },
-        setsssignedAppointmentsDates(data: any): void {
-            const programID = ProgramService.getProgramID()
-            const patientID = useDemographicsStore().getPatient().patient_id
+        setsssignedAppointmentsDates(data: any, next_apt: boolean = false): void {
+            const programID = ProgramService.getProgramID();
+            const patientID = useDemographicsStore().getPatient().patient_id;
+
             if (Array.isArray(this.assignedAppointmentsDates)) {
+                this.assignedAppointmentsDates.forEach((appointment) => {
+                    appointment.markedNextApt = false;
+                });
                 if (!appointmentExists(this.assignedAppointmentsDates, programID, patientID, data)) {
                     this.assignedAppointmentsDates.push({
                         programID,
                         patientID,
                         date: data,
-                    })
+                        markedNextApt: next_apt,
+                    });
                 }
             } else {
-                this.assignedAppointmentsDates = []
+                this.assignedAppointmentsDates = [];
             }
         },
         getAssignedAppointmentsDates() {
@@ -191,8 +210,60 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
             } else {
                 return []
             }
+        },
+        async setWeekDaysPropertiesObj() {
+            const user_store = useUserStore()
+            const global_property_store = useGlobalPropertyStore()
+            const facility_id = user_store.getfacilityLocation().location_id;
+            const sv_obj = {
+                facility_id: facility_id,
+                weekDays: {
+                    'areMondaysDisabled': this.areMondaysDisabled,
+                    'areTuesdaysDisabled': this.areTuesdaysDisabled,
+                    'areWednesdaysDisabled': this.areWednesdaysDisabled,
+                    'areThursdaysDisabled': this.areThursdaysDisabled,
+                    'areFridaysDisabled': this.areFridaysDisabled,
+                    'areSaturdaysDisabled': this.areSaturdaysDisabled,
+                    'areSundaysDisabled': this.areSundaysDisabled,
+                }
+            }
+            const sv_obj_string = JSON.stringify(sv_obj);
+            await global_property_store.setGlobalProperty("week_days_properties_"+facility_id, `${sv_obj_string}`);
+        },
+        async setMaximumNumberOfDaysForEachDayObj() {
+            const user_store = useUserStore()
+            const global_property_store = useGlobalPropertyStore()
+            const facility_id = user_store.getfacilityLocation().location_id;
+            const sv_obj = {
+                facility_id: facility_id,
+                maximumNumberOfDaysForEachDay: this.maximumNumberOfDaysForEachDay
+            }
+            const sv_obj_string = JSON.stringify(sv_obj);
+            await global_property_store.setGlobalProperty("maximum_number_Of_c_for_each_day_"+facility_id, `${sv_obj_string}`);
+        },
+        async setHolidayDatesObj() {
+            const user_store = useUserStore()
+            const facility_id = user_store.getfacilityLocation().location_id;
+            const global_property_store = useGlobalPropertyStore()
+            const dates = this.holidayDates.map((holiday: any) => {
+                return HisDate.toStandardHisFormat(holiday);
+            });            
+            const sv_obj = {
+                facility_id: facility_id,
+                holidayDates: dates,
+            }
+            const sv_obj_string = JSON.stringify(sv_obj);
+            await global_property_store.setGlobalProperty("holiday_date_"+facility_id, `${sv_obj_string}`);
+        },
+        autoGeneratedDates(): any[] {
+            const h_dates = getAutoGeneratedDates();
+            const uniqueDates = new Set(this.holidayDates);
+            h_dates.forEach((hdate: any) => {
+                uniqueDates.add(hdate.date);
+            });
+            this.holidayDates = Array.from(uniqueDates);
+            return this.holidayDates;
         }
-
     },
     persist:true,
 })
@@ -217,4 +288,10 @@ function getDateCounts(appointments: any) {
     })
     const dateCountsArray = Array.from(dateCountMap, ([date, count]) => ({ date, count }));
     return dateCountsArray;
+}
+
+function getAutoGeneratedDates() {
+    const holidayGenerator = new MalawiHolidayGenerator();
+    const holidayDates = holidayGenerator.generateFormattedHolidayDates();
+    return holidayDates
 }

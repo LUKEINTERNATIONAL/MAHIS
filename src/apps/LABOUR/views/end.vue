@@ -9,6 +9,8 @@
                :StepperData="StepperData"
                :backUrl="userRoleSettings.url"
                :backBtn="userRoleSettings.btnName"
+               :getSaveFunction="getSaveFunction"
+
       />
     </ion-content>
     <BasicFooter @finishBtn="saveData()" />
@@ -94,6 +96,9 @@ export default defineComponent ({
 
   methods: {
     markWizard(){},
+    getSaveFunction(){
+
+    },
     saveData(){
       this.$router.push("labourHome")
 

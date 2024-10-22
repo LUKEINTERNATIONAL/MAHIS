@@ -1,3 +1,4 @@
+import { getBaseURL } from "@/utils/GeneralUti";
 export interface Bmi {
     M: { [key: string]: { [key: string]: string } };
     F: { [key: string]: { [key: string]: string } };
@@ -5,21 +6,21 @@ export interface Bmi {
 }
 
 function removeQuotes(str: string | undefined) {
-    if (typeof str !== 'string') {
-        return '';
+    if (typeof str !== "string") {
+        return "";
     }
     if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
         return str.substring(1, str.length - 1);
     }
     return str;
 }
-
 export class BMIService {
     static async getBMIData(): Promise<Bmi> {
-        let  baseURL = removeQuotes(localStorage.baseURL);
-        if (baseURL.length > 0) {baseURL = '/'+baseURL}
+        let baseURL = getBaseURL();
+        if (baseURL.length > 0) {
+            baseURL = "/" + baseURL;
+        }
         const req = await fetch(`${baseURL}/bmi.json`);
-        console.log(req)
         return req.json();
     }
     static async getBMIResult(gender: "M" | "F", age: number, bmindex: number) {

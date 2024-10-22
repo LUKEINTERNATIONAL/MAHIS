@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { LocationService } from "@/services/location_service";
-import { getOfflineLocation } from "@/services/set_location";
+import { getOfflineRecords } from "@/services/offline_service";
 export default defineComponent({
     data: () => ({
         districtList: [] as any,
@@ -9,21 +9,15 @@ export default defineComponent({
         villageList: [] as any,
         locations: [] as any,
     }),
-    watch: {
-        $route: {
-            async handler(route: any) {
-                this.locations = await getOfflineLocation();
-                this.districtList = this.locations?.districts;
-                this.TAsList = this.locations?.TAs;
-                this.villageList = this.locations?.villageList;
-            },
-            immediate: true,
-            deep: true,
-        },
+    async mounted() {
+        this.districtList = await getOfflineRecords("districts");
+        this.TAsList = await getOfflineRecords("TAs");
+        this.villageList = await getOfflineRecords("villages");
     },
     methods: {
         async getVillages(targetId: any) {
-            return this.villageList.filter((obj: any) => obj.traditional_authority_id === targetId);
+            if (this.villageList == "") return null;
+            return this.villageList?.filter((obj: any) => obj.traditional_authority_id === targetId);
         },
         getTAs(targetId: any) {
             return this.TAsList.filter((obj: any) => obj.district_id === targetId);

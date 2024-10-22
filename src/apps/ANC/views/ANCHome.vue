@@ -14,7 +14,7 @@
           />
           <div class="AppointmentDate">
             <span style="font-size: 14px">Next Appt. Date: </span>
-            <b style="color: #0b5ed7">{{dateOfAppointment}}</b>
+            <b style="color: #0b5ed7">{{ dateOfAppointment || 'Not scheduled' }}</b>
           </div>
         </div>
         <div class="button-container">
@@ -39,13 +39,6 @@
               :icon="calendar()"
               @click="nextAppointment"
           />
-<!--          <ion-row class="bottom-row">-->
-<!--            <div class="center-content">-->
-<!--              <div class="centerBtns">-->
-<!--                <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Set Next Appointment Date</ion-button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </ion-row>-->
         </div>
         <NextAppointmentModal
             :isOpen="isModalOpen"
@@ -159,19 +152,19 @@ export default defineComponent({
       this.dateOfAppointment = dateOfAppointment;
 
     },
-   async saveData(){
+    async saveData(){
       const store = useScheduleNextAppointmentStore();
       const isFormValid = await store.validate();
       if (!isFormValid) {
         toastDanger('Next appointment date has errors');
         return;
       }
-       await this.saveDate();
-       this.closeAppointmentModal();
-        await this.$router.push("ANCHome");
-       await resetPatientData();
+      await this.saveDate();
+      this.closeAppointmentModal();
+      await this.$router.push("ANCHome");
+      await resetPatientData();
 
-   },
+    },
     async saveDate(){
       if (this.nextAppointmentDate.length >= 0) {
         const userID: any = Service.getUserID();
@@ -197,7 +190,7 @@ export default defineComponent({
     },
 
     async nextAppointment() {
-     this.toggleAppointmentModal()
+      this.toggleAppointmentModal()
     },
     toggleAppointmentModal(){
       this.isModalOpen=!this.isModalOpen
@@ -290,7 +283,7 @@ ion-card {
   }
   .AppointmentDate {
     margin-left: 0;
-      }
+  }
 }
 
 hr {

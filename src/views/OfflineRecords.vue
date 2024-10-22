@@ -65,14 +65,13 @@ import { useStartEndDate } from "@/stores/StartEndDate";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
-import { savePatientRecord } from "@/services/save_records";
 import "datatables.net-select";
 import db from "@/db";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 // DataTable.use(DataTablesCore);
 
 export default defineComponent({
-    name: "Home",
+    name: "offline-records",
     mixins: [SetUser, SetDemographics],
     components: {
         IonContent,
@@ -154,7 +153,6 @@ export default defineComponent({
 
         async handleDelete(id: any) {
             // Implement delete logic here
-            await savePatientRecord();
             console.log(`Deleting item with id: ${id}`);
         },
         async handleInputData(event: any) {

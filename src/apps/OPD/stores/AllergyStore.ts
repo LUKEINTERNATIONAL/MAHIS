@@ -317,6 +317,7 @@ export const useAllegyStore = defineStore('AllergyStore', {
                 }
             })
             this.selectedMedicalAllergiesList.push(data)
+            this.selectedMedicalAllergiesList = this.selectedMedicalAllergiesList.filter((item: any) => item.selected === true);
         },
     },
     persist:true,

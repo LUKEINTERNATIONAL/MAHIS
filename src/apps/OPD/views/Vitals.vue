@@ -8,9 +8,16 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Vitals" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData" />
+            <Stepper stepperTitle="Vitals"
+                     :wizardData="wizardData"
+                     @updateStatus="markWizard"
+                     @finishBtn="saveData()"
+                     :StepperData="StepperData"
+                     :getSaveFunction="getSaveFunction"
+
+            />
         </ion-content>
-        <BasicFooter :name="actionBtn" @finishBtn="saveData()" />
+<!--        <BasicFooter :name="actionBtn" @finishBtn="saveData()" />-->
     </ion-page>
 </template>
 
@@ -42,7 +49,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
+import {createModal, toastDanger} from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
@@ -55,6 +62,12 @@ import { useVitalsStore } from "@/stores/VitalsStore";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import {getFieldValue} from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import dates from "@/utils/Date"
+import {getUserLocation} from "@/services/userService";
+import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+
+
 export default defineComponent({
     name: "Home",
     components: {

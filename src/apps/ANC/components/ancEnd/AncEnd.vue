@@ -88,8 +88,6 @@ export default defineComponent({
                 modifyFieldValue(this.ancInfo,'Pregnancy outcome notes','displayNone',false)
             }else{
                 modifyFieldValue(this.ancInfo,'Pregnancy outcome notes','displayNone',true)
-                modifyFieldValue(this.ancInfo,'Pregnancy outcome notes','value','')
-
             }
         },
         handledeath(){
@@ -97,8 +95,6 @@ export default defineComponent({
                 modifyFieldValue(this.ancInfo,'Date of death','displayNone',false)
             }else{
                 modifyFieldValue(this.ancInfo,'Date of death','displayNone',true)
-              modifyFieldValue(this.ancInfo,'Date of death','value','')
-
             }
         },
         handleDeathDate(){
@@ -106,7 +102,6 @@ export default defineComponent({
                 modifyFieldValue(this.ancInfo,'Cause of death','displayNone',false)
             }else{
                 modifyFieldValue(this.ancInfo,'Cause of death','displayNone',true)
-                modifyFieldValue(this.ancInfo,'Cause of death','value','')
             }
         },
         handleRecordNotViewed(){

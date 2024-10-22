@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonIcon } from '@ionic/vue';
+import { IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { people, bed } from "ionicons/icons";
 
@@ -31,7 +31,6 @@ export default defineComponent({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    IonIcon,
   },
   setup() {
     const router = useRouter();
@@ -46,7 +45,7 @@ export default defineComponent({
 
     return {
       navigateTo,
-      cardsData,
+      cardsData
     };
   },
 });
@@ -80,6 +79,7 @@ ion-card-title {
   ion-card-title {
     font-size: 14px;
   }
+
 
   .card {
     margin: 5px;

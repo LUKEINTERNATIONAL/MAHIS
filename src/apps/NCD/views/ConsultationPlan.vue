@@ -3,15 +3,52 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper
+            <!-- <Stepper
                 stepperTitle="The consultation plan"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 @finishBtn="saveData()"
                 :StepperData="StepperData"
-            />
+            /> -->
+            <div style="width: 85vw; margin: 0 auto; margin-top: 30px">
+                <Wizard
+                    vertical-tabs
+                    navigable-tabs
+                    scrollable-tabs
+                    :doneButton="{
+                        text: 'Finish',
+                        icon: 'check',
+                        hideText: false,
+                        hideIcon: false,
+                        disabled: false,
+                    }"
+                    :custom-tabs="tabs"
+                    :beforeChange="onTabBeforeChange"
+                    @change="onChangeCurrentTab"
+                    @complete:wizard="saveData()"
+                >
+                    <div>
+                        <div class="back_profile">
+                            <DynamicButton
+                                name="Back to profile"
+                                iconSlot="start"
+                                fill="clear"
+                                :icon="chevronBackOutline"
+                                @click="openBackController()"
+                            />
+                        </div>
+                    </div>
+                    <VitalSigns v-if="currentTabIndex === 0" />
+                    <RiskAssessment v-if="currentTabIndex === 1" />
+                    <Investigations v-if="currentTabIndex === 2" />
+                    <DiagnosisComponent v-if="currentTabIndex === 3" />
+                    <ComplicationsScreening v-if="currentTabIndex === 4" />
+                    <TreatmentPlan v-if="currentTabIndex === 5" />
+                    <NextAppointment v-if="currentTabIndex === 6" />
+                </Wizard>
+            </div>
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" />
+        <!-- <BasicFooter @finishBtn="saveData()" /> -->
     </ion-page>
 </template>
 
@@ -49,7 +86,9 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
+import DynamicButton from "@/components/DynamicButton.vue";
 import Stepper from "@/components/Stepper.vue";
+// import FormWizard from "@/components/FormWizard.vue";
 import { Service } from "@/services/service";
 import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
@@ -68,6 +107,17 @@ import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
 import { UserService } from "@/services/user_service";
 import BasicFooter from "@/components/BasicFooter.vue";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import FormWizard from "@/views/Mixin/FormWizard.vue";
+import DiagnosisComponent from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
+import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
+import Investigations from "@/apps/NCD/components/Investigations.vue";
+import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
+import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
+import { useEnrollementStore } from "@/stores/EnrollmentStore";
+import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
+import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
+import VitalSigns from "@/components/VitalSigns.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -77,6 +127,7 @@ import {
     modifyCheckboxValue,
 } from "@/services/data_helpers";
 export default defineComponent({
+    mixins: [ScreenSizeMixin, FormWizard],
     name: "Home",
     components: {
         IonContent,
@@ -100,7 +151,16 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
+        FormWizard,
         BasicFooter,
+        DiagnosisComponent,
+        ComplicationsScreening,
+        Investigations,
+        TreatmentPlan,
+        NextAppointment,
+        VitalSigns,
+        DynamicButton,
+        RiskAssessment,
     },
     data() {
         return {
@@ -108,6 +168,38 @@ export default defineComponent({
             StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
+            tabs: [
+                {
+                    title: "Vitals",
+                    icon: "",
+                },
+                {
+                    title: "Risk Assessment",
+                    icon: "",
+                },
+                {
+                    title: "Investigations",
+                    icon: "",
+                },
+                {
+                    title: "Diagnosis",
+                    icon: "",
+                },
+                {
+                    title: "Complications Screening",
+                    icon: "",
+                },
+
+                {
+                    title: "Treatment Plan",
+                    icon: "",
+                },
+
+                {
+                    title: "Next Appointment",
+                    icon: "",
+                },
+            ],
         };
     },
     computed: {
@@ -118,6 +210,7 @@ export default defineComponent({
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useGeneralStore, ["NCDActivities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
+        ...mapState(useEnrollementStore, ["substance"]),
     },
     created() {
         this.getData();
@@ -158,6 +251,9 @@ export default defineComponent({
     },
 
     methods: {
+        openBackController() {
+            createModal(SaveProgressModal);
+        },
         async getData() {
             // const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
             for (let i = 0; i < this.NCDActivities.length; i++) {
@@ -182,58 +278,27 @@ export default defineComponent({
         },
         markWizard() {
             if (this.vitals.validationStatus) {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+                this.tabs[0].icon = "check";
             } else {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: false,
-                });
+                this.tabs[0].icon = "";
             }
 
             if (this.investigations[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+                this.tabs[2].icon = "check";
             } else {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: false,
-                });
+                this.tabs[2].icon = "";
             }
 
             if (this.diagnosis[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+                this.tabs[3].icon = "check";
             } else {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: false,
-                });
+                this.tabs[3].icon = "";
             }
 
             if (this.selectedMedicalDrugsList.length > 0) {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+                this.tabs[5].icon = "check";
             } else {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: false,
-                });
-            }
-
-            if (this.dispositions.length > 0) {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: false,
-                });
+                this.tabs[5].icon = "";
             }
         },
 
@@ -263,6 +328,14 @@ export default defineComponent({
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
                 diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+            }
+        },
+        async saveSubstanceAbuse() {
+            const data: any = await formatRadioButtonData(this.substance);
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const diagnosisInstance = new Diagnosis();
+                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
             }
         },
         async saveTreatmentPlan() {
