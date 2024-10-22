@@ -30,6 +30,7 @@ export class WebSocketService {
             this.socket.onclose = this.onClose;
             this.socket.onerror = this.onError;
         } else {
+            console.error(error);
             console.error("WebSocket not initialized: apiURL or apiPort is missing in localStorage.");
         }
     }
