@@ -100,23 +100,12 @@ function listUpdated1(data: any) {
     setCommonAllergiesList()
 }
 
-function dissmissDrugAddField(): void {
-    // search_item.value = false;
-    // display_item.value = true;
-    // addItemButton.value = true;
-}
 
 async function FindAllegicDrugName(text: any) {
     const searchText = text;
     const page = 1,
         limit = 10;
     const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);
-    // const drugs: ConceptName[] = await DrugService.getOPDDrugs({
-    // "name": searchText,
-    // "page": page,
-    // "selected": false as any,
-    // "page_size": limit,
-    // })
     drugs.map((drug) => ({
         label: drug.name,
         value: drug.name,

@@ -357,7 +357,6 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
-                console.log("patientProfile", data.name);
                 if (data.name == "patientProfile") {
                     await this.checkProtectedStatus();
                 }
