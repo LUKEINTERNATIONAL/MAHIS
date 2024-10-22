@@ -103,8 +103,6 @@ function listUpdated1(data: any) {
 
 async function FindAllegicDrugName(text: any) {
     const searchText = text;
-    const page = 1,
-        limit = 10;
     const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);
     drugs.map((drug) => ({
         label: drug.name,
