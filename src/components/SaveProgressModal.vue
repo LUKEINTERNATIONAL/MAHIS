@@ -59,9 +59,9 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
-        nav(url: any, action: any) {
+        async nav(url: any, action: any) {
             if (action == "not_save") {
-                resetPatientData();
+                await resetPatientData();
                 localStorage.setItem("saveProgressStatus", "false");
             } else {
                 localStorage.setItem("saveProgressStatus", "true");

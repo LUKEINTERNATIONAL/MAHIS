@@ -11,7 +11,6 @@
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
-
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -67,10 +66,10 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "referral",
-  mixins: [SetUserRole, SetEncounter],
+    mixins: [SetUserRole, SetEncounter],
 
-  components: {
-      BasicFooter,
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -156,19 +155,17 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
-      getSaveFunction(){
-
-      },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
                 return item?.data;
             });
         },
-        saveData() {
+        async saveData() {
             this.saveReferal();
             toastSuccess("Patient referral saved successfully");
-            resetPatientData();
+            await resetPatientData();
         },
         async saveReferal() {
             if (this.labourReferral.length > 0) {

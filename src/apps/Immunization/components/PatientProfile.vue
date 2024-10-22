@@ -510,7 +510,7 @@ export default defineComponent({
             await this.saveDiagnosis();
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
-            resetPatientData();
+            await resetPatientData();
             this.$router.push("patientProfile");
         },
         async saveVitals() {

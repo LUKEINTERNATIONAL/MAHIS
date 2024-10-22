@@ -12,10 +12,8 @@
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
             />
-
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
-
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -65,20 +63,27 @@ import { usePersistentBehaviourStore } from "../store/symptomsFollowUp/persisten
 import { useIpvStore } from "../store/symptomsFollowUp/ipvStore";
 import { useCurrentPhysiologicalSymptomsStore } from "../store/symptomsFollowUp/currentPhysiologicalSymptomsStore";
 import { useFatalMovementStore } from "../store/symptomsFollowUp/fatalMovementStore";
-import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
-import {CurrentPhysiologicalSymptomsInstance, FetalMovementInstance, IntimatePartnerInstance, MedicalFollowUpInstance, PersistentBehavioursInstance, PersistentSymptomsInstance} from '@/apps/ANC/service/symptoms_follow_up_service';
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
+import {
+    CurrentPhysiologicalSymptomsInstance,
+    FetalMovementInstance,
+    IntimatePartnerInstance,
+    MedicalFollowUpInstance,
+    PersistentBehavioursInstance,
+    PersistentSymptomsInstance,
+} from "@/apps/ANC/service/symptoms_follow_up_service";
 import { resetPatientData } from "@/services/reset_data";
 import { validateField } from "@/services/ANC/symptoms_validation";
 import BasicFooter from "@/components/BasicFooter.vue";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
-import {LabTestsService} from "@/apps/ANC/service/labtests_service";
-import {PersistentBehaviourService, SymptomsFollowUpService} from "@/services/ANC/symptoms_follow_up_service";
+import { LabTestsService } from "@/apps/ANC/service/labtests_service";
+import { PersistentBehaviourService, SymptomsFollowUpService } from "@/services/ANC/symptoms_follow_up_service";
 export default defineComponent({
     name: "Home",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
-      BasicFooter,
+    mixins: [SetUserRole, SetEncounter],
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -155,15 +160,24 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useMedicalFollowUpStore,["medicalFollowUp"]),
-        ...mapState(usePersistentBehaviourStore,["persistentBehaviour"]),
-        ...mapState(useCurrentPhysiologicalSymptomsStore,["physiologicalSymptoms"]),
-        ...mapState(useIpvStore,["ipv","ipv1","additionalCare","safety_assessment","physical_violence","beaten_pregnant"
-          ,"strangling","murder_threat","referrals","constant_jealous","woman_threatened"]),
-        ...mapState(useFatalMovementStore,["fatalMovement"]),
+        ...mapState(useMedicalFollowUpStore, ["medicalFollowUp"]),
+        ...mapState(usePersistentBehaviourStore, ["persistentBehaviour"]),
+        ...mapState(useCurrentPhysiologicalSymptomsStore, ["physiologicalSymptoms"]),
+        ...mapState(useIpvStore, [
+            "ipv",
+            "ipv1",
+            "additionalCare",
+            "safety_assessment",
+            "physical_violence",
+            "beaten_pregnant",
+            "strangling",
+            "murder_threat",
+            "referrals",
+            "constant_jealous",
+            "woman_threatened",
+        ]),
+        ...mapState(useFatalMovementStore, ["fatalMovement"]),
         ...mapState(useDemographicsStore, ["demographics"]),
-
-
     },
     mounted() {
         this.markWizard();
@@ -174,102 +188,84 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
-      getSaveFunction(){
-
-      },
+        getSaveFunction() {},
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
             });
         },
-        saveData() {
-            
-            
-            this.saveMedicalFollowUp()
-            this.savePersistentBehaviours()
-            this.saveIPV()
-            resetPatientData();
+        async saveData() {
+            this.saveMedicalFollowUp();
+            this.savePersistentBehaviours();
+            this.saveIPV();
+            await resetPatientData();
             this.$router.push("contact");
         },
 
-
         async buildMedicalFollowUp() {
-       return [
-         ...(await formatRadioButtonData(this.medicalFollowUp)),
-         ...(await formatCheckBoxData(this.medicalFollowUp)),
-         ...(await formatInputFiledData(this.medicalFollowUp)),
-
-
-
-       ]
-    },
-    async validations(data: any, fields: any) {
+            return [
+                ...(await formatRadioButtonData(this.medicalFollowUp)),
+                ...(await formatCheckBoxData(this.medicalFollowUp)),
+                ...(await formatInputFiledData(this.medicalFollowUp)),
+            ];
+        },
+        async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
-    async buildPersistentBehaviours() {
-       return [
-         ...(await formatRadioButtonData(this.persistentBehaviour)),
-         ...(await formatCheckBoxData(this.persistentBehaviour)),
-         ...(await formatInputFiledData(this.persistentBehaviour)),
+        async buildPersistentBehaviours() {
+            return [
+                ...(await formatRadioButtonData(this.persistentBehaviour)),
+                ...(await formatCheckBoxData(this.persistentBehaviour)),
+                ...(await formatInputFiledData(this.persistentBehaviour)),
+            ];
+        },
+        async buildCurrentPhysiologicalSymptoms() {
+            return [...(await formatCheckBoxData(this.physiologicalSymptoms))];
+        },
+        async buildIPV() {
+            return [...(await formatCheckBoxData(this.ipv)), ...(await formatInputFiledData(this.ipv))];
+        },
+        async buildFetalMovement() {
+            return [...(await formatRadioButtonData(this.fatalMovement))];
+        },
 
-        ]
-    },
-    async buildCurrentPhysiologicalSymptoms() {
-       return [
-         ...(await formatCheckBoxData(this.physiologicalSymptoms)),
+        async saveMedicalFollowUp() {
+            if (this.medicalFollowUp.length > 0) {
+                const userID: any = Service.getUserID();
+                const medicalFollowUp = new SymptomsFollowUpService(this.demographics.patient_id, userID);
+                const encounter = await medicalFollowUp.createEncounter();
+                if (!encounter) return toastWarning("Unable to create medical follow up encounter");
+                const patientStatus = await medicalFollowUp.saveObservationList(await this.buildMedicalFollowUp());
+                if (!patientStatus) return toastWarning("Unable to create patient Medical follow up details!");
+                toastSuccess("Medical follow up has been created");
+            }
+            console.log(await this.buildMedicalFollowUp());
+        },
 
-        ]
-    },
-    async buildIPV() {
-       return [
-         ...(await formatCheckBoxData(this.ipv)),
-         ...(await formatInputFiledData(this.ipv))
-        ]
-    },
-    async buildFetalMovement() {
-       return [
-         ...(await formatRadioButtonData(this.fatalMovement)),
-        ]
-    },
-
-    async saveMedicalFollowUp () {
-      if (this.medicalFollowUp.length > 0) {
-        const userID: any = Service.getUserID();
-        const  medicalFollowUp= new SymptomsFollowUpService(this.demographics.patient_id, userID);
-        const encounter = await medicalFollowUp.createEncounter();
-        if (!encounter) return toastWarning("Unable to create medical follow up encounter");
-        const patientStatus = await medicalFollowUp.saveObservationList(await this.buildMedicalFollowUp());
-        if (!patientStatus) return toastWarning("Unable to create patient Medical follow up details!");
-        toastSuccess("Medical follow up has been created");
-      }
-      console.log(await this.buildMedicalFollowUp())
-    },
-
-    async savePersistentBehaviours () {
-      if (this.medicalFollowUp.length > 0) {
-        const userID: any = Service.getUserID();
-        const  persistentBehaviour= new PersistentBehaviourService(this.demographics.patient_id, userID);
-        const encounter = await persistentBehaviour.createEncounter();
-        if (!encounter) return toastWarning("Unable to create persistent behaviour encounter");
-        const patientStatus = await persistentBehaviour.saveObservationList(await this.buildPersistentBehaviours());
-        if (!patientStatus) return toastWarning("Unable to create patient persistent behaviour details!");
-        toastSuccess("Persistent behaviour details have been created");
-      }
-      console.log(await this.buildPersistentBehaviours())
-    },
-      async saveIPV () {
-        if (this.medicalFollowUp.length > 0) {
-          const userID: any = Service.getUserID();
-          const  IPV= new PersistentBehaviourService(this.demographics.patient_id, userID);
-          const encounter = await IPV.createEncounter();
-          if (!encounter) return toastWarning("Unable to create IPV encounter");
-          const patientStatus = await IPV.saveObservationList(await this.buildIPV());
-          if (!patientStatus) return toastWarning("Unable to create patient IPV details!");
-          toastSuccess("IPV details have been created");
-        }
-        console.log(await this.buildIPV())
-      },
-    
+        async savePersistentBehaviours() {
+            if (this.medicalFollowUp.length > 0) {
+                const userID: any = Service.getUserID();
+                const persistentBehaviour = new PersistentBehaviourService(this.demographics.patient_id, userID);
+                const encounter = await persistentBehaviour.createEncounter();
+                if (!encounter) return toastWarning("Unable to create persistent behaviour encounter");
+                const patientStatus = await persistentBehaviour.saveObservationList(await this.buildPersistentBehaviours());
+                if (!patientStatus) return toastWarning("Unable to create patient persistent behaviour details!");
+                toastSuccess("Persistent behaviour details have been created");
+            }
+            console.log(await this.buildPersistentBehaviours());
+        },
+        async saveIPV() {
+            if (this.medicalFollowUp.length > 0) {
+                const userID: any = Service.getUserID();
+                const IPV = new PersistentBehaviourService(this.demographics.patient_id, userID);
+                const encounter = await IPV.createEncounter();
+                if (!encounter) return toastWarning("Unable to create IPV encounter");
+                const patientStatus = await IPV.saveObservationList(await this.buildIPV());
+                if (!patientStatus) return toastWarning("Unable to create patient IPV details!");
+                toastSuccess("IPV details have been created");
+            }
+            console.log(await this.buildIPV());
+        },
     },
 });
 </script>
