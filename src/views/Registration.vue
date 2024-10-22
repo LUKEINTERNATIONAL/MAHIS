@@ -211,9 +211,9 @@ export default defineComponent({
         lastname() {
             return getFieldValue(this.personInformation, "lastname", "value");
         },
-      phoneNumber() {
-        return getFieldValue(this.personInformation, "phoneNumber", "value");
-      },
+        phoneNumber() {
+            return getFieldValue(this.personInformation, "phoneNumber", "value");
+        },
         gender() {
             return getRadioSelectedValue(this.personInformation, "gender");
         },
@@ -292,7 +292,7 @@ export default defineComponent({
         $route: {
             async handler(data) {
                 this.currentStep = "Personal Information";
-                // await resetPatientData();
+                // await await resetPatientData();
                 if (data.name == "registration") resetDemographics();
             },
             deep: true,
@@ -505,7 +505,7 @@ export default defineComponent({
             } else return "";
         },
         async setOfflineData(item: any) {
-            await resetPatientData();
+            await await resetPatientData();
             this.setOfflineDemographics(item);
             this.isLoading = false;
             let url = "/patientProfile";
@@ -513,7 +513,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         async openNewPage(item: any) {
-            await resetPatientData();
+            await await resetPatientData();
             this.setDemographics(item);
             await UserService.setProgramUserActions();
             this.isLoading = false;

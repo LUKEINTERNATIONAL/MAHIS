@@ -1,6 +1,6 @@
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
-import { getWebsockerURL } from "@/utils/GeneralUti";
+import { getWebsockerURL, getWebsockerProtocol } from "@/utils/GeneralUti";
 export class WebSocketService {
     private socket: WebSocket | null = null;
     private channel: string = "ImmunizationReportChannel";
@@ -22,8 +22,8 @@ export class WebSocketService {
             const websocketURL = getWebsockerURL();
             const url =
                 websocketURL && websocketURL !== "undefined" && websocketURL.trim().length > 0
-                    ? `ws://${websocketURL}`
-                    : `ws://${apiURL}:${apiPort}/cable`;
+                    ? `${getWebsockerProtocol()}://${websocketURL}`
+                    : `${getWebsockerProtocol()}://${apiURL}:${apiPort}/cable`;
 
             this.socket = new WebSocket(url);
             this.socket.onopen = this.onOpen;

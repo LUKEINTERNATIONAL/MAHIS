@@ -312,7 +312,7 @@ export default defineComponent({
             await this.saveDiagnosis();
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
-            resetNCDPatientData();
+            await resetNCDPatientData();
             await UserService.setProgramUserActions();
             this.$router.push("patientProfile");
         },

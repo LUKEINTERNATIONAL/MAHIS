@@ -182,7 +182,7 @@ export default defineComponent({
             //     const demographicsStore = useDemographicsStore();
             //     demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
             //     generalStore.setSaveProgressStatus("");
-            //     resetPatientData();
+            //     await resetPatientData();
             //     if (this.activities.length == 0) {
             //         this.$router.push("patientProfile");
             //     } else {
