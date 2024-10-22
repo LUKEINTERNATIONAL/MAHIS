@@ -111,7 +111,7 @@ import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import FormWizard from "@/views/Mixin/FormWizard.vue";
 import DiagnosisComponent from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
 import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
-import Investigations from "@/apps/NCD/components/Investigations.vue";
+import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
