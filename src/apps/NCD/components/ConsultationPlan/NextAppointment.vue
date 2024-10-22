@@ -65,7 +65,7 @@ import { mapState } from "pinia";
 import { AppointmentService } from "@/services/appointment_service";
 import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
-import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
+import { useClinicalDaysStore, setValueProps } from "@/stores/clinicalDaysStore";
 import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service"
 import confirmModal from "@/apps/NCD/components/confirmModal.vue"
 
@@ -118,7 +118,8 @@ export default defineComponent({
       deep: true,
     },
   },
-  async mounted() {
+    async mounted() {
+    setValueProps()
     const userID: any = Service.getUserID();
     const patient = new PatientService();
     this.appointment = new AppointmentService(patient.getID(), userID);
