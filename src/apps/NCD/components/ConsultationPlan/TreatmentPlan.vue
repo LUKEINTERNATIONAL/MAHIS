@@ -118,7 +118,6 @@ const segments = ref([
 ]) as any
 const segmentContent = ref(segments.value[0])
 const popoverOpen = ref(false);
-let event: null = null;
 const componentKey = ref(0);
 const diagnosisData = ref([] as any);
 const drugName = ref("");

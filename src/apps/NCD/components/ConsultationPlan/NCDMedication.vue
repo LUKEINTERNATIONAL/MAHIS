@@ -1,268 +1,222 @@
 <template>
-    <ion-card v-if="selectedNCDMedicationList.length > 0">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
-          Selected Medications
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list>
-          <ion-item v-for="(med, index) in selectedNCDMedicationList" :key="index">
-            <ion-label>
-              <h2>{{ med.medication }}</h2>
-              <p class="dosage-info">
-                <span><ion-icon :icon="sunny"></ion-icon> Morning: <ion-badge color="warning">{{ med.dosage.morning || '-' }}</ion-badge></span>
-                <span><ion-icon :icon="partlySunny"></ion-icon> Afternoon: <ion-badge color="warning">{{ med.dosage.afternoon || '-' }}</ion-badge></span>
-                <span><ion-icon :icon="moon"></ion-icon> Evening: <ion-badge color="warning">{{ med.dosage.evening || '-' }}</ion-badge></span>
-              </p>
-            </ion-label>
-            <ion-buttons slot="end">
-              <ion-button color="primary" fill="clear" @click="editMedication(index)">
-                <ion-icon :icon="pencil"></ion-icon>
-              </ion-button>
-              <ion-button color="danger" fill="clear" @click="confirmRemoveMedication(index)">
-                <ion-icon :icon="trash"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-  
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon :icon="editIndex !== null ? pencil : add" class="ion-margin-end"></ion-icon>
-          {{ editIndex !== null ? 'Edit' : 'Add' }} Medication
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item>
-          <ion-icon :icon="medkit" slot="start"></ion-icon>
-          <ion-label  class="d-lbl">Medication Category</ion-label>
-          <ion-select v-model="selectedCategory" @ionChange="updateMedicationOptions">
-            <ion-select-option v-for="category in categories" :key="category" :value="category">
-              {{ category }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-  
-        <ion-item>
-          <ion-icon :icon="medical" slot="start"></ion-icon>
-          <ion-label  class="d-lbl">Medication</ion-label>
-          <ion-select v-model="selectedMedication">
-            <ion-select-option v-for="medication in medicationOptions" :key="medication" :value="medication">
-              {{ medication }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-  
-        <ion-list>
-          <ion-item>
-            <ion-icon :icon="sunny" slot="start"></ion-icon>
-            <ion-label class="d-lbl">Morning</ion-label>
-            <ion-input type="number" v-model="dosage.morning" placeholder="Dose"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-icon :icon="partlySunny" slot="start"></ion-icon>
-            <ion-label class="d-lbl">Afternoon</ion-label>
-            <ion-input type="number" v-model="dosage.afternoon" placeholder="Dose"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-icon :icon="moon" slot="start"></ion-icon>
-            <ion-label class="d-lbl">Evening</ion-label>
-            <ion-input type="number" v-model="dosage.evening" placeholder="Dose"></ion-input>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-  
-    <ion-button expand="block" @click="saveMedication">
-      <ion-icon :icon="editIndex !== null ? save : add" slot="start"></ion-icon>
-      <span class="d-lbl">
-        {{ editIndex !== null ? 'Update' : 'Add' }} Medication
-      </span>
-    </ion-button>
-  
-    <ion-alert
-      :is-open="showRemoveAlert"
-      header="Confirm Removal"
-      message="Are you sure you want to remove this medication?"
-      :buttons="[
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            showRemoveAlert = false;
-          },
-        },
-        {
-          text: 'Remove',
-          handler: () => {
-            removeMedication(medicationToRemove);
-            showRemoveAlert = false;
-          },
-        },
-      ]"
-    ></ion-alert>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent, ref, reactive, computed } from 'vue';
-  import {
-    IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel, 
-    IonSelect, IonSelectOption, IonInput, IonList, IonButton, IonButtons,
-    IonIcon, IonAlert, IonToast, IonBadge
-  } from '@ionic/vue';
-  import { 
-    pencil, trash, medkit, medical, sunny, partlySunny, moon, add, save
-  } from 'ionicons/icons';
-  import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-  import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-  import { mapState } from "pinia";
-  
-  export default defineComponent({
-    name: 'MedicationSelector',
-    components: {
-      IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel, 
-      IonSelect, IonSelectOption, IonInput, IonList, IonButton, IonButtons,
-      IonIcon, IonAlert, IonToast, IonBadge
-    },
-    computed: {
-      ...mapState(useTreatmentPlanStore, ["selectedNCDMedicationList"]), 
-    },
-    setup() {
-      const categories = ['Diabetes', 'Anti-hypertensives', 'Other'];
-      const medications = reactive({
-        'Diabetes': [
-          'Long acting Insulin',
-          'Short Acting Insulin',
-          'Metformin',
-          'Glibenclamide'
-        ],
-        'Anti-hypertensives': [
-          'Diuretic',
-          'CCB',
-          'ACE-I',
-          'BB'
-        ],
-        'Other': [
-          'Aspirin',
-          'Statin',
-          'Other'
-        ]
-      } as any);
-  
-      const selectedCategory = ref('') as any;
-      const selectedMedication = ref('') as any;
-      const medicationOptions = ref([]) as any;
-      const dosage = reactive({ morning: null, afternoon: null, evening: null } as any);
-      const editIndex = ref(null) as any;
-      const showRemoveAlert = ref(false) as any;
-      const medicationToRemove = ref(null) as any;
-      const errorMessage = ref('') as any;
-      const treatmentPlanStore = useTreatmentPlanStore();
-      const selected_NCD_Medication_List = computed(() => treatmentPlanStore.selectedNCDMedicationList) as any;
-  
-      const updateMedicationOptions = () => {
-        medicationOptions.value = medications[selectedCategory.value] || [];
-        selectedMedication.value = '';
-      };
-  
-      const saveMedication = () => {
-        if (!selectedMedication.value) {
-          errorMessage.value = 'Please select a medication';
-          toastWarning(errorMessage.value)
-          return;
-        }
-  
-        if (!dosage.morning && !dosage.afternoon && !dosage.evening) {
-          errorMessage.value = 'Please enter at least one dosage';
-          toastWarning(errorMessage.value)
-          return;
-        }
-  
-        const medicationData = {
-          category: selectedCategory.value,
-          medication: selectedMedication.value,
-          dosage: { ...dosage }
-        };
-  
-        if (editIndex.value !== null) {
-          selected_NCD_Medication_List.value[editIndex.value] = medicationData;
-          editIndex.value = null;
-        } else {
-          treatmentPlanStore.setSelectedNCDMedicationList(medicationData)
-        }
-        resetForm();
-      };
-  
-      const resetForm = () => {
-        selectedCategory.value = '';
-        selectedMedication.value = '';
-        Object.assign(dosage, { morning: null, afternoon: null, evening: null });
-        editIndex.value = null;
-      };
-  
-      const editMedication = (index: number) => {
-        const med = selected_NCD_Medication_List.value[index] as any;
-        selectedCategory.value = med.category;
-        updateMedicationOptions();
-        selectedMedication.value = med.medication;
-        Object.assign(dosage, med.dosage);
-        editIndex.value = index;
-      };
-  
-      const confirmRemoveMedication = (index: number) => {
-        medicationToRemove.value = index;
-        showRemoveAlert.value = true;
-      };
-  
-      const removeMedication = (index: number) => {
-        selected_NCD_Medication_List.value.splice(index, 1);
-      };
-  
-      return {
-        categories, medications, selectedCategory, selectedMedication, medicationOptions,
-        dosage, editIndex, showRemoveAlert, medicationToRemove,
-        errorMessage, updateMedicationOptions, saveMedication,
-        resetForm, editMedication, confirmRemoveMedication, removeMedication,
-        pencil, trash, medkit, medical, sunny, partlySunny, moon, add, save, selected_NCD_Medication_List
-      };
-    }
-  });
-  </script>
-  
-  <style scoped>
-  ion-card {
-    margin-bottom: 20px;
-  }
-  
-  ion-button {
-    margin-top: 20px;
-  }
-  
-  ion-icon {
-    vertical-align: middle;
-  }
-  
-  .dosage-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .dosage-info span {
-    display: flex;
-    align-items: center;
-  }
-  
-  .dosage-info ion-icon {
-    margin-right: 5px;
-  }
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
+        Prescription List
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="table-container">
+        <table class="prescription-table">
+          <thead>
+            <tr>
+              <th class="checkbox-col">Select</th>
+              <th>Medication</th>
+              <th><ion-icon :icon="sunny"></ion-icon> Morning</th>
+              <th><ion-icon :icon="partlySunny"></ion-icon> Afternoon</th>
+              <th><ion-icon :icon="moon"></ion-icon> Evening</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="med in medications" :key="med.id" :class="{ 'active-row': isActive(med.name) }">
+              <td class="checkbox-col">
+                <ion-checkbox
+                  :checked="isActive(med.name)"
+                  @ion-change="toggleMedication(med.name)"
+                ></ion-checkbox>
+              </td>
+              <td>{{ med.name }}</td>
+              <td>
+                <ion-input
+                  type="number"
+                  class="dose-input"
+                  :disabled="!isActive(med.name)"
+                  :value="getDosage(med.name, 'morning')"
+                  @ion-input="updateDosage(med.name, 'morning', $event)"
+                  placeholder="0"
+                ></ion-input>
+              </td>
+              <td>
+                <ion-input
+                  type="number"
+                  class="dose-input"
+                  :disabled="!isActive(med.name)"
+                  :value="getDosage(med.name, 'afternoon')"
+                  @ion-input="updateDosage(med.name, 'afternoon', $event)"
+                  placeholder="0"
+                ></ion-input>
+              </td>
+              <td>
+                <ion-input
+                  type="number"
+                  class="dose-input"
+                  :disabled="!isActive(med.name)"
+                  :value="getDosage(med.name, 'evening')"
+                  @ion-input="updateDosage(med.name, 'evening', $event)"
+                  placeholder="0"
+                ></ion-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</template>
 
-  .d-lbl {
-    margin-left: 10px;
+<script lang="ts">
+import { defineComponent, ref, computed } from 'vue';
+import {
+  IonCard, IonCardHeader, IonCardTitle, IonCardContent,
+  IonInput, IonIcon, IonCheckbox
+} from '@ionic/vue';
+import { 
+  medkit, sunny, partlySunny, moon
+} from 'ionicons/icons';
+import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { mapState } from "pinia";
+
+export default defineComponent({
+  name: 'PrescriptionTable',
+  components: {
+    IonCard, IonCardHeader, IonCardTitle, IonCardContent,
+    IonInput, IonIcon, IonCheckbox
+  },
+  setup() {
+    const treatmentPlanStore = useTreatmentPlanStore();
+    const selected_NCD_Medication_List = computed(() => treatmentPlanStore.selectedNCDMedicationList);
+
+    // Predefined list of all possible medications
+    const medications = ref([
+      // Diabetes medications
+      { id: 1, name: 'Long acting Insulin', category: 'Diabetes' },
+      { id: 2, name: 'Short Acting Insulin', category: 'Diabetes' },
+      { id: 3, name: 'Metformin', category: 'Diabetes' },
+      { id: 4, name: 'Glibenclamide', category: 'Diabetes' },
+      // Anti-hypertensives
+      { id: 5, name: 'Diuretic', category: 'Anti-hypertensives' },
+      { id: 6, name: 'CCB', category: 'Anti-hypertensives' },
+      { id: 7, name: 'ACE-I', category: 'Anti-hypertensives' },
+      { id: 8, name: 'BB', category: 'Anti-hypertensives' },
+      // Other medications
+      { id: 9, name: 'Aspirin', category: 'Other' },
+      { id: 10, name: 'Statin', category: 'Other' },
+      { id: 11, name: 'Other', category: 'Other' },
+    ]);
+
+    const isActive = (medicationName: string) => {
+      return selected_NCD_Medication_List.value.some((med: any) => med.medication === medicationName);
+    };
+
+    const getDosage = (medicationName: string, timeOfDay: string) => {
+      const medication = selected_NCD_Medication_List.value.find(
+        (        med: { medication: string; }) => med.medication === medicationName
+      );
+      return medication?.dosage[timeOfDay] || '';
+    };
+
+    const toggleMedication = (medicationName: string) => {
+      if (isActive(medicationName)) {
+        // Remove medication
+        const index = selected_NCD_Medication_List.value.findIndex(
+          (          med: { medication: string; }) => med.medication === medicationName
+        );
+        if (index > -1) {
+          selected_NCD_Medication_List.value.splice(index, 1);
+        }
+      } else {
+        // Add medication with empty dosages
+        const newMedication = {
+          medication: medicationName,
+          dosage: {
+            morning: null,
+            afternoon: null,
+            evening: null
+          }
+        };
+        treatmentPlanStore.setSelectedNCDMedicationList(newMedication);
+      }
+    };
+
+    const updateDosage = (medicationName: string, timeOfDay: string, event: any) => {
+      const value = event.target.value;
+      const medicationIndex = selected_NCD_Medication_List.value.findIndex(
+        (        med: { medication: string; }) => med.medication === medicationName
+      );
+      
+      if (medicationIndex > -1) {
+        const updatedMedication = { ...selected_NCD_Medication_List.value[medicationIndex] };
+        updatedMedication.dosage = { ...updatedMedication.dosage, [timeOfDay]: value };
+        selected_NCD_Medication_List.value[medicationIndex] = updatedMedication;
+      }
+    };
+
+    return {
+      medications,
+      isActive,
+      getDosage,
+      toggleMedication,
+      updateDosage,
+      medkit,
+      sunny,
+      partlySunny,
+      moon,
+      selected_NCD_Medication_List,
+    };
   }
-  </style>
+});
+</script>
+
+<style scoped>
+.table-container {
+  overflow-x: auto;
+}
+
+.prescription-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.prescription-table th,
+.prescription-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid var(--ion-color-light);
+  vertical-align: middle;
+}
+
+.prescription-table th {
+  background-color: var(--ion-color-light);
+  font-weight: bold;
+}
+
+.checkbox-col {
+  width: 60px;
+  text-align: center;
+}
+
+.active-row {
+  background-color: var(--ion-color-light-tint);
+}
+
+.dose-input {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  max-width: 80px;
+  margin: 0 auto;
+}
+
+.dose-input.ion-disabled {
+  opacity: 0.5;
+}
+
+ion-checkbox {
+  margin: 0 auto;
+}
+
+.prescription-table ion-icon {
+  vertical-align: middle;
+}
+</style>
