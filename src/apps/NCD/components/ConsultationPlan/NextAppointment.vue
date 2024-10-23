@@ -13,7 +13,7 @@
                     <template #day="{ day, date }">
                         <template v-if="true">
                             <p>
-                                {{ day }}<sup style="color: #999">{{ getCounter(date) }}</sup>
+                                <span>{{ day }}<sup class="count-badge">{{ getCounter(date) }}</sup></span>
                             </p>
                         </template>
                         <template v-else>
@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonDatetime } from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonBadge, IonToolbar, IonMenu, modalController, IonDatetime } from "@ionic/vue";
 import { calendar, checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { createModal } from "@/utils/Alerts";
@@ -80,6 +80,7 @@ export default defineComponent({
     IonToolbar,
     BasicInputField,
     IonDatetime,
+    IonBadge,
   },
   setup() {
     const clinicalDaysStore = useClinicalDaysStore();
@@ -148,16 +149,19 @@ export default defineComponent({
             
         }
     },
-    getCounter(date: any) {
-        const normalizeDate = (date: Date) => {
+    getCounter(date: string | Date): string | number {
+        const normalizeDate = (date: Date): number => {
             const d = new Date(date);
             d.setHours(0, 0, 0, 0);
             return d.getTime();
         };
+
         const dateTimestamp = normalizeDate(new Date(date));
-        return this.assignedAppointmentsDates.reduce((sum: any, d: any) => {
+        const count = this.assignedAppointmentsDates.reduce((sum: number, d: { date: string | Date }) => {
             return normalizeDate(new Date(d.date)) === dateTimestamp ? sum + 1 : sum;
         }, 0);
+
+        return count === 0 ? '' : count;
     },
     // async saveData() {
     //   try {
@@ -276,5 +280,12 @@ ion-datetime::part(calendar-day) {
     --dp-cell-padding: 30px; /*Padding in the cell*/
     --dp-menu-padding: 20px 5px; /*Menu padding*/
     --dp-font-size: 18px; /*Default font-size*/
+}
+.count-badge {
+    padding: 1px 4px;
+    font-size: 19px;
+    margin-left: 1px;
+    position: relative;
+    font-weight: bold;
 }
 </style>
