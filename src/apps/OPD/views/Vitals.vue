@@ -1,23 +1,23 @@
 <template>
     <ion-page>
-      <!-- Spinner -->
-      <div v-if="isLoading" class="spinner-overlay">
-        <ion-spinner name="bubbles"></ion-spinner>
-        <div class="loading-text">Please wait...</div>
-      </div>
+        <!-- Spinner -->
+        <div v-if="isLoading" class="spinner-overlay">
+            <ion-spinner name="bubbles"></ion-spinner>
+            <div class="loading-text">Please wait...</div>
+        </div>
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Vitals"
-                     :wizardData="wizardData"
-                     @updateStatus="markWizard"
-                     @finishBtn="saveData()"
-                     :StepperData="StepperData"
-                     :getSaveFunction="getSaveFunction"
-
+            <Stepper
+                stepperTitle="Vitals"
+                :wizardData="wizardData"
+                @updateStatus="markWizard"
+                @finishBtn="saveData()"
+                :StepperData="StepperData"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
-<!--        <BasicFooter :name="actionBtn" @finishBtn="saveData()" />-->
+        <!--        <BasicFooter :name="actionBtn" @finishBtn="saveData()" />-->
     </ion-page>
 </template>
 
@@ -49,7 +49,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import {createModal, toastDanger} from "@/utils/Alerts";
+import { createModal, toastDanger } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
@@ -60,13 +60,12 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import { defineComponent } from "vue";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
-import {getFieldValue} from "@/services/data_helpers";
+import { getFieldValue } from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
 import { PatientOpdList } from "@/services/patient_opd_list";
-import dates from "@/utils/Date"
-import {getUserLocation} from "@/services/userService";
-import {usePatientList} from "@/apps/OPD/stores/patientListStore";
-
+import dates from "@/utils/Date";
+import { getUserLocation } from "@/services/userService";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 
 export default defineComponent({
     name: "Home",
@@ -96,7 +95,7 @@ export default defineComponent({
     },
     data() {
         return {
-          isLoading:false,
+            isLoading: false,
             hasValidationErrors: [] as any,
             dispositions: "" as any,
             actionBtn: "" as any,
@@ -124,9 +123,9 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-      "Height Weight Reason"() {
-        return getFieldValue(this.vitals, "Height Weight Reason", "value");
-      },
+        "Height Weight Reason"() {
+            return getFieldValue(this.vitals, "Height Weight Reason", "value");
+        },
     },
     async created() {
         // this.getData();
@@ -174,130 +173,131 @@ export default defineComponent({
             }
         },
 
-      // async saveData() {
-      //         const userID: any = Service.getUserID();
-      //         const userRoles = Service.getUserRoles();
-      //         console.log("Lets the name of the user: ", userRoles);
-      //         this.isLoading = true;
+        // async saveData() {
+        //         const userID: any = Service.getUserID();
+        //         const userRoles = Service.getUserRoles();
+        //         console.log("Lets the name of the user: ", userRoles);
+        //         this.isLoading = true;
 
-      //         try {
-      //           if (this.actionBtn != "Finish") {
-      //             if (this.vitals.validationStatus) {
-      //               await this.saveVitals();
-      //               await resetOPDPatientData();
+        //         try {
+        //           if (this.actionBtn != "Finish") {
+        //             if (this.vitals.validationStatus) {
+        //               await this.saveVitals();
+        //               await resetOPDPatientData();
 
-      //               if (userRoles.includes("Nurse")) {
-      //                 this.$router.push("patientProfile");
-      //               } else if (userRoles.includes("Clinician")) {
-      //                 this.$router.push("OPDConsultationPlan");
-      //               } else {
-      //                 console.error("Unknown user role:", userRoles);
-      //               }
-      //             } else {
-      //               await this.validaterowData();
-      //               toastWarning("Please fill all required fields");
-      //             }
-      //           } else {
-      //             if (userRoles.includes("Nurse")) {
-      //               this.$router.push("patientProfile");
-      //             } else if (userRoles.includes("Clinician")) {
-      //               this.$router.push("OPDConsultationPlan");
-      //             } else {
-      //               console.error("Unknown user role:", userRoles);
-      //             }
-      //           }
-      //         } catch (error) {
-      //           console.error("Error in saveData: ", error);
-      //         } finally {
-      //           this.isLoading = false;
-      //         }
-      // },
+        //               if (userRoles.includes("Nurse")) {
+        //                 this.$router.push("patientProfile");
+        //               } else if (userRoles.includes("Clinician")) {
+        //                 this.$router.push("OPDConsultationPlan");
+        //               } else {
+        //                 console.error("Unknown user role:", userRoles);
+        //               }
+        //             } else {
+        //               await this.validaterowData();
+        //               toastWarning("Please fill all required fields");
+        //             }
+        //           } else {
+        //             if (userRoles.includes("Nurse")) {
+        //               this.$router.push("patientProfile");
+        //             } else if (userRoles.includes("Clinician")) {
+        //               this.$router.push("OPDConsultationPlan");
+        //             } else {
+        //               console.error("Unknown user role:", userRoles);
+        //             }
+        //           }
+        //         } catch (error) {
+        //           console.error("Error in saveData: ", error);
+        //         } finally {
+        //           this.isLoading = false;
+        //         }
+        // },
 
-      async saveData() {
-          const userID: any = Service.getUserID();
-          const userRoles = Service.getUserRoles();
-          console.log("Lets the name of the user: ", userRoles);
-          this.isLoading = true;
+        async saveData() {
+            const userID: any = Service.getUserID();
+            const userRoles = Service.getUserRoles();
+            console.log("Lets the name of the user: ", userRoles);
+            this.isLoading = true;
 
-          try {
-            if (this.actionBtn != "Finish") {
-              if (this.vitals.validationStatus) {
-                await this.saveVitals();
-                await resetOPDPatientData();
+            try {
+                if (this.actionBtn != "Finish") {
+                    if (this.vitals.validationStatus) {
+                        await this.saveVitals();
+                        await resetOPDPatientData();
 
-                if (userRoles.includes("Nurse")) {
-                  this.$router.push("patientProfile");
+                        if (userRoles.includes("Nurse")) {
+                            this.$router.push("patientProfile");
+                        } else {
+                            this.$router.push("OPDConsultationPlan");
+                        }
+                    } else {
+                        await this.validaterowData();
+                        toastWarning("Please fill all required fields");
+                    }
                 } else {
-                  this.$router.push("OPDConsultationPlan");
+                    if (userRoles.includes("Nurse")) {
+                        this.$router.push("patientProfile");
+                    } else {
+                        //Superuser
+                        this.$router.push("OPDConsultationPlan");
+                    }
                 }
-              } else {
-                await this.validaterowData();
-                toastWarning("Please fill all required fields");
-              }
-            } else {
-              if (userRoles.includes("Nurse")) {
-                this.$router.push("patientProfile");
-              } else {
-                //Superuser
-                this.$router.push("OPDConsultationPlan");
-              }
+            } catch (error) {
+                console.error("Error in saveData: ", error);
+            } finally {
+                this.isLoading = false;
             }
-          } catch (error) {
-            console.error("Error in saveData: ", error);
-          } finally {
-            this.isLoading = false;
-          }
         },
 
-
-      async saveVitals() {
+        async saveVitals() {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
             await vitalsInstance.onFinish(this.vitals);
         },
-      async validaterowData() {
-        const userID: any = Service.getUserID();
-        const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-        const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+        async validaterowData() {
+            const userID: any = Service.getUserID();
+            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            const age = HisDate.getAgeInYears(this.demographics?.birthdate);
 
-        this.vitals.forEach((section: any, sectionIndex: any) => {
-          if (section?.data?.rowData) {
-            section?.data?.rowData.forEach((col: any, colIndex: any) => {
-              col.colData.some((input: any, inputIndex: any) => {
-                if (input.name === "Respiratory rate" && age <= 5) {
-                  const validateResult = vitalsInstance.validator(input);
-                  if (validateResult?.length > 0) {
-                    this.hasValidationErrors.push("false");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
-                    return true;
-                  } else {
-                    this.hasValidationErrors.push("true");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-                  }
-                } else {
-                  const validateResult = vitalsInstance.validator(input);
-                  if (validateResult?.length > 0) {
-                    this.hasValidationErrors.push("false");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
-                    return true;
-                  } else {
-                    this.hasValidationErrors.push("true");
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
-                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-                  }
+            this.vitals.forEach((section: any, sectionIndex: any) => {
+                if (section?.data?.rowData) {
+                    section?.data?.rowData.forEach((col: any, colIndex: any) => {
+                        col.colData.some((input: any, inputIndex: any) => {
+                            if (input.name === "Respiratory rate" && age <= 5) {
+                                const validateResult = vitalsInstance.validator(input);
+                                if (validateResult?.length > 0) {
+                                    this.hasValidationErrors.push("false");
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
+                                        validateResult.flat(Infinity)[0];
+                                    return true;
+                                } else {
+                                    this.hasValidationErrors.push("true");
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                                }
+                            } else {
+                                const validateResult = vitalsInstance.validator(input);
+                                if (validateResult?.length > 0) {
+                                    this.hasValidationErrors.push("false");
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
+                                        validateResult.flat(Infinity)[0];
+                                    return true;
+                                } else {
+                                    this.hasValidationErrors.push("true");
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                                }
+                            }
+
+                            return false;
+                        });
+                    });
                 }
-
-                return false;
-              });
             });
-          }
-        });
 
-        this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
-      },
+            this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
+        },
 
-      openModal() {
+        openModal() {
             createModal(SaveProgressModal);
         },
     },
@@ -306,30 +306,30 @@ export default defineComponent({
 
 <style scoped>
 .spinner-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.5);
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 9999;
 }
 
 ion-spinner {
-  width: 80px;
-  height: 80px;
+    width: 80px;
+    height: 80px;
 }
 
 .loading-text {
-  margin-top: 20px;
-  font-size: 18px;
-  color: #333;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
 }
 
 .loading {
-  pointer-events: none;
+    pointer-events: none;
 }
 </style>

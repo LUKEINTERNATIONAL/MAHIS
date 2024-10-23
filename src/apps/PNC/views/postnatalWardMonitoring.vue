@@ -11,7 +11,6 @@
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
-
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -61,9 +60,9 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "postnatalWardMonitoring",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
-      BasicFooter,
+    mixins: [SetUserRole, SetEncounter],
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -155,9 +154,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
-      getSaveFunction(){
-
-      },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -167,7 +164,7 @@ export default defineComponent({
         async saveData() {
             await this.saveWardMonitoring();
             toastSuccess("Postnatal ward stay data saved successfully");
-            resetPatientData();
+            await resetPatientData();
             this.$router.push("home");
         },
         async saveWardMonitoring() {

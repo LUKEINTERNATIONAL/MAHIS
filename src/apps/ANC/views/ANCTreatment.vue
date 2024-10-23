@@ -11,11 +11,9 @@
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
-
             />
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
-
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 <script lang="ts">
@@ -41,11 +39,7 @@ import { useImmunizationStore } from "../store/immunizationStore";
 //import { useIntimatePartnerStore } from "../store/intimatePartnerStore";
 import { useDewormingStore } from "../store/dewormingStore";
 import { Service } from "@/services/service";
-import {
-  DiagnosisTreatmentService,
-  ImmunizationService,
-  MedicationDispensedService
-} from "@/services/anc_treatment_service";
+import { DiagnosisTreatmentService, ImmunizationService, MedicationDispensedService } from "@/services/anc_treatment_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { resetPatientData } from "@/services/reset_data";
@@ -58,10 +52,10 @@ import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "Treatment",
-  mixins: [SetUserRole, SetEncounter],
+    mixins: [SetUserRole, SetEncounter],
 
-  components: {
-      BasicFooter,
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonItem,
@@ -78,7 +72,7 @@ export default defineComponent({
         MedicationDispensed,
         DiagnosisCounselling,
         Immunization,
-       // IntimatePartner,
+        // IntimatePartner,
         Deworming,
     },
     data() {
@@ -162,10 +156,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useDiagnosisStore, [
-            "diagnoses",
-          
-        ]),
+        ...mapState(useDiagnosisStore, ["diagnoses"]),
         ...mapState(useMedicationDispensedStore, ["iron", "folicAcid"]),
         ...mapState(useImmunizationStore, ["ttDoses", "HepBCounselling", "HepB1", "HepB2", "HepB3", "hepBReason"]),
         // ...mapState(useIntimatePartnerStore, [
@@ -189,44 +180,40 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
-      getSaveFunction(){
-
-      },
-        saveData() {
+        getSaveFunction() {},
+        async saveData() {
             this.saveDiagnosis();
             // this.saveMedicationDispensed();
             // this.saveCouselling();
             // this.saveImmunisation();
             // this.saveIntimatePartner();
             // this.saveDeworming();
-            // resetPatientData();
-            this.$router.push('contact');
+            // await resetPatientData();
+            this.$router.push("contact");
         },
         validationRules(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
         async saveDiagnosis() {
-          if (this.diagnoses.length > 0) {
-            const userID: any = Service.getUserID();
-            const medicationDispensed = new DiagnosisTreatmentService(this.demographics.patient_id, userID);
-            const encounter = await medicationDispensed.createEncounter();
-            if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
-            const patientStatus = await medicationDispensed.saveObservationList(await this.buildDiagnosis());
-            if (!patientStatus) return toastWarning("Unable to create medication dispensed!");
-            toastSuccess("Diagnosis saved");
-
-          }
+            if (this.diagnoses.length > 0) {
+                const userID: any = Service.getUserID();
+                const medicationDispensed = new DiagnosisTreatmentService(this.demographics.patient_id, userID);
+                const encounter = await medicationDispensed.createEncounter();
+                if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
+                const patientStatus = await medicationDispensed.saveObservationList(await this.buildDiagnosis());
+                if (!patientStatus) return toastWarning("Unable to create medication dispensed!");
+                toastSuccess("Diagnosis saved");
+            }
         },
         async saveMedicationDispensed() {
-                if (this.folicAcid.length > 0) {
-                    const userID: any = Service.getUserID();
-                    const medicationDispensed = new MedicationDispensedService(this.demographics.patient_id, userID);
-                    const encounter = await medicationDispensed.createEncounter();
-                    if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
-                    const patientStatus = await medicationDispensed.saveObservationList(await this.buildMedicationDispensed());
-                    if (!patientStatus) return toastWarning("Unable to create medication dispensed!");
-                    toastSuccess("Medication Dispensed saved");
-
+            if (this.folicAcid.length > 0) {
+                const userID: any = Service.getUserID();
+                const medicationDispensed = new MedicationDispensedService(this.demographics.patient_id, userID);
+                const encounter = await medicationDispensed.createEncounter();
+                if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
+                const patientStatus = await medicationDispensed.saveObservationList(await this.buildMedicationDispensed());
+                if (!patientStatus) return toastWarning("Unable to create medication dispensed!");
+                toastSuccess("Medication Dispensed saved");
             }
             console.log(await this.buildMedicationDispensed());
         },
@@ -250,18 +237,12 @@ export default defineComponent({
             console.log(await this.buildDeworming());
         },
         async buildDiagnosis() {
-            return [
-                ...(await formatCheckBoxData(this.diagnoses)),
-        
-            ];
+            return [...(await formatCheckBoxData(this.diagnoses))];
         },
         async buildMedicationDispensed() {
-            return [
-                ...(await formatRadioButtonData(this.iron)),
-               
-            ];
+            return [...(await formatRadioButtonData(this.iron))];
         },
-    
+
         async buildImmunisation() {
             return [
                 ...(await formatRadioButtonData(this.ttDoses)),

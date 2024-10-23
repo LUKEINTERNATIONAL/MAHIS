@@ -96,8 +96,19 @@ export async function getFileConfig2(): Promise<Config> {
             if (!response.ok) {
                 throw new Error(`Unable to retrieve configuration file from ${path}`);
             }
-            const { apiURL, apiPort, apiProtocol, appConf, baseURL, apps, thirdpartyApps, platformProfiles, otherApps, websockerURL } =
-                await response.json();
+            const {
+                apiURL,
+                apiPort,
+                apiProtocol,
+                appConf,
+                baseURL,
+                apps,
+                thirdpartyApps,
+                platformProfiles,
+                otherApps,
+                websockerURL,
+                websockerProtocol,
+            } = await response.json();
             localStorage.setItem("apiURL", apiURL);
             localStorage.setItem("apiPort", apiPort);
             localStorage.setItem("apiProtocol", apiProtocol);
@@ -108,6 +119,7 @@ export async function getFileConfig2(): Promise<Config> {
             localStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
             localStorage.setItem("otherApps", JSON.stringify(otherApps));
             localStorage.setItem("websockerURL", JSON.stringify(websockerURL));
+            localStorage.setItem("websockerProtocol", JSON.stringify(websockerProtocol));
             return {
                 host: apiURL,
                 port: apiPort,
@@ -155,6 +167,15 @@ export function getWebsockerURL() {
     if (webST) {
         let websockerURL = removeQuotes(webST);
         return websockerURL;
+    }
+    return "";
+}
+
+export function getWebsockerProtocol() {
+    const webST = localStorage.websockerProtocol;
+    if (webST) {
+        let websockerProtocol = removeQuotes(webST);
+        return websockerProtocol;
     }
     return "";
 }

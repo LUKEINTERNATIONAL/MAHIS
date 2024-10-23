@@ -775,6 +775,11 @@ ion-footer {
     color: #000;
 }
 
+.scrollable_container {
+    max-height: 100vh; /* Adjust height based on your layout */
+    overflow-y: auto;
+}
+
 .dp__theme_light {
     --dp-background-color: #fff;
     --dp-text-color: #212121;

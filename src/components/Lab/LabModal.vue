@@ -134,10 +134,10 @@ export default defineComponent({
             });
             return measures;
         },
-        nav(url: any, action: any) {
+        async nav(url: any, action: any) {
             const demographicsStore = useLabResultsStore();
             if (action == "not_save") {
-                resetPatientData();
+                await resetPatientData();
                 demographicsStore.setLabResults(false);
             } else {
                 demographicsStore.setLabResults(true);

@@ -11,10 +11,9 @@
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
-
             />
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -56,9 +55,9 @@ import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "obstetricDetails",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
-      BasicFooter,
+    mixins: [SetUserRole, SetEncounter],
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -125,7 +124,7 @@ export default defineComponent({
         },
     },
     computed: {},
-    saveData() {
+    async saveData() {
         const medicalConditions = [
             "Auto immune desease",
             "Asthma",
@@ -181,16 +180,14 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
-      getSaveFunction(){
-
-      },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
                 return item?.data;
             });
         },
-        saveData() {
+        async saveData() {
             const errors: any = [];
             // this.StepperData.forEach((stepper)=> {
             //   if (!stepper.validation) return
@@ -204,9 +201,8 @@ export default defineComponent({
             // if (errors.length) {
             //     return alert(errors.join(","));
             // }
-          resetPatientData();
-          this.$router.push("labourHome");
-
+            await resetPatientData();
+            this.$router.push("labourHome");
         },
 
         openModal() {

@@ -357,7 +357,6 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
-                console.log("patientProfile", data.name);
                 if (data.name == "patientProfile") {
                     await this.checkProtectedStatus();
                 }
@@ -510,7 +509,7 @@ export default defineComponent({
             await this.saveDiagnosis();
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
-            resetPatientData();
+            await resetPatientData();
             this.$router.push("patientProfile");
         },
         async saveVitals() {

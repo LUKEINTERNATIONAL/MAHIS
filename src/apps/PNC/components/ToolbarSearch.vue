@@ -1,5 +1,5 @@
 <template>
-    <ion-searchbar  @ionInput="handleInput" placeholder="Search client  clinical No." class="searchField"></ion-searchbar>
+    <ion-searchbar @ionInput="handleInput" placeholder="Search client  clinical No." class="searchField"></ion-searchbar>
     <ion-popover
         :is-open="popoverOpen"
         :event="event"
@@ -7,7 +7,7 @@
         :keyboard-close="false"
         :show-backdrop="false"
         :dismiss-on-select="true"
-    >no
+        >no
         <ion-content class="search_card">
             <ion-row class="search_header">
                 <ion-col>MNH no.</ion-col>
@@ -116,7 +116,7 @@ export default defineComponent({
             if (ids >= 0) return item.patient_identifiers[ids].identifier;
             else return "";
         },
-        openNewPage(url: any, item: any) {
+        async openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();
             demographicsStore.setDemographics({
                 name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
@@ -126,7 +126,7 @@ export default defineComponent({
                 gender: item.person.gender,
                 patient_id: item.patient_id,
             });
-            resetPatientData();
+            await resetPatientData();
             this.$router.push(url);
         },
 

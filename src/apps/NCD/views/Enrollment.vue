@@ -268,7 +268,7 @@ export default defineComponent({
                 const demographicsStore = useDemographicsStore();
                 demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
                 await this.saveEnrollment();
-                resetNCDPatientData();
+                await resetNCDPatientData();
                 await UserService.setProgramUserActions();
                 if (this.NCDActivities.length == 0) {
                     this.$router.push("patientProfile");
