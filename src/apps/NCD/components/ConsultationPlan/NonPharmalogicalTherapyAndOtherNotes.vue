@@ -1,7 +1,6 @@
 <template>
-        <div style="margin-top: 14px; margin-left: 10px">
+        <div>
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
-
             <NonPharmacologicalIntervention/>
             
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px">
