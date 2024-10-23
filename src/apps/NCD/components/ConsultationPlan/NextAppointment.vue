@@ -136,14 +136,12 @@ export default defineComponent({
       const storeClinicalDaysStore = useClinicalDaysStore();
       storeClinicalDaysStore.setsssignedAppointmentsDates(date, true);
       this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
-      this.save();
-      this.loadDataFromStore();
+      await this.save();
       await this.getAppointmentMents(date)
     },
     async  getAppointmentMents(date: any) {
         try {
             const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
-            console.log(res.length)
             this.appointment_count = res.length;
         } catch (error) {
             
@@ -163,18 +161,6 @@ export default defineComponent({
 
         return count === 0 ? '' : count;
     },
-    // async saveData() {
-    //   try {
-    //     const res = await this.appointment.getNextAppointment();
-    //     this.nextAppointmentDate = res.appointment_date;
-    //     this.drugRunoutDate = res.drugs_run_out_date;
-    //     console.log(res);
-    //   } catch {}
-    //   const ttt = [
-    //     await this.appointment.buildValueDate("Appointment date", "2024-03-28"),
-    //     await this.appointment.buildValueDate("Estimated date", this.nextAppointmentDate),
-    //   ];
-    // },
     async save() {
         if (this.assignedAppointmentsDates.length >0) {
             try {
@@ -188,12 +174,8 @@ export default defineComponent({
         }
 
     },
-    loadDataFromStore() {
-      // This method can be used to perform any additional data loading if needed
-    },
     async openCornfirmModal(date: any) {
         this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
-        this.loadDataFromStore();
         await this.getAppointmentMents(date)
       const handleCancel = (event: CustomEvent<any>) => {
         console.log(event.detail)
