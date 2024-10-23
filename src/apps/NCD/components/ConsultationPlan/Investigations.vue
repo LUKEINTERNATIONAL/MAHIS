@@ -21,25 +21,6 @@
                     <labOrderResults :propOrders="labOrders" />
                 </span>
 
-                <span v-if="search_item">
-                    <basic-form
-                        :contentData="investigations"
-                        @update:selected="handleInputData"
-                        @update:inputValue="handleInputData"
-                        @clicked:button="addNewRow"
-                    >
-                    </basic-form>
-                </span>
-
-                <ion-row v-if="addItemButton && userRole != 'Lab'" style="margin-top: 10px">
-                    <DynamicButton
-                        fill="clear"
-                        :icon="iconsContent.plus"
-                        iconSlot="icon-only"
-                        @clicked:btn="displayInputFields()"
-                        name="Add new test"
-                    />
-                </ion-row>
             </div>
         </div>
         <div v-if="segmentContent == 'Radiology Investigation'"></div>
