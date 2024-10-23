@@ -15,10 +15,10 @@
             <div style="margin: 10px">
                 <Allergies/>
 
-                <ion-accordion-group ref="accordionGroup" class="previousView" v-if="false">
+                <ion-accordion-group ref="accordionGroup" class="previousView">
                     <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                         <ion-item slot="header" color="light">
-                            <ion-label class="previousLabel">Allergies</ion-label>
+                            <ion-label class="previousLabel">Previous Allergies</ion-label>
                         </ion-item>
                         <div class="ion-padding" slot="content">
                             <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
