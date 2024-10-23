@@ -201,14 +201,13 @@ import { ref, computed, onMounted, watch } from "vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Toggle from '@vueform/toggle';
-import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
+import { useClinicalDaysStore, setValueProps } from "@/stores/clinicalDaysStore";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import router from '@/router';
 import BasicInputField from "@/components/BasicInputField.vue"
 import HisDate from "@/utils/Date";
 import { combineArrays } from "@/utils/GeneralUti";
 import { mapState } from 'pinia';
-import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
   
   const toggle_local = ref(false);
@@ -307,30 +306,6 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
   const clinical_Days_Store = computed(() => {
     return mapState(useClinicalDaysStore, ["holidayDates"]) 
   })
-
-  const global_property_store = computed(() => {
-    return mapState(useGlobalPropertyStore, ["globalPropertyStore",])
-  })
-
-  function setValueProps() {
-    try {
-      const storeClinicalDaysStore = useClinicalDaysStore();
-      const holidayDatesObj = JSON.parse(global_property_store.value.globalPropertyStore().holidayDatesObj)
-      const maximumNumberOfCForEachDayObj = JSON.parse(global_property_store.value.globalPropertyStore().maximumNumberOfCForEachDayObj)
-      const weekDaysPropertiesObj = JSON.parse(global_property_store.value.globalPropertyStore().weekDaysPropertiesObj)
-      storeClinicalDaysStore.setHolidayDates(holidayDatesObj.holidayDates);
-      storeClinicalDaysStore.setMaximumNumberOfDaysForEachDay(maximumNumberOfCForEachDayObj.maximumNumberOfDaysForEachDay);
-      storeClinicalDaysStore.setAreMondaysDisabled(weekDaysPropertiesObj.weekDays.areMondaysDisabled);
-      storeClinicalDaysStore.setAreTuesdaysDisabled(weekDaysPropertiesObj.weekDays.areTuesdaysDisabled);
-      storeClinicalDaysStore.setAreWednesdaysDisabled(weekDaysPropertiesObj.weekDays.areWednesdaysDisabled);
-      storeClinicalDaysStore.setAreThursdaysDisabled(weekDaysPropertiesObj.weekDays.areThursdaysDisabled);
-      storeClinicalDaysStore.setAreFridaysDisabled(weekDaysPropertiesObj.weekDays.areFridaysDisabled);
-      storeClinicalDaysStore.setAreSaturdaysDisabled(weekDaysPropertiesObj.weekDays.areSaturdaysDisabled);
-      storeClinicalDaysStore.setAreSundaysDisabled(weekDaysPropertiesObj.weekDays.areSundaysDisabled);
-    } catch (error) {
-      
-    }
-  }
 
   onMounted(() => {
     setValueProps();
