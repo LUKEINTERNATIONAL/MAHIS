@@ -125,7 +125,6 @@ export default defineComponent({
     const patient = new PatientService();
     this.appointment = new AppointmentService(patient.getID(), userID);
     this.nextAppointmentDate = this.appointment.date;
-    this.loadDataFromStore();
   },
   methods: {
     updateNextAppointment() {
