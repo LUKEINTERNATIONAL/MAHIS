@@ -1,52 +1,32 @@
 <template>
-    <ion-list>
-        <ion-accordion-group ref="accordionGroup" class="previousView" >
-            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Allergies</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <Allergies />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-        
-        
-        <ion-accordion-group ref="accordionGroup" class="previousView" v-if="false">
-            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Allergies</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
-                        <div v-if="index == 1">
-                            <div>
-                                <ion-label class="previousLabelDate">{{ item[0].date }}</ion-label>
-                            </div>
-                            <div v-for="(item1, index1) in item" :key="index1">
-                                <div class="previousSecDrgs">
-                                    <ion-list>
-                                        <ion-label class="notes_p">{{ item1.value }} </ion-label>
-                                    </ion-list>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="background">
+        <ion-segment :value="segmentContent" style="margin-top: 5px">
+            <ion-segment-button value="Lab Investigations" @click="setSegmentContent(segments[0])">
+                <ion-label>Allergies</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="Radiology Investigation" @click="setSegmentContent(segments[1])">
+                <ion-label>Medications</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="Other Investigation" @click="setSegmentContent(segments[2])">
+                <ion-label>Non-pharmalogical therapy and other notes</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+        <div v-if="segmentContent == segments[0]">
+            <div style="margin: 10px">
+                <Allergies/>
 
-                    <ion-accordion-group @ionChange="accordionGroupChangeForAllergies">
-                        <ion-accordion value="fith" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                            <ion-item slot="header" color="light">
-                                <ion-label class="" color="primary">{{ showMoreAllergyMsg }}</ion-label>
-                            </ion-item>
-                            <div class="ion-padding" slot="content">
-                                <div class="ionLbltp" v-for="(item, index) in RestOfPreviousAllegies" :key="index">
+                <ion-accordion-group ref="accordionGroup" class="previousView" v-if="false">
+                    <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                        <ion-item slot="header" color="light">
+                            <ion-label class="previousLabel">Allergies</ion-label>
+                        </ion-item>
+                        <div class="ion-padding" slot="content">
+                            <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
+                                <div v-if="index == 1">
                                     <div>
-                                        <ion-label class="previousLabelDate">{{ item[0] }}</ion-label>
+                                        <ion-label class="previousLabelDate">{{ item[0].date }}</ion-label>
                                     </div>
-                                    <div v-for="(item1, index1) in removeOuterArray(item)" :key="index1">
-                                        <!-- <div>
-                                                <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>
-                                            </div> -->
+                                    <div v-for="(item1, index1) in item" :key="index1">
                                         <div class="previousSecDrgs">
                                             <ion-list>
                                                 <ion-label class="notes_p">{{ item1.value }} </ion-label>
@@ -55,37 +35,47 @@
                                     </div>
                                 </div>
                             </div>
-                        </ion-accordion>
-                    </ion-accordion-group>
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
 
-
-        <ion-accordion-group ref="accordionGroup" class="previousView" >
-            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Medication</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <NCDMedication/>
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-
-        <ion-accordion-group ref="accordionGroup" class="previousView" >
-            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Non-pharmalogical therapy and other notes</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <NonPharmalogicalTherapyAndOtherNotes/>
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-
-
-    </ion-list>
+                            <ion-accordion-group @ionChange="accordionGroupChangeForAllergies">
+                                <ion-accordion value="fith" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                                    <ion-item slot="header" color="light">
+                                        <ion-label class="" color="primary">{{ showMoreAllergyMsg }}</ion-label>
+                                    </ion-item>
+                                    <div class="ion-padding" slot="content">
+                                        <div class="ionLbltp" v-for="(item, index) in RestOfPreviousAllegies" :key="index">
+                                            <div>
+                                                <ion-label class="previousLabelDate">{{ item[0] }}</ion-label>
+                                            </div>
+                                            <div v-for="(item1, index1) in removeOuterArray(item)" :key="index1">
+                                                <!-- <div>
+                                                        <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>
+                                                    </div> -->
+                                                <div class="previousSecDrgs">
+                                                    <ion-list>
+                                                        <ion-label class="notes_p">{{ item1.value }} </ion-label>
+                                                    </ion-list>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ion-accordion>
+                            </ion-accordion-group>
+                        </div>
+                    </ion-accordion>
+                </ion-accordion-group>
+            </div>
+        </div>
+        <div v-if="segmentContent == segments[1]">
+            <div style="margin: 10px">
+                <NCDMedication/>
+            </div>
+        </div>
+        <div v-if="segmentContent == segments[2]">
+            <div style="margin: 10px">
+                <NonPharmalogicalTherapyAndOtherNotes/>
+            </div>
+        </div>
+    </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -103,6 +93,8 @@ import {
     IonAccordion,
     IonAccordionGroup,
     AccordionGroupCustomEvent,
+    IonSegment,
+    IonSegmentButton,
 } from "@ionic/vue";
 
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
@@ -118,9 +110,13 @@ import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue"
 
-const search_item = ref(false);
-const display_item = ref(false);
-const addItemButton = ref(true);
+
+const segments = ref([
+    'allergies',
+    'medications',
+    'other_notes',
+]) as any
+const segmentContent = ref(segments.value[0])
 const popoverOpen = ref(false);
 let event: null = null;
 const componentKey = ref(0);
@@ -150,8 +146,6 @@ const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
 const currentDrugOb = ref()
 
-const is_selected_insulin = ref(false)
-
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment();
     const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters();
@@ -164,6 +158,9 @@ onMounted(async () => {
     RestOfPreviousAllegies.value = restEntriesAllegies;
 });
 
+function setSegmentContent(name: any) {
+    segmentContent.value = name;
+}
 
 async function generalPrescription() {
     const systemSessionDate = Service.getSessionDate();
@@ -429,19 +426,7 @@ ion-list.list-al {
     border-radius: 10px;
     margin-top: 10px;
 }
-.previousLabel {
-    font-weight: 600;
-    color: #000;
-}
-.previousLabelDate {
-    font-weight: 600;
-    color: #000;
-    margin: 2%;
-}
-.previousSecDrgs {
-    margin: 2%;
-}
-.notes_p {
-    margin: 4%;
+.background {
+    background-color: #fff;
 }
 </style>
