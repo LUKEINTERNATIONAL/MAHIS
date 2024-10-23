@@ -31,7 +31,6 @@ import { checkmark, pulseOutline } from "ionicons/icons";
 import { ref } from "vue";
 import { icons } from "@/utils/svg";
 import ApexChart from "vue3-apexcharts";
-import List from "@/apps/NCD/components/ConsultationPlan/Investigation/List.vue";
 import { ObservationService } from "@/services/observation_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useLabResultsStore } from "@/stores/LabResults";
@@ -85,7 +84,6 @@ export default defineComponent({
         IonTitle,
         IonToolbar,
         ApexChart,
-        List,
         DynamicButton,
         DashBox,
         LabModal,
