@@ -1,52 +1,27 @@
 <template>
-    <SendToLabConfirmationModal
-        :closeModalFunc="closeSendToLabModal"
-        :onYes="handleSendToLabYes"
-        :onNo="handleSendToLabNo"
-        :isOpen="sendToLabModalOpen"
-        :title="`Do you really want to send patient to lab?`"
-    />
-    <div class="modal_wrapper" v-if="listResults.length > 1">
-        <div style="font-weight: 700">Lab Results</div>
-        <div style="--background: #fff" class="scrollable-container">
-            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"> </list>
+    <div class="container">
+        <div class="table-responsive">
+            <DataTable ref="dataTable" :options="options" :data="tableData" class="display nowrap" width="100%">
+                <thead>
+                    <tr>
+                        <th v-for="head in header" :key="head">{{ head }}</th>
+                    </tr>
+                </thead>
+            </DataTable>
         </div>
-        <div style="margin-top: 5px" v-if="listResults.length <= 4 && listSeeMoreResults.length >= 4">
-            <DynamicButton @click="seeOrderStatus('more')" name="Show More Lab Results" fill="clear" iconSlot="icon-only" />
-        </div>
-        <div style="margin-top: 5px" v-else-if="listResults.length >= 5">
-            <DynamicButton @click="seeOrderStatus('less')" name="Show Less Lab Results" fill="clear" iconSlot="icon-only" />
+        <div>
+        <ion-row  style="margin-top: 10px">
+                <DynamicButton
+                    fill="clear"
+                    :icon="iconsContent.plus"
+                    iconSlot="icon-only"
+                    @click="openEnterResultModal()"
+                    name="Add other test"
+                />
+            </ion-row>
         </div>
     </div>
 
-    <div class="modal_wrapper" v-if="listOrders.length > 1">
-        <div style="font-weight: 700">Lab Orders</div>
-        <div class="scrollable-container">
-            <list :listData="listOrders" @clicked:delete="voidLabOrder" @clicked:results="openResultsForm"></list>
-        </div>
-        <div style="margin-top: 5px" v-if="listOrders.length <= 4 && listSeeMoreOrders.length >= 4">
-            <DynamicButton @click="seeResultsStatus('more')" name="Show More Lab Orders" fill="clear" iconSlot="icon-only" />
-        </div>
-        <div style="margin-top: 5px" v-if="listOrders.length >= 5">
-            <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
-        </div>
-    </div>
-    <div v-if="activeProgramID == 14 && hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
-        <div v-if="hasPatientsWaitingForLab">
-            <DynamicButton
-                class="no-margin-left"
-                fill="clear"
-                icon="notification_icon"
-                iconSlot="icon-only"
-                name="Waiting for results from the lab"
-            />
-        </div>
-        <div v-else>
-            <DynamicButton fill="solid" :icon="iconsContent.plus" iconSlot="icon-only" @click="toggleSendToLabModal()" name="Send to Lab" />
-        </div>
-    </div>
-    <LabModal :popoverOpen="openModal" @saved="updateLabList" @closeModal="openModal = false" />
-    <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
 </template>
 
 <script lang="ts">
@@ -56,7 +31,7 @@ import { checkmark, pulseOutline } from "ionicons/icons";
 import { ref } from "vue";
 import { icons } from "@/utils/svg";
 import ApexChart from "vue3-apexcharts";
-import List from "@/components/List.vue";
+import List from "@/apps/NCD/components/ConsultationPlan/Investigation/List.vue";
 import { ObservationService } from "@/services/observation_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useLabResultsStore } from "@/stores/LabResults";
@@ -72,7 +47,8 @@ import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
 import LabResults from "@/components/Lab/LabResults.vue";
 import { PatientLabResultService } from "@/services/patient_lab_result_service";
 import LabModal from "@/components/Lab/LabModal.vue";
-import LabViewResultsModal from "@/components/Lab/LabViewResultsModal.vue";
+import LabViewResultsModal from "@/apps/NCD/components/ConsultationPlan/Investigation/LabViewResultsModal.vue";
+import EnterResultModal from "@/apps/NCD/components/ConsultationPlan/Investigation/EnterResultModal.vue";
 import labOrderResults from "@/components/Lab/labOrderResults.vue";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
@@ -84,6 +60,17 @@ import dates from "@/utils/Date";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
+import DataTable from "datatables.net-vue3";
+import DataTablesCore from "datatables.net";
+import DataTablesResponsive from "datatables.net-responsive";
+import "datatables.net-buttons";
+import "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-buttons-dt";
+import "datatables.net-responsive";
+import "datatables.net-select";
+
+import 'datatables.net-buttons';
+import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 
 export default defineComponent({
     name: "Menu",
@@ -104,6 +91,7 @@ export default defineComponent({
         LabModal,
         LabViewResultsModal,
         SendToLabConfirmationModal,
+        DataTable,
     },
 
     computed: {
@@ -127,6 +115,19 @@ export default defineComponent({
     },
     data() {
         return {
+            tableData: [] as any,
+            options: {
+                responsive: true,
+                select: false,
+                layout: {
+                    topStart: "",
+                    topEnd: "search",
+                    bottomStart: "info",
+                    bottomEnd: "paging",
+                },
+            } as any,
+
+            header: ["Lab Test", "Specimen", "Accession Number", "Date", "Result", "Action"],
             iconsContent: icons,
             valueNumericArray: [] as any,
             obsDatetime: [] as any,
@@ -167,28 +168,41 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     async mounted() {
+        await this.setListData();
+        this.$nextTick(() => {
+            const table = (this.$refs.dataTable as any).dt;
+            table.columns.adjust().draw();
+            table.on("click", ".result-btn", (e: Event) => {
+                const data: any = (e.target as HTMLElement).getAttribute("data-id");
+                this.openResultsForm(JSON.parse(data));
+            });
+            table.on("click", ".view-btn", (e: Event) => {
+                const data: any = (e.target as HTMLElement).getAttribute("data-id");
+                this.viewLabOrder(JSON.parse(data));
+            });
+            table.on("click", ".delete-btn", (e: Event) => {
+                const data: any = (e.target as HTMLElement).getAttribute("data-id");
+                this.voidLabOrder(JSON.parse(data), e);
+            });
+        });
         this.orders = this.propOrders;
-        this.setListData(this.orders);
         this.service = new PatientLabService(this.demographics.patient_id);
         this.userRoles = await Service.getUserRoles();
     },
 
     watch: {
-        propOrders: {
-            handler() {
-                this.orders = this.propOrders;
-                this.setListData(this.orders);
-            },
-            deep: true,
-        },
         $route: {
-            handler() {
-                this.updateLabList();
+            async handler() {
+                await this.setListData();
             },
             deep: true,
         },
     },
     methods: {
+        openEnterResultModal() {
+            const dataToPass = { title: "name" };
+            createModal(EnterResultModal, { class: "" }, true, dataToPass);
+        },
         toggleSendToLabModal() {
             this.sendToLabModalOpen = !this.sendToLabModalOpen;
         },
@@ -225,9 +239,7 @@ export default defineComponent({
         },
         async updateLabList() {
             this.openModal = false;
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
-            this.setListData(this.orders);
-            this.updateInvestigationWizard();
+            this.setListData();
         },
         async updateInvestigationWizard() {
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
@@ -243,20 +255,22 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
-        async voidLabOrder(event: any) {
-            await this.service.voidOrder(event.id, "Mistake entry");
-            this.updateLabList();
+        async voidLabOrder(data: any, event: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${data.tests[0].name} ?`, event);
+            if (deleteConfirmed) {
+                await this.service.voidOrder(data.id, "Mistake entry");
+            }
+            await this.setListData();
         },
 
         handleIcon() {},
-        async openResultsForm(obs: any) {
-            console.log(obs.item.concept_id);
-            const testIndicators = await PatientLabResultService.getTestIndicatorsWithID(obs.item.concept_id);
+        async openResultsForm(test: any) {
+            const testIndicators = await PatientLabResultService.getTestIndicatorsWithID(test.concept_id);
 
             console.log({ testIndicators });
 
             const indicators = [
-                obs.item,
+                test,
                 {
                     validationStatus: "",
                     data: {
@@ -399,8 +413,8 @@ export default defineComponent({
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
         },
         async viewLabOrder(labResults: any) {
-            console.log("🚀 ~ openResultsForm ~ labResults:", labResults);
-            this.labResultsContent = labResults;
+            console.log("🚀 ~ viewLabOrder ~ labResults:", labResults.result);
+            this.labResultsContent = labResults.result;
             this.openResultsModal = true;
             //  this.orders = await OrderService.getOrders(this.demographics.patient_id);
             // const labf = createModal(LabResults);
@@ -414,16 +428,44 @@ export default defineComponent({
             else if (active == "weight") this.activeWeight = "_active";
             else if (active == "BMI") this.activeBMI = "_active";
         },
-        setListData(data: any) {
+        async setListData() {
+            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.tableData = this.generateListItems(this.orders, "order");
+            DataTable.use(DataTablesCore);
             const resultsTableSize = { containSize: 2.1, btnSize: 1 };
             this.listHeaderResults = this.generateListHeader(["Lab Test", "Specimen", "Accession Number", "Date", "Result"], resultsTableSize);
-            this.listHeaderOrders = this.generateListHeader(["Lab Test", "Specimen", "Accession Number", "Date", "Result"]);
+            this.listHeaderOrders = this.generateListHeader(["Lab Test", "Specimen", "Accession Number", "Date", "Result", "Actions"]);
 
-            this.listSeeMoreResults = this.generateListItems(data, "result", true, resultsTableSize);
-            this.listSeeLessResults = this.generateListItems(data, "result", false, resultsTableSize);
-            this.listSeeMoreOrders = this.generateListItems(data, "order", true);
-            this.listSeeLessOrders = this.generateListItems(data, "order", false);
-
+            // this.listSeeMoreResults = this.generateListItems(data, "result", true, resultsTableSize);
+            // this.listSeeLessResults = this.generateListItems(data, "result", false, resultsTableSize);
+            // this.listSeeMoreOrders = this.generateListItems(data, "order", true);
+            // this.listSeeLessOrders = this.generateListItems(data, "order", false);
+            this.listSeeLessOrders = [
+                {
+                    btn: ["enter_results", "attach", "print", "delete"],
+                    minHeight: "--min-height: 25px;",
+                    class: "",
+                    id: 25432,
+                    name: "FBC",
+                    display: ["FBC", "Blood", "", ""],
+                },
+                {
+                    btn: ["enter_results", "attach", "print", "delete"],
+                    minHeight: "--min-height: 25px;",
+                    class: "",
+                    id: 25433,
+                    name: "RBS",
+                    display: ["RBS", "Blood", "", ""],
+                },
+                {
+                    btn: ["enter_results", "attach", "print", "delete"],
+                    minHeight: "--min-height: 25px;",
+                    class: "",
+                    id: 25434,
+                    name: "HbA1c",
+                    display: ["HbA1c", "Blood", "", ""],
+                },
+            ];
             this.listResults = [this.listHeaderResults, ...this.listSeeLessResults];
             this.listOrders = [this.listHeaderOrders, ...this.listSeeLessOrders];
         },
@@ -439,46 +481,36 @@ export default defineComponent({
             };
         },
 
-        generateListItems(data: any, type: any, isMore: any, tableSize = {} as any) {
+        generateListItems(data: any, type: any) {
             let count = 0;
+            let result = null;
             if (data.length > 0) {
                 return data.flatMap((item: any) => {
                     return item.tests.flatMap((test: any) => {
-                        let result = null;
+                        console.log("🚀 ~ returnitem.tests.flatMap ~ test:", test);
+                        const enter_results = `<button class="btn btn-outline-success btn-sm result-btn" data-id='${JSON.stringify(test)}'>Enter Result</button> `;
+                        const attach = `<button class="btn btn-outline-secondary btn-sm attach-btn" data-id='${JSON.stringify(test)}'>${this.iconsContent.attach2}</button>`;
+                        const view = `<button class="btn btn-outline-secondary btn-sm view-btn" data-id='${JSON.stringify(test)}'>${this.iconsContent.view2}</button> `;
+                        let resultDisplay = enter_results + attach;
                         if (test?.result?.length == 1) {
-                            result = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
+                            resultDisplay = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
                         } else if (test?.result?.length > 1) {
                             result = test?.result;
+                            resultDisplay = view;
                         }
-                        if (result == "") console.log("🚀 ~ returnitem.tests.flatMap ~ result:", test);
-                        if ((type === "result" && result !== null) || (type === "order" && result === null)) {
-                            const listItem = {
-                                containSize: tableSize?.containSize,
-                                btnSize: tableSize?.btnSize,
-                                btn: type === "order" ? ["enter_results", "attach", "print", "delete"] : ["print", "delete"],
-                                minHeight: "--min-height: 25px;",
-                                class: "",
-                                id: item.order_id,
-                                name: test.name,
-                                item: test,
-                                display:
-                                    type == "order"
-                                        ? [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name]
-                                        : [
-                                              HisDate.toStandardHisFormat(item.order_date),
-                                              item.accession_number,
-                                              test.name,
-                                              item.specimen.name,
-                                              result,
-                                          ],
-                            };
 
-                            if (isMore || count < 2) {
-                                count++;
-                                return [listItem];
-                            }
-                        }
-                        return [];
+                        return [
+                            [
+                                test.name,
+                                item.specimen.name,
+                                item.accession_number,
+                                HisDate.toStandardHisFormat(item.order_date),
+                                resultDisplay,
+                                `<button class="btn btn-outline-secondary btn-sm" data-id='${JSON.stringify(item)}'>${this.iconsContent.print2}</button>
+                                <button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify(item)}'>${this.iconsContent.delete2}</button>
+                                `,
+                            ],
+                        ];
                     });
                 });
             } else {
@@ -498,7 +530,17 @@ export default defineComponent({
     },
 });
 </script>
+<style>
+@import "datatables.net-dt";
+@import "datatables.net-buttons-dt";
+@import "datatables.net-responsive-dt";
+@import "datatables.net-select-dt";
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+</style>
 <style scoped>
 .bmi_blood {
     font-size: 14px;
