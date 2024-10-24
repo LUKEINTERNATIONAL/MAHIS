@@ -59,6 +59,8 @@ import "datatables.net-select";
 
 import "datatables.net-buttons";
 import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import { LabOrder } from "@/services/lab_order";
+import { ConceptService } from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
@@ -112,6 +114,7 @@ export default defineComponent({
                     bottomStart: "info",
                     bottomEnd: "paging",
                 },
+                ordering: false,
                 buttons: [
                     {
                         text: " <b>+ Add other tests </b>",
@@ -180,6 +183,10 @@ export default defineComponent({
                 const data: any = (e.target as HTMLElement).getAttribute("data-id");
                 this.voidLabOrder(JSON.parse(data), e);
             });
+            table.on("click", ".order-btn", (e: Event) => {
+                const data: any = (e.target as HTMLElement).getAttribute("data-id");
+                this.saveTest(JSON.parse(data));
+            });
         });
         this.orders = this.propOrders;
         this.service = new PatientLabService(this.demographics.patient_id);
@@ -195,6 +202,19 @@ export default defineComponent({
         },
     },
     methods: {
+        async saveTest(data: any) {
+            const investigationInstance = new LabOrder();
+            await investigationInstance.postActivities(this.demographics.patient_id, [
+                {
+                    concept_id: await ConceptService.getConceptID(data.name, true),
+                    name: data.name,
+                    specimen: data.specimen,
+                    reason: "Routine",
+                    specimenConcept: await ConceptService.getConceptID(data.specimen, true),
+                },
+            ]);
+            await this.setListData();
+        },
         async openEnterResultModal() {
             const dataToPass = { title: "name" };
             await createModal(EnterResultModal, { class: "lab-results-modal" }, true, dataToPass);
@@ -427,7 +447,43 @@ export default defineComponent({
         },
         async setListData() {
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
-            this.tableData = this.generateListItems(this.orders, "order");
+            const tableData = this.generateListItems(this.orders, "order");
+            const predefineTests = [
+                [
+                    "FBS",
+                    "Blood",
+                    "",
+                    "",
+                    "",
+                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
+                        name: "FBS",
+                        specimen: "Blood",
+                    })}'>Order Test</button> `,
+                ],
+                [
+                    "HbA1c",
+                    "Blood",
+                    "",
+                    "",
+                    "",
+                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
+                        name: "HbA1c",
+                        specimen: "Blood",
+                    })}'>Order Test</button> `,
+                ],
+                [
+                    "RBS",
+                    "Blood",
+                    "",
+                    "",
+                    "",
+                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
+                        name: "RBS",
+                        specimen: "Blood",
+                    })}'>Order Test</button> `,
+                ],
+            ];
+            this.tableData = [...predefineTests, ...tableData];
             DataTable.use(DataTablesCore);
             const resultsTableSize = { containSize: 2.1, btnSize: 1 };
             this.listHeaderResults = this.generateListHeader(["Lab Test", "Specimen", "Accession Number", "Date", "Result"], resultsTableSize);
@@ -437,32 +493,7 @@ export default defineComponent({
             // this.listSeeLessResults = this.generateListItems(data, "result", false, resultsTableSize);
             // this.listSeeMoreOrders = this.generateListItems(data, "order", true);
             // this.listSeeLessOrders = this.generateListItems(data, "order", false);
-            this.listSeeLessOrders = [
-                {
-                    btn: ["enter_results", "attach", "print", "delete"],
-                    minHeight: "--min-height: 25px;",
-                    class: "",
-                    id: 25432,
-                    name: "FBC",
-                    display: ["FBC", "Blood", "", ""],
-                },
-                {
-                    btn: ["enter_results", "attach", "print", "delete"],
-                    minHeight: "--min-height: 25px;",
-                    class: "",
-                    id: 25433,
-                    name: "RBS",
-                    display: ["RBS", "Blood", "", ""],
-                },
-                {
-                    btn: ["enter_results", "attach", "print", "delete"],
-                    minHeight: "--min-height: 25px;",
-                    class: "",
-                    id: 25434,
-                    name: "HbA1c",
-                    display: ["HbA1c", "Blood", "", ""],
-                },
-            ];
+
             this.listResults = [this.listHeaderResults, ...this.listSeeLessResults];
             this.listOrders = [this.listHeaderOrders, ...this.listSeeLessOrders];
         },
