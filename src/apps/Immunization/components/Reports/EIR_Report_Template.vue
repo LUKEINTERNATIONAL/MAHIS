@@ -214,9 +214,13 @@ export default defineComponent({
       },
       async openPatientProfile(client_id: any) {
         const patientData = await PatientService.findByID(client_id);
-        const patientData2 = await PatientService.findByNpid(patientData.patient_identifiers[0].identifier);
-        this.setDemographics(patientData2[0]);
-        this.$router.push("patientProfile");
+        patientData.patient_identifiers.forEach(async (indnt: any) => {
+          if (indnt.identifier_type ==	3) {
+            const patientData2 = await PatientService.findByNpid(indnt.identifier);
+            this.setDemographics(patientData2[0]);
+            this.$router.push("patientProfile");
+          }
+        })
       }
     },
   });
