@@ -15,6 +15,11 @@
         @item-list-filtered="list_picker_prperties[0].listFilteredFN"
         @item-search-text="list_picker_prperties[0].searchTextFN"
     />
+
+    <div v-if="showOtherInput" class="custom-allergy-container">
+        <ion-input v-model="otherAllergy" placeholder="Please specify the allergy" fill="outline" class="custom-input"></ion-input>
+        <ion-button @click="addCustomAllergy" class="addCustomAllergyBtn"> Add Allergy </ion-button>
+    </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -66,6 +71,9 @@ const selectedAllergiesList = computed(() => store.selectedMedicalAllergiesList)
 const allergiesList = computed(() => store.medicalAllergiesList);
 const uniqueId = ref(generateUniqueId(8, "item-"));
 
+const otherAllergy = ref("");
+const showOtherInput = ref(false);
+
 const list_picker_prperties = [
     {
         multi_Selection: true as any,
@@ -93,11 +101,17 @@ function listUpdated1(data: any) {
         if (item.selected == true) {
             const allergyStore = store;
             allergyStore.setSelectedMedicalAllergiesList(item);
+
+            if (item.name === "Other") {
+                showOtherInput.value = true;
+            } else {
+                showOtherInput.value = false;
+            }
         }
     });
+
     setCommonAllergiesList();
 }
-
 async function FindAllegicDrugName(text: any) {
     const searchText = text;
     const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);
@@ -146,6 +160,23 @@ function generateUniqueId(length = 8, prefix = "") {
     // Append a timestamp or random number for uniqueness
     result += `-${Date.now()}`; // Append timestamp
     return result;
+}
+function addCustomAllergy() {
+    const customAllergy = otherAllergy.value.trim();
+    if (customAllergy) {
+        const newAllergy = {
+            name: customAllergy,
+            selected: true,
+        };
+
+        store.setMedicalAllergiesList([...allergiesList.value, newAllergy]);
+        store.setSelectedMedicalAllergiesList(newAllergy);
+
+        otherAllergy.value = "";
+        showOtherInput.value = false;
+    } else {
+        console.log("Allergy name cannot be empty");
+    }
 }
 </script>
 
@@ -274,5 +305,14 @@ ion-list.list-al {
 }
 .notes_p {
     margin: 4%;
+}
+.custom-allergy-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.custom-input {
+    max-width: 300px;
+    width: 100%;
 }
 </style>
