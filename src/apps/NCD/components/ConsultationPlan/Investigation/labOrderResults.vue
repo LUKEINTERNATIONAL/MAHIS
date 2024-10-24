@@ -10,6 +10,7 @@
             </DataTable>
         </div>
         <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
+        <LabModal :popoverOpen="openModal" @saved="closeModal" @closeModal="openModal = false" />
     </div>
 </template>
 
@@ -198,6 +199,10 @@ export default defineComponent({
         },
     },
     methods: {
+        async closeModal() {
+            this.openModal = false;
+            await this.setListData();
+        },
         async saveTest(data: any) {
             const investigationInstance = new LabOrder();
             await investigationInstance.postActivities(this.demographics.patient_id, [
@@ -402,6 +407,7 @@ export default defineComponent({
             lab.setLabResults(indicators);
             this.openModal = true;
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            console.log("🚀 ~ openResultsForm ~ this.orders:", this.orders);
         },
         async viewLabOrder(labResults: any) {
             this.labResultsContent = labResults;
