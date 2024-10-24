@@ -163,9 +163,9 @@ export default defineComponent({
 
     async mounted() {
         this.workerApi = workerData.workerApi;
-        await workerData.postData("SET_OFFLINE_PROGRAMS");
         const auth = new AuthService();
         await auth.loadConfig();
+        await workerData.postData("SET_OFFLINE_PROGRAMS");
     },
     methods: {
         async getPrograms() {
