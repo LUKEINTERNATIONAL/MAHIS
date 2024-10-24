@@ -325,7 +325,7 @@ export default defineComponent({
         async scanCode() {
             const dataScanned: any = await scannedData();
             const dataExtracted: any = await extractDetails(dataScanned);
-            if (await this.searchByNpid(dataScanned + "$")) {
+            if (await this.searchByNpid(dataScanned)) {
                 return;
             } else if (dataExtracted && (await this.searchByMWNationalID(dataExtracted?.idNumber))) {
                 return;
@@ -391,19 +391,17 @@ export default defineComponent({
             };
         },
         async searchByNpid(searchText: any) {
-            if (/.+\$$/i.test(`${searchText}`)) {
-                searchText = `${searchText || ""}`.replace(/\$/gi, "");
-                const idData = await PatientService.findByNpid(searchText as any);
-                if (idData && idData.length > 0) {
-                    this.patients.push(...idData);
-                    if (this.patients.length == 1) {
-                        this.openNewPage("patientProfile", this.patients[0]);
-                        this.popoverOpen = false;
-                    }
-                    return true;
-                } else {
-                    return false;
+            const idData = await PatientService.findByNpid(searchText as any);
+            if (idData && idData.length > 0) {
+                this.patients = [];
+                this.patients.push(...idData);
+                if (this.patients.length == 1) {
+                    this.openNewPage("patientProfile", this.patients[0]);
+                    this.popoverOpen = false;
                 }
+                return true;
+            } else {
+                return false;
             }
         },
         async searchByOtherIds(searchText: any) {
