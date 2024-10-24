@@ -219,7 +219,6 @@ export default defineComponent({
             const patientData2 = await PatientService.findByNpid(indnt.identifier);
             this.setDemographics(patientData2[0]);
             this.$router.push("patientProfile");
-            return
           }
         })
       }
