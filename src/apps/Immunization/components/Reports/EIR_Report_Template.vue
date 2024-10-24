@@ -213,8 +213,6 @@ export default defineComponent({
         createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass, { 'view-client': handleModalAction });
       },
       async openPatientProfile(client_id: any) {
-
-        console.log("openPatientProfile")
         const patientData = await PatientService.findByID(client_id);
         patientData.patient_identifiers.forEach(async (indnt: any) => {
           if (indnt.identifier_type ==	3) {
