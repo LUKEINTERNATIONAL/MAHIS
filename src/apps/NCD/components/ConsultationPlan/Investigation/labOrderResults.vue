@@ -9,19 +9,8 @@
                 </thead>
             </DataTable>
         </div>
-        <div>
-        <ion-row  style="margin-top: 10px">
-                <DynamicButton
-                    fill="clear"
-                    :icon="iconsContent.plus"
-                    iconSlot="icon-only"
-                    @click="openEnterResultModal()"
-                    name="Add other test"
-                />
-            </ion-row>
-        </div>
+        <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
     </div>
-
 </template>
 
 <script lang="ts">
@@ -68,7 +57,7 @@ import "datatables.net-buttons-dt";
 import "datatables.net-responsive";
 import "datatables.net-select";
 
-import 'datatables.net-buttons';
+import "datatables.net-buttons";
 import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 
 export default defineComponent({
@@ -118,11 +107,20 @@ export default defineComponent({
                 responsive: true,
                 select: false,
                 layout: {
-                    topStart: "",
+                    topStart: "buttons",
                     topEnd: "search",
                     bottomStart: "info",
                     bottomEnd: "paging",
                 },
+                buttons: [
+                    {
+                        text: " <b>+ Add other tests </b>",
+                        className: "add-test text-white",
+                        action: async () => {
+                            await this.openEnterResultModal();
+                        },
+                    },
+                ],
             } as any,
 
             header: ["Lab Test", "Specimen", "Accession Number", "Date", "Result", "Action"],
@@ -197,9 +195,10 @@ export default defineComponent({
         },
     },
     methods: {
-        openEnterResultModal() {
+        async openEnterResultModal() {
             const dataToPass = { title: "name" };
-            createModal(EnterResultModal, { class: "" }, true, dataToPass);
+            await createModal(EnterResultModal, { class: "lab-results-modal" }, true, dataToPass);
+            await this.setListData();
         },
         toggleSendToLabModal() {
             this.sendToLabModalOpen = !this.sendToLabModalOpen;
@@ -412,7 +411,7 @@ export default defineComponent({
         },
         async viewLabOrder(labResults: any) {
             console.log("🚀 ~ viewLabOrder ~ labResults:", labResults.result);
-            this.labResultsContent = labResults.result;
+            this.labResultsContent = labResults;
             this.openResultsModal = true;
             //  this.orders = await OrderService.getOrders(this.demographics.patient_id);
             // const labf = createModal(LabResults);
@@ -486,9 +485,15 @@ export default defineComponent({
                 return data.flatMap((item: any) => {
                     return item.tests.flatMap((test: any) => {
                         console.log("🚀 ~ returnitem.tests.flatMap ~ test:", test);
-                        const enter_results = `<button class="btn btn-outline-success btn-sm result-btn" data-id='${JSON.stringify(test)}'>Enter Result</button> `;
-                        const attach = `<button class="btn btn-outline-secondary btn-sm attach-btn" data-id='${JSON.stringify(test)}'>${this.iconsContent.attach2}</button>`;
-                        const view = `<button class="btn btn-outline-secondary btn-sm view-btn" data-id='${JSON.stringify(test)}'>${this.iconsContent.view2}</button> `;
+                        const enter_results = `<button class="btn btn-outline-success btn-sm result-btn" data-id='${JSON.stringify(
+                            test
+                        )}'>Enter Result</button> `;
+                        const attach = `<button class="btn btn-outline-secondary btn-sm attach-btn" data-id='${JSON.stringify(test)}'>${
+                            this.iconsContent.attach2
+                        }</button>`;
+                        const view = `<button class="btn btn-outline-secondary btn-sm view-btn" data-id='${JSON.stringify(test)}'>${
+                            this.iconsContent.view2
+                        }</button> `;
                         let resultDisplay = enter_results + attach;
                         if (test?.result?.length == 1) {
                             resultDisplay = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
@@ -504,8 +509,12 @@ export default defineComponent({
                                 item.accession_number,
                                 HisDate.toStandardHisFormat(item.order_date),
                                 resultDisplay,
-                                `<button class="btn btn-outline-secondary btn-sm" data-id='${JSON.stringify(item)}'>${this.iconsContent.print2}</button>
-                                <button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify(item)}'>${this.iconsContent.delete2}</button>
+                                `<button class="btn btn-outline-secondary btn-sm" data-id='${JSON.stringify(item)}'>${
+                                    this.iconsContent.print2
+                                }</button>
+                                <button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify(item)}'>${
+                                    this.iconsContent.delete2
+                                }</button>
                                 `,
                             ],
                         ];
@@ -537,6 +546,15 @@ export default defineComponent({
 .table-responsive {
     width: 100%;
     overflow-x: auto;
+}
+div.dt-buttons > .dt-button:first-child {
+    border: 1px solid #fff;
+    background: #046c04;
+    border-radius: 5px;
+}
+div.dt-buttons > .dt-button:hover:not(.disabled) {
+    background: #188907 !important;
+    border: 1px solid #fff !important;
 }
 </style>
 <style scoped>
