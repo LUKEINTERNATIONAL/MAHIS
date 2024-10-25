@@ -20,7 +20,6 @@
                 :hasPatientsWaitingForLab="hasPatientsWaitingForLab"
             />
         </ion-content>
-<!--        <BasicFooter @finishBtn="saveData()" v-if="userRole != 'Lab'" />-->
     </ion-page>
 </template>
 
@@ -140,9 +139,16 @@ export default defineComponent({
             hasPatientsWaitingForLab: false,
             iconsContent: icons,
             isLoading: false,
+            patients: [] as any,
+
 
         };
     },
+  props:{
+    list: {
+      default: "" as any,
+    },
+  },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(usePregnancyStore, ["pregnancy"]),
@@ -155,17 +161,15 @@ export default defineComponent({
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useLevelOfConsciousnessStore, ["adult", "minor"]),
         ...mapState(useGeneralStore, ["OPDActivities"]),
+        ...mapState(usePatientList, ["patientsWaitingForVitals", "patientsWaitingForConsultation", "patientsWaitingForLab", "patientsWaitingForDispensation", "counter",
+      ]),
     },
     async created() {
         await this.getData();
     },
     async mounted() {
       await this.fetchPatientLabStageData();
-        // if (this.activities.length == 0) {
-        //     this.$router.push("patientProfile");
-        // }
-
-        this.markWizard();
+      this.markWizard();
     },
     watch: {
         vitals: {
@@ -264,6 +268,16 @@ export default defineComponent({
             this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.demographics.patient_id);
           }
         }
+      },
+      setList() {
+        const listMapping: Record<string, any[]> = {
+          VITALS: this.patientsWaitingForVitals,
+          CONSULTATION: this.patientsWaitingForConsultation,
+          LAB: this.patientsWaitingForLab,
+          DISPENSATION: this.patientsWaitingForDispensation,
+        };
+
+        this.patients = listMapping[this.list] || [];
       },
 
       async getData() {

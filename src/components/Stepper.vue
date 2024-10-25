@@ -22,12 +22,10 @@
         </ion-card-content>
       </ion-card>
     </ion-col>
-
     <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8">
       <div class="back_profile">
         <DynamicButton :name="backBtn" iconSlot="start" fill="clear" :icon="chevronBackOutline" @click="openBackController()" />
       </div>
-
       <div class="accordion_group">
         <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="currentOpenStepper">
           <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
@@ -49,11 +47,10 @@
                 <div>
                   <ion-button
                       class="next-button"
-                      :disabled="userRole !== 'Lab' && hasPatientsWaitingForLab && index >= 1"
                       @click="nextAccordion(index)"
                   >
                     <ion-icon :icon="index < StepperData.length - 1 ? chevronForward() : checkmark" slot="start"></ion-icon>
-                    {{ index < StepperData.length - 1 ? 'Next' : 'Finish and Save' }}
+                    {{ index < StepperData.length - 1 ? 'Next' : 'Finish' }}
                   </ion-button>
                 </div>
               </div>
