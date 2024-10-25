@@ -32,7 +32,7 @@ export async function saveVaccineAdministeredDrugs() {
     if (!isEmpty(store.getAdministeredVaccines())) {
         try {
             const drugOrders = mapToOrders();
-            const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), userId);
+            const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), '' as any);
             const encounter = await prescriptionService.createEncounter();
             if (!encounter) return toastWarning("Unable to create immunization encounter");
             const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId);
