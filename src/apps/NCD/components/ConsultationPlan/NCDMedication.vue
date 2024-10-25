@@ -57,6 +57,26 @@
                   placeholder="0"
                 ></ion-input>
               </td>
+              <td>
+                <VueMultiselect
+                  :disabled="!isActive(med.name)"
+                  v-model="frequency_seq"
+                  @update:model-value="updateFrequencySelection($event)"
+                  :multiple="false"
+                  :taggable="false"
+                  :hide-selected="false"
+                  :close-on-select="true"
+                  openDirection="bottom"
+                  tag-placeholder="select frequency"
+                  placeholder="select frequency"
+                  selectLabel=""
+                  label="label"
+                  :searchable="true"
+                  @search-change="$emit('search-change', $event)"
+                  track-by="label"
+                  :options="frequency_options"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -71,17 +91,19 @@ import {
   IonCard, IonCardHeader, IonCardTitle, IonCardContent,
   IonInput, IonIcon, IonCheckbox
 } from '@ionic/vue';
+import VueMultiselect from "vue-multiselect";
 import { 
   medkit, sunny, partlySunny, moon
 } from 'ionicons/icons';
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import { mapState } from "pinia";
 
 export default defineComponent({
   name: 'PrescriptionTable',
   components: {
     IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-    IonInput, IonIcon, IonCheckbox
+    IonInput, IonIcon, IonCheckbox, VueMultiselect
   },
   setup() {
     const treatmentPlanStore = useTreatmentPlanStore();
@@ -104,6 +126,8 @@ export default defineComponent({
       { id: 10, name: 'Statin', category: 'Other' },
       { id: 11, name: 'Other', category: 'Other' },
     ]);
+
+    const frequency_options = ref(DRUG_FREQUENCIES)
 
     const isActive = (medicationName: string) => {
       return selected_NCD_Medication_List.value.some((med: any) => med.medication === medicationName);
@@ -152,6 +176,10 @@ export default defineComponent({
       }
     };
 
+    const updateFrequencySelection = (data: any) => {
+
+    }
+
     return {
       medications,
       isActive,
@@ -163,6 +191,9 @@ export default defineComponent({
       partlySunny,
       moon,
       selected_NCD_Medication_List,
+      frequency_seq: "" as string,
+      frequency_options,
+      updateFrequencySelection,
     };
   }
 });

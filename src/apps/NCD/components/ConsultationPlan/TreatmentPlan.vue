@@ -98,7 +98,6 @@ import {
 } from "@ionic/vue";
 
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
-import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import NCDMedication from "./NCDMedication.vue"
 import NonPharmalogicalTherapyAndOtherNotes from "./NonPharmalogicalTherapyAndOtherNotes.vue"
 import { DrugService } from "@/services/drug_service";
