@@ -14,7 +14,7 @@
             <div class="modal_wrapper">
                 <div class="center text_12">
                     <ion-row>
-                        <ion-col size="4" v-for="(item1, index1) in content" :key="index1">
+                        <ion-col size="4" v-for="(item1, index1) in content.result" :key="index1">
                             <ion-row>
                                 <ion-col size="8">{{ item1.indicator.name }}</ion-col>
                                 <ion-col class="bold" size="0.5">:</ion-col>

@@ -9,19 +9,9 @@
                 </thead>
             </DataTable>
         </div>
-        <div>
-        <ion-row  style="margin-top: 10px">
-                <DynamicButton
-                    fill="clear"
-                    :icon="iconsContent.plus"
-                    iconSlot="icon-only"
-                    @click="openEnterResultModal()"
-                    name="Add other test"
-                />
-            </ion-row>
-        </div>
+        <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
+        <LabModal :popoverOpen="openModal" @saved="closeModal" @closeModal="openModal = false" />
     </div>
-
 </template>
 
 <script lang="ts">
@@ -68,8 +58,10 @@ import "datatables.net-buttons-dt";
 import "datatables.net-responsive";
 import "datatables.net-select";
 
-import 'datatables.net-buttons';
+import "datatables.net-buttons";
 import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import { LabOrder } from "@/services/lab_order";
+import { ConceptService } from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
@@ -118,11 +110,21 @@ export default defineComponent({
                 responsive: true,
                 select: false,
                 layout: {
-                    topStart: "",
+                    topStart: "buttons",
                     topEnd: "search",
                     bottomStart: "info",
                     bottomEnd: "paging",
                 },
+                ordering: false,
+                buttons: [
+                    {
+                        text: " <b>+ Add other tests </b>",
+                        className: "add-test text-white",
+                        action: async () => {
+                            await this.openEnterResultModal();
+                        },
+                    },
+                ],
             } as any,
 
             header: ["Lab Test", "Specimen", "Accession Number", "Date", "Result", "Action"],
@@ -144,11 +146,6 @@ export default defineComponent({
             listOrders: [] as any,
             listResults: [] as any,
             hasPatientsWaitingForLab: false,
-            listSeeMoreOrders: [] as any,
-            listSeeLessOrders: [] as any,
-            listSeeMoreResults: [] as any,
-            listSeeLessResults: [] as any,
-            listHeaderResults: "" as any,
             labResultsContent: "" as any,
             listHeaderOrders: "" as any,
             service: "" as any,
@@ -166,6 +163,7 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     async mounted() {
+        await this.updateInvestigationWizard();
         await this.setListData();
         this.$nextTick(() => {
             const table = (this.$refs.dataTable as any).dt;
@@ -182,6 +180,10 @@ export default defineComponent({
                 const data: any = (e.target as HTMLElement).getAttribute("data-id");
                 this.voidLabOrder(JSON.parse(data), e);
             });
+            table.on("click", ".order-btn", (e: Event) => {
+                const data: any = (e.target as HTMLElement).getAttribute("data-id");
+                this.saveTest(JSON.parse(data));
+            });
         });
         this.orders = this.propOrders;
         this.service = new PatientLabService(this.demographics.patient_id);
@@ -197,9 +199,28 @@ export default defineComponent({
         },
     },
     methods: {
-        openEnterResultModal() {
+        async closeModal() {
+            this.openModal = false;
+            await this.setListData();
+        },
+        async saveTest(data: any) {
+            const investigationInstance = new LabOrder();
+            await investigationInstance.postActivities(this.demographics.patient_id, [
+                {
+                    concept_id: await ConceptService.getConceptID(data.name, true),
+                    name: data.name,
+                    specimen: data.specimen,
+                    reason: "Routine",
+                    specimenConcept: await ConceptService.getConceptID(data.specimen, true),
+                },
+            ]);
+            toastSuccess("Successfully saved");
+            await this.setListData();
+        },
+        async openEnterResultModal() {
             const dataToPass = { title: "name" };
-            createModal(EnterResultModal, { class: "" }, true, dataToPass);
+            await createModal(EnterResultModal, { class: "lab-results-modal" }, true, dataToPass);
+            await this.setListData();
         },
         toggleSendToLabModal() {
             this.sendToLabModalOpen = !this.sendToLabModalOpen;
@@ -216,29 +237,7 @@ export default defineComponent({
                 }
             }
         },
-        async handleSendToLabYes() {
-            const location = await getUserLocation();
-            const locationId = location ? location.location_id : null;
-            if (!locationId) {
-                toastDanger("Location ID could not be found. Please check your settings.");
-                return;
-            }
-            await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "LAB", locationId);
-            await usePatientList().refresh(locationId);
-            toastSuccess("Lab orders submitted to the lab successfully");
-            await this.fetchPatientLabStageData();
-            this.closeSendToLabModal();
-        },
-        async handleSendToLabNo() {
-            this.toggleSendToLabModal();
-        },
-        closeSendToLabModal() {
-            this.sendToLabModalOpen = false;
-        },
-        async updateLabList() {
-            this.openModal = false;
-            this.setListData();
-        },
+
         async updateInvestigationWizard() {
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
             const filteredArray = await this.orders.filter((obj: any) => {
@@ -261,7 +260,6 @@ export default defineComponent({
             await this.setListData();
         },
 
-        handleIcon() {},
         async openResultsForm(test: any) {
             const testIndicators = await PatientLabResultService.getTestIndicatorsWithID(test.concept_id);
 
@@ -409,74 +407,64 @@ export default defineComponent({
             lab.setLabResults(indicators);
             this.openModal = true;
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            console.log("🚀 ~ openResultsForm ~ this.orders:", this.orders);
         },
         async viewLabOrder(labResults: any) {
-            console.log("🚀 ~ viewLabOrder ~ labResults:", labResults.result);
-            this.labResultsContent = labResults.result;
+            this.labResultsContent = labResults;
             this.openResultsModal = true;
-            //  this.orders = await OrderService.getOrders(this.demographics.patient_id);
-            // const labf = createModal(LabResults);
-            // console.log("🚀 ~ openResultsForm ~ labf:", labf);
-        },
-        setActivClass(active: any) {
-            this.activeHeight = "";
-            this.activeBMI = "";
-            this.activeWeight = "";
-            if (active == "height") this.activeHeight = "_active";
-            else if (active == "weight") this.activeWeight = "_active";
-            else if (active == "BMI") this.activeBMI = "_active";
         },
         async setListData() {
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
-            this.tableData = this.generateListItems(this.orders, "order");
-            DataTable.use(DataTablesCore);
-            const resultsTableSize = { containSize: 2.1, btnSize: 1 };
-            this.listHeaderResults = this.generateListHeader(["Lab Test", "Specimen", "Accession Number", "Date", "Result"], resultsTableSize);
-            this.listHeaderOrders = this.generateListHeader(["Lab Test", "Specimen", "Accession Number", "Date", "Result", "Actions"]);
-
-            // this.listSeeMoreResults = this.generateListItems(data, "result", true, resultsTableSize);
-            // this.listSeeLessResults = this.generateListItems(data, "result", false, resultsTableSize);
-            // this.listSeeMoreOrders = this.generateListItems(data, "order", true);
-            // this.listSeeLessOrders = this.generateListItems(data, "order", false);
-            this.listSeeLessOrders = [
-                {
-                    btn: ["enter_results", "attach", "print", "delete"],
-                    minHeight: "--min-height: 25px;",
-                    class: "",
-                    id: 25432,
-                    name: "FBC",
-                    display: ["FBC", "Blood", "", ""],
-                },
-                {
-                    btn: ["enter_results", "attach", "print", "delete"],
-                    minHeight: "--min-height: 25px;",
-                    class: "",
-                    id: 25433,
-                    name: "RBS",
-                    display: ["RBS", "Blood", "", ""],
-                },
-                {
-                    btn: ["enter_results", "attach", "print", "delete"],
-                    minHeight: "--min-height: 25px;",
-                    class: "",
-                    id: 25434,
-                    name: "HbA1c",
-                    display: ["HbA1c", "Blood", "", ""],
-                },
+            const tableData: any = this.generateListItems(this.orders, "order");
+            const predefineTests = [
+                [
+                    "FBS",
+                    "Blood",
+                    "",
+                    "",
+                    "",
+                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
+                        name: "FBS",
+                        specimen: "Blood",
+                    })}'>Order Test</button> `,
+                ],
+                [
+                    "HbA1c",
+                    "Blood",
+                    "",
+                    "",
+                    "",
+                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
+                        name: "HbA1c",
+                        specimen: "Blood",
+                    })}'>Order Test</button> `,
+                ],
+                [
+                    "RBS",
+                    "Blood",
+                    "",
+                    "",
+                    "",
+                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
+                        name: "RBS",
+                        specimen: "Blood",
+                    })}'>Order Test</button> `,
+                ],
             ];
-            this.listResults = [this.listHeaderResults, ...this.listSeeLessResults];
-            this.listOrders = [this.listHeaderOrders, ...this.listSeeLessOrders];
-        },
+            const uniquePredefineTests = predefineTests.filter((predefTest) => {
+                return !tableData.some((tableRow: any) => tableRow[0] === predefTest[0]);
+            });
 
-        generateListHeader(display: any, size = {} as any) {
-            return {
-                containSize: size?.containSize,
-                btnSize: size?.btnSize,
-                class: "",
-                header: true,
-                minHeight: "--min-height: 25px;",
-                display,
-            };
+            const duplicateTests = tableData.filter((tableRow: any) => {
+                return predefineTests.some((predefTest) => predefTest[0] === tableRow[0]);
+            });
+
+            const uniqueTableDataTests = tableData.filter((predefTest: any) => {
+                return !duplicateTests.some((tableRow: any) => tableRow[0] === predefTest[0]);
+            });
+            this.tableData = [...duplicateTests, ...uniquePredefineTests, ...uniqueTableDataTests];
+            await this.updateInvestigationWizard();
+            DataTable.use(DataTablesCore);
         },
 
         generateListItems(data: any, type: any) {
@@ -485,10 +473,15 @@ export default defineComponent({
             if (data.length > 0) {
                 return data.flatMap((item: any) => {
                     return item.tests.flatMap((test: any) => {
-                        console.log("🚀 ~ returnitem.tests.flatMap ~ test:", test);
-                        const enter_results = `<button class="btn btn-outline-success btn-sm result-btn" data-id='${JSON.stringify(test)}'>Enter Result</button> `;
-                        const attach = `<button class="btn btn-outline-secondary btn-sm attach-btn" data-id='${JSON.stringify(test)}'>${this.iconsContent.attach2}</button>`;
-                        const view = `<button class="btn btn-outline-secondary btn-sm view-btn" data-id='${JSON.stringify(test)}'>${this.iconsContent.view2}</button> `;
+                        const enter_results = `<button class="btn btn-outline-success btn-sm result-btn" data-id='${JSON.stringify(
+                            test
+                        )}'>Enter Result</button> `;
+                        const attach = `<button class="btn btn-outline-secondary btn-sm attach-btn" data-id='${JSON.stringify(test)}'>${
+                            this.iconsContent.attach2
+                        }</button>`;
+                        const view = `<button class="btn btn-outline-secondary btn-sm view-btn" data-id='${JSON.stringify(test)}'>${
+                            this.iconsContent.view2
+                        }</button> `;
                         let resultDisplay = enter_results + attach;
                         if (test?.result?.length == 1) {
                             resultDisplay = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
@@ -504,8 +497,12 @@ export default defineComponent({
                                 item.accession_number,
                                 HisDate.toStandardHisFormat(item.order_date),
                                 resultDisplay,
-                                `<button class="btn btn-outline-secondary btn-sm" data-id='${JSON.stringify(item)}'>${this.iconsContent.print2}</button>
-                                <button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify(item)}'>${this.iconsContent.delete2}</button>
+                                `<button class="btn btn-outline-secondary btn-sm" data-id='${JSON.stringify(item)}'>${
+                                    this.iconsContent.print2
+                                }</button>
+                                <button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify(item)}'>${
+                                    this.iconsContent.delete2
+                                }</button>
                                 `,
                             ],
                         ];
@@ -514,16 +511,6 @@ export default defineComponent({
             } else {
                 return [];
             }
-        },
-        seeOrderStatus(status: any) {
-            if (status == "more") {
-                this.listResults = [this.listHeaderResults, ...this.listSeeMoreResults];
-            } else if (status == "less") this.listResults = [this.listHeaderResults, ...this.listSeeLessResults];
-        },
-        seeResultsStatus(status: any) {
-            if (status == "more") {
-                this.listOrders = [this.listHeaderOrders, ...this.listSeeMoreOrders];
-            } else if (status == "less") this.listOrders = [this.listHeaderOrders, ...this.listSeeLessOrders];
         },
     },
 });
@@ -537,6 +524,15 @@ export default defineComponent({
 .table-responsive {
     width: 100%;
     overflow-x: auto;
+}
+div.dt-buttons > .dt-button:first-child {
+    border: 1px solid #fff;
+    background: #046c04;
+    border-radius: 5px;
+}
+div.dt-buttons > .dt-button:hover:not(.disabled) {
+    background: #188907 !important;
+    border: 1px solid #fff !important;
 }
 </style>
 <style scoped>

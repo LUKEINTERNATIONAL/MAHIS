@@ -343,7 +343,7 @@ ion-list.list-al {
 .ion-lblCls {
     font-weight: bold;
     font-size: 15px;
-    line-height: 3;
+    line-height: 5;
     border-radius: 10%;
     padding: 4px;
 }

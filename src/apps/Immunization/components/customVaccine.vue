@@ -144,27 +144,32 @@ export default defineComponent({
             }
         },
         async openAdministerVaccineModal(data: any) {
+            const modalElement = document.querySelector('.pr_o');
+            if (modalElement) {
+                return;
+            }
+
             const store = useAdministerVaccineStore();
             store.setCurrentSelectedDrug(data)
             const stockService = new StockService();
             const data_ = await stockService.getDrugBatches(data.drug_id)
             store.setLotNumberData(data_)
-
+            
             if(data_.length == 0) {
                 if (this.checkIfAdminstredAndAskToVoid() == false) {
                     if(checkDrugName(data) == false) {
-                        createModal(alert, { class: "otherVitalsModal" })
+                        createModal(alert, { class: "otherVitalsModal pr_o" })
                     }
-
+                    
                     if (checkDrugName(data) == true) {
-                        createModal(administerVaccineModal, { class: "otherVitalsModal" });
-                    } 
+                        createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
+                    }
                 }
             }
-
+            
             if(data_.length > 0) {
                 if (this.checkIfAdminstredAndAskToVoid() == false) {
-                    createModal(administerVaccineModal, { class: "otherVitalsModal" });
+                    createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
                 }
             }
         },

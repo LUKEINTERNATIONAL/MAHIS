@@ -1,23 +1,26 @@
 <template>
-    <div class="">
-        <div>
-            <div class="" slot="content" style="margin-bottom: 125px; margin-top: 2px">
-                <span>
-                    <basic-form
-                        :contentData="investigations"
-                        @update:selected="handleInputData"
-                        @update:inputValue="handleInputData"
-                        @clicked:button="addNewRow"
-                    >
-                    </basic-form>
-                </span>
+    <ion-header style="display: flex; justify-content: space-between">
+        <ion-title class="modalTitle">Add Lab Test</ion-title>
+        <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="iconsContent.cancel"></ion-icon>
+    </ion-header>
+    <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
+        <div class="modal_wrapper">
+            <div class="">
+                <basic-form :contentData="investigations" @update:selected="handleInputData" @update:inputValue="handleInputData"> </basic-form>
             </div>
         </div>
-    </div>
+    </ion-content>
+    <ion-footer collapse="fade" class="ion-no-border">
+        <ion-row>
+            <ion-col>
+                <DynamicButton @click="addNewRow()" name="Save" fill="solid" style="float: right; margin: 2%; width: 130px" />
+            </ion-col>
+        </ion-row>
+    </ion-footer>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover, modalController } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import { build, checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
@@ -128,6 +131,9 @@ export default defineComponent({
     },
 
     methods: {
+        dismiss() {
+            modalController.dismiss();
+        },
         setSegmentContent(name: any) {
             this.segmentContent = name;
         },
@@ -185,6 +191,7 @@ export default defineComponent({
                 this.addItemButton = true;
             }
             this.updateInvestigationWizard();
+            this.dismiss();
         },
         isNameInData(name: any, dataArray: any) {
             for (let item of dataArray) {
