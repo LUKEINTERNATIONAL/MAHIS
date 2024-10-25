@@ -71,7 +71,6 @@
                   placeholder="select frequency"
                   selectLabel=""
                   label="label"
-                  :searchable="true"
                   @search-change="$emit('search-change', $event)"
                   track-by="label"
                   :options="frequency_options"
