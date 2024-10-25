@@ -1,8 +1,6 @@
 <template>
     <ion-label>
-        <span style="font-size: 16px; font-weight: 600">
-            Allergies (Medication, Healthcare items, Environment and Food)
-        </span>
+        <span style="font-size: 16px; font-weight: 600"> Allergies (Medication, Healthcare items, Environment and Food) </span>
     </ion-label>
     <ListPicker
         :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -17,13 +15,18 @@
         @item-list-filtered="list_picker_prperties[0].listFilteredFN"
         @item-search-text="list_picker_prperties[0].searchTextFN"
     />
+
+    <div v-if="showOtherInput" class="custom-allergy-container">
+        <ion-input v-model="otherAllergy" placeholder="Please specify the allergy" fill="outline" class="custom-input"></ion-input>
+        <ion-button @click="addCustomAllergy" class="addCustomAllergyBtn"> Add Allergy </ion-button>
+    </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
     watch: {},
     name: "AllergiesComponent",
-})
+});
 </script>
 
 <script setup lang="ts">
@@ -31,49 +34,57 @@ import {
     IonLabel,
 } from "@ionic/vue"
 import { useAllegyStore, searchHealthcareEquipmentAllergies, concatenateArrays } from "@/apps/OPD/stores/AllergyStore";
-import { ConceptService } from "@/services/concept_service"
-import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { ConceptService } from "@/services/concept_service";
+import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { ConceptName } from "@/interfaces/conceptName";
-import ListPicker from "../../../../../components/ListPicker.vue"
+import ListPicker from "../../../../../components/ListPicker.vue";
 
-const store = useAllegyStore()
-const selectedAllergiesList = computed(() => store.selectedMedicalAllergiesList) as any
-const allergiesList = computed(() => store.medicalAllergiesList)
-const uniqueId = ref(generateUniqueId(8, 'item-'))
+const store = useAllegyStore();
+const selectedAllergiesList = computed(() => store.selectedMedicalAllergiesList) as any;
+const allergiesList = computed(() => store.medicalAllergiesList);
+const uniqueId = ref(generateUniqueId(8, "item-"));
+
+const otherAllergy = ref("");
+const showOtherInput = ref(false);
 
 const list_picker_prperties = [
     {
         multi_Selection: true as any,
         show_list_label: true as any,
-        unqueId:  uniqueId.value as any,
-        name_of_list: 'Add/Remove allegies' as any,
-        placeHolder: 'Search for an allegy' as any,
+        unqueId: uniqueId.value as any,
+        name_of_list: "Add/Remove allegies" as any,
+        placeHolder: "Search for an allegy" as any,
         items: [],
         listUpdatedFN: listUpdated1,
-        listFilteredFN: ()=>{},
+        listFilteredFN: () => {},
         searchTextFN: FindAllegicDrugName,
         use_internal_filter: true as any,
         show_error: ref(false),
-        error_message: 'please select a User',
+        error_message: "please select a User",
         disabled: ref(false) as any,
     },
-]
+];
 
 onMounted(async () => {
-    // 
-})
+    //
+});
 
 function listUpdated1(data: any) {
     data.forEach((item: any) => {
         if (item.selected == true) {
-            const allergyStore = store
-            allergyStore.setSelectedMedicalAllergiesList(item)
+            const allergyStore = store;
+            allergyStore.setSelectedMedicalAllergiesList(item);
+
+            if (item.name === "Other") {
+                showOtherInput.value = true;
+            } else {
+                showOtherInput.value = false;
+            }
         }
-    })
-    setCommonAllergiesList()
+    });
+
+    setCommonAllergiesList();
 }
-
-
 async function FindAllegicDrugName(text: any) {
     const searchText = text;
     const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);
@@ -83,17 +94,17 @@ async function FindAllegicDrugName(text: any) {
         other: drug,
     }));
 
-    const temp_data_1 = searchHealthcareEquipmentAllergies(searchText)
-    const temp_data_2 = concatenateArrays(temp_data_1, drugs as any)
-    const allergyStore = store
-    allergyStore.setMedicalAllergiesList(temp_data_2)
-    setCommonAllergiesList()
+    const temp_data_1 = searchHealthcareEquipmentAllergies(searchText);
+    const temp_data_2 = concatenateArrays(temp_data_1, drugs as any);
+    const allergyStore = store;
+    allergyStore.setMedicalAllergiesList(temp_data_2);
+    setCommonAllergiesList();
 }
 
 function setCommonAllergiesList() {
-    const temp_data_2 = allergiesList.value
+    const temp_data_2 = allergiesList.value;
     selectedAllergiesList.value.forEach((selected_alle: any) => {
-    let found = false;
+        let found = false;
         temp_data_2.forEach((alle_dat_itm: any, index: number) => {
             if (alle_dat_itm.concept_id == selected_alle.concept_id && selected_alle.selected === true) {
                 temp_data_2[index] = selected_alle;
@@ -104,15 +115,15 @@ function setCommonAllergiesList() {
             temp_data_2.push(selected_alle);
         }
     });
-    const op_ = temp_data_2.filter((item: any, index: any, self: any) =>
-        index === self.findIndex((t: { concept_id: any; }) => t.concept_id === item.concept_id)
+    const op_ = temp_data_2.filter(
+        (item: any, index: any, self: any) => index === self.findIndex((t: { concept_id: any }) => t.concept_id === item.concept_id)
     );
-    const allergyStore = store
-    allergyStore.setMedicalAllergiesList(op_)
+    const allergyStore = store;
+    allergyStore.setMedicalAllergiesList(op_);
 }
 
-function generateUniqueId(length = 8, prefix = '') {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+function generateUniqueId(length = 8, prefix = "") {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let result = prefix;
 
     for (let i = 0; i < length; i++) {
@@ -122,6 +133,23 @@ function generateUniqueId(length = 8, prefix = '') {
     // Append a timestamp or random number for uniqueness
     result += `-${Date.now()}`; // Append timestamp
     return result;
+}
+function addCustomAllergy() {
+    const customAllergy = otherAllergy.value.trim();
+    if (customAllergy) {
+        const newAllergy = {
+            name: customAllergy,
+            selected: true,
+        };
+
+        store.setMedicalAllergiesList([...allergiesList.value, newAllergy]);
+        store.setSelectedMedicalAllergiesList(newAllergy);
+
+        otherAllergy.value = "";
+        showOtherInput.value = false;
+    } else {
+        console.log("Allergy name cannot be empty");
+    }
 }
 </script>
 
@@ -250,5 +278,14 @@ ion-list.list-al {
 }
 .notes_p {
     margin: 4%;
+}
+.custom-allergy-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.custom-input {
+    max-width: 300px;
+    width: 100%;
 }
 </style>
