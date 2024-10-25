@@ -16,6 +16,7 @@
               <th><ion-icon :icon="sunny"></ion-icon> Morning</th>
               <th><ion-icon :icon="partlySunny"></ion-icon> Afternoon</th>
               <th><ion-icon :icon="moon"></ion-icon> Evening</th>
+              <th><ion-icon :icon="timeOutline"></ion-icon> Frequency</th>
             </tr>
           </thead>
           <tbody>
@@ -92,7 +93,7 @@ import {
 } from '@ionic/vue';
 import VueMultiselect from "vue-multiselect";
 import { 
-  medkit, sunny, partlySunny, moon
+  medkit, sunny, partlySunny, moon, timeOutline
 } from 'ionicons/icons';
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
@@ -198,6 +199,7 @@ export default defineComponent({
       sunny,
       partlySunny,
       moon,
+      timeOutline,
       selected_NCD_Medication_List,
       frequency_selections,
       frequency_options,
