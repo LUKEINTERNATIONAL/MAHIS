@@ -16,6 +16,7 @@
               <th><ion-icon :icon="sunny"></ion-icon> Morning</th>
               <th><ion-icon :icon="partlySunny"></ion-icon> Afternoon</th>
               <th><ion-icon :icon="moon"></ion-icon> Evening</th>
+              <th><ion-icon :icon="timeOutline"></ion-icon> Frequency</th>
             </tr>
           </thead>
           <tbody>
@@ -57,6 +58,25 @@
                   placeholder="0"
                 ></ion-input>
               </td>
+              <td>
+                <VueMultiselect
+                  :disabled="!isActive(med.name)"
+                  v-model="frequency_selections[med.name]"
+                  @update:model-value="(event: any) => updateFrequencySelection(med.name, event)"
+                  :multiple="false"
+                  :taggable="false"
+                  :hide-selected="false"
+                  :close-on-select="true"
+                  openDirection="bottom"
+                  tag-placeholder="select frequency"
+                  placeholder="select frequency"
+                  selectLabel=""
+                  label="label"
+                  @search-change="$emit('search-change', $event)"
+                  track-by="label"
+                  :options="frequency_options"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -71,17 +91,19 @@ import {
   IonCard, IonCardHeader, IonCardTitle, IonCardContent,
   IonInput, IonIcon, IonCheckbox
 } from '@ionic/vue';
+import VueMultiselect from "vue-multiselect";
 import { 
-  medkit, sunny, partlySunny, moon
+  medkit, sunny, partlySunny, moon, timeOutline
 } from 'ionicons/icons';
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import { mapState } from "pinia";
 
 export default defineComponent({
   name: 'PrescriptionTable',
   components: {
     IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-    IonInput, IonIcon, IonCheckbox
+    IonInput, IonIcon, IonCheckbox, VueMultiselect
   },
   setup() {
     const treatmentPlanStore = useTreatmentPlanStore();
@@ -104,6 +126,8 @@ export default defineComponent({
       { id: 10, name: 'Statin', category: 'Other' },
       { id: 11, name: 'Other', category: 'Other' },
     ]);
+
+    const frequency_options = ref(DRUG_FREQUENCIES)
 
     const isActive = (medicationName: string) => {
       return selected_NCD_Medication_List.value.some((med: any) => med.medication === medicationName);
@@ -152,6 +176,19 @@ export default defineComponent({
       }
     };
 
+    const frequency_selections = ref<{ [key: string]: any }>({});
+
+    const getFrequency = (medicationName: string) => {
+      return frequency_selections.value[medicationName] || null;
+    }
+
+    const updateFrequencySelection = (medicationName: string, data: any) => {
+      frequency_selections.value = {
+        ...frequency_selections.value,
+        [medicationName]: data
+      }
+    }
+
     return {
       medications,
       isActive,
@@ -162,7 +199,12 @@ export default defineComponent({
       sunny,
       partlySunny,
       moon,
+      timeOutline,
       selected_NCD_Medication_List,
+      frequency_selections,
+      frequency_options,
+      updateFrequencySelection,
+      getFrequency,
     };
   }
 });

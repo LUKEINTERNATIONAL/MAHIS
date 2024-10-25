@@ -98,7 +98,6 @@ import {
 } from "@ionic/vue";
 
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
-import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import NCDMedication from "./NCDMedication.vue"
 import NonPharmalogicalTherapyAndOtherNotes from "./NonPharmalogicalTherapyAndOtherNotes.vue"
 import { DrugService } from "@/services/drug_service";
@@ -426,6 +425,12 @@ ion-list.list-al {
     margin-top: 10px;
 }
 .background {
-    background-color: #fff;
+    /* background-color: #fff; */
+}
+ion-segment-button {
+    background: #fff;
+    margin-right: 1px;
+    font-size: 12px;
+    text-transform: unset;
 }
 </style>
