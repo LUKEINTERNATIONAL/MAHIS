@@ -5,6 +5,7 @@
         <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
         Prescription List
       </ion-card-title>
+      <OPDMedications/>
     </ion-card-header>
     <ion-card-content>
       <div class="table-container">
@@ -98,12 +99,13 @@ import {
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import { mapState } from "pinia";
+import OPDMedications from "./OPDMedications.vue"
 
 export default defineComponent({
   name: 'PrescriptionTable',
   components: {
     IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-    IonInput, IonIcon, IonCheckbox, VueMultiselect
+    IonInput, IonIcon, IonCheckbox, VueMultiselect, OPDMedications
   },
   setup() {
     const treatmentPlanStore = useTreatmentPlanStore();
