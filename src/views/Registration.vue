@@ -74,7 +74,7 @@
         </div>
         <ion-footer v-if="registrationDisplayType == 'list' || screenWidth <= 991">
             <div class="footer position_content">
-                <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="nav('/home')" />
+                <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="cancel($event)" />
                 <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
                 <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
                     <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ active: currentStep === 'Personal Information' }">
@@ -126,7 +126,7 @@ import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { resetPatientData } from "@/services/reset_data";
 import { validateField } from "@/services/validation_service";
-import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
@@ -302,6 +302,16 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        async cancel(event: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to cancel registration?`, "", {
+                confirmBtnLabel: "Yes",
+                icon: "",
+                showBackdrop: true,
+            });
+            if (deleteConfirmed) {
+                this.nav("/home");
+            }
+        },
         programID() {
             return Service.getProgramID();
         },
