@@ -60,8 +60,8 @@
               <td>
                 <VueMultiselect
                   :disabled="!isActive(med.name)"
-                  v-model="frequency_seq"
-                  @update:model-value="updateFrequencySelection($event)"
+                  v-model="frequency_selections[med.name]"
+                  @update:model-value="(event: any) => updateFrequencySelection(med.name, event)"
                   :multiple="false"
                   :taggable="false"
                   :hide-selected="false"
@@ -175,8 +175,17 @@ export default defineComponent({
       }
     };
 
-    const updateFrequencySelection = (data: any) => {
+    const frequency_selections = ref<{ [key: string]: any }>({});
 
+    const getFrequency = (medicationName: string) => {
+      return frequency_selections.value[medicationName] || null;
+    }
+
+    const updateFrequencySelection = (medicationName: string, data: any) => {
+      frequency_selections.value = {
+        ...frequency_selections.value,
+        [medicationName]: data
+      }
     }
 
     return {
@@ -190,9 +199,10 @@ export default defineComponent({
       partlySunny,
       moon,
       selected_NCD_Medication_List,
-      frequency_seq: "" as string,
+      frequency_selections,
       frequency_options,
       updateFrequencySelection,
+      getFrequency,
     };
   }
 });
