@@ -673,6 +673,7 @@ const initialCountry = [
                             eventType: "input",
                             alertsErrorMassage: "",
                             isSingleSelect: true,
+                            hide_selected: true,
                             popOver: true,
                             trackBy: "district_id",
                             multiSelectData: [],
