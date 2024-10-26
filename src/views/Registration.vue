@@ -58,8 +58,8 @@
                 <div v-if="currentStep == 'Location'">
                     <div style="justify-content: center">
                         <div><Country /></div>
-                        <div><CurrentLocation /></div>
-                        <div><HomeLocation /></div>
+                        <div v-if="regSelectedCountry == 'Malawi'"><CurrentLocation /></div>
+                        <div v-if="regSelectedCountry == 'Malawi'"><HomeLocation /></div>
                     </div>
                 </div>
                 <div v-if="currentStep == 'Social History'">
@@ -194,7 +194,7 @@ export default defineComponent({
     },
     props: ["registrationType"],
     computed: {
-        ...mapState(useGeneralStore, ["NCDUserActions"]),
+        ...mapState(useGeneralStore, ["NCDUserActions", "regSelectedCountry"]),
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useRegistrationStore, [
             "personInformation",
