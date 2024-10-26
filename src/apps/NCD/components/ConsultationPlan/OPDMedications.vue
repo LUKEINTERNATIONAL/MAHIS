@@ -3,7 +3,6 @@
         <ion-row>
             <ion-col>
                 <VueMultiselect
-                    style="margin-top: 27px;"
                     v-model="selected_drug"
                     @update:model-value="selectedDrugName($event)"
                     :multiple="false"
@@ -53,7 +52,7 @@ export default defineComponent({
     },
     data() {
         const selectedDrugName = (data: any) => {
-
+            console.log(data)
         }
         const FindDrugName = async (text: any) => {
             const treatment_plan_store = useTreatmentPlanStore() 

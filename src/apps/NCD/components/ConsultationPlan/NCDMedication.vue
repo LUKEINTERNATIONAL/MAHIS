@@ -1,11 +1,17 @@
 <template>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>
-        <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
-        Prescription List
-      </ion-card-title>
-      <OPDMedications/>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>
+            <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
+            Prescription List
+          </ion-card-title>
+        </ion-col>
+        <ion-col>
+           <OPDMedications/>
+        </ion-col>
+      </ion-row>
     </ion-card-header>
     <ion-card-content>
       <div class="table-container">
@@ -90,7 +96,7 @@
 import { defineComponent, ref, computed } from 'vue';
 import {
   IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-  IonInput, IonIcon, IonCheckbox
+  IonInput, IonIcon, IonCheckbox, IonCol, IonRow
 } from '@ionic/vue';
 import VueMultiselect from "vue-multiselect";
 import { 
@@ -105,7 +111,7 @@ export default defineComponent({
   name: 'PrescriptionTable',
   components: {
     IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-    IonInput, IonIcon, IonCheckbox, VueMultiselect, OPDMedications
+    IonInput, IonIcon, IonCol, IonRow, IonCheckbox, VueMultiselect, OPDMedications
   },
   setup() {
     const treatmentPlanStore = useTreatmentPlanStore();
