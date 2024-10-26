@@ -653,7 +653,35 @@ const initialCurrentLocation = [
         },
     },
 ] as any;
-
+const initialCountry = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Country*",
+                            icon: icons.search,
+                            value: "",
+                            name: "country",
+                            setName: "country",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
+                            id: "",
+                            idName: "district_id",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
 const initialAddTA = [
     {
         data: {
@@ -849,6 +877,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
         socialHistory: [...initialSocialHistory],
         homeLocation: [...initialHomeLocation],
         currentLocation: [...initialCurrentLocation],
+        country: [...initialCountry],
         guardianInformation: [...initialGuardianInformation],
         addTA: [...initialAddTA],
         addVillage: [...initialAddVillage],
@@ -865,6 +894,9 @@ export const useRegistrationStore = defineStore("registrationStore", {
         },
         setCurrentLocation(data: any) {
             this.currentLocation = data;
+        },
+        setCountry(data: any) {
+            this.country = data;
         },
         setGuardianInformation(data: any) {
             this.guardianInformation = data;
@@ -884,6 +916,10 @@ export const useRegistrationStore = defineStore("registrationStore", {
         },
         getInitialCurrentLocation() {
             const data = _.cloneDeep(initialCurrentLocation);
+            return [...data];
+        },
+        getInitialCountry() {
+            const data = _.cloneDeep(initialCountry);
             return [...data];
         },
         getInitialGuardianInformation() {
