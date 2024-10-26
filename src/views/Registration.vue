@@ -39,12 +39,13 @@
                         <PersonalInformation />
                     </div>
                     <div class="flex-item">
+                        <Country />
                         <CurrentLocation />
-                        <SocialHistory v-if="checkUnderFourteen" />
-                        <BirthRegistration v-if="checkUnderNine" />
+                        <HomeLocation />
                     </div>
                     <div class="flex-item">
-                        <HomeLocation />
+                        <SocialHistory v-if="checkUnderFourteen" />
+                        <BirthRegistration v-if="checkUnderNine" />
                         <GuardianInformation />
                     </div>
                 </div>
@@ -56,6 +57,7 @@
                 </div>
                 <div v-if="currentStep == 'Location'">
                     <div style="justify-content: center">
+                        <div><Country /></div>
                         <div><CurrentLocation /></div>
                         <div><HomeLocation /></div>
                     </div>
@@ -116,6 +118,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import PersonalInformation from "@/components/Registration/PersonalInformation.vue";
 import GuardianInformation from "@/components/Registration/GuardianInformation.vue";
 import HomeLocation from "@/components/Registration/HomeLocation.vue";
+import Country from "@/components/Registration/Country.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
@@ -163,6 +166,7 @@ export default defineComponent({
         PersonalInformation,
         GuardianInformation,
         CurrentLocation,
+        Country,
         HomeLocation,
         SocialHistory,
         BirthRegistration,
@@ -192,11 +196,14 @@ export default defineComponent({
     computed: {
         ...mapState(useGeneralStore, ["NCDUserActions"]),
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
-        ...mapState(useRegistrationStore, ["personInformation"]),
-        ...mapState(useRegistrationStore, ["socialHistory"]),
-        ...mapState(useRegistrationStore, ["homeLocation"]),
-        ...mapState(useRegistrationStore, ["currentLocation"]),
-        ...mapState(useRegistrationStore, ["guardianInformation"]),
+        ...mapState(useRegistrationStore, [
+            "personInformation",
+            "socialHistory",
+            "currentLocation",
+            "homeLocation",
+            "guardianInformation",
+            "country",
+        ]),
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
         ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
         nationalID() {
