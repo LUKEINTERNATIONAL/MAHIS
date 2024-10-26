@@ -664,7 +664,10 @@ const initialCountry = [
                         {
                             inputHeader: "Country*",
                             icon: icons.search,
-                            value: "",
+                            value: {
+                                district_id: 292,
+                                name: "Malawi",
+                            },
                             name: "country",
                             setName: "country",
                             eventType: "input",
