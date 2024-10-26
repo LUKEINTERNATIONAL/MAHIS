@@ -1,16 +1,16 @@
 const LocationService = {
     async setOfflineLocation() {
         let countryData = await DatabaseManager.getOfflineData("countries").then((data) => data?.[0]);
-        if (!countryData || countryData.length !== 256) {
+        if (!countryData || countryData.length !== 257) {
             countryData = await this.getCountries();
             await DatabaseManager.overRideRecord("countries", countryData);
         }
 
-        if (countryData.length === 256) {
+        if (countryData.length === 257) {
             self.postMessage({
                 payload: {
-                    total_countries: 256,
-                    total: 256,
+                    total_countries: 257,
+                    total: 257,
                 },
             });
         }
