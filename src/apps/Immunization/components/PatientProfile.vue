@@ -27,9 +27,9 @@
                                 MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span>
                             </div>
                         </div>
-                        <div class="demographicsOtherRow">
+                        <!-- <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">Outcome: <span class="outcomeStatus"> Active</span></div>
-                        </div>
+                        </div> -->
                         <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">
                                 Status:
@@ -165,7 +165,7 @@
         <div>
             <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
                 <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
-                <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>
+                <!-- <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>s -->
                 <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
                 <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
             </ion-list>
