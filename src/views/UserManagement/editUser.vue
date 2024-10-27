@@ -82,6 +82,28 @@
             <ion-col></ion-col>
         </ion-row> -->
 
+        <ion-row>
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                    >Gender<span style="color: #b42318">*</span></ion-label
+                >
+                <sselectionList
+                    :labels="isSSelection_properties[0].labels.value"
+                    :selected-opt="isSSelection_properties[0].selectedOption.value"
+                    @selection-event="isSSelection_properties[0].dataHandler"
+                />
+
+                <div>
+                    <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
+                        {{ isSSelection_properties[0].error_message }}
+                    </ion-label>
+                </div>
+            </ion-col>
+            <ion-col>
+                
+            </ion-col>
+        </ion-row>
+
         <ion-row v-if="isSuperUser">
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
@@ -119,7 +141,7 @@
         </ion-row>
 
         <ion-row v-if="isSuperUser">
-            <ion-col size="6" v-if="false">
+            <ion-col size="6">
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                     >District(s)<span style="color: #b42318">*</span></ion-label
                 >
@@ -174,23 +196,6 @@
                 <div>
                     <ion-label v-if="location_show_error" class="error-label">
                         {{ location_error_message }}
-                    </ion-label>
-                </div>
-            </ion-col>
-
-            <ion-col>
-                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                    >Gender<span style="color: #b42318">*</span></ion-label
-                >
-                <sselectionList
-                    :labels="isSSelection_properties[0].labels.value"
-                    :selected-opt="isSSelection_properties[0].selectedOption.value"
-                    @selection-event="isSSelection_properties[0].dataHandler"
-                />
-
-                <div>
-                    <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
-                        {{ isSSelection_properties[0].error_message }}
                     </ion-label>
                 </div>
             </ion-col>
