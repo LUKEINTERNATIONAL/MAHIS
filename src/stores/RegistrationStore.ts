@@ -494,6 +494,7 @@ const initialCurrentLocation = [
                             multiSelectData: [],
                             id: "",
                             idName: "district_id",
+                            validationFunctionName: "required",
                         },
                     ],
                 },
@@ -520,6 +521,7 @@ const initialCurrentLocation = [
                             id: "",
                             idName: "district_id",
                             displayNone: true,
+                            validationFunctionName: "required",
                         },
                     ],
                     btns: [
@@ -555,6 +557,7 @@ const initialCurrentLocation = [
                             id: "",
                             idName: "village_id",
                             displayNone: true,
+                            validationFunctionName: "required",
                         },
                     ],
                     btns: [
