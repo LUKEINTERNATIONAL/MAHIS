@@ -395,6 +395,17 @@ export default defineComponent({
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
+        async validateLocation() {
+            if (this.regSelectedCountry == "Malawi") {
+                if ((await validateInputFiledData(this.homeLocation)) && (await validateInputFiledData(this.currentLocation))) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        },
         async possibleDuplicates() {
             const ddeInstance = new PatientDemographicsExchangeService();
             this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
@@ -428,8 +439,7 @@ export default defineComponent({
             }
             if (
                 (await this.validations(this.personInformation, fields)) &&
-                (await this.validations(this.currentLocation, currentFields)) &&
-                (await validateInputFiledData(this.homeLocation)) &&
+                (await this.validateLocation()) &&
                 (await this.validateBirthData()) &&
                 this.validateGaudiarnInfo()
             ) {
@@ -559,8 +569,11 @@ export default defineComponent({
                 gender: this.gender,
                 birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
                 birthdate_estimated: "false",
-                home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
-                home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
+                home_region:
+                    (await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name)) ||
+                    (await this.getRegion(getFieldValue(this.country, "country", "value")?.name)),
+                home_district:
+                    getFieldValue(this.homeLocation, "home_district", "value")?.name || getFieldValue(this.country, "country", "value")?.name,
                 home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
                 home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
                 current_region: await this.getRegion(this.current_district),
