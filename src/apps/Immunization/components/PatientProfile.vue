@@ -18,9 +18,13 @@
                                 {{ getAge(demographics.birthdate) }} ({{ formatBirthdate() }})
                             </div>
                         </div>
-                        <div class="demographicsOtherRow">
+                        <div class="demographicsOtherRow" v-if="demographics.address">
                             <div class="demographicsText">Current Address:</div>
                             <div class="demographicsText mediumFontColor">{{ demographics.address }}</div>
+                        </div>
+                        <div class="demographicsOtherRow" v-if="demographics.country">
+                            <div class="demographicsText">Country:</div>
+                            <div class="demographicsText mediumFontColor">{{ demographics.country }}</div>
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">
