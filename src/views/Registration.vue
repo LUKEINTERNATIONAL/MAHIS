@@ -572,14 +572,14 @@ export default defineComponent({
                 home_region:
                     (await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name)) ||
                     (await this.getRegion(getFieldValue(this.country, "country", "value")?.name)),
-                home_district:
-                    getFieldValue(this.homeLocation, "home_district", "value")?.name || getFieldValue(this.country, "country", "value")?.name,
+                home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
                 home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
                 home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
                 current_region: await this.getRegion(this.current_district),
                 current_district: this.current_district,
                 current_traditional_authority: this.current_traditional_authority,
                 current_village: this.current_village,
+                country: getFieldValue(this.country, "country", "value")?.name,
                 landmark: landmark,
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
