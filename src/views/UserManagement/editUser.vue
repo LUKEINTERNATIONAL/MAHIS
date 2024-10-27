@@ -340,8 +340,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import { text } from "ionicons/icons"
-import { it } from "date-fns/locale"
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
@@ -407,12 +405,12 @@ const selected_Districts = ref();
 const district_show_error = ref(false)
 const district_error_message = ref('Select district(s)')
 const village_error_message = ref('Select village(s)')
-const selected_TAz = ref()
+const selected_TAz = ref([]) as any
 const villageList = ref([] as any)
 const village_show_error = ref(false)
 const TAz_show_error = ref(false)
 const TAz_error_message = ref('Select TA(s)')
-const selected_villages = ref()
+const selected_villages = ref([]) as any
 const TAList = ref([] as any)
 const selectedDistrictIds : any[] = []
 const selectedTAIds: any[] = []
@@ -429,6 +427,7 @@ onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
     await getUserData()
+    await fillUserVillages()
     getCurrentUser()
     districtList.value = await getdistrictList() 
 })
@@ -437,6 +436,13 @@ watch(
     () => props.action,
     async (newValue) => {
         trigerSaveFn()
+    }
+)
+
+watch(
+    () => TAList.value.length,
+    async (newValue) => {
+        setUserTAs()
     }
 )
 
@@ -649,6 +655,59 @@ function ValidatePassword() {
     return true;
 }
 
+async function fillUserVillages() {
+    userId.value = props.user_id
+    const user_villages = await UserService.getUserVillages(userId.value)
+    user_villages.villages.forEach((village: any, index: number) => {
+        setVillage(village.village_id as any, index)
+    })
+}
+
+async function setVillage(villageId: number, index: number) {
+    const n_village = await LocationService.getVillage(villageId);
+    const arrayWithIds = [{
+        ...n_village,
+        assigned_id: index
+    }];
+    villageList.value = villageList.value.concat(arrayWithIds);
+    selectedVillageIds.push(n_village.village_id);
+    selected_villages.value.push(arrayWithIds[0]);
+}
+
+async function setUserTAs() {
+    try {
+        selected_TAz.value = [];
+        villageList.value = [];
+
+        const uniqueTAsMap = new Map();
+        
+        selected_villages.value.forEach((village: any, index: number) => {
+            const matchingTA = TAList.value.find(
+                (ta: any) => ta.traditional_authority_id === village.traditional_authority_id
+            );
+
+            if (matchingTA && !uniqueTAsMap.has(matchingTA.traditional_authority_id)) {
+                const TAWithId = {
+                    ...matchingTA,
+                    assigned_id: index
+                };
+                uniqueTAsMap.set(matchingTA.traditional_authority_id, TAWithId);
+            }
+        });
+
+        const uniqueTAs = Array.from(uniqueTAsMap.values());
+        villageList.value = [...villageList.value, ...uniqueTAs];
+        selected_TAz.value = uniqueTAs;
+
+        await Promise.all(
+            selected_TAz.value.map((TA: any) => findVillages(TA.district_id, false))
+        );
+    } catch (error) {
+        console.error('Error in setUserTAs:', error);
+        throw new Error('Failed to set user TAs');
+    }
+}
+
 
 async function getUserData() {
     userId.value = props.user_id
@@ -786,6 +845,8 @@ function fillUserRoles() {
             }
         })
     })
+
+    checkIfSelectedIsHSA(user_roles.value)
 }
 
 function getCurrentUser() {
@@ -996,10 +1057,11 @@ async function getdistrictList() {
     return districtList
 }
 
-function findVillages(district_id: any) {
+function findVillages(district_id: any, clear_list = true) {
     disableVillageSelection.value = true;
-    selected_villages.value = []
-    
+    if (clear_list == true) {
+        selected_villages.value = []
+    }
     fetchVillages(district_id, '')
 }
 
@@ -1030,16 +1092,18 @@ function selectedTA(selectedTAList: any) {
 
 function selectedVillage(VillagesList: any) {
     selectedVillageIds.length = 0
-    VillagesList.forEach((village: any ) => {
+    VillagesList.forEach((village: any) => {
+        console.log(village)
         selectedVillageIds.push(village.village_id)
     })
 }
 
 function checkIfSelectedIsHSA(role_list: any) {
+    const HSA_ROLES = ['HSA', 'Health Surveillance']
     village_show_error.value = false
     let is_found = false
     role_list.forEach((item: any) => {
-        if (item?.selected == true && item?.name == 'HSA') {
+        if (item?.selected == true && HSA_ROLES.includes(item?.name)) {
             HSA_found_for_disabling_button.value = false
             is_found = true
         }

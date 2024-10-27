@@ -46,6 +46,11 @@ export class UserService extends Service {
     static deactivateUser(id: number) {
         return this.postJson(`users/${id}/deactivate`, {});
     }
+
+    static getUserVillages(id: number) {
+        return this.getJson(`users/${id}/get_user_villages`);
+    }
+    
     static isAdmin() {
         const roles = super.getUserRoles().filter((role: Role) => {
             return role.role.match(/Program Manager|Superuser|System Developer/i);
