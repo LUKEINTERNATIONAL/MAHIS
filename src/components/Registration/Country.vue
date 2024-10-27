@@ -98,6 +98,11 @@ export default defineComponent({
         },
         setSelectedCountry() {
             useGeneralStore().setRegSelectedCountry(this.selected_country);
+            if (this.selected_country === "Malawi") {
+                const registration = useRegistrationStore();
+                registration.setHomeLocation(registration.getInitialHomeLocation());
+                registration.setCurrentLocation(registration.getInitialCurrentLocation());
+            }
         },
         async buildCards() {
             this.cardData = {
@@ -113,9 +118,6 @@ export default defineComponent({
 
         async handleInputData(event: any) {
             this.setSelectedCountry();
-            if (event?.value?.name === "Malawi") {
-            } else {
-            }
         },
     },
 });
