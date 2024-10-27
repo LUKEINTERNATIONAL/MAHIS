@@ -4,7 +4,7 @@
             <ion-col>
                 <VueMultiselect
                     v-model="selected_drug"
-                    @update:model-value="selectedDrugName($event)"
+                    @update:model-value="selectedDrugName"
                     :multiple="false"
                     :taggable="false"
                     :hide-selected="false"
@@ -15,7 +15,7 @@
                     selectLabel=""
                     label="name"
                     :searchable="true"
-                    @search-change="FindDrugName($event)"
+                    @search-change="FindDrugName"
                     track-by="uuid"
                     :options="OPDDrugList"
                 />
@@ -34,7 +34,7 @@ import { DrugService } from "@/services/drug_service";
 import { ConceptName } from "@/interfaces/conceptName";
 
 export default defineComponent({
-    name: "Menu",
+    name: "DrugSelector",
     components: {
         IonContent,
         IonHeader,
@@ -50,12 +50,16 @@ export default defineComponent({
         IonCol,
         IonRow
     },
+    emits: ['drug-selected'],  // Declare the emit event
     data() {
-        const selectedDrugName = (data: any) => {
-            console.log(data)
+        const selectedDrugName = (data: ConceptName) => {
+            // Emit the selected drug data to parent component
+            this.$emit('drug-selected', data);
         }
-        const FindDrugName = async (text: any) => {
-            const treatment_plan_store = useTreatmentPlanStore() 
+
+        const FindDrugName = async (text: string) => {
+            const treatment_plan_store = useTreatmentPlanStore()
+            
             const searchText = text
             const page = 1,
                 limit = 10;
@@ -64,42 +68,35 @@ export default defineComponent({
                 page: page,
                 page_size: limit,
             })
-            drugs.map((drug: any) => ({
+
+            const formattedDrugs = drugs.map((drug: ConceptName) => ({
                 label: drug.name,
                 value: drug.name,
                 other: drug,
+                ...drug // Spread the original drug properties
             }))
-
-            treatment_plan_store.setPartialOPDdrugList(drugs)
+            
+            treatment_plan_store.setPartialOPDdrugList(formattedDrugs)
         }
+
         const OPDDrugList = computed(() => this.partialOPDdrugList)
-        const selected_drug = ref()
+        const selected_drug = ref<ConceptName | null>(null)
+
         return {
-            test: '',
             selected_drug,
             selectedDrugName,
             FindDrugName,
             OPDDrugList
         };
     },
-    setup() {
-        return {  };
-    },
     computed: {
-        ...mapState(useTreatmentPlanStore, ["partialOPDdrugList",]), 
-    },
-    watch: {
-        
-    },
-    async mounted() {
-
-    },
-    methods: {
-        
+        ...mapState(useTreatmentPlanStore, ["partialOPDdrugList"]),
     },
 })
 </script>
 
 <style scoped>
-
+.multiselect {
+    width: 100%;
+}
 </style>
