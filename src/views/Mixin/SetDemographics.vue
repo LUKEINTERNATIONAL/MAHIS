@@ -32,6 +32,7 @@ export default defineComponent({
                 patient_id: item.patient_id,
                 address: address,
                 phone: this.getPhone(item),
+                country: item?.person?.addresses[0]?.country,
             });
         },
         setOfflineDemographics(item: any) {
