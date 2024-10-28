@@ -165,6 +165,7 @@ import { IdentifierService } from "@/services/identifier_service";
 import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { UserService } from "@/services/user_service";
+import { PatientRegistrationEncounterType, PatientHistoryEncounterType } from "@/apps/NCD/services/encounter_type";
 
 export default defineComponent({
     name: "Home",
@@ -303,19 +304,34 @@ export default defineComponent({
                 this.iconGridStatus = "active_icon";
             }
         },
-        async buildEnrollmentData() {
-            return [
+        async saveEnrollment() {
+            await this.saveDiagnosis();
+            await this.savePatientHistory();
+            await this.savePatientRegistration();
+        },
+
+        async savePatientHistory() {
+            const data: any = [
                 ...(await formatRadioButtonData(this.patientHistoryHIV)),
-                ...(await formatRadioButtonData(this.patientType)),
-                ...(await formatRadioButtonData(this.substance)),
-                ...(await formatCheckBoxData(this.enrollmentDiagnosis)),
                 ...(await formatCheckBoxData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.familyHistory)),
-                ...(await formatCheckBoxData(this.patientHistoryHIV)),
             ];
+            if (data.length > 0) {
+                const patient = new PatientHistoryEncounterType(this.demographics.patient_id, "" as any);
+                const encounter = await patient.createEncounter();
+                patient.saveObservationList(data);
+            }
         },
-        async saveEnrollment() {
-            const data: any = await this.buildEnrollmentData();
+        async savePatientRegistration() {
+            const data: any = await formatCheckBoxData(this.enrollmentDiagnosis);
+            if (data.length > 0) {
+                const patientHistory = new PatientRegistrationEncounterType(this.demographics.patient_id, "" as any);
+                const encounter = await patientHistory.createEncounter();
+                patientHistory.saveObservationList(data);
+            }
+        },
+        async saveDiagnosis() {
+            const data: any = await formatCheckBoxData(this.enrollmentDiagnosis);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
