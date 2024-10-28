@@ -4,17 +4,16 @@
             <ion-col size-sm="12" size-md="12" size-lg="12" size-xl="8">
                 <VueDatePicker
                     class="calender"
-                    @date-update="handleDateUpdate"
-                    v-model="date"
+                    @date-update="openCornfirmModal"
                     inline
                     auto-apply
                     :enable-time-picker="false"
                     :disabled-dates="disabledDates"
                 >
-                    <template #day="{ day }">
-                        <template v-if="day === tomorrow">
+                    <template #day="{ day, date }">
+                        <template v-if="true">
                             <p>
-                                {{ day }}<sup style="color: #999">{{ bookedPatient }}</sup>
+                                <span>{{ day }}<sup class="count-badge">{{ getCounter(date) }}</sup></span>
                             </p>
                         </template>
                         <template v-else>
@@ -39,13 +38,13 @@
                 <ion-item>
                     <div class="dates_title">
                         <div>Appointments</div>
-                        <div class="sub_data">{{ bookedPatient }}</div>
+                        <div class="sub_data">{{ appointment_count }}</div>
                     </div>
                 </ion-item>
                 <ion-item>
                     <div class="dates_title">
                         <div>Appointment limit (per/day)</div>
-                        <div class="sub_data">{{ bookedPatient }}/120</div>
+                        <div class="sub_data">{{ appointment_count }}/{{ maximumNumberOfDaysForEachDay }}</div>
                     </div>
                 </ion-item>
             </ion-col>
@@ -54,12 +53,10 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonDatetime } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref, computed } from "vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonBadge, IonToolbar, IonMenu, modalController, IonDatetime } from "@ionic/vue";
 import { calendar, checkmark, pulseOutline } from "ionicons/icons";
-import { ref } from "vue";
 import { icons } from "@/utils/svg";
-
 import { createModal } from "@/utils/Alerts";
 import BasicInputField from "../../../../components/BasicInputField.vue";
 import HisDate from "@/utils/Date";
@@ -68,94 +65,129 @@ import { mapState } from "pinia";
 import { AppointmentService } from "@/services/appointment_service";
 import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
-import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
+import { useClinicalDaysStore, setValueProps } from "@/stores/clinicalDaysStore";
+import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service"
+import confirmModal from "@/apps/NCD/components/confirmModal.vue"
 
 export default defineComponent({
-    components: {
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        BasicInputField,
-        IonDatetime,
-    },
-    data() {
-        return {
-            iconsContent: icons,
-            calendarDate: "" as any,
-            date: new Date(),
-            bookedPatient: 20,
-            tomorrow: new Date().getDate() + 1,
-            appointment: "" as any,
-            drugRunoutDate: "" as any,
-            nextAppointmentDate: "" as any,
-            minDate: new Date(),
-            disabledDates: [],
+  components: {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonMenu,
+    IonTitle,
+    IonToolbar,
+    BasicInputField,
+    IonDatetime,
+    IonBadge,
+  },
+  setup() {
+    const clinicalDaysStore = useClinicalDaysStore();
+    const appointment_count = ref(0);
+    const disabledDates = computed(() => clinicalDaysStore.getDisabledDates());
+    const datesCounts = computed(() => clinicalDaysStore.getAssignedAppointments());
 
-            datesCounts: [] as any,
-        };
+    return {
+      disabledDates,
+      datesCounts,
+      appointment_count,
+    };
+  },
+  data() {
+    return {
+      iconsContent: icons,
+      calendarDate: "" as any,
+      date: new Date(),
+      bookedPatient: 20,
+      tomorrow: new Date().getDate() + 1,
+      appointment: "" as any,
+      drugRunoutDate: "" as any,
+      nextAppointmentDate: "" as any,
+      minDate: new Date(),
+    };
+  },
+  computed: {
+    ...mapState(useNextAppointmentStore, ["nextAppointment"]),
+    ...mapState(useClinicalDaysStore, ["maximumNumberOfDaysForEachDay", "assignedAppointmentsDates"]),
+  },
+  watch: {
+    calendarDate: {
+      handler() {
+        this.updateNextAppointment();
+      },
+      deep: true,
     },
-    computed: {
-        ...mapState(useNextAppointmentStore, ["nextAppointment"]),
-    },
-    watch: {
-        calendarDate: {
-            handler() {
-                this.updateNextAppointment();
-            },
-            deep: true,
-        },
-    },
+  },
     async mounted() {
-        const userID: any = Service.getUserID();
-        const patient = new PatientService();
-        this.appointment = new AppointmentService(patient.getID(), userID);
-        this.nextAppointmentDate = this.appointment.date;
-        this.loadDataFromStore()
-       
+    setValueProps()
+    const userID: any = Service.getUserID();
+    const patient = new PatientService();
+    this.appointment = new AppointmentService(patient.getID(), userID);
+    this.nextAppointmentDate = this.appointment.date;
+  },
+  methods: {
+    updateNextAppointment() {
+      const nextAppointmentStore = useNextAppointmentStore();
+      nextAppointmentStore.setNextAppointment(this.calendarDate);
     },
-    methods: {
-        updateNextAppointment() {
-            const nextAppointmentStore = useNextAppointmentStore();
-            nextAppointmentStore.setNextAppointment(this.calendarDate);
-        },
-        handleDateUpdate(value: any) {
-            const storeClinicalDaysStore = useClinicalDaysStore()
-            storeClinicalDaysStore.setsssignedAppointmentsDates(value);
-            this.calendarDate = HisDate.toStandardHisDisplayFormat(value);
-            this.saveData();
-            this.loadDataFromStore()
-        },
-        async saveData() {
-            try {
-                const res = await this.appointment.getNextAppointment();
-                this.nextAppointmentDate = res.appointment_date;
-                this.drugRunoutDate = res.drugs_run_out_date;
-                console.log(res);
-            } catch {}
-            // const res = await this.appointment.getDailiyAppointments("2024-03-01");
-            // console.log("🚀 ~ mounted ~ res:", res);
-            const ttt = [
-                await this.appointment.buildValueDate("Appointment date", "2024-03-28"),
-                await this.appointment.buildValueDate("Estimated date", this.nextAppointmentDate),
-            ];
-            // await this.appointment.createEncounter();
-            // await this.appointment.saveObservationList(ttt);
-            console.log("🚀 ~ mounted ~ ttt:", ttt);
-        },
-        loadDataFromStore() {
-            const storeClinicalDaysStore = useClinicalDaysStore()
-            this.disabledDates = storeClinicalDaysStore.getDisabledDates() as any
-            // this.date = storeClinicalDaysStore.getAssignedAppointmentsDates()
-            console.log(storeClinicalDaysStore.getAssignedAppointmentsDates())
-            console.log(storeClinicalDaysStore.getAssignedAppointments())
-
-            this.datesCounts = storeClinicalDaysStore.getAssignedAppointments() as any
+    async handleDateUpdate(date: any) {
+      const storeClinicalDaysStore = useClinicalDaysStore();
+      storeClinicalDaysStore.setsssignedAppointmentsDates(date, true);
+      this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
+      await this.save();
+      await this.getAppointmentMents(date)
+    },
+    async  getAppointmentMents(date: any) {
+        try {
+            const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
+            this.appointment_count = res.length;
+        } catch (error) {
+            
         }
     },
+    getCounter(date: string | Date): string | number {
+        const normalizeDate = (date: Date): number => {
+            const d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            return d.getTime();
+        };
+
+        const dateTimestamp = normalizeDate(new Date(date));
+        const count = this.assignedAppointmentsDates.reduce((sum: number, d: { date: string | Date }) => {
+            return normalizeDate(new Date(d.date)) === dateTimestamp ? sum + 1 : sum;
+        }, 0);
+
+        return count === 0 ? '' : count;
+    },
+    async save() {
+        if (this.assignedAppointmentsDates.length >0) {
+            try {
+                const appointment_service = new Appointment();
+                const appointmentDetails = await appointment_service.createAppointment();
+            } catch (error) {
+                
+            }
+        } else {
+            // toastWarning("please select next appointment date on the calendar");
+        }
+
+    },
+    async openCornfirmModal(date: any) {
+        this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
+        await this.getAppointmentMents(date)
+      const handleCancel = (event: CustomEvent<any>) => {
+        console.log(event.detail)
+      };
+      const handleConfirm = async (event: CustomEvent<any>) => {
+        if (event.detail == true) {
+            await this.handleDateUpdate(date)
+        }
+      };
+      const dataToPass = { message: 'Are you sure you want add this Appointment?',}
+      createModal(confirmModal, { class: "otherVitalsModal" }, true, dataToPass, { 'cancel': handleCancel, 'confirm':  handleConfirm});
+  },
+  },
 });
 </script>
 
@@ -229,5 +261,12 @@ ion-datetime::part(calendar-day) {
     --dp-cell-padding: 30px; /*Padding in the cell*/
     --dp-menu-padding: 20px 5px; /*Menu padding*/
     --dp-font-size: 18px; /*Default font-size*/
+}
+.count-badge {
+    padding: 1px 4px;
+    font-size: 19px;
+    margin-left: 1px;
+    position: relative;
+    font-weight: bold;
 }
 </style>

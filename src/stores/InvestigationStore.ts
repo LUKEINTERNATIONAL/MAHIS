@@ -46,13 +46,6 @@ export const useInvestigationStore = defineStore("investigationStore", {
                                     validationFunctionName: "required",
                                 },
                             ],
-                            btns: [
-                                {
-                                    name: "Save",
-                                    fill: "clear",
-                                    icon: icons.plus,
-                                },
-                            ],
                         },
                     ],
                 },

@@ -181,7 +181,7 @@ export default defineComponent({
         this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.demographics.patient_id);
         this.showAlert = this.hasPatientsWaitingForLab;
         if (this.showAlert) {
-          // Automatically hide the alert after 20 seconds
+          // Automatically hide the alert after some seconds
           setTimeout(() => {
             this.showAlert = false;
           }, 15000);

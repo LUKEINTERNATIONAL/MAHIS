@@ -82,7 +82,23 @@
             <ion-col></ion-col>
         </ion-row> -->
 
-        <ion-row v-if="isSuperUser">
+        <ion-row>
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                    >Gender<span style="color: #b42318">*</span></ion-label
+                >
+                <sselectionList
+                    :labels="isSSelection_properties[0].labels.value"
+                    :selected-opt="isSSelection_properties[0].selectedOption.value"
+                    @selection-event="isSSelection_properties[0].dataHandler"
+                />
+
+                <div>
+                    <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
+                        {{ isSSelection_properties[0].error_message }}
+                    </ion-label>
+                </div>
+            </ion-col>
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Activate/Deactivate user<span style="color: #b42318">*</span></ion-label
@@ -97,7 +113,9 @@
                     :onLabel="'active'"
                 />
             </ion-col>
+        </ion-row>
 
+        <ion-row v-if="isSuperUser">
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Role(s)<span style="color: #b42318">*</span></ion-label
@@ -119,7 +137,7 @@
         </ion-row>
 
         <ion-row v-if="isSuperUser">
-            <ion-col size="6" v-if="false">
+            <ion-col size="6">
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                     >District(s)<span style="color: #b42318">*</span></ion-label
                 >
@@ -323,8 +341,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import { text } from "ionicons/icons"
-import { it } from "date-fns/locale"
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
@@ -339,6 +355,7 @@ import { IonButtons,
 import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import Toggle from '@vueform/toggle'
 import ListPicker from "../../components/ListPicker.vue"
+import sselectionList from "@/components/SselectionList.vue"
 import userActivities from "./userActivities.vue"
 import VueMultiselect from "vue-multiselect"
 import { LocationService } from "@/services/location_service"
@@ -358,9 +375,10 @@ import { ref, onMounted, watch } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { UserService } from "@/services/user_service";
 import { ProgramService } from "@/services/program_service";
-import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti";
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid, getGenderCode } from "@/utils/GeneralUti";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { useUserStore } from "@/stores/userStore";
+import { PersonService } from "@/services/person_service";
 
 const toggle_local = ref(false);
 const user_roles = ref([] as any);
@@ -384,21 +402,22 @@ const passwordErrorMsgs = [
 const isSuperUser = ref(false);
 const districtList = ref([] as any);
 const HSA_found_for_disabling_button = ref(true)
-const selected_Districts = ref();
+const selected_Districts = ref([]) as any;
 const district_show_error = ref(false)
 const district_error_message = ref('Select district(s)')
 const village_error_message = ref('Select village(s)')
-const selected_TAz = ref()
+const selected_TAz = ref([]) as any
 const villageList = ref([] as any)
 const village_show_error = ref(false)
 const TAz_show_error = ref(false)
 const TAz_error_message = ref('Select TA(s)')
-const selected_villages = ref()
+const selected_villages = ref([]) as any
 const TAList = ref([] as any)
 const selectedDistrictIds : any[] = []
 const selectedTAIds: any[] = []
 const disableVillageSelection = ref(true)
 const selectedVillageIds: any[] = []
+const traditionalAuthorities = ref([]) as any
 
 const props = defineProps<{
     toggle: true,
@@ -410,6 +429,7 @@ onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
     await getUserData()
+    await fillUserVillages()
     getCurrentUser()
     districtList.value = await getdistrictList() 
 })
@@ -421,12 +441,32 @@ watch(
     }
 )
 
+watch(
+    () => TAList.value.length,
+    async (newValue) => {
+        setUserTAs()
+    }
+)
+
+watch(
+    () => traditionalAuthorities.value.length,
+    async (newValue) => {
+        setUserDistricts()
+    }
+)
+
+watch(
+    () => districtList.value.length,
+        async (newValue) => {
+        setUserDistricts()
+    }
+)
+
 function selectedLocation(data: any) {
     selected_location.value = data
 }
 
 async function FindLocation(text: any) {
-    console.log(text)
     let srch_text
     if (isEmpty(text) == true) {
         srch_text = ''
@@ -464,9 +504,32 @@ function trigerSaveFn() {
     actionN.value = props.action
     preSavePrograms()
     preSaveRoles()
+    updateuserPersoninf()
     trigerSaveStatusFn()
     updateUserDemographics()
     updatePassword()
+    updateUserVillages()
+}
+
+
+const isSSelection_properties = [
+    {
+        labels: ref(['Male','Female',]),
+        selectedOption: ref(null),
+        dataHandler: sselectionListUpdated,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Please make a selection',
+    }
+]
+
+function sselectionListUpdated(data: any) {
+    try {
+        isSSelection_properties[0].dataValue.value = data.label 
+    } catch (error) {
+        isSSelection_properties[0].dataValue.value = undefined 
+    }
+    isSSelectionValid()
 }
 
 const input_properties = [
@@ -561,6 +624,10 @@ async function updatePassword() {
     }
 }
 
+async function updateUserVillages() {
+    UserService.updateuserVillages(userId.value, selectedVillageIds as any)
+}
+
 function checkPasswordFieldsEmpty() {
   return password_input_properties.slice(0, 2).every(prop =>
     !prop.dataValue.value || prop.dataValue.value.trim() === ""
@@ -608,6 +675,79 @@ function ValidatePassword() {
     return true;
 }
 
+async function fillUserVillages() {
+    userId.value = props.user_id
+    const user_villages = await UserService.getUserVillages(userId.value)
+    user_villages.villages.forEach((village: any, index: number) => {
+        setVillage(village.village_id as any, index)
+    })
+}
+
+async function setVillage(villageId: number, index: number) {
+    const n_village = await LocationService.getVillage(villageId);
+    const arrayWithIds = [{
+        ...n_village,
+        assigned_id: index
+    }];
+    villageList.value = villageList.value.concat(arrayWithIds);
+    selectedVillageIds.push(n_village.village_id);
+    selected_villages.value.push(arrayWithIds[0]);
+    traditionalAuthorities.value.push(n_village.traditional_authority)
+}
+
+async function setUserDistricts() {
+    try {
+        selected_Districts.value = [];
+        const uniqueDistrictIds = new Set();
+        traditionalAuthorities.value.forEach((TA: any) => {
+            const matchingDistrict = districtList.value.find(
+                (DL: any) => DL.district_id === TA.district_id
+            );
+            
+            if (matchingDistrict && !uniqueDistrictIds.has(matchingDistrict.district_id)) {
+                uniqueDistrictIds.add(matchingDistrict.district_id);
+                selected_Districts.value.push(matchingDistrict);
+            }
+        });
+    } catch (error) {
+        console.error('Error setting user districts:', error);
+        throw error;
+    }
+}
+
+async function setUserTAs() {
+    try {
+        selected_TAz.value = [];
+        villageList.value = [];
+        const uniqueTAsMap = new Map();
+        
+        selected_villages.value.forEach((village: any, index: number) => {
+            const matchingTA = TAList.value.find(
+                (ta: any) => ta.traditional_authority_id === village.traditional_authority_id
+            );
+
+            if (matchingTA && !uniqueTAsMap.has(matchingTA.traditional_authority_id)) {
+                const TAWithId = {
+                    ...matchingTA,
+                    assigned_id: index
+                };
+                uniqueTAsMap.set(matchingTA.traditional_authority_id, TAWithId);
+            }
+        });
+
+        const uniqueTAs = Array.from(uniqueTAsMap.values());
+        villageList.value = [...villageList.value, ...uniqueTAs];
+        selected_TAz.value = uniqueTAs;
+
+        await Promise.all(
+            selected_TAz.value.map((TA: any) => findVillages(TA.district_id, false))
+        );
+    } catch (error) {
+        console.error('Error in setUserTAs:', error);
+        throw new Error('Failed to set user TAs');
+    }
+}
+
 
 async function getUserData() {
     userId.value = props.user_id
@@ -627,6 +767,7 @@ async function getUserData() {
     last_name.value = userLastname(user_data.value.person.names)
     input_properties[2].dataValue.value = last_name.value
 
+    selectGender(user_data.value.person)
     fillUserRoles()
     fillUserPrograms()
     getAPICounterPart() 
@@ -693,8 +834,10 @@ async function updateUserDetails() {
 
         try {
             const response = await UserService.updateusername(userId.value, username_payload)
+            saveEvent(true);
             toastSuccess("username updated successfully")
         } catch (error) {
+            saveEvent(true);
             toastWarning("username update failed, already existing")
             
         }
@@ -742,6 +885,8 @@ function fillUserRoles() {
             }
         })
     })
+
+    checkIfSelectedIsHSA(user_roles.value)
 }
 
 function getCurrentUser() {
@@ -938,24 +1083,21 @@ async function getdistrictList() {
         districtList.push(...districts);
     }
 
-    //__________________________not ideal
-
     districtList.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id)
     })
 
-    districtList.forEach((district: any ) => {
+    districtList.forEach((district: any) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
-    //__________________________
-
     return districtList
 }
 
-function findVillages(district_id: any) {
+function findVillages(district_id: any, clear_list = true) {
     disableVillageSelection.value = true;
-    selected_villages.value = []
-    
+    if (clear_list == true) {
+        selected_villages.value = []
+    }
     fetchVillages(district_id, '')
 }
 
@@ -986,16 +1128,17 @@ function selectedTA(selectedTAList: any) {
 
 function selectedVillage(VillagesList: any) {
     selectedVillageIds.length = 0
-    VillagesList.forEach((village: any ) => {
+    VillagesList.forEach((village: any) => {
         selectedVillageIds.push(village.village_id)
     })
 }
 
 function checkIfSelectedIsHSA(role_list: any) {
+    const HSA_ROLES = ['HSA', 'Health Surveillance']
     village_show_error.value = false
     let is_found = false
     role_list.forEach((item: any) => {
-        if (item?.selected == true && item?.name == 'HSA') {
+        if (item?.selected == true && HSA_ROLES.includes(item?.name)) {
             HSA_found_for_disabling_button.value = false
             is_found = true
         }
@@ -1006,6 +1149,42 @@ function checkIfSelectedIsHSA(role_list: any) {
         HSA_found_for_disabling_button.value = true
     }
     return is_found
+}
+
+function isSSelectionValid() {
+    let is_valid = false
+    if (isSSelection_properties[0].dataValue.value == undefined) {
+        isSSelection_properties[0].show_error.value = true
+    }
+    if (isSSelection_properties[0].dataValue.value != undefined) {
+        isSSelection_properties[0].show_error.value = false
+        is_valid = true
+    }
+    return is_valid
+}
+
+async function updateuserPersoninf() {
+    const data1 = getFieldsValuesObj(input_properties)
+    const updatedData = {
+        cell_phone_number: data1.phone_number,
+        gender: getGenderCode(isSSelection_properties[0].dataValue.value),
+    } as any
+    const personService = new PersonService(updatedData);
+    const data = await personService.update(user_data.value.person.person_id);
+    return data
+}
+
+function selectGender(person: any) {
+    let selected_opt = {} as any
+    isSSelection_properties[0].labels.value.forEach((label: string, index: number) => {
+        if (label == getGenderCode(person.gender)) {
+            selected_opt = {
+                label,
+                value: "option_"+index 
+            } as any
+        }
+    })
+    isSSelection_properties[0].selectedOption.value = selected_opt
 }
 
 </script>

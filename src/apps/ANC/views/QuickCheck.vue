@@ -14,7 +14,7 @@
             />
             <ion-spinner v-if="isLoading" name="lines"></ion-spinner>
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -41,7 +41,6 @@ import {
     modalController,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
-
 
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -91,9 +90,9 @@ import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "Home",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
-      BasicFooter,
+    mixins: [SetUserRole, SetEncounter],
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -258,9 +257,7 @@ export default defineComponent({
             //   this.wizardData[4].checked = false;
             // }
         },
-      getSaveFunction(){
-
-      },
+        getSaveFunction() {},
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data[0] || item?.data;
@@ -281,33 +278,32 @@ export default defineComponent({
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
         async saveData() {
-             this.saveQuickCheck();
-            resetPatientData();
+            this.saveQuickCheck();
+            await resetPatientData();
         },
-      async saveQuickCheck() {
-        const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
+        async saveQuickCheck() {
+            const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
 
-        if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
-          if (this.ConfirmPregnancy && this.ReasonForVisit) {
-            const userID: any = Service.getUserID();
-            const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
-            const encounter = await quickCheck.createEncounter();
-            if (!encounter) return toastWarning("Unable to create quick check encounter");
-            const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());
-            if (!patientStatus) return toastWarning("Unable to create quick check details!");
-            toastSuccess("Quick check details have been created");
-            if (getRadioSelectedValue(this.ReasonForVisit, "Intervention on danger signs")== "Yes") {
-              this.$router.push("/ancReferral");
+            if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
+                if (this.ConfirmPregnancy && this.ReasonForVisit) {
+                    const userID: any = Service.getUserID();
+                    const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
+                    const encounter = await quickCheck.createEncounter();
+                    if (!encounter) return toastWarning("Unable to create quick check encounter");
+                    const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());
+                    if (!patientStatus) return toastWarning("Unable to create quick check details!");
+                    toastSuccess("Quick check details have been created");
+                    if (getRadioSelectedValue(this.ReasonForVisit, "Intervention on danger signs") == "Yes") {
+                        this.$router.push("/ancReferral");
+                    } else {
+                        this.$router.push("contact");
+                    }
+                }
             } else {
-              this.$router.push("contact");
+                await toastWarning("Please complete all required fields");
             }
-          }
-        } else {
-          await toastWarning("Please complete all required fields");
-        }
-        console.log("=============>>>",await this.buildQuickCheck());
-
-      },
+            console.log("=============>>>", await this.buildQuickCheck());
+        },
 
         openModal() {
             createModal(SaveProgressModal);

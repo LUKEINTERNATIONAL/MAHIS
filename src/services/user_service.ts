@@ -46,6 +46,15 @@ export class UserService extends Service {
     static deactivateUser(id: number) {
         return this.postJson(`users/${id}/deactivate`, {});
     }
+
+    static getUserVillages(id: number) {
+        return this.getJson(`users/${id}/get_user_villages`);
+    }
+
+    static updateuserVillages(id: number, user_village_ids = []) {
+        return this.putJson(`users/${id}/update_user_villages`, { user_village_ids });
+    }
+    
     static isAdmin() {
         const roles = super.getUserRoles().filter((role: Role) => {
             return role.role.match(/Program Manager|Superuser|System Developer/i);
@@ -189,7 +198,7 @@ export class UserService extends Service {
             if (patient.getNcdNumber() != "Unknown") {
                 if (activities.length == 0) {
                     this.setNCDNumber();
-                    url = "patientProfile";
+                    url = "/patientProfile";
                     NCDProgramActionName = "+ Edit NCD Enrollment";
                 } else {
                     if (localStorage.getItem("saveProgressStatus") == "true") {
@@ -197,11 +206,11 @@ export class UserService extends Service {
                     } else if (visits.includes(HisDate.currentDate())) {
                         NCDProgramActionName = "+ Edit NCD consultation";
                     } else NCDProgramActionName = "+ Start new NCD consultation";
-                    url = "consultationPlan";
+                    url = "/consultationPlan";
                 }
             } else {
                 this.setNCDNumber();
-                url = "NCDEnrollment";
+                url = "/NCDEnrollment";
                 NCDProgramActionName = "+ Enroll in NCD Program";
             }
 

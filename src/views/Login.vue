@@ -102,7 +102,7 @@ import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
 import { getUserLocation } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
-import db from "@/db";
+import workerData from "@/activate_worker";
 
 export default defineComponent({
     name: "Login",
@@ -135,10 +135,23 @@ export default defineComponent({
             auth: {} as any,
             password: "" as any,
             username: "" as any,
+            programList: "" as any,
             program: "" as any,
+            workerApi: null as any,
             togglePasswordVisibility: false,
             showPassword: false,
         };
+    },
+    watch: {
+        workerApi: {
+            handler() {
+                if (this.workerApi.data !== null && !this.programList) {
+                    this.programList = this.workerApi.data.payload;
+                    this.getPrograms();
+                }
+            },
+            deep: true,
+        },
     },
     computed: {},
     setup() {
@@ -147,22 +160,18 @@ export default defineComponent({
     created() {
         this.auth = new AuthService();
     },
+
     async mounted() {
+        this.workerApi = workerData.workerApi;
         const auth = new AuthService();
         await auth.loadConfig();
-        await this.getPrograms();
+        await workerData.postData("SET_OFFLINE_PROGRAMS");
     },
     methods: {
         async getPrograms() {
-            const programsData = await db.collection("programs").get();
-            const programs = programsData[0]?.programs;
-            if (!(programs && Object.keys(programs).length > 0)) {
-                await this.setOfflinePrograms();
-                await this.getPrograms();
-            }
-            if (programs && Object.keys(programs).length > 0) {
-                programs.sort((a: any, b: any) => a.name.localeCompare(b.name));
-                this.multiSelectData = programs;
+            if (this.programList && Object.keys(this.programList).length > 0) {
+                this.programList.sort((a: any, b: any) => a.name.localeCompare(b.name));
+                this.multiSelectData = this.programList;
             }
         },
         doLogin: async function () {
@@ -208,15 +217,8 @@ export default defineComponent({
             const store = useUserStore();
             const data = await getUserLocation();
             store.setUserFacilityName(data.name);
+            store.setFacilityLocation(data);
             store.setCurrentUserProgram(this.program);
-        },
-        async setOfflinePrograms() {
-            const programs = await ProgramService.getAllPrograms();
-            if (programs && Object.keys(programs).length > 0) {
-                await db.collection("programs").add({
-                    programs: programs,
-                });
-            }
         },
     },
 });

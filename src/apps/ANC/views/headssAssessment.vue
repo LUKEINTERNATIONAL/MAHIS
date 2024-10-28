@@ -3,9 +3,14 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepper-title="HEADSS Assessment" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" :backUrl="userRoleSettings.url"
-                     :backBtn="userRoleSettings.btnName"
-                     :getSaveFunction="getSaveFunction"
+            <Stepper
+                stepper-title="HEADSS Assessment"
+                :wizardData="wizardData"
+                @updateStatus="markWizard"
+                :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -41,9 +46,9 @@ import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "treatment",
-  mixins: [SetUserRole, SetEncounter],
+    mixins: [SetUserRole, SetEncounter],
 
-  components: {
+    components: {
         BasicFooter,
         IonContent,
         IonHeader,
@@ -104,12 +109,10 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
-      getSaveFunction(){
-
-      },
-        saveData() {
+        getSaveFunction() {},
+        async saveData() {
             this.saveHeadssAssesment();
-            resetPatientData();
+            await resetPatientData();
         },
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));

@@ -61,6 +61,7 @@
                 >
                 <sselectionList
                     :labels="isSSelection_properties[0].labels"
+                    :selected-opt="isSSelection_properties[0].selectedOption.value"
                     @selection-event="isSSelection_properties[0].dataHandler"
                 />
 
@@ -78,23 +79,16 @@
             >Phone<span style="color: #b42318">*</span></ion-label
         >
             <BasicInputField
-                :placeholder="'phone number'"
-                :icon="phonePortraitOutline"
-                :inputValue="''"
-                @update:inputValue=""
-            />
-            <!-- <BasicInputField
                 :placeholder="input_properties[3].placeHolder"
                 :icon="phonePortraitOutline"
-                :inputValue="user_name"
+                :inputValue="phone_number"
                 @update:inputValue="input_properties[3].dataHandler"
-            /> -->
-
-            <!-- <div>
+            />
+            <div>
                 <ion-label v-if="input_properties[3].show_error.value" class="error-label">
                     {{ input_properties[3].error_message }}
                 </ion-label>
-            </div> -->
+            </div>
         </ion-col>
         <ion-col>
             <ion-col>
@@ -116,7 +110,7 @@
                 />
 
                 <div>
-                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">
+                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label" style="margin-top: -10px;">
                         {{ list_picker_prperties[0].error_message }}
                     </ion-label>
                 </div>
@@ -323,7 +317,7 @@ export default defineComponent({
 import { IonContent, IonHeader, IonItem, IonCol, IonLabel, IonToolbar, IonMenu, IonAccordionGroup, IonAccordion, AccordionGroupCustomEvent } from "@ionic/vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import sselectionList from "@/components/SselectionList.vue"
-import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti"
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid, getGenderCode } from "@/utils/GeneralUti"
 import _ from "lodash"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import ListPicker from "../../components/ListPicker.vue"
@@ -344,10 +338,12 @@ import {
 } from "ionicons/icons"
 import { UserService } from "@/services/user_service"
 import { ProgramService } from "@/services/program_service"
+import { PersonService } from "@/services/person_service";
 
 const user_name = ref()
 const first_name = ref()
 const last_name = ref()
+const phone_number = ref()
 const user_roles = ref([] as any)
 const user_programs = ref([] as any)
 const selectedRoleNames: any[] = []
@@ -404,6 +400,17 @@ watch(
         }
     }
 )
+
+async function updateuserPersoninf(personId: number) {
+    const data1 = getFieldsValuesObj(input_properties)
+    const updatedData = {
+        cell_phone_number: data1.phone_number,
+        gender: getGenderCode(isSSelection_properties[0].dataValue.value),
+    } as any
+    const personService = new PersonService(updatedData);
+    const data = await personService.update(personId);
+    return data
+}
 
 function selectedLocation(data: any) {
     locationId.value = data.location_id
@@ -487,13 +494,13 @@ async function trigerSaveFn() {
         try {
             const { user } = await UserService.createUser(payload)
             if (user) {
-                // console.log(user.user_id)
-                // console.log(user)
+                await updateuserPersoninf(user.person.person_id)
                 saveEvent(user.user_id)
             }
         } catch (error) {
             //console.error(error)
-            toastDanger("User already exists", 8000)
+            saveEvent('')
+            toastDanger(error as string, 8000)
         }
     }
 }
@@ -720,14 +727,14 @@ const input_properties = [
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
     },
-    // {
-    //     placeHolder: 'phone number',
-    //     property_name: 'phone_number',
-    //     dataHandler: inputUpDated_fn4,
-    //     dataValue: ref(),
-    //     show_error: ref(false),
-    //     error_message: 'Input required, valid input',
-    // },
+    {
+        placeHolder: 'phone number',
+        property_name: 'phone_number',
+        dataHandler: inputUpDated_fn4,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, valid input',
+    },
 ]
 
 const password_input_properties = [
@@ -786,10 +793,11 @@ function listUpdated1(data: any) {
 }
 
 function checkIfSelectedIsHSA(role_list: any) {
+    const HSA_ROLES = ['HSA', 'Health Surveillance']
     village_show_error.value = false
     let is_found = false
     role_list.forEach((item: any) => {
-        if (item?.selected == true && item?.name == 'HSA') {
+        if (item?.selected == true && HSA_ROLES.includes(item?.name)) {
             HSA_found_for_disabling_button.value = false
             is_found = true
         }
@@ -815,6 +823,7 @@ function listUpdated2(data: any) {
 const isSSelection_properties = [
     {
         labels: ['Male','Female',],
+        selectedOption: ref(null),
         dataHandler: sselectionListUpdated,
         dataValue: ref(),
         show_error: ref(false),
@@ -844,8 +853,8 @@ function inputUpDated_fn3(event: any) {
     input_properties[2].dataValue.value = input
 }
 function inputUpDated_fn4(event: any) {
-    // const input = event.target.value
-    // input_properties[2].dataValue.value = input
+    const input = event.target.value
+    input_properties[3].dataValue.value = input
 }
 function passwordInputUpDated_fn1(event: any) {
     const input = event.target.value
@@ -910,17 +919,7 @@ function findVillages(district_id: any) {
     fetchVillages(district_id, '')
 }
 
-function getGenderCode(gender: string) {
-  const lowercaseGender = gender.toLowerCase().trim();
-  
-  if (lowercaseGender === 'male') {
-    return 'M';
-  } else if (lowercaseGender === 'female') {
-    return 'F';
-  } else {
-    return 'Invalid gender';
-  }
-}
+
 
 </script>
 <style scoped>

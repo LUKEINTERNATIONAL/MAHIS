@@ -63,12 +63,7 @@ export default defineComponent({
 import { IonButtons, IonButton, IonModal, IonAvatar, IonImg, IonLabel, IonPage, IonFooter } from "@ionic/vue"
 import { IonContent, IonHeader, IonItem, IonCol, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import editUser from "./editUser.vue"
-import { checkmark, pulseOutline } from "ionicons/icons"
 import { ref } from "vue"
-import { icons } from "@/utils/svg"
-
-import BasicForm from "@/components/BasicForm.vue"
-import DynamicButton from "@/components/DynamicButton.vue"
 
 const action = ref('') as any
 
@@ -79,6 +74,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "closePopoover", ObjectsArray: any): void
+    (e: "updated", ObjectsArray: any): void
 }>()
 
 function saveAction() {
@@ -86,8 +82,8 @@ function saveAction() {
 }
 
 function isFormValid(data: any) {
-    console.log(data)
     if (data == true) {
+        emit("updated", data)
         closeModal()
     }
     if (data == false) {

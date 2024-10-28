@@ -116,7 +116,7 @@ export default defineComponent({
             if (ids >= 0) return item.patient_identifiers[ids].identifier;
             else return "";
         },
-        openNewPage(url: any, item: any) {
+        async openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();
             demographicsStore.setDemographics({
                 name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
@@ -126,7 +126,7 @@ export default defineComponent({
                 gender: item.person.gender,
                 patient_id: item.patient_id,
             });
-            resetPatientData();
+            await resetPatientData();
             this.$router.push(url);
         },
 

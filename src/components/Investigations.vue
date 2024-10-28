@@ -161,7 +161,6 @@ export default defineComponent({
         this.setDashedBox();
         this.updateInvestigationWizard();
     },
-
     methods: {
         async getTests() {
             const test = await OrderService.getTestTypes();
