@@ -5,6 +5,7 @@ export const useStatusStore = defineStore("statusStore", {
         apiStatus: true,
         offlineVillageStatus: {} as any,
         offlineDistrictStatus: {} as any,
+        offlineCountriesStatus: {} as any,
         offlineTAsStatus: {} as any,
         offlineRelationshipStatus: {} as any,
     }),
@@ -14,6 +15,9 @@ export const useStatusStore = defineStore("statusStore", {
         },
         setOfflineDistrictStatus(data: any) {
             this.offlineDistrictStatus = data;
+        },
+        setOfflineCountriesStatus(data: any) {
+            this.offlineCountriesStatus = data;
         },
         setOfflineVillageStatus(data: any) {
             this.offlineVillageStatus = data;

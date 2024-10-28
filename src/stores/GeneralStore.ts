@@ -6,6 +6,7 @@ export const useGeneralStore = defineStore("generalStore", {
         NCDActivities: [] as any,
         OPDUserActions: [] as any,
         NCDUserActions: [] as any,
+        regSelectedCountry: "" as any,
     }),
     actions: {
         setOPDActivity(data: any) {
@@ -19,6 +20,9 @@ export const useGeneralStore = defineStore("generalStore", {
         },
         setNCDUserActions(data: any) {
             this.NCDUserActions = data;
+        },
+        setRegSelectedCountry(data: any) {
+            this.regSelectedCountry = data;
         },
     },
     persist: true,
