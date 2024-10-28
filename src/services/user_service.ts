@@ -50,6 +50,10 @@ export class UserService extends Service {
     static getUserVillages(id: number) {
         return this.getJson(`users/${id}/get_user_villages`);
     }
+
+    static updateuserVillages(id: number, user_village_ids = []) {
+        return this.putJson(`users/${id}/update_user_villages`, { user_village_ids });
+    }
     
     static isAdmin() {
         const roles = super.getUserRoles().filter((role: Role) => {

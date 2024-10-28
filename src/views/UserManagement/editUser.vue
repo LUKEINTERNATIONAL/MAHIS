@@ -508,6 +508,7 @@ function trigerSaveFn() {
     trigerSaveStatusFn()
     updateUserDemographics()
     updatePassword()
+    updateUserVillages()
 }
 
 
@@ -621,6 +622,10 @@ async function updatePassword() {
             await UserService.updateUser(userId.value, {new_password});
         }
     }
+}
+
+async function updateUserVillages() {
+    UserService.updateuserVillages(userId.value, selectedVillageIds as any)
 }
 
 function checkPasswordFieldsEmpty() {
