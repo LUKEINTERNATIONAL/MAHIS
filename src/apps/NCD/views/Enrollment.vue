@@ -309,34 +309,6 @@ export default defineComponent({
             await this.savePatientHistory();
             await this.savePatientRegistration();
         },
-
-        //     const data: any = [
-        //         ...(await formatRadioButtonData(this.patientHistoryHIV)),
-        //         ...(await formatCheckBoxData(this.patientHistory)),
-        //         ...(await formatCheckBoxData(this.familyHistory)),
-        //     ];
-        //     if (data.length > 0) {
-        //         const patient = new PatientHistoryEncounterType(this.demographics.patient_id, "" as any);
-        //         const encounter = await patient.createEncounter();
-        //         patient.saveObservationList(data);
-        //     }
-        // },
-        // async savePatientRegistration() {
-        //     const data: any = await formatRadioButtonData(this.patientType);
-        //     if (data.length > 0) {
-        //         const patientHistory = new PatientRegistrationEncounterType(this.demographics.patient_id, "" as any);
-        //         const encounter = await patientHistory.createEncounter();
-        //         patientHistory.saveObservationList(data);
-        //     }
-        // },
-        // async saveDiagnosis() {
-        //     const data: any = await formatCheckBoxData(this.enrollmentDiagnosis);
-        //     if (data.length > 0) {
-        //         const patientHistory = new PatientRegistrationEncounterType(this.demographics.patient_id, "" as any);
-        //         const encounter = await patientHistory.createEncounter();
-        //         patientHistory.saveObservationList(data);
-        //     }
-        // },
         async savePatientHistory() {
             const data: any = [
                 ...(await formatRadioButtonData(this.patientHistoryHIV)),
