@@ -165,7 +165,7 @@ import { IdentifierService } from "@/services/identifier_service";
 import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { UserService } from "@/services/user_service";
-import { PatientRegistrationEncounterType, PatientHistoryEncounterType } from "@/apps/NCD/services/encounter_type";
+import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 
 export default defineComponent({
     name: "Home",
@@ -310,33 +310,58 @@ export default defineComponent({
             await this.savePatientRegistration();
         },
 
+        //     const data: any = [
+        //         ...(await formatRadioButtonData(this.patientHistoryHIV)),
+        //         ...(await formatCheckBoxData(this.patientHistory)),
+        //         ...(await formatCheckBoxData(this.familyHistory)),
+        //     ];
+        //     if (data.length > 0) {
+        //         const patient = new PatientHistoryEncounterType(this.demographics.patient_id, "" as any);
+        //         const encounter = await patient.createEncounter();
+        //         patient.saveObservationList(data);
+        //     }
+        // },
+        // async savePatientRegistration() {
+        //     const data: any = await formatRadioButtonData(this.patientType);
+        //     if (data.length > 0) {
+        //         const patientHistory = new PatientRegistrationEncounterType(this.demographics.patient_id, "" as any);
+        //         const encounter = await patientHistory.createEncounter();
+        //         patientHistory.saveObservationList(data);
+        //     }
+        // },
+        // async saveDiagnosis() {
+        //     const data: any = await formatCheckBoxData(this.enrollmentDiagnosis);
+        //     if (data.length > 0) {
+        //         const patientHistory = new PatientRegistrationEncounterType(this.demographics.patient_id, "" as any);
+        //         const encounter = await patientHistory.createEncounter();
+        //         patientHistory.saveObservationList(data);
+        //     }
+        // },
         async savePatientHistory() {
             const data: any = [
                 ...(await formatRadioButtonData(this.patientHistoryHIV)),
                 ...(await formatCheckBoxData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.familyHistory)),
             ];
-            if (data.length > 0) {
-                const patient = new PatientHistoryEncounterType(this.demographics.patient_id, "" as any);
-                const encounter = await patient.createEncounter();
-                patient.saveObservationList(data);
-            }
+            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.FAMILY_MEDICAL_HISTORY, "" as any, data);
         },
+
         async savePatientRegistration() {
-            const data: any = await formatCheckBoxData(this.enrollmentDiagnosis);
-            if (data.length > 0) {
-                const patientHistory = new PatientRegistrationEncounterType(this.demographics.patient_id, "" as any);
-                const encounter = await patientHistory.createEncounter();
-                patientHistory.saveObservationList(data);
-            }
+            await saveEncounterData(
+                this.demographics.patient_id,
+                EncounterTypeId.PATIENT_REGISTRATION,
+                "" as any,
+                await formatRadioButtonData(this.patientType)
+            );
         },
+
         async saveDiagnosis() {
-            const data: any = await formatCheckBoxData(this.enrollmentDiagnosis);
-            if (data.length > 0) {
-                const userID: any = Service.getUserID();
-                const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
-            }
+            await saveEncounterData(
+                this.demographics.patient_id,
+                EncounterTypeId.DIAGNOSIS,
+                "" as any,
+                await formatCheckBoxData(this.enrollmentDiagnosis)
+            );
         },
     },
 });
