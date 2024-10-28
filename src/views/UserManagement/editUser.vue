@@ -100,12 +100,6 @@
                 </div>
             </ion-col>
             <ion-col>
-                
-            </ion-col>
-        </ion-row>
-
-        <ion-row v-if="isSuperUser">
-            <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Activate/Deactivate user<span style="color: #b42318">*</span></ion-label
                 >
@@ -119,7 +113,9 @@
                     :onLabel="'active'"
                 />
             </ion-col>
+        </ion-row>
 
+        <ion-row v-if="isSuperUser">
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Role(s)<span style="color: #b42318">*</span></ion-label
@@ -406,7 +402,7 @@ const passwordErrorMsgs = [
 const isSuperUser = ref(false);
 const districtList = ref([] as any);
 const HSA_found_for_disabling_button = ref(true)
-const selected_Districts = ref();
+const selected_Districts = ref([]) as any;
 const district_show_error = ref(false)
 const district_error_message = ref('Select district(s)')
 const village_error_message = ref('Select village(s)')
@@ -421,6 +417,7 @@ const selectedDistrictIds : any[] = []
 const selectedTAIds: any[] = []
 const disableVillageSelection = ref(true)
 const selectedVillageIds: any[] = []
+const traditionalAuthorities = ref([]) as any
 
 const props = defineProps<{
     toggle: true,
@@ -451,12 +448,25 @@ watch(
     }
 )
 
+watch(
+    () => traditionalAuthorities.value.length,
+    async (newValue) => {
+        setUserDistricts()
+    }
+)
+
+watch(
+    () => districtList.value.length,
+        async (newValue) => {
+        setUserDistricts()
+    }
+)
+
 function selectedLocation(data: any) {
     selected_location.value = data
 }
 
 async function FindLocation(text: any) {
-    console.log(text)
     let srch_text
     if (isEmpty(text) == true) {
         srch_text = ''
@@ -677,13 +687,33 @@ async function setVillage(villageId: number, index: number) {
     villageList.value = villageList.value.concat(arrayWithIds);
     selectedVillageIds.push(n_village.village_id);
     selected_villages.value.push(arrayWithIds[0]);
+    traditionalAuthorities.value.push(n_village.traditional_authority)
+}
+
+async function setUserDistricts() {
+    try {
+        selected_Districts.value = [];
+        const uniqueDistrictIds = new Set();
+        traditionalAuthorities.value.forEach((TA: any) => {
+            const matchingDistrict = districtList.value.find(
+                (DL: any) => DL.district_id === TA.district_id
+            );
+            
+            if (matchingDistrict && !uniqueDistrictIds.has(matchingDistrict.district_id)) {
+                uniqueDistrictIds.add(matchingDistrict.district_id);
+                selected_Districts.value.push(matchingDistrict);
+            }
+        });
+    } catch (error) {
+        console.error('Error setting user districts:', error);
+        throw error;
+    }
 }
 
 async function setUserTAs() {
     try {
         selected_TAz.value = [];
         villageList.value = [];
-
         const uniqueTAsMap = new Map();
         
         selected_villages.value.forEach((village: any, index: number) => {
@@ -1048,17 +1078,13 @@ async function getdistrictList() {
         districtList.push(...districts);
     }
 
-    //__________________________not ideal
-
     districtList.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id)
     })
 
-    districtList.forEach((district: any ) => {
+    districtList.forEach((district: any) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
-    //__________________________
-
     return districtList
 }
 
@@ -1098,7 +1124,6 @@ function selectedTA(selectedTAList: any) {
 function selectedVillage(VillagesList: any) {
     selectedVillageIds.length = 0
     VillagesList.forEach((village: any) => {
-        console.log(village)
         selectedVillageIds.push(village.village_id)
     })
 }

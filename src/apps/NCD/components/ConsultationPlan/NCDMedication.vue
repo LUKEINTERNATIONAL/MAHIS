@@ -5,7 +5,7 @@
         <ion-col>
           <ion-card-title>
             <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
-            Prescription List
+            Medication List
           </ion-card-title>
         </ion-col>
         <ion-col>
