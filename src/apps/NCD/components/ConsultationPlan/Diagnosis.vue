@@ -70,8 +70,9 @@ import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-buttons-dt";
 import "datatables.net-responsive";
 import "datatables.net-select";
-
 import "datatables.net-buttons";
+import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
+import AddDiagnosisModal from "./Diagnosis/AddDiagnosisModal.vue";
 
 export default defineComponent({
     name: "Menu",
@@ -165,6 +166,10 @@ export default defineComponent({
         // });
     },
     methods: {
+        async openEnterResultModal() {
+            await createModal(AddDiagnosisModal, { class: "lab-results-modal" }, true);
+            await this.setListData();
+        },
         async setListData() {
             const obsP = await ObservationService.getAll(this.demographics.patient_id, "Primary diagnosis");
             const obsS = await ObservationService.getAll(this.demographics.patient_id, "Secondary diagnosis");
