@@ -8,6 +8,7 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
+
             <Stepper
                 :stepperTitle="userRoleSettings.stepperTitle"
                 :wizardData="wizardData"
@@ -17,9 +18,12 @@
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
-                :hasPatientsWaitingForLab="hasPatientsWaitingForLab"
+                :hasPatientsWaitingList="hasPatientsWaitingForLab"
             />
         </ion-content>
+      <div v-if="(userRole === 'Clinician' || userRole === 'Superuser') && showAlert" class="pause-alert">
+        Consultation for this patient is paused due to lab orders.
+      </div>
     </ion-page>
 </template>
 
@@ -103,7 +107,7 @@ import {getUserLocation} from "@/services/userService";
 import {usePatientList} from "@/apps/OPD/stores/patientListStore";
 
 export default defineComponent({
-    name: "Home",
+    name: "ConsultationPlan",
     mixins: [SetUserRole, SetEncounter],
     components: {
         IonContent,
@@ -140,6 +144,7 @@ export default defineComponent({
             iconsContent: icons,
             isLoading: false,
             patients: [] as any,
+            showAlert: false,
 
 
         };
@@ -172,6 +177,16 @@ export default defineComponent({
       this.markWizard();
     },
     watch: {
+      patientsWaitingForLab(newValue) {
+        this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.demographics.patient_id);
+        this.showAlert = this.hasPatientsWaitingForLab;
+        if (this.showAlert) {
+          // Automatically hide the alert after 20 seconds
+          setTimeout(() => {
+            this.showAlert = false;
+          }, 15000);
+        }
+        },
         vitals: {
             handler() {
                 this.markWizard();
@@ -183,6 +198,7 @@ export default defineComponent({
                 await this.getData();
                 this.markWizard();
                 this.fetchPatientLabStageData();
+                this.hasPatientsWaitingForLab=false
             },
             deep: true,
         },
@@ -208,7 +224,7 @@ export default defineComponent({
         immediate: true,
         handler(newValue) {
           console.log("Updated lab waiting status:", newValue);
-        }
+        },
       },
     },
     setup() {
@@ -216,7 +232,7 @@ export default defineComponent({
     },
 
     methods: {
-      getSaveFunction(index: any) {
+     getSaveFunction(index: any) {
         const disableNextButton = this.userRole !== "Lab" && this.hasPatientsWaitingForLab && index >= 1;
 
         if (index < this.StepperData.length - 1) {
@@ -255,6 +271,8 @@ export default defineComponent({
               this.$router.push("home");
               toastSuccess("Lab results submitted!");
             }
+
+
           };
         }
       },
@@ -266,6 +284,8 @@ export default defineComponent({
           const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
           if (this.demographics.patient_id) {
             this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.demographics.patient_id);
+            console.log("Patients waiting for lab updated:", this.hasPatientsWaitingForLab);
+
           }
         }
       },
@@ -409,10 +429,6 @@ export default defineComponent({
             });
           }
           if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
-            // await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"DISPENSATION");
-            // await this.saveDiagnosis();
-            // await this.saveTreatmentPlan();
-            // await this.saveOutComeStatus();
             await this.saveWomenStatus();
             await this.savePresentingComplaints();
             await this.savePastMedicalHistory();
@@ -683,6 +699,16 @@ ion-spinner {
   margin-top: 20px;
   font-size: 18px;
   color: #333;
+}
+.pause-alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  margin-bottom: 1px;
+  text-align: center;
+
 }
 
 .loading {

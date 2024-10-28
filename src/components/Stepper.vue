@@ -28,12 +28,12 @@
       </div>
       <div class="accordion_group">
         <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="currentOpenStepper">
-          <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
+          <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value" v-show="!(hasPatientsWaitingList && index >= 2)">
             <ion-item slot="header">
               <ion-label>{{ item.title }}</ion-label>
             </ion-item>
             <div class="ion-padding" slot="content">
-              <component :is="item.component" ></component>
+              <component :is="item.component"></component>
               <div class="button-row">
                 <!-- Previous Button -->
                 <div v-if="index > 0">
@@ -45,10 +45,7 @@
 
                 <!-- Next Button -->
                 <div>
-                  <ion-button
-                      class="next-button"
-                      @click="nextAccordion(index)"
-                  >
+                  <ion-button class="next-button" @click="nextAccordion(index)">
                     <ion-icon :icon="index < StepperData.length - 1 ? chevronForward() : checkmark" slot="start"></ion-icon>
                     {{ index < StepperData.length - 1 ? 'Next' : 'Finish' }}
                   </ion-button>
@@ -56,6 +53,7 @@
               </div>
             </div>
           </ion-accordion>
+
         </ion-accordion-group>
         <hr style="background: rgba(0, 0, 0, 0.13)" />
       </div>
@@ -325,7 +323,7 @@ export default defineComponent({
       type: Function,
       required: true,
     },
-    hasPatientsWaitingForLab: {
+    hasPatientsWaitingList: {
       type: Boolean,
       default: false,
     },
@@ -335,6 +333,7 @@ export default defineComponent({
 
     };
   },
+
   methods: {
     chevronBack() {
       return chevronBack
