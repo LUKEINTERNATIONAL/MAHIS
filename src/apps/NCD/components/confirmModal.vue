@@ -44,7 +44,7 @@
       const onCancel = async () => {
         emit('cancel');
         try {
-        const modal = await modalController.getTop();
+        const modal = await modalController.getTop() as any;
             if (modal) {
             modal.dispatchEvent(new CustomEvent('cancel', { detail: true }));
             }
@@ -57,7 +57,7 @@
       const onConfirm = async () => {
         emit('confirm');
         try {
-        const modal = await modalController.getTop();
+        const modal = await modalController.getTop() as any;
             if (modal) {
             modal.dispatchEvent(new CustomEvent('confirm', { detail: true }));
             }

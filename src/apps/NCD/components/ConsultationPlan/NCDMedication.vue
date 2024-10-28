@@ -1,10 +1,17 @@
 <template>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>
-        <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
-        Prescription List
-      </ion-card-title>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>
+            <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
+            Medication List
+          </ion-card-title>
+        </ion-col>
+        <ion-col>
+           <OPDMedications @drug-selected="addSearchedDrug"/>
+        </ion-col>
+      </ion-row>
     </ion-card-header>
     <ion-card-content>
       <div class="table-container">
@@ -89,7 +96,7 @@
 import { defineComponent, ref, computed } from 'vue';
 import {
   IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-  IonInput, IonIcon, IonCheckbox
+  IonInput, IonIcon, IonCheckbox, IonCol, IonRow
 } from '@ionic/vue';
 import VueMultiselect from "vue-multiselect";
 import { 
@@ -98,34 +105,51 @@ import {
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import { mapState } from "pinia";
+import OPDMedications from "./OPDMedications.vue"
 
 export default defineComponent({
   name: 'PrescriptionTable',
   components: {
     IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-    IonInput, IonIcon, IonCheckbox, VueMultiselect
+    IonInput, IonIcon, IonCol, IonRow, IonCheckbox, VueMultiselect, OPDMedications
   },
   setup() {
     const treatmentPlanStore = useTreatmentPlanStore();
     const selected_NCD_Medication_List = computed(() => treatmentPlanStore.selectedNCDMedicationList);
 
-    // Predefined list of all possible medications
-    const medications = ref([
-      // Diabetes medications
-      { id: 1, name: 'Long acting Insulin', category: 'Diabetes' },
-      { id: 2, name: 'Short Acting Insulin', category: 'Diabetes' },
-      { id: 3, name: 'Metformin', category: 'Diabetes' },
-      { id: 4, name: 'Glibenclamide', category: 'Diabetes' },
-      // Anti-hypertensives
-      { id: 5, name: 'Diuretic', category: 'Anti-hypertensives' },
-      { id: 6, name: 'CCB', category: 'Anti-hypertensives' },
-      { id: 7, name: 'ACE-I', category: 'Anti-hypertensives' },
-      { id: 8, name: 'BB', category: 'Anti-hypertensives' },
-      // Other medications
-      { id: 9, name: 'Aspirin', category: 'Other' },
-      { id: 10, name: 'Statin', category: 'Other' },
-      { id: 11, name: 'Other', category: 'Other' },
-    ]);
+    const medications = ref([]) as any;
+    const DiabetesMedication = [
+      'Long acting Insulin',
+      'Short Acting Insulin',
+      'Metformin',
+      'Glibenclamide',
+    ]
+    const AntiHypertensives = [
+      'Diuretic',
+      'CCB',
+      'ACE-I',
+      'BB',
+    ]
+    const other = [
+      'Aspirin',
+      'Statin',
+    ]
+
+    const drugObj = (drug_id: number, name: string, category: string) => {
+      return { drug_id: drug_id, name: name, category: category, units: '', dosage_form: '', dose_strength: '' }
+    }
+
+    medications.value.push(
+      ...other.map((drug, index) => drugObj(index + 1, drug, 'Other') as any)
+    )
+
+    medications.value.push(
+      ...AntiHypertensives.map((drug, index) => drugObj(other.length + index + 1, drug, 'AntiHypertensive') as any)
+    )
+
+    medications.value.push(
+      ...DiabetesMedication.map((drug, index) => drugObj(AntiHypertensives.length + index + 1, drug, 'DiabetesMedication') as any)
+    )
 
     const frequency_options = ref(DRUG_FREQUENCIES)
 
@@ -163,10 +187,17 @@ export default defineComponent({
       }
     };
 
+    const addSearchedDrug = (data: any) => {
+      // console.log(data)
+      const drug = drugObj(data.drug_id, data.name, 'Other')
+      // console.log(drug)
+      medications.value.unshift(drug)
+    }
+
     const updateDosage = (medicationName: string, timeOfDay: string, event: any) => {
       const value = event.target.value;
       const medicationIndex = selected_NCD_Medication_List.value.findIndex(
-        (        med: { medication: string; }) => med.medication === medicationName
+        (med: { medication: string; }) => med.medication === medicationName
       );
       
       if (medicationIndex > -1) {
@@ -205,6 +236,7 @@ export default defineComponent({
       frequency_options,
       updateFrequencySelection,
       getFrequency,
+      addSearchedDrug
     };
   }
 });
