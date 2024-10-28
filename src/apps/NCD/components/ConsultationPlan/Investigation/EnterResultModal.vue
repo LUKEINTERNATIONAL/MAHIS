@@ -28,7 +28,7 @@ import { OrderService } from "@/services/order_service";
 import DashBox from "@/components/DashBox.vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import BasicInputField from "@/components/BasicInputField.vue";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
+import { useInvestigationStore } from "@/apps/NCD/stores/InvestigationStore";
 import { mapState } from "pinia";
 import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import BasicForm from "@/components/BasicForm.vue";
