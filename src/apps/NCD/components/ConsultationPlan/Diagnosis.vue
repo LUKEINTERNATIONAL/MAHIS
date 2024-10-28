@@ -1,4 +1,13 @@
 <template>
+    <div class="table-responsive">
+        <DataTable ref="dataTable" :options="options" :data="tableData" class="display nowrap" width="100%">
+            <thead>
+                <tr>
+                    <th v-for="head in header" :key="head">{{ head }}</th>
+                </tr>
+            </thead>
+        </DataTable>
+    </div>
     <DashBox :status="no_item" :content="'No Diagnosis added'" />
 
     <span v-if="display_item">
@@ -50,6 +59,19 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import { Service } from "@/services/service";
 import previousDiagnosis from "@/apps/NCD/components/ConsultationPlan/previousVisits/previousDiagnosis.vue";
 import { Diagnosis } from "../../services/diagnosis";
+import HisDate from "@/utils/Date";
+import { ObservationService } from "@/services/observation_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import DataTable from "datatables.net-vue3";
+import DataTablesCore from "datatables.net";
+import DataTablesResponsive from "datatables.net-responsive";
+import "datatables.net-buttons";
+import "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-buttons-dt";
+import "datatables.net-responsive";
+import "datatables.net-select";
+
+import "datatables.net-buttons";
 
 export default defineComponent({
     name: "Menu",
@@ -70,6 +92,7 @@ export default defineComponent({
         BasicForm,
         DynamicButton,
         previousDiagnosis,
+        DataTable,
     },
     data() {
         return {
@@ -85,6 +108,29 @@ export default defineComponent({
             popoverOpen: false,
             event: "" as any,
             selectedCondition: "" as any,
+            tableData: [] as any,
+            options: {
+                responsive: true,
+                select: false,
+                layout: {
+                    topStart: "buttons",
+                    topEnd: "search",
+                    bottomStart: "info",
+                    bottomEnd: "paging",
+                },
+                ordering: false,
+                buttons: [
+                    {
+                        text: " <b>+ Add diagnosis </b>",
+                        className: "add-test text-white",
+                        action: async () => {
+                            await this.openEnterResultModal();
+                        },
+                    },
+                ],
+            } as any,
+
+            header: ["Diagnosis", "Order Date", "Action"],
         };
     },
     setup() {
@@ -92,6 +138,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDiagnosisStore, ["diagnosis"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
         inputFields() {
             return this.diagnosis[0].data.rowData[0].colData;
         },
@@ -104,11 +151,52 @@ export default defineComponent({
             deep: true,
         },
     },
-    mounted() {
+    async mounted() {
         this.updateDiagnosisStores();
         this.setDashedBox();
+        await this.setListData();
+        // this.$nextTick(() => {
+        //     const table = (this.$refs.dataTable as any).dt;
+        //     table.columns.adjust().draw();
+        //     table.on("click", ".delete-btn", (e: Event) => {
+        //         const data: any = (e.target as HTMLElement).getAttribute("data-id");
+        //         // this.voidLabOrder(JSON.parse(data), e);
+        //     });
+        // });
     },
     methods: {
+        async setListData() {
+            const obsP = await ObservationService.getAll(this.demographics.patient_id, "Primary diagnosis");
+            const obsS = await ObservationService.getAll(this.demographics.patient_id, "Secondary diagnosis");
+            const observations = [...(obsP || []), ...(obsS || [])];
+            this.tableData = await this.generateListItems(observations);
+            console.log("🚀 ~ setListData ~ this.tableData:", this.tableData);
+
+            // await this.updateInvestigationWizard();
+            DataTable.use(DataTablesCore);
+        },
+        async generateListItems(data: any) {
+            if (data.length > 0) {
+                // Use Promise.all to wait for all async operations to complete
+                const promiseResults = await Promise.all(
+                    data.map(async (item: any) => {
+                        const name = await ObservationService.getConceptName(item.value_coded);
+                        const obs_date = item.obs_datetime;
+                        return [
+                            name,
+                            HisDate.toStandardHisFormat(obs_date),
+                            `<button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify(item)}'>${
+                                this.iconsContent.delete2
+                            }</button>`,
+                        ];
+                    })
+                );
+
+                return promiseResults;
+            } else {
+                return [];
+            }
+        },
         displayInputFields() {
             this.conditionStatus = "";
             this.selectedText = "";
@@ -207,7 +295,26 @@ export default defineComponent({
     },
 });
 </script>
+<style>
+@import "datatables.net-dt";
+@import "datatables.net-buttons-dt";
+@import "datatables.net-responsive-dt";
+@import "datatables.net-select-dt";
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+div.dt-buttons > .dt-button:first-child {
+    border: 1px solid #fff;
+    background: #046c04;
+    border-radius: 5px;
+}
+div.dt-buttons > .dt-button:hover:not(.disabled) {
+    background: #188907 !important;
+    border: 1px solid #fff !important;
+}
+</style>
 <style scoped>
 #container {
     text-align: center;
