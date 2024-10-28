@@ -14,22 +14,6 @@ export const useInvestigationStore = defineStore("investigationStore", {
                         {
                             colData: [
                                 {
-                                    inputHeader: "Specimen",
-                                    icon: icons.search,
-                                    value: "",
-                                    name: "specimen",
-                                    eventType: "input",
-                                    required: true,
-                                    alertsErrorMassage: "",
-                                    disabled: false,
-                                    isSingleSelect: true,
-                                    trackBy: "concept_id",
-                                    multiSelectData: [],
-                                    id: "",
-                                    idName: "specimen_id",
-                                },
-                                {
-                                    disabled: true,
                                     inputHeader: "Test",
                                     icon: icons.search,
                                     value: "",
@@ -43,13 +27,23 @@ export const useInvestigationStore = defineStore("investigationStore", {
                                     multiSelectData: [],
                                     id: "",
                                     idName: "test_id",
+                                    validationFunctionName: "required",
                                 },
-                            ],
-                            btns: [
                                 {
-                                    name: "Save",
-                                    fill: "clear",
-                                    icon: icons.plus,
+                                    inputHeader: "Specimen",
+                                    icon: icons.search,
+                                    value: "",
+                                    name: "specimen",
+                                    eventType: "input",
+                                    required: true,
+                                    alertsErrorMassage: "",
+                                    disabled: true,
+                                    isSingleSelect: true,
+                                    trackBy: "concept_id",
+                                    multiSelectData: [],
+                                    id: "",
+                                    idName: "specimen_id",
+                                    validationFunctionName: "required",
                                 },
                             ],
                         },
@@ -63,5 +57,5 @@ export const useInvestigationStore = defineStore("investigationStore", {
             this.investigations = data;
         },
     },
-    persist: true,
+    // persist: true,
 });
