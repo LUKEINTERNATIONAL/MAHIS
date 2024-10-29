@@ -40,8 +40,8 @@
                     </div>
                     <div class="flex-item">
                         <Country />
-                        <CurrentLocation />
-                        <HomeLocation />
+                        <CurrentLocation v-if="regSelectedCountry == 'Malawi'" />
+                        <HomeLocation v-if="regSelectedCountry == 'Malawi'" />
                     </div>
                     <div class="flex-item">
                         <SocialHistory v-if="checkUnderFourteen" />
