@@ -140,7 +140,7 @@ export async function formatCheckBoxData(
                 try {
                     const value_coded = await ConceptService.getConceptID(checkboxData.value, true);
                     const concept_id = await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true);
-                    const date = getFieldValue(data, checkboxData.value + " date", "value");
+                    const date = getFieldValue(data, checkboxData.name + " date", "value");
                     obs_datetime = date || obs_datetime;
                     // Skip if required IDs couldn't be retrieved
                     if (!value_coded || !concept_id) {
