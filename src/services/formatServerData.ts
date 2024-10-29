@@ -1,4 +1,13 @@
 import { ConceptService } from "@/services/concept_service";
+import {
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    getFieldValue,
+    modifyRadioValue,
+    modifyFieldValue,
+    modifyCheckboxData,
+} from "@/services/data_helpers";
 
 export async function formatRadioButtonData(data: any, date: any = ConceptService.getSessionDate(), childData = []) {
     const buildObjPromises: Promise<any>[] = data.map(async (item: any) => {
@@ -131,7 +140,8 @@ export async function formatCheckBoxData(
                 try {
                     const value_coded = await ConceptService.getConceptID(checkboxData.value, true);
                     const concept_id = await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true);
-
+                    const date = getFieldValue(data, checkboxData.value + " date", "value");
+                    obs_datetime = date || obs_datetime;
                     // Skip if required IDs couldn't be retrieved
                     if (!value_coded || !concept_id) {
                         return null;
