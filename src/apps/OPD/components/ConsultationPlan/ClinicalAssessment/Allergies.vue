@@ -30,9 +30,36 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
+import { icons } from "@/utils/svg";
 import {
+    IonContent,
+    IonHeader,
+    IonCol,
+    IonItem,
+    IonList,
+    IonButton,
+    IonMenu,
+    IonTitle,
+    IonToolbar,
+    IonInput,
+    IonDatetime,
     IonLabel,
-} from "@ionic/vue"
+    IonTextarea,
+    IonAccordion,
+    IonAccordionGroup,
+    AccordionGroupCustomEvent,
+} from "@ionic/vue";
+import {
+    checkmark,
+    pulseOutline,
+    addOutline,
+    closeOutline,
+    checkmarkOutline,
+    filter,
+    chevronDownOutline,
+    chevronUpOutline,
+    codeSlashOutline,
+} from "ionicons/icons";
 import { useAllegyStore, searchHealthcareEquipmentAllergies, concatenateArrays } from "@/apps/OPD/stores/AllergyStore";
 import { ConceptService } from "@/services/concept_service";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
@@ -47,9 +74,9 @@ const uniqueId = ref(generateUniqueId(8, "item-"));
 const otherAllergy = ref("");
 const showOtherInput = ref(false);
 
-// const filteredAllergiesList = computed(() => {
-//     return allergiesList.value.filter((item: any) => item.name !== "Other" || !showOtherInput.value);
-// });
+const filteredAllergiesList = computed(() => {
+    return allergiesList.value;
+});
 
 const list_picker_prperties = [
     {
@@ -146,23 +173,6 @@ function generateUniqueId(length = 8, prefix = "") {
     result += `-${Date.now()}`; // Append timestamp
     return result;
 }
-// function addCustomAllergy() {
-//     const customAllergy = otherAllergy.value.trim();
-//     if (customAllergy) {
-//         const newAllergy = {
-//             name: customAllergy,
-//             selected: true,
-//         };
-
-//         store.setMedicalAllergiesList([...allergiesList.value, newAllergy]);
-//         store.setSelectedMedicalAllergiesList(newAllergy);
-
-//         otherAllergy.value = "";
-//         showOtherInput.value = false;
-//     } else {
-//         console.log("Allergy name cannot be empty");
-//     }
-// }
 function addCustomAllergy() {
     const customAllergy = otherAllergy.value.trim();
     if (customAllergy) {
