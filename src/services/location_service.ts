@@ -48,6 +48,10 @@ export class LocationService extends Service {
         return await super.getJson("/villages", { traditional_authority_id: traditionalAuthorityID, name, page_size: 1000 });
     }
 
+    static async getVillage(villageID: number) {
+        return await super.getJson(`/villages/${villageID}`);
+    }
+
     static async getTraditionalAuthorities(villageID: number, name = "") {
         return await super.getJson("/traditional_authorities", { district_id: villageID, name, page_size: 1000 });
     }

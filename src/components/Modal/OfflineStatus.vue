@@ -13,6 +13,15 @@
                 color="rgb(107, 199, 107)"
             ></k-progress>
             <div class="sub_title">
+                Countries <span class="count"> ({{ offlineCountriesStatus?.total_countries }}/{{ offlineCountriesStatus?.total }})</span>
+            </div>
+            <k-progress
+                :percent="fractionToPercentage(offlineCountriesStatus?.total_countries, offlineCountriesStatus?.total)"
+                :active="!offlineCountriesStatus?.total_countries == offlineCountriesStatus?.total"
+                active-color="#fff"
+                color="rgb(107, 199, 107)"
+            ></k-progress>
+            <div class="sub_title">
                 Districts <span class="count"> ({{ offlineDistrictStatus?.total_districts }}/{{ offlineDistrictStatus?.total }})</span>
             </div>
             <k-progress
@@ -133,7 +142,13 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useStatusStore, ["offlineVillageStatus", "offlineDistrictStatus", "offlineTAsStatus", "offlineRelationshipStatus"]),
+        ...mapState(useStatusStore, [
+            "offlineVillageStatus",
+            "offlineCountriesStatus",
+            "offlineDistrictStatus",
+            "offlineTAsStatus",
+            "offlineRelationshipStatus",
+        ]),
     },
     watch: {
         dataToPass: {
@@ -165,8 +180,10 @@ export default defineComponent({
             if (
                 this.offlineVillageStatus?.total_village &&
                 this.offlineTAsStatus?.total_TAs &&
+                this.offlineCountriesStatus?.total_countries &&
                 this.offlineDistrictStatus?.total_districts &&
                 this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
+                this.offlineCountriesStatus?.total_countries == this.offlineCountriesStatus?.total &&
                 this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
                 this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
             ) {
@@ -174,6 +191,7 @@ export default defineComponent({
             }
             const status = useStatusStore();
             status.setOfflineVillageStatus("");
+            status.setOfflineCountriesStatus("");
             status.setOfflineDistrictStatus("");
             status.setOfflineTAsStatus("");
         },

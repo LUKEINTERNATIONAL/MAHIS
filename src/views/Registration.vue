@@ -39,12 +39,13 @@
                         <PersonalInformation />
                     </div>
                     <div class="flex-item">
+                        <Country />
                         <CurrentLocation />
-                        <SocialHistory v-if="checkUnderFourteen" />
-                        <BirthRegistration v-if="checkUnderNine" />
+                        <HomeLocation />
                     </div>
                     <div class="flex-item">
-                        <HomeLocation />
+                        <SocialHistory v-if="checkUnderFourteen" />
+                        <BirthRegistration v-if="checkUnderNine" />
                         <GuardianInformation />
                     </div>
                 </div>
@@ -56,8 +57,9 @@
                 </div>
                 <div v-if="currentStep == 'Location'">
                     <div style="justify-content: center">
-                        <div><CurrentLocation /></div>
-                        <div><HomeLocation /></div>
+                        <div><Country /></div>
+                        <div v-if="regSelectedCountry == 'Malawi'"><CurrentLocation /></div>
+                        <div v-if="regSelectedCountry == 'Malawi'"><HomeLocation /></div>
                     </div>
                 </div>
                 <div v-if="currentStep == 'Social History'">
@@ -74,7 +76,7 @@
         </div>
         <ion-footer v-if="registrationDisplayType == 'list' || screenWidth <= 991">
             <div class="footer position_content">
-                <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="nav('/home')" />
+                <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="cancel($event)" />
                 <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
                 <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
                     <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ active: currentStep === 'Personal Information' }">
@@ -116,6 +118,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import PersonalInformation from "@/components/Registration/PersonalInformation.vue";
 import GuardianInformation from "@/components/Registration/GuardianInformation.vue";
 import HomeLocation from "@/components/Registration/HomeLocation.vue";
+import Country from "@/components/Registration/Country.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
@@ -126,7 +129,7 @@ import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { resetPatientData } from "@/services/reset_data";
 import { validateField } from "@/services/validation_service";
-import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
@@ -163,6 +166,7 @@ export default defineComponent({
         PersonalInformation,
         GuardianInformation,
         CurrentLocation,
+        Country,
         HomeLocation,
         SocialHistory,
         BirthRegistration,
@@ -190,13 +194,16 @@ export default defineComponent({
     },
     props: ["registrationType"],
     computed: {
-        ...mapState(useGeneralStore, ["NCDUserActions"]),
+        ...mapState(useGeneralStore, ["NCDUserActions", "regSelectedCountry"]),
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
-        ...mapState(useRegistrationStore, ["personInformation"]),
-        ...mapState(useRegistrationStore, ["socialHistory"]),
-        ...mapState(useRegistrationStore, ["homeLocation"]),
-        ...mapState(useRegistrationStore, ["currentLocation"]),
-        ...mapState(useRegistrationStore, ["guardianInformation"]),
+        ...mapState(useRegistrationStore, [
+            "personInformation",
+            "socialHistory",
+            "currentLocation",
+            "homeLocation",
+            "guardianInformation",
+            "country",
+        ]),
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
         ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
         nationalID() {
@@ -302,6 +309,16 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        async cancel(event: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to cancel registration?`, "", {
+                confirmBtnLabel: "Yes",
+                icon: "",
+                showBackdrop: true,
+            });
+            if (deleteConfirmed) {
+                this.nav("/home");
+            }
+        },
         programID() {
             return Service.getProgramID();
         },
@@ -378,6 +395,17 @@ export default defineComponent({
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
+        async validateLocation() {
+            if (this.regSelectedCountry == "Malawi") {
+                if ((await validateInputFiledData(this.homeLocation)) && (await validateInputFiledData(this.currentLocation))) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        },
         async possibleDuplicates() {
             const ddeInstance = new PatientDemographicsExchangeService();
             this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
@@ -411,8 +439,7 @@ export default defineComponent({
             }
             if (
                 (await this.validations(this.personInformation, fields)) &&
-                (await this.validations(this.currentLocation, currentFields)) &&
-                (await validateInputFiledData(this.homeLocation)) &&
+                (await this.validateLocation()) &&
                 (await this.validateBirthData()) &&
                 this.validateGaudiarnInfo()
             ) {
@@ -542,7 +569,9 @@ export default defineComponent({
                 gender: this.gender,
                 birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
                 birthdate_estimated: "false",
-                home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
+                home_region:
+                    (await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name)) ||
+                    (await this.getRegion(getFieldValue(this.country, "country", "value")?.name)),
                 home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
                 home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
                 home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
@@ -550,6 +579,7 @@ export default defineComponent({
                 current_district: this.current_district,
                 current_traditional_authority: this.current_traditional_authority,
                 current_village: this.current_village,
+                country: getFieldValue(this.country, "country", "value")?.name,
                 landmark: landmark,
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),

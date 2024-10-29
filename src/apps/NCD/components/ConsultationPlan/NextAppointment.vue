@@ -13,7 +13,7 @@
                     <template #day="{ day, date }">
                         <template v-if="true">
                             <p>
-                                {{ day }}<sup style="color: #999">{{ getCounter(date) }}</sup>
+                                <span>{{ day }}<sup class="count-badge">{{ getCounter(date) }}</sup></span>
                             </p>
                         </template>
                         <template v-else>
@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonDatetime } from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonBadge, IonToolbar, IonMenu, modalController, IonDatetime } from "@ionic/vue";
 import { calendar, checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { createModal } from "@/utils/Alerts";
@@ -80,6 +80,7 @@ export default defineComponent({
     IonToolbar,
     BasicInputField,
     IonDatetime,
+    IonBadge,
   },
   setup() {
     const clinicalDaysStore = useClinicalDaysStore();
@@ -124,7 +125,6 @@ export default defineComponent({
     const patient = new PatientService();
     this.appointment = new AppointmentService(patient.getID(), userID);
     this.nextAppointmentDate = this.appointment.date;
-    this.loadDataFromStore();
   },
   methods: {
     updateNextAppointment() {
@@ -135,42 +135,31 @@ export default defineComponent({
       const storeClinicalDaysStore = useClinicalDaysStore();
       storeClinicalDaysStore.setsssignedAppointmentsDates(date, true);
       this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
-      this.save();
-      this.loadDataFromStore();
+      await this.save();
       await this.getAppointmentMents(date)
     },
     async  getAppointmentMents(date: any) {
         try {
             const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
-            console.log(res.length)
             this.appointment_count = res.length;
         } catch (error) {
             
         }
     },
-    getCounter(date: any) {
-        const normalizeDate = (date: Date) => {
+    getCounter(date: string | Date): string | number {
+        const normalizeDate = (date: Date): number => {
             const d = new Date(date);
             d.setHours(0, 0, 0, 0);
             return d.getTime();
         };
+
         const dateTimestamp = normalizeDate(new Date(date));
-        return this.assignedAppointmentsDates.reduce((sum: any, d: any) => {
+        const count = this.assignedAppointmentsDates.reduce((sum: number, d: { date: string | Date }) => {
             return normalizeDate(new Date(d.date)) === dateTimestamp ? sum + 1 : sum;
         }, 0);
+
+        return count === 0 ? '' : count;
     },
-    // async saveData() {
-    //   try {
-    //     const res = await this.appointment.getNextAppointment();
-    //     this.nextAppointmentDate = res.appointment_date;
-    //     this.drugRunoutDate = res.drugs_run_out_date;
-    //     console.log(res);
-    //   } catch {}
-    //   const ttt = [
-    //     await this.appointment.buildValueDate("Appointment date", "2024-03-28"),
-    //     await this.appointment.buildValueDate("Estimated date", this.nextAppointmentDate),
-    //   ];
-    // },
     async save() {
         if (this.assignedAppointmentsDates.length >0) {
             try {
@@ -184,12 +173,8 @@ export default defineComponent({
         }
 
     },
-    loadDataFromStore() {
-      // This method can be used to perform any additional data loading if needed
-    },
     async openCornfirmModal(date: any) {
         this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
-        this.loadDataFromStore();
         await this.getAppointmentMents(date)
       const handleCancel = (event: CustomEvent<any>) => {
         console.log(event.detail)
@@ -276,5 +261,12 @@ ion-datetime::part(calendar-day) {
     --dp-cell-padding: 30px; /*Padding in the cell*/
     --dp-menu-padding: 20px 5px; /*Menu padding*/
     --dp-font-size: 18px; /*Default font-size*/
+}
+.count-badge {
+    padding: 1px 4px;
+    font-size: 19px;
+    margin-left: 1px;
+    position: relative;
+    font-weight: bold;
 }
 </style>

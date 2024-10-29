@@ -50,6 +50,7 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import DynamicButton from "@/components/DynamicButton.vue";
+import { toastSuccess } from "@/utils/Alerts";
 
 export default defineComponent({
     components: {
@@ -117,6 +118,7 @@ export default defineComponent({
             patientLabResultService.setResultDate(HisDate.currentDate());
             await patientLabResultService.createEncounter();
             await patientLabResultService.createLabResult(this.buildResults());
+            toastSuccess("Saved successfully");
             this.$emit("saved");
         },
 

@@ -118,7 +118,7 @@ export class AppEncounterService extends ObservationService {
             encounter_datetime: this.date,
         };
         if (this.providerID != -1) {
-            payload["provider_id"] = this.providerID;
+            // payload["provider_id"] = this.providerID;
         }
         const encounter = await EncounterService.create(payload);
         if (encounter) {

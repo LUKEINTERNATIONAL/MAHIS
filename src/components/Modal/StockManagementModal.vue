@@ -373,14 +373,14 @@ export default defineComponent({
                 };
                 try {
                     await this.stockService.updateItem(this.stockData.id, data);
-                    toastSuccess("Discard successfully");
+                    toastSuccess("Adjust successfully");
                     await this.buildTableData();
                     this.closePopover();
                 } catch (error: any) {
                     toastWarning(error);
                 }
             } else {
-                toastWarning("Failing to discard");
+                toastWarning("Failing to adjust");
                 return false;
             }
         },

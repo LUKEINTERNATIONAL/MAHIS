@@ -345,7 +345,13 @@ export default defineComponent({
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useStatusStore, ["offlineVillageStatus", "offlineDistrictStatus", "offlineTAsStatus", "offlineRelationshipStatus"]),
+        ...mapState(useStatusStore, [
+            "offlineVillageStatus",
+            "offlineCountriesStatus",
+            "offlineDistrictStatus",
+            "offlineTAsStatus",
+            "offlineRelationshipStatus",
+        ]),
         ...mapState(usePatientList, [
             "patientsWaitingForVitals",
             "patientsWaitingForConsultation",
@@ -380,16 +386,19 @@ export default defineComponent({
                 if (this.workerApi?.data?.payload) {
                     if (this.workerApi?.data?.payload?.total_relationships) status.setOfflineRelationshipStatus(this.workerApi?.data?.payload);
                     if (this.workerApi?.data?.payload?.total_village) status.setOfflineVillageStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_countries) status.setOfflineCountriesStatus(this.workerApi?.data?.payload);
                     if (this.workerApi?.data?.payload?.total_districts) status.setOfflineDistrictStatus(this.workerApi?.data?.payload);
                     if (this.workerApi?.data?.payload?.total_TAs) status.setOfflineTAsStatus(this.workerApi?.data?.payload);
 
                     if (
                         this.offlineVillageStatus?.total_village &&
                         this.offlineRelationshipStatus?.total_relationships &&
+                        this.offlineCountriesStatus?.total_countries &&
                         this.offlineDistrictStatus?.total_districts &&
                         this.offlineTAsStatus?.total_TAs &&
                         this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
                         this.offlineRelationshipStatus?.total_relationships == this.offlineRelationshipStatus?.total &&
+                        this.offlineCountriesStatus?.total_countries == this.offlineCountriesStatus?.total &&
                         this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
                         this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
                     ) {

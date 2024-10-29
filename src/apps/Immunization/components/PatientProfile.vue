@@ -12,25 +12,29 @@
                         <div class="demographicsFirstRow">
                             <div class="name">{{ demographics.name }}</div>
                         </div>
-                        <div class="demographicsOtherRow">
+                        <div class="demographicsOtherRow" style="margin-top: 10px">
                             <div class="demographicsText">
                                 {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
                                 {{ getAge(demographics.birthdate) }} ({{ formatBirthdate() }})
                             </div>
                         </div>
-                        <div class="demographicsOtherRow">
+                        <div class="demographicsOtherRow" v-if="demographics.address">
                             <div class="demographicsText">Current Address:</div>
                             <div class="demographicsText mediumFontColor">{{ demographics.address }}</div>
+                        </div>
+                        <div class="demographicsOtherRow" v-if="demographics.country">
+                            <div class="demographicsText">Country:</div>
+                            <div class="demographicsText mediumFontColor">{{ demographics.country }}</div>
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">
                                 MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span>
                             </div>
                         </div>
-                        <div class="demographicsOtherRow">
+                        <!-- <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">Outcome: <span class="outcomeStatus"> Active</span></div>
-                        </div>
-                        <div class="demographicsOtherRow">
+                        </div> -->
+                        <div class="demographicsOtherRow" style="margin-bottom: 10px">
                             <div class="demographicsText smallFont">
                                 Status:
                                 <span v-if="protectedStatus == 'No'" style="background: #fedf89; color: #b54708" class="protectedStatus"
@@ -165,7 +169,7 @@
         <div>
             <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
                 <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
-                <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>
+                <!-- <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>s -->
                 <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
                 <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
             </ion-list>
@@ -708,13 +712,9 @@ export default defineComponent({
 }
 .demographicsOtherRow {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 1px 5px;
     gap: 10px;
-    height: 25px;
-    left: calc(50% - 243px / 2 + 26.5px);
-    top: calc(50% - 23px / 2 - 455.5px);
+    margin-top: 20px;
+    margin-left: 5px;
 }
 .smallFont {
     font-size: 14px;

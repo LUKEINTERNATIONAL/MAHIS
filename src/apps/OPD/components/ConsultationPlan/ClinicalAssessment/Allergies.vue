@@ -30,36 +30,9 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { icons } from "@/utils/svg";
 import {
-    IonContent,
-    IonHeader,
-    IonCol,
-    IonItem,
-    IonList,
-    IonButton,
-    IonMenu,
-    IonTitle,
-    IonToolbar,
-    IonInput,
-    IonDatetime,
     IonLabel,
-    IonTextarea,
-    IonAccordion,
-    IonAccordionGroup,
-    AccordionGroupCustomEvent,
-} from "@ionic/vue";
-import {
-    checkmark,
-    pulseOutline,
-    addOutline,
-    closeOutline,
-    checkmarkOutline,
-    filter,
-    chevronDownOutline,
-    chevronUpOutline,
-    codeSlashOutline,
-} from "ionicons/icons";
+} from "@ionic/vue"
 import { useAllegyStore, searchHealthcareEquipmentAllergies, concatenateArrays } from "@/apps/OPD/stores/AllergyStore";
 import { ConceptService } from "@/services/concept_service";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
