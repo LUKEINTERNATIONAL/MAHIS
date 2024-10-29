@@ -74,6 +74,10 @@ const uniqueId = ref(generateUniqueId(8, "item-"));
 const otherAllergy = ref("");
 const showOtherInput = ref(false);
 
+// const filteredAllergiesList = computed(() => {
+//     return allergiesList.value.filter((item: any) => item.name !== "Other" || !showOtherInput.value);
+// });
+
 const list_picker_prperties = [
     {
         multi_Selection: true as any,
@@ -92,21 +96,29 @@ const list_picker_prperties = [
     },
 ];
 
+watch(
+    selectedAllergiesList,
+    (newList) => {
+        showOtherInput.value = newList.some((item: any) => item.name === "Other" && item.selected);
+    },
+    { deep: true }
+);
 onMounted(async () => {
     //
 });
 
 function listUpdated1(data: any) {
     data.forEach((item: any) => {
-        if (item.selected == true) {
+        if (item.selected == true && item.name === "Other") {
             const allergyStore = store;
             allergyStore.setSelectedMedicalAllergiesList(item);
 
-            if (item.name === "Other") {
-                showOtherInput.value = true;
-            } else {
-                showOtherInput.value = false;
-            }
+            // if (item.name === "Other") {
+            //     showOtherInput.value = true;
+            // } else {
+            //     showOtherInput.value = false;
+            // }
+            showOtherInput.value = item.name === "Other";
         }
     });
 
@@ -161,6 +173,23 @@ function generateUniqueId(length = 8, prefix = "") {
     result += `-${Date.now()}`; // Append timestamp
     return result;
 }
+// function addCustomAllergy() {
+//     const customAllergy = otherAllergy.value.trim();
+//     if (customAllergy) {
+//         const newAllergy = {
+//             name: customAllergy,
+//             selected: true,
+//         };
+
+//         store.setMedicalAllergiesList([...allergiesList.value, newAllergy]);
+//         store.setSelectedMedicalAllergiesList(newAllergy);
+
+//         otherAllergy.value = "";
+//         showOtherInput.value = false;
+//     } else {
+//         console.log("Allergy name cannot be empty");
+//     }
+// }
 function addCustomAllergy() {
     const customAllergy = otherAllergy.value.trim();
     if (customAllergy) {
