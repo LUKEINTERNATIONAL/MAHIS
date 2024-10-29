@@ -95,11 +95,13 @@ const list_picker_prperties = [
         disabled: ref(false) as any,
     },
 ];
-
+const addingCustomAllergy = ref(false);
 watch(
     selectedAllergiesList,
     (newList) => {
-        showOtherInput.value = newList.some((item: any) => item.name === "Other" && item.selected);
+        if (!addingCustomAllergy.value) {
+            showOtherInput.value = newList.some((item: any) => item.name === "Other" && item.selected);
+        }
     },
     { deep: true }
 );
@@ -173,7 +175,7 @@ function generateUniqueId(length = 8, prefix = "") {
     result += `-${Date.now()}`; // Append timestamp
     return result;
 }
-function addCustomAllergy() {
+async function addCustomAllergy() {
     const customAllergy = otherAllergy.value.trim();
     if (customAllergy) {
         const newAllergy = {
@@ -186,6 +188,11 @@ function addCustomAllergy() {
 
         otherAllergy.value = "";
         showOtherInput.value = false;
+        addingCustomAllergy.value = true;
+
+        setTimeout(() => {
+            addingCustomAllergy.value = false;
+        }, 100);
     } else {
         console.log("Allergy name cannot be empty");
     }
