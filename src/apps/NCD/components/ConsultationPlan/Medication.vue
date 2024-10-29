@@ -118,8 +118,6 @@ export default defineComponent({
             }
         };
 
-        
-
         const getFrequency = (medicationName: string) => {
             return NCDmedicationsStore.frequency_selections.value[medicationName] || null;
         }
@@ -137,7 +135,6 @@ export default defineComponent({
 
         const toggleMedication = (medicationName: string) => {
             if (isActive(medicationName)) {
-                // Remove medication
                 const index = selected_NCD_Medication_List.value.findIndex(
                 (          med: { medication: string; }) => med.medication === medicationName
                 );

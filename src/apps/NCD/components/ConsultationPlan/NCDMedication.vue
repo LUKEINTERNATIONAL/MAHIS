@@ -44,7 +44,7 @@ export default defineComponent({
   },
   setup() {
     const openAddOtherOPDMedicationModal = async () => {
-      await createModal(AddOtherOPDMedication, { class: "lab-results-modal" }, true, {});
+      await createModal(AddOtherOPDMedication, { class: "large-modal" }, true, {});
     }
 
     return {
