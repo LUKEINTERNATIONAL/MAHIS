@@ -1,10 +1,4 @@
 <template>
-  <!-- Optional loading spinner -->
-<!--  <div v-if="isLoading" class="spinner-overlay">-->
-<!--    <ion-spinner name="bubbles"></ion-spinner>-->
-<!--    <div class="loading-text">Please wait...</div>-->
-<!--  </div>-->
-
   <ion-header>
     <div class="header position_content">
       <div style="display: flex; align-items: center" @click="dismiss">
@@ -54,15 +48,10 @@
                         class="btn-edit"
                         @click="navigateTo(patient.patient_id, '/patientProfile')"
                     >Profile</ion-button>
-                    <ion-button
-                        size="small"
-                        class="btn-edit"
-                        @click="handleAbscond(patient.visit_id)"
-                    >Abscond</ion-button>
                   </ion-col>
                 </ion-row>
                 <ion-row v-if="patients.length === 0 && !isLoading">
-                  <ion-col>No patients waiting for lab results.</ion-col>
+                  <ion-col>No patients today.</ion-col>
                 </ion-row>
               </ion-grid>
             </div>
@@ -175,9 +164,19 @@ export default defineComponent({
   },
   async mounted() {
     this.isLoading = true;
-    this.patientList = await getPatientsList()
-    const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
-    this.isLoading = false;
+    try {
+      const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
+
+      this.patients = visitsToday.map((patient:any) => ({
+        fullName: patient.fullName,
+        arrivalTime: patient.arrivalTime,
+        patient_id: patient.patient_id
+      }));
+    } catch (error) {
+      console.error('Error fetching patients:', error);
+    } finally {
+      this.isLoading = false;
+    }
   },
   methods: {
     openPopover(e: Event) {
