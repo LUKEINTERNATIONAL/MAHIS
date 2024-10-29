@@ -8,37 +8,6 @@
             </thead>
         </DataTable>
     </div>
-    <DashBox :status="no_item" :content="'No Diagnosis added'" />
-
-    <span v-if="display_item">
-        <list
-            classNames="dashed_bottom_border"
-            :listData="diagnosis[0].selectedData"
-            @clicked:edit="editDiagnosis($event)"
-            @clicked:delete="deleteDiagnosis"
-        >
-        </list>
-    </span>
-
-    <ion-row v-if="search_item">
-        <basic-form :contentData="diagnosis" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="addNewRow">
-        </basic-form>
-    </ion-row>
-    <ion-row v-if="addItemButton" style="margin-top: 10px">
-        <DynamicButton fill="clear" :icon="iconsContent.plus" iconSlot="icon-only" @clicked:btn="displayInputFields()" name="Add new Diagnosis" />
-    </ion-row>
-    <ion-row>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Previous Diagnosis</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <previousDiagnosis />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-    </ion-row>
 </template>
 
 <script lang="ts">
@@ -73,6 +42,7 @@ import "datatables.net-select";
 import "datatables.net-buttons";
 import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
 import AddDiagnosisModal from "./Diagnosis/AddDiagnosisModal.vue";
+import { EncounterService } from "@/services/encounter_service";
 
 export default defineComponent({
     name: "Menu",
@@ -131,7 +101,7 @@ export default defineComponent({
                 ],
             } as any,
 
-            header: ["Diagnosis", "Order Date", "Action"],
+            header: ["Diagnosis", "Date", "Action"],
         };
     },
     setup() {
@@ -145,9 +115,9 @@ export default defineComponent({
         },
     },
     watch: {
-        diagnosis: {
-            handler() {
-                this.setDashedBox();
+        $route: {
+            async handler() {
+                await this.setListData();
             },
             deep: true,
         },
@@ -156,16 +126,23 @@ export default defineComponent({
         this.updateDiagnosisStores();
         this.setDashedBox();
         await this.setListData();
-        // this.$nextTick(() => {
-        //     const table = (this.$refs.dataTable as any).dt;
-        //     table.columns.adjust().draw();
-        //     table.on("click", ".delete-btn", (e: Event) => {
-        //         const data: any = (e.target as HTMLElement).getAttribute("data-id");
-        //         // this.voidLabOrder(JSON.parse(data), e);
-        //     });
-        // });
+        this.$nextTick(() => {
+            const table = (this.$refs.dataTable as any).dt;
+            table.columns.adjust().draw();
+            table.on("click", ".delete-btn", (e: Event) => {
+                const data: any = (e.target as HTMLElement).getAttribute("data-id");
+                this.voidDiagnosis(JSON.parse(data), e);
+            });
+        });
     },
     methods: {
+        async voidDiagnosis(data: any, event: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${data.name} ?`, event);
+            if (deleteConfirmed) {
+                EncounterService.voidEncounter(data.id);
+                await this.setListData();
+            }
+        },
         async openEnterResultModal() {
             await createModal(AddDiagnosisModal, { class: "lab-results-modal" }, true);
             await this.setListData();
@@ -175,24 +152,23 @@ export default defineComponent({
             const obsS = await ObservationService.getAll(this.demographics.patient_id, "Secondary diagnosis");
             const observations = [...(obsP || []), ...(obsS || [])];
             this.tableData = await this.generateListItems(observations);
-            console.log("🚀 ~ setListData ~ this.tableData:", this.tableData);
-
             // await this.updateInvestigationWizard();
             DataTable.use(DataTablesCore);
         },
         async generateListItems(data: any) {
             if (data.length > 0) {
-                // Use Promise.all to wait for all async operations to complete
                 const promiseResults = await Promise.all(
                     data.map(async (item: any) => {
+                        console.log("🚀 ~ data.map ~ item:", item.encounter_id);
                         const name = await ObservationService.getConceptName(item.value_coded);
                         const obs_date = item.obs_datetime;
                         return [
                             name,
                             HisDate.toStandardHisFormat(obs_date),
-                            `<button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify(item)}'>${
-                                this.iconsContent.delete2
-                            }</button>`,
+                            `<button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify({
+                                id: item.encounter_id,
+                                name: name,
+                            })}'>${this.iconsContent.delete2}</button>`,
                         ];
                     })
                 );
