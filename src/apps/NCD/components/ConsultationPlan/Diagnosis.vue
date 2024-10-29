@@ -295,6 +295,9 @@ div.dt-buttons > .dt-button:hover:not(.disabled) {
     background: #188907 !important;
     border: 1px solid #fff !important;
 }
+.dt-type-date {
+    text-align: left !important;
+}
 </style>
 <style scoped>
 #container {
