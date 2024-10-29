@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 const DiabetesMedication = [
     'Long acting Insulin',
@@ -25,6 +26,7 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
     state: () => ({
         medications: [] as any,
         selectedNCDMedicationList: [] as any,
+        frequency_selections: ref<{ [key: string]: any }>({}),
     }),
     actions: {
         setMedications(data: any) {

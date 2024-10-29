@@ -97,7 +97,7 @@ export default defineComponent({
         IonInput, IonIcon, IonCol, IonRow, IonCheckbox, VueMultiselect,
     },
     computed: {
-        ...mapState(useNCDMedicationsStore, ["medications"]),
+        ...mapState(useNCDMedicationsStore, ["medications", "frequency_selections"]),
     },
     setup() {
         const NCDmedicationsStore = useNCDMedicationsStore();
@@ -118,15 +118,15 @@ export default defineComponent({
             }
         };
 
-        const frequency_selections = ref<{ [key: string]: any }>({});
+        
 
         const getFrequency = (medicationName: string) => {
-            return frequency_selections.value[medicationName] || null;
+            return NCDmedicationsStore.frequency_selections.value[medicationName] || null;
         }
 
         const updateFrequencySelection = (medicationName: string, data: any) => {
-            frequency_selections.value = {
-                ...frequency_selections.value,
+            NCDmedicationsStore.frequency_selections.value = {
+                ...NCDmedicationsStore.frequency_selections.value,
                 [medicationName]: data
             }
         }
@@ -145,7 +145,6 @@ export default defineComponent({
                 selected_NCD_Medication_List.value.splice(index, 1);
                 }
             } else {
-                // Add medication with empty dosages
                 const newMedication = {
                 medication: medicationName,
                 dosage: {
@@ -172,7 +171,6 @@ export default defineComponent({
             moon,
             timeOutline,
             frequency_options,
-            frequency_selections,
             updateFrequencySelection,
             getFrequency,
             updateDosage,
