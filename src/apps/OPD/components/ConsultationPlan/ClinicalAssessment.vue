@@ -1,5 +1,8 @@
 <template>
     <ion-row>
+      <div style="width: 100%">
+        <VisitHistory />
+      </div>
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
@@ -86,6 +89,7 @@ import PastMedicalHistory from "@/apps/OPD/components/ConsultationPlan/ClinicalA
 import PhysicalExamination from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PhysicalExamination.vue";
 import PregnancyBreastfeeding from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PregnancyBreastfeeding.vue";
 import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
+import VisitHistory from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/VisitHistory.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import {
     modifyCheckboxInputField,
@@ -123,6 +127,7 @@ export default defineComponent({
         PhysicalExamination,
         PregnancyBreastfeeding,
         PresentingComplaints,
+        VisitHistory
     },
     data() {
         return {
