@@ -499,11 +499,8 @@ async function trigerSaveFn() {
             }
         } catch (error) {
             //console.error(error)
-            console.error("hhhhhhhhhhhhhhhhhhhhhhhh")
             saveEvent('')
-            toastDanger("User already exists", 8000)
-
-
+            toastDanger(error as string, 8000)
         }
     }
 }
@@ -796,10 +793,11 @@ function listUpdated1(data: any) {
 }
 
 function checkIfSelectedIsHSA(role_list: any) {
+    const HSA_ROLES = ['HSA', 'Health Surveillance']
     village_show_error.value = false
     let is_found = false
     role_list.forEach((item: any) => {
-        if (item?.selected == true && item?.name == 'HSA') {
+        if (item?.selected == true && HSA_ROLES.includes(item?.name)) {
             HSA_found_for_disabling_button.value = false
             is_found = true
         }

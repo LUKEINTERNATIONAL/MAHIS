@@ -51,7 +51,7 @@ import List from "@/components/List.vue";
 import BasicForm from "@/components/BasicForm.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { Service } from "@/services/service";
-import previousDiagnosis from "@/apps/NCD/components/ConsultationPlan/previousVisits/previousDiagnosis.vue";
+import previousDiagnosis from "@/apps/OPD/components/ConsultationPlan/previousVisits/previousDiagnosis.vue";
 import { Diagnosis } from "../../services/diagnosis";
 import { getFieldValue, modifyFieldValue } from "@/services/data_helpers";
 

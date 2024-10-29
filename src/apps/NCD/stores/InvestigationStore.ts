@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 
-export const useInvestigationStore = defineStore("investigationStore", {
+export const useInvestigationStore = defineStore("investigationNCDStore", {
     state: () => ({
         investigations: [
             {
@@ -44,13 +44,6 @@ export const useInvestigationStore = defineStore("investigationStore", {
                                     id: "",
                                     idName: "specimen_id",
                                     validationFunctionName: "required",
-                                },
-                            ],
-                            btns: [
-                                {
-                                    name: "Save",
-                                    fill: "clear",
-                                    icon: icons.plus,
                                 },
                             ],
                         },

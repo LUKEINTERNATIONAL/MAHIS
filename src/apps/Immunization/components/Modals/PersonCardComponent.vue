@@ -157,12 +157,12 @@ export default defineComponent({
       const target = event.target as HTMLInputElement;
       searchText.value = target.value;
       searchTextError.value = !isValidString(searchText.value);
-      pagination.page = 1; // Reset to first page when search changes
+      pagination.page = 1;
     };
 
     const viewPatientProfile = async (clientId: string) => {
       try {
-        const modal = await modalController.getTop();
+        const modal = await modalController.getTop() as any;
         if (modal) {
           modal.dispatchEvent(new CustomEvent('view-client', { detail: { client_id: clientId } }));
         }
