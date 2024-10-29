@@ -1,0 +1,50 @@
+import { defineStore } from "pinia";
+
+const DiabetesMedication = [
+    'Long acting Insulin',
+    'Short Acting Insulin',
+    'Metformin',
+    'Glibenclamide',
+]
+const AntiHypertensives = [
+    'Diuretic',
+    'CCB',
+    'ACE-I',
+    'BB',
+]
+const other = [
+    'Aspirin',
+    'Statin',
+]
+
+const drugObj = (drug_id: number, name: string, category: string) => {
+    return { drug_id: drug_id, name: name, category: category, units: "", dosage_form: "", dose_strength: "" };
+}
+
+export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
+    state: () => ({
+        medications: [] as any,
+        selectedNCDMedicationList: [] as any,
+    }),
+    actions: {
+        setMedications(data: any) {
+            this.medications = data;
+        },
+        initMedications() {
+            this.medications.push(...other.map((drug, index) => drugObj(index + 1, drug, "Other") as any));
+
+            this.medications.push(...AntiHypertensives.map((drug, index) => drugObj(other.length + index + 1, drug, "AntiHypertensive") as any));
+
+            this.medications.push(
+                ...DiabetesMedication.map((drug, index) => drugObj(AntiHypertensives.length + index + 1, drug, "DiabetesMedication") as any)
+            );
+        },
+        setSelectedNCDMedicationList(drug_item: any): void {
+            this.selectedNCDMedicationList.push(drug_item);
+        },
+        getSelectedNCDMedicationList() {
+            return this.selectedNCDMedicationList;
+        },
+    },
+    persist: true,
+});

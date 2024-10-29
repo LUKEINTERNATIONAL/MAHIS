@@ -8,86 +8,18 @@
             Medication List
           </ion-card-title>
         </ion-col>
-        <ion-col>
-           <OPDMedications @drug-selected="addSearchedDrug"/>
-        </ion-col>
       </ion-row>
     </ion-card-header>
     <ion-card-content>
-      <div class="table-container">
-        <table class="prescription-table">
-          <thead>
-            <tr>
-              <th class="checkbox-col">Select</th>
-              <th>Medication</th>
-              <th><ion-icon :icon="sunny"></ion-icon> Morning</th>
-              <th><ion-icon :icon="partlySunny"></ion-icon> Afternoon</th>
-              <th><ion-icon :icon="moon"></ion-icon> Evening</th>
-              <th><ion-icon :icon="timeOutline"></ion-icon> Frequency</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="med in medications" :key="med.id" :class="{ 'active-row': isActive(med.name) }">
-              <td class="checkbox-col">
-                <ion-checkbox
-                  :checked="isActive(med.name)"
-                  @ion-change="toggleMedication(med.name)"
-                ></ion-checkbox>
-              </td>
-              <td>{{ med.name }}</td>
-              <td>
-                <ion-input
-                  type="number"
-                  class="dose-input"
-                  :disabled="!isActive(med.name)"
-                  :value="getDosage(med.name, 'morning')"
-                  @ion-input="updateDosage(med.name, 'morning', $event)"
-                  placeholder="0"
-                ></ion-input>
-              </td>
-              <td>
-                <ion-input
-                  type="number"
-                  class="dose-input"
-                  :disabled="!isActive(med.name)"
-                  :value="getDosage(med.name, 'afternoon')"
-                  @ion-input="updateDosage(med.name, 'afternoon', $event)"
-                  placeholder="0"
-                ></ion-input>
-              </td>
-              <td>
-                <ion-input
-                  type="number"
-                  class="dose-input"
-                  :disabled="!isActive(med.name)"
-                  :value="getDosage(med.name, 'evening')"
-                  @ion-input="updateDosage(med.name, 'evening', $event)"
-                  placeholder="0"
-                ></ion-input>
-              </td>
-              <td>
-                <VueMultiselect
-                  :disabled="!isActive(med.name)"
-                  v-model="frequency_selections[med.name]"
-                  @update:model-value="(event: any) => updateFrequencySelection(med.name, event)"
-                  :multiple="false"
-                  :taggable="false"
-                  :hide-selected="false"
-                  :close-on-select="true"
-                  openDirection="bottom"
-                  tag-placeholder="select frequency"
-                  placeholder="select frequency"
-                  selectLabel=""
-                  label="label"
-                  @search-change="$emit('search-change', $event)"
-                  track-by="label"
-                  :options="frequency_options"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <Medication/>
+      <ion-row>
+        <ion-col>
+          <ion-button @click="openAddOtherOPDMedicationModal" color="primary" style="float: right;">
+            <ion-icon :icon="medkit" slot="start"></ion-icon>
+            ADD Other Medication
+          </ion-button>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
   </ion-card>
 </template>
@@ -96,201 +28,33 @@
 import { defineComponent, ref, computed } from 'vue';
 import {
   IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-  IonInput, IonIcon, IonCheckbox, IonCol, IonRow
+  IonInput, IonIcon, IonCheckbox, IonCol, IonRow,
+  IonButton
 } from '@ionic/vue';
-import VueMultiselect from "vue-multiselect";
-import { 
-  medkit, sunny, partlySunny, moon, timeOutline
-} from 'ionicons/icons';
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
-import { mapState } from "pinia";
-import OPDMedications from "./OPDMedications.vue"
+import { medkit } from 'ionicons/icons';
+import Medication from "./Medication.vue"
+import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
+import AddOtherOPDMedication from './AddOtherOPDMedication.vue';
 
 export default defineComponent({
   name: 'PrescriptionTable',
   components: {
-    IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-    IonInput, IonIcon, IonCol, IonRow, IonCheckbox, VueMultiselect, OPDMedications
+    IonCard, IonCardHeader, IonButton, IonCardTitle, IonCardContent,
+    IonInput, IonIcon, IonCol, IonRow, IonCheckbox, Medication,
   },
   setup() {
-    const treatmentPlanStore = useTreatmentPlanStore();
-    const selected_NCD_Medication_List = computed(() => treatmentPlanStore.selectedNCDMedicationList);
-
-    const medications = ref([]) as any;
-    const DiabetesMedication = [
-      'Long acting Insulin',
-      'Short Acting Insulin',
-      'Metformin',
-      'Glibenclamide',
-    ]
-    const AntiHypertensives = [
-      'Diuretic',
-      'CCB',
-      'ACE-I',
-      'BB',
-    ]
-    const other = [
-      'Aspirin',
-      'Statin',
-    ]
-
-    const drugObj = (drug_id: number, name: string, category: string) => {
-      return { drug_id: drug_id, name: name, category: category, units: '', dosage_form: '', dose_strength: '' }
-    }
-
-    medications.value.push(
-      ...other.map((drug, index) => drugObj(index + 1, drug, 'Other') as any)
-    )
-
-    medications.value.push(
-      ...AntiHypertensives.map((drug, index) => drugObj(other.length + index + 1, drug, 'AntiHypertensive') as any)
-    )
-
-    medications.value.push(
-      ...DiabetesMedication.map((drug, index) => drugObj(AntiHypertensives.length + index + 1, drug, 'DiabetesMedication') as any)
-    )
-
-    const frequency_options = ref(DRUG_FREQUENCIES)
-
-    const isActive = (medicationName: string) => {
-      return selected_NCD_Medication_List.value.some((med: any) => med.medication === medicationName);
-    };
-
-    const getDosage = (medicationName: string, timeOfDay: string) => {
-      const medication = selected_NCD_Medication_List.value.find(
-        (        med: { medication: string; }) => med.medication === medicationName
-      );
-      return medication?.dosage[timeOfDay] || '';
-    };
-
-    const toggleMedication = (medicationName: string) => {
-      if (isActive(medicationName)) {
-        // Remove medication
-        const index = selected_NCD_Medication_List.value.findIndex(
-          (          med: { medication: string; }) => med.medication === medicationName
-        );
-        if (index > -1) {
-          selected_NCD_Medication_List.value.splice(index, 1);
-        }
-      } else {
-        // Add medication with empty dosages
-        const newMedication = {
-          medication: medicationName,
-          dosage: {
-            morning: null,
-            afternoon: null,
-            evening: null
-          }
-        };
-        treatmentPlanStore.setSelectedNCDMedicationList(newMedication);
-      }
-    };
-
-    const addSearchedDrug = (data: any) => {
-      // console.log(data)
-      const drug = drugObj(data.drug_id, data.name, 'Other')
-      // console.log(drug)
-      medications.value.unshift(drug)
-    }
-
-    const updateDosage = (medicationName: string, timeOfDay: string, event: any) => {
-      const value = event.target.value;
-      const medicationIndex = selected_NCD_Medication_List.value.findIndex(
-        (med: { medication: string; }) => med.medication === medicationName
-      );
-      
-      if (medicationIndex > -1) {
-        const updatedMedication = { ...selected_NCD_Medication_List.value[medicationIndex] };
-        updatedMedication.dosage = { ...updatedMedication.dosage, [timeOfDay]: value };
-        selected_NCD_Medication_List.value[medicationIndex] = updatedMedication;
-      }
-    };
-
-    const frequency_selections = ref<{ [key: string]: any }>({});
-
-    const getFrequency = (medicationName: string) => {
-      return frequency_selections.value[medicationName] || null;
-    }
-
-    const updateFrequencySelection = (medicationName: string, data: any) => {
-      frequency_selections.value = {
-        ...frequency_selections.value,
-        [medicationName]: data
-      }
+    const openAddOtherOPDMedicationModal = async () => {
+      await createModal(AddOtherOPDMedication, { class: "lab-results-modal" }, true, {});
     }
 
     return {
-      medications,
-      isActive,
-      getDosage,
-      toggleMedication,
-      updateDosage,
-      medkit,
-      sunny,
-      partlySunny,
-      moon,
-      timeOutline,
-      selected_NCD_Medication_List,
-      frequency_selections,
-      frequency_options,
-      updateFrequencySelection,
-      getFrequency,
-      addSearchedDrug
+      openAddOtherOPDMedicationModal,
+      medkit
     };
   }
 });
 </script>
 
 <style scoped>
-.table-container {
-  overflow-x: auto;
-}
 
-.prescription-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.prescription-table th,
-.prescription-table td {
-  padding: 0.75rem;
-  text-align: center;
-  border-bottom: 1px solid var(--ion-color-light);
-  vertical-align: middle;
-}
-
-.prescription-table th {
-  background-color: var(--ion-color-light);
-  font-weight: bold;
-}
-
-.checkbox-col {
-  width: 60px;
-  text-align: center;
-}
-
-.active-row {
-  background-color: var(--ion-color-light-tint);
-}
-
-.dose-input {
-  --padding-start: 8px;
-  --padding-end: 8px;
-  max-width: 80px;
-  margin: 0 auto;
-}
-
-.dose-input.ion-disabled {
-  opacity: 0.5;
-}
-
-ion-checkbox {
-  margin: 0 auto;
-}
-
-.prescription-table ion-icon {
-  vertical-align: middle;
-}
 </style>
