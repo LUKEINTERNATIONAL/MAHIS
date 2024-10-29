@@ -101,7 +101,7 @@ export default defineComponent({
     },
     setup() {
         const NCDmedicationsStore = useNCDMedicationsStore();
-        // NCDmedicationsStore.initMedications();
+        NCDmedicationsStore.initMedications();
         const selected_NCD_Medication_List = computed(() => NCDmedicationsStore.selectedNCDMedicationList);
         const frequency_options = ref(DRUG_FREQUENCIES);
 

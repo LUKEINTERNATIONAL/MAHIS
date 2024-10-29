@@ -31,13 +31,19 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
             this.medications = data;
         },
         initMedications() {
-            this.medications.push(...other.map((drug, index) => drugObj(index + 1, drug, "Other") as any));
+            if (this.medications.length == 0) {
+                this.medications.push(...other.map((drug, index) => drugObj(index + 1, drug, "Other") as any));
 
-            this.medications.push(...AntiHypertensives.map((drug, index) => drugObj(other.length + index + 1, drug, "AntiHypertensive") as any));
+                this.medications.push(
+                    ...AntiHypertensives.map((drug, index) => drugObj(other.length + index + 1, drug, "AntiHypertensive") as any)
+                );
 
-            this.medications.push(
-                ...DiabetesMedication.map((drug, index) => drugObj(AntiHypertensives.length + index + 1, drug, "DiabetesMedication") as any)
-            );
+                this.medications.push(
+                    ...DiabetesMedication.map(
+                        (drug, index) => drugObj(AntiHypertensives.length + index + 1, drug, "DiabetesMedication") as any
+                    )
+                );
+            }
         },
         setSelectedNCDMedicationList(drug_item: any): void {
             this.selectedNCDMedicationList.push(drug_item);
