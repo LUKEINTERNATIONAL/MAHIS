@@ -328,11 +328,11 @@ export default defineComponent({
         },
 
         async saveDiagnosis() {
-            await saveEncounterData(
-                this.demographics.patient_id,
-                EncounterTypeId.DIAGNOSIS,
-                "" as any,
-                await formatCheckBoxData(this.enrollmentDiagnosis)
+            const diagnosis = await formatCheckBoxData(this.enrollmentDiagnosis);
+            await Promise.all(
+                diagnosis.map(async (item) => {
+                    await saveEncounterData(this.demographics.patient_id, EncounterTypeId.DIAGNOSIS, "" as any, [item]);
+                })
             );
         },
     },
