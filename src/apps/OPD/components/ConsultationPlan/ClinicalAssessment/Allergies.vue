@@ -30,9 +30,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import {
-    IonLabel,
-} from "@ionic/vue"
+import { IonButton, IonLabel} from "@ionic/vue";
 import { useAllegyStore, searchHealthcareEquipmentAllergies, concatenateArrays } from "@/apps/OPD/stores/AllergyStore";
 import { ConceptService } from "@/services/concept_service";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
@@ -46,6 +44,10 @@ const uniqueId = ref(generateUniqueId(8, "item-"));
 
 const otherAllergy = ref("");
 const showOtherInput = ref(false);
+
+const filteredAllergiesList = computed(() => {
+    return allergiesList.value;
+});
 
 const list_picker_prperties = [
     {
@@ -64,22 +66,26 @@ const list_picker_prperties = [
         disabled: ref(false) as any,
     },
 ];
-
+const addingCustomAllergy = ref(false);
+watch(
+    selectedAllergiesList,
+    (newList) => {
+        if (!addingCustomAllergy.value) {
+            showOtherInput.value = newList.some((item: any) => item.name === "Other" && item.selected);
+        }
+    },
+    { deep: true }
+);
 onMounted(async () => {
     //
 });
 
 function listUpdated1(data: any) {
     data.forEach((item: any) => {
-        if (item.selected == true) {
+        if (item.selected == true && item.name === "Other") {
             const allergyStore = store;
             allergyStore.setSelectedMedicalAllergiesList(item);
-
-            if (item.name === "Other") {
-                showOtherInput.value = true;
-            } else {
-                showOtherInput.value = false;
-            }
+            showOtherInput.value = item.name === "Other";
         }
     });
 
@@ -134,7 +140,7 @@ function generateUniqueId(length = 8, prefix = "") {
     result += `-${Date.now()}`; // Append timestamp
     return result;
 }
-function addCustomAllergy() {
+async function addCustomAllergy() {
     const customAllergy = otherAllergy.value.trim();
     if (customAllergy) {
         const newAllergy = {
@@ -147,6 +153,11 @@ function addCustomAllergy() {
 
         otherAllergy.value = "";
         showOtherInput.value = false;
+        addingCustomAllergy.value = true;
+
+        setTimeout(() => {
+            addingCustomAllergy.value = false;
+        }, 100);
     } else {
         console.log("Allergy name cannot be empty");
     }
