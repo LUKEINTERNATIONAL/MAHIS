@@ -75,7 +75,6 @@
   </div>
 </template>
 
-
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
 import {
@@ -146,10 +145,6 @@ export default defineComponent({
             }
         };
 
-        const getFrequency = (medicationName: string) => {
-            return NCDmedicationsStore.frequency_selections.value[medicationName] || null;
-        }
-
         const updateFrequencySelection = (medicationName: string, data: any) => {
             NCDmedicationsStore.frequency_selections.value = {
                 ...NCDmedicationsStore.frequency_selections.value,
@@ -202,7 +197,6 @@ export default defineComponent({
             timeOutline,
             frequency_options,
             updateFrequencySelection,
-            getFrequency,
             updateDosage,
             getDosage,
             isActive,
