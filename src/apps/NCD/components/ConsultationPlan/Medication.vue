@@ -22,8 +22,8 @@
           <td>{{ med.name }}</td>
           <td>
             <ion-input
-              type="number"
-              class="dose-input"
+              type="text"
+              class="dose-input bordered-input"
               :disabled="!isActive(med.name)"
               :value="getDosage(med.name, 'morning')"
               @ion-input="updateDosage(med.name, 'morning', $event)"
@@ -32,8 +32,8 @@
           </td>
           <td>
             <ion-input
-              type="number"
-              class="dose-input"
+              type="text"
+              class="dose-input bordered-input"
               :disabled="!isActive(med.name)"
               :value="getDosage(med.name, 'afternoon')"
               @ion-input="updateDosage(med.name, 'afternoon', $event)"
@@ -42,8 +42,8 @@
           </td>
           <td>
             <ion-input
-              type="number"
-              class="dose-input"
+              type="text"
+              class="dose-input bordered-input"
               :disabled="!isActive(med.name)"
               :value="getDosage(med.name, 'evening')"
               @ion-input="updateDosage(med.name, 'evening', $event)"
@@ -74,6 +74,7 @@
     </table>
   </div>
 </template>
+
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
@@ -257,5 +258,11 @@ ion-checkbox {
 
 .prescription-table ion-icon {
   vertical-align: middle;
+}
+
+.bordered-input {
+  border: 2px solid #ccc; /* Customize the color */
+  border-radius: 4px; /* Optional: adds rounded corners */
+  padding: 4px; /* Optional: adjusts padding within the input */
 }
 </style>
