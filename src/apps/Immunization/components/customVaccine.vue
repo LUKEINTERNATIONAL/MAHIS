@@ -99,7 +99,19 @@ export default defineComponent({
     },
     watch: {},
     setup() {
-        return {}
+        let isModalOpening = false;
+        const cleanupModal = () => {
+            isModalOpening = false;
+            const modalElement = document.querySelector('.pr_o');
+            if (modalElement) {
+                modalElement.remove();
+            }
+        }
+
+        return {
+            isModalOpening,
+            cleanupModal
+        }
     },
     methods: {
         getColorForVaccine(vaccine: any) {
@@ -145,34 +157,44 @@ export default defineComponent({
         },
         async openAdministerVaccineModal(data: any) {
             const modalElement = document.querySelector('.pr_o');
-            if (modalElement) {
+            if (this.isModalOpening || modalElement) {
+                console.log('Modal already open or opening, current state:', { 
+                    isModalOpening: this.isModalOpening, 
+                    modalExists: !!modalElement 
+                });
                 return;
             }
 
-            const store = useAdministerVaccineStore();
-            store.setCurrentSelectedDrug(data)
-            const stockService = new StockService();
-            const data_ = await stockService.getDrugBatches(data.drug_id)
-            store.setLotNumberData(data_)
-            
-            if(data_.length == 0) {
-                if (this.checkIfAdminstredAndAskToVoid() == false) {
-                    if(checkDrugName(data) == false) {
-                        createModal(alert, { class: "otherVitalsModal pr_o" })
+            try {
+                    this.isModalOpening = true;
+                    console.log('Starting modal open process');
+
+                    const store = useAdministerVaccineStore();
+                    store.setCurrentSelectedDrug(data);
+
+                    const stockService = new StockService();
+                    const drugBatches = await stockService.getDrugBatches(data.drug_id);
+                    store.setLotNumberData(drugBatches);
+
+                    if (!this.checkIfAdminstredAndAskToVoid()) {
+                        if (drugBatches.length === 0) {
+                            if (!checkDrugName(data)) {
+                                createModal(alert, { class: "otherVitalsModal pr_o" });
+                            } else {
+                                createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
+                            }
+                        } else {
+                            createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
+                        }
                     }
-                    
-                    if (checkDrugName(data) == true) {
-                        createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
-                    }
+                } catch (error) {
+                    console.error('Error opening modal:', error);
+                    throw error;
+                } finally {
+                    this.isModalOpening = false;
+                    console.log('Modal open process completed');
                 }
-            }
-            
-            if(data_.length > 0) {
-                if (this.checkIfAdminstredAndAskToVoid() == false) {
-                    createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
-                }
-            }
-        },
+            },
         disableVaccine(vaccine: any) {
             if (vaccine.status != null && vaccine.status == "administered") {
                 return false;
