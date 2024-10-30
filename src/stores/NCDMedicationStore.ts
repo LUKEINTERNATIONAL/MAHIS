@@ -38,6 +38,9 @@ export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore"
             const drug = drugObj(data.drug_id, data.name, "Other");
             this.otherNCDMedications.unshift(drug);
         },
+        clearOtherNCDMedications() {
+            this.otherNCDMedications = [];
+        }
     },
     persist: true,
 });
@@ -76,3 +79,9 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
     },
     persist: true,
 });
+
+export function addOtherMedicationToNCDMedicationList() {
+    const NCDMedicationsStore = useNCDMedicationsStore();
+    const OtherNCDMedicationStore = useOtherNCDMedicationStore();
+    NCDMedicationsStore.medications = [...OtherNCDMedicationStore.otherNCDMedications, ...NCDMedicationsStore.medications];
+}

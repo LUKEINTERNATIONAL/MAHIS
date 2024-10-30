@@ -3,7 +3,7 @@
         <ion-title class="modalTitle">
             <div class="medication-list">
                 <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
-                <span>Add Other Medication List</span>
+                <span>Add Other Medication</span>
             </div>
         </ion-title>
         <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="iconsContent.cancel"></ion-icon>
