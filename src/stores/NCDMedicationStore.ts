@@ -39,10 +39,20 @@ export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore"
             const exists = this.otherNCDMedications.some((med: any) => med.drug_id === drug.drug_id);
             if (!exists) {
                 this.otherNCDMedications.unshift(drug);
+                const newMedication = {
+                    medication: drug.name,
+                    dosage: {
+                        morning: null,
+                        afternoon: null,
+                        evening: null,
+                    },
+                };
+                this.setSelectedNCDMedicationList(newMedication);
             }
         },
         clearOtherNCDMedications() {
             this.otherNCDMedications = [];
+            this.selectedOtherNCDMedicationList = [];
         }
     },
     persist: true,
@@ -74,10 +84,7 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
             }
         },
         setSelectedNCDMedicationList(drug_item: any): void {
-            const exists = this.selectedNCDMedicationList.some((item: any) => item.drug_id === drug_item.drug_id);
-            if (!exists) {
-                this.selectedNCDMedicationList.push(drug_item);
-            }
+            this.selectedNCDMedicationList.push(drug_item);
         },
         getSelectedNCDMedicationList() {
             return this.selectedNCDMedicationList;
@@ -90,4 +97,15 @@ export function addOtherMedicationToNCDMedicationList() {
     const NCDMedicationsStore = useNCDMedicationsStore();
     const OtherNCDMedicationStore = useOtherNCDMedicationStore();
     NCDMedicationsStore.medications = [...OtherNCDMedicationStore.otherNCDMedications, ...NCDMedicationsStore.medications];
+    NCDMedicationsStore.medications = NCDMedicationsStore.medications.reduce((unique: any, item: any) => {
+        if (!unique.some((med: any) => med.drug_id === item.drug_id)) {
+            unique.push(item);
+        }
+        return unique;
+    }, []);
+
+    NCDMedicationsStore.selectedNCDMedicationList = [
+        ...OtherNCDMedicationStore.selectedOtherNCDMedicationList,
+        ...NCDMedicationsStore.selectedNCDMedicationList,
+    ];
 }
