@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 
 const DiabetesMedication = [
     'Long acting Insulin',
@@ -94,18 +95,23 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
 });
 
 export function addOtherMedicationToNCDMedicationList() {
-    const NCDMedicationsStore = useNCDMedicationsStore();
-    const OtherNCDMedicationStore = useOtherNCDMedicationStore();
-    NCDMedicationsStore.medications = [...OtherNCDMedicationStore.otherNCDMedications, ...NCDMedicationsStore.medications];
-    NCDMedicationsStore.medications = NCDMedicationsStore.medications.reduce((unique: any, item: any) => {
-        if (!unique.some((med: any) => med.drug_id === item.drug_id)) {
-            unique.push(item);
-        }
-        return unique;
-    }, []);
+    try {
+        const NCDMedicationsStore = useNCDMedicationsStore();
+        const OtherNCDMedicationStore = useOtherNCDMedicationStore();
+        NCDMedicationsStore.medications = [...OtherNCDMedicationStore.otherNCDMedications, ...NCDMedicationsStore.medications];
+        NCDMedicationsStore.medications = NCDMedicationsStore.medications.reduce((unique: any, item: any) => {
+            if (!unique.some((med: any) => med.drug_id === item.drug_id)) {
+                unique.push(item);
+            }
+            return unique;
+        }, []);
 
-    NCDMedicationsStore.selectedNCDMedicationList = [
-        ...OtherNCDMedicationStore.selectedOtherNCDMedicationList,
-        ...NCDMedicationsStore.selectedNCDMedicationList,
-    ];
+        NCDMedicationsStore.selectedNCDMedicationList = [
+            ...OtherNCDMedicationStore.selectedOtherNCDMedicationList,
+            ...NCDMedicationsStore.selectedNCDMedicationList,
+        ];
+        toastSuccess("Medication added successfully");
+    } catch (error) {
+        
+    }
 }
