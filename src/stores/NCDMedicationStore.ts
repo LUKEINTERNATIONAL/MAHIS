@@ -41,7 +41,7 @@ export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore"
             if (!exists) {
                 this.otherNCDMedications.unshift(drug);
                 const newMedication = {
-                    medication: drug.name,
+                    drug_id: drug.drug_id,
                     dosage: {
                         morning: null,
                         afternoon: null,

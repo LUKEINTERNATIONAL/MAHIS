@@ -12,11 +12,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="med in activeMedications" :key="med.id" :class="{ 'active-row': isActive(med.name) }">
+        <tr v-for="med in activeMedications" :key="med.id" :class="{ 'active-row': isActive(med.drug_id) }">
           <td class="checkbox-col">
             <ion-checkbox
-              :checked="isActive(med.name)"
-              @ion-change="toggleMedication(med.name)"
+              :checked="isActive(med.drug_id)"
+              @ion-change="toggleMedication(med.drug_id)"
             ></ion-checkbox>
           </td>
           <td>{{ med.name }}</td>
@@ -24,9 +24,9 @@
             <ion-input
               type="text"
               class="dose-input bordered-input"
-              :disabled="!isActive(med.name)"
-              :value="getDosage(med.name, 'morning')"
-              @ion-input="updateDosage(med.name, 'morning', $event)"
+              :disabled="!isActive(med.drug_id)"
+              :value="getDosage(med.drug_id, 'morning')"
+              @ion-input="updateDosage(med.drug_id, 'morning', $event)"
               placeholder="0"
             ></ion-input>
           </td>
@@ -34,9 +34,9 @@
             <ion-input
               type="text"
               class="dose-input bordered-input"
-              :disabled="!isActive(med.name)"
-              :value="getDosage(med.name, 'afternoon')"
-              @ion-input="updateDosage(med.name, 'afternoon', $event)"
+              :disabled="!isActive(med.drug_id)"
+              :value="getDosage(med.drug_id, 'afternoon')"
+              @ion-input="updateDosage(med.drug_id, 'afternoon', $event)"
               placeholder="0"
             ></ion-input>
           </td>
@@ -44,17 +44,17 @@
             <ion-input
               type="text"
               class="dose-input bordered-input"
-              :disabled="!isActive(med.name)"
-              :value="getDosage(med.name, 'evening')"
-              @ion-input="updateDosage(med.name, 'evening', $event)"
+              :disabled="!isActive(med.drug_id)"
+              :value="getDosage(med.drug_id, 'evening')"
+              @ion-input="updateDosage(med.drug_id, 'evening', $event)"
               placeholder="0"
             ></ion-input>
           </td>
           <td>
             <VueMultiselect
-              :disabled="!isActive(med.name)"
-              v-model="frequency_selections[med.name]"
-              @update:model-value="(event: any) => updateFrequencySelection(med.name, event)"
+              :disabled="!isActive(med.drug_id)"
+              v-model="frequency_selections[med.drug_id]"
+              @update:model-value="(event: any) => updateFrequencySelection(med.drud_id, event)"
               :multiple="false"
               :taggable="false"
               :hide-selected="false"
@@ -132,10 +132,10 @@ export default defineComponent({
           : selected_Other_NCD_Medication_List.value
       )
 
-        const updateDosage = (medicationName: string, timeOfDay: string, event: any) => {
+        const updateDosage = (drug_id: string, timeOfDay: string, event: any) => {
             const value = event.target.value;
             const medicationIndex = current_set_Medication_List.value.findIndex(
-                (med: { medication: string; }) => med.medication === medicationName
+                (med: { drug_id: string; }) => med.drug_id === drug_id
             );
             
             if (medicationIndex > -1) {
@@ -145,28 +145,28 @@ export default defineComponent({
             }
         };
 
-        const updateFrequencySelection = (medicationName: string, data: any) => {
+        const updateFrequencySelection = (drug_id: string, data: any) => {
             NCDmedicationsStore.frequency_selections.value = {
                 ...NCDmedicationsStore.frequency_selections.value,
-                [medicationName]: data
+                [drug_id]: data
             }
         }
 
-        const isActive = (medicationName: string) => {
-            return current_set_Medication_List.value.some((med: any) => med.medication === medicationName);
+        const isActive = (drug_id: string) => {
+            return current_set_Medication_List.value.some((med: any) => med.drug_id === drug_id);
         };
 
-        const toggleMedication = (medicationName: string) => {
-          if (isActive(medicationName)) {
+        const toggleMedication = (drug_id: string) => {
+          if (isActive(drug_id)) {
               const index = current_set_Medication_List.value.findIndex(
-              (          med: { medication: string; }) => med.medication === medicationName
+              (          med: { drug_id: string; }) => med.drug_id === drug_id
               );
               if (index > -1) {
               current_set_Medication_List.value.splice(index, 1);
               }
           } else {
               const newMedication = {
-              medication: medicationName,
+              drug_id: drug_id,
               dosage: {
                   morning: null,
                   afternoon: null,
@@ -182,9 +182,9 @@ export default defineComponent({
           }
         };
 
-        const getDosage = (medicationName: string, timeOfDay: string) => {
+        const getDosage = (drug_id: string, timeOfDay: string) => {
           const medication = current_set_Medication_List.value.find(
-              (        med: { medication: string; }) => med.medication === medicationName
+              (        med: { drug_id: string; }) => med.drug_id === drug_id
           );
           return medication?.dosage[timeOfDay] || '';
         };
