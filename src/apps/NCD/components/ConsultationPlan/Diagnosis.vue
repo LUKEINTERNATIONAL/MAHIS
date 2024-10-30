@@ -110,9 +110,6 @@ export default defineComponent({
     computed: {
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useDemographicsStore, ["demographics"]),
-        inputFields() {
-            return this.diagnosis[0].data.rowData[0].colData;
-        },
     },
     watch: {
         $route: {
@@ -123,8 +120,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.updateDiagnosisStores();
-        this.setDashedBox();
         await this.setListData();
         this.$nextTick(() => {
             const table = (this.$refs.dataTable as any).dt;
@@ -139,7 +134,7 @@ export default defineComponent({
         async voidDiagnosis(data: any, event: any) {
             const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${data.name} ?`, event);
             if (deleteConfirmed) {
-                EncounterService.voidEncounter(data.id);
+                await ObservationService.voidObs(data.id);
                 await this.setListData();
             }
         },
@@ -152,21 +147,19 @@ export default defineComponent({
             const obsS = await ObservationService.getAll(this.demographics.patient_id, "Secondary diagnosis");
             const observations = [...(obsP || []), ...(obsS || [])];
             this.tableData = await this.generateListItems(observations);
-            // await this.updateInvestigationWizard();
             DataTable.use(DataTablesCore);
         },
         async generateListItems(data: any) {
             if (data.length > 0) {
                 const promiseResults = await Promise.all(
                     data.map(async (item: any) => {
-                        console.log("🚀 ~ data.map ~ item:", item.encounter_id);
                         const name = await ObservationService.getConceptName(item.value_coded);
                         const obs_date = item.obs_datetime;
                         return [
                             name,
                             HisDate.toStandardHisFormat(obs_date),
                             `<button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify({
-                                id: item.encounter_id,
+                                id: item.obs_id,
                                 name: name,
                             })}'>${this.iconsContent.delete2}</button>`,
                         ];
@@ -176,101 +169,6 @@ export default defineComponent({
                 return promiseResults;
             } else {
                 return [];
-            }
-        },
-        displayInputFields() {
-            this.conditionStatus = "";
-            this.selectedText = "";
-            this.no_item = false;
-            this.addItemButton = false;
-            this.search_item = true;
-        },
-        async validaterowData() {
-            this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = false;
-            this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "";
-
-            this.diagnosisData = await this.getDiagnosis(this.inputFields[0].value);
-            if (this.inputFields[0].value == this.diagnosisData[0]?.name) {
-                return true;
-            } else {
-                this.search_item = true;
-                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = true;
-                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select diagnosis from the list";
-                return false;
-            }
-        },
-        async addNewRow() {
-            if (await this.validaterowData()) {
-                this.diagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
-                this.search_item = false;
-                this.display_item = true;
-                this.addItemButton = true;
-                this.buildDiagnosis();
-            }
-            this.diagnosis[0].data.rowData[0].colData[0].value = "";
-            this.diagnosis[0].data.rowData[0].colData[0].popOverData.data = [];
-        },
-        buildDiagnosis() {
-            this.diagnosis[0].selectedData.push({
-                actionBtn: true,
-                btn: ["edit", "delete"],
-                name: this.inputFields[0].value,
-                id: this.diagnosisData[0].concept_id,
-                display: [this.inputFields[0].value],
-                data: {
-                    concept_id: 6542, //primary diagnosis
-                    value_coded: this.diagnosisData[0].concept_id,
-                    obs_datetime: Service.getSessionDate(),
-                },
-            });
-        },
-        updateDiagnosisStores() {
-            const diagnosisStore = useDiagnosisStore();
-            diagnosisStore.setDiagnosis(this.diagnosis);
-        },
-        openPopover(e: any) {
-            this.event = e;
-            this.popoverOpen = true;
-        },
-        async handleInputData(col: any) {
-            if (col.inputHeader == "Diagnosis") {
-                this.diagnosisData = await this.getDiagnosis(col.value);
-                this.diagnosis[0].data.rowData[0].colData[0].popOverData.data = this.diagnosisData;
-                this.validaterowData();
-            }
-        },
-        async getDiagnosis(value: any) {
-            return await PatientDiagnosisService.getDiagnosis(value, 1, 5);
-        },
-        editDiagnosis(test: any) {
-            this.deleteDiagnosis(test);
-            this.selectedText = test.name;
-            this.diagnosis[0].data.rowData[0].colData[0].value = test.name;
-            this.addItemButton = false;
-            this.search_item = true;
-            this.updateDiagnosisStores();
-        },
-        async openDeletePopover(e: any) {
-            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e.name} ?`, e.event);
-            if (deleteConfirmed) {
-                this.deleteDiagnosis(e.name);
-            }
-        },
-        deleteDiagnosis(diagnosis: any) {
-            this.diagnosis[0].selectedData = this.diagnosis[0].selectedData.filter((item: any) => item.display[0] !== diagnosis.name);
-            this.updateDiagnosisStores();
-        },
-        setDashedBox() {
-            if (this.inputFields[0].value) {
-                this.addItemButton = false;
-                this.search_item = true;
-                this.no_item = false;
-            }
-            if (this.diagnosis[0].selectedData.length > 0) {
-                this.display_item = true;
-                this.no_item = false;
-            } else if (!this.search_item) {
-                this.no_item = true;
             }
         },
     },
