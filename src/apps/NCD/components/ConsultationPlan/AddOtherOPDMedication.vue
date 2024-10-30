@@ -7,6 +7,7 @@
         <div class="modal_wrapper">
             <div class="">
                 <OPDMedications @drug-selected="addSearchedDrug"/>
+                 <Medication :use-default-stores="false"/>
             </div>
         </div>
     </ion-content>
@@ -24,6 +25,8 @@ import { IonContent, IonHeader, IonFooter, modalController, IonIcon, IonPage, Io
 import { defineComponent } from "vue";
 import { icons } from "@/utils/svg";
 import OPDMedications from "./OPDMedications.vue"
+import Medication from "./Medication.vue"
+import { useOtherNCDMedicationStore } from "@/stores/NCDMedicationStore";
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
@@ -38,7 +41,8 @@ export default defineComponent({
         IonTitle,
         IonIcon,
         IonFooter,
-        OPDMedications
+        OPDMedications,
+        Medication,
     },
     data() {
         const dismiss = () => {
@@ -46,10 +50,8 @@ export default defineComponent({
         }
 
         const addSearchedDrug = (data: any) => {
-            // console.log(data)
-            // const drug = drugObj(data.drug_id, data.name, 'Other')
-            // console.log(drug)
-            // medications.value.unshift(drug)
+            const OtherNCDmedicationsStore = useOtherNCDMedicationStore()
+            OtherNCDmedicationsStore.addSearchedDrug(data)
         }
 
         return {

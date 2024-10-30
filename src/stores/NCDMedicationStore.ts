@@ -22,6 +22,25 @@ const drugObj = (drug_id: number, name: string, category: string) => {
     return { drug_id: drug_id, name: name, category: category, units: "", dosage_form: "", dose_strength: "" };
 }
 
+export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore", {
+    state: () => ({
+        selectedOtherNCDMedicationList: [] as any,
+    }),
+    actions: {
+        setSelectedNCDMedicationList(drug_item: any): void {
+            this.selectedOtherNCDMedicationList.push(drug_item);
+        },
+        getSelectedNCDMedicationList() {
+            return this.selectedOtherNCDMedicationList;
+        },
+        addSearchedDrug (data: any) {
+            const drug = drugObj(data.drug_id, data.name, 'Other')
+            this.selectedOtherNCDMedicationList.unshift(drug);
+        }
+    },
+
+});
+
 export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
     state: () => ({
         medications: [] as any,
