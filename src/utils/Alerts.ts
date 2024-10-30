@@ -125,7 +125,7 @@ export function createPopover(massege: any, e: any, options: any, btns = [] as A
         backdropDismiss: false,
         event: e,
         cssClass: "delete-popover",
-        showBackdrop: options.showBackdrop,
+        showBackdrop: options?.showBackdrop || false,
         side: "bottom",
         reference: "event",
         alignment: "center",
