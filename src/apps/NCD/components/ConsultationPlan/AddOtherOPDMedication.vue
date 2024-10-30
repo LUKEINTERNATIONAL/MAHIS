@@ -1,13 +1,18 @@
 <template>
     <ion-header style="display: flex; justify-content: space-between">
-        <ion-title class="modalTitle">Add Lab Test</ion-title>
+        <ion-title class="modalTitle">
+            <div class="medication-list">
+                <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
+                <span>Add Other Medication List</span>
+            </div>
+        </ion-title>
         <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="iconsContent.cancel"></ion-icon>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
         <div class="modal_wrapper">
             <div class="">
                 <OPDMedications @drug-selected="addSearchedDrug"/>
-                 <Medication :use-default-stores="false"/>
+                <Medication :use-default-stores="false"/>
             </div>
         </div>
     </ion-content>
@@ -24,6 +29,7 @@
 import { IonContent, IonHeader, IonFooter, modalController, IonIcon, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { icons } from "@/utils/svg";
+import { medkit } from 'ionicons/icons';
 import OPDMedications from "./OPDMedications.vue"
 import Medication from "./Medication.vue"
 import { useOtherNCDMedicationStore } from "@/stores/NCDMedicationStore";
@@ -58,6 +64,7 @@ export default defineComponent({
             iconsContent: icons,
             dismiss,
             addSearchedDrug,
+            medkit
         };
     },
     computed: {
@@ -78,6 +85,13 @@ export default defineComponent({
     },
 });
 </script>
+<style scoped>
+    .medication-list {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+</style>
 
 
 

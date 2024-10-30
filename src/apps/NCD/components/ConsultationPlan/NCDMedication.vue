@@ -4,8 +4,10 @@
       <ion-row>
         <ion-col>
           <ion-card-title>
-            <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
-            Medication List
+            <div class="medication-list">
+                <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
+                <span>Add Other Medication List</span>
+            </div>
           </ion-card-title>
         </ion-col>
       </ion-row>
@@ -56,5 +58,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+  .medication-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="table-container" v-if="activeMedications.length > 0">
+  <div v-if="activeMedications.length > 0">
     <table class="prescription-table">
       <thead>
         <tr>
@@ -212,10 +212,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.table-container {
-  overflow-x: auto;
-}
-
 .prescription-table {
   width: 100%;
   border-collapse: collapse;
