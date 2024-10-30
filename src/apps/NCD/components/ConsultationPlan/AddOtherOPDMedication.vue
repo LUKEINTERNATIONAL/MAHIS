@@ -19,17 +19,20 @@
     <ion-footer collapse="fade" class="ion-no-border">
         <ion-row>
             <ion-col>
-                
+                <ion-button @click="onAdd" color="primary" style="float: right; margin-bottom: 20px; margin-right: 20px;">
+                    <ion-icon :icon="checkmark" slot="start"></ion-icon>
+                     Add
+                </ion-button>
             </ion-col>
         </ion-row>
     </ion-footer>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonFooter, modalController, IonIcon, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard } from "@ionic/vue";
+import { IonContent, IonHeader, IonFooter, modalController, IonIcon, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonButton } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { icons } from "@/utils/svg";
-import { medkit } from 'ionicons/icons';
+import { medkit, checkmark } from 'ionicons/icons';
 import OPDMedications from "./OPDMedications.vue"
 import Medication from "./Medication.vue"
 import { useOtherNCDMedicationStore } from "@/stores/NCDMedicationStore";
@@ -49,11 +52,19 @@ export default defineComponent({
         IonFooter,
         OPDMedications,
         Medication,
+        IonCol,
+        IonButton,
     },
     data() {
         const dismiss = () => {
             modalController.dismiss();
         }
+
+        const onAdd = () => {
+            dismiss()
+        }
+
+        modalController.dismiss("dismiss");
 
         const addSearchedDrug = (data: any) => {
             const OtherNCDmedicationsStore = useOtherNCDMedicationStore()
@@ -64,7 +75,9 @@ export default defineComponent({
             iconsContent: icons,
             dismiss,
             addSearchedDrug,
-            medkit
+            medkit,
+            checkmark,
+            onAdd,
         };
     },
     computed: {

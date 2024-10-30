@@ -36,7 +36,10 @@ export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore"
         },
         addSearchedDrug(data: any) {
             const drug = drugObj(data.drug_id, data.name, "Other");
-            this.otherNCDMedications.unshift(drug);
+            const exists = this.otherNCDMedications.some((med: any) => med.drug_id === drug.drug_id);
+            if (!exists) {
+                this.otherNCDMedications.unshift(drug);
+            }
         },
         clearOtherNCDMedications() {
             this.otherNCDMedications = [];
@@ -71,7 +74,10 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
             }
         },
         setSelectedNCDMedicationList(drug_item: any): void {
-            this.selectedNCDMedicationList.push(drug_item);
+            const exists = this.selectedNCDMedicationList.some((item: any) => item.drug_id === drug_item.drug_id);
+            if (!exists) {
+                this.selectedNCDMedicationList.push(drug_item);
+            }
         },
         getSelectedNCDMedicationList() {
             return this.selectedNCDMedicationList;
