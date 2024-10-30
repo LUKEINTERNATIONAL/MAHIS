@@ -24,6 +24,7 @@ const drugObj = (drug_id: number, name: string, category: string) => {
 
 export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore", {
     state: () => ({
+        otherNCDMedications: [] as any,
         selectedOtherNCDMedicationList: [] as any,
     }),
     actions: {
@@ -33,12 +34,12 @@ export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore"
         getSelectedNCDMedicationList() {
             return this.selectedOtherNCDMedicationList;
         },
-        addSearchedDrug (data: any) {
-            const drug = drugObj(data.drug_id, data.name, 'Other')
-            this.selectedOtherNCDMedicationList.unshift(drug);
-        }
+        addSearchedDrug(data: any) {
+            const drug = drugObj(data.drug_id, data.name, "Other");
+            this.otherNCDMedications.unshift(drug);
+        },
     },
-
+    persist: true,
 });
 
 export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {

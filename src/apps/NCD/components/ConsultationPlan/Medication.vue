@@ -102,12 +102,12 @@ export default defineComponent({
     },
     computed: {
       ...mapState(useNCDMedicationsStore, ["medications", "frequency_selections"]),
-      ...mapState(useOtherNCDMedicationStore, ["selectedOtherNCDMedicationList"]),
+      ...mapState(useOtherNCDMedicationStore, ["otherNCDMedications"]),
 
       activeMedications() {
         return this.useDefaultStores 
           ? this.medications 
-          : this.selectedOtherNCDMedicationList
+          : this.otherNCDMedications
       }
     },
     props: {
@@ -178,8 +178,11 @@ export default defineComponent({
               }
               };
 
-
+            if (props.useDefaultStores == false) {
+              OtherNCDmedicationsStore.setSelectedNCDMedicationList(newMedication);
+            } else {
               NCDmedicationsStore.setSelectedNCDMedicationList(newMedication);
+            }
           }
         };
 

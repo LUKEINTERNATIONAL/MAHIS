@@ -15,8 +15,8 @@
       <ion-row>
         <ion-col>
           <ion-button @click="openAddOtherOPDMedicationModal" color="primary" style="float: right;">
-            <ion-icon :icon="medkit" slot="start"></ion-icon>
-            ADD Other Medication
+            <ion-icon :icon="medkit" slot="start"> </ion-icon>
+             <span style="margin-left: 10px;"> ADD Other Medication</span>
           </ion-button>
         </ion-col>
       </ion-row>
