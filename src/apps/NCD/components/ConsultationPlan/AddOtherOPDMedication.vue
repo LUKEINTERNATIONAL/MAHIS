@@ -35,7 +35,7 @@ import { icons } from "@/utils/svg";
 import { medkit, checkmark } from 'ionicons/icons';
 import OPDMedications from "./OPDMedications.vue"
 import Medication from "./Medication.vue"
-import { useOtherNCDMedicationStore } from "@/stores/NCDMedicationStore";
+import { useOtherNCDMedicationStore, addOtherMedicationToNCDMedicationList } from "@/stores/NCDMedicationStore";
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
@@ -56,19 +56,19 @@ export default defineComponent({
         IonButton,
     },
     data() {
+        const OtherNCDmedicationsStore = useOtherNCDMedicationStore();
         const dismiss = () => {
             modalController.dismiss();
         }
 
         const onAdd = () => {
+            addOtherMedicationToNCDMedicationList();
+            OtherNCDmedicationsStore.clearOtherNCDMedications();
             dismiss()
         }
 
-        modalController.dismiss("dismiss");
-
         const addSearchedDrug = (data: any) => {
-            const OtherNCDmedicationsStore = useOtherNCDMedicationStore()
-            OtherNCDmedicationsStore.addSearchedDrug(data)
+            OtherNCDmedicationsStore.addSearchedDrug(data);
         }
 
         return {
