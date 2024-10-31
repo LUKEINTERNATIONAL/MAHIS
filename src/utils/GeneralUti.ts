@@ -9,15 +9,6 @@ interface FormattedHoliday {
     name: string;
     date: string;
 }
-export interface Config {
-    host: string;
-    port: string;
-    protocol: string;
-    thirdpartyapps: string;
-    otherApps: Array<any>;
-    baseURL: string;
-    [key: string]: any;
-}
 
 export function areFieldsValid(propertiesArray: any[]) {
     let foundInvalidEntry = false;
@@ -80,117 +71,6 @@ export function combineArrays<T>(...arrays: T[][]): T[] {
 
 export function isSameDate(date1: Date, date2: Date) {
     return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
-}
-
-let baseURL = getBaseURL();
-if (baseURL.length > 0) {
-    baseURL = "/" + baseURL;
-}
-
-const configPaths = [`${baseURL}/config.json`];
-
-export async function getFileConfig2(): Promise<Config> {
-    for (const path of configPaths) {
-        try {
-            const response = await fetch(path);
-            if (!response.ok) {
-                throw new Error(`Unable to retrieve configuration file from ${path}`);
-            }
-            const {
-                apiURL,
-                apiPort,
-                apiProtocol,
-                appConf,
-                baseURL,
-                apps,
-                thirdpartyApps,
-                platformProfiles,
-                otherApps,
-                websockerURL,
-                websockerProtocol,
-            } = await response.json();
-            localStorage.setItem("apiURL", apiURL);
-            localStorage.setItem("apiPort", apiPort);
-            localStorage.setItem("apiProtocol", apiProtocol);
-            localStorage.setItem("appConf", JSON.stringify(appConf));
-            localStorage.setItem("apps", JSON.stringify(apps));
-            // localStorage.setItem("app", JSON.stringify({ programID: 29, applicationName: "PATIENT REGISTRATION PROGRAM" }));
-            localStorage.setItem("thirdpartyApps", JSON.stringify(thirdpartyApps));
-            localStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
-            localStorage.setItem("otherApps", JSON.stringify(otherApps));
-            localStorage.setItem("websockerURL", JSON.stringify(websockerURL));
-            localStorage.setItem("websockerProtocol", JSON.stringify(websockerProtocol));
-            return {
-                host: apiURL,
-                port: apiPort,
-                protocol: apiProtocol,
-                thirdpartyapps: thirdpartyApps,
-                otherApps,
-                baseURL: baseURL,
-            };
-        } catch (e) {
-            console.error(`Error reading config from ${path}:`, e);
-            if (path === configPaths[configPaths.length - 1]) {
-                throw new Error("All API Configuration file attempts failed. Please check console log for more details");
-            }
-        }
-    }
-
-    // This line should never be reached due to the throw in the loop,
-    // but TypeScript requires a return statement here
-    throw new Error("Unexpected error occurred");
-}
-
-async function readConfigValueAsync(): Promise<Config> {
-    for (const path of configPaths) {
-        try {
-            const response = await fetch(path);
-            if (!response.ok) {
-                throw new Error(`Unable to retrieve configuration file from ${path}`);
-            }
-            const { baseURL } = await response.json();
-            return baseURL;
-        } catch (e) {
-            console.error(`Error reading config from ${path}:`, e);
-            if (path === configPaths[configPaths.length - 1]) {
-                throw new Error("All API Configuration file attempts failed. Please check console log for more details");
-            }
-        }
-    }
-    // This line should never be reached due to the throw in the loop,
-    // but TypeScript requires a return statement here
-    throw new Error("Unexpected error occurred");
-}
-
-export function getWebsockerURL() {
-    const webST = localStorage.websockerURL;
-    if (webST) {
-        let websockerURL = removeQuotes(webST);
-        return websockerURL;
-    }
-    return "";
-}
-
-export function getWebsockerProtocol() {
-    const webST = localStorage.websockerProtocol;
-    if (webST) {
-        let websockerProtocol = removeQuotes(webST);
-        return websockerProtocol;
-    }
-    return "";
-}
-
-function removeQuotes(str: string) {
-    if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
-        return str.substring(1, str.length - 1);
-    }
-    return str;
-}
-
-export function getBaseURL() {
-    let baseURL = import.meta.env.BASE_URL;
-    baseURL = baseURL.replace("/", "");
-    return baseURL;
 }
 
 export function compareDates(currentDateStr: string, nextAppointmentDateStr: string) {

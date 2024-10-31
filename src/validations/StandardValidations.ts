@@ -1,5 +1,4 @@
 import { isEmpty, isPlainObject, isArray } from "lodash";
-import { getBaseURL } from "@/utils/GeneralUti";
 
 function validateSeries(conditions: Array<any>) {
     try {
@@ -161,11 +160,7 @@ function validateFBS(val: any) {
 
 async function validateMobilePhone(val: any, countryData: any) {
     try {
-        let baseURL = getBaseURL();
-        if (baseURL.length > 0) {
-            baseURL = "/" + baseURL;
-        }
-        const response = await fetch(`${baseURL}/countryphones.json`);
+        const response = await fetch(`${import.meta.env.BASE_URL}countryphones.json`);
         const data = await response.json();
         const country = data.countries.find((c: { iso2: string }) => c.iso2 === countryData.iso2);
 

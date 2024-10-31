@@ -1,7 +1,5 @@
 import EventBus from "@/utils/EventBus";
 
-import { getFileConfig2, Config } from "@/utils/GeneralUti"
-
 export enum ApiBusEvents {
     BEFORE_API_REQUEST = "before_api_request",
     AFTER_API_REQUEST = "after_api_request",
@@ -9,39 +7,58 @@ export enum ApiBusEvents {
 }
 
 const ApiClient = (() => {
-    const baseURL = ''
+    interface Config {
+        host: string;
+        port: string;
+        protocol: string;
+    }
 
     async function getFileConfig(): Promise<Config> {
-        return await getFileConfig2()
+        const response = await fetch(`${import.meta.env.BASE_URL}config.json`);
+        // const response = await fetch("/config.json");
+        if (!response.ok) {
+            throw "Unable to retrieve configuration file/ Invalid config.json";
+        }
+        try {
+            const data = await response.json();
+            const { apiURL, apiPort, apiProtocol } = data[import.meta.env.MODE];
+            localStorage.setItem("apiURL", apiURL);
+            localStorage.setItem("apiPort", apiPort);
+            localStorage.setItem("apiProtocol", apiProtocol);
+            return {
+                host: apiURL,
+                port: apiPort,
+                protocol: apiProtocol,
+            };
+        } catch (e) {
+            console.error(e);
+            throw 'API Configuration file "/config.json" has errors. Please check console log for more details';
+        }
     }
 
     function getLocalConfig(): Config | undefined {
         const host = localStorage.apiURL;
         const port = localStorage.apiPort;
         const protocol = localStorage.apiProtocol;
-        const thirdpartyapps = localStorage.thirdpartyApps;
-        const otherApps = localStorage.otherApps || [];
 
-        if (host && port && protocol) return { host, port, protocol, thirdpartyapps, otherApps, baseURL };
+        if (host && port && protocol) return { host, port, protocol };
     }
 
     function getSessionConfig(): Config | undefined {
         const host = localStorage.apiURL;
         const port = localStorage.apiPort;
         const protocol = localStorage.apiProtocol;
-        const thirdpartyapps = localStorage.thirdpartyApps;
-        const otherApps = localStorage.otherApps;
 
-        if (host && port && protocol) return { host, port, protocol, thirdpartyapps, otherApps, baseURL };
+        if (host && port && protocol) return { host, port, protocol };
     }
 
     function getConfig(): Promise<Config> | Config {
-        // const localConfig: Config | undefined = getLocalConfig();
-        // const sessionConfig: Config | undefined = getSessionConfig();
+        const localConfig: Config | undefined = getLocalConfig();
+        const sessionConfig: Config | undefined = getSessionConfig();
 
-        // if (localStorage.useLocalStorage && localConfig) return localConfig;
+        if (localStorage.useLocalStorage && localConfig) return localConfig;
 
-        // if (sessionConfig) return sessionConfig;
+        if (sessionConfig) return sessionConfig;
 
         return getFileConfig();
     }
@@ -87,7 +104,7 @@ const ApiClient = (() => {
             handleUnauthorized(response.statusText);
             return response;
         } catch (e) {
-            // console.error(e);
+            console.error(e);
             if (`${e}`.match(/NetworkError|Failed to fetch/i)) {
                 EventBus.emit(ApiBusEvents.ON_API_CRASH, e);
             } else {
