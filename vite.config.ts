@@ -22,6 +22,6 @@ export default defineConfig(({ command, mode }) => {
                 plugins: [visualizer()],
             },
         },
-        base: mode == "development" ? "mahis/" : "",
+        base: mode == "test" ? "mahis/" : "",
     };
 });
