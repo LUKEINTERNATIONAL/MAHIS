@@ -36,6 +36,7 @@ import { medkit, checkmark } from 'ionicons/icons';
 import OPDMedications from "./OPDMedications.vue"
 import Medication from "./Medication.vue"
 import { useOtherNCDMedicationStore, addOtherMedicationToNCDMedicationList } from "@/stores/NCDMedicationStore";
+import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service"
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
@@ -62,6 +63,7 @@ export default defineComponent({
         }
 
         const onAdd = () => {
+            // createNCDDrugOrder()
             addOtherMedicationToNCDMedicationList();
             OtherNCDmedicationsStore.clearOtherNCDMedications();
             dismiss()
