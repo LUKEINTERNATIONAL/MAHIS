@@ -22,7 +22,7 @@ jobs:
               run: npm install
 
             - name: Run Build
-              run: npm run build:development
+              run: npm run build:test
 #
 # - name: Upload logs if the build fails
 #   if: failure()
