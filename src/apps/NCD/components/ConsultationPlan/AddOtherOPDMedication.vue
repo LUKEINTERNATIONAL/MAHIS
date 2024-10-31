@@ -63,10 +63,10 @@ export default defineComponent({
         }
 
         const onAdd = () => {
-            // createNCDDrugOrder()
-            addOtherMedicationToNCDMedicationList();
-            OtherNCDmedicationsStore.clearOtherNCDMedications();
-            dismiss()
+            createNCDDrugOrder()
+            // addOtherMedicationToNCDMedicationList();
+            // OtherNCDmedicationsStore.clearOtherNCDMedications();
+            // dismiss()
         }
 
         const addSearchedDrug = (data: any) => {

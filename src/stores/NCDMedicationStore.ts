@@ -37,17 +37,18 @@ export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore"
         },
         addSearchedDrug(data: any) {
             const drug = drugObj(data.drug_id, data.name, "Other");
+            drug.units = data.units;
             const exists = this.otherNCDMedications.some((med: any) => med.drug_id === drug.drug_id);
             if (!exists) {
                 this.otherNCDMedications.unshift(drug);
                 const newMedication = {
-                    drug_id: drug.drug_id,
                     dosage: {
                         morning: null,
                         afternoon: null,
                         evening: null,
                     },
                     duration: null,
+                    ...drug,
                 };
                 this.setSelectedNCDMedicationList(newMedication);
             }
