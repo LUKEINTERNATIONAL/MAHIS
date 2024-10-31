@@ -14,10 +14,14 @@ export class WebSocketService {
     private async init() {
         const apiURL = localStorage.getItem("apiURL");
         const apiPort = localStorage.getItem("apiPort");
+        const websocketProtocol = localStorage.getItem("websocketProtocol");
 
         this.location_id = localStorage.getItem("locationID");
         try {
-            const url = import.meta.env.MODE === "development" ? `ws://${apiURL}:${apiPort}/cable` : `wss://${apiURL}/api/v1/cable`;
+            const url =
+                import.meta.env.MODE === "development"
+                    ? `${websocketProtocol}://${apiURL}:${apiPort}/cable`
+                    : `${websocketProtocol}://${apiURL}/api/v1/cable`;
 
             this.socket = new WebSocket(url);
             this.socket.onopen = this.onOpen;
