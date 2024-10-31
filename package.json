@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc && vite build",
-    "build:test": "vite build --mode test",
-    "test-mode": "vite --mode test",
+    "android:test": "vite build --mode test && cp -r dist/* android/app/src/main/assets/public",
+    "android": "ionic cap run android",
+    "build:test": "vite --mode test",
+    "build:development": "vite build --mode development",
     "build:prod": "vite build --mode production",
     "preview": "vite preview",
     "test:e2e": "cypress run",
