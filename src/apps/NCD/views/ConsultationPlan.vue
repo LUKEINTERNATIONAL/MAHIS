@@ -118,6 +118,7 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 import VitalSigns from "@/components/VitalSigns.vue";
+import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service"
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -359,15 +360,7 @@ export default defineComponent({
                 treatmentInstance.onSubmitNotes(patientID, userID, treatmentNotesTxt);
             }
 
-            if (!isEmpty(this.selectedMedicalDrugsList)) {
-                const drugOrders = this.mapToOrders();
-                const prescriptionService = new DrugPrescriptionService(patientID, userID);
-                const encounter = await prescriptionService.createEncounter();
-                if (!encounter) return toastWarning("Unable to create treatment encounter");
-                const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
-                if (!drugOrder) return toastWarning("Unable to create drug orders!");
-                toastSuccess("Drug order has been created");
-            }
+            await createNCDDrugOrder();
         },
 
         async saveOutComeStatus() {
@@ -410,22 +403,6 @@ export default defineComponent({
         },
         openModal() {
             createModal(SaveProgressModal);
-        },
-        mapToOrders(): any[] {
-            return this.selectedMedicalDrugsList.map((drug: any) => {
-                const startDate = DrugPrescriptionService.getSessionDate();
-                const frequency = DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) || ({} as (typeof DRUG_FREQUENCIES)[0]);
-                return {
-                    drug_inventory_id: drug.drug_id,
-                    equivalent_daily_dose: drug.dose == "Unknown" ? 0 : drug.dose * frequency?.value || 0,
-                    start_date: startDate,
-                    auto_expire_date: this.calculateExpireDate(startDate, drug.duration),
-                    units: drug.units,
-                    instructions: `${drug.drugName}: ${drug.dose} ${drug.units} ${frequency?.code || ""} for ${drug.duration} days`,
-                    dose: drug.dose,
-                    frequency: frequency?.code || "",
-                };
-            });
         },
         calculateExpireDate(startDate: string | Date, duration: any) {
             const date = new Date(startDate);

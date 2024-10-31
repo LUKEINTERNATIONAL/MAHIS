@@ -92,6 +92,11 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
         getSelectedNCDMedicationList() {
             return this.selectedNCDMedicationList;
         },
+        clearMedicationDataStores() {
+            this.medications = [];
+            this.selectedNCDMedicationList = [];
+            this.frequency_selections = [];
+        }
     },
     persist: true,
 });
