@@ -11,6 +11,7 @@ const ApiClient = (() => {
         host: string;
         port: string;
         protocol: string;
+        websocketProtocol: string;
     }
 
     async function getFileConfig(): Promise<Config> {
@@ -21,14 +22,16 @@ const ApiClient = (() => {
         }
         try {
             const data = await response.json();
-            const { apiURL, apiPort, apiProtocol } = data[import.meta.env.MODE];
+            const { apiURL, apiPort, apiProtocol, websocketProtocol } = data[import.meta.env.MODE];
             localStorage.setItem("apiURL", apiURL);
             localStorage.setItem("apiPort", apiPort);
             localStorage.setItem("apiProtocol", apiProtocol);
+            localStorage.setItem("websocketProtocol", websocketProtocol);
             return {
                 host: apiURL,
                 port: apiPort,
                 protocol: apiProtocol,
+                websocketProtocol: websocketProtocol,
             };
         } catch (e) {
             console.error(e);
@@ -40,16 +43,18 @@ const ApiClient = (() => {
         const host = localStorage.apiURL;
         const port = localStorage.apiPort;
         const protocol = localStorage.apiProtocol;
+        const websocketProtocol = localStorage.websocketProtocol;
 
-        if (host && port && protocol) return { host, port, protocol };
+        if (host && port && protocol) return { host, port, protocol, websocketProtocol };
     }
 
     function getSessionConfig(): Config | undefined {
         const host = localStorage.apiURL;
         const port = localStorage.apiPort;
         const protocol = localStorage.apiProtocol;
+        const websocketProtocol = localStorage.websocketProtocol;
 
-        if (host && port && protocol) return { host, port, protocol };
+        if (host && port && protocol) return { host, port, protocol, websocketProtocol };
     }
 
     function getConfig(): Promise<Config> | Config {
