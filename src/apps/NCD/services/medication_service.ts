@@ -1,9 +1,20 @@
 import { useNCDMedicationsStore } from "@/stores/NCDMedicationStore";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import HisDate from "@/utils/Date";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { Service } from "@/services/service";
+import { PatientService } from "@/services/patient_service";
 
-export function createNCDDrugOrder() {
-    console.log(mapToOrders())
+export async function createNCDDrugOrder() {
+    const userID: any = Service.getUserID();
+    const patient = new PatientService();
+    const drugOrders = mapToOrders();
+    const prescriptionService = new DrugPrescriptionService(patient.getID(), userID);
+    const encounter = await prescriptionService.createEncounter();
+    if (!encounter) return toastWarning("Unable to create treatment encounter");
+    const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
+    if (!drugOrder) return toastWarning("Unable to create drug orders!");
+    toastSuccess("Drug order(s) has been created");
 }
 
 const mapToOrders = () => {
