@@ -298,7 +298,6 @@ export default defineComponent({
             dataToPass: { payloadData: "tes" } as any,
             programBtn: {} as any,
             totalPatientsToday: 0,
-            base_url: "${import.meta.env.BASE_URL}backgroundImg.png",
             isLoading: false,
             totalStats: [
                 {
