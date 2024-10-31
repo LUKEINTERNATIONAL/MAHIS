@@ -5,8 +5,8 @@
         <tr>
           <th class="checkbox-col">Select</th>
           <th>Medication</th>
-          <th><ion-icon :icon="sunny"></ion-icon> Morning</th>
-          <th><ion-icon :icon="partlySunny"></ion-icon> Afternoon</th>
+          <th><ion-icon :icon="partlySunny"></ion-icon> Morning</th>
+          <th><ion-icon :icon="sunny"></ion-icon> Afternoon</th>
           <th><ion-icon :icon="moon"></ion-icon> Evening</th>
           <th><ion-icon :icon="timeOutline"></ion-icon> Frequency</th>
         </tr>
