@@ -26,7 +26,7 @@ jobs:
 
             # Step 4: Build the Vue app
             - name: Build Vue app
-              run: npm run build
+              run: npm run build:development
 
             # Step 5: Clone the target repository (MAHIS-Release)
             - name: Clone target repository
