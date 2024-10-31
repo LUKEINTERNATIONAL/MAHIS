@@ -6,9 +6,10 @@
           <th class="checkbox-col">Select</th>
           <th>Medication</th>
           <th><ion-icon :icon="partlySunny"></ion-icon> Morning</th>
-          <th><ion-icon :icon="sunny"></ion-icon> Afternoon</th>
-          <th><ion-icon :icon="moon"></ion-icon> Evening</th>
-          <th><ion-icon :icon="timeOutline"></ion-icon> Frequency</th>
+          <th><ion-icon :icon="sunny"></ion-icon> Noon</th>
+          <th><ion-icon :icon="moon"></ion-icon> Night</th>
+          <th><ion-icon :icon="timeOutline"></ion-icon> Duration</th>
+          <th><ion-icon :icon="cubeOutline"></ion-icon> Quantity</th>
         </tr>
       </thead>
       <tbody>
@@ -51,23 +52,24 @@
             ></ion-input>
           </td>
           <td>
-            <VueMultiselect
+            <ion-input
+              type="text"
+              class="dose-input bordered-input"
               :disabled="!isActive(med.drug_id)"
-              v-model="frequency_selections[med.drug_id]"
-              @update:model-value="(event: any) => updateFrequencySelection(med.drud_id, event)"
-              :multiple="false"
-              :taggable="false"
-              :hide-selected="false"
-              :close-on-select="true"
-              openDirection="bottom"
-              tag-placeholder="select frequency"
-              placeholder="select frequency"
-              selectLabel=""
-              label="label"
-              @search-change="$emit('search-change', $event)"
-              track-by="label"
-              :options="frequency_options"
-            />
+              :value="getDuration(med.drug_id)"
+              @ion-input="updateDuration(med.drug_id, $event)"
+              placeholder="0"
+              min="1"
+            ></ion-input>
+          </td>
+          <td>
+            <ion-input
+              type="text"
+              class="dose-input bordered-input"
+              disabled
+              :value="calculateQuantity(med.drug_id)"
+              placeholder="0"
+            ></ion-input>
           </td>
         </tr>
       </tbody>
@@ -82,11 +84,9 @@ import {
   IonInput, IonIcon, IonCheckbox, IonCol, IonRow,
   IonButton
 } from '@ionic/vue';
-import VueMultiselect from "vue-multiselect";
 import { 
-  medkit, sunny, partlySunny, moon, timeOutline,
+  medkit, sunny, partlySunny, moon, timeOutline, cubeOutline 
 } from 'ionicons/icons';
-import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import { useNCDMedicationsStore, useOtherNCDMedicationStore } from "@/stores/NCDMedicationStore";
 import { mapState } from "pinia";
 
@@ -98,10 +98,10 @@ export default defineComponent({
     name: 'medication',
     components: {
         IonCard, IonCardHeader, IonButton, IonCardTitle, IonCardContent,
-        IonInput, IonIcon, IonCol, IonRow, IonCheckbox, VueMultiselect,
+        IonInput, IonIcon, IonCol, IonRow, IonCheckbox,
     },
     computed: {
-      ...mapState(useNCDMedicationsStore, ["medications", "frequency_selections"]),
+      ...mapState(useNCDMedicationsStore, ["medications"]),
       ...mapState(useOtherNCDMedicationStore, ["otherNCDMedications"]),
 
       activeMedications() {
@@ -124,8 +124,6 @@ export default defineComponent({
       const OtherNCDmedicationsStore = useOtherNCDMedicationStore()
       const selected_Other_NCD_Medication_List = computed(() => OtherNCDmedicationsStore.selectedOtherNCDMedicationList);
 
-      const frequency_options = ref(DRUG_FREQUENCIES);
-
       const current_set_Medication_List = computed(() => 
         props.useDefaultStores 
           ? selected_NCD_Medication_List.value 
@@ -145,12 +143,31 @@ export default defineComponent({
             }
         };
 
-        const updateFrequencySelection = (drug_id: string, data: any) => {
-            NCDmedicationsStore.frequency_selections.value = {
-                ...NCDmedicationsStore.frequency_selections.value,
-                [drug_id]: data
+        const updateDuration = (drug_id: string, event: any) => {
+            const value = event.target.value;
+            const medicationIndex = current_set_Medication_List.value.findIndex(
+                (med: { drug_id: string; }) => med.drug_id === drug_id
+            );
+            
+            if (medicationIndex > -1) {
+                const updatedMedication = { ...current_set_Medication_List.value[medicationIndex] };
+                updatedMedication.duration = value;
+                current_set_Medication_List.value[medicationIndex] = updatedMedication;
             }
-        }
+        };
+
+        const updateQuantity = (drug_id: string, event: any) => {
+            const value = event.target.value;
+            const medicationIndex = current_set_Medication_List.value.findIndex(
+                (med: { drug_id: string; }) => med.drug_id === drug_id
+            );
+            
+            if (medicationIndex > -1) {
+                const updatedMedication = { ...current_set_Medication_List.value[medicationIndex] };
+                updatedMedication.quantity = value;
+                current_set_Medication_List.value[medicationIndex] = updatedMedication;
+            }
+        };
 
         const isActive = (drug_id: string) => {
             return current_set_Medication_List.value.some((med: any) => med.drug_id === drug_id);
@@ -159,50 +176,78 @@ export default defineComponent({
         const toggleMedication = (drug_id: string) => {
           if (isActive(drug_id)) {
               const index = current_set_Medication_List.value.findIndex(
-              (          med: { drug_id: string; }) => med.drug_id === drug_id
+                (med: { drug_id: string; }) => med.drug_id === drug_id
               );
               if (index > -1) {
-              current_set_Medication_List.value.splice(index, 1);
+                current_set_Medication_List.value.splice(index, 1);
               }
           } else {
               const newMedication = {
-              drug_id: drug_id,
-              dosage: {
-                  morning: null,
-                  afternoon: null,
-                  evening: null
-              }
+                drug_id: drug_id,
+                dosage: {
+                    morning: null,
+                    afternoon: null,
+                    evening: null
+                },
+                duration: null,
               };
 
-            if (props.useDefaultStores == false) {
-              OtherNCDmedicationsStore.setSelectedNCDMedicationList(newMedication);
-            } else {
-              NCDmedicationsStore.setSelectedNCDMedicationList(newMedication);
-            }
+              if (props.useDefaultStores == false) {
+                OtherNCDmedicationsStore.setSelectedNCDMedicationList(newMedication);
+              } else {
+                NCDmedicationsStore.setSelectedNCDMedicationList(newMedication);
+              }
           }
         };
 
         const getDosage = (drug_id: string, timeOfDay: string) => {
           const medication = current_set_Medication_List.value.find(
-              (        med: { drug_id: string; }) => med.drug_id === drug_id
+              (med: { drug_id: string; }) => med.drug_id === drug_id
           );
           return medication?.dosage[timeOfDay] || '';
         };
 
-        return {
-            medkit,
-            sunny,
-            partlySunny,
-            moon,
-            timeOutline,
-            frequency_options,
-            updateFrequencySelection,
-            updateDosage,
-            getDosage,
-            isActive,
-            toggleMedication,
+        const getDuration = (drug_id: string) => {
+          const medication = current_set_Medication_List.value.find(
+              (med: { drug_id: string; }) => med.drug_id === drug_id
+          );
+          return medication?.duration || '';
         };
-      }
+
+
+        const calculateQuantity = (drug_id: string) => {
+          const medication = current_set_Medication_List.value.find(
+            (med: { drug_id: string; }) => med.drug_id === drug_id
+          );
+          
+          if (!medication || !medication.dosage || !medication.duration) return '';
+          
+          const totalDailyDose = ['morning', 'afternoon', 'evening'].reduce((sum, timeOfDay) => {
+            const dose = parseFloat(medication.dosage[timeOfDay]) || 0;
+            return sum + dose;
+          }, 0);
+          
+          const duration = parseFloat(medication.duration) || 0;
+          return (totalDailyDose * duration).toString();
+        };
+
+        return {
+          medkit,
+          sunny,
+          partlySunny,
+          moon,
+          timeOutline,
+          updateDosage,
+          updateDuration,
+          updateQuantity,
+          getDosage,
+          getDuration,
+          calculateQuantity,
+          isActive,
+          toggleMedication,
+          cubeOutline,
+        };
+    }
 })
 </script>
 
@@ -255,8 +300,8 @@ ion-checkbox {
 }
 
 .bordered-input {
-  border: 2px solid #ccc; /* Customize the color */
-  border-radius: 4px; /* Optional: adds rounded corners */
-  padding: 4px; /* Optional: adjusts padding within the input */
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding: 4px;
 }
 </style>

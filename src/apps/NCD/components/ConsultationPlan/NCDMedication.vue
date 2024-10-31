@@ -6,7 +6,7 @@
           <ion-card-title>
             <div class="medication-list">
                 <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
-                <span>Add Other Medication List</span>
+                <span>Medication List</span>
             </div>
           </ion-card-title>
         </ion-col>

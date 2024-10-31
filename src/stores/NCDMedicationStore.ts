@@ -47,6 +47,7 @@ export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore"
                         afternoon: null,
                         evening: null,
                     },
+                    duration: null,
                 };
                 this.setSelectedNCDMedicationList(newMedication);
             }
