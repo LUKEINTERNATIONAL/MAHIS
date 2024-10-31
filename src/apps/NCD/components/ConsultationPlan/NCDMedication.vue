@@ -14,6 +14,7 @@
     </ion-card-header>
     <ion-card-content>
       <Medication/>
+      <MedicationHistory/>
       <ion-row>
         <ion-col>
           <ion-button @click="openAddOtherOPDMedicationModal" color="primary" style="float: right;">
@@ -37,12 +38,13 @@ import { medkit } from 'ionicons/icons';
 import Medication from "./Medication.vue"
 import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
 import AddOtherOPDMedication from './AddOtherOPDMedication.vue';
+import MedicationHistory from '@/apps/NCD/components/MedicationHistory.vue'
 
 export default defineComponent({
   name: 'PrescriptionTable',
   components: {
     IonCard, IonCardHeader, IonButton, IonCardTitle, IonCardContent,
-    IonInput, IonIcon, IonCol, IonRow, IonCheckbox, Medication,
+    IonInput, IonIcon, IonCol, IonRow, IonCheckbox, Medication, MedicationHistory,
   },
   setup() {
     const openAddOtherOPDMedicationModal = async () => {
