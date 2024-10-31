@@ -1,6 +1,5 @@
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
-import { getWebsockerURL, getWebsockerProtocol } from "@/utils/GeneralUti";
 export class WebSocketService {
     private socket: WebSocket | null = null;
     private channel: string = "ImmunizationReportChannel";
@@ -15,14 +14,10 @@ export class WebSocketService {
     private async init() {
         const apiURL = localStorage.getItem("apiURL");
         const apiPort = localStorage.getItem("apiPort");
-        
+
         this.location_id = localStorage.getItem("locationID");
         try {
-            const websocketURL = getWebsockerURL();
-            const url =
-                websocketURL && websocketURL !== "undefined" && websocketURL.trim().length > 0
-                    ? `${getWebsockerProtocol()}://${websocketURL}`
-                    : `${getWebsockerProtocol()}://${apiURL}:${apiPort}/cable`;
+            const url = import.meta.env.MODE === "development" ? `ws://${apiURL}:${apiPort}/cable` : `wss://${apiURL}/api/v1/cable`;
 
             this.socket = new WebSocket(url);
             this.socket.onopen = this.onOpen;
