@@ -5,7 +5,13 @@
                 <ion-card style="background-color: #fff">
                     <ion-card-content>
                         <ion-img class="login_img" :src="loginIcon()" id="logo"></ion-img>
-                        <ion-title class="login-title">MaHIS</ion-title>
+                        <ion-title class="login-title">
+                            <span v-if="mode === 'development' || mode === 'test'" style="justify-content: center; display: block">
+                                <div>MaHIS</div>
+                                <div style="font-size: 12px; color: #34af4d">({{ mode }} mode)</div>
+                            </span>
+                            <span v-else>MaHIS</span>
+                        </ion-title>
                         <span style="text-align: left">
                             <ion-input
                                 v-model="username"
@@ -140,6 +146,7 @@ export default defineComponent({
             workerApi: null as any,
             togglePasswordVisibility: false,
             showPassword: false,
+            mode: import.meta.env.MODE as string,
         };
     },
     watch: {
