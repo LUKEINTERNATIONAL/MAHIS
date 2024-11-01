@@ -7,7 +7,7 @@
     "dev": "vite --host",
     "build": "vue-tsc && vite build",
     "android:test": "vite build --mode test && cp -r dist/* android/app/src/main/assets/public",
-    "android": "ionic cap run android",
+    "android": "ionic cap build android",
     "build:test": "vite build --mode test",
     "build:development": "vite build --mode development",
     "build:prod": "vite build --mode production",
