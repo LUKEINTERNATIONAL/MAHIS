@@ -14,7 +14,6 @@
     </ion-card-header>
     <ion-card-content>
       <Medication/>
-      <MedicationHistory/>
       <ion-row>
         <ion-col>
           <ion-button @click="openAddOtherOPDMedicationModal" color="primary" style="float: right;">
@@ -22,6 +21,11 @@
              <span style="margin-left: 10px;"> ADD Other Medication</span>
           </ion-button>
         </ion-col>
+      </ion-row>
+      <ion-row>
+        <IonCol>
+          <MedicationHistory/>
+        </IonCol>
       </ion-row>
     </ion-card-content>
   </ion-card>
