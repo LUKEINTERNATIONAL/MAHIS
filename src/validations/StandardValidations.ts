@@ -202,88 +202,47 @@ function mergeErrors(errors: any[]) {
     });
     return holder.length > 0 ? holder : null;
 }
-function isValidBPReading(vital: any) {
-    const p = [];
-    const isValidBP = `${vital.value}`.match(/^\d{1,3}\/\d{1,3}$/g) ? null : ["Invalid BP reading"];
-    p.push(isValidBP);
-    if (isValidBP == null) {
-        const value = `${vital.value}`.split("/");
-
-        const bpSystolic = {
-            name: "Systolic",
-            value: value[0],
-        };
-        const bpDiastolic = {
-            name: "Diastolic",
-            value: value[1],
-        };
-        p.push(checkMinMax(bpDiastolic, 30, 200));
-        p.push(checkMinMax(bpSystolic, 40, 250));
-    }
-    return mergeErrors(p);
-}
 // vitals validations
 function vitalsWeight(val: any) {
-    const errors = [];
-    errors.push(isNotEmptyandNumber(val));
-    errors.push(checkMinMax(val, 0.5, 250.0));
-    return mergeErrors(errors);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 0.5, 250.0);
 }
 function vitalsHeight(val: any) {
-    const errors = [];
-    errors.push(isNotEmptyandNumber(val));
-    errors.push(checkMinMax(val, 40, 220));
-    return mergeErrors(errors);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 220);
 }
-function vitalsBP(val: any) {
-    return isValidBPReading(val);
+function vitalsSystolic(val: any) {
+    checkMinMax(val, 40, 250);
+}
+function vitalsDiastolic(val: any) {
+    return checkMinMax(val, 30, 200);
 }
 function vitalsTemperature(val: any) {
-    const errors = [];
-    errors.push(isNotEmptyandNumber(val));
-    errors.push(checkMinMax(val, 30, 42));
-    return mergeErrors(errors);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 30, 42);
 }
 function vitalsRespiratoryRateNotRequired(val: any) {
-    const minErrors = checkMinMax(val, 5, 80);
-    return mergeErrors([minErrors]);
+    return checkMinMax(val, 5, 80);
 }
 function vitalsRespiratoryRate(val: any) {
-    const errors = [];
-    errors.push(isNotEmptyandNumber(val));
-    errors.push(checkMinMax(val, 5, 80));
-    return mergeErrors(errors);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 5, 80);
 }
 function vitalsOxygenSaturation(val: any) {
-    const errors = [];
-    errors.push(isNotEmptyandNumber(val));
-    errors.push(checkMinMax(val, 40, 100));
-    return mergeErrors(errors);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 100);
 }
 function vitalsSystolicPressure(val: any) {
-    const errors = [];
-    errors.push(isNotEmptyandNumber(val));
-    errors.push(checkMinMax(val, 20, 300));
-    return mergeErrors(errors);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 20, 300);
 }
 function vitalsDiastolicPressure(val: any) {
-    const errors = [];
-    errors.push(isNotEmptyandNumber(val));
-    errors.push(checkMinMax(val, 20, 300));
-    return mergeErrors(errors);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 20, 300);
 }
 function vitalsPulseRate(val: any) {
-    const errors = [];
-    errors.push(isNotEmptyandNumber(val));
-    errors.push(checkMinMax(val, 20, 80));
-    return mergeErrors(errors);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 20, 80);
 }
 // vitals validations
 
 export default {
     vitalsWeight,
     vitalsHeight,
-    vitalsBP,
+    vitalsSystolic,
+    vitalsDiastolic,
     vitalsTemperature,
     vitalsRespiratoryRateNotRequired,
     vitalsRespiratoryRate,
