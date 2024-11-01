@@ -3,13 +3,6 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <!-- <Stepper
-                stepperTitle="The consultation plan"
-                :wizardData="wizardData"
-                @updateStatus="markWizard"
-                @finishBtn="saveData()"
-                :StepperData="StepperData"
-            /> -->
             <div style="width: 85vw; margin: 0 auto; margin-top: 30px">
                 <Wizard
                     vertical-tabs
@@ -48,7 +41,6 @@
                 </Wizard>
             </div>
         </ion-content>
-        <!-- <BasicFooter @finishBtn="saveData()" /> -->
     </ion-page>
 </template>
 
@@ -81,7 +73,7 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/stores/VitalsStore";
+import { useVitalsStore } from "@/apps/NCD/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
@@ -117,8 +109,8 @@ import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessmen
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
-import VitalSigns from "@/components/VitalSigns.vue";
-import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service"
+import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
+import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -318,10 +310,14 @@ export default defineComponent({
             this.$router.push("patientProfile");
         },
         async saveVitals() {
+            console.log("🚀 ~ saveVitals ~ this.vitals.validationStatus:", this.vitals.validationStatus);
             if (this.vitals.validationStatus) {
                 const userID: any = Service.getUserID();
                 const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
                 vitalsInstance.onFinish(this.vitals);
+                toastSuccess("Vitals saved successfully");
+            } else {
+                toastWarning("Fail to save vitals");
             }
         },
         async saveDiagnosis() {
