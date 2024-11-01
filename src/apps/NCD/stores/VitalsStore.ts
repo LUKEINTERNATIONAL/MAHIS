@@ -120,7 +120,7 @@ const initialVitals = [
                             required: true,
                             eventType: "input",
                             disabled: false,
-                            validationFunctionName: "vitalsHeight",
+                            validationFunctionName: "vitalsSystolic",
                         },
                         {
                             inputHeader: "Diastolic pressure*",
@@ -131,7 +131,7 @@ const initialVitals = [
                             required: true,
                             eventType: "input",
                             disabled: false,
-                            validationFunctionName: "vitalsHeight",
+                            validationFunctionName: "vitalsDiastolic",
                         },
                     ],
                 },
