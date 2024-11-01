@@ -1,5 +1,5 @@
 <template>
-    <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
+    <basic-form :contentData="vitals" @update:inputValue="validateRowData($event)"></basic-form>
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
@@ -45,6 +45,7 @@ import {
 } from "@/services/data_helpers";
 import { find, isEmpty } from "lodash";
 import dayjs from "dayjs";
+import Validation from "@/validations/StandardValidations";
 export default defineComponent({
     components: {
         IonContent,
@@ -93,7 +94,7 @@ export default defineComponent({
         await this.checkHeight();
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-        await this.validaterowData("onload");
+        await this.validateRowData("onload");
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -232,94 +233,49 @@ export default defineComponent({
                 }
             }
         },
-        async validaterowData(inputData: any) {
+        async validateRowData(inputData: any) {
             this.validationController(inputData);
-            // this.hasValidationErrors = [];
+            const height = getFieldValue(this.vitals, "Height (cm)", "value");
+            const weight = getFieldValue(this.vitals, "Weight", "value");
+            const systolic = getFieldValue(this.vitals, "Systolic", "value");
+            const diastolic = getFieldValue(this.vitals, "Diastolic", "value");
+            const temp = getFieldValue(this.vitals, "Temp", "value");
+            const pulse = getFieldValue(this.vitals, "Pulse", "value");
+            const respiratoryRate = getFieldValue(this.vitals, "Respiratory rate", "value");
+            const SP02 = getFieldValue(this.vitals, "SP02", "value");
 
-            // this.vitals.forEach((section: any, sectionIndex: any) => {
-            //     if (section?.data?.rowData) {
-            //         section?.data?.rowData.forEach((col: any, colIndex: any) => {
-            //             if (
-            //                 (col.colData[0].inputHeader == "Systolic Pressure*" &&
-            //                     (inputData.inputHeader == "Systolic Pressure*" ||
-            //                         inputData.inputHeader == "Diastolic pressure*" ||
-            //                         inputData == "onload")) ||
-            //                 (col.colData[0].inputHeader == "Systolic Pressure" && inputData?.col?.name == "Blood Pressure Not Done")
-            //             ) {
-            //                 const isSystolicValid =
-            //                     this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
-            //                 this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value, col.colData[1].value) : {};
-            //                 this.updateBP(col.colData[0].value, col.colData[1].value);
-            //             }
-            //             if (
-            //                 (col.colData[1].inputHeader == "Pulse rate*" && (inputData.inputHeader == "Pulse rate*" || inputData == "onload")) ||
-            //                 (col.colData[1].inputHeader == "Pulse rate" && inputData?.col?.name == "Pulse Rate Not Done")
-            //             ) {
-            //                 const isPulseValid = this.vitalsInstance.validator(col.colData[1]) == null;
-            //                 const pulseStatus = isPulseValid ? this.getPulseRateStatus(col.colData[1].value) : {};
-            //                 this.updateTemperateRate("pulse", col.colData[1].value + " BMP", pulseStatus, 4);
-            //             }
-            //             if (col.colData[0].value && col.colData[0].inputHeader == "Temperature") {
-            //                 const isTempValid = this.vitalsInstance.validator(col.colData[0]) == null;
-            //                 const tempStatus = isTempValid ? this.getTemperatureStatus(col.colData[0].value) : {};
-            //                 this.updateTemperateRate("temp", col.colData[0].value + "°C", tempStatus, 4);
-            //             }
-            //             if (col.colData[0].inputHeader == "Respiratory rate") {
-            //                 const isRespiratoryValid = this.vitalsInstance.validator(col.colData[0]) == null;
-            //                 const respiratoryStatus = isRespiratoryValid ? this.getRespiratoryRateStatus(col.colData[0].value) : {};
-            //                 this.updateTemperateRate("respiratory", col.colData[0].value + "BMP", respiratoryStatus, 6);
-            //             }
-            //             if (col.colData[1].value && col.colData[1].inputHeader == "Oxygen saturation") {
-            //                 const isOxygenValid = this.vitalsInstance.validator(col.colData[1]) == null;
-            //                 const oxygenStatus = isOxygenValid ? this.getOxygenSaturationStatus(col.colData[1].value) : {};
-            //                 this.updateTemperateRate("oxygen", col.colData[1].value + "%", oxygenStatus, 6);
-            //             }
+            await this.setBMI(height, weight);
+            await this.updateBP(systolic, diastolic);
 
-            //             if (
-            //                 (col.colData[0].inputHeader == "Height*" &&
-            //                     (inputData.inputHeader == "Height*" || inputData.inputHeader == "Weight*" || inputData == "onload")) ||
-            //                 (col.colData[0].inputHeader == "Height" && inputData?.col?.name == "Height And Weight Not Done")
-            //             ) {
-            //                 const isHeightValid =
-            //                     this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
-            //                 this.BMI = isHeightValid ? this.setBMI(col.colData[1].value, col.colData[0].value) : {};
-            //                 this.updateBMI();
-            //             }
+            const pulseStatus = this.getPulseRateStatus(pulse);
+            await this.updateRate("pulse", pulse, " BMP", pulseStatus, 4);
 
-            //             col.colData.some((input: any, inputIndex: any) => {
-            //                 const validateResult = this.vitalsInstance.validator(input);
-            //                 if (validateResult?.length > 0) {
-            //                     this.hasValidationErrors.push("false");
-            //                     if (input.inputHeader === inputData.inputHeader) {
-            //                         this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
-            //                         this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
-            //                             validateResult.flat(Infinity)[0];
-            //                         return true;
-            //                     }
-            //                 } else {
-            //                     this.hasValidationErrors.push("true");
-            //                     this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
-            //                     this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-            //                 }
+            const tempStatus = this.getTemperatureStatus(temp);
+            this.updateRate("temp", temp, "°C", tempStatus, 4);
 
-            //                 return false;
-            //             });
-            //         });
-            //     }
-            // });
+            const respiratoryStatus = this.getRespiratoryRateStatus(respiratoryRate);
+            this.updateRate("respiratory", respiratoryRate, "BMP", respiratoryStatus, 6);
 
-            // this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
+            const oxygenStatus = this.getOxygenSaturationStatus(SP02);
+            this.updateRate("oxygen", SP02, "%", oxygenStatus, 6);
         },
-        async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate && weight && height) {
+        async setBMI(height: any, weight: any) {
+            if (
+                this.demographics.gender &&
+                this.demographics.birthdate &&
+                Validation.vitalsHeight(height) == null &&
+                Validation.vitalsWeight(weight) == null
+            ) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
                     this.demographics.gender,
                     HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
                 );
-                this.updateBMI();
+            } else {
+                this.BMI = {};
             }
+            await this.updateBMI();
         },
         async updateBMI() {
             const bmiColor = this.BMI?.color ?? [];
@@ -331,6 +287,8 @@ export default defineComponent({
             vitals.value = this.BMI?.result ?? "";
         },
         async updateBP(systolic: any, diastolic: any) {
+            this.BPStatus = this.getBloodPressureStatus(systolic, diastolic);
+            if (!(Validation.vitalsSystolic(systolic) == null && Validation.vitalsDiastolic(diastolic) == null)) this.BPStatus = {};
             const vitals = this.vitals[2]?.alerts[0] ?? [];
             const bpColor = this.BPStatus?.colors ?? [];
             vitals.icon = iconBloodPressure(bpColor);
@@ -339,7 +297,8 @@ export default defineComponent({
             vitals.index = systolic + "/" + diastolic;
             vitals.value = this.BPStatus?.value ?? "";
         },
-        async updateTemperateRate(name: any, index: any, obj: any, objNumber: any) {
+        async updateRate(name: any, value: any, units: any, obj: any, objNumber: any) {
+            const index = value + " " + units;
             const filteredArray = this.vitals[objNumber]?.alerts?.filter((item: any) => item.name !== name);
             this.vitals[objNumber].alerts = filteredArray;
             const bpColor = obj?.colors ?? [];
@@ -417,7 +376,7 @@ export default defineComponent({
         },
 
         getTemperatureStatus(value: any) {
-            if (value) {
+            if (Validation.vitalsTemperature(value) == null) {
                 let ageGroup;
                 let minTemp;
                 let maxTemp;
@@ -452,10 +411,12 @@ export default defineComponent({
                 } else if (value > maxTemp) {
                     return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High Temperature " };
                 }
+            } else {
+                return {};
             }
         },
         getPulseRateStatus(value: any) {
-            if (value) {
+            if (Validation.vitalsPulseRate(value) == null) {
                 let ageGroup;
                 let minPulse;
                 let maxPulse;
@@ -505,7 +466,7 @@ export default defineComponent({
             }
         },
         getOxygenSaturationStatus(value: any) {
-            if (value) {
+            if (Validation.vitalsOxygenSaturation(value) == null) {
                 let minOxygenSaturation = 95;
                 let maxOxygenSaturation = 100;
 
@@ -517,7 +478,7 @@ export default defineComponent({
             }
         },
         getRespiratoryRateStatus(value: any) {
-            if (value) {
+            if (Validation.vitalsRespiratoryRate(value) == null) {
                 let ageGroup;
                 let minRespiratoryRate;
                 let maxRespiratoryRate;
