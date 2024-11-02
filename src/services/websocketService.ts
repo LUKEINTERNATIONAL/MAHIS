@@ -21,7 +21,7 @@ export class WebSocketService {
             const url =
                 import.meta.env.MODE === "development"
                     ? `${websocketProtocol}://${apiURL}:${apiPort}/cable`
-                    : `${websocketProtocol}://${apiURL}/api/v1/cable`;
+                    : `${websocketProtocol}://${apiURL}/cable`;
 
             this.socket = new WebSocket(url);
             this.socket.onopen = this.onOpen;
