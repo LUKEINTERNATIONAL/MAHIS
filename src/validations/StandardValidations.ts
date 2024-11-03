@@ -210,7 +210,7 @@ function vitalsHeight(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 40, 220);
 }
 function vitalsSystolic(val: any) {
-    checkMinMax(val, 40, 250);
+    return checkMinMax(val, 40, 250);
 }
 function vitalsDiastolic(val: any) {
     return checkMinMax(val, 30, 200);
