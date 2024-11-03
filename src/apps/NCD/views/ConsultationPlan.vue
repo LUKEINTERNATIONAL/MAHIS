@@ -111,6 +111,7 @@ import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServ
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
 import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service";
+import { validateInputFiledData } from "@/services/group_validation";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -301,23 +302,25 @@ export default defineComponent({
             });
         },
         async saveData() {
-            await this.saveVitals();
-            await this.saveDiagnosis();
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
-            await resetNCDPatientData();
-            await UserService.setProgramUserActions();
-            this.$router.push("patientProfile");
+            if (await this.saveVitals()) {
+                await this.saveDiagnosis();
+                await this.saveTreatmentPlan();
+                await this.saveOutComeStatus();
+                await resetNCDPatientData();
+                await UserService.setProgramUserActions();
+                this.$router.push("patientProfile");
+            }
         },
         async saveVitals() {
-            console.log("🚀 ~ saveVitals ~ this.vitals.validationStatus:", this.vitals.validationStatus);
-            if (this.vitals.validationStatus) {
+            if (await validateInputFiledData(this.vitals)) {
                 const userID: any = Service.getUserID();
                 const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
                 vitalsInstance.onFinish(this.vitals);
                 toastSuccess("Vitals saved successfully");
+                return true;
             } else {
                 toastWarning("Fail to save vitals");
+                return false;
             }
         },
         async saveDiagnosis() {
