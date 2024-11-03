@@ -121,6 +121,9 @@ export default defineComponent({
                     if (item == "Pulse") {
                         modifyCheckboxValue(this.vitals, "Pulse Rate Not Done", "displayNone", true);
                     }
+                    if (item == "Respiratory rate") {
+                        modifyCheckboxValue(this.vitals, "Respiratory rate Not Done", "displayNone", true);
+                    }
                     modifyFieldValue(
                         this.vitals,
                         item,
