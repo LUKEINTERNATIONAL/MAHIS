@@ -81,6 +81,7 @@ export default defineComponent({
             handler() {
                 this.setTodayVitals();
                 this.updateVitalsStores();
+                this.cleanVitalForm();
             },
             deep: true,
         },
@@ -100,6 +101,10 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        cleanVitalForm() {
+            const vitals = useVitalsStore();
+            vitals.setVitals(vitals.getInitialVitals());
+        },
         async setTodayVitals() {
             const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
             const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
