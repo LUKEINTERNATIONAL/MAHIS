@@ -270,8 +270,8 @@ export default defineComponent({
                 });
             }
         },
-        markWizard() {
-            if (this.vitals.validationStatus) {
+        async markWizard() {
+            if (await validateInputFiledData(this.vitals)) {
                 this.tabs[0].icon = "check";
             } else {
                 this.tabs[0].icon = "";
