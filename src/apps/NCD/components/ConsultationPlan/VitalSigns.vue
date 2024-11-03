@@ -78,8 +78,8 @@ export default defineComponent({
     },
     watch: {
         $route: {
-            handler() {
-                this.setTodayVitals();
+            async handler() {
+                await this.setTodayVitals();
                 this.updateVitalsStores();
                 this.cleanVitalForm();
             },
@@ -91,7 +91,6 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
-        await this.setTodayVitals();
         await this.checkHeight();
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
@@ -135,19 +134,20 @@ export default defineComponent({
                 } else {
                     modifyFieldValue(this.vitals, item, "value", "");
                 }
+
                 if (item === "Respiratory rate" && age <= 5) {
                     modifyFieldValue(this.vitals, item, "required", true);
                     modifyFieldValue(this.vitals, item, "inputHeader", "Respiratory rate*");
                 }
             });
 
-            await Promise.all(promises);
-            if (!mandatoryDone.includes("false")) {
-                this.vitals[0].actionBtn = "Finish";
-            } else {
-                this.vitals[0].actionBtn = "Finish and Save";
-            }
-            return !mandatoryDone.includes("false");
+            // await Promise.all(promises);
+            // if (!mandatoryDone.includes("false")) {
+            //     this.vitals[0].actionBtn = "Finish";
+            // } else {
+            //     this.vitals[0].actionBtn = "Finish and Save";
+            // }
+            // return !mandatoryDone.includes("false");
         },
         navigationMenu(url: any) {
             menuController.close();
