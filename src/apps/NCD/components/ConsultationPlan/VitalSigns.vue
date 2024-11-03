@@ -79,9 +79,10 @@ export default defineComponent({
     watch: {
         $route: {
             async handler() {
-                await this.setTodayVitals();
-                this.updateVitalsStores();
                 this.cleanVitalForm();
+                await this.setTodayVitals();
+                await this.validateRowData("onload");
+                this.updateVitalsStores();
             },
             deep: true,
         },
@@ -144,13 +145,7 @@ export default defineComponent({
                 }
             });
 
-            // await Promise.all(promises);
-            // if (!mandatoryDone.includes("false")) {
-            //     this.vitals[0].actionBtn = "Finish";
-            // } else {
-            //     this.vitals[0].actionBtn = "Finish and Save";
-            // }
-            // return !mandatoryDone.includes("false");
+            await Promise.all(promises);
         },
         navigationMenu(url: any) {
             menuController.close();
