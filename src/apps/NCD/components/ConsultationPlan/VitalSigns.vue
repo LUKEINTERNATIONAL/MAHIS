@@ -107,8 +107,6 @@ export default defineComponent({
         },
         async setTodayVitals() {
             const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
-            const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
-            const mandatoryDone = [] as any;
             const age = HisDate.getAgeInYears(this.demographics?.birthdate);
             const promises = array.map(async (item: any) => {
                 const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
@@ -132,9 +130,6 @@ export default defineComponent({
                         await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
                     );
                     modifyFieldValue(this.vitals, item, "disabled", true);
-                    mandatoryDone.push("true");
-                } else if (mandatoryFields.includes(item)) {
-                    mandatoryDone.push("false");
                 } else {
                     modifyFieldValue(this.vitals, item, "value", "");
                 }
