@@ -62,6 +62,7 @@ import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import DynamicList from "@/components/DynamicList.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
+import { useNCDMedicationsStore } from "@/stores/NCDMedicationStore";
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
@@ -84,13 +85,13 @@ export default defineComponent({
     data() {
         const componentKey = ref(0);
         const showMoreMedicationsMsg = ref("Show more medications");
-        const values = ["first", "second", "third"];
+        // const values = ["first", "second", "third"];
         const itemWasExpanded = ref(false);
         const PreviuosSelectedMedicalDrugsList = ref();
 
         const accordionGroupChangeFn1 = (ev: AccordionGroupCustomEvent) => {}
         const accordionGroupChange = (ev: AccordionGroupCustomEvent) => {
-            const collapsedItems = values.filter((value) => value !== ev.detail.value);
+            // const collapsedItems = values.filter((value) => value !== ev.detail.value);
             const selectedValue = ev.detail.value;
             // console.log(
             //     `Expanded: ${selectedValue === undefined ? 'None' : ev.detail.value} | Collapsed: ${collapsedItems.join(', ')}`
@@ -124,7 +125,8 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["patient"]), 
+        ...mapState(useDemographicsStore, ["patient"]),
+        ...mapState(useNCDMedicationsStore, ["selectedNCDMedicationList"]),  
     },
     $route: {
         async handler() {},
@@ -137,6 +139,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        selectedNCDMedicationList: {
+            handler() {
+                this.loadPreviousMedications()
+            },
+            deep: true,
+        }
     },
     async mounted() {
         this.loadPreviousMedications()
