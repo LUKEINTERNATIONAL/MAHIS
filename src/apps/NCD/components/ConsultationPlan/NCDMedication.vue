@@ -5,7 +5,7 @@
         <ion-col>
           <ion-card-title>
             <div class="medication-list">
-                <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
+                <ion-icon :icon="medkit" class="ion-margin-end diagnosis-icon"></ion-icon>
                 <span>Medication List</span>
             </div>
           </ion-card-title>
@@ -68,5 +68,10 @@ export default defineComponent({
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+
+  .diagnosis-icon {
+    font-size: 1.4rem;
+    color: var(--ion-color-primary);
   }
 </style>
