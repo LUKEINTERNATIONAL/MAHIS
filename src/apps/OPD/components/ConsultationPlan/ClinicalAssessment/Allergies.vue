@@ -1,7 +1,8 @@
 <template>
     <ion-card>
         <ion-card-header>
-            <ion-label>
+            <ion-label class="header-container">
+                <ion-icon :icon="alertCircleOutline" class="allergy-icon"></ion-icon>
                 <span style="font-size: 16px; font-weight: 600"> Allergies (Medication, Healthcare items, Environment and Food) </span>
             </ion-label>
         </ion-card-header>
@@ -26,8 +27,8 @@
             </div>
         </ion-card-content>
     </ion-card>
-
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -37,10 +38,11 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { IonButton, IonLabel, IonCard, IonCardContent, IonCardHeader} from "@ionic/vue";
+import { IonButton, IonLabel, IonCard, IonCardContent, IonCardHeader, IonIcon } from "@ionic/vue";
+import { alertCircleOutline } from 'ionicons/icons';
 import { useAllegyStore, searchHealthcareEquipmentAllergies, concatenateArrays } from "@/apps/OPD/stores/AllergyStore";
 import { ConceptService } from "@/services/concept_service";
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import { ConceptName } from "@/interfaces/conceptName";
 import ListPicker from "../../../../../components/ListPicker.vue";
 
@@ -306,4 +308,17 @@ ion-list.list-al {
     max-width: 300px;
     width: 100%;
 }
+
+.header-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.allergy-icon {
+    font-size: 24px;
+    color: #b42318;
+}
+
+/* Rest of the styles remain the same */
 </style>
