@@ -210,10 +210,10 @@ function vitalsHeight(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 40, 220);
 }
 function vitalsSystolic(val: any) {
-    return checkMinMax(val, 40, 250);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 250);
 }
 function vitalsDiastolic(val: any) {
-    return checkMinMax(val, 30, 200);
+    return isNotEmptyandNumber(val) || checkMinMax(val, 30, 200);
 }
 function vitalsTemperature(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 30, 42);
