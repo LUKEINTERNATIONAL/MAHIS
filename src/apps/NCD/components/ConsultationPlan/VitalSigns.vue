@@ -46,6 +46,7 @@ import {
 import { find, isEmpty } from "lodash";
 import dayjs from "dayjs";
 import Validation from "@/validations/StandardValidations";
+import { validateInputFiledData } from "@/services/group_validation";
 export default defineComponent({
     components: {
         IonContent,
@@ -150,7 +151,7 @@ export default defineComponent({
             const vitalsStore = useVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
-        validationController(inputData: any) {
+        async validationController(inputData: any) {
             if (inputData?.col?.name == "Height And Weight Not Done" && inputData.col.checked) {
                 modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", false);
                 modifyFieldValue(this.vitals, "Height (cm)", "disabled", true);
@@ -213,6 +214,7 @@ export default defineComponent({
                 modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
+            await validateInputFiledData(this.vitals);
         },
         async checkHeight() {
             const patient = new PatientService();
@@ -232,7 +234,7 @@ export default defineComponent({
             }
         },
         async validateRowData(inputData: any) {
-            this.validationController(inputData);
+            await this.validationController(inputData);
             const height = getFieldValue(this.vitals, "Height (cm)", "value");
             const weight = getFieldValue(this.vitals, "Weight", "value");
             const systolic = getFieldValue(this.vitals, "Systolic", "value");
