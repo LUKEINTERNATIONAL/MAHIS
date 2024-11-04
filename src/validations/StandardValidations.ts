@@ -216,7 +216,7 @@ function vitalsDiastolic(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 30, 200);
 }
 function vitalsTemperature(val: any) {
-    return isNotEmptyandNumber(val) || checkMinMax(val, 30, 42);
+    return isNumber(val) || checkMinMax(val, 30, 42);
 }
 function vitalsRespiratoryRateNotRequired(val: any) {
     return checkMinMax(val, 5, 80);
@@ -225,7 +225,7 @@ function vitalsRespiratoryRate(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 5, 80);
 }
 function vitalsOxygenSaturation(val: any) {
-    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 100);
+    return isNumber(val) || checkMinMax(val, 40, 100);
 }
 function vitalsSystolicPressure(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 20, 300);
