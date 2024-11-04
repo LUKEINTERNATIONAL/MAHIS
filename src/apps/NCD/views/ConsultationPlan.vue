@@ -114,6 +114,7 @@ import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service";
 import { validateInputFiledData } from "@/services/group_validation";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { ObservationService } from "@/services/observation_service";
+import { OrderService } from "@/services/order_service";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -211,40 +212,40 @@ export default defineComponent({
     created() {
         this.getData();
     },
-    mounted() {
+    async mounted() {
         if (this.NCDActivities.length == 0) {
             this.$router.push("patientProfile");
         }
-        this.markWizard();
+        await this.markWizard();
     },
     watch: {
         vitals: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
             deep: true,
         },
         investigations: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
             deep: true,
         },
         diagnosis: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
             deep: true,
         },
         substance: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
             deep: true,
         },
         selectedMedicalDrugsList: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
         },
     },
@@ -291,7 +292,11 @@ export default defineComponent({
                 this.tabs[1].icon = "";
             }
 
-            if (this.investigations[0].selectedData.length > 0) {
+            const labOrders = await OrderService.getOrders(this.demographics.patient_id);
+            const filteredArray = await labOrders.filter((obj: any) => {
+                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+            });
+            if (filteredArray.length > 0) {
                 this.tabs[2].icon = "check";
             } else {
                 this.tabs[2].icon = "";
