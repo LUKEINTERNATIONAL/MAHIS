@@ -15,6 +15,9 @@ import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
 import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
+
 export default defineComponent({
     name: "Menu",
     components: {
@@ -38,6 +41,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useEnrollementStore, ["substance"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
     },
     watch: {
         substance: {
