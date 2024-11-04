@@ -112,6 +112,7 @@ import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointm
 import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
 import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service";
 import { validateInputFiledData } from "@/services/group_validation";
+import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -234,6 +235,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        substance: {
+            handler() {
+                this.markWizard();
+            },
+            deep: true,
+        },
         selectedMedicalDrugsList: {
             handler() {
                 this.markWizard();
@@ -276,6 +283,12 @@ export default defineComponent({
             } else {
                 this.tabs[0].icon = "";
             }
+            const data: any = await formatRadioButtonData(this.substance);
+            if (data.length > 0) {
+                this.tabs[1].icon = "check";
+            } else {
+                this.tabs[1].icon = "";
+            }
 
             if (this.investigations[0].selectedData.length > 0) {
                 this.tabs[2].icon = "check";
@@ -306,6 +319,7 @@ export default defineComponent({
                 await this.saveDiagnosis();
                 await this.saveTreatmentPlan();
                 await this.saveOutComeStatus();
+                await this.saveSubstanceAbuse();
                 await resetNCDPatientData();
                 await UserService.setProgramUserActions();
                 this.$router.push("patientProfile");
@@ -331,12 +345,7 @@ export default defineComponent({
             }
         },
         async saveSubstanceAbuse() {
-            const data: any = await formatRadioButtonData(this.substance);
-            if (data.length > 0) {
-                const userID: any = Service.getUserID();
-                const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
-            }
+            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(this.substance));
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
