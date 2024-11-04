@@ -376,7 +376,7 @@ export default defineComponent({
         },
 
         getTemperatureStatus(value: any) {
-            if (Validation.vitalsTemperature(value) == null) {
+            if (value && Validation.vitalsTemperature(value) == null) {
                 let ageGroup;
                 let minTemp;
                 let maxTemp;
@@ -466,7 +466,7 @@ export default defineComponent({
             }
         },
         getOxygenSaturationStatus(value: any) {
-            if (Validation.vitalsOxygenSaturation(value) == null) {
+            if (value && Validation.vitalsOxygenSaturation(value) == null) {
                 let minOxygenSaturation = 95;
                 let maxOxygenSaturation = 100;
 
