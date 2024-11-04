@@ -113,6 +113,7 @@ import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
 import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service";
 import { validateInputFiledData } from "@/services/group_validation";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
+import { ObservationService } from "@/services/observation_service";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -295,8 +296,8 @@ export default defineComponent({
             } else {
                 this.tabs[2].icon = "";
             }
-
-            if (this.diagnosis[0].selectedData.length > 0) {
+            const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, "Primary diagnosis");
+            if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                 this.tabs[3].icon = "check";
             } else {
                 this.tabs[3].icon = "";
