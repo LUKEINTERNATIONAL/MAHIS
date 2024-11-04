@@ -191,8 +191,65 @@ function formatToExample(value: string, exampleNumber: string): string {
         })
         .join("");
 }
+// vitals helper functions
+
+function mergeErrors(errors: any[]) {
+    const holder: any = [];
+    errors.forEach((element) => {
+        if (isArray(element)) {
+            holder.push(element);
+        }
+    });
+    return holder.length > 0 ? holder : null;
+}
+// vitals validations
+function vitalsWeight(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 0.5, 250.0);
+}
+function vitalsHeight(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 220);
+}
+function vitalsSystolic(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 250);
+}
+function vitalsDiastolic(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 30, 200);
+}
+function vitalsTemperature(val: any) {
+    return isNumber(val) || checkMinMax(val, 30, 42);
+}
+function vitalsRespiratoryRateNotRequired(val: any) {
+    return checkMinMax(val, 5, 80);
+}
+function vitalsRespiratoryRate(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 5, 80);
+}
+function vitalsOxygenSaturation(val: any) {
+    return isNumber(val) || checkMinMax(val, 40, 100);
+}
+function vitalsSystolicPressure(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 20, 300);
+}
+function vitalsDiastolicPressure(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 20, 300);
+}
+function vitalsPulseRate(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 20, 80);
+}
+// vitals validations
 
 export default {
+    vitalsWeight,
+    vitalsHeight,
+    vitalsSystolic,
+    vitalsDiastolic,
+    vitalsTemperature,
+    vitalsRespiratoryRateNotRequired,
+    vitalsRespiratoryRate,
+    vitalsOxygenSaturation,
+    vitalsSystolicPressure,
+    vitalsDiastolicPressure,
+    vitalsPulseRate,
     validateRBS,
     validateFBS,
     validateHeight,

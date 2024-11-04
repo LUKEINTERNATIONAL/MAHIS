@@ -12,10 +12,13 @@ import {
 import Validation from "@/validations/StandardValidations";
 
 function validateData(data: any, col: any, value: any) {
-    if (col.validationFunctionName) {
+    if (col.validationFunctionName && !col.disabled) {
         const validationMessage = Validation[col.validationFunctionName](value);
         modifyFieldValue(data, col.name, "alertsErrorMassage", validationMessage);
         return validationMessage;
+    } else {
+        modifyFieldValue(data, col.name, "alertsErrorMassage", "");
+        return null;
     }
     return null;
 }
