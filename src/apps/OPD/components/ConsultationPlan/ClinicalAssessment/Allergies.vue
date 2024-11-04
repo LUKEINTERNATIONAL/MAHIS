@@ -1,25 +1,32 @@
 <template>
-    <ion-label>
-        <span style="font-size: 16px; font-weight: 600"> Allergies (Medication, Healthcare items, Environment and Food) </span>
-    </ion-label>
-    <ListPicker
-        :multiSelection="list_picker_prperties[0].multi_Selection"
-        :show_label="list_picker_prperties[0].show_list_label"
-        :uniqueId="list_picker_prperties[0].unqueId"
-        :name_of_list="list_picker_prperties[0].name_of_list"
-        :choose_place_holder="list_picker_prperties[0].placeHolder"
-        :items_-list="allergiesList"
-        :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-        :disabled="list_picker_prperties[0].disabled.value"
-        @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-        @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-        @item-search-text="list_picker_prperties[0].searchTextFN"
-    />
+    <ion-card>
+        <ion-card-header>
+            <ion-label>
+                <span style="font-size: 16px; font-weight: 600"> Allergies (Medication, Healthcare items, Environment and Food) </span>
+            </ion-label>
+        </ion-card-header>
+        <ion-card-content>
+            <ListPicker
+                :multiSelection="list_picker_prperties[0].multi_Selection"
+                :show_label="list_picker_prperties[0].show_list_label"
+                :uniqueId="list_picker_prperties[0].unqueId"
+                :name_of_list="list_picker_prperties[0].name_of_list"
+                :choose_place_holder="list_picker_prperties[0].placeHolder"
+                :items_-list="allergiesList"
+                :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                :disabled="list_picker_prperties[0].disabled.value"
+                @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                @item-search-text="list_picker_prperties[0].searchTextFN"
+            />
 
-    <div v-if="showOtherInput" class="custom-allergy-container">
-        <ion-input v-model="otherAllergy" placeholder="Please specify the allergy" fill="outline" class="custom-input"></ion-input>
-        <ion-button @click="addCustomAllergy" class="addCustomAllergyBtn"> Add Allergy </ion-button>
-    </div>
+            <div v-if="showOtherInput" class="custom-allergy-container">
+                <ion-input v-model="otherAllergy" placeholder="Please specify the allergy" fill="outline" class="custom-input"></ion-input>
+                <ion-button @click="addCustomAllergy" class="addCustomAllergyBtn"> Add Allergy </ion-button>
+            </div>
+        </ion-card-content>
+    </ion-card>
+
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -30,7 +37,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { IonButton, IonLabel} from "@ionic/vue";
+import { IonButton, IonLabel, IonCard, IonCardContent, IonCardHeader} from "@ionic/vue";
 import { useAllegyStore, searchHealthcareEquipmentAllergies, concatenateArrays } from "@/apps/OPD/stores/AllergyStore";
 import { ConceptService } from "@/services/concept_service";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";

@@ -1,5 +1,5 @@
 <template>
-  <PreviousNCDDiagnosis/>
+  <PreviousNCDDiagnosis v-if="useDefaultStores"/>
   <div v-if="activeMedications.length > 0">
     <table class="prescription-table">
       <thead>
