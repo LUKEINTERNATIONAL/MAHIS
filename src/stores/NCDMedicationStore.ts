@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { DrugService } from "@/services/drug_service";
 
 const DiabetesMedication = [
     'Long acting Insulin',
