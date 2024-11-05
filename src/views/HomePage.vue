@@ -252,7 +252,6 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
 import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
 import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
-import { getBaseURL } from "@/utils/GeneralUti";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import { useWebWorker } from "@vueuse/core";
 import { getUserLocation } from "@/services/userService";
@@ -288,7 +287,6 @@ export default defineComponent({
         Slide,
         Pagination,
         Navigation,
-        getBaseURL,
         NCDHomePage,
     },
     data() {
@@ -300,7 +298,6 @@ export default defineComponent({
             dataToPass: { payloadData: "tes" } as any,
             programBtn: {} as any,
             totalPatientsToday: 0,
-            base_url: "backgroundImg.png",
             isLoading: false,
             totalStats: [
                 {
@@ -361,7 +358,7 @@ export default defineComponent({
 
         backgroundStyle() {
             return {
-                background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(this.base_url)})`,
+                background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img("backgroundImg.png")})`,
                 backgroundSize: "cover",
                 backgroundBlendMode: "overlay",
                 height: "22.8vh",
@@ -530,10 +527,6 @@ export default defineComponent({
         openAllModal(name: any, buttonLink: string, buttonTitle: string) {
             const dataToPass = { title: name, buttonLink, buttonTitle };
             createModal(OPDAllPatientsModal, { class: "fullScreenModal" }, true, dataToPass);
-        },
-        async getImagePath() {
-            const BASE_URL = await getBaseURL();
-            this.base_url = BASE_URL + this.base_url;
         },
     },
 });

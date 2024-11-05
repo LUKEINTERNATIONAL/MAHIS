@@ -184,21 +184,28 @@ export default defineComponent({
                         await this.saveVitals();
                         await resetOPDPatientData();
 
+                        const location = await getUserLocation();
+                        const locationId = location ? location.location_id : null;
                         if (userRoles.includes("Nurse")) {
+                          await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
                             this.$router.push("patientProfile");
                         } else {
-                            this.$router.push("OPDConsultationPlan");
+                          await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
+                          this.$router.push("OPDConsultationPlan");
                         }
                     } else {
                         await this.validaterowData();
                         toastWarning("Please fill all required fields");
                     }
                 } else {
+                  const location = await getUserLocation();
+                  const locationId = location ? location.location_id : null;
                     if (userRoles.includes("Nurse")) {
-                        this.$router.push("patientProfile");
+                      await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
+                      this.$router.push("patientProfile");
                     } else {
-                        //Superuser
-                        this.$router.push("OPDConsultationPlan");
+                      await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
+                      this.$router.push("OPDConsultationPlan");
                     }
                 }
             } catch (error) {

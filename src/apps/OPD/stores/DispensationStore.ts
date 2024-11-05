@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 interface DispensationData {
     drugPrescriptions: any[];
     dispensedMedication: any[];
-    payload: {}; //{"dispensations":[{"drug_order_id":2399362,"date":"2024-03-27","quantity":"3"}],"program_id":14}
+    payload: {};
     saveInitiated: Boolean;
     StepperData: any[];
 }

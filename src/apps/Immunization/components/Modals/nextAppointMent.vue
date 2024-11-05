@@ -112,7 +112,7 @@ import { RelationshipService } from "@/services/relationship_service";
 import { PatientService } from "@/services/patient_service";
 import { AppointmentService } from "@/services/appointment_service";
 
-const user = useDemographicsStore();
+const client = useDemographicsStore();
 const date = ref();
 const suggested_date = ref();
 const show_suggested_date = ref(false);
@@ -345,14 +345,14 @@ async function getfacilityConfiguration() {
 
 async function getMobilePhones(){
     try {
-        const guardianData = await RelationshipService.getRelationships(user.demographics.patient_id);
+        const guardianData = await RelationshipService.getRelationships(client.demographics.patient_id);
         if(guardianData.length > 0){ 
             const phone = guardianData[0].relation.person_attributes.find((x: any) => x.type.name == "Cell Phone Number")
             if(phone){ phoneNumbers.value.push(phone.value); }
         }
         
-        if (user.demographics.phone){
-            phoneNumbers.value.push(user.demographics.phone)
+        if (client.demographics.phone){
+            phoneNumbers.value.push(client.demographics.phone)
         }
     } catch (error) {
         

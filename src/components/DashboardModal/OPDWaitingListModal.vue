@@ -1,9 +1,9 @@
 <template>
-  <!-- Spinner -->
-  <!--    <div v-if="isLoading" class="spinner-overlay">-->
-  <!--        <ion-spinner name="bubbles"></ion-spinner>-->
-  <!--        <div class="loading-text">Please wait...</div>-->
-  <!--    </div>-->
+   Spinner
+      <div v-if="isLoading" class="spinner-overlay">
+          <ion-spinner name="bubbles"></ion-spinner>
+          <div class="loading-text">Please wait...</div>
+      </div>
   <ion-header>
     <div class="header position_content">
       <div style="display: flex; align-items: center" @click="dismiss">
@@ -76,18 +76,11 @@
                     >
                   </ion-col>
                 </ion-row>
+                <ion-row v-if="patients.length === 0 && !isLoading">
+                  <ion-col>No records found.</ion-col>
+                </ion-row>
               </ion-grid>
             </div>
-            <!-- <DataTable :options="options" :columns="tableColumns" :data="patients" class="display nowrap" width="100%" /> -->
-            <!-- <table>
-                            <thead>
-                                <tr>
-                                    <th>Patient Name</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <
-                         </table> -->
           </div>
         </ion-card-content>
       </ion-card>
@@ -291,16 +284,17 @@ export default defineComponent({
     },
     async handleAbscond(patient: any) {
       try {
-
         const location = await getUserLocation();
         const locationId = location ? location.id : null;
         await PatientOpdList.checkOutPatient(patient.visit_id, dates.todayDateFormatted());
-        await usePatientList().refresh(locationId);
-        this.patients = this.patients.filter((p:any) => p.patient_id !== patient.patient_id);
+        this.patients = this.patients.filter((p: any) => p.patient_id !== patient.patient_id);
+        toastSuccess('Patient absconded successfully.');
       } catch (e) {
         console.error("Error absconding patient:", e);
+        toastDanger('Failed to abscond patient.');
       }
     },
+
     setList() {
       const listMapping: Record<string, any[]> = {
         VITALS: this.patientsWaitingForVitals,

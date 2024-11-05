@@ -24,7 +24,10 @@
     <div class="modal_wrapper" v-if="listOrders.length > 1">
         <div style="font-weight: 700">Lab Orders</div>
         <div class="scrollable-container">
-            <list :listData="listOrders" @clicked:delete="voidLabOrder" @clicked:results="openResultsForm"></list> 
+            <list :listData="listOrders.map((item:any) => ({...item, disabledEnterResults: hasPatientsWaitingForLab && activeProgramID === 14 && (userRoles === 'Clinician' || userRoles === 'Superuser'), }))"
+                  @clicked:delete="voidLabOrder"
+                  @clicked:results="openResultsForm">
+            </list>
         </div>
         <div style="margin-top: 5px" v-if="listOrders.length <= 4 && listSeeMoreOrders.length >= 4">
             <DynamicButton @click="seeResultsStatus('more')" name="Show More Lab Orders" fill="clear" iconSlot="icon-only" />
@@ -40,7 +43,7 @@
           fill="clear"
           icon="notification_icon"
           iconSlot="icon-only"
-          name="Waiting for results from the lab"
+          name="Waiting for results from the lab. Consultation paused!"
       />
     </div>
     <div v-else>
@@ -123,7 +126,9 @@ export default defineComponent({
         return this.listOrders.some((item: any) =>
             item.btn && item.btn.includes("enter_results")
         );
-      }
+      },
+      hasPatientsWaitingForLab(): boolean {
+        return Array.isArray(this.patientsWaitingForLab) && this.patientsWaitingForLab.length > 0;      }
     },
     props: {
         propOrders: {
@@ -179,6 +184,10 @@ export default defineComponent({
   },
 
   watch: {
+    patientsWaitingForLab(newValue) {
+      this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.demographics.patient_id);
+      console.log("Updated lab waiting status:", this.hasPatientsWaitingForLab);
+    },
         propOrders: {
             handler() {
                 this.orders = this.propOrders;
@@ -187,10 +196,11 @@ export default defineComponent({
             deep: true,
         },
         $route: {
-            handler() {
+          immediate: true,
+          handler() {
                 this.updateLabList();
+                this.fetchPatientLabStageData();
             },
-            deep: true,
         },
     },
     methods: {
@@ -205,7 +215,7 @@ export default defineComponent({
           const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
           await usePatientList().refresh(locationId);
           if (this.demographics.patient_id) {
-            this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.demographics.patient_id);
+            this.patientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.demographics.patient_id);
           }
         }
       },
@@ -218,7 +228,7 @@ export default defineComponent({
         }
         await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"LAB", locationId);
         await usePatientList().refresh(locationId);
-        toastSuccess("Lab orders submitted to the lab successfully")
+        toastSuccess("Lab orders submitted to the lab successfully. Consultation paused")
         await this.fetchPatientLabStageData()
         this.closeSendToLabModal()
       },

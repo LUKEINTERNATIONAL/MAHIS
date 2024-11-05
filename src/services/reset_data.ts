@@ -36,7 +36,7 @@ import { useMedicalFollowUpStore } from "@/apps/ANC/store/symptomsFollowUp/medic
 import { usePersistentBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/persistentBehaviourStore";
 import { useWomenBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/womenBehaviourStore";
 import { useMedicStore } from "@/apps/ANC/store/symptomsFollowUp/MedicStore";
-import {usePreventativeCounsellingStore} from "@/apps/ANC/store/counselling/preventativeCounsellingStore";
+import { usePreventativeCounsellingStore } from "@/apps/ANC/store/counselling/preventativeCounsellingStore";
 import { useDewormingStore } from "@/apps/ANC/store/dewormingStore";
 import { useImmunizationStore } from "@/apps/ANC/store/immunizationStore";
 //import { useIntimatePartnerStore } from "@/apps/ANC/store/intimatePartnerStore";
@@ -92,7 +92,7 @@ export async function resetPatientData() {
     const ANCdietCounselling = useDietCounsellingStore();
     const ANCphysCounselling = usePhysiologicalCounselingStore();
     const heads = useHeadssAssessmentStore();
-   
+
     const ANCfatalAssment = useFetalAssessment();
     const ANCfatalPres = useFetalPresentationStore();
     const ANCpresSigns = usePresentingSigns();
@@ -148,6 +148,7 @@ export async function resetPatientData() {
     registration.setHomeLocation(registration.getInitialHomeLocation());
     registration.setCurrentLocation(registration.getInitialCurrentLocation());
     registration.setGuardianInformation(registration.getInitialGuardianInformation());
+    registration.setCountry(registration.getInitialCountry());
     weightHeightVitals.setVitals(weightHeightVitals.getInitialVitals());
 
     enrollement.setDiagnosis(enrollement.getInitialEnrollmentDiagnosis());
@@ -175,7 +176,7 @@ export async function resetPatientData() {
     ANCwomanBehavior.$reset();
     ANCphysCounselling.$reset();
     heads.$reset();
-   
+
     ANCfatalAssment.$reset();
     ANCfatalPres.$reset();
     ANCpresSigns.$reset();

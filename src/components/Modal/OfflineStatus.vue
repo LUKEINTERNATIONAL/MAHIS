@@ -1,6 +1,6 @@
 <template>
     <div class="" style="display: block">
-        <div class="title">Loading Offline Records</div>
+        <div class="title">Loading Offline Records Please wait ...</div>
         <div class="container">
             <div class="sub_title">
                 Relationships
