@@ -111,6 +111,27 @@ const AntiHypertensivesMedication = {
     ids: [],
 };
 
+const Diuretics = {
+    name: "Diuretics (Water Pills)",
+    ids: [274, 168, 648, 289, 286, 164, 287, 288, 672, 257, 1233, 671],
+};
+
+const CCB = {
+    name: "CCB (Calcium Channel Blockers)",
+    ids: [559, 1236, 1234, 558, 1235, 1211, 276, 277, 278, 279],
+};
+
+const ACE_I = {
+    name: "ACE-I (Angiotensin Converting Enzyme Inhibitors)",
+    ids: [556, 653, 557, 652, 943, 1238, 1240, 1237, 942, 1239, 946, 1503, 944, 1504, 945, 1505],
+};
+
+const BB = {
+    name: "BB (Beta Blockers)",
+    ids: [116, 85, 117, 1232, 936, 1364, 937, 1365, 1366],
+};
+
+
 export function getDiabetesDrugs() {
     const NCDMedicationsStore = useNCDMedicationsStore();
     DiabetesMedication.ids.forEach(async (diaBetesMedicationId: number) => {
