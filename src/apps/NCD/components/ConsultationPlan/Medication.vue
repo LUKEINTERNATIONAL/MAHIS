@@ -1,4 +1,5 @@
 <template>
+  <PreviousNCDDiagnosis v-if="useDefaultStores"/>
   <div v-if="activeMedications.length > 0">
     <table class="prescription-table">
       <thead>
@@ -89,6 +90,7 @@ import {
 } from 'ionicons/icons';
 import { useNCDMedicationsStore, useOtherNCDMedicationStore } from "@/stores/NCDMedicationStore";
 import { mapState } from "pinia";
+import PreviousNCDDiagnosis from "../PreviousNCDDiagnosis.vue"
 
 interface Props {
   useDefaultStores: boolean
@@ -98,7 +100,7 @@ export default defineComponent({
     name: 'medication',
     components: {
         IonCard, IonCardHeader, IonButton, IonCardTitle, IonCardContent,
-        IonInput, IonIcon, IonCol, IonRow, IonCheckbox,
+        IonInput, IonIcon, IonCol, IonRow, IonCheckbox, PreviousNCDDiagnosis,
     },
     computed: {
       ...mapState(useNCDMedicationsStore, ["medications"]),

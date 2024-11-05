@@ -113,7 +113,6 @@ export class PreviousTreatment {
                 start_date: patientVisit.value,
             });
             if (!isEmpty(medications)) {
-                console.log(medications)
                 const previousPrescriptions = medications.map((medication: any) => ({
                     drugName: medication.drug.name,
                     value: HisDate.toStandardHisTimeFormat(medication.order.start_date),
@@ -175,4 +174,27 @@ function sortObjectByDateDescending(obj: { [key: string]: any }) {
 
 function reverseObjectKeys(obj: any) {
     return Object.fromEntries(Object.entries(obj).reverse());
+}
+
+export async function getNCDDiagnosis() {
+    const store = useDemographicsStore();
+    const patientId = store.demographics.patient_id;
+    const ncdConceptIds = [8809, 6410, 6409];
+    const names = [];
+
+    try {
+        const observations = await ObservationService.getAll(patientId, "Primary diagnosis");
+
+        for (const obs of observations) {
+            if (ncdConceptIds.includes(obs.value_coded)) {
+                const name = await ObservationService.getConceptName(obs.value_coded);
+                names.push(name);
+            }
+        }
+
+        return names;
+    } catch (error) {
+        console.error("Error:", error);
+        return [];
+    }
 }

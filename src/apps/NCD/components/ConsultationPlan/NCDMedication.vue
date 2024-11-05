@@ -5,7 +5,7 @@
         <ion-col>
           <ion-card-title>
             <div class="medication-list">
-                <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
+                <ion-icon :icon="medkit" class="ion-margin-end diagnosis-icon"></ion-icon>
                 <span>Medication List</span>
             </div>
           </ion-card-title>
@@ -14,7 +14,6 @@
     </ion-card-header>
     <ion-card-content>
       <Medication/>
-      <MedicationHistory/>
       <ion-row>
         <ion-col>
           <ion-button @click="openAddOtherOPDMedicationModal" color="primary" style="float: right;">
@@ -22,6 +21,11 @@
              <span style="margin-left: 10px;"> ADD Other Medication</span>
           </ion-button>
         </ion-col>
+      </ion-row>
+      <ion-row>
+        <IonCol>
+          <MedicationHistory/>
+        </IonCol>
       </ion-row>
     </ion-card-content>
   </ion-card>
@@ -64,5 +68,10 @@ export default defineComponent({
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+
+  .diagnosis-icon {
+    font-size: 1.4rem;
+    color: var(--ion-color-primary);
   }
 </style>
