@@ -77,7 +77,6 @@ const showOtherInput = ref(false);
 const filteredAllergiesList = computed(() => {
     return allergiesList.value;
 });
-
 const list_picker_prperties = [
     {
         multi_Selection: true as any,
@@ -95,6 +94,7 @@ const list_picker_prperties = [
         disabled: ref(false) as any,
     },
 ];
+
 const addingCustomAllergy = ref(false);
 watch(
     selectedAllergiesList,
@@ -126,6 +126,7 @@ function listUpdated1(data: any) {
 
     setCommonAllergiesList();
 }
+
 async function FindAllegicDrugName(text: any) {
     const searchText = text;
     const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);

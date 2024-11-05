@@ -147,7 +147,7 @@ export class VitalsService extends AppEncounterService {
                 name: "Temperature",
                 validator: (val: any) => {
                     const errors = [];
-                    errors.push(this.isNotEmptyandNumber(val));
+                    //errors.push(this.isNotEmptyandNumber(val));
                     errors.push(this.checkMinMax(val, 30, 42));
                     return this.mergeErrors(errors);
                 },
@@ -172,7 +172,7 @@ export class VitalsService extends AppEncounterService {
                 name: "Oxygen saturation",
                 validator: (val: any) => {
                     const errors = [];
-                    errors.push(this.isNotEmptyandNumber(val));
+                    //errors.push(this.isNotEmptyandNumber(val));
                     errors.push(this.checkMinMax(val, 40, 100));
                     return this.mergeErrors(errors);
                 },
