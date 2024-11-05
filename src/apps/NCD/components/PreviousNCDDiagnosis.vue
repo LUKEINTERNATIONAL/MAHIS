@@ -26,6 +26,7 @@ import { defineComponent } from "vue";
 import { medkitOutline } from 'ionicons/icons';
 import { getNCDDiagnosis } from "@/apps/NCD/services/treatment";
 import SetUser from "@/views/Mixin/SetUser.vue";
+import { getDiabetesDrugs } from "@/stores/NCDMedicationStore";
 
 export default defineComponent({
   name: "Home",
@@ -51,6 +52,7 @@ export default defineComponent({
   },
   async mounted() {
     this.diagnoses = await getNCDDiagnosis();
+    getDiabetesDrugs()
   },
 });
 </script>

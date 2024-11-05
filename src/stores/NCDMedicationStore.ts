@@ -3,18 +3,7 @@ import { ref } from "vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { DrugService } from "@/services/drug_service";
 
-const DiabetesMedication = [
-    'Long acting Insulin',
-    'Short Acting Insulin',
-    'Metformin',
-    'Glibenclamide',
-]
-const AntiHypertensives = [
-    'Diuretic',
-    'CCB',
-    'ACE-I',
-    'BB',
-]
+
 const other = [
     'Aspirin',
     'Statin',
@@ -73,19 +62,7 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
             this.medications = data;
         },
         initMedications() {
-            if (this.medications.length == 0) {
-                this.medications.push(...other.map((drug, index) => drugObj(index + 1, drug, "Other") as any));
 
-                this.medications.push(
-                    ...AntiHypertensives.map((drug, index) => drugObj(other.length + index + 1, drug, "AntiHypertensive") as any)
-                );
-
-                this.medications.push(
-                    ...DiabetesMedication.map(
-                        (drug, index) => drugObj(AntiHypertensives.length + index + 1, drug, "DiabetesMedication") as any
-                    )
-                );
-            }
         },
         setSelectedNCDMedicationList(drug_item: any): void {
             this.selectedNCDMedicationList.push(drug_item);
@@ -122,4 +99,25 @@ export function addOtherMedicationToNCDMedicationList() {
     } catch (error) {
         
     }
+}
+
+const DiabetesMedication = {
+    name: "DiabetesMedication",
+    ids: [337, 336, 280, 410, 729, 263, 812, 265, 264, 240, 266, 726, 728, 223],
+};
+
+const AntiHypertensivesMedication = {
+    name: "AntiHypertensivesMedication",
+    ids: [],
+};
+
+export function getDiabetesDrugs() {
+    const NCDMedicationsStore = useNCDMedicationsStore();
+    DiabetesMedication.ids.forEach(async (diaBetesMedicationId: number) => {
+        const data = await DrugService.getDrugById(diaBetesMedicationId);
+        if (!NCDMedicationsStore.medications.some((med: any) => med.drug_id === data.drug_id)) {
+            const drug = drugObj(data.drug_id, data.name, DiabetesMedication.name);
+            NCDMedicationsStore.medications.push(drug);
+        }
+    });
 }
