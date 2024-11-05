@@ -72,10 +72,11 @@
           corrected_date.setMonth(parseInt(clientBODMonth) - 1)
           pickerInstance.setDate(corrected_date)
         }
-        if (parseInt(pickerDay) <= parseInt(clientBODDay)) {
-          const corrected_date = pickerInstance.getDate()
-          corrected_date.setDate(parseInt(clientBODDay) + 1)
-          pickerInstance.setDate(corrected_date)
+        if (parseInt(pickerMonth) === parseInt(clientBODMonth) && 
+            parseInt(pickerDay) < parseInt(clientBODDay)) {
+            const corrected_date = pickerInstance.getDate()
+            corrected_date.setDate(parseInt(clientBODDay))
+            pickerInstance.setDate(corrected_date)
         }
       }
       if ( parseInt(pickerYear) < parseInt(clientBODYear)) {
