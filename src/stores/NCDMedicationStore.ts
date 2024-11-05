@@ -132,13 +132,36 @@ const BB = {
 };
 
 
-export function getDiabetesDrugs() {
+export async function fetchAndStoreMedications(medicationType: any) {
     const NCDMedicationsStore = useNCDMedicationsStore();
-    DiabetesMedication.ids.forEach(async (diaBetesMedicationId: number) => {
-        const data = await DrugService.getDrugById(diaBetesMedicationId);
-        if (!NCDMedicationsStore.medications.some((med: any) => med.drug_id === data.drug_id)) {
-            const drug = drugObj(data.drug_id, data.name, DiabetesMedication.name);
-            NCDMedicationsStore.medications.push(drug);
+    const promises = medicationType.ids.map(async (medicationId: any) => {
+        try {
+        const data = await DrugService.getDrugById(medicationId);
+        if (data) {
+            if (!NCDMedicationsStore.medications.some((med: any) => med.drug_id === data.drug_id)) {
+                const drug = drugObj(data.drug_id, data.name, medicationType.name);
+                NCDMedicationsStore.medications.push(drug);
+            }
+        }
+        } catch (error) {
+        console.error(`Error fetching drug ID ${medicationId}:`, error);
         }
     });
+    
+    return Promise.all(promises);
+}
+
+export function getDiabetesDrugs() {
+  return fetchAndStoreMedications(DiabetesMedication);
+}
+
+export function getAntiHypertensivesMedication() {
+  AntiHypertensivesMedication.ids = [
+    ...Diuretics.ids,
+    ...CCB.ids,
+    ...ACE_I.ids,
+    ...BB.ids
+  ] as any;
+  
+  return fetchAndStoreMedications(AntiHypertensivesMedication);
 }
