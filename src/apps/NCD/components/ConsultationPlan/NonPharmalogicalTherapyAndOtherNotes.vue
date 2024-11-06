@@ -24,16 +24,7 @@
             </div>
             
             <div style="margin-top: 14px; margin-left: 10px">
-                <ion-accordion-group ref="accordionGroup" class="previousView">
-                    <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                        <ion-item slot="header" color="light">
-                            <ion-label class="previousLabel">Previous visits notes</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <!-- Rest of the content remains the same -->
-                        </div>
-                    </ion-accordion>
-                </ion-accordion-group>
+                <PreviousNotes/>
             </div>
         </ion-card-content>
     </ion-card>
@@ -62,56 +53,21 @@ import {
     IonIcon
 } from "@ionic/vue";
 
-
-import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { icons } from "@/utils/svg";
 import { clipboardOutline } from 'ionicons/icons';
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
+import PreviousNotes from './PreviousNotes.vue'
 
 const store = useTreatmentPlanStore();
-const values = ["first", "second", "third"];
 const iconsContent = icons;
-const showMoreNotesMsg = ref("Show more notes");
-const FirstPreviousNotes = ref();
-const RestOfPreviousNotes = ref();
-const itemNotesWasExpanded = ref(false);
-const itemWasExpanded = ref(false);
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
-
-onMounted(async () => {
-    const previousTreatment = new PreviousTreatment();
-    const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters();
-    FirstPreviousNotes.value = Object.entries(previousClinicalNotes)[0];
-    const [, ...restEntries] = Object.entries(previousClinicalNotes);
-    RestOfPreviousNotes.value = restEntries;
-
-});
-
-function removeOuterArray(arr: any) {
-    return arr[1];
-}
 
 function validateNotes(ev: any) {
     let value = ev.target.value
     refSetNonPharmalogicalTherapyAndOtherNotes(value)
 }
-
-function accordionGroupChangeForNotes(ev: AccordionGroupCustomEvent) {
-    const collapsedItems = values.filter((value) => value !== ev.detail.value);
-    const selectedValue = ev.detail.value;
-    if (selectedValue !== undefined) {
-        if (selectedValue == "third") {
-            showMoreNotesMsg.value = "Show less notes";
-            itemNotesWasExpanded.value = !itemWasExpanded.value;
-        }
-    } else {
-        showMoreNotesMsg.value = "Show more notes";
-        itemNotesWasExpanded.value = !itemWasExpanded.value;
-    }
-}
-
 
 function refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
     const treatmentPlanStore = useTreatmentPlanStore();

@@ -49,7 +49,7 @@ export default defineComponent({
 
     const initC = async () => {
       try {
-        clearMedicationData()
+        // clearMedicationData()
         diagnoses.value = await getNCDDiagnosis();
 
         const hasHypertension = diagnoses.value.some((diagnosis: any) =>
