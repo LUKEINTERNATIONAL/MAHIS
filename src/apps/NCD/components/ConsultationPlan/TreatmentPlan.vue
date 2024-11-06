@@ -2,16 +2,21 @@
     <div class="background">
         <ion-segment :value="segmentContent" style="margin-top: 5px">
             <ion-segment-button value="Lab Investigations" @click="setSegmentContent(segments[0])">
-                <ion-label>Allergies</ion-label>
+                <ion-label>Medications</ion-label>
             </ion-segment-button>
             <ion-segment-button value="Radiology Investigation" @click="setSegmentContent(segments[1])">
-                <ion-label>Medications</ion-label>
+                <ion-label>Allergies</ion-label>
             </ion-segment-button>
             <ion-segment-button value="Other Investigation" @click="setSegmentContent(segments[2])">
                 <ion-label>Non-pharmalogical therapy and other notes</ion-label>
             </ion-segment-button>
         </ion-segment>
         <div v-if="segmentContent == segments[0]">
+            <div style="margin: 10px">
+                <NCDMedication/>
+            </div>
+        </div>
+        <div v-if="segmentContent == segments[1]">
             <div style="margin: 10px">
                 <Allergies/>
 
@@ -63,11 +68,6 @@
                         </div>
                     </ion-accordion>
                 </ion-accordion-group>
-            </div>
-        </div>
-        <div v-if="segmentContent == segments[1]">
-            <div style="margin: 10px">
-                <NCDMedication/>
             </div>
         </div>
         <div v-if="segmentContent == segments[2]">
