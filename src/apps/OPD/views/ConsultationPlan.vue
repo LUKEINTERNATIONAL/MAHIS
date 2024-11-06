@@ -301,60 +301,64 @@ export default defineComponent({
       },
 
       async getData() {
-            this.wizardData = [];
-            this.StepperData = [];
-            const { name } = await WorkflowService.nextTask(this.demographics.patient_id);
-            console.log("🚀 ~ getData ~ name:", name);
+        try {
+          this.wizardData = [];
+          this.StepperData = [];
+          const { name } = await WorkflowService.nextTask(this.demographics.patient_id);
+          console.log("🚀 ~ getData ~ name:", name);
 
-            // const steps = ["Clinical Assessment", "Investigations", "Diagnosis", "Treatment Plan", "Outcome"];
-            for (let i = 0; i < this.OPDActivities.length; i++) {
-                let wizardClass = "common_step";
-                if (name == "PRESENTING COMPLAINTS" && this.OPDActivities[i] == "Clinical Assessment") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                if (name == "LAB RESULTS" && this.OPDActivities[i] == "Investigations") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                if (name == "OUTPATIENT DIAGNOSIS" && this.OPDActivities[i] == "Diagnosis") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                if (name == "PRESCRIPTION" && this.OPDActivities[i] == "Treatment Plan") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                if (name == "PATIENT OUTCOME" && this.OPDActivities[i] == "Outcome") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                let title = this.OPDActivities[i];
-                let componentName = this.OPDActivities[i];
-                if (this.OPDActivities[i] == "Diagnosis") {
-                    componentName = "OPDDiagnosis";
-                }
-                if (this.OPDActivities[i] == "Treatment Plan") {
-                    componentName = "OPDTreatmentPlan";
-                }
+          // const steps = ["Clinical Assessment", "Investigations", "Diagnosis", "Treatment Plan", "Outcome"];
+          for (let i = 0; i < this.OPDActivities.length; i++) {
+              let wizardClass = "common_step";
+              if (name == "PRESENTING COMPLAINTS" && this.OPDActivities[i] == "Clinical Assessment") {
+                  this.openStepper = i + 1;
+                  wizardClass = "open_step common_step";
+              }
+              if (name == "LAB RESULTS" && this.OPDActivities[i] == "Investigations") {
+                  this.openStepper = i + 1;
+                  wizardClass = "open_step common_step";
+              }
+              if (name == "OUTPATIENT DIAGNOSIS" && this.OPDActivities[i] == "Diagnosis") {
+                  this.openStepper = i + 1;
+                  wizardClass = "open_step common_step";
+              }
+              if (name == "PRESCRIPTION" && this.OPDActivities[i] == "Treatment Plan") {
+                  this.openStepper = i + 1;
+                  wizardClass = "open_step common_step";
+              }
+              if (name == "PATIENT OUTCOME" && this.OPDActivities[i] == "Outcome") {
+                  this.openStepper = i + 1;
+                  wizardClass = "open_step common_step";
+              }
+              let title = this.OPDActivities[i];
+              let componentName = this.OPDActivities[i];
+              if (this.OPDActivities[i] == "Diagnosis") {
+                  componentName = "OPDDiagnosis";
+              }
+              if (this.OPDActivities[i] == "Treatment Plan") {
+                  componentName = "OPDTreatmentPlan";
+              }
 
-                const number = i + 1;
+              const number = i + 1;
 
-                this.wizardData.push({
-                    title,
-                    class: wizardClass,
-                    checked: i === 0 ? false : "",
-                    disabled: false,
-                    number,
-                    last_step: i === this.OPDActivities.length - 1 ? "last_step" : "",
-                });
+              this.wizardData.push({
+                  title,
+                  class: wizardClass,
+                  checked: i === 0 ? false : "",
+                  disabled: false,
+                  number,
+                  last_step: i === this.OPDActivities.length - 1 ? "last_step" : "",
+              });
 
-                this.StepperData.push({
-                    title,
-                    component: componentName.replace(/\s+/g, ""),
-                    value: number.toString(),
-                });
-            }
+              this.StepperData.push({
+                  title,
+                  component: componentName.replace(/\s+/g, ""),
+                  value: number.toString(),
+              });
+          } 
+        } catch (error) {
+          console.error(error)
+        }
         },
 
         markWizard() {

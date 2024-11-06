@@ -19,55 +19,7 @@
         <div v-if="segmentContent == segments[1]">
             <div style="margin: 10px">
                 <Allergies/>
-
-                <ion-accordion-group ref="accordionGroup" class="previousView">
-                    <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                        <ion-item slot="header" color="light">
-                            <ion-label class="previousLabel">Previous Allergies</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
-                                <div v-if="index == 1">
-                                    <div>
-                                        <ion-label class="previousLabelDate">{{ item[0].date }}</ion-label>
-                                    </div>
-                                    <div v-for="(item1, index1) in item" :key="index1">
-                                        <div class="previousSecDrgs">
-                                            <ion-list>
-                                                <ion-label class="notes_p">{{ item1.value }} </ion-label>
-                                            </ion-list>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <ion-accordion-group @ionChange="accordionGroupChangeForAllergies">
-                                <ion-accordion value="fith" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                                    <ion-item slot="header" color="light">
-                                        <ion-label class="" color="primary">{{ showMoreAllergyMsg }}</ion-label>
-                                    </ion-item>
-                                    <div class="ion-padding" slot="content">
-                                        <div class="ionLbltp" v-for="(item, index) in RestOfPreviousAllegies" :key="index">
-                                            <div>
-                                                <ion-label class="previousLabelDate">{{ item[0] }}</ion-label>
-                                            </div>
-                                            <div v-for="(item1, index1) in removeOuterArray(item)" :key="index1">
-                                                <!-- <div>
-                                                        <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>
-                                                    </div> -->
-                                                <div class="previousSecDrgs">
-                                                    <ion-list>
-                                                        <ion-label class="notes_p">{{ item1.value }} </ion-label>
-                                                    </ion-list>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </ion-accordion>
-                            </ion-accordion-group>
-                        </div>
-                    </ion-accordion>
-                </ion-accordion-group>
+                <PreviousAllergies/>
             </div>
         </div>
         <div v-if="segmentContent == segments[2]">
@@ -105,7 +57,7 @@ import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue"
-
+import PreviousAllergies from './PreviousAllergies.vue'
 
 const segments = ref([
     'allergies',
@@ -120,8 +72,6 @@ const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesLis
 
 const values = ["first", "second", "third"];
 const PreviuosSelectedMedicalDrugsList = ref();
-const FirstPreviousNotes = ref();
-const RestOfPreviousNotes = ref();
 const itemWasExpanded = ref(false);
 
 const itemAllegiesWasExpanded = ref(false);

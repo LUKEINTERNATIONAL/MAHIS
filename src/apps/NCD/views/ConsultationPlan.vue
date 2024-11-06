@@ -118,6 +118,7 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 import VitalSigns from "@/components/VitalSigns.vue";
+import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
 import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service"
 import {
     modifyRadioValue,
@@ -344,7 +345,8 @@ export default defineComponent({
             const patientID = this.demographics.patient_id;
             const treatmentInstance = new Treatment();
 
-            if (!isEmpty(this.selectedMedicalAllergiesList)) {
+            const allergyStore = useAllegyStore();
+            if (!isEmpty(allergyStore.selectedMedicalAllergiesList)) {
                 const allergies = this.mapToAllergies();
                 treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
             }
@@ -410,7 +412,8 @@ export default defineComponent({
             return HisDate.toStandardHisFormat(date);
         },
         mapToAllergies(): any[] {
-            return this.selectedMedicalAllergiesList.map((allergy: any) => {
+            const allergyStore = useAllegyStore();
+            return allergyStore.selectedMedicalAllergiesList.map((allergy: any) => {
                 return {
                     concept_id: 985,
                     obs_datetime: Service.getSessionDate(),
