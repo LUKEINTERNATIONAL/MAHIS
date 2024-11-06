@@ -323,9 +323,17 @@ export const useAllegyStore = defineStore("AllergyStore", {
                     this.selectedMedicalAllergiesList.splice(index, 1);
                 }
             });
+            this.changeSelectionToFalse(allergyToRemove);
         },
         findSelectedAllergyByName(name: string): any {
             return this.selectedMedicalAllergiesList.find((allergy: any) => allergy.name === name);
+        },
+        changeSelectionToFalse(allergy: any) {
+            this.medicalAllergiesList.forEach((allergy_: any, index: number) => {
+                if (allergy_.concept_name_id == allergy.concept_name_id) {
+                    this.medicalAllergiesList[index].selected = false;
+                }
+            });
         },
     },
     persist: true,

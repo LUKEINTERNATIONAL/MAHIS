@@ -76,15 +76,6 @@ const list_picker_prperties = [
     },
 ];
 const addingCustomAllergy = ref(false);
-watch(
-    selectedAllergiesList,
-    (newList) => {
-        if (!addingCustomAllergy.value) {
-            showOtherInput.value = newList.some((item: any) => item.name === "Other" && item.selected);
-        }
-    },
-    { deep: true }
-);
 onMounted(async () => {
     //
 });
