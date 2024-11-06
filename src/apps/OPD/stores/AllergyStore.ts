@@ -335,6 +335,12 @@ export const useAllegyStore = defineStore("AllergyStore", {
                 }
             });
         },
+        clearSelectedMedicalAllergiesList() {
+            this.selectedMedicalAllergiesList.forEach((allergy: any) => {
+                this.changeSelectionToFalse(allergy);
+            })
+            this.selectedMedicalAllergiesList = [];
+        }
     },
     persist: true,
 });
