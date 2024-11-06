@@ -1,19 +1,9 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { DrugService } from "@/services/drug_service";
 
-const DiabetesMedication = [
-    'Long acting Insulin',
-    'Short Acting Insulin',
-    'Metformin',
-    'Glibenclamide',
-]
-const AntiHypertensives = [
-    'Diuretic',
-    'CCB',
-    'ACE-I',
-    'BB',
-]
+
 const other = [
     'Aspirin',
     'Statin',
@@ -72,19 +62,7 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
             this.medications = data;
         },
         initMedications() {
-            if (this.medications.length == 0) {
-                this.medications.push(...other.map((drug, index) => drugObj(index + 1, drug, "Other") as any));
 
-                this.medications.push(
-                    ...AntiHypertensives.map((drug, index) => drugObj(other.length + index + 1, drug, "AntiHypertensive") as any)
-                );
-
-                this.medications.push(
-                    ...DiabetesMedication.map(
-                        (drug, index) => drugObj(AntiHypertensives.length + index + 1, drug, "DiabetesMedication") as any
-                    )
-                );
-            }
         },
         setSelectedNCDMedicationList(drug_item: any): void {
             this.selectedNCDMedicationList.push(drug_item);
@@ -121,4 +99,69 @@ export function addOtherMedicationToNCDMedicationList() {
     } catch (error) {
         
     }
+}
+
+const DiabetesMedication = {
+    name: "DiabetesMedication",
+    ids: [337, 336, 280, 410, 729, 263, 812, 265, 264, 240, 266, 726, 728, 223],
+};
+
+const AntiHypertensivesMedication = {
+    name: "AntiHypertensivesMedication",
+    ids: [],
+};
+
+const Diuretics = {
+    name: "Diuretics (Water Pills)",
+    ids: [274, 168, 648, 289, 286, 164, 287, 288, 672, 257, 1233, 671],
+};
+
+const CCB = {
+    name: "CCB (Calcium Channel Blockers)",
+    ids: [559, 1236, 1234, 558, 1235, 1211, 276, 277, 278, 279],
+};
+
+const ACE_I = {
+    name: "ACE-I (Angiotensin Converting Enzyme Inhibitors)",
+    ids: [556, 653, 557, 652, 943, 1238, 1240, 1237, 942, 1239, 946, 1503, 944, 1504, 945, 1505],
+};
+
+const BB = {
+    name: "BB (Beta Blockers)",
+    ids: [116, 85, 117, 1232, 936, 1364, 937, 1365, 1366],
+};
+
+
+export async function fetchAndStoreMedications(medicationType: any) {
+    const NCDMedicationsStore = useNCDMedicationsStore();
+    const promises = medicationType.ids.map(async (medicationId: any) => {
+        try {
+        const data = await DrugService.getDrugById(medicationId);
+        if (data) {
+            if (!NCDMedicationsStore.medications.some((med: any) => med.drug_id === data.drug_id)) {
+                const drug = drugObj(data.drug_id, data.name, medicationType.name);
+                NCDMedicationsStore.medications.push(drug);
+            }
+        }
+        } catch (error) {
+        console.error(`Error fetching drug ID ${medicationId}:`, error);
+        }
+    });
+    
+    return Promise.all(promises);
+}
+
+export function getDiabetesDrugs() {
+  return fetchAndStoreMedications(DiabetesMedication);
+}
+
+export function getAntiHypertensivesMedication() {
+  AntiHypertensivesMedication.ids = [
+    ...Diuretics.ids,
+    ...CCB.ids,
+    ...ACE_I.ids,
+    ...BB.ids
+  ] as any;
+  
+  return fetchAndStoreMedications(AntiHypertensivesMedication);
 }

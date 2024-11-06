@@ -185,10 +185,12 @@ export async function getNCDDiagnosis() {
     try {
         const observations = await ObservationService.getAll(patientId, "Primary diagnosis");
 
-        for (const obs of observations) {
-            if (ncdConceptIds.includes(obs.value_coded)) {
-                const name = await ObservationService.getConceptName(obs.value_coded);
-                names.push(name);
+        if (observations) {
+            for (const obs of observations) {
+                if (ncdConceptIds.includes(obs.value_coded)) {
+                    const name = await ObservationService.getConceptName(obs.value_coded);
+                    names.push(name);
+                }
             }
         }
 
