@@ -273,6 +273,7 @@ export default defineComponent({
                         .doc({ offlinePatientID: this.offlinePatientID })
                         .get()
                         .then(async (document: any) => {
+                            await workerData.terminate();
                             if (document.serverPatientID) {
                                 this.openNewPage(document.patientData);
                             } else {
@@ -282,6 +283,7 @@ export default defineComponent({
                 }
             },
             deep: true,
+            immediate: true,
         },
         personInformation: {
             handler() {
@@ -298,6 +300,7 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
+                this.workerApi = workerData.workerApi;
                 this.currentStep = "Personal Information";
                 // await await resetPatientData();
                 if (data.name == "registration") resetDemographics();
