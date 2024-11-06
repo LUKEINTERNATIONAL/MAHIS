@@ -348,7 +348,8 @@ export default defineComponent({
             const allergyStore = useAllegyStore();
             if (!isEmpty(allergyStore.selectedMedicalAllergiesList)) {
                 const allergies = this.mapToAllergies();
-                treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+                await treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+                allergyStore.selectedMedicalAllergiesList = [];
             }
 
             if (!isEmpty(this.nonPharmalogicalTherapyAndOtherNotes)) {
