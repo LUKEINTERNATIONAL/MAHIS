@@ -19,7 +19,7 @@
         <div v-if="segmentContent == segments[1]">
             <div style="margin: 10px">
                 <Allergies/>
-                <PreviousAllergies/>
+                <PreviousAllergies style="margin-top: 10px;"/>
             </div>
         </div>
         <div v-if="segmentContent == segments[2]">
