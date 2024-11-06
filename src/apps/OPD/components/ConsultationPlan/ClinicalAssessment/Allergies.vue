@@ -45,9 +45,12 @@ import { ConceptService } from "@/services/concept_service";
 import { ref, watch, computed, onMounted } from "vue";
 import { ConceptName } from "@/interfaces/conceptName";
 import ListPicker from "../../../../../components/ListPicker.vue";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 const allergyStore = useAllegyStore();
+const DemographicsStore = useDemographicsStore();
 const selectedAllergiesList = computed(() => allergyStore.selectedMedicalAllergiesList) as any;
+const demographics = computed(() => DemographicsStore.demographics) as any;
 const allergiesList = computed(() => allergyStore.medicalAllergiesList);
 const uniqueId = ref(generateUniqueId(8, "item-"));
 
@@ -79,6 +82,13 @@ const addingCustomAllergy = ref(false);
 onMounted(async () => {
     //
 });
+
+watch(
+    () => demographics.value,
+    async (newValue) => {
+        allergyStore.clearSelectedMedicalAllergiesList();
+    }
+)
 
 function listUpdated1(data: any) {
     data.forEach((item: any) => {

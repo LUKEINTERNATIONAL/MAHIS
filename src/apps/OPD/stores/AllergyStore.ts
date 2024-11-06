@@ -339,6 +339,10 @@ export const useAllegyStore = defineStore("AllergyStore", {
             this.selectedMedicalAllergiesList.forEach((allergy: any) => {
                 this.changeSelectionToFalse(allergy);
             })
+
+            this.medicalAllergiesList.forEach((allergie: any) => {
+                allergie.selected = false;
+            })
             this.selectedMedicalAllergiesList = [];
         }
     },

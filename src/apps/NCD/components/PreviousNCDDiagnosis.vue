@@ -22,10 +22,12 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonChip, IonLabel, IonIcon } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch, computed } from "vue";
 import { medkitOutline } from 'ionicons/icons';
 import { getNCDDiagnosis } from "@/apps/NCD/services/treatment";
 import SetUser from "@/views/Mixin/SetUser.vue";
+import { mapState } from "pinia";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 import { getDiabetesDrugs, getAntiHypertensivesMedication, clearMedicationData } from "@/stores/NCDMedicationStore";
 
 export default defineComponent({
@@ -44,12 +46,14 @@ export default defineComponent({
     IonLabel,
     IonIcon,
   },
+  computed: {
+    ...mapState(useDemographicsStore, ["demographics"])
+  },
   data() {
     const diagnoses = ref([] as any)
 
     const initC = async () => {
       try {
-        // clearMedicationData()
         diagnoses.value = await getNCDDiagnosis();
 
         const hasHypertension = diagnoses.value.some((diagnosis: any) =>
@@ -79,6 +83,15 @@ export default defineComponent({
   },
   async mounted() {
     this.initC()
+  },
+  watch:{
+    demographics:{
+      handler(){
+        clearMedicationData()
+        this.initC()
+      },
+      deep:true
+    }
   },
 });
 </script>
