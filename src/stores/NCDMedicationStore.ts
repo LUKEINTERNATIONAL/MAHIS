@@ -165,3 +165,8 @@ export function getAntiHypertensivesMedication() {
   
   return fetchAndStoreMedications(AntiHypertensivesMedication);
 }
+
+export function clearMedicationData() {
+    const NCDMedicationsStore = useNCDMedicationsStore();
+    NCDMedicationsStore.clearMedicationDataStores();
+}
