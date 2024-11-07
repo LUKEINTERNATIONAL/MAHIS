@@ -49,6 +49,7 @@ export const useComplicationsStore = defineStore("complicationsStore", {
                                     alertsErrorMassage: "",
                                     disabled: false,
                                     validationFunctionName: "",
+                                    valueType: "text",
                                 },
                                 {
                                     inputHeader: "Right Eye",
@@ -59,6 +60,7 @@ export const useComplicationsStore = defineStore("complicationsStore", {
                                     alertsErrorMassage: "",
                                     disabled: false,
                                     validationFunctionName: "",
+                                    valueType: "text",
                                 },
                             ],
                         },
