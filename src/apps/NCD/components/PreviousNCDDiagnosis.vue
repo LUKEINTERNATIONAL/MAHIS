@@ -1,5 +1,5 @@
 <template>
-  <div class="diagnosis-container">
+  <div class="diagnosis-container"  v-if="diagnoses.length > 0">
     <div class="heading">
       <ion-icon :icon="medkitOutline" class="diagnosis-icon"></ion-icon>
       <h2>Diagnosis</h2>
@@ -22,11 +22,13 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonChip, IonLabel, IonIcon } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch, computed } from "vue";
 import { medkitOutline } from 'ionicons/icons';
 import { getNCDDiagnosis } from "@/apps/NCD/services/treatment";
 import SetUser from "@/views/Mixin/SetUser.vue";
-import { getDiabetesDrugs, getAntiHypertensivesMedication } from "@/stores/NCDMedicationStore";
+import { mapState } from "pinia";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { getDiabetesDrugs, getAntiHypertensivesMedication, clearMedicationData } from "@/stores/NCDMedicationStore";
 
 export default defineComponent({
   name: "Home",
@@ -44,16 +46,52 @@ export default defineComponent({
     IonLabel,
     IonIcon,
   },
+  computed: {
+    ...mapState(useDemographicsStore, ["demographics"])
+  },
   data() {
+    const diagnoses = ref([] as any)
+
+    const initC = async () => {
+      try {
+        diagnoses.value = await getNCDDiagnosis();
+
+        const hasHypertension = diagnoses.value.some((diagnosis: any) =>
+          diagnosis.toLowerCase().includes("hypertension")
+        );
+
+        const hasDiabetes = diagnoses.value.some((diagnosis: any) =>
+          diagnosis.toLowerCase().includes("diabetes")
+        );
+
+        if (hasHypertension) {
+          getAntiHypertensivesMedication();
+        }
+        if (hasDiabetes) {
+          getDiabetesDrugs();
+        }
+      } catch (error) {
+        
+      }
+    }
+
     return {
-      diagnoses: [] as string[],
+      diagnoses,
       medkitOutline,
+      initC
     };
   },
   async mounted() {
-    this.diagnoses = await getNCDDiagnosis();
-    getDiabetesDrugs()
-    getAntiHypertensivesMedication()
+    this.initC()
+  },
+  watch:{
+    demographics:{
+      handler(){
+        clearMedicationData()
+        this.initC()
+      },
+      deep:true
+    }
   },
 });
 </script>

@@ -5,7 +5,7 @@
             <ion-col style="width: 100%;">
             <ion-item lines="none" class="ItemAl modal_wrapper" style="display: flex; flex-wrap: wrap; margin-left: -30px; margin-top: 0%; background-color: inherit; background: inherit;">
                 <div class="item-container">
-                    <div v-for="(item, index) in local_itmes_List" :key="index">
+                    <div v-for="(item, index) in local_itmes_List_nodles" :key="index">
                         <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}
                         <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
@@ -67,6 +67,7 @@ import { ref, watch, onMounted } from "vue"
 
 const itemName = ref("")
 const local_itmes_List = ref([] as any)
+const local_itmes_List_nodles = ref([] as any)
 const local_disabled = ref(false)
 const disableCls = ref('')
 
@@ -90,8 +91,10 @@ watch(
 
         if (newValue) {
             local_itmes_List.value = newValue
+            local_itmes_List_nodles.value = newValue
         } else {
             local_itmes_List.value = newValue
+            local_itmes_List_nodles.value = newValue
         }
         
     }
@@ -105,6 +108,7 @@ watch(
 
 onMounted(async () => {
     local_itmes_List.value = props.items_List
+    local_itmes_List_nodles.value = props.items_List
     isDisabled()
 })
 

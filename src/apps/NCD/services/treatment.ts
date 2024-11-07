@@ -11,6 +11,7 @@ import { ProgramService } from "@/services/program_service"
 import { DrugOrderService } from "@/services/drug_order_service"
 import HisDate from "@/utils/Date";
 import { getFrequencyLabelOrCheckCode } from "@/services/drug_prescription_service"
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 
 export class Treatment {
     async onSubmitNotes(patientID: any, providerID: any, treatmentNotesData: any) {
@@ -20,9 +21,14 @@ export class Treatment {
     }
 
     async onSubmitAllergies(patientID: any, providerID: any, allergiesDataObs: any) {
-        const drug_allergy_service = new DrugAllergyService(patientID, providerID)
-        await drug_allergy_service.createEncounter()
-        await drug_allergy_service.saveObservationList(allergiesDataObs)
+        try {
+            const drug_allergy_service = new DrugAllergyService(patientID, providerID);
+            await drug_allergy_service.createEncounter();
+            await drug_allergy_service.saveObservationList(allergiesDataObs);
+            toastSuccess("Allergies saved successfully");
+        } catch (error) {
+            
+        }
     }
 }
 
