@@ -15,7 +15,6 @@ export class PatientOpdList extends Service {
   }
   static async getAllPatientsVisitsToday() {
     const response = await super.getJson('/visits');
-    console.log("API response from /visits:", response);
     return response;
   }
   static checkOutPatient(visitId: number, closedDateTime: string) {

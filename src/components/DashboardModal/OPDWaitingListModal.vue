@@ -42,7 +42,7 @@
             <div class="table-container">
               <!-- Table Header -->
               <ion-grid>
-                <ion-row class="table-header">
+                <ion-row style="font-weight: bold " class="table-header">
                   <ion-col>Patient Name</ion-col>
                   <ion-col>Waiting Time</ion-col>
                   <ion-col>Actions</ion-col>
@@ -272,11 +272,6 @@ export default defineComponent({
     dismiss() {
       modalController.dismiss();
     },
-    // async navigateToPage(){
-    //   const patient = await PatientService.findByID(id);
-    //   this.setDemographics(patient);
-    // },
-
     async navigateTo(id: any, route:string) {
       const patient = await PatientService.findByID(id);
       this.setDemographics(patient);
@@ -424,7 +419,7 @@ ion-header {
 }
 
 .table-header {
-  font-weight: bold;
+ font-weight: bold;
   background-color: #f0f0f0;
 }
 

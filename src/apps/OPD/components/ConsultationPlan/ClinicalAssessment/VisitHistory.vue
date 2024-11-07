@@ -1,35 +1,15 @@
 <template>
     <div class="visitContent">
         <ion-row>
-            <ion-col size="3">
-              <div>
-                <DynamicButton
-                    class=""
-                    style="margin-bottom: 5px; width: 96%; height: 45px"
-                    @click="loadSavedEncounters(todayVisit)"
-                    :name="covertDate(todayVisit)"
-                    :color="visitDate === todayVisit ? 'success' : ''"
-                />
-              </div>
-
-            </ion-col>
-            <ion-col offset="0.1" size="8">
+            <ion-col offset="0.1" size="10">
               <div class="visitData">
                 <!-- Level of consciousness section -->
                 <div v-if="Object.values(vitals).every((value) => value !== '')">
                   <div style="max-width: 300px">
                     <div class="heading">1. Level of consciousness presented</div>
-<!--                    <ion-row>-->
-<!--                      <ion-col class="contentTitle">Systolic pressure</ion-col>-->
-<!--                      <ion-col class="contentTitle">Diastolic pressure</ion-col>-->
-<!--                    </ion-row>-->
-<!--                    <ion-row>-->
-<!--                      <ion-col>{{ vitals.systolic }} mmHg</ion-col>-->
-<!--                      <ion-col>{{ vitals.diastolic }} mmHg</ion-col>-->
-<!--                    </ion-row>-->
                   </div>
                 </div>
-                <div class="noData" v-else>No level of consciousness was recorded</div>
+                <div class="noData" v-else>1. No level of consciousness were recorded</div>
 
                 <!-- Presenting Complaints Section -->
                 <div v-if="uniquePresentingComplaints?.length > 0">
@@ -60,7 +40,7 @@
 
                 <!-- Allergies Section -->
                 <div v-if="selectedAllergiesList2?.length > 0">
-                  <div class="heading">5. Allergies</div>
+                  <div class="heading">5. Allergies recorded</div>
                   <ion-item lines="none" class="medicalAl">
                     <ion-row>
                       <div v-for="(item, index) in selectedAllergiesList2" :key="index">
@@ -105,7 +85,6 @@ import { icons } from "@/utils/svg";
 import UpcomingFeature from "@/components/UpcomingFeature.vue";
 import InvestigationsModal from "@/components/ProfileModal/InvestigationsModal.vue";
 import { createModal } from "@/utils/Alerts";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { mapState } from "pinia";
 import { PatientService } from "@/services/patient_service";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -173,15 +152,12 @@ export default defineComponent({
             deep: true,
         },
     },
+
     async mounted() {
         await this.updateData();
     },
     computed: {
-        ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
-        inputFields() {
-            return this.investigations[0].selectedData;
-        },
       todayVisit() {
         const todayDate = HisDate.toStandardHisFormat(new Date());
         return this.visits.find((date:any) => date === todayDate) || null;
@@ -377,7 +353,6 @@ ion-button.medicalAlBtn {
     border-style: dashed;
     border-radius: 5px;
     padding: 10px;
-    text-align: center;
     margin-bottom: 10px;
     margin-top: 30px;
 }
