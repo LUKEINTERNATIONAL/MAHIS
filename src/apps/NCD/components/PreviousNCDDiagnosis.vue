@@ -57,12 +57,26 @@ export default defineComponent({
     const initC = async () => {
       try {
         diagnoses.value = await getNCDDiagnosis();
-        await fetchMedications();
+
+        const hasHypertension = diagnoses.value.some((diagnosis: any) =>
+          diagnosis.toLowerCase().includes("hypertension")
+        );
+
+        const hasDiabetes = diagnoses.value.some((diagnosis: any) =>
+          diagnosis.toLowerCase().includes("diabetes")
+        );
+
+        if (hasHypertension) {
+          getAntiHypertensivesMedication();
+        }
+        if (hasDiabetes) {
+          getDiabetesDrugs();
+        }
       } catch (error) {
-        
+
       }
     }
-
+    
     const fetchMedications = async () => {
       const hasHypertension = selectedDiagnoses.value.some((diagnosis: any) =>
         diagnosis.toLowerCase().includes("hypertension")
@@ -88,7 +102,8 @@ export default defineComponent({
         fetchMedications();
       } else {
         selectedDiagnoses.value.splice(index, 1);
-        fetchMedications();
+        clearMedicationData()
+        initC()
       }
     }
 
