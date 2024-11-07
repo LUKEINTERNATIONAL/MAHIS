@@ -76,7 +76,6 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      // Set the initial state to 'medications' to ensure it is selected by default
       setBottomSummarySegmentContent('medications');
     });
 

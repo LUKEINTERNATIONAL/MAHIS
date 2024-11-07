@@ -39,22 +39,14 @@ export default defineComponent({
 
 <script setup lang="ts">
 import {
-    IonItem,
-    IonList,
     IonLabel,
-    IonAccordion,
-    IonAccordionGroup,
-    AccordionGroupCustomEvent,
     IonSegment,
     IonSegmentButton,
 } from "@ionic/vue";
 
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
+import { ref, onMounted } from "vue";
 import NCDMedication from "./NCDMedication.vue"
 import NonPharmalogicalTherapyAndOtherNotes from "./NonPharmalogicalTherapyAndOtherNotes.vue"
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-import { PreviousTreatment } from "@/apps/NCD/services/treatment";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue"
 import PreviousAllergies from './PreviousAllergies.vue'
@@ -65,19 +57,9 @@ const segments = ref([
     'other_notes',
 ]) as any
 const segmentContent = ref(segments.value[0])
-const store2 = useAllegyStore();
-
-const PreviuosSelectedMedicalDrugsList = ref();
-const FirstPreviousAllegies = ref();
-const RestOfPreviousAllegies = ref();
 
 onMounted(async () => {
-    const previousTreatment = new PreviousTreatment();
-    const { previousDrugPrescriptions, previousDrugAllergies } = await previousTreatment.getPatientEncounters();
-    PreviuosSelectedMedicalDrugsList.value = previousDrugPrescriptions;
-    FirstPreviousAllegies.value = Object.entries(previousDrugAllergies)[0];
-    const [, ...restEntriesAllegies] = Object.entries(previousDrugAllergies);
-    RestOfPreviousAllegies.value = restEntriesAllegies;
+
 });
 
 function setSegmentContent(name: any) {
