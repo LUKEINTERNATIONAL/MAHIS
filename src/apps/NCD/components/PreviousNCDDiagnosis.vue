@@ -1,5 +1,5 @@
 <template>
-  <div class="diagnosis-container"  v-if="diagnoses.length > 0">
+  <div class="diagnosis-container" v-if="diagnoses.length > 0">
     <div class="heading">
       <ion-icon :icon="medkitOutline" class="diagnosis-icon"></ion-icon>
       <h2>Diagnosis</h2>
@@ -8,9 +8,10 @@
       <ion-col>
         <div class="diagnosis-list">
           <ion-chip 
-            v-for="diagnosis in diagnoses" 
-            :key="diagnosis"
-            class="diagnosis-chip"
+            v-for="(diagnosis, index) in diagnoses" 
+            :key="index"
+            :class="{ 'diagnosis-chip-selected': selectedDiagnoses.includes(diagnosis) }"
+            @click="toggleDiagnosisSelection(diagnosis)"
           >
             <ion-label>{{ diagnosis }}</ion-label>
           </ion-chip>
@@ -25,10 +26,10 @@ import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, Io
 import { defineComponent, ref, watch, computed } from "vue";
 import { medkitOutline } from 'ionicons/icons';
 import { getNCDDiagnosis } from "@/apps/NCD/services/treatment";
+import { getDiabetesDrugs, getAntiHypertensivesMedication, clearMedicationData } from "@/stores/NCDMedicationStore";
 import SetUser from "@/views/Mixin/SetUser.vue";
 import { mapState } from "pinia";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { getDiabetesDrugs, getAntiHypertensivesMedication, clearMedicationData } from "@/stores/NCDMedicationStore";
 
 export default defineComponent({
   name: "Home",
@@ -50,35 +51,53 @@ export default defineComponent({
     ...mapState(useDemographicsStore, ["demographics"])
   },
   data() {
-    const diagnoses = ref([] as any)
+    const diagnoses = ref([] as any);
+    const selectedDiagnoses = ref([] as any);
 
     const initC = async () => {
       try {
         diagnoses.value = await getNCDDiagnosis();
-
-        const hasHypertension = diagnoses.value.some((diagnosis: any) =>
-          diagnosis.toLowerCase().includes("hypertension")
-        );
-
-        const hasDiabetes = diagnoses.value.some((diagnosis: any) =>
-          diagnosis.toLowerCase().includes("diabetes")
-        );
-
-        if (hasHypertension) {
-          getAntiHypertensivesMedication();
-        }
-        if (hasDiabetes) {
-          getDiabetesDrugs();
-        }
+        await fetchMedications();
       } catch (error) {
         
       }
     }
 
+    const fetchMedications = async () => {
+      const hasHypertension = selectedDiagnoses.value.some((diagnosis: any) =>
+        diagnosis.toLowerCase().includes("hypertension")
+      );
+
+      const hasDiabetes = selectedDiagnoses.value.some((diagnosis: any) =>
+        diagnosis.toLowerCase().includes("diabetes")
+      );
+
+      if (hasHypertension) {
+        await getAntiHypertensivesMedication();
+      }
+      if (hasDiabetes) {
+        await getDiabetesDrugs();
+      }
+    }
+
+    const toggleDiagnosisSelection = (diagnosis: string) => {
+      const index = selectedDiagnoses.value.indexOf(diagnosis);
+      if (index === -1) {
+        selectedDiagnoses.value.push(diagnosis);
+        clearMedicationData()
+        fetchMedications();
+      } else {
+        selectedDiagnoses.value.splice(index, 1);
+        fetchMedications();
+      }
+    }
+
     return {
       diagnoses,
+      selectedDiagnoses,
       medkitOutline,
-      initC
+      initC,
+      toggleDiagnosisSelection
     };
   },
   async mounted() {
@@ -129,5 +148,10 @@ export default defineComponent({
 
 .diagnosis-chip {
   white-space: nowrap;
+}
+
+.diagnosis-chip-selected {
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
 }
 </style>
