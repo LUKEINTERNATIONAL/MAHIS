@@ -103,7 +103,7 @@ i {
         margin-left: 0px !important;
     }
     .large-modal {
-        --width: 60vw !important;
+        --width: 98%;
     }
 }
 @media (max-width: 991px) {
@@ -134,7 +134,7 @@ i {
         display: inline;
     }
     .large-modal {
-        --width: 80vw !important;
+        --width: 98%
     }
     ion-popover[mobilePopover] {
         --offset-x: 47%;

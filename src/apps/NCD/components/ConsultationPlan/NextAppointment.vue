@@ -184,7 +184,7 @@ export default defineComponent({
             await this.handleDateUpdate(date)
         }
       };
-      const dataToPass = { message: 'Are you sure you want add this Appointment?',}
+      const dataToPass = { message: 'Are you sure you want to add this Appointment?',}
       createModal(confirmModal, { class: "otherVitalsModal" }, true, dataToPass, { 'cancel': handleCancel, 'confirm':  handleConfirm});
   },
   },

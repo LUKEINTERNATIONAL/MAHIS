@@ -127,7 +127,7 @@ export default defineComponent({
                 ],
             } as any,
 
-            header: ["Lab Test", "Specimen", "Accession Number", "Date", "Result", "Action"],
+            header: ["Lab Test", "Specimen", "Accession Number", "Order Date", "Result", "Action"],
             iconsContent: icons,
             valueNumericArray: [] as any,
             obsDatetime: [] as any,

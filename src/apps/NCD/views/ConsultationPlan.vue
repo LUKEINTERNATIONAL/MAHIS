@@ -3,13 +3,6 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <!-- <Stepper
-                stepperTitle="The consultation plan"
-                :wizardData="wizardData"
-                @updateStatus="markWizard"
-                @finishBtn="saveData()"
-                :StepperData="StepperData"
-            /> -->
             <div style="width: 85vw; margin: 0 auto; margin-top: 30px">
                 <Wizard
                     vertical-tabs
@@ -48,7 +41,6 @@
                 </Wizard>
             </div>
         </ion-content>
-        <!-- <BasicFooter @finishBtn="saveData()" /> -->
     </ion-page>
 </template>
 
@@ -81,7 +73,7 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/stores/VitalsStore";
+import { useVitalsStore } from "@/apps/NCD/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
@@ -115,9 +107,16 @@ import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigation
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
+import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
-import VitalSigns from "@/components/VitalSigns.vue";
+import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
+import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
+import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service";
+import { validateInputFiledData } from "@/services/group_validation";
+import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
+import { ObservationService } from "@/services/observation_service";
+import { OrderService } from "@/services/order_service";
+import { ConceptService } from "@/services/concept_service";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -126,6 +125,7 @@ import {
     modifyFieldValue,
     modifyCheckboxValue,
 } from "@/services/data_helpers";
+import { useComplicationsStore } from "@/stores/ComplicationsStore";
 export default defineComponent({
     mixins: [ScreenSizeMixin, FormWizard],
     name: "Home",
@@ -211,38 +211,45 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["NCDActivities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useEnrollementStore, ["substance"]),
+        ...mapState(useComplicationsStore, ["FootScreening", "visualScreening", "cvScreening"]),
     },
     created() {
         this.getData();
     },
-    mounted() {
+    async mounted() {
         if (this.NCDActivities.length == 0) {
             this.$router.push("patientProfile");
         }
-        this.markWizard();
+        await this.markWizard();
     },
     watch: {
         vitals: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
             deep: true,
         },
         investigations: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
             deep: true,
         },
         diagnosis: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
+            },
+            deep: true,
+        },
+        substance: {
+            async handler() {
+                await this.markWizard();
             },
             deep: true,
         },
         selectedMedicalDrugsList: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
         },
     },
@@ -276,20 +283,30 @@ export default defineComponent({
                 });
             }
         },
-        markWizard() {
-            if (this.vitals.validationStatus) {
+        async markWizard() {
+            if (await validateInputFiledData(this.vitals)) {
                 this.tabs[0].icon = "check";
             } else {
                 this.tabs[0].icon = "";
             }
+            const data: any = await formatRadioButtonData(this.substance);
+            if (data.length > 0) {
+                this.tabs[1].icon = "check";
+            } else {
+                this.tabs[1].icon = "";
+            }
 
-            if (this.investigations[0].selectedData.length > 0) {
+            const labOrders = await OrderService.getOrders(this.demographics.patient_id);
+            const filteredArray = await labOrders.filter((obj: any) => {
+                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+            });
+            if (filteredArray.length > 0) {
                 this.tabs[2].icon = "check";
             } else {
                 this.tabs[2].icon = "";
             }
-
-            if (this.diagnosis[0].selectedData.length > 0) {
+            const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, "Primary diagnosis");
+            if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                 this.tabs[3].icon = "check";
             } else {
                 this.tabs[3].icon = "";
@@ -308,19 +325,41 @@ export default defineComponent({
             });
         },
         async saveData() {
-            await this.saveVitals();
-            await this.saveDiagnosis();
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
-            await resetNCDPatientData();
-            await UserService.setProgramUserActions();
-            this.$router.push("patientProfile");
+            if (await this.saveVitals()) {
+                await this.saveDiagnosis();
+                await this.saveTreatmentPlan();
+                await this.saveOutComeStatus();
+                await this.saveSubstanceAbuse();
+                await this.saveComplications();
+                await resetNCDPatientData();
+                await UserService.setProgramUserActions();
+                this.$router.push("patientProfile");
+            }
+        },
+        async saveComplications() {
+            await this.saveVisualScreening();
+        },
+        async saveVisualScreening() {
+            const childData = await formatInputFiledData(this.visualScreening);
+            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
+                {
+                    concept_id: await ConceptService.getConceptID("Visual acuity", true),
+                    value_text: "visual acuity test",
+                    obs_datetime: ConceptService.getSessionDate(),
+                    child: childData,
+                },
+            ]);
         },
         async saveVitals() {
-            if (this.vitals.validationStatus) {
+            if (await validateInputFiledData(this.vitals)) {
                 const userID: any = Service.getUserID();
                 const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
                 vitalsInstance.onFinish(this.vitals);
+                toastSuccess("Vitals saved successfully");
+                return true;
+            } else {
+                toastWarning("Fail to save vitals");
+                return false;
             }
         },
         async saveDiagnosis() {
@@ -331,21 +370,18 @@ export default defineComponent({
             }
         },
         async saveSubstanceAbuse() {
-            const data: any = await formatRadioButtonData(this.substance);
-            if (data.length > 0) {
-                const userID: any = Service.getUserID();
-                const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
-            }
+            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(this.substance));
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
             const patientID = this.demographics.patient_id;
             const treatmentInstance = new Treatment();
 
-            if (!isEmpty(this.selectedMedicalAllergiesList)) {
+            const allergyStore = useAllegyStore();
+            if (!isEmpty(allergyStore.selectedMedicalAllergiesList)) {
                 const allergies = this.mapToAllergies();
-                treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+                await treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+                allergyStore.clearSelectedMedicalAllergiesList();
             }
 
             if (!isEmpty(this.nonPharmalogicalTherapyAndOtherNotes)) {
@@ -359,15 +395,7 @@ export default defineComponent({
                 treatmentInstance.onSubmitNotes(patientID, userID, treatmentNotesTxt);
             }
 
-            if (!isEmpty(this.selectedMedicalDrugsList)) {
-                const drugOrders = this.mapToOrders();
-                const prescriptionService = new DrugPrescriptionService(patientID, userID);
-                const encounter = await prescriptionService.createEncounter();
-                if (!encounter) return toastWarning("Unable to create treatment encounter");
-                const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
-                if (!drugOrder) return toastWarning("Unable to create drug orders!");
-                toastSuccess("Drug order has been created");
-            }
+            await createNCDDrugOrder();
         },
 
         async saveOutComeStatus() {
@@ -411,29 +439,14 @@ export default defineComponent({
         openModal() {
             createModal(SaveProgressModal);
         },
-        mapToOrders(): any[] {
-            return this.selectedMedicalDrugsList.map((drug: any) => {
-                const startDate = DrugPrescriptionService.getSessionDate();
-                const frequency = DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) || ({} as (typeof DRUG_FREQUENCIES)[0]);
-                return {
-                    drug_inventory_id: drug.drug_id,
-                    equivalent_daily_dose: drug.dose == "Unknown" ? 0 : drug.dose * frequency?.value || 0,
-                    start_date: startDate,
-                    auto_expire_date: this.calculateExpireDate(startDate, drug.duration),
-                    units: drug.units,
-                    instructions: `${drug.drugName}: ${drug.dose} ${drug.units} ${frequency?.code || ""} for ${drug.duration} days`,
-                    dose: drug.dose,
-                    frequency: frequency?.code || "",
-                };
-            });
-        },
         calculateExpireDate(startDate: string | Date, duration: any) {
             const date = new Date(startDate);
             date.setDate(date.getDate() + parseInt(duration));
             return HisDate.toStandardHisFormat(date);
         },
         mapToAllergies(): any[] {
-            return this.selectedMedicalAllergiesList.map((allergy: any) => {
+            const allergyStore = useAllegyStore();
+            return allergyStore.selectedMedicalAllergiesList.map((allergy: any) => {
                 return {
                     concept_id: 985,
                     obs_datetime: Service.getSessionDate(),

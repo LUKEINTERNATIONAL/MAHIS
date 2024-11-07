@@ -8,7 +8,6 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         selectedMedicalAllergiesList: [] as any,
         nonPharmalogicalTherapyAndOtherNotes: '' as string,
         partialOPDdrugList: [] as any,
-        selectedNCDMedicationList: [] as any,
     }),
     actions:{
         setSelectedMedicalDrugsList(data: any) {
@@ -40,12 +39,6 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         getPartialOPDdrugList(): any {
             return this.partialOPDdrugList;
         },
-        setSelectedNCDMedicationList(drug_item: any): void {
-            this.selectedNCDMedicationList.push(drug_item);
-        },
-        getSelectedNCDMedicationList() {
-            return this.selectedNCDMedicationList;
-        }
     },
     persist:true,
 })

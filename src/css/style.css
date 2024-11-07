@@ -313,7 +313,7 @@ ion-modal > .ion-page {
     --overflow: auto;
 }
 .large-modal {
-    --width: 90%;
+    --width: 98%;
     --height: 90%;
     --border-radius: 8px;
     --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -324,14 +324,14 @@ ion-modal > .ion-page {
 }
 @media (min-width: 768px) {
     .large-modal {
-        --width: 90%;
+        --width: 98%;
         --height: 90%;
     }
 }
 
 @media (min-width: 1024px) {
     .large-modal {
-        --width: 90%;
+        --width: 98%;
         --height: 90%;
     }
 }
