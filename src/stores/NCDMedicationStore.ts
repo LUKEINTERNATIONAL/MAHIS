@@ -180,3 +180,20 @@ export function clearMedicationData() {
     const NCDMedicationsStore = useNCDMedicationsStore();
     NCDMedicationsStore.clearMedicationDataStores();
 }
+
+export function MedicationSelectionHasValues(): boolean {
+    const NCDMedicationsStore = useNCDMedicationsStore();
+
+    return NCDMedicationsStore.selectedNCDMedicationList.some((med: any) => {
+        const { morning, afternoon, evening } = med.dosage;
+        const morningNum = typeof morning === "string" ? Number(morning) : morning;
+        const afternoonNum = typeof afternoon === "string" ? Number(afternoon) : afternoon;
+        const eveningNum = typeof evening === "string" ? Number(evening) : evening;
+
+        return (
+            (typeof morningNum === "number" && morningNum > 0) ||
+            (typeof afternoonNum === "number" && afternoonNum > 0) ||
+            (typeof eveningNum === "number" && eveningNum > 0)
+        );
+    });
+}

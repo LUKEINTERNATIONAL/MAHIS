@@ -85,7 +85,7 @@ import { Service } from "@/services/service";
 import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useNCDMedicationsStore } from "@/stores/NCDMedicationStore";
+import { useNCDMedicationsStore, MedicationSelectionHasValues } from "@/stores/NCDMedicationStore";
 import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
@@ -209,7 +209,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-         ...mapState(useNCDMedicationsStore, ["selectedNCDMedicationList"]),
+        ...mapState(useNCDMedicationsStore, ["selectedNCDMedicationList"]),
         ...mapState(useGeneralStore, ["NCDActivities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useEnrollementStore, ["substance"]),
@@ -316,7 +316,12 @@ export default defineComponent({
             }
 
             if (this.selectedNCDMedicationList.length > 0) {
-                this.tabs[5].icon = "check";
+                console.log(MedicationSelectionHasValues())
+                if (MedicationSelectionHasValues() == true) {
+                    this.tabs[5].icon = "check";
+                } else {
+                    this.tabs[5].icon = "";
+                }
             } else {
                 this.tabs[5].icon = "";
             }
