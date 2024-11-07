@@ -100,8 +100,15 @@ export default defineComponent({
         selectedDiagnoses.value.push(diagnosis);
         clearMedicationData()
         fetchMedications();
-      } else {
+      }
+      else {
         selectedDiagnoses.value.splice(index, 1);
+        clearMedicationData()
+        fetchMedications();
+      }
+
+      const selectedDiagnosesCount = selectedDiagnoses.value.length as number;
+      if (selectedDiagnosesCount === 0) {
         clearMedicationData()
         initC()
       }
