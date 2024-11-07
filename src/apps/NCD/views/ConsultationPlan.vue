@@ -283,7 +283,7 @@ export default defineComponent({
             }
         },
         async markWizard() {
-            if (await validateInputFiledData(this.vitals)) {
+            if (await validateInputFiledData(this.vitals, false)) {
                 this.tabs[0].icon = "check";
             } else {
                 this.tabs[0].icon = "";
