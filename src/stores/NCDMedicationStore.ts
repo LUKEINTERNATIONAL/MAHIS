@@ -54,16 +54,22 @@ export const useOtherNCDMedicationStore = defineStore("OtherNCDMedicationsStore"
 export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
     state: () => ({
         medications: [] as any,
+        filteredMedications: [] as any,
         selectedNCDMedicationList: [] as any,
         frequency_selections: ref<{ [key: string]: any }>({}),
     }),
     actions: {
         setMedications(data: any) {
             this.medications = data;
+            this.filteredMedications  = data;
+        },
+        setFilteredMedications(data: any) {
+            this.filteredMedications = data;
         },
         initMedications() {
 
         },
+
         setSelectedNCDMedicationList(drug_item: any): void {
             this.selectedNCDMedicationList.push(drug_item);
         },
@@ -72,6 +78,7 @@ export const useNCDMedicationsStore = defineStore("NCDmedicationsStore", {
         },
         clearMedicationDataStores() {
             this.medications = [];
+            this.filteredMedications = [];
             this.selectedNCDMedicationList = [];
             this.frequency_selections = [];
         }
@@ -95,6 +102,8 @@ export function addOtherMedicationToNCDMedicationList() {
             ...OtherNCDMedicationStore.selectedOtherNCDMedicationList,
             ...NCDMedicationsStore.selectedNCDMedicationList,
         ];
+
+        NCDMedicationsStore.filteredMedications = NCDMedicationsStore.medications;
         toastSuccess("Medication added successfully");
     } catch (error) {
         
@@ -147,7 +156,8 @@ export async function fetchAndStoreMedications(medicationType: any) {
         console.error(`Error fetching drug ID ${medicationId}:`, error);
         }
     });
-    
+
+    NCDMedicationsStore.filteredMedications = NCDMedicationsStore.medications;
     return Promise.all(promises);
 }
 

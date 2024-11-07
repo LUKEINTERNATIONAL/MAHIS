@@ -4,7 +4,7 @@
       <PreviousNCDDiagnosis v-if="useDefaultStores"/>
     </ion-col>
     <ion-col>
-      <MedicationSearchInput v-if="useDefaultStores" style="margin-top: 50px;"/>
+      <MedicationSearchInput v-if="useDefaultStores && medications.length > 0" style="margin-top: 50px;"/>
     </ion-col>
   </ion-row>
   
@@ -113,12 +113,12 @@ export default defineComponent({
       MedicationSearchInput
     },
     computed: {
-      ...mapState(useNCDMedicationsStore, ["medications"]),
+      ...mapState(useNCDMedicationsStore, ["medications", "filteredMedications"]),
       ...mapState(useOtherNCDMedicationStore, ["otherNCDMedications"]),
 
       activeMedications() {
         return this.useDefaultStores 
-          ? this.medications 
+          ? this.filteredMedications 
           : this.otherNCDMedications
       }
     },
