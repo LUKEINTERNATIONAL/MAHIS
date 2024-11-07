@@ -1,38 +1,39 @@
 <template>
   <div class="bottom-summary">
-    <ion-segment value="medications" class="ion-no-padding">
+    <div class="ion-segment ion-no-padding">
       <ion-segment-button
         @click="setBottomSummarySegmentContent('medications')"
         class="ion-no-padding"
+        :class="{ 'segment-button-checked': bottomSummarySegmentContent === 'medications' }"
       >
         <ion-icon :icon="medkit"></ion-icon>
         <ion-label>Medications</ion-label>
       </ion-segment-button>
-
       <ion-segment-button
         @click="setBottomSummarySegmentContent('investigations')"
         class="ion-no-padding"
+        :class="{ 'segment-button-checked': bottomSummarySegmentContent === 'investigations' }"
       >
         <ion-icon :icon="flask"></ion-icon>
         <ion-label>Investigations</ion-label>
       </ion-segment-button>
-
       <ion-segment-button
         @click="setBottomSummarySegmentContent('immunizations')"
         class="ion-no-padding"
+        :class="{ 'segment-button-checked': bottomSummarySegmentContent === 'immunizations' }"
       >
         <ion-icon :icon="shield"></ion-icon>
         <ion-label>Immunizations</ion-label>
       </ion-segment-button>
-
       <ion-segment-button
         @click="setBottomSummarySegmentContent('notes')"
         class="ion-no-padding"
+        :class="{ 'segment-button-checked': bottomSummarySegmentContent === 'notes' }"
       >
         <ion-icon :icon="document"></ion-icon>
         <ion-label>Notes</ion-label>
       </ion-segment-button>
-    </ion-segment>
+    </div>
 
     <div class="bottom-summary-content">
       <div v-if="bottomSummarySegmentContent === 'medications'">
@@ -52,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import {
   medkit,
   flask,
@@ -67,11 +68,17 @@ export default defineComponent({
     MedicationsGrid,
     NotesGrid,
   },
-  data() {
-    const bottomSummarySegmentContent = ref('medications')
+  setup() {
+    const bottomSummarySegmentContent = ref('medications');
+
     const setBottomSummarySegmentContent = (name: string) => {
       bottomSummarySegmentContent.value = name;
     };
+
+    onMounted(() => {
+      // Set the initial state to 'medications' to ensure it is selected by default
+      setBottomSummarySegmentContent('medications');
+    });
 
     return {
       bottomSummarySegmentContent,
@@ -88,25 +95,11 @@ export default defineComponent({
 <style scoped>
 .bottom-summary {
   border-top: 1px solid #e0e0e0;
-  padding: 16px;
 }
 
-.bottom-summary-content {
-  margin-top: 16px;
-}
-
-.ion-segment-button {
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --border-radius: 0;
-  --border-width: 0;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.ion-icon {
-  font-size: 20px;
-  margin-right: 8px;
+.ion-segment {
+  display: flex;
+  justify-content: space-between;
 }
 
 .segment-button-checked {
@@ -114,9 +107,10 @@ export default defineComponent({
 }
 
 ion-segment-button {
-    background: #fff;
-    margin-right: 1px;
-    font-size: 12px;
-    text-transform: unset;
+  background: #fff;
+  margin-right: 1px;
+  font-size: 12px;
+  text-transform: unset;
+  flex: 1;
 }
 </style>

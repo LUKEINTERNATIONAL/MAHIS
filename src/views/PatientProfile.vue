@@ -193,7 +193,7 @@
                   <PreviousVitals />
                 </div>
               </div>
-              <bottomSummary/>
+              <bottomSummary style="margin-top: 10px"/>
             </div>
             <div v-if="segmentContent == 'Visits History'">
               <VisitsHistory />
