@@ -85,6 +85,7 @@ import { Service } from "@/services/service";
 import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { useNCDMedicationsStore, MedicationSelectionHasValues } from "@/stores/NCDMedicationStore";
 import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
@@ -207,7 +208,8 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useTreatmentPlanStore, ["nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useNCDMedicationsStore, ["selectedNCDMedicationList"]),
         ...mapState(useGeneralStore, ["NCDActivities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useEnrollementStore, ["substance"]),
@@ -247,10 +249,11 @@ export default defineComponent({
             },
             deep: true,
         },
-        selectedMedicalDrugsList: {
+        selectedNCDMedicationList: {
             async handler() {
                 await this.markWizard();
             },
+            deep: true,
         },
     },
     setup() {
@@ -312,8 +315,13 @@ export default defineComponent({
                 this.tabs[3].icon = "";
             }
 
-            if (this.selectedMedicalDrugsList.length > 0) {
-                this.tabs[5].icon = "check";
+            if (this.selectedNCDMedicationList.length > 0) {
+                console.log(MedicationSelectionHasValues())
+                if (MedicationSelectionHasValues() == true) {
+                    this.tabs[5].icon = "check";
+                } else {
+                    this.tabs[5].icon = "";
+                }
             } else {
                 this.tabs[5].icon = "";
             }
