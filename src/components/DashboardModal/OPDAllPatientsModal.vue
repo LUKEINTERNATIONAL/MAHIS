@@ -27,7 +27,7 @@
               <ion-grid>
                 <ion-row class="table-header">
                   <ion-col>Patient Name</ion-col>
-                  <ion-col>Total time spent</ion-col>
+                  <ion-col>Service Time</ion-col>
                   <ion-col>Actions</ion-col>
                 </ion-row>
 
@@ -38,7 +38,7 @@
                     class="table-row"
                 >
                   <ion-col>{{ patient.fullName }}</ion-col>
-                  <ion-col>{{ waitingTime(patient.arrivalTime) }}</ion-col>
+                  <ion-col>{{ formatArrivalTime (patient.arrivalTime) }}</ion-col>
                   <ion-col>
                     <ion-button
                         size="small"
@@ -225,6 +225,10 @@ export default defineComponent({
     },
     waitingTime(timeStamp: any) {
       return dates.calculateTimeDifference(timeStamp);
+    },
+    formatArrivalTime(dateTime: string) {
+      const date = new Date(dateTime);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     },
   },
 });

@@ -40,9 +40,7 @@ export class PatientOpdList extends Service {
 
   static async getPatientList(stage: "VITALS" | "CONSULTATION" | "LAB" | "DISPENSATION", locationId: number) {
       const apiUrl = `/stages`;
-      console.log("Fetching from API:", apiUrl);
       const response = await super.getJson(apiUrl, {location_id:locationId,stage});
-      console.log("API response:", response);
       return response;
   }
 
