@@ -1,5 +1,5 @@
 <template>
-  <ion-card>
+
     <div class="ion-padding">
       <ion-item-divider>
         <ion-label class="h_dmt">Documented medications timeline</ion-label>
@@ -24,7 +24,6 @@
         </ion-item>
       </ion-list>
     </div>
-  </ion-card>
 </template>
 
 <script lang="ts">
