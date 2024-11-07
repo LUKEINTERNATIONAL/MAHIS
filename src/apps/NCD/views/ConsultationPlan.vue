@@ -107,7 +107,7 @@ import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigation
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
+import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
 import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service";
@@ -115,6 +115,7 @@ import { validateInputFiledData } from "@/services/group_validation";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { ObservationService } from "@/services/observation_service";
 import { OrderService } from "@/services/order_service";
+import { ConceptService } from "@/services/concept_service";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -123,6 +124,7 @@ import {
     modifyFieldValue,
     modifyCheckboxValue,
 } from "@/services/data_helpers";
+import { useComplicationsStore } from "@/stores/ComplicationsStore";
 export default defineComponent({
     mixins: [ScreenSizeMixin, FormWizard],
     name: "Home",
@@ -208,6 +210,7 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["NCDActivities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useEnrollementStore, ["substance"]),
+        ...mapState(useComplicationsStore, ["FootScreening", "visualScreening", "cvScreening"]),
     },
     created() {
         this.getData();
@@ -326,10 +329,25 @@ export default defineComponent({
                 await this.saveTreatmentPlan();
                 await this.saveOutComeStatus();
                 await this.saveSubstanceAbuse();
+                await this.saveComplications();
                 await resetNCDPatientData();
                 await UserService.setProgramUserActions();
                 this.$router.push("patientProfile");
             }
+        },
+        async saveComplications() {
+            await this.saveVisualScreening();
+        },
+        async saveVisualScreening() {
+            const childData = await formatInputFiledData(this.visualScreening);
+            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
+                {
+                    concept_id: await ConceptService.getConceptID("Visual acuity", true),
+                    value_text: "visual acuity test",
+                    obs_datetime: ConceptService.getSessionDate(),
+                    child: childData,
+                },
+            ]);
         },
         async saveVitals() {
             if (await validateInputFiledData(this.vitals)) {
