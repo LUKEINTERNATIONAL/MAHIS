@@ -273,6 +273,7 @@ export default defineComponent({
                         .doc({ offlinePatientID: this.offlinePatientID })
                         .get()
                         .then(async (document: any) => {
+                            await workerData.terminate();
                             if (document.serverPatientID) {
                                 this.openNewPage(document.patientData);
                             } else {
@@ -282,6 +283,7 @@ export default defineComponent({
                 }
             },
             deep: true,
+            immediate: true,
         },
         personInformation: {
             handler() {
@@ -298,6 +300,7 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
+                this.workerApi = workerData.workerApi;
                 this.currentStep = "Personal Information";
                 // await await resetPatientData();
                 if (data.name == "registration") resetDemographics();
@@ -372,29 +375,31 @@ export default defineComponent({
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex < this.steps.length - 1) {
-                if(this.currentStep === "Personal Information"){
+                if (this.currentStep === "Personal Information") {
                     const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
-                    if ((await this.validations(this.personInformation, fields))){
+                    if (await this.validations(this.personInformation, fields)) {
                         this.currentStep = this.steps[currentIndex + 1];
-                    }else{
+                    } else {
                         toastWarning("Please fill fileds correctly before you proceed!");
                     }
-                } else if (this.currentStep === "Location"){
+                } else if (this.currentStep === "Location") {
                     const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
-                    if ((await this.validations(this.currentLocation, currentFields)) && 
-                        (await validateInputFiledData(this.homeLocation))){
+                    if (
+                        ((await this.validations(this.currentLocation, currentFields)) && (await validateInputFiledData(this.homeLocation))) ||
+                        this.regSelectedCountry != "Malawi"
+                    ) {
                         this.currentStep = this.steps[currentIndex + 1];
-                    }else{
+                    } else {
                         toastWarning("Please fill fileds correctly before you proceed!");
                     }
-                } else if(this.currentStep === "Social History"){
-                    if (this.checkUnderFive || this.checkUnderOne){
-                        if ((await validateInputFiledData(this.birthRegistration))){
+                } else if (this.currentStep === "Social History") {
+                    if (this.checkUnderFive || this.checkUnderOne) {
+                        if (await validateInputFiledData(this.birthRegistration)) {
                             this.currentStep = this.steps[currentIndex + 1];
                         } else {
                             toastWarning("Please fill fileds correctly before you proceed!");
                         }
-                    }else{
+                    } else {
                         this.currentStep = this.steps[currentIndex + 1];
                     }
                 }
