@@ -1,32 +1,30 @@
 <template>
-    <ion-card>
-        <div style="">
-            <div>
-                <div value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="previousLabel">Documented medications timeline</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                        <div class="ionLbltp" v-for="(item, index) in PreviuosSelectedMedicalDrugsList" :key="index">
-                            <div>
-                                <div>
-                                    <ion-label class="previousLabelDate">{{ item.prescriptionDate }}</ion-label>
-                                </div>
+  <ion-card>
+    <div class="ion-padding">
+      <ion-item-divider>
+        <ion-label class="h_dmt">Documented medications timeline</ion-label>
+        <ion-icon :icon="medkit" slot="start" class="ion-margin-end diagnosis-icon"></ion-icon>
+      </ion-item-divider>
 
-                                <div class="previousSecDrgs">
-                                    <dynamic-list
-                                        :_selectedMedicalDrugsList="item.previousPrescriptions"
-                                        :show_actions_buttons="false"
-                                        :key="componentKey"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <ion-list>
+        <ion-item v-for="(item, index) in PreviuosSelectedMedicalDrugsList" :key="index">
+          <ion-label class="ion-text-wrap">
+            <ion-card style="padding: 10px; margin: 5px;">
+            <div style="display: flex; align-items: center;">
+                <ion-icon :icon="calendarOutline" class="ion-margin-end"></ion-icon>
+                <h2>{{ item.prescriptionDate }}</h2>
             </div>
-        </div>
-    </ion-card>
+            <dynamic-list
+              :_selectedMedicalDrugsList="item.previousPrescriptions"
+              :show_actions_buttons="false"
+              :key="componentKey"
+            />
+            </ion-card>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ion-card>
 </template>
 
 <script lang="ts">
@@ -38,6 +36,7 @@ import DynamicList from "@/components/DynamicList.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
 import { useNCDMedicationsStore } from "@/stores/NCDMedicationStore";
+import { calendarOutline, medkit } from 'ionicons/icons';
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
@@ -71,6 +70,8 @@ export default defineComponent({
             itemWasExpanded,
             PreviuosSelectedMedicalDrugsList,
             loadPreviousMedications,
+            calendarOutline,
+            medkit,
         };
     },
     computed: {
@@ -101,9 +102,20 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-    .previousView {
-        width: 100%;
-        border-radius: 10px;
-        margin-top: 10px;
-    }
+.ion-text-wrap {
+    white-space: normal;
+}
+
+.ion-margin-end {
+    margin-right: 8px;
+}
+
+.diagnosis-icon {
+    font-size: 1.4rem;
+    color: var(--ion-color-primary);
+}
+.h_dmt {
+    font-weight: 400;
+    font-size: 22px;
+}
 </style>
