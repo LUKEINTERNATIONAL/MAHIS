@@ -87,7 +87,6 @@ export default defineComponent({
 
 <style scoped>
 .bottom-summary {
-  background-color: #f5f5f5;
   border-top: 1px solid #e0e0e0;
   padding: 16px;
 }
@@ -108,6 +107,10 @@ export default defineComponent({
 .ion-icon {
   font-size: 20px;
   margin-right: 8px;
+}
+
+.segment-button-checked {
+  background: #ddeedd !important;
 }
 
 ion-segment-button {

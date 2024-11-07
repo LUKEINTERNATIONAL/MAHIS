@@ -65,18 +65,9 @@ const segments = ref([
     'other_notes',
 ]) as any
 const segmentContent = ref(segments.value[0])
-
-const store = useTreatmentPlanStore();
 const store2 = useAllegyStore();
-const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
 
-const values = ["first", "second", "third"];
 const PreviuosSelectedMedicalDrugsList = ref();
-const itemWasExpanded = ref(false);
-
-const itemAllegiesWasExpanded = ref(false);
-
-const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
 
@@ -91,61 +82,6 @@ onMounted(async () => {
 
 function setSegmentContent(name: any) {
     segmentContent.value = name;
-}
-
-
-function isPresentInAllergyList(obj: any) {
-    const filter_id_array: any[] = []
-    selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-        if (selectedMedicalAllergy.selected) {
-            filter_id_array.push(selectedMedicalAllergy.concept_id);
-        }
-    })
-    const filteredDrugs = hasMatchingIDs([obj] as any, filter_id_array as any)
-    if (filteredDrugs == true) {
-        toastWarning("Client is allergic to the selected medication", 4000)
-        return true;
-    } else {
-        return false
-    }
-}
-
-function isInsulinPresent(obj: any) {
-    const insulin_concept_ids = [
-        279,
-        282,
-    ]
-    const filteredDrugs = hasMatchingIDs([obj] as any, insulin_concept_ids as any)
-    if (filteredDrugs == true) {
-        return true
-    } else {
-        return false
-    }
-}
-
-function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
-    // Check if any item in mainArray has concept_id included in idsToFilter
-    return mainArray.some((item: any) => 
-        idsToFilter.includes(item.concept_id as never)
-    );
-}
-
-function accordionGroupChangeForAllergies(ev: AccordionGroupCustomEvent) {
-    const collapsedItems = values.filter((value) => value !== ev.detail.value);
-    const selectedValue = ev.detail.value;
-    if (selectedValue !== undefined) {
-        if (selectedValue == "fith") {
-            showMoreAllergyMsg.value = "Show less allegies";
-            itemAllegiesWasExpanded.value = !itemWasExpanded.value;
-        }
-    } else {
-        showMoreAllergyMsg.value = "Show more allegies";
-        itemAllegiesWasExpanded.value = !itemWasExpanded.value;
-    }
-}
-
-function removeOuterArray(arr: any) {
-    return arr[1];
 }
 </script>
 
