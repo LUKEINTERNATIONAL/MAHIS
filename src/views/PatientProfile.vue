@@ -193,25 +193,7 @@
                   <PreviousVitals />
                 </div>
               </div>
-              <div class="bottomSummary">
-                <ion-segment value="custom">
-                  <ion-segment-button value="custom">
-                    <ion-label>Medications</ion-label>
-                  </ion-segment-button>
-                  <ion-segment-button value="segment">
-                    <ion-label>Investigations</ion-label>
-                  </ion-segment-button>
-                  <ion-segment-button value="Visits History">
-                    <ion-label>Immunizations</ion-label>
-                  </ion-segment-button>
-                  <ion-segment-button value="Vitals & Measurements Summary">
-                    <ion-label>Notes</ion-label>
-                  </ion-segment-button>
-                </ion-segment>
-              </div>
-              <div class="bottomSummaryContent">
-                <MedicationsGrid />
-              </div>
+              <bottomSummary/>
             </div>
             <div v-if="segmentContent == 'Visits History'">
               <VisitsHistory />
@@ -306,7 +288,7 @@ import DemographicBar from "@/components/DemographicBar.vue";
 
 import DispositionGrid from "@/components/PatientProfileGrid/OutcomeGrid.vue";
 import InvestigationsGrid from "@/components/PatientProfileGrid/InvestigationsGrid.vue";
-import MedicationsGrid from "@/components/PatientProfileGrid/MedicationsGrid.vue";
+import bottomSummary from "./bottomSummary.vue";
 import VitalsGrid from "@/components/PatientProfileGrid/VitalsGrid.vue";
 import LabTestsHistory from "@/components/DashboardSegments/LabTestsHistory.vue";
 import DiagnosesHistory from "@/components/DashboardSegments/DiagnosesHistory.vue";
@@ -384,7 +366,6 @@ export default defineComponent({
     IonModal,
     DispositionGrid,
     InvestigationsGrid,
-    MedicationsGrid,
     VitalsGrid,
     IonRow,
     IonCol,
@@ -406,6 +387,7 @@ export default defineComponent({
     Programs,
     CheckInConfirmationModal,
     AncEnrollmentModal,
+    bottomSummary,
   },
   data() {
     return {
