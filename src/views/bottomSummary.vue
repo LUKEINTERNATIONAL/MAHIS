@@ -97,12 +97,6 @@ export default defineComponent({
 }
 
 .ion-segment-button {
-  --background: transparent;
-  --background-hover: transparent;
-  --background-focused: transparent;
-  --background-activated: transparent;
-  --color: #666;
-  --color-activated: #007aff;
   --padding-start: 16px;
   --padding-end: 16px;
   --border-radius: 0;
@@ -111,12 +105,15 @@ export default defineComponent({
   font-weight: 500;
 }
 
-.ion-segment-button.ion-activated {
-  --color: #007aff;
-}
-
 .ion-icon {
   font-size: 20px;
   margin-right: 8px;
+}
+
+ion-segment-button {
+    background: #fff;
+    margin-right: 1px;
+    font-size: 12px;
+    text-transform: unset;
 }
 </style>
