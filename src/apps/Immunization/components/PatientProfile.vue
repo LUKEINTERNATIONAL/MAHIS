@@ -437,12 +437,6 @@ export default defineComponent({
             } else {
                 this.selectedStatus = checkEnrollment.state;
             }
-            //  this.program = new PatientProgramService(this.demographics.patient_id);
-            // const checkEnrollment = await this.program.getProgramCurrentStates();
-            // console.log("🚀 ~ programEnrollment ~ checkEnrollment:", checkEnrollment);
-            // if (!checkEnrollment) {
-            //     await this.program.enrollProgram();
-            // }
         },
         async updateState(state: any) {
             this.selectedStatus = state;
