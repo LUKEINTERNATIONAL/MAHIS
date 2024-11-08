@@ -31,9 +31,17 @@
                                 MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span>
                             </div>
                         </div>
-                        <!-- <div class="demographicsOtherRow">
-                            <div class="demographicsText smallFont">Outcome: <span class="outcomeStatus"> Active</span></div>
-                        </div> -->
+                        <div class="demographicsOtherRow">
+                            <div class="demographicsText smallFont" v-if="selectedStatus == 7">
+                                Outcome: <span class="outcomeStatus"> Active</span>
+                            </div>
+                            <div class="demographicsText smallFont" v-if="selectedStatus == 6">
+                                Outcome: <span class="outcomeStatus" style="background: #fecdca; color: #b42318"> Inactive</span>
+                            </div>
+                            <div class="demographicsText smallFont" v-if="selectedStatus == 3">
+                                Outcome: <span class="outcomeStatus" style="background: #fecdca; color: #b42318"> Died</span>
+                            </div>
+                        </div>
                         <div class="demographicsOtherRow" style="margin-bottom: 10px">
                             <div class="demographicsText smallFont">
                                 Status:
@@ -158,21 +166,43 @@
             </div>
         </div>
     </div>
-    <ion-popover
-        style="--offset-x: -10px"
-        :is-open="popoverOpen"
-        :show-backdrop="false"
-        :dismiss-on-select="true"
-        :event="event"
-        @didDismiss="popoverOpen = false"
-    >
+    <ion-popover style="--offset-x: -10px" :is-open="popoverOpen" :show-backdrop="false" :event="event" @didDismiss="popoverOpen = false">
         <div>
-            <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
-                <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
-                <!-- <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>s -->
-                <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
-                <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
-            </ion-list>
+            <ion-accordion-group :multiple="true">
+                <ion-accordion value="first" toggle-icon="" @click="openPIM()">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Update demographics</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="second" toggle-icon="" @click="printVisitSummary()">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Print visit summary</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="third" toggle-icon="" @click="printID()">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Print client identifier</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="fourth">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Update outcome</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <ion-list>
+                            <ion-item>
+                                <ion-toggle :checked="selectedStatus == 7" value="active" @ionChange="updateState(7)"> Active </ion-toggle>
+                            </ion-item>
+                            <ion-item>
+                                <ion-toggle :checked="selectedStatus == 6" value="inactive" @ionChange="updateState(6)"> Inactive </ion-toggle>
+                            </ion-item>
+                            <ion-item>
+                                <ion-toggle :checked="selectedStatus == 3" value="died" @ionChange="updateState(3)"> Died </ion-toggle>
+                            </ion-item>
+                        </ion-list>
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
         </div>
     </ion-popover>
 </template>
@@ -258,6 +288,8 @@ import {
 } from "@/services/data_helpers";
 import PatientProfileVue from "@/views/PatientProfile.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
+import Enrollment from "@/apps/NCD/views/Enrollment.vue";
+import { PatientProgramService } from "@/services/patient_program_service";
 export default defineComponent({
     mixins: [PatientProfileMixin],
     name: "Home",
@@ -303,6 +335,7 @@ export default defineComponent({
             todays_date: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
             lastVaccine: [] as any,
             visits: [] as any,
+            selectedStatus: 7 as any,
         };
     },
     computed: {
@@ -329,6 +362,7 @@ export default defineComponent({
         this.checkAge();
         await this.checkProtectedStatus();
         await this.openFollowModal();
+        await this.programEnrollment();
     },
     watch: {
         vitals: {
@@ -382,6 +416,33 @@ export default defineComponent({
     },
 
     methods: {
+        handleChange(status: any) {
+            this.selectedStatus = status;
+        },
+        async programEnrollment() {
+            this.program = new PatientProgramService(this.demographics.patient_id);
+            const checkEnrollment = await this.program.getProgramCurrentStates();
+            console.log("🚀 ~ programEnrollment ~ checkEnrollment:", checkEnrollment);
+            if (!checkEnrollment) {
+                await this.program.enrollProgram();
+                await this.program.setStateId(7);
+                await this.program.updateState();
+                this.selectedStatus = 7;
+            } else {
+                this.selectedStatus = checkEnrollment.state;
+            }
+            //  this.program = new PatientProgramService(this.demographics.patient_id);
+            // const checkEnrollment = await this.program.getProgramCurrentStates();
+            // console.log("🚀 ~ programEnrollment ~ checkEnrollment:", checkEnrollment);
+            // if (!checkEnrollment) {
+            //     await this.program.enrollProgram();
+            // }
+        },
+        async updateState(state: any) {
+            this.selectedStatus = state;
+            await this.program.setStateId(state);
+            await this.program.updateState();
+        },
         getAge(dateOfBirth: string): string {
             return HisDate.calculateDisplayAge(HisDate.toStandardHisFormat(dateOfBirth));
         },
@@ -657,6 +718,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
+ion-accordion {
+    background: #fff;
+}
+ion-list {
+    --ion-background-color: #fff;
+}
 .demographics {
     box-sizing: border-box;
     width: 98vw;

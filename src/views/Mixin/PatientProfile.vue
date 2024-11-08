@@ -18,6 +18,7 @@ export default defineComponent({
             visits: [] as any,
             event: null as any,
             popoverOpen: false,
+            program: null as any,
         };
     },
     mounted() {},
