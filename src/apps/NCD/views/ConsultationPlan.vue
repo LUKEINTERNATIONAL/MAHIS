@@ -336,7 +336,19 @@ export default defineComponent({
             }
         },
         async saveComplications() {
-            await this.saveVisualScreening();
+            // await this.saveVisualScreening();
+            // await this.saveFootScreening();
+        },
+        async saveFootScreening() {
+            const childData = await formatRadioButtonData(this.visualScreening);
+            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
+                {
+                    concept_id: await ConceptService.getConceptID("Visual acuity", true),
+                    value_text: "visual acuity test",
+                    obs_datetime: ConceptService.getSessionDate(),
+                    child: childData,
+                },
+            ]);
         },
         async saveVisualScreening() {
             const childData = await formatInputFiledData(this.visualScreening);
