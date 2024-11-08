@@ -21,16 +21,13 @@
   <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
     <div>
       <ion-card class="section" style="margin-bottom: 25px; margin-inline: 0px">
-        <ion-card-header>
-          <ion-card-title class="sectionTitle">Patient List</ion-card-title>
-        </ion-card-header>
         <ion-card-content>
           <div class="dueCardContent">
             <div class="table-container">
               <ion-grid>
                 <ion-row class="table-header">
                   <ion-col>Patient Name</ion-col>
-                  <ion-col>Waiting Time</ion-col>
+                  <ion-col>Service Time</ion-col>
                   <ion-col>Actions</ion-col>
                 </ion-row>
 
@@ -41,7 +38,7 @@
                     class="table-row"
                 >
                   <ion-col>{{ patient.fullName }}</ion-col>
-                  <ion-col>{{ waitingTime(patient.arrivalTime) }}</ion-col>
+                  <ion-col>{{ formatArrivalTime (patient.arrivalTime) }}</ion-col>
                   <ion-col>
                     <ion-button
                         size="small"
@@ -165,16 +162,35 @@ export default defineComponent({
   async mounted() {
     this.isLoading = true;
     try {
+      const location = await getUserLocation();
+      const locationId = location ? location.location_id : null;
       const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
+      const filteredVisits = visitsToday.filter((visit: any) => visit.location_id === locationId);
+      this.patients = await Promise.all(filteredVisits.map(async (visit: any) => {
+        const patientDetails = await PatientService.findByID(visit.patientId);
+        if (patientDetails && patientDetails.person) {
+          const names = patientDetails.person.names;
+          const fullName = names && names.length > 0
+              ? `${names[0].given_name || ''} ${names[0].family_name || ''}`.trim()
+              : "Unknown";
 
-      this.patients = visitsToday.map((patient:any) => ({
-        fullName: patient.fullName,
-        arrivalTime: patient.arrivalTime,
-        patient_id: patient.patient_id
+          return {
+            fullName,
+            arrivalTime: visit.startDate,
+            patient_id: visit.patientId
+          };
+        } else {
+          return {
+            fullName: "Unknown",
+            arrivalTime: visit.startDate,
+            patient_id: visit.patientId
+          };
+        }
       }));
     } catch (error) {
       console.error('Error fetching patients:', error);
-    } finally {
+    }
+    finally {
       this.isLoading = false;
     }
   },
@@ -207,12 +223,12 @@ export default defineComponent({
         await usePatientList().refresh(locationId);
       } catch (e) {}
     },
-    goToPatientProfile(patient: any) {
-      // Redirect to patient profile or handle accordingly
-      console.log('Navigating to profile of:', patient.firstName, patient.lastName);
-    },
     waitingTime(timeStamp: any) {
       return dates.calculateTimeDifference(timeStamp);
+    },
+    formatArrivalTime(dateTime: string) {
+      const date = new Date(dateTime);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     },
   },
 });
@@ -248,6 +264,10 @@ export default defineComponent({
   font-size: 1.1em;
   border-bottom: #ccc 1px solid;
   line-height: 30px;
+}
+.table-header {
+  font-weight: bold;
+  background-color: #f0f0f0;
 }
 .header {
   color: #fff;

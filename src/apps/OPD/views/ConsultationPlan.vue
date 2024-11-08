@@ -75,7 +75,7 @@ import { usePastMedicalHistoryStore } from "@/apps/OPD/stores/PastMedicalHistory
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
-import { defineComponent } from "vue";
+import {defineComponent, ref} from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
@@ -105,6 +105,9 @@ import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date"
 import {getUserLocation} from "@/services/userService";
 import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+import {PatientService} from "@/services/patient_service";
+import {EncounterService} from "@/services/encounter_service";
+import {ConceptService} from "@/services/concept_service";
 
 export default defineComponent({
     name: "ConsultationPlan",
@@ -181,7 +184,7 @@ export default defineComponent({
         this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.demographics.patient_id);
         this.showAlert = this.hasPatientsWaitingForLab;
         if (this.showAlert) {
-          // Automatically hide the alert after some seconds
+          // Automatically hide the alert after 15 seconds
           setTimeout(() => {
             this.showAlert = false;
           }, 15000);
@@ -228,7 +231,51 @@ export default defineComponent({
       },
     },
     setup() {
-        return { chevronBackOutline, checkmark };
+      const presentingComplaints = ref<string[]>([]);
+
+      async function loadSavedEncounters(patientVisitDate: any) {
+        const patient = new PatientService();
+        const encounters = await EncounterService.getEncounters(patient.getID(), { date: patientVisitDate });
+        await setPresentingComplainsEncounters(encounters);
+      }
+
+      async function setPresentingComplainsEncounters(data: any) {
+        const observations = data.find((encounter:any) => encounter.type.name === "PRESENTING COMPLAINTS")?.observations;
+        if (observations) {
+          presentingComplaints.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
+        } else {
+          presentingComplaints.value = [];
+        }
+      }
+
+      function filterObs(observations: any, conceptName: string) {
+        return observations?.filter((obs: any) =>
+            obs.concept.concept_names.some((name: any) => name.name === conceptName)
+        );
+      }
+
+      async function getConceptValues(filteredObservations: any, type: string) {
+        if (filteredObservations) {
+          return Promise.all(
+              filteredObservations.map(async (item: any) => {
+                return await ConceptService.getConceptName(item.value_coded);
+              })
+          );
+        }
+        return [];
+      }
+
+      const mounted = async () => {
+        const todayDate = new Date().toISOString().split('T')[0];
+        await loadSavedEncounters(todayDate);
+      };
+      mounted();
+      return {
+        presentingComplaints,
+        loadSavedEncounters,
+        chevronBackOutline, checkmark
+      };
+
     },
 
     methods: {
@@ -238,7 +285,11 @@ export default defineComponent({
         if (index < this.StepperData.length - 1) {
           switch (index) {
             case 0:
-              return this.saveClinicalAssessment;
+              if (this.presentingComplaints.length === 0) {
+                return this.saveClinicalAssessment;
+              } else {
+                return () => Promise.resolve();
+              }
             case 1:
               return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
             case 2:

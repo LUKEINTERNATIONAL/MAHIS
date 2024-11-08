@@ -427,13 +427,13 @@ export default defineComponent({
         await this.fetchUserData();
         const location = await getUserLocation();
         const locationId = location ? location.location_id : null;
-        if (locationId) {
             try {
                 const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
-                this.totalPatientsToday = visitsToday.length;
+              const filteredVisits = visitsToday.filter((visit: any) => visit.location_id === locationId);
+              this.totalPatientsToday = filteredVisits.length;
                 await usePatientList().refresh(locationId);
             } catch (error) {}
-        }
+
         this.isLoading = false;
     },
     methods: {
