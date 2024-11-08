@@ -397,6 +397,7 @@ export default defineComponent({
             async handler(data) {
                 if (data.name == "patientProfile") {
                     await this.checkProtectedStatus();
+                    await this.programEnrollment();
                 }
             },
         },
@@ -404,6 +405,7 @@ export default defineComponent({
             async handler() {
                 if (this.demographics) {
                     await this.checkProtectedStatus();
+                    await this.programEnrollment();
                     if (!this.demographics.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
@@ -422,11 +424,15 @@ export default defineComponent({
         async programEnrollment() {
             this.program = new PatientProgramService(this.demographics.patient_id);
             const checkEnrollment = await this.program.getProgramCurrentStates();
-            console.log("🚀 ~ programEnrollment ~ checkEnrollment:", checkEnrollment);
             if (!checkEnrollment) {
-                await this.program.enrollProgram();
-                await this.program.setStateId(7);
+                try {
+                    await this.program.enrollProgram();
+                    await this.program.setStateId(7);
+                } catch (error) {
+                    await this.program.setStateId(7);
+                }
                 await this.program.updateState();
+
                 this.selectedStatus = 7;
             } else {
                 this.selectedStatus = checkEnrollment.state;
