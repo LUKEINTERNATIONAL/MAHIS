@@ -161,8 +161,8 @@
             </ion-card>
             <div>
               <ion-segment :value="segmentContent" style="margin-top: 5px">
-                <ion-segment-button value="Patient Summary" @click="setSegmentContent('Patient Summary')">
-                  <ion-label>Patient Summary</ion-label>
+                <ion-segment-button value="Patient Charts" @click="setSegmentContent('Patient Charts')">
+                  <ion-label>Patient Charts</ion-label>
                 </ion-segment-button>
                 <ion-segment-button value="Visits History" @click="setSegmentContent('Visits History')">
                   <ion-label>Visits History</ion-label>
@@ -181,7 +181,7 @@
                 </ion-segment-button>
               </ion-segment>
             </div>
-            <div v-if="segmentContent == 'Patient Summary'">
+            <div v-if="segmentContent == 'Patient Charts'">
               <div style="display: flex; margin-top: 10px">
                 <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
                   <WeightHeightChart />
@@ -193,25 +193,7 @@
                   <PreviousVitals />
                 </div>
               </div>
-              <div class="bottomSummary">
-                <ion-segment value="custom">
-                  <ion-segment-button value="custom">
-                    <ion-label>Medications</ion-label>
-                  </ion-segment-button>
-                  <ion-segment-button value="segment">
-                    <ion-label>Investigations</ion-label>
-                  </ion-segment-button>
-                  <ion-segment-button value="Visits History">
-                    <ion-label>Immunizations</ion-label>
-                  </ion-segment-button>
-                  <ion-segment-button value="Vitals & Measurements Summary">
-                    <ion-label>Notes</ion-label>
-                  </ion-segment-button>
-                </ion-segment>
-              </div>
-              <div class="bottomSummaryContent">
-                <MedicationsGrid />
-              </div>
+              <bottomSummary style="margin-top: 10px"/>
             </div>
             <div v-if="segmentContent == 'Visits History'">
               <VisitsHistory />
@@ -306,7 +288,7 @@ import DemographicBar from "@/components/DemographicBar.vue";
 
 import DispositionGrid from "@/components/PatientProfileGrid/OutcomeGrid.vue";
 import InvestigationsGrid from "@/components/PatientProfileGrid/InvestigationsGrid.vue";
-import MedicationsGrid from "@/components/PatientProfileGrid/MedicationsGrid.vue";
+import bottomSummary from "./bottomSummary.vue";
 import VitalsGrid from "@/components/PatientProfileGrid/VitalsGrid.vue";
 import LabTestsHistory from "@/components/DashboardSegments/LabTestsHistory.vue";
 import DiagnosesHistory from "@/components/DashboardSegments/DiagnosesHistory.vue";
@@ -384,7 +366,6 @@ export default defineComponent({
     IonModal,
     DispositionGrid,
     InvestigationsGrid,
-    MedicationsGrid,
     VitalsGrid,
     IonRow,
     IonCol,
@@ -406,6 +387,7 @@ export default defineComponent({
     Programs,
     CheckInConfirmationModal,
     AncEnrollmentModal,
+    bottomSummary,
   },
   data() {
     return {
@@ -415,7 +397,7 @@ export default defineComponent({
       checkUnderNine: false,
       checkUnderFive: false,
       checkUnderSixWeeks: false,
-      segmentContent: "Patient Summary",
+      segmentContent: "Patient Charts",
       iconsContent: icons,
       isModalOpen: false,
       url: "" as any,
