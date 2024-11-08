@@ -53,6 +53,7 @@ export class AuthService {
     }
 
     async loadConfig() {
+        localStorage.setItem(AuthVariable.CORE_VERSION, this.getHeadVersion());
         return ApiClient.getFileConfig();
     }
 
