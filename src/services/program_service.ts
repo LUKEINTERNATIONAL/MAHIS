@@ -27,6 +27,9 @@ export class ProgramService extends Service {
     static getPatientStates(patientId: number, programId: number) {
         return super.getJson(`programs/${programId}/patients/${patientId}/states`);
     }
+    static getPatientCurrentStates(patientId: number, programId: number) {
+        return super.getJson(`programs/${programId}/patients/${patientId}/current_states`);
+    }
 
     static voidProgram(patientProgramId: number, reason = "") {
         return super.void(`patient_programs/${patientProgramId}/`, { reason });
@@ -44,23 +47,17 @@ export class ProgramService extends Service {
 
     static async getProgramInformation(patientID: number) {
         try {
-            const info = await super.getJson(
-                `/programs/${super.getProgramID()}/patients/${patientID}`
-            );
+            const info = await super.getJson(`/programs/${super.getProgramID()}/patients/${patientID}`);
             return info;
         } catch (error) {
             return {};
         }
     }
     static getCurrentProgramInformation(patientID: number, visitDate: any) {
-        return super.getJson(
-            `/programs/${super.getProgramID()}/patients/${patientID}/visit?date=${visitDate}`
-        );
+        return super.getJson(`/programs/${super.getProgramID()}/patients/${patientID}/visit?date=${visitDate}`);
     }
     static getMastercardDrugInformation(patientID: number, visitDate: any) {
-        return super.getJson(
-            `/programs/${super.getProgramID()}/patients/${patientID}/mastercard_data?date=${visitDate}`
-        );
+        return super.getJson(`/programs/${super.getProgramID()}/patients/${patientID}/mastercard_data?date=${visitDate}`);
     }
     static getNextTask(patientID: number) {
         return super.getJson(`/workflows/${super.getProgramID()}/${patientID}`, {
