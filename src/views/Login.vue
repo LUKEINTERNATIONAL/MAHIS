@@ -172,10 +172,10 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.setVersion();
         this.workerApi = workerData.workerApi;
         const auth = new AuthService();
         await auth.loadConfig();
+        this.setVersion();
         await workerData.postData("SET_OFFLINE_PROGRAMS");
     },
     methods: {
