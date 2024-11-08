@@ -7,7 +7,9 @@
                         <ion-img class="login_img" :src="loginIcon()" id="logo"></ion-img>
                         <ion-title class="login-title">
                             <span v-if="mode === 'development' || mode === 'test'" style="justify-content: center; display: block">
-                                <div>MaHIS</div>
+                                <div>
+                                    MaHIS <small style="font-size: 15px">(V {{ version }})</small>
+                                </div>
                                 <div style="font-size: 12px; color: #34af4d">({{ mode }} mode)</div>
                             </span>
                             <span v-else>MaHIS</span>
@@ -142,6 +144,7 @@ export default defineComponent({
             password: "" as any,
             username: "" as any,
             programList: "" as any,
+            version: "" as any,
             program: "" as any,
             workerApi: null as any,
             togglePasswordVisibility: false,
@@ -169,6 +172,7 @@ export default defineComponent({
     },
 
     async mounted() {
+        this.setVersion();
         this.workerApi = workerData.workerApi;
         const auth = new AuthService();
         await auth.loadConfig();
@@ -180,6 +184,9 @@ export default defineComponent({
                 this.programList.sort((a: any, b: any) => a.name.localeCompare(b.name));
                 this.multiSelectData = this.programList;
             }
+        },
+        setVersion() {
+            this.version = localStorage.getItem("core_version");
         },
         doLogin: async function () {
             if (this.username && this.password && this.program) {
