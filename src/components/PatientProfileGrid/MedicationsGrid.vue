@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonAccordion, IonAccordionGroup, IonItem, IonLabel, AccordionGroupCustomEvent } from "@ionic/vue";
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonAccordion, IonAccordionGroup, IonItem, IonLabel, AccordionGroupCustomEvent, IonIcon } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
@@ -52,6 +52,7 @@ export default defineComponent({
         IonLabel,
         DynamicList,
         IonCard,
+        IonIcon,
     },
     data() {
         const componentKey = ref(0);

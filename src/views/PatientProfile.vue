@@ -161,8 +161,8 @@
             </ion-card>
             <div>
               <ion-segment :value="segmentContent" style="margin-top: 5px">
-                <ion-segment-button value="Patient Summary" @click="setSegmentContent('Patient Summary')">
-                  <ion-label>Patient Summary</ion-label>
+                <ion-segment-button value="Patient Charts" @click="setSegmentContent('Patient Charts')">
+                  <ion-label>Patient Charts</ion-label>
                 </ion-segment-button>
                 <ion-segment-button value="Visits History" @click="setSegmentContent('Visits History')">
                   <ion-label>Visits History</ion-label>
@@ -181,7 +181,7 @@
                 </ion-segment-button>
               </ion-segment>
             </div>
-            <div v-if="segmentContent == 'Patient Summary'">
+            <div v-if="segmentContent == 'Patient Charts'">
               <div style="display: flex; margin-top: 10px">
                 <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
                   <WeightHeightChart />
@@ -397,7 +397,7 @@ export default defineComponent({
       checkUnderNine: false,
       checkUnderFive: false,
       checkUnderSixWeeks: false,
-      segmentContent: "Patient Summary",
+      segmentContent: "Patient Charts",
       iconsContent: icons,
       isModalOpen: false,
       url: "" as any,

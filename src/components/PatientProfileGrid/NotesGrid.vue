@@ -4,6 +4,7 @@
 
         <ion-item slot="header" color="light">
             <ion-label class="previousLabel">Previous visits notes</ion-label>
+            <ion-icon :icon="document" slot="start" class="ion-margin-end diagnosis-icon"></ion-icon>
         </ion-item>
         <div>
             <div>
@@ -11,7 +12,10 @@
                     <div class="ionLbltp" v-for="(item, index) in RestOfPreviousNotes" :key="index">
                         <div v-for="(item1, index1) in removeOuterArray(item)" :key="index1">
                             <div>
-                                <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>
+                                <div style="display: flex; align-items: center;">
+                                    <ion-icon :icon="calendarOutline" class="ion-margin-end"></ion-icon>
+                                    <h4>{{ item1.date }}</h4>
+                                </div>
                             </div>
                             <div class="previousSecDrgs">
                                 <ion-list>
@@ -41,8 +45,9 @@ import {
     IonLabel,
     IonCard,
 } from "@ionic/vue";
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
+import { ref, onMounted } from "vue";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
+import { calendarOutline, document } from 'ionicons/icons';
 
 const RestOfPreviousNotes = ref();
 
@@ -183,8 +188,13 @@ ion-list.list-al {
 }
 .notes_p {
     margin: 4%;
+    font-size: 19px;
 }
 .qaws {
     margin-top: -27px;
+}
+.diagnosis-icon {
+    font-size: 1.4rem;
+    color: var(--ion-color-primary);
 }
 </style>
