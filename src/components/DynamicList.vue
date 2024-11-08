@@ -26,7 +26,6 @@ import { IonItem, IonCol, IonLabel, IonIcon } from '@ionic/vue'
 import { defineComponent } from 'vue'
 import { createModal,popoverConfirmation,alertConfirmation } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import { Camera, Trash } from 'lucide-react'
 export default defineComponent({
     created() {
        // this.$emit('onFooterInstance', this)
@@ -36,8 +35,6 @@ export default defineComponent({
         IonCol,
         IonLabel,
         IonIcon,
-        Camera,
-        Trash
     },
     data() {
     return {
