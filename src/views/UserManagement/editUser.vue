@@ -619,7 +619,7 @@ async function updatePassword() {
     if (checkPasswordFieldsEmpty() == false) {
         if (ValidatePassword() == true) {
             const new_password = password_input_properties[0].dataValue.value 
-            await UserService.updateUser(userId.value, {new_password});
+            await UserService.updateUser(userId.value, { password: new_password});
         }
     }
 }
