@@ -421,7 +421,7 @@ export default defineComponent({
         resetDemographics();
         await this.setAppointments();
         this.setView();
-        const wsService = new WebSocketService();
+        const wsService = new WebSocketService("ImmunizationReportChannel");
         wsService.setMessageHandler(this.onMessage);
         await useGlobalPropertyStore().loadGlobalProperty();
         await this.fetchUserData();
