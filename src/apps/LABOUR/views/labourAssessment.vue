@@ -50,7 +50,7 @@ import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 // import { useObstreticHistoryStore } from "../stores/obstetric details/obstetric";
-import { useLabourQuickCheckStore } from "../stores/physical exam/quickCheck";
+import { useLabourQuickCheckStore } from "../stores/physical exam/labourQuickCheck";
 import { useLabourPhysicalExamStore } from "../stores/physical exam/physicalExamination";
 import { usefirstVaginalExaminationStore } from "../stores/physical exam/firstVaginalExamination";
 import { usePelvicAssessmentStore } from "../stores/physical exam/pelvicAssessment";

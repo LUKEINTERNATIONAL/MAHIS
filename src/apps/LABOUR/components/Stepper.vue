@@ -83,7 +83,7 @@ import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
 import LabourVitals from "@/apps/LABOUR/components/repeatable things/LabourVitals.vue";
 import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
-import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
+import QuickCheck from "@/apps/LABOUR/components/physical exam/LabourQuickCheck.vue";
 import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
 import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
 import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
