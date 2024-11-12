@@ -2,13 +2,14 @@ import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
 export class WebSocketService {
     private socket: WebSocket | null = null;
-    private channel: string = "ImmunizationReportChannel";
+    private channel: string;
     private isConnected: boolean = false;
     private pendingFetch: (() => void) | null = null;
     private location_id: any;
 
-    constructor() {
+    constructor(channel: string) {
         this.initPromise = this.init();
+        this.channel = channel;
     }
     private initPromise: Promise<void>;
     private async init() {
