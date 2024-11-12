@@ -1,77 +1,121 @@
 <template>
-    <div class="" style="cursor: pointer; padding-bottom: 5px">
-        <span v-if="selectedMedicalDrugsList.length">
-            <div class="m_name_dosage" v-for="(item, index) in selectedMedicalDrugsList" :key="index">
-                <div class="m_name">
-                    <div>{{ item.drugName }}</div>
-                    <div class="m_btns">
-                        <ion-icon style="font-size: x-large" :icon="iconsContent.refresh" @click="openDrugRefill"></ion-icon>
-                        <ion-icon style="font-size: 20px" :icon="iconsContent.delete" @click="openDeleteModal($event)"></ion-icon>
-                    </div>
-                </div>
-                <div class="m_dosage">{{ item.frequency }} / {{ item.duration }} days/ until {{ item.prescription }}</div>
+
+    <div class="ion-padding">
+      <ion-item-divider>
+        <ion-label class="h_dmt">Documented medications timeline</ion-label>
+        <ion-icon :icon="medkit" slot="start" class="ion-margin-end diagnosis-icon"></ion-icon>
+      </ion-item-divider>
+
+      <ion-list>
+        <ion-item v-for="(item, index) in PreviuosSelectedMedicalDrugsList" :key="index">
+          <ion-label class="ion-text-wrap">
+            <ion-card style="padding: 10px; margin: 5px;">
+            <div style="display: flex; align-items: center;">
+                <ion-icon :icon="calendarOutline" class="ion-margin-end"></ion-icon>
+                <h2>{{ item.prescriptionDate }}</h2>
             </div>
-        </span>
-        <div class="no_content" v-if="!selectedMedicalDrugsList.length">
-            <div>
-                <div class="no_content_title">No medications added.</div>
-            </div>
-        </div>
+            <dynamic-list
+              :_selectedMedicalDrugsList="item.previousPrescriptions"
+              :show_actions_buttons="false"
+              :key="componentKey"
+            />
+            </ion-card>
+          </ion-label>
+        </ion-item>
+      </ion-list>
     </div>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, popoverController } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { checkmark, pulseOutline } from "ionicons/icons";
-import { ref } from "vue";
-import { icons } from "@/utils/svg";
-
-import MedicationsModal from "@/components/ProfileModal/MedicationsModal.vue";
-import DrugRefill from "@/components/ProfileModal/DrugRefill.vue";
-import { createModal, popoverConfirmation, alertConfirmation } from "@/utils/Alerts";
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonAccordion, IonAccordionGroup, IonItem, IonLabel, AccordionGroupCustomEvent, IonIcon } from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import Toolbar from "@/components/Toolbar.vue";
+import { PreviousTreatment } from "@/apps/NCD/services/treatment";
+import DynamicList from "@/components/DynamicList.vue";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { useNCDMedicationsStore } from "@/stores/NCDMedicationStore";
+import { calendarOutline, medkit } from 'ionicons/icons';
 
+import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
-    name: "Menu",
+    name: "Home",
+    mixins: [SetUser],
     components: {
         IonContent,
         IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
+        IonPage,
         IonToolbar,
+        Toolbar,
+        IonRow,
+        IonItem,
+        IonLabel,
+        DynamicList,
+        IonCard,
+        IonIcon,
     },
     data() {
+        const componentKey = ref(0);
+        const itemWasExpanded = ref(false);
+        const PreviuosSelectedMedicalDrugsList = ref();
+
+        const loadPreviousMedications = async () => {
+            const previousTreatment = new PreviousTreatment();
+            const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters();
+            PreviuosSelectedMedicalDrugsList.value = previousDrugPrescriptions;
+        }
+
         return {
-            iconsContent: icons,
-            event: null as any,
-            eventPopover: null as any,
-            modalStatus: false,
+            componentKey,
+            itemWasExpanded,
+            PreviuosSelectedMedicalDrugsList,
+            loadPreviousMedications,
+            calendarOutline,
+            medkit,
         };
     },
     computed: {
-        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList"]),
+        ...mapState(useDemographicsStore, ["patient"]),
+        ...mapState(useNCDMedicationsStore, ["selectedNCDMedicationList"]),  
     },
-    methods: {
-        openModal() {
-            createModal(MedicationsModal);
+    $route: {
+        async handler() {},
+        deep: true,
+    },
+    watch: {
+        patient: {
+            handler() {
+                this.loadPreviousMedications()
+            },
+            deep: true,
         },
-        async openDrugRefill() {
-            const modal = await modalController.create({
-                component: DrugRefill,
-                backdropDismiss: false,
-                cssClass: "small-modal",
-            });
-            modal.present();
-        },
-        async openDeleteModal(e: Event) {
-            popoverConfirmation("Do you want to delete it?", e);
-        },
+        selectedNCDMedicationList: {
+            handler() {
+                this.loadPreviousMedications()
+            },
+            deep: true,
+        }
+    },
+    async mounted() {
+        this.loadPreviousMedications()
     },
 });
 </script>
+<style scoped>
+.ion-text-wrap {
+    white-space: normal;
+}
 
-<style scoped></style>
+.ion-margin-end {
+    margin-right: 8px;
+}
+
+.diagnosis-icon {
+    font-size: 1.4rem;
+    color: var(--ion-color-primary);
+}
+.h_dmt {
+    font-weight: 400;
+    font-size: 22px;
+}
+</style>

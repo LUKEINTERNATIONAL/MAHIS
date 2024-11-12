@@ -214,7 +214,7 @@ export default defineComponent({
                 modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
-            await validateInputFiledData(this.vitals);
+            // await validateInputFiledData(this.vitals);
         },
         async checkHeight() {
             const patient = new PatientService();
