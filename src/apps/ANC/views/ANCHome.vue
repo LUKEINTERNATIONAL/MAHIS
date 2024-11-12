@@ -12,8 +12,8 @@
                     </div>
                 </div>
                 <div class="button-container">
-                    <DynamicButton name="New ANC contact" iconSlot="start" fill="solid" :icon="checkmark" @click="navigateToContact" />
-                    <DynamicButton name="View ANC contacts" iconSlot="start" fill="solid" :icon="eye()" @click="previousContacts" />
+                    <DynamicButton style="padding-right: 1%" name="New ANC contact" iconSlot="start" fill="solid" :icon="checkmark" @click="navigateToContact" />
+                    <DynamicButton style="padding-right: 1%" name="View ANC contacts" iconSlot="start" fill="solid" :icon="eye()" @click="previousContacts" />
                     <DynamicButton name="Schedule next contact" iconSlot="start" fill="solid" :icon="calendar()" @click="nextAppointment" />
                 </div>
                 <NextAppointmentModal
@@ -177,7 +177,7 @@ export default defineComponent({
 <style scoped>
 .container {
     text-align: center;
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     top: 35%;

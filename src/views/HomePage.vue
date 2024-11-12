@@ -6,7 +6,7 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32">
+        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32 && programID() !=12">
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -183,7 +183,9 @@
             </div>
         </ion-content>
         <NCDHomePage v-if="programID() == 32" />
-        <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
+       <ANCHomePage v-if="programID() == 12" />
+
+      <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
     </ion-page>
 </template>
 
@@ -260,6 +262,7 @@ import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import workerData from "@/activate_worker";
 import { useStatusStore } from "@/stores/StatusStore";
+import ANCHomePage from "@/apps/ANC/components/ANCHomePage.vue";
 
 export default defineComponent({
     name: "Home",
@@ -288,6 +291,7 @@ export default defineComponent({
         Pagination,
         Navigation,
         NCDHomePage,
+      ANCHomePage
     },
     data() {
         return {
