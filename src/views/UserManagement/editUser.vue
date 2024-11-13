@@ -184,6 +184,7 @@
                     selectLabel=""
                     label="name"
                     :searchable="true"
+                    :disabled="disableFacilitySelection"
                     @search-change="FindLocation($event)"
                     track-by="location_id"
                     :options="locationData"
@@ -371,7 +372,7 @@ import {
     peopleOutline,
     phonePortraitOutline,
 } from "ionicons/icons";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { UserService } from "@/services/user_service";
 import { ProgramService } from "@/services/program_service";
@@ -398,26 +399,28 @@ const location_show_error = ref(false);
 const passwordErrorMsgs = [
     'Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (@#$%^&+=*!-), without spaces',
     'Password does not match'
-]
+];
 const isSuperUser = ref(false);
 const districtList = ref([] as any);
-const HSA_found_for_disabling_button = ref(true)
+const HSA_found_for_disabling_button = ref(true);
 const selected_Districts = ref([]) as any;
 const district_show_error = ref(false)
-const district_error_message = ref('Select district(s)')
-const village_error_message = ref('Select village(s)')
-const selected_TAz = ref([]) as any
-const villageList = ref([] as any)
-const village_show_error = ref(false)
-const TAz_show_error = ref(false)
-const TAz_error_message = ref('Select TA(s)')
-const selected_villages = ref([]) as any
-const TAList = ref([] as any)
-const selectedDistrictIds : any[] = []
-const selectedTAIds: any[] = []
-const disableVillageSelection = ref(true)
-const selectedVillageIds: any[] = []
-const traditionalAuthorities = ref([]) as any
+const district_error_message = ref('Select district(s)');
+const village_error_message = ref('Select village(s)');
+const selected_TAz = ref([]) as any;
+const villageList = ref([] as any);
+const village_show_error = ref(false);
+const TAz_show_error = ref(false);
+const TAz_error_message = ref('Select TA(s)');
+const selected_villages = ref([]) as any;
+const TAList = ref([] as any);
+const selectedDistrictIds: any[] = [];
+const selectedTAIds: any[] = [];
+const disableVillageSelection = ref(true);
+const selectedVillageIds: any[] = [];
+const traditionalAuthorities = ref([]) as any;
+const userStore = useUserStore();
+const disableFacilitySelection = ref(true)
 
 const props = defineProps<{
     toggle: true,
@@ -431,7 +434,8 @@ onMounted(async () => {
     await getUserData()
     await fillUserVillages()
     getCurrentUser()
-    districtList.value = await getdistrictList() 
+    districtList.value = await getdistrictList()
+    await getCurrentUserRoles() 
 })
 
 watch(
@@ -622,6 +626,27 @@ async function updatePassword() {
             await UserService.updateUser(userId.value, { password: new_password});
         }
     }
+}
+
+async function getCurrentUserRoles() {
+    try {
+        const user = await UserService.getCurrentUser();
+        if (user) {
+            const userRoles = user.roles.map((role) => role.role);
+            userStore.setUserRoles(userRoles);
+
+            if (findUserRoleByName('Superuser,Superuser,') == true) {
+                disableFacilitySelection.value = false;
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function findUserRoleByName(name: string) {
+    const roles = userStore.getUserRoles();
+    return roles.some((role: any) => role.toLowerCase() === name.toLowerCase());
 }
 
 async function updateUserVillages() {

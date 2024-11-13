@@ -166,6 +166,7 @@
                 selectLabel=""
                 label="name"
                 :searchable="true"
+                :disabled="disableFacilitySelection"
                 @search-change="FindLocation($event)"
                 track-by="location_id"
                 :options="locationData"
@@ -377,6 +378,7 @@ const disableVillageSelection = ref(true)
 const HSA_found_for_disabling_button = ref(true)
 const userStore = useUserStore()
 const facilityLocation = computed(() => userStore.facilityLocation);
+const disableFacilitySelection = ref(true)
 
 const props = defineProps<{
     action: any
@@ -386,6 +388,7 @@ onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
     await getFacilityForCurrentuser()
+    await getCurrentUserRoles()
     districtList.value = await getdistrictList()
 })
 
@@ -460,6 +463,27 @@ async function getFacilityForCurrentuser() {
     } catch (error) {
         console.error(error)
     }
+}
+
+async function getCurrentUserRoles() {
+    try {
+        const user = await UserService.getCurrentUser();
+        if (user) {
+            const userRoles = user.roles.map((role) => role.role);
+            userStore.setUserRoles(userRoles);
+
+            if (findUserRoleByName('Superuser,Superuser,') == true) {
+                disableFacilitySelection.value = false;
+            }
+        }
+    } catch (error) {
+        
+    }
+}
+
+function findUserRoleByName(name: string) {
+    const roles = userStore.getUserRoles();
+    return roles.some((role: any) => role.toLowerCase() === name.toLowerCase());
 }
 
 async function FindLocation(text: any) {
