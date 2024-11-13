@@ -325,6 +325,7 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 import VueMultiselect from "vue-multiselect"
 import { LocationService } from "@/services/location_service"
 import { isEmpty } from "lodash"
+import { useUserStore } from "@/stores/userStore";
 import {
     addOutline,
     pencilOutline,
@@ -374,6 +375,8 @@ const selected_TAz = ref()
 const selected_Districts = ref()
 const disableVillageSelection = ref(true)
 const HSA_found_for_disabling_button = ref(true)
+const userStore = useUserStore()
+const facilityLocation = computed(() => userStore.facilityLocation);
 
 const props = defineProps<{
     action: any
@@ -382,6 +385,7 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
+    await getFacilityForCurrentuser()
     districtList.value = await getdistrictList()
 })
 
@@ -445,6 +449,17 @@ function selectedDistrict(selectedDistrict: any) {
     selectedDistrict.forEach((district: any ) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
+}
+
+async function getFacilityForCurrentuser() {
+    try {
+        const response = await LocationService.getLocation(facilityLocation.value.location_id)
+        if (isEmpty(response) == false) {
+            selected_location.value = response
+        }
+    } catch (error) {
+        console.error(error)
+    }
 }
 
 async function FindLocation(text: any) {
