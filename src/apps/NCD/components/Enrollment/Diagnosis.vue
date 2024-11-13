@@ -13,7 +13,13 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
-import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+import {
+    modifyCheckboxInputField,
+    modifyCheckboxValue,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    modifyFieldValue,
+} from "@/services/data_helpers";
 
 export default defineComponent({
     name: "Menu",
@@ -78,9 +84,19 @@ export default defineComponent({
             console.log(data);
         },
         async handleInputData(event: any) {
-            if (event?.value?.detail?.checked) {
-                modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", false);
-            } else modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", true);
+            const type2 = getCheckboxSelectedValue(this.enrollmentDiagnosis, "Type 2 DM");
+            const type1 = getCheckboxSelectedValue(this.enrollmentDiagnosis, "Type 1 DM");
+            if (event?.col?.name != "Hypertension") {
+                modifyFieldValue(this.enrollmentDiagnosis, "Type 1 DM date", "displayNone", true);
+                modifyFieldValue(this.enrollmentDiagnosis, "Type 2 DM date", "displayNone", true);
+                modifyFieldValue(this.enrollmentDiagnosis, event?.col?.name + " date", "displayNone", false);
+            }
+            if (type2 && type1) {
+                modifyCheckboxValue(this.enrollmentDiagnosis, "Type 2 DM", "checked", false);
+                modifyCheckboxValue(this.enrollmentDiagnosis, "Type 1 DM", "checked", false);
+                modifyCheckboxValue(this.enrollmentDiagnosis, event?.col?.name, "checked", true);
+                this.buildCards();
+            }
         },
     },
 });
