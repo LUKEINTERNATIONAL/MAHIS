@@ -879,9 +879,27 @@ function sselectionListUpdated(data: any) {
     isSSelectionValid()
 }
 
-function inputUpDated_fn1(event: any) {
+async function validateUsernameIfExists(username: string) {
+    try {
+        if (username.length > 0) {
+            const does_username_exist = await UserService.doesUsernameExist(username);
+            if (does_username_exist.exists == true) {
+                input_properties[0].show_error.value = true;
+                input_properties[0].error_message = "Username already exists";
+            } else if (does_username_exist.exists == false) {
+                input_properties[0].show_error.value = false;
+                input_properties[0].error_message = "Input required, Only letters are allowed";
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function inputUpDated_fn1(event: any) {
     const input = event.target.value
     input_properties[0].dataValue.value = input
+    await validateUsernameIfExists(input)
 }
 function inputUpDated_fn2(event: any) {
     const input = event.target.value
