@@ -255,6 +255,9 @@ import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import { useWebWorker } from "@vueuse/core";
 import { getUserLocation } from "@/services/userService";
+
+import { OfflineService} from "@/services/offline_service";
+
 import { PatientOpdList } from "@/services/patient_opd_list";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
@@ -425,6 +428,9 @@ export default defineComponent({
         wsService.setMessageHandler(this.onMessage);
         await useGlobalPropertyStore().loadGlobalProperty();
         await this.fetchUserData();
+
+        console.log(OfflineService.checkApiStatus());
+
         const location = await getUserLocation();
         const locationId = location ? location.location_id : null;
             try {
