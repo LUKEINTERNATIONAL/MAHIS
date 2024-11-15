@@ -2,7 +2,14 @@
     <ion-page>
         <NavigationMenu />
         <ion-content :fullscreen="true">
-            <usersTemplate :items="_items_" :search_fields="search_fields_" @click-row="clickRow" @reload="getUsers"/>
+            <TableSkeletonLoader v-if="isLoading" />
+            <usersTemplate
+                v-else 
+                :items="_items_"
+                :search_fields="search_fields_"
+                @reload="getUsers"
+                @close-modal="closeModal"
+            />
         </ion-content>
     </ion-page>
 </template>
@@ -18,6 +25,7 @@ import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMen
 import router from "@/router";
 import { ref, onMounted } from "vue";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
+import TableSkeletonLoader from './TableSkeletonLoader.vue';
 
 export default defineComponent({
     name: "Users",
@@ -30,10 +38,12 @@ export default defineComponent({
         Toolbar,
         usersTemplate,
         NavigationMenu,
+        TableSkeletonLoader,
     },
     setup() {
         const isPopooverOpen = ref(false);
         const user_data = ref([]);
+        const isLoading = ref(true);
         const search_fields_ = ref([
             {
                 value: "username",
@@ -50,24 +60,32 @@ export default defineComponent({
         });
 
         async function getUsers() {
-            const userData = await UserService.getAllUsers();
-            user_data.value = userData.map((item: any) => ({
-                username: item.username,
-                label: item.username,
-                value: item.user_id,
-                other: item,
-            }));
+            try {
+                isLoading.value = true;
+                const userData = await UserService.getAllUsers();
+                user_data.value = userData.map((item: any) => ({
+                    username: item.username,
+                    label: item.username,
+                    value: item.user_id,
+                    other: item,
+                }));
 
-            _items_.value = userData.map((item: any) => ({
-                userId: item.user_id,
-                username: item.username,
-                roles: userRolesStr(item.roles),
-                programs: userProgramsStr(item.programs),
-                gender: item.person.gender,
-                status: item.deactivated_on,
-                firstName: userFirstname(item.person.names),
-                lastName: userLastname(item.person.names),
-            }));
+                _items_.value = userData.map((item: any) => ({
+                    userId: item.user_id,
+                    username: item.username,
+                    roles: userRolesStr(item.roles),
+                    programs: userProgramsStr(item.programs),
+                    gender: item.person.gender,
+                    status: item.deactivated_on,
+                    firstName: userFirstname(item.person.names),
+                    lastName: userLastname(item.person.names),
+                }));
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            } finally {
+                isLoading.value = false;
+            }
+            
         }
 
         function userRolesStr(items: any) {
@@ -86,15 +104,14 @@ export default defineComponent({
             return items.map((item: any) => item.name);
         }
 
-        function clickRow(data: any) {
-            isPopooverOpen.value = true;
-            user_id.value = data.userId;
+        function closeModal(data: any) {
+            if (data == false) {
+                setTimeout(() => {
+                    getUsers();
+                }, 500);
+            }
         }
 
-        function modalClosed() {
-            isPopooverOpen.value = false;
-            getUsers();
-        }
 
         function nav(url: string) {
             router.push(url);
@@ -110,12 +127,12 @@ export default defineComponent({
             user_id,
             _items_,
             search_fields_,
-            clickRow,
-            modalClosed,
             nav,
             chevronBackOutline,
             initNavData,
             getUsers,
+            isLoading,
+            closeModal,
         };
     },
     watch: {
