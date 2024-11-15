@@ -151,6 +151,7 @@ import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { UserService } from "@/services/user_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import workerData from "@/activate_worker";
+import { OfflineService } from "@/services/offline_service";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts, SetDemographics],
     components: {
@@ -266,7 +267,7 @@ export default defineComponent({
     watch: {
         workerApi: {
             async handler() {
-                if (this.workerApi?.data == "Done" && this.offlinePatientID) {
+                if (this.workerApi?.data == "Offline" && this.offlinePatientID) {
                     toastSuccess("Successfully Created Patient");
                     await db
                         .collection("patientRecords")
@@ -475,7 +476,7 @@ export default defineComponent({
                 this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
-                this.isLoading = true;
+              
 
                 if (this.globalPropertyStore.dde_enabled === "true") {
                     if (await this.possibleDuplicates()) {
@@ -488,7 +489,16 @@ export default defineComponent({
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 this.offlinePatientID = Date.now();
                 await this.createOfflineRecord(this.offlinePatientID);
-                await workerData.postData("SYNC_PATIENT_RECORD");
+
+                this.isLoading = false;
+                
+                if (await OfflineService.checkApiStatus()) {
+                    await workerData.postData("SYNC_PATIENT_RECORD")
+                    this.workerApi.data = "Syncing";
+                } else {
+                    this.workerApi.data = "Offline";
+                }
+             
             } else {
                 toastWarning("Please complete all required fields");
             }
@@ -563,7 +573,7 @@ export default defineComponent({
             } else return "";
         },
         async setOfflineData(item: any) {
-            await await resetPatientData();
+            await resetPatientData();
             this.setOfflineDemographics(item);
             this.isLoading = false;
             let url = "/patientProfile";
@@ -571,7 +581,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         async openNewPage(item: any) {
-            await await resetPatientData();
+            await resetPatientData();
             this.setDemographics(item);
             await UserService.setProgramUserActions();
             this.isLoading = false;
