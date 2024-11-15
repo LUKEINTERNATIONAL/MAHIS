@@ -1,14 +1,23 @@
 <template>
     <div :fullscreen="true" style="--background: #fff">
         <div class="demographics">
-            <div style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
-                <ion-row>
-                    <ion-col size="3.3">
+            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+                <div
+                    style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-content: center;
+                        padding-bottom: 5px;
+                        padding-top: 5px;
+                        padding-left: 5px;
+                    "
+                >
+                    <div style="margin-right: 5px">
                         <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
                             <ion-icon style="color: #fff; font-size: 100px" :icon="person"></ion-icon>
                         </div>
-                    </ion-col>
-                    <ion-col size="8.7">
+                    </div>
+                    <div>
                         <div class="demographicsFirstRow">
                             <div class="name">{{ demographics.name }}</div>
                         </div>
@@ -54,8 +63,8 @@
                                 <span v-else class="protectedStatus" style="background: #fecdca; color: #b42318">Unknown protection at birth</span>
                             </div>
                         </div>
-                    </ion-col>
-                </ion-row>
+                    </div>
+                </div>
             </div>
             <div class="name" style="color: var(--ion-color-primary); margin-top: 10px" @click="openPopover($event)">
                 <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>

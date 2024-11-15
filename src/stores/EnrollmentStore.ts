@@ -888,6 +888,9 @@ export const useEnrollementStore = defineStore("enrollementStore", {
         setSubstance(data: any) {
             this.substance = data;
         },
+        setPatientType(data: any) {
+            this.patientType = data;
+        },
         setDiagnosis(data: any) {
             this.enrollmentDiagnosis = data;
         },
