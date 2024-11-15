@@ -143,6 +143,29 @@ export const useLabTestsStore = defineStore("labTestsStore", {
           ],
         },
       },
+      {
+        isFinishBtn: false,
+        sectionHeader: "",
+        data: {
+          rowData: [
+            {
+              colData: [
+                {
+                  class:"bold",
+                  displayNone: true,
+                  inputHeader: "Amniotic fluid level result",
+                  icon: icons.editPen,
+                  value: "",
+                  name: "Amniotic fluid level result",
+                  required: true,
+                  eventType: "input",
+                  inputWidth: "100%",
+                },
+              ],
+            },
+          ],
+        },
+      },
 
       {
         selectdData: [],
