@@ -43,7 +43,7 @@
       </ion-row>
 
       <ion-row>
-        <user-card-list :users="items" style="margin-left: 20px;" :filterValue="searchValue" @reload="reload"/>
+        <user-card-list :users="items" style="margin-left: 20px;" :filterValue="searchValue" @reload="closeModal"/>
       </ion-row>
 
       <addUserModal
@@ -142,9 +142,13 @@ function reload(user_id: any) {
   emit("reload", user_id)
 }
 
+function closeModal(data: any) {
+  emit("closeModal", data)
+}
+
 const emit = defineEmits<{
-  (e: "clickRow", ObjectsArray: any): void
   (e: "reload", ObjectsArray: any): void
+  (e: "closeModal", value: any): void
 }>()
 
 </script>

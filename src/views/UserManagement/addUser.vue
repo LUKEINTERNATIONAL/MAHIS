@@ -166,6 +166,7 @@
                 selectLabel=""
                 label="name"
                 :searchable="true"
+                :disabled="disableFacilitySelection"
                 @search-change="FindLocation($event)"
                 track-by="location_id"
                 :options="locationData"
@@ -325,6 +326,7 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 import VueMultiselect from "vue-multiselect"
 import { LocationService } from "@/services/location_service"
 import { isEmpty } from "lodash"
+import { useUserStore } from "@/stores/userStore";
 import {
     addOutline,
     pencilOutline,
@@ -374,6 +376,9 @@ const selected_TAz = ref()
 const selected_Districts = ref()
 const disableVillageSelection = ref(true)
 const HSA_found_for_disabling_button = ref(true)
+const userStore = useUserStore()
+const facilityLocation = computed(() => userStore.facilityLocation);
+const disableFacilitySelection = ref(true)
 
 const props = defineProps<{
     action: any
@@ -382,6 +387,8 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
+    await getFacilityForCurrentuser()
+    await getCurrentUserRoles()
     districtList.value = await getdistrictList()
 })
 
@@ -445,6 +452,38 @@ function selectedDistrict(selectedDistrict: any) {
     selectedDistrict.forEach((district: any ) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
+}
+
+async function getFacilityForCurrentuser() {
+    try {
+        const response = await LocationService.getLocation(facilityLocation.value.location_id)
+        if (isEmpty(response) == false) {
+            selected_location.value = response
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function getCurrentUserRoles() {
+    try {
+        const user = await UserService.getCurrentUser();
+        if (user) {
+            const userRoles = user.roles.map((role) => role.role);
+            userStore.setUserRoles(userRoles);
+
+            if (findUserRoleByName('Superuser,Superuser,') == true) {
+                disableFacilitySelection.value = false;
+            }
+        }
+    } catch (error) {
+        
+    }
+}
+
+function findUserRoleByName(name: string) {
+    const roles = userStore.getUserRoles();
+    return roles.some((role: any) => role.toLowerCase() === name.toLowerCase());
 }
 
 async function FindLocation(text: any) {
@@ -840,9 +879,27 @@ function sselectionListUpdated(data: any) {
     isSSelectionValid()
 }
 
-function inputUpDated_fn1(event: any) {
+async function validateUsernameIfExists(username: string) {
+    try {
+        if (username.length > 0) {
+            const does_username_exist = await UserService.doesUsernameExist(username);
+            if (does_username_exist.exists == true) {
+                input_properties[0].show_error.value = true;
+                input_properties[0].error_message = "Username already exists";
+            } else if (does_username_exist.exists == false) {
+                input_properties[0].show_error.value = false;
+                input_properties[0].error_message = "Input required, Only letters are allowed";
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function inputUpDated_fn1(event: any) {
     const input = event.target.value
     input_properties[0].dataValue.value = input
+    await validateUsernameIfExists(input)
 }
 function inputUpDated_fn2(event: any) {
     const input = event.target.value
@@ -881,7 +938,6 @@ async function getdistrictList() {
     districtList.forEach((district: any ) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
-    //__________________________
 
     return districtList
 }

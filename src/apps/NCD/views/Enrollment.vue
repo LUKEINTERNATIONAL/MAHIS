@@ -166,6 +166,7 @@ import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { UserService } from "@/services/user_service";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
+import { resetPatientData } from "@/services/reset_data";
 
 export default defineComponent({
     name: "Home",
@@ -212,6 +213,14 @@ export default defineComponent({
             iconGridStatus: "inactive_icon",
         };
     },
+    watch: {
+        $route: {
+            async handler() {
+                await resetPatientData();
+            },
+            deep: true,
+        },
+    },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
@@ -231,6 +240,7 @@ export default defineComponent({
     },
     async mounted() {
         this.setDisplayType(this.enrollmentDisplayType);
+        await resetPatientData();
     },
 
     setup() {
