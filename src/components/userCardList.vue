@@ -195,8 +195,8 @@ export default defineComponent({
     };
 
 
-    function reload() {
-      emit("reload", '')
+    function reload(data: any) {
+      emit("reload", data)
     }
 
     watch(() => props.users, (newUsers) => {
@@ -222,8 +222,8 @@ export default defineComponent({
     };
 
     const modalClosed = () => {
-      reload()
       isPopooverOpen.value = false;
+      reload(isPopooverOpen.value)
     };
 
     return {
