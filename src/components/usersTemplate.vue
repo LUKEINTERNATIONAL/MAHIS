@@ -94,7 +94,7 @@
 
 const note_properties = [
     {
-        placeHolder: 'search for user (based on search field)',
+        placeHolder: 'search for username',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
