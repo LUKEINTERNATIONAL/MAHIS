@@ -5,6 +5,8 @@
             <DemographicBar />
             <div style="width: 85vw; margin: 0 auto; margin-top: 30px">
                 <Wizard
+                    v-if="showWizard"
+                    ref="wizard"
                     vertical-tabs
                     navigable-tabs
                     scrollable-tabs
@@ -169,6 +171,7 @@ export default defineComponent({
             StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
+            showWizard: true,
             tabs: [
                 {
                     title: "Vitals",
@@ -231,6 +234,13 @@ export default defineComponent({
             },
             deep: true,
         },
+        demographics: {
+            async handler() {
+                this.refreshWizard();
+                await this.markWizard();
+            },
+            deep: true,
+        },
         investigations: {
             async handler() {
                 await this.markWizard();
@@ -261,6 +271,13 @@ export default defineComponent({
     },
 
     methods: {
+        refreshWizard(): void {
+            this.showWizard = false;
+            this.currentTabIndex = 0;
+            setTimeout(() => {
+                this.showWizard = true;
+            }, 0);
+        },
         openBackController() {
             createModal(SaveProgressModal);
         },
@@ -316,7 +333,7 @@ export default defineComponent({
             }
 
             if (this.selectedNCDMedicationList.length > 0) {
-                console.log(MedicationSelectionHasValues())
+                console.log(MedicationSelectionHasValues());
                 if (MedicationSelectionHasValues() == true) {
                     this.tabs[5].icon = "check";
                 } else {
