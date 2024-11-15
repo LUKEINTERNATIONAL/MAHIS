@@ -2,7 +2,7 @@
     <ion-page>
         <NavigationMenu />
         <ion-content :fullscreen="true">
-            <dataTable :items="_items_" :search_fields="search_fields_" @click-row="clickRow" @reload="getUsers"/>
+            <usersTemplate :items="_items_" :search_fields="search_fields_" @click-row="clickRow" @reload="getUsers"/>
         </ion-content>
     </ion-page>
 </template>
@@ -12,7 +12,7 @@ import { defineComponent } from "vue";
 import { chevronBackOutline } from "ionicons/icons";
 import { IonContent, IonPage, IonRow, IonCol, IonIcon } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
-import dataTable from "@/components/dataTable.vue";
+import usersTemplate from "@/components/usersTemplate.vue";
 import { UserService } from "@/services/user_service";
 import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMenu.vue";
 import router from "@/router";
@@ -28,7 +28,7 @@ export default defineComponent({
         IonCol,
         IonIcon,
         Toolbar,
-        dataTable,
+        usersTemplate,
         NavigationMenu,
     },
     setup() {
