@@ -938,7 +938,6 @@ async function getdistrictList() {
     districtList.forEach((district: any ) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
-    //__________________________
 
     return districtList
 }
