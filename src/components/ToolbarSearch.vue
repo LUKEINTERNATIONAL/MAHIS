@@ -409,11 +409,11 @@ export default defineComponent({
                 const IDs: any = await this.setID(searchText);
                 if (Service.getProgramID() == 1) {
                     const artData = await PatientService.findByOtherID(4, IDs["ARVNumber"]);
-                    if (artData.length > 0) this.patients.push(...artData);
+                    if (artData.length > 0) this.patients = artData;
                 }
                 if (Service.getProgramID() == 32) {
                     const ncdData = await PatientService.findByOtherID(31, IDs["NCDNumber"]);
-                    if (ncdData.length > 0) this.patients.push(...ncdData);
+                    if (ncdData.length > 0) this.patients = ncdData;
                 }
             }
         },
