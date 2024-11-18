@@ -49,8 +49,8 @@ import Stepper from "@/components/Stepper.vue";
 import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-// import { useObstreticHistoryStore } from "../stores/obstetric details/obstetric";
 import { useLabourQuickCheckStore } from "../stores/physical exam/labourQuickCheck";
+import { useLabourWomanBehaviourStore } from "../stores/physical exam/labourWomanBehaviour";
 import { useLabourPhysicalExamStore } from "../stores/physical exam/physicalExamination";
 import { usefirstVaginalExaminationStore } from "../stores/physical exam/firstVaginalExamination";
 import { usePelvicAssessmentStore } from "../stores/physical exam/pelvicAssessment";
@@ -98,7 +98,7 @@ export default defineComponent({
         return {
             wizardData: [
                 {
-                    title: "Quick Check",
+                    title: "Labour Profile",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -107,7 +107,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Physical examination",
+                    title: "Quick Check",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -116,7 +116,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "First vaginal assessment",
+                    title: "Physical examination",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -125,35 +125,49 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Pelvis assessment",
+                    title: "First vaginal assessment",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
                     number: 4,
+                    last_step: "",
+                },
+                {
+                    title: "Pelvis assessment",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 5,
                     last_step: "last_step",
                 },
             ],
             StepperData: [
                 {
+                    title: "Labour Profile",
+                    component: "LabourWomanBehaviour",
+                    value: "1",
+                },
+                {
                     title: "Quick check",
                     component: "QuickCheck",
-                    value: "1",
+                    value: "2",
                 },
                 {
                     title: "Physical examination",
                     component: "PhysicalExamination",
-                    value: "2",
+                    value: "3",
                 },
                 {
                     title: "First vaginal examination",
                     component: "FirstVaginalExamination",
-                    value: "3",
+                    value: "4",
                 },
                 {
                     title: "Pelvic assessment",
                     component: "PelvicAssessment",
-                    value: "4",
+                    value: "5",
                 },
             ],
             isOpen: false,
@@ -168,6 +182,7 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useLabourQuickCheckStore, ["pastProblems"]),
+        ...mapState(useLabourWomanBehaviourStore, ["dailyCaffeineIntake"]),
         ...mapState(useLabourPhysicalExamStore, ["vitals"]),
         ...mapState(useLabourPhysicalExamStore, ["anaemia"]),
         ...mapState(useLabourPhysicalExamStore, ["otherphysicalExams"]),
