@@ -4,7 +4,7 @@
             <ion-card-content>
                 <div class="top-card-text">
                     <div class="text-2xl font-bold">{{ todayMetrics.bookedPatients }}</div>
-                    <h3 class="text-sm font-medium">Today's Bookings</h3>
+                    <h3 class="text-sm font-medium">Today's Appointments</h3>
                 </div>
             </ion-card-content>
         </ion-card>
@@ -55,7 +55,7 @@
                     <ApexChart
                         v-if="isChartReady"
                         style="width: 100%; height: 500px"
-                        type="bar"
+                        type="line"
                         :options="lineChartOptions"
                         :series="lineChartSeries"
                     />
@@ -84,10 +84,16 @@ export default {
                 totalActive: 156,
             },
             quarterlyData: [
-                { quarter: "Q1 2024", newCases: 245 },
-                { quarter: "Q2 2024", newCases: 312 },
-                { quarter: "Q3 2024", newCases: 278 },
-                { quarter: "Q4 2024", newCases: 334 },
+                { quarter: "Q1 2024", male: 245, female: 120 },
+                { quarter: "Q2 2024", male: 312, female: 165 },
+                { quarter: "Q3 2024", male: 278, female: 138 },
+                { quarter: "Q4 2024", male: 334, female: 187 },
+            ],
+            quarterlyDiagnosisData: [
+                { quarter: "Q1 2024", diabetesType1: 245, diabetesType2: 120, hypertention: 32 },
+                { quarter: "Q2 2024", diabetesType1: 312, diabetesType2: 165, hypertention: 45 },
+                { quarter: "Q3 2024", diabetesType1: 278, diabetesType2: 138, hypertention: 25 },
+                { quarter: "Q4 2024", diabetesType1: 334, diabetesType2: 187, hypertention: 78 },
             ],
             lineChartOptions: {
                 chart: {
@@ -104,7 +110,7 @@ export default {
                 xaxis: {
                     categories: [],
                 },
-                colors: ["#2563eb"],
+                colors: ["#2563eb", "#10b981"],
                 grid: {
                     borderColor: "#f3f4f6",
                     row: {
@@ -115,10 +121,18 @@ export default {
                 tooltip: {
                     theme: "light",
                 },
+                legend: {
+                    show: true,
+                    position: "top",
+                },
             },
             lineChartSeries: [
                 {
-                    name: "New Cases",
+                    name: "Male",
+                    data: [],
+                },
+                {
+                    name: "Female",
                     data: [],
                 },
             ],
@@ -139,7 +153,7 @@ export default {
                 xaxis: {
                     categories: [],
                 },
-                colors: ["#2563eb"],
+                colors: ["#2563eb", "#10b981", "#f43f5e"],
                 grid: {
                     borderColor: "#f3f4f6",
                     row: {
@@ -150,10 +164,22 @@ export default {
                 tooltip: {
                     theme: "light",
                 },
+                legend: {
+                    show: true,
+                    position: "top",
+                },
             },
             barChartSeries: [
                 {
-                    name: "New Cases",
+                    name: "Type 1 Diabetes",
+                    data: [],
+                },
+                {
+                    name: "Type 2 Diabetes",
+                    data: [],
+                },
+                {
+                    name: "Hypertention",
                     data: [],
                 },
             ],
@@ -175,15 +201,17 @@ export default {
         initializeChartData() {
             // Populate chart data
             this.lineChartOptions.xaxis.categories = this.quarterlyData.map((item) => item.quarter);
-            this.lineChartSeries[0].data = this.quarterlyData.map((item) => item.newCases);
+            this.lineChartSeries[0].data = this.quarterlyData.map((item) => item.male);
+            this.lineChartSeries[1].data = this.quarterlyData.map((item) => item.female);
 
             this.barChartOptions.xaxis.categories = this.quarterlyData.map((item) => item.quarter);
-            this.barChartSeries[0].data = this.quarterlyData.map((item) => item.newCases);
+            this.barChartSeries[0].data = this.quarterlyDiagnosisData.map((item) => item.diabetesType1);
+            this.barChartSeries[1].data = this.quarterlyDiagnosisData.map((item) => item.diabetesType2);
+            this.barChartSeries[2].data = this.quarterlyDiagnosisData.map((item) => item.hypertention);
         },
     },
 };
 </script>
-
 <style scoped>
 .grid {
     display: grid;
