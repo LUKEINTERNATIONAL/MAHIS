@@ -1,6 +1,10 @@
 <template>
     <ion-fab slot="fixed" :vertical="verticalPosition" horizontal="end">
-        <ion-fab-button v-if="btn" color="primary" style="--border-radius: 5px; width: 80px; height: 40px; font-weight: 900">
+        <ion-fab-button
+            v-if="btn"
+            color="primary"
+            style="--border-radius: 4px; width: 80px; height: 40px; font-weight: 900; border: 1px solid #cdcdcd; border-radius: 5px"
+        >
             Start visit
         </ion-fab-button>
         <ion-fab-button v-else color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
