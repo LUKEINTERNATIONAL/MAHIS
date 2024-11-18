@@ -50,7 +50,7 @@
         </ion-card>
         <ion-card style="margin-bottom: 20px; background-color: #fff; margin-left: 20px; width: 100%" class="top-card">
             <ion-card-content>
-                <div class="font-medium">Quarterly Case Distribution</div>
+                <div class="font-medium">Patients by gender</div>
                 <div ref="chartRef2">
                     <ApexChart
                         v-if="isChartReady"
