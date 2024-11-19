@@ -681,7 +681,7 @@ const initialChronicConditions = [
 export const useLabourChronicHealthConditionsStore = defineStore("labourChronicHealthConditionsStore", {
     state: () => ({
         labourChronicHealthConditions: [...initialChronicConditions] as any,
-        hivTest: [
+        labourHivTest: [
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -877,7 +877,7 @@ export const useLabourChronicHealthConditionsStore = defineStore("labourChronicH
                 },
             },
         ] as any,
-        syphilisTest: [
+        labourSyphilisTest: [
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -1089,10 +1089,10 @@ export const useLabourChronicHealthConditionsStore = defineStore("labourChronicH
             this.labourChronicHealthConditions = data;
         },
         addhivTest(data: any) {
-            this.hivTest = data;
+            this.labourHivTest = data;
         },
         addSyphilisTest(data: any) {
-            this.syphilisTest = data;
+            this.labourSyphilisTest = data;
         },
         getInitial2() {
             const data = _.cloneDeep(initialChronicConditions);
