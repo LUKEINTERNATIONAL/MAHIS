@@ -90,12 +90,12 @@ export default defineComponent({
     height: 100vh;
     border-right: 1px solid #e0e0e0;
     padding-top: 1rem;
-    width: 250px;
+    width: 15%;
 }
 .right_col {
     height: 100vh;
     padding-top: 1rem;
-    width: 80%;
+    width: 85%;
 }
 
 .nav-menu {
