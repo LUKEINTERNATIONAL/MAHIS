@@ -1,7 +1,7 @@
 <template>
-    <ion-page>
+        <ion-page>
         <NavigationMenu/>
-        <ion-content :fullscreen="true">
+        <ion-content>
             <div class="p-4">
                 <template v-for="(medicationGroup, date) in groupedMedications" :key="date">
                     <h2 class="text-lg font-bold mb-2">{{ formatHeaderDate(date) }}</h2>
@@ -58,35 +58,12 @@
                     No medications prescribed
                 </div>
             </div>
-
-            <ion-modal :is-open="selectedMedication !== null" @did-dismiss="selectedMedication = null">
-                <ion-header>
-                    <ion-toolbar>
-                        <ion-title>Medication Details</ion-title>
-                        <ion-buttons slot="end">
-                            <ion-button @click="selectedMedication = null">Close</ion-button>
-                        </ion-buttons>
-                    </ion-toolbar>
-                </ion-header>
-                <ion-content v-if="selectedMedication" class="p-4">
-                    <div class="medication-details-modal">
-                        <h2 class="text-xl font-bold mb-4">{{ selectedMedication.drug.name }}</h2>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div><strong>Order ID:</strong> {{ selectedMedication.order_id }}</div>
-                            <div><strong>Drug ID:</strong> {{ selectedMedication.drug_inventory_id }}</div>
-                            <div><strong>Dose:</strong> {{ selectedMedication.dose }} {{ selectedMedication.units }}</div>
-                            <div><strong>Equivalent Daily Dose:</strong> {{ selectedMedication.equivalent_daily_dose }}</div>
-                            <div><strong>Frequency:</strong> {{ getFrequencyLabel(selectedMedication.frequency) }}</div>
-                            <div><strong>Order Type:</strong> {{ selectedMedication.order.order_type_id }}</div>
-                            <div><strong>Start Date:</strong> {{ formatFullDate(selectedMedication.order.start_date) }}</div>
-                            <div><strong>Date Created:</strong> {{ formatFullDate(selectedMedication.order.date_created) }}</div>
-                            <div><strong>Orderer:</strong> {{ selectedMedication.order.orderer }}</div>
-                            <div><strong>Instructions:</strong> {{ selectedMedication.order.instructions }}</div>
-                        </div>
-                    </div>
-                </ion-content>
-            </ion-modal>
         </ion-content>
+
+    <!-- <MedicationDetailsModal 
+      :selectedMedication="selectedMedication" 
+      @close="selectedMedication = null" 
+    /> -->
     </ion-page>
 </template>
 
@@ -114,10 +91,11 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { DrugOrderService } from "@/services/drug_order_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
 import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
+import MedicationDetailsModal from "./MedicationDetailsModal.vue";
+import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
 
 export default defineComponent({
     name: "MedicationDispensation",
-    mixins: [SetUser],
     components: {
         IonContent,
         IonPage,
@@ -132,7 +110,8 @@ export default defineComponent({
         IonToolbar,
         IonTitle,
         IonButtons,
-        IonInput
+        IonInput,
+        MedicationDetailsModal,
     },
     data() {
         return {
@@ -165,6 +144,7 @@ export default defineComponent({
         },
         async prescribedMedications() {
             this.medications = await DrugOrderService.drugOrders(this.demographics.patient_id);
+            console.log(this.medications)
             this.medications = this.medications.map((med: any) => ({
                 ...med,
                 amountToDispense: null,
@@ -189,8 +169,9 @@ export default defineComponent({
                 console.error('Dispensation failed', error);
             }
         },
-        viewDetails(medication: any) {
+        async viewDetails(medication: any) {
             this.selectedMedication = medication;
+            await createModal(MedicationDetailsModal, { class: "large-modal" }, true, {selectedMedication: this.selectedMedication});
         },
         formatHeaderDate(dateString: any) {
             return new Date(dateString).toLocaleDateString('en-US', { 
@@ -200,16 +181,6 @@ export default defineComponent({
                 day: 'numeric' 
             });
         },
-        formatFullDate(dateString: any) {
-            return new Date(dateString).toLocaleString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-        }
     }
 });
 </script>
