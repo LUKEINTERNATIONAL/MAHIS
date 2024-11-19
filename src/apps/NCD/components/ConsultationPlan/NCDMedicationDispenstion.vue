@@ -22,13 +22,21 @@
                         >
                             <ion-card class="mb-4">
                                 <ion-card-header>
-                                    <ion-card-title>{{ medication.drug.name }}</ion-card-title>
+                                    <ion-card-title>
+                                        <ion-icon :icon="medkit"></ion-icon>
+                                        {{ medication.drug.name }}
+                                    </ion-card-title>
                                 </ion-card-header>
                                 <ion-card-content>
                                     <div class="medication-details">
                                         <div class="flex justify-between mb-3">
-                                            <span>Dose: {{ medication.dose }} {{ medication.units }}</span>
-                                            <span>Frequency: 
+                                            <span>
+                                                <ion-icon :icon="medication"></ion-icon>
+                                                Dose: {{ medication.dose }} {{ medication.units }}
+                                            </span>
+                                            <span>
+                                                <ion-icon :icon="timeOutline"></ion-icon>
+                                                Frequency: 
                                                 {{ getFrequencyLabel(medication.frequency) }} 
                                                 ({{ medication.frequency }})
                                             </span>
@@ -46,7 +54,10 @@
                                                 style="margin-top: 10px"
                                                 @click="setAmountAsPrescribed(medication)"
                                             >
-                                                As Prescribed
+                                                <ion-icon :icon="clipboardOutline" size="small"></ion-icon>
+                                                <span style="color: darkseagreen;">
+                                                    As Prescribed
+                                                </span>
                                             </ion-button>
                                         </div>
                                         <div class="mt-3 flex space-x-2">
@@ -55,6 +66,7 @@
                                                 @click="dispenseMedication(medication)"
                                                 :disabled="!medication.amountToDispense || medication.dispensed"
                                             >
+                                                <ion-icon :icon="checkmarkDoneCircleOutline"></ion-icon>
                                                 {{ medication.dispensed ? 'Dispensed' : 'Dispense' }}
                                             </ion-button>
                                             <ion-button 
@@ -62,6 +74,7 @@
                                                 style="margin-left: 20px;" 
                                                 @click="viewDetails(medication)"
                                             >
+                                                <ion-icon :icon="eye"></ion-icon>
                                                 View Details
                                             </ion-button>
                                         </div>
@@ -72,12 +85,14 @@
                     </ion-row>
                 </template>
                 <div v-if="medications.length === 0" class="text-center">
+                    <ion-icon name="alertCircleOutline" size="large"></ion-icon>
                     No medications prescribed
                 </div>
             </div>
         </ion-content>
     </ion-page>
 </template>
+
 
 <script lang="ts">
 import { 
@@ -95,7 +110,8 @@ import {
     IonButtons,
     IonInput,
     IonRow,
-    IonCol
+    IonCol,
+    IonIcon,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
@@ -107,6 +123,7 @@ import SetUser from "@/views/Mixin/SetUser.vue";
 import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import MedicationDetailsModal from "./MedicationDetailsModal.vue";
 import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
+import { medkit, repeat, eye, alertCircleOutline, checkmarkDoneCircleOutline, clipboardOutline, timeOutline  } from 'ionicons/icons';
 
 export default defineComponent({
     name: "MedicationDispensation",
@@ -127,12 +144,20 @@ export default defineComponent({
         IonInput,
         MedicationDetailsModal,
         IonRow,
-        IonCol
+        IonCol,
+        IonIcon
     },
     data() {
         return {
             medications: [],
-            selectedMedication: null as any
+            selectedMedication: null as any,
+            medkit,
+            repeat,
+            eye,
+            alertCircleOutline,
+            checkmarkDoneCircleOutline,
+            clipboardOutline,
+            timeOutline,
         };
     },
     computed: {
