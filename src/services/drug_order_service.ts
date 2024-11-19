@@ -52,6 +52,8 @@ export class DrugOrderService extends Service {
         })
     }
 
+    
+
     static getDrugDosages(patientID: number, drugID: number, date=this.getSessionDate()) {
         const params = { 'drug_id': drugID, 'date': date }
         return this.getJson(`programs/${this.getProgramID()}/patients/${patientID}/drug_doses`, params)
