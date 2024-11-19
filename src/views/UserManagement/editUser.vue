@@ -434,8 +434,7 @@ onMounted(async () => {
     await getUserData()
     await fillUserVillages()
     getCurrentUser()
-    districtList.value = await getdistrictList()
-    await getCurrentUserRoles() 
+    districtList.value = await getdistrictList() 
 })
 
 watch(
@@ -656,7 +655,12 @@ async function getCurrentUserRoles() {
             if (findUserRoleByName('Superuser,Superuser,') == true) {
                 disableFacilitySelection.value = false;
             }
+
+            if (findUserRoleByName('Superuser,Superuser,') == false) {
+                user_roles.value = findAndRemoveRoleSSU(user_roles.value)
+            }
         }
+
     } catch (error) {
         console.error(error);
     }
@@ -666,6 +670,19 @@ function findUserRoleByName(name: string) {
     const roles = userStore.getUserRoles();
     return roles.some((role: any) => role.toLowerCase() === name.toLowerCase());
 }
+
+function findAndRemoveRoleSSU(data: any[]): any[] {
+    const index = data.findIndex((role: any) => 
+        typeof role.name === 'string' && role.name.toLowerCase() === 'Superuser,Superuser,'.toLowerCase()
+    );
+    
+    if (index !== -1) {
+        data.splice(index, 1);
+    }
+
+    return data;
+}
+
 
 async function updateUserVillages() {
     UserService.updateuserVillages(userId.value, selectedVillageIds as any)
@@ -920,7 +937,7 @@ async function savePrograms(programIds: any) {
     })
 }
 
-function fillUserRoles() {
+async function fillUserRoles() {
     user_roles.value.forEach((item: any) => {
         user_data.value.roles.forEach((userR: any) => {
             if (userR.uuid == item.other.uuid) {
@@ -930,6 +947,7 @@ function fillUserRoles() {
     })
 
     checkIfSelectedIsHSA(user_roles.value)
+    await getCurrentUserRoles()    
 }
 
 function getCurrentUser() {

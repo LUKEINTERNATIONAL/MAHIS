@@ -1,6 +1,6 @@
 <template>
       <ion-row>
-        <ion-col>
+        <!-- <ion-col>
           <ListPicker
               style="margin-left: 30px"
               :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -15,11 +15,13 @@
               @item-list-filtered="list_picker_prperties[0].listFilteredFN"
               @item-search-text="list_picker_prperties[0].searchTextFN"
           />
-        </ion-col>
+        </ion-col> -->
         
-        <ion-col>
           <ion-row>
             <ion-col>
+
+            </ion-col>
+            <ion-col size="4">
               <BasicInputField
                 :placeholder="note_properties[0].placeHolder"
                 :icon="searchOutline"
@@ -39,7 +41,6 @@
               </ion-button>
             </ion-col>
           </ion-row>
-        </ion-col>
       </ion-row>
 
       <ion-row>
@@ -93,7 +94,7 @@
 
 const note_properties = [
     {
-        placeHolder: 'search for user (based on search field)',
+        placeHolder: 'search for username',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),

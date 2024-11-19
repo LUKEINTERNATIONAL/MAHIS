@@ -26,7 +26,7 @@
                 <ion-item>
                     <div class="dates_title">
                         <div>Medication run out date</div>
-                        <div class="sub_data">20 June 2024</div>
+                        <div class="sub_data">- - -</div>
                     </div>
                 </ion-item>
                 <ion-item>
@@ -68,6 +68,8 @@ import { PatientService } from "@/services/patient_service";
 import { useClinicalDaysStore, setValueProps } from "@/stores/clinicalDaysStore";
 import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service"
 import confirmModal from "@/apps/NCD/components/confirmModal.vue"
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { DrugOrderService } from "@/services/drug_order_service";
 
 export default defineComponent({
   components: {
@@ -110,6 +112,7 @@ export default defineComponent({
   computed: {
     ...mapState(useNextAppointmentStore, ["nextAppointment"]),
     ...mapState(useClinicalDaysStore, ["maximumNumberOfDaysForEachDay", "assignedAppointmentsDates"]),
+    ...mapState(useDemographicsStore, ["demographics"])
   },
   watch: {
     calendarDate: {
@@ -124,7 +127,8 @@ export default defineComponent({
     const userID: any = Service.getUserID();
     const patient = new PatientService();
     this.appointment = new AppointmentService(patient.getID(), userID);
-    this.nextAppointmentDate = this.appointment.date;
+        this.nextAppointmentDate = this.appointment.date;
+    this.supposedRunOutDate()
   },
   methods: {
     updateNextAppointment() {
@@ -186,7 +190,12 @@ export default defineComponent({
       };
       const dataToPass = { message: 'Are you sure you want to add this Appointment?',}
       createModal(confirmModal, { class: "otherVitalsModal" }, true, dataToPass, { 'cancel': handleCancel, 'confirm':  handleConfirm});
-  },
+    },
+
+    async supposedRunOutDate() {
+        const lastMedication = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+        console.log(lastMedication)
+    }
   },
 });
 </script>

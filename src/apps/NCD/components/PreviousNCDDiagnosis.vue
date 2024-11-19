@@ -72,6 +72,10 @@ export default defineComponent({
         if (hasDiabetes) {
           getDiabetesDrugs();
         }
+
+        if (diagnoses.value.length == 0) {
+          clearMedicationData()
+        }
       } catch (error) {
 
       }

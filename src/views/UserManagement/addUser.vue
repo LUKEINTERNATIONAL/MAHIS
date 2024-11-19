@@ -388,7 +388,6 @@ onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
     await getFacilityForCurrentuser()
-    await getCurrentUserRoles()
     districtList.value = await getdistrictList()
 })
 
@@ -475,6 +474,10 @@ async function getCurrentUserRoles() {
             if (findUserRoleByName('Superuser,Superuser,') == true) {
                 disableFacilitySelection.value = false;
             }
+
+            if (findUserRoleByName('Superuser,Superuser,') == false) {
+                user_roles.value = findAndRemoveRoleSSU(user_roles.value)
+            }
         }
     } catch (error) {
         
@@ -484,6 +487,18 @@ async function getCurrentUserRoles() {
 function findUserRoleByName(name: string) {
     const roles = userStore.getUserRoles();
     return roles.some((role: any) => role.toLowerCase() === name.toLowerCase());
+}
+
+function findAndRemoveRoleSSU(data: any[]): any[] {
+    const index = data.findIndex((role: any) => 
+        typeof role.name === 'string' && role.name.toLowerCase() === 'Superuser,Superuser,'.toLowerCase()
+    );
+    
+    if (index !== -1) {
+        data.splice(index, 1);
+    }
+
+    return data;
 }
 
 async function FindLocation(text: any) {
@@ -564,6 +579,7 @@ async function getUserRoles() {
         )
     })
     user_roles.value = temp_array
+    await getCurrentUserRoles()
 }
 
 function isRoleSelected() {
