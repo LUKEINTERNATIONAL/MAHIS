@@ -45,7 +45,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import { mapState } from "pinia";
 import { getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/profile_validation_service";
-import { useLabourWomanBehaviourStore } from "../../stores/physical exam/labourWomanBehaviour";
+import { useLabourWomanBehaviourStore } from "../../stores/labour profile/labourWomanBehaviour";
 
 export default defineComponent({
     name: "Menu",
