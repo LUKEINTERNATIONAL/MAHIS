@@ -112,7 +112,7 @@ export default defineComponent({
   computed: {
     ...mapState(useNextAppointmentStore, ["nextAppointment"]),
     ...mapState(useClinicalDaysStore, ["maximumNumberOfDaysForEachDay", "assignedAppointmentsDates"]),
-    ...mapState(useDemographicsStore, ["demographics"])
+    ...mapState(useDemographicsStore, ["demographics"]),
   },
   watch: {
     calendarDate: {
@@ -122,7 +122,7 @@ export default defineComponent({
       deep: true,
     },
   },
-    async mounted() {
+  async mounted() {
     setValueProps()
     const userID: any = Service.getUserID();
     const patient = new PatientService();
