@@ -22,20 +22,20 @@
                         >
                             <ion-card class="mb-4">
                                 <ion-card-header>
-                                    <ion-card-title>
-                                        <ion-icon :icon="medkit"></ion-icon>
-                                        {{ medication.drug.name }}
+                                    <ion-card-title class="medication-details-header">
+                                        <ion-icon :icon="medkit"  class="ion-margin-end"></ion-icon>
+                                        <span>{{ medication.drug.name }}</span>
                                     </ion-card-title>
                                 </ion-card-header>
                                 <ion-card-content>
                                     <div class="medication-details">
                                         <div class="flex justify-between mb-3">
-                                            <span>
-                                                <ion-icon :icon="medication"></ion-icon>
+                                            <!-- <ion-icon :icon="timeOutline" class="mr-2"></ion-icon> -->
+                                            <span class="flex items-center">
+                                                <ion-icon :icon="medication" class="mr-2"></ion-icon>
                                                 Dose: {{ medication.dose }} {{ medication.units }}
                                             </span>
-                                            <span>
-                                                <ion-icon :icon="timeOutline"></ion-icon>
+                                            <span class="flex items-center">
                                                 Frequency: 
                                                 {{ getFrequencyLabel(medication.frequency) }} 
                                                 ({{ medication.frequency }})
@@ -54,10 +54,8 @@
                                                 style="margin-top: 10px"
                                                 @click="setAmountAsPrescribed(medication)"
                                             >
-                                                <ion-icon :icon="clipboardOutline" size="small"></ion-icon>
-                                                <span style="color: darkseagreen;">
-                                                    As Prescribed
-                                                </span>
+                                                <ion-icon :icon="clipboardOutline" size="small" style="margin-right: 5px;" class="mr-1"></ion-icon>
+                                                <span style="color: darkseagreen;"> As Prescribed</span>
                                             </ion-button>
                                         </div>
                                         <div class="mt-3 flex space-x-2">
@@ -66,7 +64,7 @@
                                                 @click="dispenseMedication(medication)"
                                                 :disabled="!medication.amountToDispense || medication.dispensed"
                                             >
-                                                <ion-icon :icon="checkmarkDoneCircleOutline"></ion-icon>
+                                                <ion-icon :icon="checkmarkDoneCircleOutline" class="mr-2" style="margin-right: 5px;"></ion-icon>
                                                 {{ medication.dispensed ? 'Dispensed' : 'Dispense' }}
                                             </ion-button>
                                             <ion-button 
@@ -74,8 +72,8 @@
                                                 style="margin-left: 20px;" 
                                                 @click="viewDetails(medication)"
                                             >
-                                                <ion-icon :icon="eye"></ion-icon>
-                                                View Details
+                                                <ion-icon :icon="eye" class="mr-2" style="margin-right: 5px;"></ion-icon>
+                                                 View Details
                                             </ion-button>
                                         </div>
                                     </div>
@@ -85,7 +83,7 @@
                     </ion-row>
                 </template>
                 <div v-if="medications.length === 0" class="text-center">
-                    <ion-icon name="alertCircleOutline" size="large"></ion-icon>
+                    <ion-icon name="alertCircleOutline" size="large" class="mb-2"></ion-icon>
                     No medications prescribed
                 </div>
             </div>
@@ -237,5 +235,11 @@ export default defineComponent({
         border: 2px solid #ccc;
         border-radius: 4px;
         padding: 4px;
+    }
+
+    .medication-details-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 </style>
