@@ -1,69 +1,81 @@
 <template>
-        <ion-page>
-        <NavigationMenu/>
+    <ion-page>
+        <NavigationMenu />
         <ion-content>
             <div class="p-4">
                 <template v-for="(medicationGroup, date) in groupedMedications" :key="date">
                     <h2 class="text-lg font-bold mb-2">{{ formatHeaderDate(date) }}</h2>
-                    <ion-card v-for="medication in medicationGroup" :key="medication.order_id" class="mb-4">
-                        <ion-card-header>
-                            <ion-card-title>{{ medication.drug.name }}</ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <div class="medication-details">
-                                <div class="flex justify-between mb-3">
-                                    <span>Dose: {{ medication.dose }} {{ medication.units }}</span>
-                                    <span>Frequency: 
-                                        {{ getFrequencyLabel(medication.frequency) }} 
-                                        ({{ medication.frequency }})
-                                    </span>
-                                </div>
-                                <div class="flex items-center mb-3">
-                                    <ion-input 
-                                        type="text" 
-                                        placeholder="Amount to Dispense"
-                                        v-model="medication.amountToDispense"
-                                        class="mr-2 dose-input bordered-input"
-                                    ></ion-input>
-                                    <ion-button 
-                                        size="small" 
-                                        color="light"
-                                        style="margin-top: 10px"
-                                        @click="setAmountAsPrescribed(medication)"
-                                    >
-                                        As Prescribed
-                                    </ion-button>
-                                </div>
-                                <div class="mt-3 flex space-x-2">
-                                    <ion-button 
-                                        color="primary" 
-                                        @click="dispenseMedication(medication)"
-                                        :disabled="!medication.amountToDispense || medication.dispensed"
-                                    >
-                                        {{ medication.dispensed ? 'Dispensed' : 'Dispense' }}
-                                    </ion-button>
-                                    <ion-button 
-                                        color="secondary"
-                                        style="margin-left: 20px;" 
-                                        @click="viewDetails(medication)"
-                                    >
-                                        View Details
-                                    </ion-button>
-                                </div>
-                            </div>
-                        </ion-card-content>
-                    </ion-card>
+                    <ion-row>
+                        <!-- Responsive Column for Date Header -->
+                        <ion-col size="12" size-md="6" size-lg="4">
+                            <h3 class="text-md font-medium">{{ date }}</h3>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <!-- Each Medication Card in its Column -->
+                        <ion-col 
+                            v-for="medication in medicationGroup" 
+                            :key="medication.order_id" 
+                            size="12" 
+                            size-md="6" 
+                            size-lg="4"
+                        >
+                            <ion-card class="mb-4">
+                                <ion-card-header>
+                                    <ion-card-title>{{ medication.drug.name }}</ion-card-title>
+                                </ion-card-header>
+                                <ion-card-content>
+                                    <div class="medication-details">
+                                        <div class="flex justify-between mb-3">
+                                            <span>Dose: {{ medication.dose }} {{ medication.units }}</span>
+                                            <span>Frequency: 
+                                                {{ getFrequencyLabel(medication.frequency) }} 
+                                                ({{ medication.frequency }})
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center mb-3">
+                                            <ion-input 
+                                                type="text" 
+                                                placeholder="Amount to Dispense"
+                                                v-model="medication.amountToDispense"
+                                                class="mr-2 dose-input bordered-input"
+                                            ></ion-input>
+                                            <ion-button 
+                                                size="small" 
+                                                color="light"
+                                                style="margin-top: 10px"
+                                                @click="setAmountAsPrescribed(medication)"
+                                            >
+                                                As Prescribed
+                                            </ion-button>
+                                        </div>
+                                        <div class="mt-3 flex space-x-2">
+                                            <ion-button 
+                                                color="primary" 
+                                                @click="dispenseMedication(medication)"
+                                                :disabled="!medication.amountToDispense || medication.dispensed"
+                                            >
+                                                {{ medication.dispensed ? 'Dispensed' : 'Dispense' }}
+                                            </ion-button>
+                                            <ion-button 
+                                                color="secondary"
+                                                style="margin-left: 20px;" 
+                                                @click="viewDetails(medication)"
+                                            >
+                                                View Details
+                                            </ion-button>
+                                        </div>
+                                    </div>
+                                </ion-card-content>
+                            </ion-card>
+                        </ion-col>
+                    </ion-row>
                 </template>
                 <div v-if="medications.length === 0" class="text-center">
                     No medications prescribed
                 </div>
             </div>
         </ion-content>
-
-    <!-- <MedicationDetailsModal 
-      :selectedMedication="selectedMedication" 
-      @close="selectedMedication = null" 
-    /> -->
     </ion-page>
 </template>
 
@@ -81,7 +93,9 @@ import {
     IonToolbar,
     IonTitle,
     IonButtons,
-    IonInput
+    IonInput,
+    IonRow,
+    IonCol
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
@@ -112,6 +126,8 @@ export default defineComponent({
         IonButtons,
         IonInput,
         MedicationDetailsModal,
+        IonRow,
+        IonCol
     },
     data() {
         return {
