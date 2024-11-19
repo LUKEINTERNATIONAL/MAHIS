@@ -12,7 +12,9 @@
                                 </div>
                                 <div style="font-size: 12px; color: #34af4d">({{ mode }} mode)</div>
                             </span>
-                            <span v-else>MaHIS</span>
+                            <span v-else
+                                >MaHIS <small style="font-size: 15px">(v{{ version }})</small></span
+                            >
                         </ion-title>
                         <span style="text-align: left">
                             <ion-input
