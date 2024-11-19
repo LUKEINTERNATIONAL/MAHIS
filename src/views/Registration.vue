@@ -476,9 +476,10 @@ export default defineComponent({
                 this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
-              
 
-                if (this.globalPropertyStore.dde_enabled === "true") {
+                const  apiStatus: boolean = await OfflineService.checkApiStatus();
+
+                if (this.globalPropertyStore.dde_enabled === "true" && apiStatus) {
                     if (await this.possibleDuplicates()) {
                         this.disableSaveBtn = false;
                         this.isLoading = false;
@@ -492,13 +493,14 @@ export default defineComponent({
 
                 this.isLoading = false;
                 
-                if (await OfflineService.checkApiStatus()) {
+                if (apiStatus) {
                     await workerData.postData("SYNC_PATIENT_RECORD")
                     this.workerApi.data = "Syncing";
                 } else {
                     this.workerApi.data = "Offline";
                 }
-             
+
+              
             } else {
                 toastWarning("Please complete all required fields");
             }
