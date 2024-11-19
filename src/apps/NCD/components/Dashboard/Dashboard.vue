@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-left: 20px; display: flex; gap: 20px; width: 95%">
+    <div style="display: flex; gap: 20px; width: 100%; padding-left: 20px; padding-right: 20px">
         <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
@@ -33,8 +33,8 @@
             </ion-card-content>
         </ion-card>
     </div>
-    <div style="display: flex; gap: 30px">
-        <ion-card style="margin-bottom: 20px; background-color: #fff; margin-left: 20px; width: 100%" class="top-card">
+    <div style="display: flex; gap: 20px; padding-left: 20px; padding-right: 20px">
+        <ion-card style="margin-bottom: 20px; background-color: #fff; width: 100%" class="top-card">
             <ion-card-content>
                 <div class="font-medium">Quarterly Case Distribution</div>
                 <div ref="chartRef1">
@@ -48,7 +48,7 @@
                 </div>
             </ion-card-content>
         </ion-card>
-        <ion-card style="margin-bottom: 20px; background-color: #fff; margin-left: 20px; width: 100%" class="top-card">
+        <ion-card style="margin-bottom: 20px; background-color: #fff; width: 100%" class="top-card">
             <ion-card-content>
                 <div class="font-medium">Patients by gender</div>
                 <div ref="chartRef2">
