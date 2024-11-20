@@ -1,6 +1,7 @@
 // start common code
 // import { DatabaseManager } from "./db";
-importScripts("db.js", "client.js", "location.js", "patient.js", "program.js", "relationships.js");
+importScripts("db.js", "client.js", "location.js", "patient.js",
+    "program.js", "relationships.js", "generics.js");
 
 let APIURL = "";
 let APIKEY = "";
@@ -57,6 +58,15 @@ self.onmessage = async (event) => {
                     console.log("SET_OFFLINE_RELATIONSHIPS ~ storeName:", type);
                 } catch (error) {
                     console.log("SET_OFFLINE_RELATIONSHIPS ~ error:", error);
+                }
+                break;
+            case "SET_GENERIC_VACCINE_SCHEDULE":
+                try {
+                    await genericsService.setOfflineGenericVaccineSchedule()
+
+                    console.log("SET_OFFLINE_LOCATION ~ storeName:", type);
+                } catch (error) { 
+                  console.log("GET_OFFLINE_LOCATION ~ error:", error);
                 }
                 break;
             case "DELETE_OBJECT_STORE":
