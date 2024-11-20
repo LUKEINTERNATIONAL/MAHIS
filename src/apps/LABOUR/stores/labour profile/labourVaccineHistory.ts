@@ -344,46 +344,6 @@ const initialLMNP = [
         },
     },
     {
-        isFinishBtn: false,
-        sideColSize: 0.5,
-        //classDash: "dashed_bottom_border",
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        // {
-                        //   displayNone: true,
-                        //   inputHeader: "TTV 3 immunisation date",
-                        //   value: "",
-                        //   name: "immunised doses",
-                        //   isDatePopover: true,
-                        //   icon: icons.calenderPrimary,
-                        //   placeholder: "",
-                        //   required: true,
-                        //   eventType: "input",
-                        //   inputWidth: "100%",
-                        //   alertsErrorMassage: "",
-                        // },
-                        // {
-                        //   //displayNone: true,
-                        //   inputHeader: "TTV 4 immunisation date",
-                        //   value: "",
-                        //   name: "underimmunised3",
-                        //   isDatePopover: true,
-                        //   icon: icons.calenderPrimary,
-                        //   placeholder: "Pick the date",
-                        //   required: true,
-                        //   eventType: "input",
-                        //   inputWidth: "100%",
-                        //   alertsErrorMassage: "",
-                        // },
-                    ],
-                },
-            ],
-        },
-    },
-
-    {
         sideColSize: 0.5,
         selectdData: [],
         isFinishBtn: false,
@@ -452,32 +412,14 @@ const initialLMNP = [
         },
     },
 ] as any;
-const initialUltraSound = [] as any;
 const initialTetenus = [] as any;
-export const useCurrentPregnanciesStore = defineStore("currentPregnanciesStore", {
+export const useLabourVaccineStore = defineStore("labourVaccineStore", {
     state: () => ({
-        palpation: [] as any,
-        lmnp: [...initialLMNP] as any,
-        ultrasound: [...initialUltraSound] as any,
-        tetanus: [...initialTetenus] as any,
+        labourTetanus: [...initialTetenus] as any,
     }),
     actions: {
         setTetanus(data: any) {
-            this.tetanus = data;
-        },
-        setLMNP(data: any) {
-            this.lmnp = data;
-        },
-        setUltrasound(data: any) {
-            this.ultrasound = data;
-        },
-        getInitial() {
-            const data = _.cloneDeep(initialLMNP);
-            return [...data]; // Return a copy of the initial state
-        },
-        getInitial1() {
-            const data = _.cloneDeep(initialUltraSound);
-            return [...data]; // Return a copy of the initial state
+            this.labourTetanus = data;
         },
         getInitial2() {
             const data = _.cloneDeep(initialTetenus);

@@ -1,3 +1,4 @@
+import labourProfile from "@/apps/LABOUR/views/labourProfile.vue";
 import obstetricDetails from "@/apps/LABOUR/views/obstetricDetails.vue";
 import continuousMonitoring from "@/apps/LABOUR/views/continuousMonitoring.vue";
 import referral from "@/apps/LABOUR/views/referral.vue";
@@ -8,6 +9,11 @@ import labourAssessment from "@/apps/LABOUR/views/labourAssessment.vue";
 import labourHome from "@/apps/LABOUR/views/labourHome.vue";
 
 export default [
+    {
+        path: "/labourProfile",
+        name: "labourProfile",
+        component: labourProfile,
+    },
     {
         path: "/obstetric",
         name: "obstetricDetails",
