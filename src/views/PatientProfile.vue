@@ -667,7 +667,7 @@ export default defineComponent({
         if (!found) {
           if (gender === "Male") {
             // Toast message for males
-            toastWarning("Males are not eligible for this program");
+            toastWarning("Males cannot be enrolled in this program");
             return;
           } else if (gender === "Female" && age < 9) {
             // Toast message for females under 9 years
