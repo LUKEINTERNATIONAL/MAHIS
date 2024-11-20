@@ -493,14 +493,11 @@ export default defineComponent({
 
                 this.isLoading = false;
                 
-                if (apiStatus) {
-                    await workerData.postData("SYNC_PATIENT_RECORD")
-                    this.workerApi.data = "Syncing";
-                } else {
-                    this.workerApi.data = "Offline";
-                }
-
-              
+                
+                await workerData.postData("SYNC_PATIENT_RECORD")
+                
+                this.workerApi.data = "Offline";
+                      
             } else {
                 toastWarning("Please complete all required fields");
             }

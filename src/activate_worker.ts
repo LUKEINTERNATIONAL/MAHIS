@@ -38,7 +38,7 @@ class WorkerManager {
         const protocol = localStorage.getItem("apiProtocol") || "http";
         const apiUrl = localStorage.getItem("apiURL") || "";
         const port = localStorage.getItem("apiPort") || "";
-        this.state.value.url = `${protocol}://${apiUrl}${port ? ":" + port : ""}/api/v1/`;
+        this.state.value.url = `${protocol}://${apiUrl}${port ? ":" + port : ""}/api/v1`;
 
         // Get authentication and user data
         this.state.value.apiKey = localStorage.getItem("apiKey");
