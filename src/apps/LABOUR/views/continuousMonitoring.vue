@@ -9,10 +9,12 @@
                 @updateStatus="markWizard"
                 @finishBtn="saveData()"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
-
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -56,11 +58,14 @@ import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { ContinuousMonitoringVitalsService, OtherExamsService } from "@/services/LABOUR/continuous_monitoring_service";
 import { resetPatientData } from "@/services/reset_data";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "obstetricDetails",
+    mixins: [SetUserRole, SetEncounter],
     components: {
-      BasicFooter,
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -107,7 +112,7 @@ export default defineComponent({
             ],
             StepperData: [
                 {
-                    title: "Vitals",
+                    title: "Vitals Signs",
                     component: "LabourVitals",
                     value: "1",
                 },
@@ -162,18 +167,19 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
                 return item?.data;
             });
         },
-        saveData() {
+        async saveData() {
             //this.$router.push("labourHome");
             this.saveVitals();
             this.saveOtherExams();
             toastSuccess("Continuous monitoring data saved successfully");
-            resetPatientData();
+            await resetPatientData();
         },
         async saveVitals() {
             if (this.vitals.length > 0) {

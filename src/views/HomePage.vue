@@ -1,7 +1,12 @@
 <template>
     <ion-page>
+        <!-- Spinner -->
+        <div v-if="isLoading" class="spinner-overlay">
+            <ion-spinner name="bubbles"></ion-spinner>
+            <div class="loading-text">Please wait...</div>
+        </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33">
+        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32">
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -9,8 +14,82 @@
                     profile and start the triage
                 </p>
                 <div class="centered-content">
-                    <!-- Your component goes here -->
                     <ToolbarSearch />
+                </div>
+            </div>
+        </ion-content>
+        <ion-content :fullscreen="true" v-else-if="programID() == 14">
+            <div id="containertwo">
+                <div class="centered-content OPDDueCardWrapper">
+                    <ion-card class="section" style="width: 80%">
+                        <ion-card-header>
+                            <ion-card-title class="cardTitle">Today's patients list</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <div class="OPDDueCardContent">
+                                <div
+                                    class="OPDDueCard"
+                                    @click="openAllModal('All patients today', 'View profile', '/patientProfile')"
+                                    :style="dueCardStyle('success')"
+                                >
+                                    <ion-icon :icon="people" class="dueCardIcon"></ion-icon>
+                                    <div class="OPDStatsValue">{{ totalPatientsToday }}</div>
+                                    <div class="OPDStatsText">Total patients today</div>
+                                </div>
+                                <div
+                                    class="OPDDueCard"
+                                    @click="openPatientsListModal('Patients waiting for vitals', 'VITALS', 'Vitals', '/OPDVitals')"
+                                    :style="dueCardStyle('success')"
+                                    v-if="canViewVitals"
+                                >
+                                    <ion-icon :icon="thermometer" class="dueCardIcon"></ion-icon>
+                                    <div class="OPDStatsValue">{{ patientsWaitingForVitals.length }}</div>
+                                    <div class="OPDStatsText">Waiting for vitals</div>
+                                </div>
+
+                                <div
+                                    class="OPDDueCard"
+                                    @click="
+                                        openPatientsListModal(
+                                            'Patients waiting for consultation',
+                                            'CONSULTATION',
+                                            'Consultation',
+                                            '/OPDConsultationPlan'
+                                        )
+                                    "
+                                    :style="dueCardStyle('success')"
+                                    v-if="canViewConsultation"
+                                >
+                                    <ion-icon :icon="clipboard" class="dueCardIcon"></ion-icon>
+                                    <div class="OPDStatsValue">{{ patientsWaitingForConsultation.length }}</div>
+                                    <div class="OPDStatsText">Waiting for consultation</div>
+                                </div>
+
+                                <div
+                                    class="OPDDueCard"
+                                    @click="openPatientsListModal('Patients waiting for lab', 'LAB', 'Lab', '/OPDConsultationPlan')"
+                                    :style="dueCardStyle('success')"
+                                    v-if="canViewLab"
+                                >
+                                    <ion-icon :icon="clipboard" class="dueCardIcon"></ion-icon>
+                                    <div class="OPDStatsValue">{{ patientsWaitingForLab.length }}</div>
+                                    <div class="OPDStatsText">Waiting for lab</div>
+                                </div>
+                                <div
+                                    class="OPDDueCard"
+                                    @click="
+                                        openPatientsListModal('Patients waiting for dispensation', 'DISPENSATION', 'Dispensation', '/dispensation')
+                                    "
+                                    :style="dueCardStyle('success')"
+                                    v-if="canViewDispensation"
+                                >
+                                    <ion-icon :icon="medkit" class="dueCardIcon"></ion-icon>
+                                    <div class="OPDStatsValue">{{ patientsWaitingForDispensation.length }}</div>
+                                    <div class="OPDStatsText">Waiting for dispensation</div>
+                                </div>
+                            </div>
+                        </ion-card-content>
+                    </ion-card>
                 </div>
             </div>
         </ion-content>
@@ -103,6 +182,7 @@
                 </ion-card>
             </div>
         </ion-content>
+        <NCDHomePage v-if="programID() == 32" />
         <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
     </ion-page>
 </template>
@@ -122,6 +202,7 @@ import {
     IonToolbar,
     IonRow,
     IonCol,
+    modalController,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -143,6 +224,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { AppointmentService } from "@/services/appointment_service";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { PatientService } from "@/services/patient_service";
+import NCDHomePage from "@/apps/NCD/components/NCDHomePage.vue";
 import {
     medkit,
     chevronBackOutline,
@@ -156,20 +238,32 @@ import {
     globe,
     add,
     person,
+    clipboard,
+    thermometer,
+    people,
 } from "ionicons/icons";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import DueModal from "@/components/DashboardModal/DueModal.vue";
+import OfflineStatusModal from "@/components/Modal/OfflineStatus.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { createModal } from "@/utils/Alerts";
-import { setOfflineLocation } from "@/services/set_location";
-import { setOfflineRelationship } from "@/services/set_relationships";
+import OPDWaitingListModal from "@/components/DashboardModal/OPDWaitingListModal.vue";
+import OPDAllPatientsModal from "@/components/DashboardModal/OPDAllPatientsModal.vue";
+import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import { useWebWorker } from "@vueuse/core";
+import { getUserLocation } from "@/services/userService";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import workerData from "@/activate_worker";
+import { useStatusStore } from "@/stores/StatusStore";
 
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser, SetDemographics, SetPrograms],
+    mixins: [SetUser, SetDemographics, SetPrograms, SetUserRole],
     components: {
         IonContent,
         IonHeader,
@@ -193,14 +287,18 @@ export default defineComponent({
         Slide,
         Pagination,
         Navigation,
+        NCDHomePage,
     },
     data() {
         return {
+            workerApi: null as any,
             controlGraphs: "months" as any,
             reportData: "" as any,
             appointments: [] as any,
+            dataToPass: { payloadData: "tes" } as any,
             programBtn: {} as any,
-            base_url: "backgroundImg.png",
+            totalPatientsToday: 0,
+            isLoading: false,
             totalStats: [
                 {
                     name: "Total vaccinated this year",
@@ -215,6 +313,11 @@ export default defineComponent({
                     value: 0,
                 },
             ] as any,
+            canViewVitals: false,
+            canViewConsultation: false,
+            canViewLab: false,
+            canViewDispensation: false,
+            userRoles: [] as any,
         };
     },
     setup() {
@@ -231,14 +334,31 @@ export default defineComponent({
             medkit,
             add,
             person,
+            people,
+            thermometer,
+            clipboard,
         };
     },
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
         ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useStatusStore, [
+            "offlineVillageStatus",
+            "offlineCountriesStatus",
+            "offlineDistrictStatus",
+            "offlineTAsStatus",
+            "offlineRelationshipStatus",
+        ]),
+        ...mapState(usePatientList, [
+            "patientsWaitingForVitals",
+            "patientsWaitingForConsultation",
+            "patientsWaitingForLab",
+            "patientsWaitingForDispensation",
+        ]),
+
         backgroundStyle() {
             return {
-                background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img(this.base_url)})`,
+                background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img("backgroundImg.png")})`,
                 backgroundSize: "cover",
                 backgroundBlendMode: "overlay",
                 height: "22.8vh",
@@ -250,22 +370,105 @@ export default defineComponent({
             async handler(data) {
                 if (data.name == "Home") resetDemographics();
                 await this.setAppointments();
-                const wsService = new WebSocketService();
-                wsService.setMessageHandler(this.onMessage);
+                await this.fetchUserData();
+                // cannot subscribe more than once
+                // const wsService = new WebSocketService();
+                // wsService.setMessageHandler(this.onMessage);
+            },
+            deep: true,
+        },
+        workerApi: {
+            handler() {
+                const status = useStatusStore();
+                if (this.workerApi?.data?.payload) {
+                    if (this.workerApi?.data?.payload?.total_relationships) status.setOfflineRelationshipStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_village) status.setOfflineVillageStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_countries) status.setOfflineCountriesStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_districts) status.setOfflineDistrictStatus(this.workerApi?.data?.payload);
+                    if (this.workerApi?.data?.payload?.total_TAs) status.setOfflineTAsStatus(this.workerApi?.data?.payload);
+
+                    if (
+                        this.offlineVillageStatus?.total_village &&
+                        this.offlineRelationshipStatus?.total_relationships &&
+                        this.offlineCountriesStatus?.total_countries &&
+                        this.offlineDistrictStatus?.total_districts &&
+                        this.offlineTAsStatus?.total_TAs &&
+                        this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
+                        this.offlineRelationshipStatus?.total_relationships == this.offlineRelationshipStatus?.total &&
+                        this.offlineCountriesStatus?.total_countries == this.offlineCountriesStatus?.total &&
+                        this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
+                        this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
+                    ) {
+                        modalController.dismiss();
+                    }
+                }
             },
             deep: true,
         },
     },
     async mounted() {
-        await setOfflineLocation();
-        await setOfflineRelationship();
+        this.isLoading = true;
+        const status = useStatusStore();
+        status.setOfflineVillageStatus("");
+        status.setOfflineDistrictStatus("");
+        status.setOfflineTAsStatus("");
+        status.setOfflineRelationshipStatus("");
+        this.openOfflineStatusModal("data");
+        this.workerApi = workerData.workerApi;
+        await workerData.postData("SET_OFFLINE_LOCATION");
+        await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
+        await workerData.postData("SYNC_PATIENT_RECORD");
         resetDemographics();
         await this.setAppointments();
         this.setView();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
+        await useGlobalPropertyStore().loadGlobalProperty();
+        await this.fetchUserData();
+        const location = await getUserLocation();
+        const locationId = location ? location.location_id : null;
+            try {
+                const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
+              const filteredVisits = visitsToday.filter((visit: any) => visit.location_id === locationId);
+              this.totalPatientsToday = filteredVisits.length;
+                await usePatientList().refresh(locationId);
+            } catch (error) {}
+
+        this.isLoading = false;
     },
     methods: {
+        async fetchUserData() {
+            const user = await UserService.getCurrentUser();
+            if (user) {
+                this.userRoles = user.roles.map((role) => role.role);
+                this.updateCardVisibility();
+            }
+        },
+        updateCardVisibility() {
+            this.canViewVitals = this.isUserRole("Clinician") || this.isUserRole("Nurse") || this.isUserRole("Superuser");
+            this.canViewConsultation = this.isUserRole("Clinician") || this.isUserRole("Superuser");
+            this.canViewLab = this.isUserRole("Lab");
+            this.canViewDispensation = this.isUserRole("Clinician") || this.isUserRole("Pharmacist") || this.isUserRole("Superuser");
+        },
+
+        isUserRole(role: any) {
+            return this.userRoles.includes(role);
+        },
+        dueCardStyle(type: "success" | "warning" | "info" | "danger") {
+            const colors = {
+                success: "rgb(158, 207, 136)",
+                warning: "rgb(239, 221, 121)",
+                info: "rgb(144, 202, 249)",
+                danger: "rgb(241, 154, 154)",
+            };
+
+            return {
+                border: `1px solid ${colors[type]}`,
+                padding: "20px",
+                margin: "10px",
+            };
+        },
+
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
             if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
@@ -308,15 +511,95 @@ export default defineComponent({
         loadImage(name: any) {
             return img(name);
         },
+        openOfflineStatusModal(name: any) {
+            const dataToPass = { title: name };
+            createModal(OfflineStatusModal, { class: "fullScreenModal" }, false, this.dataToPass);
+        },
         openDueModal(name: any) {
             const dataToPass = { title: name };
             createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
         },
+
+        openPatientsListModal(name: any, list: "VITALS" | "CONSULTATION" | "LAB" | "DISPENSATION", buttonTitle: string, buttonLink: string) {
+            const dataToPass = { title: name, list, buttonTitle, buttonLink };
+            createModal(OPDWaitingListModal, { class: "fullScreenModal" }, true, dataToPass);
+        },
+        openAllModal(name: any, buttonLink: string, buttonTitle: string) {
+            const dataToPass = { title: name, buttonLink, buttonTitle };
+            createModal(OPDAllPatientsModal, { class: "fullScreenModal" }, true, dataToPass);
+        },
     },
 });
 </script>
-
 <style scoped>
+.centered-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.OPDDueCardWrapper {
+    padding: 20px;
+}
+
+.OPDDueCardContent {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.OPDDueCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-basis: calc(100% / 2 - 40px);
+    max-width: 300px;
+}
+
+@media (min-width: 0px) {
+    .OPDDueCard {
+        flex-basis: calc(100% / 2 - 40px);
+    }
+
+    #containertwo {
+        top: 50% !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .OPDDueCard {
+        flex-basis: calc(100% / 4 - 40px);
+    }
+
+    #containertwo {
+        top: 30%;
+    }
+}
+
+.dueCardIcon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.OPDStatsValue {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.OPDStatsText {
+    font-size: 1rem;
+    color: #555;
+}
+
 .totalStats {
     padding-bottom: 2vw;
     border-radius: 5px;
@@ -486,7 +769,16 @@ ion-card {
     position: absolute;
     left: 0;
     right: 0;
-    top: 50%;
+    top: 30%;
+    transform: translateY(-50%);
+}
+#containertwo {
+    text-align: center;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 30%;
     transform: translateY(-50%);
 }
 

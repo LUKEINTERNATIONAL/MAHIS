@@ -5,7 +5,17 @@
                 <ion-card style="background-color: #fff">
                     <ion-card-content>
                         <ion-img class="login_img" :src="loginIcon()" id="logo"></ion-img>
-                        <ion-title class="login-title">MaHIS</ion-title>
+                        <ion-title class="login-title">
+                            <span v-if="mode === 'development' || mode === 'test'" style="justify-content: center; display: block">
+                                <div>
+                                    MaHIS <small style="font-size: 15px">(v{{ version }})</small>
+                                </div>
+                                <div style="font-size: 12px; color: #34af4d">({{ mode }} mode)</div>
+                            </span>
+                            <span v-else
+                                >MaHIS <small style="font-size: 15px">(v{{ version }})</small></span
+                            >
+                        </ion-title>
                         <span style="text-align: left">
                             <ion-input
                                 v-model="username"
@@ -100,12 +110,12 @@ import { toastWarning, toastDanger } from "@/utils/Alerts";
 import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
-import ProgramData from "@/Data/ProgramData";
 import { getUserLocation } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
+import workerData from "@/activate_worker";
 
 export default defineComponent({
-    name: "Home",
+    name: "Login",
     components: {
         IonContent,
         IonHeader,
@@ -135,10 +145,25 @@ export default defineComponent({
             auth: {} as any,
             password: "" as any,
             username: "" as any,
+            programList: "" as any,
+            version: "" as any,
             program: "" as any,
+            workerApi: null as any,
             togglePasswordVisibility: false,
             showPassword: false,
+            mode: import.meta.env.MODE as string,
         };
+    },
+    watch: {
+        workerApi: {
+            handler() {
+                if (this.workerApi.data !== null && !this.programList) {
+                    this.programList = this.workerApi.data.payload;
+                    this.getPrograms();
+                }
+            },
+            deep: true,
+        },
     },
     computed: {},
     setup() {
@@ -147,15 +172,23 @@ export default defineComponent({
     created() {
         this.auth = new AuthService();
     },
+
     async mounted() {
+        this.workerApi = workerData.workerApi;
         const auth = new AuthService();
         await auth.loadConfig();
-        await this.getPrograms();
+        this.setVersion();
+        await workerData.postData("SET_OFFLINE_PROGRAMS");
     },
     methods: {
         async getPrograms() {
-            ProgramData.sort((a, b) => a.name.localeCompare(b.name));
-            this.multiSelectData = ProgramData;
+            if (this.programList && Object.keys(this.programList).length > 0) {
+                this.programList.sort((a: any, b: any) => a.name.localeCompare(b.name));
+                this.multiSelectData = this.programList;
+            }
+        },
+        setVersion() {
+            this.version = localStorage.getItem("core_version");
         },
         doLogin: async function () {
             if (this.username && this.password && this.program) {
@@ -200,6 +233,7 @@ export default defineComponent({
             const store = useUserStore();
             const data = await getUserLocation();
             store.setUserFacilityName(data.name);
+            store.setFacilityLocation(data);
             store.setCurrentUserProgram(this.program);
         },
     },
@@ -263,6 +297,9 @@ export default defineComponent({
 }
 .multiselect::before {
     top: -7px;
+}
+ion-card {
+    min-width: 330px;
 }
 @media (max-width: 902px) {
     .login-page {

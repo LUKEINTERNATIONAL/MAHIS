@@ -16,6 +16,8 @@
                 </div>
                 <div class="drug_container">
                     <div class="drug_content" v-for="(item, index) in reportData" :key="index">
+                        <div class="watermark" v-if="!checkExpired(item)">EXPIRED</div>
+                        <div class="watermark" v-if="item.current_quantity <= 0">Stock out</div>
                         <ion-row class="search_header">
                             <ion-col class="">
                                 <span style="font-weight: 700; font-size: 16px; color: #939393">{{ item.drug_legacy_name }}</span>
@@ -30,7 +32,7 @@
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.manufacture }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
-                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Expiration date</ion-col>
+                            <ion-col style="max-width: 188px; min-width: 150px" class="contentBold">Expiration date </ion-col>
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ formatDate(item.expiry_date) }}</ion-col>
                         </ion-row>
                         <ion-row class="search_header">
@@ -55,11 +57,33 @@
                         </ion-row>
 
                         <div>
-                            <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 12px" @click="discardStock($event, item)"
-                                >Discard Stock</ion-button
+                            <ion-button
+                                size="small"
+                                color="danger"
+                                name="Discard Stock"
+                                v-if="checkExpired(item) && item.current_quantity > 0"
+                                style="font-size: 12px"
+                                @click="whichPopover($event, item, 'discard')"
                             >
-                            <ion-button color="success" size="small" name="Update Stock" style="font-size: 12px" @click="openAddStockModal(item)"
-                                >Update Stock</ion-button
+                                Discard Stock
+                            </ion-button>
+                            <ion-button
+                                v-else
+                                size="small"
+                                color="danger"
+                                name="Discard Stock"
+                                style="font-size: 12px"
+                                @click="voidStock($event, item)"
+                            >
+                                Void Stock
+                            </ion-button>
+                            <ion-button
+                                color="success"
+                                size="small"
+                                name="Update Stock"
+                                style="font-size: 12px"
+                                @click="whichPopover($event, item, 'adjust')"
+                                >Adjust Stock</ion-button
                             >
                         </div>
                     </div>
@@ -74,6 +98,42 @@
                     />
                 </div>
             </div>
+            <ion-popover
+                style="--offset-x: -10px"
+                :is-open="popoverOpen"
+                :show-backdrop="false"
+                :dismiss-on-select="false"
+                :event="event"
+                @didDismiss="popoverOpen = false"
+            >
+                <div style="margin-bottom: 160px">
+                    <basic-form :contentData="stockDiscard" @update:inputValue="handleInputData"></basic-form>
+                    <!-- <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
+                        <ion-item :button="true" :detail="false" style="cursor: pointer"></ion-item>
+                    </ion-list> -->
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 10px">
+                    <ion-button size="small" color="danger" name="Discard Stock" style="font-size: 14px" @click="closePopover()">Cancel</ion-button>
+                    <ion-button
+                        v-if="popoverName == 'adjust'"
+                        color="success"
+                        size="small"
+                        name="Update Stock"
+                        style="font-size: 14px"
+                        @click="adjustStock()"
+                        >Save</ion-button
+                    >
+                    <ion-button
+                        v-if="popoverName == 'discard'"
+                        color="success"
+                        size="small"
+                        name="Update Stock"
+                        style="font-size: 14px"
+                        @click="updateBatch()"
+                        >Save</ion-button
+                    >
+                </div>
+            </ion-popover>
         </ion-content>
     </ion-page>
 </template>
@@ -95,6 +155,7 @@ import {
     IonCard,
     IonButton,
     modalController,
+    IonPopover,
 } from "@ionic/vue";
 import { defineComponent, ref, computed } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -118,10 +179,21 @@ import { StockService } from "@/services/stock_service";
 import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
 import { useSearchName } from "@/stores/SearchName";
+import { useStockDiscard } from "@/stores/StockDiscard";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
+import {
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    modifyCheckboxValue,
+    getRadioSelectedValue,
+    getFieldValue,
+    modifyRadioValue,
+    modifyFieldValue,
+} from "@/services/data_helpers";
+import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import {
     medkit,
     chevronBackOutline,
@@ -137,7 +209,7 @@ import {
     person,
 } from "ionicons/icons";
 export default defineComponent({
-    name: "Home",
+    name: "StockManagementModal",
     mixins: [SetUser],
     components: {
         IonContent,
@@ -160,12 +232,14 @@ export default defineComponent({
         IonFabButton,
         IonFabList,
         IonButton,
+        IonPopover,
     },
     data() {
         return {
             iconsContent: icons,
             reportData: [] as any,
             currentStock: [] as any,
+            stockData: [] as any,
             allStock: [] as any,
             outStock: [] as any,
             filter: "" as any,
@@ -177,6 +251,11 @@ export default defineComponent({
             } as any,
             selectedButton: "all",
             isLoading: false,
+            popoverOpen: false,
+            popoverName: "",
+            event: null as any,
+            stockService: {} as any,
+            disabled: false,
         };
     },
     setup() {
@@ -198,6 +277,9 @@ export default defineComponent({
             person,
         };
     },
+    created() {
+        this.stockService = new StockService();
+    },
     props: {
         data: {
             default: {} as any,
@@ -206,6 +288,7 @@ export default defineComponent({
     computed: {
         ...mapState(useStockStore, ["stock"]),
         ...mapState(useSearchName, ["searchName"]),
+        ...mapState(useStockDiscard, ["stockDiscard"]),
     },
     $route: {
         async handler() {
@@ -225,6 +308,127 @@ export default defineComponent({
         await this.buildTableData();
     },
     methods: {
+        checkExpired(item: any) {
+            const expiry_date: Date = new Date(item.expiry_date);
+            const currentDate: Date = new Date(HisDate.currentDate());
+            if (currentDate >= expiry_date) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+        async updateBatch() {
+            const doses_wasted = parseInt(getFieldValue(this.stockDiscard, "quantity", "value"));
+            const reason = getFieldValue(this.stockDiscard, "reason", "value").name;
+            const delivered_quantity = parseInt(this.stockData.delivered_quantity);
+            this.stockData.current_quantity;
+            const total_used_quantity = this.stockData.dispensed_quantity + this.stockData.doses_wasted + doses_wasted;
+            if (delivered_quantity < total_used_quantity) {
+                toastWarning("Quantity delivered can not be greater than quantity wasted and dispensed");
+                return false;
+            }
+            if (validateInputFiledData(this.stockDiscard)) {
+                const data = {
+                    doses_wasted: doses_wasted,
+                    drug_id: this.stockData.drug_id,
+                    reallocation_code: "MA20",
+                    waste_reason: reason,
+                    date: HisDate.currentDate(),
+                    reason: reason,
+                };
+                try {
+                    await this.stockService.updateItem(this.stockData.id, data);
+                    toastSuccess("Discard successfully");
+                    await this.buildTableData();
+                    this.closePopover();
+                } catch (error: any) {
+                    toastWarning(error);
+                }
+            } else {
+                toastWarning("Failing to discard");
+                return false;
+            }
+        },
+        async adjustStock() {
+            let adjust_stock = parseInt(getFieldValue(this.stockDiscard, "quantity", "value"));
+            let reason = getFieldValue(this.stockDiscard, "reason", "value").name;
+            if (reason == "Positive Adjustment") {
+                adjust_stock = adjust_stock;
+            }
+            if (reason == "Negative Adjustment") {
+                if (adjust_stock > this.stockData.current_quantity) {
+                    toastWarning("Quantity Available can not be greater than adjustment quantity");
+                    return false;
+                }
+                adjust_stock = -adjust_stock;
+            }
+            if (validateInputFiledData(this.stockDiscard)) {
+                const data = {
+                    adjust_stock: adjust_stock,
+                    drug_id: this.stockData.drug_id,
+                    reallocation_code: "MA20",
+                    waste_reason: reason,
+                    date: HisDate.currentDate(),
+                    reason: reason,
+                };
+                try {
+                    await this.stockService.updateItem(this.stockData.id, data);
+                    toastSuccess("Adjust successfully");
+                    await this.buildTableData();
+                    this.closePopover();
+                } catch (error: any) {
+                    toastWarning(error);
+                }
+            } else {
+                toastWarning("Failing to adjust");
+                return false;
+            }
+        },
+        whichPopover(e: Event, item: any, name: any) {
+            this.popoverName = name;
+            useStockDiscard().setStockDiscard(useStockDiscard().getInitialStockDiscard());
+            if (name == "adjust") {
+                modifyFieldValue(this.stockDiscard, "reason", "multiSelectData", [
+                    {
+                        id: 1,
+                        name: "Positive Adjustment",
+                    },
+                    {
+                        id: 2,
+                        name: "Negative Adjustment",
+                    },
+                ]);
+            } else {
+                modifyFieldValue(this.stockDiscard, "reason", "multiSelectData", [
+                    {
+                        id: 1,
+                        name: "VVM stage > 2",
+                    },
+                    {
+                        id: 2,
+                        name: "Frozen",
+                    },
+                    {
+                        id: 3,
+                        name: "Damage",
+                    },
+                    {
+                        id: 4,
+                        name: "Wastage",
+                    },
+                ]);
+            }
+            this.openPopover(e, item);
+        },
+        openPopover(e: Event, item: any) {
+            this.stockData = item;
+            this.event = e;
+            this.popoverOpen = true;
+        },
+        closePopover() {
+            this.event = null;
+            this.popoverOpen = false;
+        },
         dismiss() {
             modalController.dismiss("dismiss");
         },
@@ -241,7 +445,7 @@ export default defineComponent({
                 await this.buildTableData();
             }
         },
-        async discardStock(e: any, item: any) {
+        async voidStock(e: any, item: any) {
             const deleteConfirmed = await popoverConfirmation(`Do you want to void "${item.drug_legacy_name}", batch: ${item.batch_number} ?`, e, {
                 confirmBtnLabel: "Void",
             });
@@ -342,6 +546,19 @@ ion-row {
     padding-bottom: 10px;
     margin-bottom: 10px;
     border-bottom: 1px solid #f2f2f2;
+    position: relative;
+    overflow: hidden;
+}
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 4em;
+    color: rgba(255, 110, 110, 0.2);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 0;
 }
 .bigGroupButton {
     margin-top: 10px;

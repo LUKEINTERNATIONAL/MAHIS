@@ -1,5 +1,11 @@
 <template>
-    <basic-card :content="cardData" :editable="editable"  @update:selected="handleInputData" @update:inputValue="handleInputData" @countryChanged="handleCountryChange"></basic-card>
+    <basic-card
+        :content="cardData"
+        :editable="editable"
+        @update:selected="handleInputData"
+        @update:inputValue="handleInputData"
+        @countryChanged="handleCountryChange"
+    ></basic-card>
 </template>
 
 <script lang="ts">
@@ -46,14 +52,13 @@ export default defineComponent({
             },
             deep: true,
         },
-        // $route:{
-        //     handler(data: any) {
-        //         console.log("lllllllll",data.path)
-        //         if()
-        //         this.buildCards();
-        //     },
-        //     deep: true,
-        // }
+        patient: {
+            handler() {
+                this.setData();
+            },
+            deep: true,
+        },
+        
     },
     props: {
         editable: {
@@ -61,7 +66,6 @@ export default defineComponent({
         },
     },
     computed: {
-        
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
@@ -96,23 +100,33 @@ export default defineComponent({
     async mounted() {
         this.buildCards();
         this.setData();
-        this.setData();
     },
 
     methods: {
         setData() {
-            
             if (this.editable) {
                 modifyFieldValue(this.personInformation, "firstname", "value", this.patient.person.names[0].given_name);
                 modifyFieldValue(this.personInformation, "middleName", "value", this.patient.person.names[0].middle_name);
                 modifyFieldValue(this.personInformation, "lastname", "value", this.patient.person.names[0].family_name);
                 modifyFieldValue(this.personInformation, "birthdate", "value", this.patient.person.birthdate);
                 modifyRadioValue(this.personInformation, "gender", "selectedValue", this.patient.person.gender);
-                modifyFieldValue(this.personInformation, "phoneNumber", "value", this.getAttributes(this.patient, "Cell Phone Number"));
+                modifyFieldValue(this.personInformation, "phoneNumber", "value", this.getPhoneNumber());
             }
         },
-        getAttributes(item: any, name: any) {
-            return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;
+        getPhoneNumber() {
+            let attribute = this.patient.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number");
+            if (attribute) {
+               if (attribute.value.includes("+")) { 
+                    if(this.selectedCountry.dialCode){ return attribute.value.split(this.selectedCountry.dialCode)[1];}
+                    else{ return attribute.value.split("265")[1]; }                   
+                }
+                else if(attribute.value.startsWith('08') || attribute.value.startsWith('09')) {
+                    return attribute.value.substring(1);
+                }
+                else{
+                    return attribute.value;
+                }
+             }
         },
         buildCards() {
             const personalInformation = useRegistrationStore();
@@ -136,15 +150,22 @@ export default defineComponent({
         },
 
         async handleInputData(event: any) {
-            if (event?.col?.name == "Estimate Age" && !event?.col?.checked) {
+            if (event?.col?.name == "Estimate Age" && event?.col?.checked) {
+                modifyFieldValue(this.personInformation, "birthdate", "displayNone", true);
+            } else if (event?.col?.name == "Estimate Age" && !event?.col?.checked) {
+                modifyFieldValue(this.personInformation, "birthdate", "displayNone", false);
                 modifyFieldValue(this.personInformation, "estimation", "displayNone", true);
             } else if (event.name == "phoneNumber") {
-                const message = await Validation.validateMobilePhone(event.value,this.selectedCountry);
-                this.personInformation[4].data.rowData[0].colData[0].alertsErrorMassage = null;
-                if(!message.includes("+")){
-                    this.personInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
-                }  
-                return true 
+                const phone = `+${this.selectedCountry.dialCode}${event.value}`;
+                const message = await Validation.validateMobilePhone(phone, this.selectedCountry);
+                modifyFieldValue(this.personInformation, "phoneNumber", "alertsErrorMassage", "");
+                if (!message.includes("+")) {
+                    modifyFieldValue(this.personInformation, "phoneNumber", "alertsErrorMassage", message);
+                } else {
+                    modifyFieldValue(this.personInformation, "phoneNumber", "value", phone);
+                }
+
+                return true;
             }
             // Estimated age
             this.validationRules(event);
@@ -152,7 +173,8 @@ export default defineComponent({
             this.setGuardingInfo(event);
         },
         async handleCountryChange(country: any) {
-            this.selectedCountry = country.event
+            this.selectedCountry = country.event;
+            this.personInformation[8].data.rowData[0].colData[0].alertsErrorMassage = "";
         },
         setGuardingFormRules(age: any) {
             if (age < 14) {

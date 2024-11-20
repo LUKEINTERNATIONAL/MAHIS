@@ -21,6 +21,7 @@ import malaria_report from "../components/reports/moh/malaria_report.vue";
 
 import MoHReports from "../views/MoHReports.vue";
 import ClinicalReports from "../views/ClinicalReports.vue";
+import FacilityReports from "../views/FacilityReports.vue"
 import { Component } from "ionicons/dist/types/stencil-public-runtime";
 export default [
     {
@@ -122,5 +123,10 @@ export default [
         path: '/ClinicalReports',
         name: 'ClinicalReports',
         component: ClinicalReports
+    },
+    {
+        path: '/FacilityReports',
+        name: 'FacilityReports',
+        component: FacilityReports
     },
 ];

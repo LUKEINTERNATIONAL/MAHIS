@@ -102,7 +102,7 @@ export class Service {
 
             if (response.status === 404) {
                 const { errors } = await response?.json();
-                throw new NotFoundError(errors);
+                return errors;
             }
 
             if (response.status === 422) {
@@ -187,12 +187,12 @@ export class Service {
 
     static getProgramName() {
         let app: any = localStorage.getItem("app");
+        if (!app) return "";
         app = JSON.parse(app);
-
         if ("applicationName" in app) return app.applicationName;
-
         return "";
     }
+
 
     static getSuspendedProgram() {
         return localStorage.getItem("suspendedApp") || "";
@@ -200,9 +200,13 @@ export class Service {
 
     static getProgramID() {
         let app: any = localStorage.getItem("app");
-        app = JSON.parse(app);
 
-        if ("programID" in app) return app.programID;
+        if (app) {
+            app = JSON.parse(app);
+            if ("programID" in app) {
+                return app.programID;
+            }
+        }
 
         return "";
     }
@@ -230,4 +234,9 @@ export class Service {
     }
 
     static delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+    static patchJson(url: string, data: Record<string, any>) {
+        return this.jsonResponseHandler(ApiClient.patch(url, data));
+    }
+
 }

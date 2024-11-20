@@ -6,7 +6,13 @@
                     <b>User Profile</b>
                 </ion-title>
                 <ion-buttons slot="end">
-                    <ion-button @click="$emit('closePopoover', false)">Close</ion-button>
+                    <ion-title>
+                        <ion-button @click="$emit('closePopoover', false)" fill="solid">
+                            <span style="font-weight: 400; font-size: 19px;">
+                                close
+                            </span>
+                        </ion-button>
+                    </ion-title>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
@@ -28,9 +34,17 @@
                 </div>
             </div>
         </ion-content>
-        <ion-footer :translucent="true">
+        <ion-footer>
             <ion-toolbar>
-                <DynamicButton @click="saveAction" name="Save" fill="clear" iconSlot="icon-only" style="float: right" />
+                <ion-buttons slot="end">
+                    <ion-title>
+                        <ion-button @click="saveAction" fill="solid" color="success">
+                            <span style="font-weight: 400; font-size: 20px;">
+                                save
+                            </span>
+                        </ion-button>
+                    </ion-title>
+                </ion-buttons>
             </ion-toolbar>
         </ion-footer>
     </ion-modal>
@@ -49,12 +63,7 @@ export default defineComponent({
 import { IonButtons, IonButton, IonModal, IonAvatar, IonImg, IonLabel, IonPage, IonFooter } from "@ionic/vue"
 import { IonContent, IonHeader, IonItem, IonCol, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import editUser from "./editUser.vue"
-import { checkmark, pulseOutline } from "ionicons/icons"
 import { ref } from "vue"
-import { icons } from "@/utils/svg"
-
-import BasicForm from "@/components/BasicForm.vue"
-import DynamicButton from "@/components/DynamicButton.vue"
 
 const action = ref('') as any
 
@@ -65,6 +74,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "closePopoover", ObjectsArray: any): void
+    (e: "updated", ObjectsArray: any): void
 }>()
 
 function saveAction() {
@@ -72,8 +82,8 @@ function saveAction() {
 }
 
 function isFormValid(data: any) {
-    console.log(data)
     if (data == true) {
+        emit("updated", data)
         closeModal()
     }
     if (data == false) {
@@ -105,5 +115,9 @@ ion-footer {
 ion-modal {
     --width: 90%;
     --height: 94%;
+    --border-radius: 12px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+    --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 </style>

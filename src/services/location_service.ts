@@ -40,27 +40,31 @@ export class LocationService extends Service {
         return super.getJson("/regions");
     }
 
-    static getDistricts(regionID: number) {
-        return super.getJson("/districts", { region_id: regionID, page_size: 1000 });
+    static async getDistricts(regionID: number) {
+        return await super.getJson("/districts", { region_id: regionID, page_size: 1000 });
     }
 
-    static getVillages(traditionalAuthorityID: number, name = "") {
-        return super.getJson("/villages", { traditional_authority_id: traditionalAuthorityID, name, page_size: 1000 });
+    static async getVillages(traditionalAuthorityID: number, name = "") {
+        return await super.getJson("/villages", { traditional_authority_id: traditionalAuthorityID, name, page_size: 1000 });
     }
 
-    static getTraditionalAuthorities(villageID: number, name = "") {
-        return super.getJson("/traditional_authorities", { district_id: villageID, name, page_size: 1000 });
+    static async getVillage(villageID: number) {
+        return await super.getJson(`/villages/${villageID}`);
     }
 
-    static getAllDistricts() {
-        return super.getJson("/districts", { paginate: false });
+    static async getTraditionalAuthorities(villageID: number, name = "") {
+        return await super.getJson("/traditional_authorities", { district_id: villageID, name, page_size: 1000 });
     }
 
-    static getAllVillages() {
-        return super.getJson("/villages", { paginate: false });
+    static async getAllDistricts() {
+        return await super.getJson("/districts", { paginate: false });
     }
 
-    static getAllTraditionalAuthorities() {
-        return super.getJson("/traditional_authorities", { paginate: false });
+    static async getAllVillages(page = 1, page_size = 10) {
+        return await super.getJson("/villages", { page: page, page_size: page_size });
+    }
+
+    static async getAllTraditionalAuthorities() {
+        return await super.getJson("/traditional_authorities", { paginate: false });
     }
 }

@@ -8,10 +8,12 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
-
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -54,20 +56,27 @@ import { LabOrder } from "@/apps/NCD/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import {DangerSignsService} from "@/apps/ANC/service/danger_signs_service";
-import {useBehaviourCousellingStore} from "@/apps/ANC/store/counselling/behaviourCousellingStore";
-import {usePhysiologicalCounselingStore} from "@/apps/ANC/store/counselling/physiologicalCounselingStore";
-import {useDietCounsellingStore} from "@/apps/ANC/store/counselling/dietCounsellingStore";
-import {BehaviourCounsellingService} from "@/apps/ANC/service/behaviour_counselling_service";
-import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
-import {PhysiologicalCounsellingService} from "@/apps/ANC/service/physiological_counselling_service";
-import {DietCounsellingService} from "@/apps/ANC/service/diet_counselling_service";
+import { DangerSignsService } from "@/apps/ANC/service/danger_signs_service";
+import { useBehaviourCousellingStore } from "@/apps/ANC/store/counselling/behaviourCousellingStore";
+import { usePhysiologicalCounselingStore } from "@/apps/ANC/store/counselling/physiologicalCounselingStore";
+import { useDietCounsellingStore } from "@/apps/ANC/store/counselling/dietCounsellingStore";
+import { BehaviourCounsellingService } from "@/apps/ANC/service/behaviour_counselling_service";
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
+import { DietCounsellingService } from "@/apps/ANC/service/diet_counselling_service";
 import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
+import { useClinicalCounsellingStore } from "@/apps/ANC/store/counselling/clinicalCousellingStore";
+import { usePreventativeCounsellingStore } from "@/apps/ANC/store/counselling/preventativeCounsellingStore";
+import { CounsellingService } from "@/apps/ANC/service/physiological_counselling_service";
+
 export default defineComponent({
     name: "Home",
+    mixins: [SetUserRole, SetEncounter],
+
     components: {
-      BasicFooter,
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -118,6 +127,24 @@ export default defineComponent({
                     icon: false,
                     disabled: false,
                     number: 3,
+                    last_step: "",
+                },
+                {
+                    title: "Clinical counselling",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 4,
+                    last_step: "",
+                },
+                {
+                    title: "Preventative counselling",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 5,
                     last_step: "last_step",
                 },
             ],
@@ -137,6 +164,16 @@ export default defineComponent({
                     component: "DietCounselling",
                     value: "3",
                 },
+                {
+                    title: "Clinical counselling",
+                    component: "ClinicalCounselling",
+                    value: "4",
+                },
+                {
+                    title: "Preventative counselling",
+                    component: "DiagnosisCounselling",
+                    value: "5",
+                },
             ],
             isOpen: false,
             iconsContent: icons,
@@ -145,92 +182,68 @@ export default defineComponent({
     mounted() {
         this.markWizard();
     },
-  computed:{
-    ...mapState(useDemographicsStore, ["demographics"]),
-    ...mapState(useBehaviourCousellingStore,["behaviourInfo"]),
-    ...mapState(usePhysiologicalCounselingStore,["physiologicalCounselingInfo"]),
-    ...mapState(useDietCounsellingStore,["dietCounsellingInfo"])
-  },
+    computed: {
+        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useBehaviourCousellingStore, ["behaviourInfo"]),
+        ...mapState(usePhysiologicalCounselingStore, ["physiologicalCounselingInfo"]),
+        ...mapState(useDietCounsellingStore, ["dietCounsellingInfo"]),
+        ...mapState(useClinicalCounsellingStore, ["clinicalCounselling"]),
+        ...mapState(usePreventativeCounsellingStore, ["preventativeCounselling"]),
+    },
     setup() {
         return { chevronBackOutline, checkmark };
     },
 
     methods: {
         markWizard() {},
+        getSaveFunction() {},
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
             });
         },
         async saveData() {
-          await this.saveBehaviourCounselling();
-          await this.savePhysiologicalCounselling()
-          await  this.saveDietCounselling()
-          resetPatientData();
-          this.$router.push("ANChome");
-
-
+            this.saveCounselling();
+            await resetPatientData();
+            this.$router.push("contact");
         },
-      async saveBehaviourCounselling() {
-        if (this.behaviourInfo.length > 0) {
-          const userID: any = Service.getUserID();
-          const  behaviourInfo= new BehaviourCounsellingService(this.demographics.patient_id, userID);
-          const encounter = await behaviourInfo.createEncounter();
-          if (!encounter) return toastWarning("Unable to create patient behaviour counselling encounter");
-          const patientStatus = await behaviourInfo.saveObservationList(await this.buildBehaviourCounselling());
-          if (!patientStatus) return toastWarning("Unable to create patient behaviour counselling details!");
-          toastSuccess("Behaviour counselling details have been created");
-        }
-        console.log(await this.buildBehaviourCounselling())
-
-      },
-      async savePhysiologicalCounselling() {
-        if (this.physiologicalCounselingInfo.length > 0) {
-          const userID: any = Service.getUserID();
-          const  physiologicalCounsellingInfo= new PhysiologicalCounsellingService(this.demographics.patient_id, userID);
-          const encounter = await physiologicalCounsellingInfo.createEncounter();
-          if (!encounter) return toastWarning("Unable to create patient physiological counselling encounter");
-          const patientStatus = await physiologicalCounsellingInfo.saveObservationList(await this.buildPhysiologicalCounselling());
-          if (!patientStatus) return toastWarning("Unable to create patient physiological counselling details!");
-          toastSuccess("Physiological counselling details have been created");
-        }
-        console.log(await this.buildPhysiologicalCounselling())
-
-      },
-      async saveDietCounselling() {
-        if (this.physiologicalCounselingInfo.length > 0) {
-          const userID: any = Service.getUserID();
-          const  dietCounsellingInfo= new DietCounsellingService(this.demographics.patient_id, userID);
-          const encounter = await dietCounsellingInfo.createEncounter();
-          if (!encounter) return toastWarning("Unable to create patient diet counselling encounter");
-          const patientStatus = await dietCounsellingInfo.saveObservationList(await this.buildDietCounselling());
-          if (!patientStatus) return toastWarning("Unable to create patient diet counselling details!");
-          toastSuccess("Diet counselling details have been created");
-        }
-        console.log(await this.buildDietCounselling())
-
-      },
-      async buildBehaviourCounselling() {
-        return [
-          ...(await formatCheckBoxData(this.behaviourInfo)),
-          ...(await formatRadioButtonData(this.behaviourInfo)),
-          ...(await formatInputFiledData(this.behaviourInfo)),
-        ];
-      },
-      async buildPhysiologicalCounselling() {
-        return [
-          ...(await formatCheckBoxData(this.physiologicalCounselingInfo)),
-          ...(await formatRadioButtonData(this.physiologicalCounselingInfo)),
-          ...(await formatInputFiledData(this.physiologicalCounselingInfo)),
-        ];
-      },
-      async buildDietCounselling() {
-        return [
-          ...(await formatCheckBoxData(this.dietCounsellingInfo)),
-          ...(await formatRadioButtonData(this.dietCounsellingInfo)),
-          ...(await formatInputFiledData(this.dietCounsellingInfo)),
-        ];
-      },
+        async saveCounselling() {
+            if (
+                this.physiologicalCounselingInfo.length >= 0 ||
+                this.dietCounsellingInfo >= 0 ||
+                this.behaviourInfo >= 0 ||
+                this.clinicalCounselling >= 0 ||
+                this.preventativeCounselling >= 0
+            ) {
+                const userID: any = Service.getUserID();
+                const counsellingInfo = new CounsellingService(this.demographics.patient_id, userID);
+                const encounter = await counsellingInfo.createEncounter();
+                if (!encounter) return toastWarning("Unable to create patient counselling encounter");
+                const patientStatus = await counsellingInfo.saveObservationList(await this.buildCounselling());
+                if (!patientStatus) return toastWarning("Unable to create counselling details!");
+                toastSuccess("Counselling details have been saved");
+            }
+            console.log(await this.buildCounselling());
+        },
+        async buildCounselling() {
+            return [
+                ...(await formatCheckBoxData(this.dietCounsellingInfo)),
+                ...(await formatRadioButtonData(this.dietCounsellingInfo)),
+                ...(await formatInputFiledData(this.dietCounsellingInfo)),
+                ...(await formatCheckBoxData(this.behaviourInfo)),
+                ...(await formatRadioButtonData(this.behaviourInfo)),
+                ...(await formatInputFiledData(this.behaviourInfo)),
+                ...(await formatCheckBoxData(this.physiologicalCounselingInfo)),
+                ...(await formatRadioButtonData(this.physiologicalCounselingInfo)),
+                ...(await formatInputFiledData(this.physiologicalCounselingInfo)),
+                ...(await formatCheckBoxData(this.clinicalCounselling)),
+                ...(await formatRadioButtonData(this.clinicalCounselling)),
+                ...(await formatInputFiledData(this.clinicalCounselling)),
+                ...(await formatCheckBoxData(this.preventativeCounselling)),
+                ...(await formatRadioButtonData(this.preventativeCounselling)),
+                ...(await formatInputFiledData(this.preventativeCounselling)),
+            ];
+        },
     },
 });
 </script>

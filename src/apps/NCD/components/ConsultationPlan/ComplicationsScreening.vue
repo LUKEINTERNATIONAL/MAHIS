@@ -1,109 +1,26 @@
 <template>
+    <basic-form :contentData="visualScreening"> </basic-form>
     <ion-list>
-        <ion-item :lines="visualAT" class="dashed_bottom_border textSectionFormat">
-            <ion-toggle :checked="showVisualAcuityTest" @ionChange="toggleShowVisualAcuityTest">
-                <div class="toggle_content">
-                    <div>Visual acuity test</div>
-                    <div class="due_date">2023-04-13</div>
-                    <div>
-                        <DynamicButton color="danger" name="Overdue" size="small" />
-                    </div>
-                </div>
-            </ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="showVisualAcuityTest">
-            <ion-row>
-                <ion-col>
-                    <basic-input-field inputType="number" inputHeader="Left Eye"></basic-input-field>
-                </ion-col>
-                <ion-col>
-                    <basic-input-field inputType="number" inputHeader="Right Eye"></basic-input-field>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-accordion-group ref="accordionGroup" class="previousView">
-                    <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                        <ion-item slot="header" color="light">
-                            <ion-label class="previousLabel">Previous Visits</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <previousDiagnosis />
-                        </div>
-                    </ion-accordion>
-                </ion-accordion-group>
-            </ion-row>
-        </div>
-        <ion-item class="sub_item_body_close" v-if="showVisualAcuityTest" />
-
-        <ion-item class="dashed_bottom_border textSectionFormat">
-            <ion-toggle>Retinopathy screening</ion-toggle>
-        </ion-item>
-
         <ion-item :lines="footSC" class="dashed_bottom_border textSectionFormat">
-            <ion-toggle :checked="footChecked" @ionChange="footScreening">Foot screening</ion-toggle>
+            <span>Foot screening</span>
         </ion-item>
-
-        <div class="sub_item_body" v-if="footChecked">
+        <div class="sub_item_body">
             <basic-form :contentData="FootScreening"> </basic-form>
-            <ion-row>
-                <ion-accordion-group ref="accordionGroup" class="previousView">
-                    <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                        <ion-item slot="header" color="light">
-                            <ion-label class="previousLabel">Previous Visits</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <previousDiagnosis />
-                        </div>
-                    </ion-accordion>
-                </ion-accordion-group>
-            </ion-row>
         </div>
-        <ion-item class="sub_item_body_close" v-if="footChecked" />
-
-        <ion-item class="dashed_bottom_border textSectionFormat">
-            <div class="other_content">
-                <div>CVD risk screening</div>
-                <div style="color: #007d7d; font-size: 20px; text-decoration: underline" v-if="cvdRiskObj.btnColor == 'danger'">
-                    <DynamicButton
-                        fontWeight="700"
-                        expand="full"
-                        :icon="iconsContent.greaterThan"
-                        iconSlot="end"
-                        fill="clear"
-                        size="large"
-                        color="tertiary"
-                        class=""
-                        name="Send to referral"
-                        iconFont="large"
-                    />
-                </div>
-                <div style="width: 200px">
-                    <DynamicButton
-                        @click="cvdRisk()"
-                        fontWeight="700"
-                        expand="full"
-                        size="large"
-                        :color="cvdRiskObj.btnColor"
-                        class=""
-                        :name="cvdRiskObj.btnName"
-                    />
-                </div>
-            </div>
-        </ion-item>
-        <ion-item class="dashed_bottom_border textSectionFormat">
-            <div class="other_content">
-                <div>Diabetic kidney disease</div>
-                <div style="display: flex; width: 420px; justify-content: space-between">
-                    <div style="width: 200px">
-                        <DynamicButton expand="full" size="large" color="danger" class="" name="Proteinuria" subName="4+ (High risk)" />
-                    </div>
-                    <div style="width: 200px">
-                        <DynamicButton expand="full" size="large" color="secondary" class="" name="Ceatinine (mg/dl)" subName="22.1 (No risk)" />
-                    </div>
-                </div>
-            </div>
-        </ion-item>
     </ion-list>
+    <basic-form :contentData="cvScreening"> </basic-form>
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Previous Visits</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <previousDiagnosis />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
 
 <script lang="ts">
@@ -163,7 +80,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useComplicationsStore, ["FootScreening"]),
+        ...mapState(useComplicationsStore, ["FootScreening", "visualScreening", "cvScreening"]),
     },
     setup() {
         return { checkmark, pulseOutline };

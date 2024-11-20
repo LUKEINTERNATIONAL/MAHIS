@@ -6,31 +6,54 @@
             </ion-toolbar>
         </ion-header>
         <ion-content style="--background: #fff">
-            <ion-accordion-group expand="inset">
-                <ion-accordion value="first" @click="navigationMenu('home')" toggle-icon="">
+            <ion-accordion-group expand="inset" style="margin-inline: unset; margin-top: unset">
+                <ion-accordion-group>
+                <ion-accordion value="1" @click="navigationMenu('home')" toggle-icon="">
                     <ion-item slot="header" color="light">
-                        <ion-label class="header">Home</ion-label>
+                    <ion-icon :icon="homeOutline" slot="start"></ion-icon>
+                    <ion-label class="header lft-drpm">Home</ion-label>
                     </ion-item>
                 </ion-accordion>
-
-                <ion-accordion value="third" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
+                
+                <ion-accordion value="2" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
                     <ion-item slot="header" color="light">
-                        <ion-label class="header">Schedule Immunization</ion-label>
+                    <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
+                    <ion-label class="header lft-drpm">Schedule Immunization</ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="fifth" @click="navigationMenu('manageAppointMents')" toggle-icon="">
+                
+                <ion-accordion value="3" @click="navigationMenu('manageAppointMents')" toggle-icon="">
                     <ion-item slot="header" color="light">
-                        <ion-label class="header">Manage Appointments</ion-label>
+                    <ion-icon :icon="listOutline" slot="start"></ion-icon>
+                    <ion-label class="header lft-drpm">Manage Appointments</ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="second" @click="navigationMenu('stockManagement')" toggle-icon="">
+                
+                <ion-accordion value="4" @click="navigationMenu('stockManagement')" toggle-icon="">
                     <ion-item slot="header" color="light">
-                        <ion-label class="header">Inventory Management </ion-label>
+                    <ion-icon :icon="cubeOutline" slot="start"></ion-icon>
+                    <ion-label class="header lft-drpm">Inventory Management</ion-label>
                     </ion-item>
                 </ion-accordion>
-                <ion-accordion value="fourth">
+                
+                <ion-accordion value="5" @click="navigationMenu('OfflineRecords')" toggle-icon="">
                     <ion-item slot="header" color="light">
-                        <ion-label class="header">Reports</ion-label>
+                    <ion-icon :icon="documentOutline" slot="start"></ion-icon>
+                    <ion-label class="header lft-drpm">Manage Offline Records</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                
+                <ion-accordion value="deduplication of client profile records" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                    <ion-icon :icon="peopleOutline" slot="start"></ion-icon>
+                    <ion-label class="header lft-drpm">De-Duplication</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                </ion-accordion-group>
+                <ion-accordion value="6">
+                    <ion-item slot="header" color="light">
+                        <ion-icon :icon="barChartOutline" slot="start"></ion-icon>
+                        <ion-label class="header lft-drpm">Reports</ion-label>
                     </ion-item>
                     <div class="ion-padding" slot="content">
                         <ion-accordion-group>
@@ -40,6 +63,9 @@
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
+                                        <ion-item style="cursor: pointer" @click="navigationMenu('FacilityReports')" class="list-content"
+                                            >Facility Reports</ion-item
+                                        >
                                         <ion-item style="cursor: pointer" @click="navigationMenu('MoHReports')" class="list-content">MoH</ion-item>
                                         <ion-item style="cursor: pointer" @click="navigationMenu('ClinicalReports')" class="list-content"
                                             >Clinical Reports</ion-item
@@ -47,7 +73,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-accordion value="second" v-if="programAttri[1].showReports">
+                            <ion-accordion value="seventh" v-if="programAttri[1].showReports">
                                 <ion-item slot="header">
                                     <ion-label class="header">NCD Reports</ion-label>
                                 </ion-item>
@@ -70,11 +96,17 @@
                                 </div>
                             </ion-accordion>
 
-                            <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer">
+                            <ion-item
+                                v-if="programAttri[3].showReports"
+                                @click="navigationMenu('EIPMReport')"
+                                class="list-content"
+                                style="cursor: pointer"
+                            >
                                 EPI Monthly Report
                             </ion-item>
 
                             <ion-item
+                                v-if="programAttri[3].showReports"
                                 @click="navigationMenu('OverDueReport')"
                                 class="list-content"
                                 style="cursor: pointer"
@@ -108,9 +140,10 @@
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
-                <ion-accordion value="sixth" v-if="isSuperuser">
+                <ion-accordion value="7" v-if="isSuperuser" style="border-radius: 0px">
                     <ion-item slot="header" color="light">
-                        <ion-label class="header">Settings</ion-label>
+                        <ion-icon :icon="settingsOutline" slot="start"></ion-icon>
+                        <ion-label class="header lft-drpm">Settings</ion-label>
                     </ion-item>
                     <div class="ion-padding" slot="content">
                         <ion-accordion-group>
@@ -145,6 +178,7 @@
 <script lang="ts">
 import { IonAccordion, IonAccordionGroup, IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController } from "@ionic/vue";
 import { defineComponent, ref, computed, onMounted, onUpdated, watch } from "vue";
+import { homeOutline, calendarOutline, listOutline, cubeOutline, settingsOutline, documentOutline, peopleOutline, barChartOutline } from 'ionicons/icons';
 import { UserService } from "@/services/user_service";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/userStore";
@@ -203,7 +237,7 @@ export default defineComponent({
         const router = useRouter();
         const user_data = ref<any>(null);
         onMounted(async () => {
-            await fetchUserData();
+            // await fetchUserData();
         });
         async function fetchUserData() {
             const user = await UserService.getCurrentUser();
@@ -219,17 +253,21 @@ export default defineComponent({
         }
         function navigationMenu(url: string) {
             menuController.close();
-            router.push(url).then(() => {
-                if (url === "users") {
-                    router.go(0);
-                }
-            });
+            router.push(url).then(() => {});
         }
         return {
             isSuperuser,
             user_data,
             navigationMenu,
             onMenuOpen,
+            homeOutline,
+            calendarOutline,
+            listOutline,
+            cubeOutline,
+            documentOutline,
+            peopleOutline,
+            barChartOutline,
+            settingsOutline,
         };
     },
     methods: {
@@ -248,12 +286,29 @@ export default defineComponent({
 <style scoped>
 ion-accordion {
     margin: 0 auto;
+    border-radius: 0px;
+    background-color: #fff;
+    font-weight: 700;
 }
-
+ion-item {
+    --background: #fff;
+    --color: #7b7b7b !important;
+}
+ion-label {
+    font-weight: 700;
+    --color: #7b7b7b !important;
+}
 ion-accordion.accordion-expanding,
 ion-accordion.accordion-expanded {
     width: calc(100% - 32px);
-
     margin: 16px auto;
+    background-color: #fff;
+}
+.list-md {
+    background: unset;
+}
+
+.lft-drpm {
+    margin-left: 10px;
 }
 </style>

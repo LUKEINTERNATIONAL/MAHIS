@@ -116,11 +116,11 @@ export class PatientService extends Service {
         });
     }
 
-    updateMWNationalId(newId: string) {
-        return PatientIdentifierService.create(this.getID(), 28, newId);
+    updateMWNationalId(newId: string, patientID: any = "") {
+        return PatientIdentifierService.create(this.getID() || patientID, 28, newId);
     }
-    updateBirthId(newId: string) {
-        return PatientIdentifierService.create(this.getID(), 23, newId);
+    updateBirthId(newId: string, patientID: any = "") {
+        return PatientIdentifierService.create(this.getID() || patientID, 23, newId);
     }
 
     isMale() {
@@ -449,5 +449,10 @@ export class PatientService extends Service {
             addressOBJ.currentVillage = addresses.city_village;
         }
         return addressOBJ;
+    }
+
+    public static async getCachedClientProfileDuplicates() {
+        const res = await Service.getJson('/dde/patients/matches')
+        return res
     }
 }

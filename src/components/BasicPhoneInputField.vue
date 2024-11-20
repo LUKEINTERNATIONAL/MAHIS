@@ -15,10 +15,16 @@
             :disabled="disabled"
             :preferredCountries="['mw']"
             :defaultCountry="'mw'"
-            :inputOptions="{ showDialCode: true,}"
-            :dropdownOptions="{ showSearchBox: true, showFlags:true,showDialCodeInList: true, searchBoxPlaceholder: 'Search here...'}"
+            :inputOptions="{ showDialCode: false, placeholder: 'Enter a phone number' }"
+            :dropdownOptions="{
+                showDialCodeInSelection: true,
+                showSearchBox: true,
+                showFlags: true,
+                showDialCodeInList: true,
+                searchBoxPlaceholder: 'Search here...',
+            }"
             mode="international"
-            
+            :autoFormat="false"
         >
         </vue-tel-input>
     </div>
@@ -40,7 +46,6 @@ import { caretDownSharp } from "ionicons/icons";
 import { VueTelInput } from "vue-tel-input";
 import { size } from "lodash";
 import "vue-tel-input/vue-tel-input.css";
-import { getElement } from "ionicons/dist/types/stencil-public-runtime";
 export default defineComponent({
     name: "HisFormElement",
     components: {
@@ -56,16 +61,18 @@ export default defineComponent({
             displayList: [] as any,
             popoverOpen: false,
             event: "" as any,
-            phone: "" as any,
+            phone: this.inputValue || ("" as any),
             options: {} as any,
             selectedText: "" as any,
             filteredData: [] as any,
             showAsterisk: false,
-            country: [{"dialCode": "265","iso2": "MW","name": "Malawi"}] as any
+            country: [{ dialCode: "265", iso2: "MW", name: "Malawi" }] as any,
         };
     },
+    watch: {},
+
     mounted() {
-        this.phone = this.inputValue;
+        this.phone = this.inputValue || "";
     },
 
     props: {
@@ -130,8 +137,8 @@ export default defineComponent({
     },
     methods: {
         handleCountryChanged(country: any) {
-            this.country = country
-            this.$emit("countryChanged", this.country);   
+            this.country = country;
+            this.$emit("countryChanged", this.country);
         },
         handleClick(event: any) {
             // if (this.popOverData?.data) this.setEvent(event);
@@ -196,6 +203,6 @@ h6 {
     --background: #fff;
 }
 .custom >>> .vti__input {
-  background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }
 </style>

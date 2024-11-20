@@ -6,7 +6,13 @@
                     ><b>Add User Details</b></ion-title
                 >
                 <ion-buttons slot="end">
-                    <ion-button @click="$emit('closePopoover', false)">Close</ion-button>
+                    <ion-title>
+                        <ion-button @click="$emit('closePopoover', false)" fill="solid">
+                            <span style="font-weight: 400; font-size: 19px;">
+                                close
+                            </span>
+                        </ion-button>
+                    </ion-title>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
@@ -29,7 +35,15 @@
         </ion-content>
         <ion-footer :translucent="true">
             <ion-toolbar>
-                <DynamicButton @click="saveAction" name="Save" fill="clear" iconSlot="icon-only" style="float: right" />
+                <ion-buttons slot="end">
+                    <ion-title>
+                        <ion-button @click="saveAction" fill="solid" color="success">
+                            <span style="font-weight: 400; font-size: 20px;">
+                                save
+                            </span>
+                        </ion-button>
+                    </ion-title>
+                </ion-buttons>
             </ion-toolbar>
         </ion-footer>
     </ion-modal>
@@ -38,6 +52,7 @@
         :is_open="isPopooverOpen"
         :user_id="user_id"
         @close-popoover="isPopooverOpen = false"
+        @updated="reload"
     />
 </template>
 
@@ -73,6 +88,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "closePopoover", ObjectsArray: any): void
+    (e: "updated", ObjectsArray: any): void
+    (e: "reload", ObjectsArray: any): void
 }>()
 
 function saveAction() {
@@ -83,9 +100,14 @@ function closeModal() {
     modalController.dismiss()
 }
 
+function reload() {
+  emit("reload", '')
+}
+
 function closeModalAndOpenEditUser(data: any) {
     user_id.value = data
-    isPopooverOpen.value = true
+    // isPopooverOpen.value = true
+    emit("updated", data)
     closeModal()
 }
 
@@ -109,5 +131,9 @@ ion-footer {
 ion-modal {
     --width: 90%;
     --height: 94%;
+    --border-radius: 12px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+    --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 </style>

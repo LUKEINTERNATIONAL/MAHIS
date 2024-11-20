@@ -1,15 +1,22 @@
 <template>
-    <div>
-      <PrivacyPolicy />
-    </div>
-  </template>
-  
-  <script lang="ts">
-  import PrivacyPolicy from "@/components/PrivacyPolicy.vue";
-  
-  export default {
+    <ion-page>
+        <ion-content class="ion-padding login-page">
+            <PrivacyPolicy />
+        </ion-content>
+    </ion-page>
+</template>
+
+<script lang="ts">
+import { IonContent, IonPage } from "@ionic/vue";
+import PrivacyPolicy from "@/components/PrivacyPolicy.vue";
+import { defineComponent } from "vue";
+
+export default defineComponent({
+    name: "PrivacyPolicyView",
     components: {
-      PrivacyPolicy,
+        IonContent,
+        IonPage,
+        PrivacyPolicy,
     },
-  };
-  </script>
+});
+</script>

@@ -14,6 +14,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Shape of brim',
+                            name: 'Shape of brim',
                             selectedValue: ''
                         },
                         data:[
@@ -43,6 +44,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Sacrum',
+                            name: 'Sacrum',
                             selectedValue: ''
                         },
                         data:[
@@ -71,7 +73,8 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Sacral promotory',
+                            title: 'Sacral promontory',
+                            name: 'Sacral promontory',
                             selectedValue: ''
                         },
                         data:[
@@ -101,6 +104,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Sacrospinous ligaments',
+                            name: 'Sacrospinous ligaments',
                             selectedValue: ''
                         },
                         data:[
@@ -130,6 +134,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Ischial spines',
+                            name: 'Ischial spines',
                             selectedValue: ''
                         },
                         data:[
@@ -159,6 +164,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Station',
+                            name: 'Station',
                             selectedValue: ''
                         },
                         data:[
@@ -237,6 +243,7 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Sub-pubic arch',
+                            name: 'Sub-pubic arch',
                             selectedValue: ''
                         },
                         data:[
@@ -266,19 +273,20 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                     {
                         header:{
                             title: 'Intertuberous diameter',
+                            name: 'Intertuberous diameter',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Admits 4 knuckles (Normal)',
-                                value: 'admits 4 knucles (Normal)',
+                                name: 'more than or equal to 8.5cm (Normal)',
+                                value: 'more than or equal to 8.5cm (Normal)',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Admits 4 knuckles (Abnormal)',
-                                value: 'admits 4 knuckles (Abrnormal)',
+                                name: 'less than 8.5cm (Abnormal)',
+                                value: 'less than 8.5cm (Abnormal)',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -342,6 +350,8 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
             this.pelvicAssessment = data
         },
     },
-    persist:true,
+    // persist:true,
 
 })
+
+

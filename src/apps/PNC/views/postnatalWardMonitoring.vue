@@ -8,6 +8,9 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -53,10 +56,13 @@ import { useDangerSignsStore } from "@/apps/ANC/store/Tempo";
 import { usePostnatalWardStayStore } from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
 import { PostnatalWardStayService } from "@/apps/PNC/Services/postnatal_wardstay_service";
 import { resetPatientData } from "@/services/reset_data";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "postnatalWardMonitoring",
+    mixins: [SetUserRole, SetEncounter],
     components: {
-      BasicFooter,
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -148,6 +154,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -157,7 +164,7 @@ export default defineComponent({
         async saveData() {
             await this.saveWardMonitoring();
             toastSuccess("Postnatal ward stay data saved successfully");
-            resetPatientData();
+            await resetPatientData();
             this.$router.push("home");
         },
         async saveWardMonitoring() {

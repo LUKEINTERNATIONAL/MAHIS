@@ -8,6 +8,9 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -59,10 +62,14 @@ import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { ReferralService } from "@/services/LABOUR/referral_service";
 import { resetPatientData } from "@/services/reset_data";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "referral",
+    mixins: [SetUserRole, SetEncounter],
+
     components: {
-      BasicFooter,
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -148,16 +155,17 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
                 return item?.data;
             });
         },
-        saveData() {
+        async saveData() {
             this.saveReferal();
             toastSuccess("Patient referral saved successfully");
-            resetPatientData();
+            await resetPatientData();
         },
         async saveReferal() {
             if (this.labourReferral.length > 0) {

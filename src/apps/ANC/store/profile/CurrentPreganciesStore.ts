@@ -1,13 +1,22 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _, { initial } from "lodash";
+import * as yup from 'yup'
+import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers";
+
+export const pastObstreticValidationShema = yup.object().shape({
+    "The woman received tetanus doses for immunization?":yup.mixed()
+    .required("This field is required")
+
+  })
+
 const initialLMNP = [
     {
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "LNMP Known?*",
+                title: "LNMP Known?",
                 selectedValue: "",
                 name: "LNMP Known?",
                 displayNext: "Yes",
@@ -39,7 +48,7 @@ const initialLMNP = [
                         {
                             displayNone: true,
                             class: "bold",
-                            inputHeader: "LNMP date*",
+                            inputHeader: "LNMP date",
                             value: "",
                             name: "lmnpDate",
                             eventType: "input",
@@ -114,7 +123,7 @@ const initialLMNP = [
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "Ultrasound done?*",
+                title: "Ultrasound done?",
                 selectedValue: "",
                 name: "Ultrasound done?",
                 displayNext: "Yes",
@@ -146,7 +155,7 @@ const initialLMNP = [
                         {
                             class: "bold",
                             displayNone: true,
-                            inputHeader: "Date for ultrasound*",
+                            inputHeader: "Date for ultrasound",
                             value: "",
                             name: "Ultrasound",
                             minDate: "",
@@ -162,7 +171,7 @@ const initialLMNP = [
                         },
                         {
                             class: "bold",
-                            inputHeader: "Gestation age from ultrasound*",
+                            inputHeader: "Gestation age from ultrasound",
                             value: "",
                             name: "specify",
                             required: true,
@@ -230,7 +239,7 @@ const initialLMNP = [
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "Gestation age by Palpation known*?",
+                title: "Gestation age by Palpation known?",
                 selectedValue: "",
                 name: "Gestation",
                 displayNext: "Yes",
@@ -262,7 +271,7 @@ const initialLMNP = [
                     colData: [
                         {
                             displayNone: true,
-                            inputHeader: "Enter gestation age by palpation*",
+                            inputHeader: "Enter gestation age by palpation",
                             value: "",
                             class: "bold",
                             name: "Gestation age by palpation",
@@ -298,7 +307,7 @@ const initialLMNP = [
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "Gestation age to be used*",
+                title: "Gestation age to be used",
                 selectedValue: "",
                 name: "Gestation age to be used",
                 alertsErrorMassage: "",
@@ -365,7 +374,7 @@ const initialLMNP = [
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "Number of under immunised tetanus doses*",
+                title: "Number of under immunised tetanus doses",
                 selectedValue: "",
                 displayNone: true,
                 name: "Number of tetanus doses",
@@ -405,7 +414,7 @@ const initialLMNP = [
                     colData: [
                         {
                             displayNone: true,
-                            inputHeader: "TTV 1 immunisation date*",
+                            inputHeader: "TTV 1 immunisation date",
                             value: "",
                             name: "tt6Date",
                             isDatePopover: true,
@@ -431,7 +440,7 @@ const initialLMNP = [
                     colData: [
                         {
                             displayNone: true,
-                            inputHeader: "TTV 1 immunisation date*",
+                            inputHeader: "TTV 1 immunisation date",
                             value: "",
                             name: "tt7Date",
                             isDatePopover: true,
@@ -444,7 +453,7 @@ const initialLMNP = [
                         },
                         {
                             displayNone: true,
-                            inputHeader: "TTV 2 immunisation date*",
+                            inputHeader: "TTV 2 immunisation date",
                             value: "",
                             name: "tt8Date",
                             isDatePopover: true,
@@ -471,7 +480,7 @@ const initialLMNP = [
                     colData: [
                         {
                             displayNone: true,
-                            inputHeader: "TTV 1 immunisation date*",
+                            inputHeader: "TTV 1 immunisation date",
                             value: "",
                             name: "tt9Date",
                             isDatePopover: true,
@@ -484,7 +493,7 @@ const initialLMNP = [
                         },
                         {
                             displayNone: true,
-                            inputHeader: "TTV 2 immunisation date*",
+                            inputHeader: "TTV 2 immunisation date",
                             value: "",
                             name: "tt10Date",
                             isDatePopover: true,
@@ -497,7 +506,7 @@ const initialLMNP = [
                         },
                         {
                             displayNone: true,
-                            inputHeader: "TTV 3 immunisation date*",
+                            inputHeader: "TTV 3 immunisation date",
                             value: "",
                             name: "tt11Date",
                             isDatePopover: true,
@@ -523,7 +532,7 @@ const initialLMNP = [
                     colData: [
                         {
                             displayNone: true,
-                            inputHeader: "TTV 1 immunisation date*",
+                            inputHeader: "TTV 1 immunisation date",
                             value: "",
                             name: "tt1Date",
                             isDatePopover: true,
@@ -536,7 +545,7 @@ const initialLMNP = [
                         },
                         {
                             //displayNone: true,
-                            inputHeader: "TTV 2 immunisation date*",
+                            inputHeader: "TTV 2 immunisation date",
                             value: "",
                             name: "tt2Date",
                             isDatePopover: true,
@@ -549,7 +558,7 @@ const initialLMNP = [
                         },
                         {
                             // displayNone: true,
-                            inputHeader: "TTV 3 immunisation date*",
+                            inputHeader: "TTV 3 immunisation date",
                             value: "",
                             name: "tt3Date",
                             isDatePopover: true,
@@ -562,7 +571,7 @@ const initialLMNP = [
                         },
                         {
                             //displayNone: true,
-                            inputHeader: "TTV 4 immunisation date*",
+                            inputHeader: "TTV 4 immunisation date",
                             value: "",
                             name: "tt4Date",
                             isDatePopover: true,
@@ -575,7 +584,7 @@ const initialLMNP = [
                         },
                         {
                             displayNone: true,
-                            inputHeader: "TTV 5 immunisation date*",
+                            inputHeader: "TTV 5 immunisation date",
                             value: "",
                             name: "tt5Date",
                             isDatePopover: true,
@@ -601,7 +610,7 @@ const initialLMNP = [
                     colData: [
                         {
                             displayNone: true,
-                            inputHeader: "TTV 1 immunisation date*",
+                            inputHeader: "TTV 1 immunisation date",
                             value: "",
                             name: "12",
                             isDatePopover: true,
@@ -614,7 +623,7 @@ const initialLMNP = [
                         },
                         {
                             //displayNone: true,
-                            inputHeader: "TTV 2 immunisation date*",
+                            inputHeader: "TTV 2 immunisation date",
                             value: "",
                             name: "13",
                             isDatePopover: true,
@@ -627,7 +636,7 @@ const initialLMNP = [
                         },
                         {
                             // displayNone: true,
-                            inputHeader: "TTV 3 immunisation date*",
+                            inputHeader: "TTV 3 immunisation date",
                             value: "",
                             name: "14",
                             isDatePopover: true,
@@ -704,7 +713,7 @@ const initialLMNP = [
         radioBtnContent: {
             header: {
                 class: "bold",
-                title: "Reason Tetanus toxoid (TT) was not conducted*",
+                title: "Reason Tetanus toxoid (TT) was not conducted",
                 name: "Reason Tetanus toxoid (TT) was not conducted",
                 selectedValue: "",
                 displayNone: true,

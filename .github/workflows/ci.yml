@@ -1,0 +1,86 @@
+name: Build and Deploy Vue App
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "16"
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Build Vue app (Test)
+              run: npm run build:test
+
+            - name: Deploy to Release
+              continue-on-error: false
+              run: |
+                  # Clone the repository
+                  git clone https://github.com/LUKEINTERNATIONAL/MAHIS-Release.git
+
+                  # Prepare the files
+                  rm -rf MAHIS-Release/*
+                  cp -R dist/* MAHIS-Release/
+
+                  # Navigate to the repository
+                  cd MAHIS-Release
+
+                  # Configure git
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+                  # Stage changes
+                  git add .
+
+                  # Check if there are changes to commit
+                  if git diff --staged --quiet; then
+                    echo "No changes to commit in Release repository"
+                    exit 0  # Exit successfully when no changes
+                  else
+                    git commit -m "Automated build and deployment"
+                    git push https://petroskayange:${{ secrets.RELEASE_TOKEN }}@github.com/LUKEINTERNATIONAL/MAHIS-Release.git
+                  fi
+
+            - name: Build Vue app (Production)
+              run: npm run build:prod
+
+            - name: Deploy to Production
+              continue-on-error: false
+              run: |
+                  # Clone the repository
+                  git clone https://github.com/LUKEINTERNATIONAL/MAHIS-Production.git
+
+                  # Prepare the files
+                  rm -rf MAHIS-Production/*
+                  cp -R dist/* MAHIS-Production/
+
+                  # Navigate to the repository
+                  cd MAHIS-Production
+
+                  # Configure git
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+                  # Stage changes
+                  git add .
+
+                  # Check if there are changes to commit
+                  if git diff --staged --quiet; then
+                    echo "No changes to commit in Production repository"
+                    exit 0  # Exit successfully when no changes
+                  else
+                    git commit -m "Automated build and deployment"
+                    git push https://petroskayange:${{ secrets.RELEASE_TOKEN }}@github.com/LUKEINTERNATIONAL/MAHIS-Production.git
+                  fi

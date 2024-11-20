@@ -1,5 +1,4 @@
 import { isEmpty, isPlainObject, isArray } from "lodash";
-import { getBaseURl } from "@/utils/GeneralUti";
 
 function validateSeries(conditions: Array<any>) {
     try {
@@ -13,7 +12,9 @@ function validateSeries(conditions: Array<any>) {
     }
 }
 
-function required(value: any): null | String {
+type FieldValue = "string" | "number" | "boolean" | "object" | "array";
+
+function required(value: FieldValue): null | String {
     return isEmpty(value) ? "Value is required" : null;
 }
 
@@ -37,14 +38,13 @@ function isFloatingPointNumber(val: any): null | string[] {
 
 function isMWPhoneNumber(val: any) {
     //Regex source: https://gist.github.com/kwalter94/1861f1f0fa192382a75a445ad70f07ec
-    if(val.includes("+265")){
-        val = val.replace(/\s+/g, '')
+    if (val.includes("+265")) {
+        val = val.replace(/\s+/g, "");
         const validation = /^(\+?265|0)(((8[89]|9[89])\d{7})|(1\d{6})|(2\d{8})|(31\d{8}))$/;
-       return !isEmpty(val) && !val.match(validation) ? "Not a valid phone number" : null;
-    }else{
+        return !isEmpty(val) && !val.match(validation) ? "Not a valid phone number" : null;
+    } else {
         return null;
     }
-    
 }
 
 function isMWNationalID(nationalId: any): null | string {
@@ -160,39 +160,96 @@ function validateFBS(val: any) {
 
 async function validateMobilePhone(val: any, countryData: any) {
     try {
-        let baseURL = getBaseURl();
-        if (baseURL.length > 0) {
-            baseURL = '/' + baseURL;
-        }
-        const response = await fetch(`${baseURL}/countryphones.json`)
+        const response = await fetch(`${import.meta.env.BASE_URL}countryphones.json`);
         const data = await response.json();
         const country = data.countries.find((c: { iso2: string }) => c.iso2 === countryData.iso2);
-        
+
         if (!country) {
             return "Country not found";
         }
 
         const sampleNumber = country.examplePhoneNumber;
-        let result = !isEmpty(val) && (val.replace(/\s+/g, '').length !== sampleNumber.replace(/\s+/g, '').length) ? "Not a valid phone number" : null;
-        if (result == null){ result = formatToExample(val, sampleNumber); }
-        return result
+        let result = !isEmpty(val) && val.replace(/\s+/g, "").length !== sampleNumber.replace(/\s+/g, "").length ? "Not a valid phone number" : null;
+        if (result == null) {
+            result = formatToExample(val, sampleNumber);
+        }
+        return result;
     } catch (error) {
         return `Error fetching or processing data: ${error}`;
     }
 }
 
 function formatToExample(value: string, exampleNumber: string): string {
-    const digits = value.replace(/\s+/g, '');
+    const digits = value.replace(/\s+/g, "");
     let digitIndex = 0;
 
-    return exampleNumber.split('').map(char => {
-        if (char === ' ') return ' ';
-        return digitIndex < digits.length ? digits[digitIndex++] : '';
-    }).join('');
+    return exampleNumber
+        .split("")
+        .map((char) => {
+            if (char === " ") return " ";
+            return digitIndex < digits.length ? digits[digitIndex++] : "";
+        })
+        .join("");
 }
+// vitals helper functions
 
+function mergeErrors(errors: any[]) {
+    const holder: any = [];
+    errors.forEach((element) => {
+        if (isArray(element)) {
+            holder.push(element);
+        }
+    });
+    return holder.length > 0 ? holder : null;
+}
+// vitals validations
+function vitalsWeight(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 0.5, 250.0);
+}
+function vitalsHeight(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 220);
+}
+function vitalsSystolic(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 250);
+}
+function vitalsDiastolic(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 30, 200);
+}
+function vitalsTemperature(val: any) {
+    return isNumber(val) || checkMinMax(val, 30, 42);
+}
+function vitalsRespiratoryRateNotRequired(val: any) {
+    return checkMinMax(val, 5, 80);
+}
+function vitalsRespiratoryRate(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 5, 80);
+}
+function vitalsOxygenSaturation(val: any) {
+    return isNumber(val) || checkMinMax(val, 40, 100);
+}
+function vitalsSystolicPressure(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 20, 300);
+}
+function vitalsDiastolicPressure(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 20, 300);
+}
+function vitalsPulseRate(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 20, 80);
+}
+// vitals validations
 
 export default {
+    vitalsWeight,
+    vitalsHeight,
+    vitalsSystolic,
+    vitalsDiastolic,
+    vitalsTemperature,
+    vitalsRespiratoryRateNotRequired,
+    vitalsRespiratoryRate,
+    vitalsOxygenSaturation,
+    vitalsSystolicPressure,
+    vitalsDiastolicPressure,
+    vitalsPulseRate,
     validateRBS,
     validateFBS,
     validateHeight,
@@ -218,5 +275,5 @@ export default {
     checkMinMax,
     isDate,
     isNameWithSlush,
-    validateMobilePhone
+    validateMobilePhone,
 } as any;

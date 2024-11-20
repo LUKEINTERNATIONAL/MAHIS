@@ -20,7 +20,6 @@ import { useBehaviourCousellingStore } from "@/apps/ANC/store/counselling/behavi
 import { useDietCounsellingStore } from "@/apps/ANC/store/counselling/dietCounsellingStore";
 import { usePhysiologicalCounselingStore } from "@/apps/ANC/store/counselling/physiologicalCounselingStore";
 import { useHeadssAssessmentStore } from "@/apps/ANC/store/others/headsAssessmentStore";
-import { useAncVitalsStore } from "@/apps/ANC/store/physical exam/AncVitalsStore";
 import { useFetalAssessment } from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 import { useFetalPresentationStore } from "@/apps/ANC/store/physical exam/FetalPresantationStore";
 import { usePresentingSigns } from "@/apps/ANC/store/physical exam/PresentingSignsStore";
@@ -33,15 +32,14 @@ import { useReferralStore } from "@/apps/ANC/store/referral/referralStore";
 import { useIpvStore } from "@/apps/ANC/store/symptomsFollowUp/ipvStore";
 import { useFatalMovementStore } from "@/apps/ANC/store/symptomsFollowUp/fatalMovementStore";
 import { useCurrentPhysiologicalSymptomsStore } from "@/apps/ANC/store/symptomsFollowUp/currentPhysiologicalSymptomsStore";
-import { useMedicalFollowUpStore } from "@/apps/ANC/store/symptomsFollowUp/medicalFollowUpStore";
+import { useMedicalFollowUpStore } from "@/apps/ANC/store/symptomsFollowUp/medicalFollowUp";
 import { usePersistentBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/persistentBehaviourStore";
-import { usePersistentSymptomsStore } from "@/apps/ANC/store/symptomsFollowUp/persistentSymptomsStore";
 import { useWomenBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/womenBehaviourStore";
 import { useMedicStore } from "@/apps/ANC/store/symptomsFollowUp/MedicStore";
-import { useDiagnosisCounsellingStore } from "@/apps/ANC/store/diagnosisCounsellingStore";
+import { usePreventativeCounsellingStore } from "@/apps/ANC/store/counselling/preventativeCounsellingStore";
 import { useDewormingStore } from "@/apps/ANC/store/dewormingStore";
 import { useImmunizationStore } from "@/apps/ANC/store/immunizationStore";
-import { useIntimatePartnerStore } from "@/apps/ANC/store/intimatePartnerStore";
+//import { useIntimatePartnerStore } from "@/apps/ANC/store/intimatePartnerStore";
 import { useLabTestsStore } from "@/apps/ANC/store/LabTestsStore";
 import { useMedicationDispensedStore } from "@/apps/ANC/store/medicationDispensed";
 import { useTBScreeningStore } from "@/apps/ANC/store/TBScreeningStore";
@@ -78,7 +76,7 @@ export async function resetPatientData() {
     const medications = useMedicationsStore();
     const treatmentPlan = useTreatmentPlanStore();
     const diagnosis = useDiagnosisStore();
-    const enrollement = useEnrollementStore();
+    const enrollment = useEnrollementStore();
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
     const weightHeightVitals = useWeightHeightVitalsStore();
@@ -94,7 +92,7 @@ export async function resetPatientData() {
     const ANCdietCounselling = useDietCounsellingStore();
     const ANCphysCounselling = usePhysiologicalCounselingStore();
     const heads = useHeadssAssessmentStore();
-    const ANCancvitals = useAncVitalsStore();
+
     const ANCfatalAssment = useFetalAssessment();
     const ANCfatalPres = useFetalPresentationStore();
     const ANCpresSigns = usePresentingSigns();
@@ -109,14 +107,13 @@ export async function resetPatientData() {
     const ANCcurrentPhysiological = useCurrentPhysiologicalSymptomsStore();
     const ANCmedicalFollowUp = useMedicalFollowUpStore();
     const ANCpersistent = usePersistentBehaviourStore();
-    const ANCpersistentSymptoms = usePersistentSymptomsStore();
     const ANCwomenBehavior = useWomenBehaviourStore();
     const ANCmedication = useMedicStore();
-    const ANCdiagnosisCounselling = useDiagnosisCounsellingStore();
+    const ANCpreventativeCounselling = usePreventativeCounsellingStore();
     const ANCdeworming = useDewormingStore();
     const ANCdiagnosis = useDiagnosisStore();
     const ANCimmunisation = useImmunizationStore();
-    const ANCintimatePartner = useIntimatePartnerStore();
+    //const ANCintimatePartner = useIntimatePartnerStore();
     const ANCLabTest = useLabTestsStore();
     const ANCmedicationDispensed = useMedicationDispensedStore();
     const ANCtbScreening = useTBScreeningStore();
@@ -151,20 +148,21 @@ export async function resetPatientData() {
     registration.setHomeLocation(registration.getInitialHomeLocation());
     registration.setCurrentLocation(registration.getInitialCurrentLocation());
     registration.setGuardianInformation(registration.getInitialGuardianInformation());
+    registration.setCountry(registration.getInitialCountry());
     weightHeightVitals.setVitals(weightHeightVitals.getInitialVitals());
 
-    enrollement.setDiagnosis(enrollement.getInitialEnrollmentDiagnosis());
-    enrollement.setPatientHistory(enrollement.getInitialPatientHistory());
-    enrollement.setSubstance(enrollement.getInitialSubstance());
-    enrollement.setPatientHistory(enrollement.getInitialFamilyHistory());
-    enrollement.setNCDNumber(enrollement.getInitialNCDNumber());
-    enrollement.setPatientHistoryHIV(enrollement.getInitialPatientHistoryHIV());
+    enrollment.setDiagnosis(enrollment.getInitialEnrollmentDiagnosis());
+    enrollment.setPatientHistory(enrollment.getInitialPatientHistory());
+    enrollment.setSubstance(enrollment.getInitialSubstance());
+    enrollment.setFamilyHistory(enrollment.getInitialFamilyHistory());
+    enrollment.setNCDNumber(enrollment.getInitialNCDNumber());
+    enrollment.setPatientType(enrollment.getInitialPatientType());
+    enrollment.setPatientHistoryHIV(enrollment.getInitialPatientHistoryHIV());
     investigations.$reset();
     outcome.$reset();
     medications.$reset();
     treatmentPlan.$reset();
     diagnosis.$reset();
-    enrollement.$reset();
     nextAppointment.$reset();
 
     ANCobstreticHistory.$reset();
@@ -178,7 +176,7 @@ export async function resetPatientData() {
     ANCwomanBehavior.$reset();
     ANCphysCounselling.$reset();
     heads.$reset();
-    ANCancvitals.$reset();
+
     ANCfatalAssment.$reset();
     ANCfatalPres.$reset();
     ANCpresSigns.$reset();
@@ -193,14 +191,13 @@ export async function resetPatientData() {
     ANCcurrentPhysiological.$reset();
     ANCmedicalFollowUp.$reset();
     ANCpersistent.$reset();
-    ANCpersistentSymptoms.$reset();
     ANCwomenBehavior.$reset();
     ANCmedication.$reset();
-    ANCdiagnosisCounselling.$reset();
+    ANCpreventativeCounselling.$reset();
     ANCdeworming.$reset();
     ANCdiagnosis.$reset();
     ANCimmunisation.$reset();
-    ANCintimatePartner.$reset();
+    //ANCintimatePartner.$reset();
     ANCLabTest.$reset();
     ANCmedicationDispensed.$reset();
     ANCtbScreening.$reset();

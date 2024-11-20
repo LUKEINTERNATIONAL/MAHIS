@@ -8,7 +8,6 @@ import { Program } from "../interfaces/program";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { ProgramService } from "@/services/program_service";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import ProgramData from "@/Data/ProgramData";
 import { OrderService } from "@/services/order_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 
@@ -47,6 +46,19 @@ export class UserService extends Service {
     static deactivateUser(id: number) {
         return this.postJson(`users/${id}/deactivate`, {});
     }
+
+    static getUserVillages(id: number) {
+        return this.getJson(`users/${id}/get_user_villages`);
+    }
+
+    static doesUsernameExist(username: string) {
+        return this.getJson(`/check_username`, { username });
+    }
+
+    static updateuserVillages(id: number, user_village_ids = []) {
+        return this.putJson(`users/${id}/update_user_villages`, { user_village_ids });
+    }
+
     static isAdmin() {
         const roles = super.getUserRoles().filter((role: Role) => {
             return role.role.match(/Program Manager|Superuser|System Developer/i);
@@ -84,6 +96,10 @@ export class UserService extends Service {
 
     static getUsers() {
         return super.getJson("users", { role: "Provider" });
+    }
+
+    static getUsersByRole(role: any) {
+        return super.getJson("users", role);
     }
 
     static getSystemUsageByUsers(startDate: string, endDate: string) {
@@ -146,15 +162,15 @@ export class UserService extends Service {
                     filteredPrograms.push(item);
                 } else if (item.name === "ANC PROGRAM") {
                     let ANCItem = { ...item }; // Create a new object
-                    ANCItem.url = "ANCEnrollment";
+                    ANCItem.url = "ANChome";
                     ANCItem.actionName = "+ Enroll in ANC Program";
                     filteredPrograms.push(ANCItem);
-
+                } else if (item.name === "LABOUR AND DELIVERY PROGRAM") {
                     let labourItem = { ...item }; // Create a new object
                     labourItem.url = "labour/labourHome";
                     labourItem.actionName = "+ Enroll in Labour and delivery program";
                     filteredPrograms.push(labourItem);
-
+                } else if (item.name === "PNC PROGRAM") {
                     let pncItem = { ...item }; // Create a new object
                     pncItem.url = "pnc/Home";
                     pncItem.actionName = "+ Enroll in PNC program";
@@ -179,7 +195,6 @@ export class UserService extends Service {
     static async setNCDValue() {
         const patient = new PatientService();
         if (patient.getID()) {
-            console.log("🚀 ~ UserService ~ setNCDValue ~ patient.getID():", patient.getID());
             const visits = await PatientService.getPatientVisits(patient.getID(), false);
             const activities = await this.getUserActivities("NCD_activities");
             let url = "";
@@ -187,7 +202,7 @@ export class UserService extends Service {
             if (patient.getNcdNumber() != "Unknown") {
                 if (activities.length == 0) {
                     this.setNCDNumber();
-                    url = "patientProfile";
+                    url = "/patientProfile";
                     NCDProgramActionName = "+ Edit NCD Enrollment";
                 } else {
                     if (localStorage.getItem("saveProgressStatus") == "true") {
@@ -195,11 +210,11 @@ export class UserService extends Service {
                     } else if (visits.includes(HisDate.currentDate())) {
                         NCDProgramActionName = "+ Edit NCD consultation";
                     } else NCDProgramActionName = "+ Start new NCD consultation";
-                    url = "consultationPlan";
+                    url = "/consultationPlan";
                 }
             } else {
                 this.setNCDNumber();
-                url = "NCDEnrollment";
+                url = "/NCDEnrollment";
                 NCDProgramActionName = "+ Enroll in NCD Program";
             }
 
@@ -218,6 +233,6 @@ export class UserService extends Service {
     static async setProgramUserActions() {
         const actions = await this.setNCDValue();
         const generalStore = useGeneralStore();
-        generalStore.setNCDUserActions([actions]);
+        generalStore.setNCDUserActions(actions);
     }
 }

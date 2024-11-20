@@ -11,7 +11,7 @@ const initialPersonalInformation = [
                     colData: [
                         {
                             inputHeader: "National ID",
-                            iconRight: icons.scannerIcon,
+                            iconRight: "",
                             icon: icons.nationalID,
                             value: "",
                             name: "nationalID",
@@ -50,25 +50,6 @@ const initialPersonalInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Last name*",
-                            icon: icons.fullName,
-                            value: "",
-                            name: "lastname",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
                             inputHeader: "Middle name",
                             icon: icons.fullName,
                             value: "",
@@ -88,11 +69,10 @@ const initialPersonalInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Phone number",
-                            icon: icons.phone,
+                            inputHeader: "Last name*",
+                            icon: icons.fullName,
                             value: "",
-                            name: "phoneNumber",
-                            isPhoneInput: true,
+                            name: "lastname",
                             eventType: "input",
                             alertsErrorMassage: "",
                             required: true,
@@ -102,6 +82,28 @@ const initialPersonalInformation = [
             ],
         },
     },
+    {
+        radioBtnContent: {
+            header: {
+                title: "Gender*",
+                selectedValue: "",
+                name: "gender",
+                alertsErrorMassage: "",
+            },
+            data: [
+                {
+                    name: "Male",
+                    value: "M",
+                    colSize: "4",
+                },
+                {
+                    name: "Female",
+                    value: "F",
+                },
+            ],
+        },
+    },
+
     {
         data: {
             rowData: [
@@ -195,22 +197,21 @@ const initialPersonalInformation = [
         },
     },
     {
-        radioBtnContent: {
-            header: {
-                title: "Gender*",
-                selectedValue: "",
-                name: "gender",
-                alertsErrorMassage: "",
-            },
-            data: [
+        data: {
+            rowData: [
                 {
-                    name: "Male",
-                    value: "M",
-                    colSize: "4",
-                },
-                {
-                    name: "Female",
-                    value: "F",
+                    colData: [
+                        {
+                            inputHeader: "Phone number",
+                            icon: icons.phone,
+                            value: "",
+                            name: "phoneNumber",
+                            isPhoneInput: true,
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
                 },
             ],
         },
@@ -493,6 +494,7 @@ const initialCurrentLocation = [
                             multiSelectData: [],
                             id: "",
                             idName: "district_id",
+                            validationFunctionName: "required",
                         },
                     ],
                 },
@@ -519,6 +521,7 @@ const initialCurrentLocation = [
                             id: "",
                             idName: "district_id",
                             displayNone: true,
+                            validationFunctionName: "required",
                         },
                     ],
                     btns: [
@@ -554,6 +557,7 @@ const initialCurrentLocation = [
                             id: "",
                             idName: "village_id",
                             displayNone: true,
+                            validationFunctionName: "required",
                         },
                     ],
                     btns: [
@@ -652,7 +656,39 @@ const initialCurrentLocation = [
         },
     },
 ] as any;
-
+const initialCountry = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Country*",
+                            icon: icons.search,
+                            value: {
+                                district_id: 292,
+                                name: "Malawi",
+                            },
+                            name: "country",
+                            setName: "country",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            isSingleSelect: true,
+                            hide_selected: true,
+                            popOver: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
+                            id: "",
+                            idName: "district_id",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
 const initialAddTA = [
     {
         data: {
@@ -723,7 +759,7 @@ const initialGuardianInformation = [
                     colData: [
                         {
                             inputHeader: "Guardian National ID",
-                            iconRight: icons.scannerIcon,
+                            iconRight: "",
                             icon: icons.nationalID,
                             value: "",
                             name: "guardianNationalID",
@@ -848,6 +884,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
         socialHistory: [...initialSocialHistory],
         homeLocation: [...initialHomeLocation],
         currentLocation: [...initialCurrentLocation],
+        country: [...initialCountry],
         guardianInformation: [...initialGuardianInformation],
         addTA: [...initialAddTA],
         addVillage: [...initialAddVillage],
@@ -864,6 +901,9 @@ export const useRegistrationStore = defineStore("registrationStore", {
         },
         setCurrentLocation(data: any) {
             this.currentLocation = data;
+        },
+        setCountry(data: any) {
+            this.country = data;
         },
         setGuardianInformation(data: any) {
             this.guardianInformation = data;
@@ -883,6 +923,10 @@ export const useRegistrationStore = defineStore("registrationStore", {
         },
         getInitialCurrentLocation() {
             const data = _.cloneDeep(initialCurrentLocation);
+            return [...data];
+        },
+        getInitialCountry() {
+            const data = _.cloneDeep(initialCountry);
             return [...data];
         },
         getInitialGuardianInformation() {

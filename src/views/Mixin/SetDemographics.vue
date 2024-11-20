@@ -25,12 +25,14 @@ export default defineComponent({
             demographicsStore.setDemographics({
                 name: fullName,
                 mrn: this.patientIdentifier(item),
+                NCDNumber: this.patientIdentifierNCD(item),
                 birthdate: item.person.birthdate,
                 category: "",
                 gender: item.person.gender,
                 patient_id: item.patient_id,
                 address: address,
                 phone: this.getPhone(item),
+                country: item?.person?.addresses[0]?.country,
             });
         },
         setOfflineDemographics(item: any) {
@@ -41,6 +43,7 @@ export default defineComponent({
             } else {
                 fullName = item.personInformation.given_name + " " + item.personInformation.family_name;
             }
+            demographicsStore.setPatient(item.patientData);
             demographicsStore.setDemographics({
                 name: fullName,
                 mrn: item.offlinePatientID,
@@ -58,10 +61,24 @@ export default defineComponent({
             });
         },
         patientIdentifier(identifiers: any) {
-            return identifiers.patient_identifiers
-                .filter((identifier: any) => identifier.identifier_type === 3)
-                .map((identifier: any) => identifier.identifier)
-                .join(", ");
+            if (identifiers) {
+                return identifiers.patient_identifiers
+                    .filter((identifier: any) => identifier.identifier_type === 3)
+                    .map((identifier: any) => identifier.identifier)
+                    .join(", ");
+            } else {
+                return "";
+            }
+        },
+        patientIdentifierNCD(identifiers: any) {
+            if (identifiers) {
+                return identifiers.patient_identifiers
+                    .filter((identifier: any) => identifier.identifier_type === 31)
+                    .map((identifier: any) => identifier.identifier)
+                    .join(", ");
+            } else {
+                return "";
+            }
         },
         getPhone(item: any) {
             return item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value;

@@ -5,13 +5,12 @@
       <ion-card-content>
         <basic-form
             :contentData="referralInfo"
+            :initialData="initialData"
             @update:selected="handleInputData" @update:inputValue="handleInputData"
-
         ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
-<!--  :initialData="initialData"-->
 </template>
 
 <script lang="ts">
@@ -19,11 +18,13 @@
 import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useReferralStore} from "@/apps/ANC/store/referral/referralStore";
+ import {ReferralValidationSchema, useReferralStore} from "@/apps/ANC/store/referral/referralStore";
  import BasicForm from '@/components/BasicForm.vue';
  import {modifyRadioValue, getRadioSelectedValue, modifyFieldValue, getFieldValue} from '@/services/data_helpers'
  import {LocationService} from "@/services/location_service";
  import {validateField} from "@/services/ANC/referral_validation_service";
+ import {YupValidateField} from "@/services/validation_service";
+ import {FetalAssessmentValidation} from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 
 
 export default defineComponent({
@@ -36,7 +37,6 @@ export default defineComponent({
     },
   data(){
     return{
-      //referral facility data
       no_item: false,
       search_item: false,
       display_item: false,
@@ -47,6 +47,7 @@ export default defineComponent({
       facilityData: [] as any,
       popoverOpen: false,
       event: "" as any,
+      initialData:[] as any,
       selectedCondition: "" as any,
     }
   },
@@ -54,14 +55,17 @@ export default defineComponent({
 
     mounted(){
         const  referralInfo =useReferralStore()
+       this.initialData=referralInfo.getInitialReferral()
         this.handleReferral()
-      this.validaterowData({})
+        this.handletreatment()
+      // this.validaterowData({})
 
     },
     watch:{
         referralInfo:{
             handler(){
                 this.handleReferral()
+                this.handletreatment()
             },
             deep:true
         }
@@ -72,18 +76,33 @@ export default defineComponent({
 
       },
     methods:{
+        navigationMenu(url: any) {
+            this.$router.push(url);
+        },
         handleReferral(){
             if(getRadioSelectedValue(this.referralInfo,'referalOption') == 'yes'){
                 modifyRadioValue(this.referralInfo,'referralOutcome','displayNone',false)
             }else{
                 modifyRadioValue(this.referralInfo,'referralOutcome','displayNone',true)
             }
+          },
+        handletreatment(){
+            if(getRadioSelectedValue(this.referralInfo,'Any treatment given before referral') == 'yes'){
+                modifyRadioValue(this.referralInfo,'treatment','displayNone',false)
+            }else{
+                modifyRadioValue(this.referralInfo,'treatment','displayNone',true)
+            }
         },
-
 
       //Handling input data on Referral
       async handleInputData(col: any){
-        this.validaterowData(col)
+        YupValidateField(
+            this.referralInfo,
+            ReferralValidationSchema,
+            col.name,
+            col.value
+        ),
+            // this.validaterowData(col);
         this.handleReferralDateRange(col)
         this.handleDateOfScheduledReferralRange(col)
 
@@ -113,7 +132,6 @@ export default defineComponent({
       validationRules(event: any) {
         return validateField(this.referralInfo,event.name, (this as any)[event.name]);
       },
-
 
       // Validations
       validaterowData(event: any) {

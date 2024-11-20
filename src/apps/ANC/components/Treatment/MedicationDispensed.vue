@@ -3,11 +3,15 @@
     <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-              <basic-form :contentData="iron" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <basic-form 
+              :contentData="iron"
+               @update:selected="handleInputData" 
+               @update:inputValue="handleInputData"></basic-form>
               <basic-form :contentData="folicAcid" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
               <!-- <basic-form :contentData="folicAcid"></basic-form> -->
               <!-- <basic-form :contentData="folicAcidReason"></basic-form> -->
-              <basic-form :contentData="vitaminA"></basic-form>
+              <basic-form :contentData="vitaminA"   @update:selected="handleVitamin" 
+               @update:inputValue="handleVitamin"></basic-form>
               <!-- <basic-form :contentData="calcium"></basic-form> -->
             </ion-card-content>
     </ion-card>
@@ -37,10 +41,11 @@ import { mapState } from 'pinia';
 import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
-import { useMedicationDispensedStore } from '../../store/medicationDispensed';
+import { useMedicationDispensedStore, vitaminValidationSchema } from '../../store/medicationDispensed';
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 import { validateField } from '@/services/ANC/treatement_validation_service';
 import StandardValidations from '@/validations/StandardValidations';
+import { YupValidateField } from '@/services/validation_service';
 
 
 
@@ -83,7 +88,7 @@ export default defineComponent ({
 
     },
     mounted(){
-      this.handleIron()
+      // this.handleIron()
       this.handleTypeIron()
       this.handleAcid()
       this.handleFolicIron()
@@ -105,7 +110,7 @@ export default defineComponent ({
     watch:{
       iron:{
         handler(){
-          this.handleIron()
+          // this.handleIron()
           this.handleTypeIron()
           this.handleNoIron()
           this.handleNoIronOther()
@@ -146,6 +151,15 @@ export default defineComponent ({
       }
     },
     methods :{
+      handleVitamin(event:any){
+        YupValidateField(
+          this.vitaminA,
+          vitaminValidationSchema,
+          event.name,
+          event.value
+
+        )
+      },
       handleInputData(data: any){
             this.validationRules(data)
       },
@@ -158,13 +172,13 @@ export default defineComponent ({
          return validateField(this.folicAcid,event.name, (this as any)[event.name]) || validateField(this.iron,event.name, (this as any)[event.name]);  
          // return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))     
      },
-    handleIron(){
-      if(getRadioSelectedValue(this.iron,'Iron prescription')=='yes'){
-        modifyFieldValue(this.iron,'iron Amount','displayNone',false)
-      }else{
-        modifyFieldValue(this.iron,'iron Amount','displayNone',true)
-      }
-    },
+    // handleIron(){
+    //   if(getRadioSelectedValue(this.iron,'Iron prescription')=='Yes'){
+    //     modifyFieldValue(this.iron,'iron Amount','displayNone',false)
+    //   }else{
+    //     modifyFieldValue(this.iron,'iron Amount','displayNone',true)
+    //   }
+    // },
     handleTypeIron(){
       if(getRadioSelectedValue(this.iron,'Iron prescription')=='yes'){
         modifyRadioValue(this.iron,'Type of Iron supplement dosage','displayNone',false)
@@ -175,7 +189,7 @@ export default defineComponent ({
         handleIronDailyWeekly() {
               const ironDosageType = getRadioSelectedValue(this.iron, 'Type of Iron supplement dosage');
 
-              if (ironDosageType === 'daily' || ironDosageType === 'weekly') {
+              if (ironDosageType === 'daily' && getRadioSelectedValue(this.iron,'Iron prescription')=='yes' || ironDosageType === 'weekly' && getRadioSelectedValue(this.iron,'Iron prescription')=='yes') {
                 modifyFieldValue(this.iron, 'iron Amount', 'displayNone', false); 
               } else {
                 modifyFieldValue(this.iron, 'iron Amount', 'displayNone', true); 
@@ -194,11 +208,11 @@ export default defineComponent ({
       if(getRadioSelectedValue(this.iron,'Iron prescription')=='no'){
         modifyRadioValue(this.iron,'Iron and folic acid not prescribed','displayNone',false)
       }else{
-         modifyFieldValue(this.iron,'Iron and folic acid not prescribed','displayNone',true)
+         modifyRadioValue(this.iron,'Iron and folic acid not prescribed','displayNone',true)
       }
     },
     handleNoIronOther(){
-      if(getRadioSelectedValue(this.iron,'Iron and folic acid not prescribed')=='other'){
+      if(getRadioSelectedValue(this.iron,'Iron and folic acid not prescribed')=='other' && getRadioSelectedValue(this.iron,'Iron prescription')=='no'){
         modifyFieldValue(this.iron,'Other','displayNone',false)
       }else{
          modifyFieldValue(this.iron,'Other','displayNone',true)

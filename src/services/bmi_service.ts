@@ -4,19 +4,9 @@ export interface Bmi {
     colors: { [key: string]: string };
 }
 
-function removeQuotes(str: string) {
-    if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
-        return str.substring(1, str.length - 1);
-    }
-    return str;
-}
 export class BMIService {
     static async getBMIData(): Promise<Bmi> {
-        let baseURL = removeQuotes(localStorage.baseURL);
-        if (baseURL.length > 0) {
-            baseURL = "/" + baseURL;
-        }
-        const req = await fetch(`${baseURL}/bmi.json`);
+        const req = await fetch(`${import.meta.env.BASE_URL}bmi.json`);
         return req.json();
     }
     static async getBMIResult(gender: "M" | "F", age: number, bmindex: number) {

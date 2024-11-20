@@ -8,9 +8,12 @@
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -53,14 +56,22 @@ import { usefirstVaginalExaminationStore } from "../stores/physical exam/firstVa
 import { usePelvicAssessmentStore } from "../stores/physical exam/pelvicAssessment";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Service } from "@/services/service";
-import {QuickCheckInstance,PhysicalExamInstance, VaginalExamInstance, PelvicAssessmentInstance } from '@/apps/LABOUR/services/labour_assesment_service';
+import {
+    QuickCheckInstance,
+    PhysicalExamInstance,
+    VaginalExamInstance,
+    PelvicAssessmentInstance,
+} from "@/apps/LABOUR/services/labour_assesment_service";
 import { resetPatientData } from "@/services/reset_data";
 import BasicFooter from "@/components/BasicFooter.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "obstetricDetails",
+    mixins: [SetUserRole, SetEncounter],
     components: {
-      BasicFooter,
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -144,7 +155,6 @@ export default defineComponent({
                     component: "PelvicAssessment",
                     value: "4",
                 },
-
             ],
             isOpen: false,
             iconsContent: icons,
@@ -155,16 +165,14 @@ export default defineComponent({
             console.log(change);
         },
     },
-    computed: { 
-         ...mapState(useDemographicsStore, ["demographics"]),
-         ...mapState(useLabourQuickCheckStore,["pastProblems"]),
-         ...mapState(useLabourPhysicalExamStore,["vitals"]),
-         ...mapState(useLabourPhysicalExamStore,["anaemia"]),
-         ...mapState(useLabourPhysicalExamStore,["otherphysicalExams"]),
-         ...mapState(usefirstVaginalExaminationStore,["firstVaginalExamination"]),
-         ...mapState(usePelvicAssessmentStore,["pelvicAssessment"]),
-
-         
+    computed: {
+        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useLabourQuickCheckStore, ["pastProblems"]),
+        ...mapState(useLabourPhysicalExamStore, ["vitals"]),
+        ...mapState(useLabourPhysicalExamStore, ["anaemia"]),
+        ...mapState(useLabourPhysicalExamStore, ["otherphysicalExams"]),
+        ...mapState(usefirstVaginalExaminationStore, ["firstVaginalExamination"]),
+        ...mapState(usePelvicAssessmentStore, ["pelvicAssessment"]),
     },
     // saveData() {
     //     const medicalConditions = [
@@ -222,13 +230,14 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
                 return item?.data;
             });
         },
-        saveData() {
+        async saveData() {
             const errors: any = [];
             // this.StepperData.forEach((stepper)=> {
             //   if (!stepper.validation) return
@@ -242,102 +251,86 @@ export default defineComponent({
             // if (errors.length) {
             //     return alert(errors.join(","));
             // }
-          this.saveQuickCheck();
-          this.saveVaginalExamInstance();
-          this.savePhysicalExamInstance();
-          this.savePelvicAssessmentInstance();
-          resetPatientData();
-          this.$router.push("labourHome");
-
+            this.saveQuickCheck();
+            this.saveVaginalExamInstance();
+            this.savePhysicalExamInstance();
+            this.savePelvicAssessmentInstance();
+            await resetPatientData();
+            this.$router.push("labourHome");
         },
 
         async buildQuickCheck() {
-       return [
-          ...(await formatInputFiledData(this.pastProblems)),
-          ...(await formatRadioButtonData(this.pastProblems)),
-          ...(await formatCheckBoxData(this.pastProblems)),
-        ]
-    },
+            return [
+                ...(await formatInputFiledData(this.pastProblems)),
+                ...(await formatRadioButtonData(this.pastProblems)),
+                ...(await formatCheckBoxData(this.pastProblems)),
+            ];
+        },
 
-    async buildPhysicalExamination() {
-       return [
-          ...(await formatInputFiledData(this.vitals)),
-          ...(await formatRadioButtonData(this.vitals)),
-          ...(await formatRadioButtonData(this.anaemia)),
-          ...(await formatRadioButtonData(this.otherphysicalExams)),
-          
-        ]
-    },
+        async buildPhysicalExamination() {
+            return [
+                ...(await formatInputFiledData(this.vitals)),
+                ...(await formatRadioButtonData(this.vitals)),
+                ...(await formatRadioButtonData(this.anaemia)),
+                ...(await formatRadioButtonData(this.otherphysicalExams)),
+            ];
+        },
 
-    async buildFirstVaginalExamination() {
-       return [
-          ...(await formatInputFiledData(this.firstVaginalExamination)),
-          ...(await formatRadioButtonData(this.firstVaginalExamination)),
-        ]
-    },
+        async buildFirstVaginalExamination() {
+            return [...(await formatInputFiledData(this.firstVaginalExamination)), ...(await formatRadioButtonData(this.firstVaginalExamination))];
+        },
 
-    async buildPelvicAssessment() {
-       return [
-          ...(await formatInputFiledData(this.pelvicAssessment)),
-          ...(await formatRadioButtonData(this.pelvicAssessment)),
-        ]
-    },
+        async buildPelvicAssessment() {
+            return [...(await formatInputFiledData(this.pelvicAssessment)), ...(await formatRadioButtonData(this.pelvicAssessment))];
+        },
 
-    async saveQuickCheck () {
-        const data: any = await this.buildQuickCheck();
-        if (data.length > 0) {
-            const userID: any = Service.getUserID();
-            const quickCheckInstance = new QuickCheckInstance();
-            quickCheckInstance.push(this.demographics.patient_id, userID, data)
-            toastSuccess("Quick check data saved successfully");
-        }
+        async saveQuickCheck() {
+            const data: any = await this.buildQuickCheck();
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const quickCheckInstance = new QuickCheckInstance();
+                quickCheckInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Quick check data saved successfully");
+            } else {
+                toastWarning("Could not find concepts");
+            }
+        },
 
-        else {
-            toastWarning("Could not find concepts");
-        }
-    },
+        async savePhysicalExamInstance() {
+            const data: any = await this.buildPhysicalExamination();
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const physicalExamInstance = new PhysicalExamInstance();
+                physicalExamInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Physical examination data saved successfully");
+            } else {
+                toastWarning("Could not find concepts");
+            }
+        },
 
-    async savePhysicalExamInstance () {
-        const data: any = await this.buildPhysicalExamination();
-        if (data.length > 0) {
-            const userID: any = Service.getUserID();
-            const physicalExamInstance = new PhysicalExamInstance();
-            physicalExamInstance.push(this.demographics.patient_id, userID, data)
-            toastSuccess("Physical examination data saved successfully");
-        }
+        async saveVaginalExamInstance() {
+            const data: any = await this.buildFirstVaginalExamination();
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const vaginalExamInstance = new VaginalExamInstance();
+                vaginalExamInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("First Vaginal Examination data saved successfully");
+            } else {
+                toastWarning("Could not find concepts");
+            }
+        },
 
-        else {
-            toastWarning("Could not find concepts");
-        }
-    },
-
-    async saveVaginalExamInstance () {
-        const data: any = await this.buildFirstVaginalExamination();
-        if (data.length > 0) {
-            const userID: any = Service.getUserID();
-            const vaginalExamInstance = new VaginalExamInstance();
-            vaginalExamInstance.push(this.demographics.patient_id, userID, data)
-            toastSuccess("First Vaginal Examination data saved successfully");
-        }
-
-        else {
-            toastWarning("Could not find concepts");
-        }
-    },
-
-    async savePelvicAssessmentInstance () {
-        const data: any = await this.buildPelvicAssessment();
-        if (data.length > 0) {
-            const userID: any = Service.getUserID();
-            const pelvicAssessmentInstance = new PelvicAssessmentInstance();
-            pelvicAssessmentInstance.push(this.demographics.patient_id, userID, data)
-            toastSuccess("Pelvic Assessment data saved successfully");
-        }
-
-        else {
-            toastWarning("Could not find concepts");
-        }
-    },
+        async savePelvicAssessmentInstance() {
+            const data: any = await this.buildPelvicAssessment();
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const pelvicAssessmentInstance = new PelvicAssessmentInstance();
+                pelvicAssessmentInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Pelvic Assessment data saved successfully");
+            } else {
+                toastWarning("Could not find concepts");
+            }
+        },
 
         openModal() {
             createModal(SaveProgressModal);

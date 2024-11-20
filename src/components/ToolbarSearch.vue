@@ -1,10 +1,19 @@
 <template>
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
-    <div style="display: flex; align-items: center">
+    <CheckInConfirmationModal
+        :closeModalFunc="closeCheckInModal"
+        :onYes="handleCheckInYes"
+        :onNo="handleCheckInNo"
+        :isOpen="checkInModalOpen"
+        :title="`Do you want to create visit or view profile?`"
+    />
+
+    <div style="display: flex; width: 100%; justify-content: center">
         <ion-input
+            style="color: #000; width: 70%"
             @ionInput="handleInput"
             fill="outline"
-            :value="searchValue"
+            v-model="searchValue"
             placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
             class="searchField"
         >
@@ -42,7 +51,7 @@
                 <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
                 <ion-col style="max-width: 25px"></ion-col>
             </ion-row>
-            <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
+            <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openCheckInModal(item)">
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                     item.person.names[0].given_name + " " + item.person.names[0].family_name
                 }}</ion-col>
@@ -62,7 +71,7 @@
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
             <ion-row
-                v-show="!patients"
+                v-show="!apiStatus"
                 class="search_result clickable-row"
                 v-for="(item, index) in offlineFilteredPatients"
                 :key="index"
@@ -161,6 +170,7 @@ import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import DeviceDetection from "@/views/Mixin/DeviceDetection.vue";
 import { scannedData, extractDetails } from "@/services/national_id";
+import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
 import db from "@/db";
 import { Patient } from "@/interfaces/patient";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
@@ -171,9 +181,16 @@ import { isUnknownOrEmpty, isValueEmpty } from "@/utils/Strs";
 import PersonField from "@/utils/HisFormHelpers/PersonFieldHelper";
 import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 import { icons } from "@/utils/svg";
+import { useStatusStore } from "@/stores/StatusStore";
+import { useProgramStore } from "@/stores/ProgramStore";
+import router from "@/router";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import { getUserLocation } from "@/services/userService";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import dates from "@/utils/Date";
 
 export default defineComponent({
-    name: "Home",
+    name: "ToolbarSearch",
     mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
     components: {
         IonContent,
@@ -192,6 +209,7 @@ export default defineComponent({
         RoleSelectionModal,
         IonButton,
         IonInput,
+        CheckInConfirmationModal,
     },
     setup() {
         return { checkmark, add, search, camera };
@@ -215,6 +233,8 @@ export default defineComponent({
             useDDE: true as boolean,
             ddeEnabled: true as boolean,
             patient: {} as any,
+            checkInModalOpen: false,
+            selectedPatient: {} as any,
             facts: {
                 hasHighViralLoad: false as boolean,
                 patientFound: false as boolean,
@@ -280,31 +300,42 @@ export default defineComponent({
         searchText() {
             this.page = 1;
         },
+        $router: {
+            handler() {
+                this.searchValue = "";
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useGeneralStore, ["NCDUserActions"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
+        ...mapState(useProgramStore, ["programs"]),
     },
     async mounted() {
         this.ddeInstance = new PatientDemographicsExchangeService();
         this.offlinePatients = await db.collection("patientRecords").get();
     },
     methods: {
-        nav(url: any) {
+        async nav(url: any) {
+            await resetPatientData();
             this.$router.push(url);
         },
         async scanCode() {
             const dataScanned: any = await scannedData();
             const dataExtracted: any = await extractDetails(dataScanned);
-            if (await this.searchByNpid(dataScanned + "$")) {
-                this.searchValue = dataScanned;
+            if (await this.searchByNpid(dataScanned)) {
+                return;
             } else if (dataExtracted && (await this.searchByMWNationalID(dataExtracted?.idNumber))) {
-                this.searchValue = dataScanned?.idNumber;
+                return;
             } else if (dataExtracted) {
                 await this.setPersonInformation(dataExtracted);
                 this.$router.push("/registration/manual");
+                return;
+            } else {
+                toastWarning("Invalid Scan");
             }
-            this.searchValue = dataScanned;
         },
         programID() {
             return Service.getProgramID();
@@ -315,7 +346,13 @@ export default defineComponent({
             this.popoverOpen = false;
             if (this.searchText.length > 0) {
                 this.openPopover(ev);
-                await this.searchDemographicPayload(this.searchText);
+                if (this.apiStatus) {
+                    await this.searchDemographicPayload(this.searchText);
+                } else {
+                    this.offlineFilteredPatients = [];
+                    const payload = this.splitSearchText(this.searchText);
+                    this.offlineFilteredPatients = await this.searchOfflinePatients(payload);
+                }
             }
         },
         async setID(scannedID: any) {
@@ -332,16 +369,7 @@ export default defineComponent({
             await this.searchByNpid(searchText);
         },
         async searchByName(searchText: any) {
-            const splittedArray = searchText.split(" ");
-            const payload = {
-                given_name: splittedArray[0],
-                family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
-                gender: splittedArray.length >= 3 ? splittedArray[2] : "",
-                page: this.page.toString(),
-                per_page: this.paginationSize.toString(),
-            };
-            this.offlineFilteredPatients = [];
-
+            const payload = this.splitSearchText(searchText);
             // DDE enabled search
             if (this.globalPropertyStore.dde_enabled && payload.given_name && payload.family_name && payload.gender) {
                 return (this.patients = await this.ddeInstance.searchDemographics(payload));
@@ -350,24 +378,30 @@ export default defineComponent({
             this.patients = await PatientService.search(payload);
             if (this.patients && this.patients?.length > 0) {
                 this.callswipeleft();
-            } else {
-                this.offlineFilteredPatients = await this.searchOfflinePatients(payload);
             }
         },
+        splitSearchText(searchText: any) {
+            const splittedArray = searchText.split(" ");
+            return {
+                given_name: splittedArray[0],
+                family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
+                gender: splittedArray.length >= 3 ? splittedArray[2] : "",
+                page: this.page.toString(),
+                per_page: this.paginationSize.toString(),
+            };
+        },
         async searchByNpid(searchText: any) {
-            if (/.+\$$/i.test(`${searchText}`)) {
-                searchText = `${searchText || ""}`.replace(/\$/gi, "");
-                const idData = await PatientService.findByNpid(searchText as any);
-                if (idData && idData.length > 0) {
-                    this.patients.push(...idData);
-                    if (this.patients.length == 1) {
-                        this.openNewPage("patientProfile", this.patients[0]);
-                        this.popoverOpen = false;
-                    }
-                    return true;
-                } else {
-                    return false;
+            const idData = await PatientService.findByNpid(searchText as any);
+            if (idData && idData.length > 0) {
+                this.patients = [];
+                this.patients.push(...idData);
+                if (this.patients.length == 1) {
+                    this.openNewPage("patientProfile", this.patients[0]);
+                    this.popoverOpen = false;
                 }
+                return true;
+            } else {
+                return false;
             }
         },
         async searchByOtherIds(searchText: any) {
@@ -375,11 +409,11 @@ export default defineComponent({
                 const IDs: any = await this.setID(searchText);
                 if (Service.getProgramID() == 1) {
                     const artData = await PatientService.findByOtherID(4, IDs["ARVNumber"]);
-                    if (artData.length > 0) this.patients.push(...artData);
+                    if (artData.length > 0) this.patients = artData;
                 }
                 if (Service.getProgramID() == 32) {
                     const ncdData = await PatientService.findByOtherID(31, IDs["NCDNumber"]);
-                    if (ncdData.length > 0) this.patients.push(...ncdData);
+                    if (ncdData.length > 0) this.patients = ncdData;
                 }
             }
         },
@@ -387,6 +421,7 @@ export default defineComponent({
             if (Validation.isMWNationalID(searchText) == null) {
                 const nationalID = await PatientService.findByOtherID(28, searchText);
                 if (nationalID && nationalID.length > 0) {
+                    this.patients = [];
                     this.patients.push(...nationalID);
                     this.openNewPage("patientProfile", this.patients[0]);
                     return true;
@@ -410,47 +445,45 @@ export default defineComponent({
                 .map((identifier: any) => identifier.identifier)
                 .join(", ");
         },
-        setOfflineDemo(data: any) {
+        async setOfflineDemo(data: any) {
             this.popoverOpen = false;
-            resetPatientData();
+            await resetPatientData();
             this.setOfflineDemographics(data);
             let url = "/patientProfile";
             this.$router.push(url);
         },
         async openNewPage(url: any, item: any) {
             this.popoverOpen = false;
+            this.searchValue = "";
             this.setDemographics(item);
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
-                resetNCDPatientData();
+                await resetNCDPatientData();
             } else if (Service.getProgramID() == 14) {
                 resetOPDPatientData();
             }
-            resetPatientData();
+            await resetPatientData();
 
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
             const userProgramsData: any = localStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
-            const roleData: any = localStorage.getItem("userRoles");
-            const roles: any = JSON.parse(roleData);
-            UserService.setProgramUserActions();
-
+            const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
+            const roles: any = roleData ? roleData : [];
+            await UserService.setProgramUserActions();
             if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 this.$router.push("dispensation");
             } else if (roles.some((role: any) => role.role === "Lab")) {
                 this.$router.push("OPDConsultationPlan");
-            } else if (userPrograms.length == 1) {
-                let NCDUserAction: any = "";
-                if (this.NCDUserActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.NCDUserActions;
-                if (NCDUserAction && userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "NCD PROGRAM")) {
-                    this.$router.push(NCDUserAction.url);
-                } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
+            } else if (userPrograms?.length == 1) {
+                if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
                     this.$router.push("OPDvitals");
                 } else {
                     this.$router.push(url);
                 }
+            } else if (this.programID() == 32) {
+                this.$router.push(this.NCDUserActions.url);
             } else {
                 this.$router.push(url);
             }
@@ -462,9 +495,9 @@ export default defineComponent({
             this.event = e;
             this.popoverOpen = true;
         },
-        openCheckPaitentNationalIDModal() {
+        async openCheckPaitentNationalIDModal() {
             this.popoverOpen = false;
-            resetPatientData();
+            await resetPatientData();
             createModal(CheckPatientNationalID, { class: "nationalIDModal" });
         },
         onDismiss() {
@@ -486,80 +519,6 @@ export default defineComponent({
                     (!searchCriteria.gender || personInfo.gender === searchCriteria.gender)
                 );
             });
-        },
-        async searchOffline(searchText: any) {
-            this.offlinePatients;
-            return {
-                patient_id: 25,
-                date_created: "2024-07-26T11:41:27.000+02:00",
-                person: {
-                    gender: "M",
-                    birthdate: "2024-07-26",
-                    names: [
-                        {
-                            given_name: "test",
-                            middle_name: "",
-                            family_name: "ppea",
-                        },
-                    ],
-                    addresses: [
-                        {
-                            address1: null,
-                            address2: null,
-                            city_village: "Chidothi",
-                            state_province: "Dowa ",
-                            postal_code: null,
-                            county_district: null,
-                            neighborhood_cell: null,
-                            region: null,
-                            subregion: null,
-                            township_division: "Mponela Urban",
-                        },
-                    ],
-                    person_attributes: [
-                        {
-                            value: "",
-                            type: {
-                                person_attribute_type_id: 12,
-                                name: "Cell Phone Number",
-                            },
-                        },
-                        {
-                            person_attribute_id: 272,
-                            value: "",
-                            type: {
-                                person_attribute_type_id: 13,
-                                name: "Occupation",
-                            },
-                        },
-                        {
-                            value: "",
-                            type: {
-                                person_attribute_type_id: 5,
-                                name: "Civil Status",
-                            },
-                        },
-                        {
-                            person_attribute_id: 274,
-                            value: "",
-                            type: {
-                                person_attribute_type_id: 28,
-                                name: "EDUCATION LEVEL",
-                            },
-                        },
-                    ],
-                },
-                patient_identifiers: [
-                    {
-                        patient_identifier_id: 1,
-                        identifier: "P170000000013",
-                        type: {
-                            patient_identifier_type_id: 3,
-                            name: "National id",
-                        },
-                    },
-                ],
-            };
         },
         async handleSearchResults(patient: Promise<Patient | Patient[]>) {
             let results: Patient[] | Patient = [];
@@ -722,6 +681,69 @@ export default defineComponent({
                 const errors = data[0][1] as string[];
                 return [entity, errors.join(", ")];
             });
+        },
+        closeCheckInModal() {
+            this.checkInModalOpen = false;
+        },
+        handleCheckInNo() {
+            this.openNewPage("patientProfile", this.selectedPatient);
+            this.toggleCheckInModal();
+        },
+        async handleCheckInYes() {
+            try {
+                const location = await getUserLocation();
+                const locationId = location ? location.location_id : null;
+                if (!locationId) {
+                    toastDanger("Location ID could not be found. Please check your settings.");
+                    return;
+                }
+                const stages: Array<"VITALS" | "CONSULTATION" | "DISPENSATION"> = ["VITALS", "CONSULTATION", "DISPENSATION", locationId];
+                let isAlreadyCheckedIn = false;
+                for (const stage of stages) {
+                    const patientList = (await PatientOpdList.getPatientList(stage, locationId)) as Array<{ patient_id: string }>;
+                    if (patientList.some((patient) => patient.patient_id === this.selectedPatient.patient_id)) {
+                        isAlreadyCheckedIn = true;
+                        break;
+                    }
+                }
+
+                if (isAlreadyCheckedIn) {
+                    toastDanger("Failed, the patient's visit is already active");
+                    return;
+                }
+                await PatientOpdList.checkInPatient(this.selectedPatient.patient_id, dates.todayDateFormatted(), locationId);
+                await PatientOpdList.addPatientToStage(this.selectedPatient.patient_id, dates.todayDateFormatted(), "VITALS", locationId);
+                await usePatientList().refresh(locationId);
+                await this.openNewPage("home", this.selectedPatient);
+                this.closeCheckInModal();
+                toastSuccess("Patient's visit is now active, check on the waiting list of vitals");
+            } catch (e) {
+                console.error("Error during patient check-in process:", e);
+                toastDanger("An error occurred while attempting to check in the patient. Please try again.");
+            }
+        },
+        toggleCheckInModal() {
+            this.checkInModalOpen = !this.checkInModalOpen;
+        },
+        async openCheckInModal(item: any) {
+            if (this.programs?.program?.applicationName == "OPD Program") {
+                try {
+                    const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
+                    if (Boolean(checkInStatus)) {
+                        this.openNewPage("patientProfile", item);
+                        return;
+                    }
+                    this.checkInModalOpen = true;
+                    this.selectedPatient = item;
+
+                    return;
+                } catch (e) {
+                    this.checkInModalOpen = true;
+                    this.selectedPatient = item;
+                    return;
+                }
+            }
+            this.openNewPage("patientProfile", item);
         },
     },
 });

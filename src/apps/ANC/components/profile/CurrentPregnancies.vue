@@ -3,7 +3,7 @@
   <ion-card  class="section">
             <ion-card-content>
               <basic-form :contentData="lmnp" @update:selected="handleInputData" @update:inputValue="handleInputData"
-                          :initialData="initialData"
+              :initialData="initialData"
               ></basic-form>
             </ion-card-content>
     </ion-card>
@@ -34,7 +34,7 @@ import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
+import {pastObstreticValidationShema, useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
 import {
   getCheckboxSelectedValue,
   getFieldValue,
@@ -45,6 +45,7 @@ import BasicCard from "@/components/BasicCard.vue";
 import {validateField} from "@/services/ANC/profile_validation_service"
 import StandardValidations from "@/validations/StandardValidations";
 import HisDate from "@/utils/Date";
+import { YupValidateField } from '@/services/validation_service';
 
 
 export default defineComponent({
@@ -119,7 +120,17 @@ export default defineComponent({
         this.handleTetanus()
         this.calculateEDD
         this.validaterowData({})
-        this.handlettv1()
+       // this.handlettv1()
+
+        this.handleUnderImmunised()
+        this. handleOneDose()
+        this.handleTwoDose()
+        this.handleThreeDose()
+        this.handleFourDose()
+        this.handleNodoses()
+        this.handleOtherDoses()
+
+       // this.resetDoseFields()
   
   
           
@@ -135,7 +146,17 @@ export default defineComponent({
            this.calculateEDD(event)
            this.lmnp
            this.handleTetanus()
-           this.handlettv1()
+          // this.handlettv1()
+
+           this.handleUnderImmunised()
+           this. handleOneDose()
+           this.handleTwoDose()
+           this.handleThreeDose()
+           this.handleFourDose()
+           this.handleNodoses()
+           this.handleOtherDoses()
+
+           //this.resetDoseFields()
           },
          deep:true
 
@@ -157,6 +178,14 @@ export default defineComponent({
         // },
       },
       methods:{
+        async handleImmunValidation(event:any){
+          YupValidateField(
+            this.lmnp,
+            pastObstreticValidationShema,
+            event.name,
+            event.value
+          )
+        },
         validationRules(event: any) {
           return validateField(this.lmnp,event.name, (this as any)[event.name]);
         },
@@ -168,6 +197,7 @@ export default defineComponent({
         },
 
         async handleInputData(event: any) {
+          this.handleImmunValidation(event)
           this.validaterowData(event)
           this.calculateGestationAgefromLNMP(event)
           this.calculateEDD(event)
@@ -270,8 +300,8 @@ export default defineComponent({
                   }
               }
           },
-
         handleTetanus(){
+        
           if(getRadioSelectedValue(this.lmnp, 'The woman received tetanus doses for immunization?')=='fully immunised'){
             modifyFieldValue(this.lmnp,'tt1Date','displayNone', false)
             modifyFieldValue(this.lmnp,'tt2Date','displayNone', false)
@@ -287,26 +317,33 @@ export default defineComponent({
             modifyFieldValue(this.lmnp,'tt4Date','displayNone', true)
             modifyFieldValue(this.lmnp,'tt5Date','displayNone', true)
           }
-
+        },
+        handleUnderImmunised(){
+        
           if(getRadioSelectedValue(this.lmnp, 'The woman received tetanus doses for immunization?')=='under immunised'){
             modifyRadioValue(this.lmnp,'Number of tetanus doses','displayNone', false)
           }   else {
             modifyRadioValue(this.lmnp,'Number of tetanus doses','displayNone', true)
           }
-
-          if(getRadioSelectedValue(this.lmnp, 'Number of tetanus doses')=='one dose'){
+        },
+        handleOneDose(){
+          if(getRadioSelectedValue(this.lmnp, 'Number of tetanus doses')=='one dose' && getRadioSelectedValue(this.lmnp, 'The woman received tetanus doses for immunization?')=='under immunised'){
             modifyFieldValue(this.lmnp,'tt6Date','displayNone', false)
           }   else {
             modifyFieldValue(this.lmnp,'tt6Date','displayNone', true)
           }
-          if(getRadioSelectedValue(this.lmnp, 'Number of tetanus doses')=='two doses'){
+        },
+        handleTwoDose(){
+          if(getRadioSelectedValue(this.lmnp, 'Number of tetanus doses')=='two doses' && getRadioSelectedValue(this.lmnp, 'The woman received tetanus doses for immunization?')=='under immunised'){
             modifyFieldValue(this.lmnp,'tt7Date','displayNone', false)
             modifyFieldValue(this.lmnp,'tt8Date','displayNone', false)
           }   else {
             modifyFieldValue(this.lmnp,'tt7Date','displayNone', true)
             modifyFieldValue(this.lmnp,'tt8Date','displayNone', true)
           }
-          if(getRadioSelectedValue(this.lmnp, 'Number of tetanus doses')=='three doses'){
+        },
+         handleThreeDose(){
+          if(getRadioSelectedValue(this.lmnp, 'Number of tetanus doses')=='three doses' && getRadioSelectedValue(this.lmnp, 'The woman received tetanus doses for immunization?')=='under immunised'){
             modifyFieldValue(this.lmnp,'tt9Date','displayNone', false)
             modifyFieldValue(this.lmnp,'tt10Date','displayNone', false)
             modifyFieldValue(this.lmnp,'tt11Date','displayNone', false)
@@ -315,7 +352,9 @@ export default defineComponent({
             modifyFieldValue(this.lmnp,'tt10Date','displayNone', true)
             modifyFieldValue(this.lmnp,'tt11Date','displayNone', true)
           }
-          if(getRadioSelectedValue(this.lmnp, 'Number of tetanus doses')=='four doses'){
+         },
+         handleFourDose(){
+          if(getRadioSelectedValue(this.lmnp, 'Number of tetanus doses')=='four doses' && getRadioSelectedValue(this.lmnp, 'The woman received tetanus doses for immunization?')=='under immunised'){
             modifyFieldValue(this.lmnp,'12','displayNone', false)
             modifyFieldValue(this.lmnp,'13','displayNone', false)
             modifyFieldValue(this.lmnp,'14','displayNone', false)
@@ -326,25 +365,23 @@ export default defineComponent({
             modifyFieldValue(this.lmnp,'14','displayNone', true)
             modifyFieldValue(this.lmnp,'15','displayNone', true)
           }
-          
-
+         },
+         handleNodoses(){
+ 
           if(getRadioSelectedValue(this.lmnp,'The woman received tetanus doses for immunization?') == 'no doses'){
             modifyRadioValue(this.lmnp,'Reason Tetanus toxoid (TT) was not conducted','displayNone',false)
-            if(getRadioSelectedValue(this.lmnp, 'Reason Tetanus toxoid (TT) was not conducted')=='other'){
-              modifyFieldValue(this.lmnp,'Other','displayNone', false)
-            }   else {modifyFieldValue(this.lmnp,'Other','displayNone', true)}
+
           }else{
             modifyRadioValue(this.lmnp,'Reason Tetanus toxoid (TT) was not conducted','displayNone',true)
           }
-
-        },
-       handlettv1(){
-          // if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='1'){
-          //   modifyFieldValue(this.tetanus,'tt1Date','displayNone', false)
-          // }   else {
-          //   modifyFieldValue(this.tetanus,'tt1Date','displayNone', true)
-          // }
-       },
+         },
+         handleOtherDoses(){            
+           if(getRadioSelectedValue(this.lmnp, 'Reason Tetanus toxoid (TT) was not conducted')=='other' && getRadioSelectedValue(this.lmnp,'The woman received tetanus doses for immunization?') == 'no doses'){
+              modifyFieldValue(this.lmnp,'Other','displayNone', false)
+            }   else {
+              modifyFieldValue(this.lmnp,'Other','displayNone', true)
+            }
+         },
     }
    
       },

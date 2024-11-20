@@ -22,11 +22,76 @@ const initialOPDdiagnosis = [
                             multiSelectData: [],
                             idName: "district_id",
                             validationFunctionName: "required",
-                            // inputFieldDisplayNone: true,
-                            // colSize: 0,
+
                         },
+                    ],
+
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        sideColSize:0,
+        checkboxBtnContent:{
+            header:{
+
+            },
+            data:[
+                {
+                    name:'Secondary Diagnosis',
+                    value: 'Secondary Diagnosis',
+                    colSize: "5",
+                },
+                {
+                    name: 'Differential Diagnosis',
+                    value: 'Differential Diagnosis',
+                    colSize: "7",
+                },
+            ]
+        }
+    },
+    {
+        childName:"Secondary Diagnosis",
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
                         {
+                            displayNone:true,
                             inputHeader: "Secondary Diagnosis",
+                            icon: icons.search,
+                            isMultiSelect: true,
+                            popOver: true,
+                            value: "",
+                            name: "secondaryDiagnosis",
+                            multiSelectData: [],
+                            eventType: "input",
+                            // required: true,
+                            alertsErrorMassage: "",
+                            id: "",
+                            idName: "district_id",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        childName:"Differential Diagnosis",
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone:true,
+                            inputHeader: "Differential Diagnosis",
                             icon: icons.search,
                             isMultiSelect: true,
                             popOver: true,
@@ -40,18 +105,33 @@ const initialOPDdiagnosis = [
                             idName: "district_id",
                         },
                     ],
-                    btns: [
-                        {
-                            name: "Add",
-                            fill: "clear",
-                            btn_col_size: 3,
-                            icon: icons.plus,
-                        },
-                    ],
                 },
             ],
         },
     },
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    btns: [
+                        {
+                            name: "Save",
+                            fill: "solid",
+                            btn_col_size: 3,
+                            icon: icons.plus,
+                        },
+                    ],
+                    colData: [
+                    ],
+
+                },
+            ],
+        },
+    },
+
+
 ];
 export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
     state: () => ({
@@ -66,5 +146,5 @@ export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
             return [...data]; // Return a copy of the initial state
         },
     },
-    persist: true,
+    // persist: true,
 });

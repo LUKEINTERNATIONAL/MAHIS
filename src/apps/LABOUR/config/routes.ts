@@ -9,44 +9,44 @@ import labourHome from "@/apps/LABOUR/views/labourHome.vue";
 
 export default [
     {
-        path: '/labour/obstetric',
+        path: '/obstetric',
         name: 'obstetricDetails',
         component: obstetricDetails
     },
     {
-        path: '/labour/labourAssessment',
+        path: '/labourAssessment',
         name: 'labourAssessment',
         component: labourAssessment
     },
     {
-        path: '/labour/continuousMonitoring',
+        path: '/continuousMonitoring',
         name: 'continuousMonitoring',
         component: continuousMonitoring
     },
     {
-        path: '/labour/referral',
+        path: '/labourReferral',
         name: 'referral',
         component: referral
     },
     {
-        path: '/labour/deliveryDetails',
+        path: '/labourDeliveryDetails',
         name: 'deliveryDetails',
         component: deliveryDetails
     },
     {
-        path: '/labour/postnatalChecks',
+        path: '/postnatalChecks',
         name: 'postnatalChecks',
         component: postnatalChecks
     },
 
     {
-        path: '/labour/end',
+        path: '/labourEnd',
         name: 'end',
         component: end
     },
     {
         path: '/labour/labourHome',
-        name: 'end',
+        name: 'labourHome',
         component: labourHome
     },
 

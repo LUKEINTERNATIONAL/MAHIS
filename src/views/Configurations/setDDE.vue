@@ -1,5 +1,10 @@
 <template>
-    <ion-page>
+    <ion-page :class="{ loading: isLoading }">
+        <!-- Spinner -->
+        <div v-if="isLoading" class="spinner-overlay">
+            <ion-spinner name="bubbles"></ion-spinner>
+            <div class="loading-text">Please wait...</div>
+        </div>
         <Toolbar />
         <ion-content :fullscreen="true">
             <div class="positionCenter">
@@ -119,6 +124,7 @@ export default defineComponent({
             apiDate: "" as string,
             date: "" as string,
             DDE: {} as any,
+            isLoading: false,
         };
     },
     computed: {
@@ -132,32 +138,47 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            async handler() {
+                await this.ddeData();
+            },
+            deep: true,
+        },
     },
+
     async mounted() {
+        this.isLoading = true;
+        await useGlobalPropertyStore().loadDDEStatus();
         this.apiDate = await Service.getApiDate();
-        this.ddeData();
+        await this.ddeData();
         this.date = getFieldValue(this.sessionDate, "sessionDate", "value");
+        this.isLoading = false;
     },
 
     methods: {
         async setDDEStatus() {
             const dde = useGlobalPropertyStore();
             await dde.setGlobalProperty("dde_enabled", `${this.globalPropertyStore.dde_enabled}`);
+            await this.ddeData();
         },
         async ddeData() {
-            const data = await PatientDemographicsExchangeService.getRemainingNpids();
-            const stats = data["npid_status"][0];
-            const unassigned = stats["unassigned"];
-            const avg = stats["avg_consumption_rate_per_day"] || 1;
-            this.DDE = {
-                id: stats["location_id"],
-                avg: avg,
-                unassigned: stats["unassigned"],
-                assigned: stats["assigned"],
-                daysLeft: Math.floor(unassigned / avg),
-                lastUpdated: dayjs(stats["date_last_updated"]).format("DD/MMM/YYYY HH:mm:ss"),
-                title: stats["location_name"] + " DDE NPID Status",
-            };
+            if (this.globalPropertyStore.dde_enabled === "true") {
+                try {
+                    const data = await PatientDemographicsExchangeService.getRemainingNpids();
+                    const stats = data["npid_status"][0];
+                    const unassigned = stats["unassigned"];
+                    const avg = stats["avg_consumption_rate_per_day"] || 1;
+                    this.DDE = {
+                        id: stats["location_id"],
+                        avg: avg,
+                        unassigned: stats["unassigned"],
+                        assigned: stats["assigned"],
+                        daysLeft: Math.floor(unassigned / avg),
+                        lastUpdated: dayjs(stats["date_last_updated"]).format("DD/MMM/YYYY HH:mm:ss"),
+                        title: stats["location_name"] + " DDE NPID Status",
+                    };
+                } catch (error) {}
+            }
         },
         openModal() {
             createModal(DispositionModal);

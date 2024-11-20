@@ -10,6 +10,54 @@ const initialExamsAfterDeliveryForChild=[
         radioBtnContent:
             {
                 header:{
+                    title: 'Time For postnatal check'
+,                   selectedValue: '',
+                    class:"bold",
+                    name:"Time For postnatal check"
+                },
+                data:[
+
+                ]
+            }
+
+    },
+    {   
+        
+        classDash: 'dashed_bottom_border',
+        header:{
+                 title: 'Time For postnatal check',
+                 selectedValue: '',
+                 name:"time"
+             },
+         data:{ 
+             rowData:[
+                 {
+                     colData:[
+                             {
+                                 class:"bold",
+                                 inputHeader: 'Time for baby postnatal check',
+                                 icon: icons.timePicker,
+                                 name: 'Time for baby postnatal check',
+                                 value: "",
+                                 valueType: "text",
+                                 placeholder:'Pick time',
+                                 eventType: 'input',
+                                 required: true
+                         }
+                         ]
+                 }
+             ],
+             
+         }
+             
+     },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        radioBtnContent:
+            {
+                header:{
                     title: 'Immediate vitals for child'
 ,                   selectedValue: '',
                     class:"bold",
@@ -204,6 +252,6 @@ export const useImmediatePostnatalChecksForChildStore = defineStore('immediatePo
             return [...data]
         }
     },
-    persist:true,
+    // persist:true,
 
 })

@@ -7,6 +7,7 @@
             <div class="ion-padding" slot="content" style="margin-bottom: 125px">
                 <span>
                     <labOrderResults :propOrders="labOrders" />
+
                 </span>
 
                 <span v-if="search_item">
@@ -160,7 +161,6 @@ export default defineComponent({
         this.setDashedBox();
         this.updateInvestigationWizard();
     },
-
     methods: {
         async getTests() {
             const test = await OrderService.getTestTypes();

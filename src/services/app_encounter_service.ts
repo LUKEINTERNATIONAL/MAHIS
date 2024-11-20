@@ -118,12 +118,12 @@ export class AppEncounterService extends ObservationService {
             encounter_datetime: this.date,
         };
         if (this.providerID != -1) {
-            payload["provider_id"] = this.providerID;
+            // payload["provider_id"] = this.providerID;
         }
         const encounter = await EncounterService.create(payload);
         if (encounter) {
             this.encounterID = encounter.encounter_id;
-            await this.saveValueTextObs("Workstation location", ObservationService.getUserLocation() || "Unknown");
+            // await this.saveValueTextObs("Workstation location", ObservationService.getUserLocation() || "Unknown");
             return encounter;
         }
     }

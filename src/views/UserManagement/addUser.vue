@@ -57,31 +57,69 @@
 
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Phone<span style="color: #b42318">*</span></ion-label
-            >
-                <BasicInputField
-                    :placeholder="'phone number'"
-                    :icon="phonePortraitOutline"
-                    :inputValue="''"
-                    @update:inputValue=""
+                    >Gender<span style="color: #b42318">*</span></ion-label
+                >
+                <sselectionList
+                    :labels="isSSelection_properties[0].labels"
+                    :selected-opt="isSSelection_properties[0].selectedOption.value"
+                    @selection-event="isSSelection_properties[0].dataHandler"
                 />
-                <!-- <BasicInputField
-                    :placeholder="input_properties[3].placeHolder"
-                    :icon="phonePortraitOutline"
-                    :inputValue="user_name"
-                    @update:inputValue="input_properties[3].dataHandler"
-                /> -->
 
-                <!-- <div>
-                    <ion-label v-if="input_properties[3].show_error.value" class="error-label">
-                        {{ input_properties[3].error_message }}
+                <div>
+                    <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
+                        {{ isSSelection_properties[0].error_message }}
                     </ion-label>
-                </div> -->
+                </div>
             </ion-col>
     </ion-row>
 
     <ion-row>
-        <ion-col size="6" v-if="false">
+        <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+            >Phone<span style="color: #b42318">*</span></ion-label
+        >
+            <BasicInputField
+                :placeholder="input_properties[3].placeHolder"
+                :icon="phonePortraitOutline"
+                :inputValue="phone_number"
+                @update:inputValue="input_properties[3].dataHandler"
+            />
+            <div>
+                <ion-label v-if="input_properties[3].show_error.value" class="error-label">
+                    {{ input_properties[3].error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+        <ion-col>
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Role(s)<span style="color: #b42318">*</span></ion-label
+                >
+                <ListPicker
+                    :multiSelection="list_picker_prperties[0].multi_Selection"
+                    :show_label="list_picker_prperties[0].show_list_label"
+                    :uniqueId="list_picker_prperties[0].unqueId"
+                    :name_of_list="list_picker_prperties[0].name_of_list"
+                    :choose_place_holder="list_picker_prperties[0].placeHolder"
+                    :items_-list="user_roles"
+                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                    :disabled="list_picker_prperties[0].disabled.value"
+                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                    @item-search-text="list_picker_prperties[0].searchTextFN"
+                />
+
+                <div>
+                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label" style="margin-top: -10px;">
+                        {{ list_picker_prperties[0].error_message }}
+                    </ion-label>
+                </div>
+            </ion-col>
+        </ion-col>
+    </ion-row>
+
+    <ion-row>
+        <ion-col size="6" v-if="true">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >District(s)<span style="color: #b42318">*</span></ion-label
             >
@@ -128,6 +166,7 @@
                 selectLabel=""
                 label="name"
                 :searchable="true"
+                :disabled="disableFacilitySelection"
                 @search-change="FindLocation($event)"
                 track-by="location_id"
                 :options="locationData"
@@ -140,8 +179,6 @@
             </div>
         </ion-col>
     </ion-row>
-
- 
 
     <ion-row>
         <ion-col size="6">
@@ -205,36 +242,6 @@
     </ion-row>
 
     <ion-row>
-
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Role(s)<span style="color: #b42318">*</span></ion-label
-            >
-            <ListPicker
-                :multiSelection="list_picker_prperties[0].multi_Selection"
-                :show_label="list_picker_prperties[0].show_list_label"
-                :uniqueId="list_picker_prperties[0].unqueId"
-                :name_of_list="list_picker_prperties[0].name_of_list"
-                :choose_place_holder="list_picker_prperties[0].placeHolder"
-                :items_-list="user_roles"
-                :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                :disabled="list_picker_prperties[0].disabled.value"
-                @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                @item-search-text="list_picker_prperties[0].searchTextFN"
-            />
-
-            <div>
-                <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">
-                    {{ list_picker_prperties[0].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-        <ion-col></ion-col>
-    </ion-row>
-
-
-    <ion-row>
         <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                 >Program(s)<span style="color: #b42318">*</span></ion-label
@@ -256,25 +263,6 @@
             <div>
                 <ion-label v-if="list_picker_prperties[1].show_error.value" class="error-label">
                     {{ list_picker_prperties[1].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-        <ion-col></ion-col>
-    </ion-row>
-
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Gender<span style="color: #b42318">*</span></ion-label
-            >
-            <sselectionList
-                :labels="isSSelection_properties[0].labels"
-                @selection-event="isSSelection_properties[0].dataHandler"
-            />
-
-            <div>
-                <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
-                    {{ isSSelection_properties[0].error_message }}
                 </ion-label>
             </div>
         </ion-col>
@@ -330,7 +318,7 @@ export default defineComponent({
 import { IonContent, IonHeader, IonItem, IonCol, IonLabel, IonToolbar, IonMenu, IonAccordionGroup, IonAccordion, AccordionGroupCustomEvent } from "@ionic/vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import sselectionList from "@/components/SselectionList.vue"
-import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti"
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid, getGenderCode } from "@/utils/GeneralUti"
 import _ from "lodash"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import ListPicker from "../../components/ListPicker.vue"
@@ -338,6 +326,7 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 import VueMultiselect from "vue-multiselect"
 import { LocationService } from "@/services/location_service"
 import { isEmpty } from "lodash"
+import { useUserStore } from "@/stores/userStore";
 import {
     addOutline,
     pencilOutline,
@@ -351,10 +340,12 @@ import {
 } from "ionicons/icons"
 import { UserService } from "@/services/user_service"
 import { ProgramService } from "@/services/program_service"
+import { PersonService } from "@/services/person_service";
 
 const user_name = ref()
 const first_name = ref()
 const last_name = ref()
+const phone_number = ref()
 const user_roles = ref([] as any)
 const user_programs = ref([] as any)
 const selectedRoleNames: any[] = []
@@ -363,7 +354,7 @@ const selectedVillageIds: any[] = []
 const selectedTAIds: any[] = []
 const selectedDistrictIds : any[] = []
 const passwordErrorMsgs = [
-    'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
+    'Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (@#$%^&+=*!-), without spaces',
     'Password does not match'
 ]
 const selected_location = ref()
@@ -385,6 +376,9 @@ const selected_TAz = ref()
 const selected_Districts = ref()
 const disableVillageSelection = ref(true)
 const HSA_found_for_disabling_button = ref(true)
+const userStore = useUserStore()
+const facilityLocation = computed(() => userStore.facilityLocation);
+const disableFacilitySelection = ref(true)
 
 const props = defineProps<{
     action: any
@@ -393,6 +387,7 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
+    await getFacilityForCurrentuser()
     districtList.value = await getdistrictList()
 })
 
@@ -411,6 +406,17 @@ watch(
         }
     }
 )
+
+async function updateuserPersoninf(personId: number) {
+    const data1 = getFieldsValuesObj(input_properties)
+    const updatedData = {
+        cell_phone_number: data1.phone_number,
+        gender: getGenderCode(isSSelection_properties[0].dataValue.value),
+    } as any
+    const personService = new PersonService(updatedData);
+    const data = await personService.update(personId);
+    return data
+}
 
 function selectedLocation(data: any) {
     locationId.value = data.location_id
@@ -445,6 +451,54 @@ function selectedDistrict(selectedDistrict: any) {
     selectedDistrict.forEach((district: any ) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
+}
+
+async function getFacilityForCurrentuser() {
+    try {
+        const response = await LocationService.getLocation(facilityLocation.value.location_id)
+        if (isEmpty(response) == false) {
+            selected_location.value = response
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function getCurrentUserRoles() {
+    try {
+        const user = await UserService.getCurrentUser();
+        if (user) {
+            const userRoles = user.roles.map((role) => role.role);
+            userStore.setUserRoles(userRoles);
+
+            if (findUserRoleByName('Superuser,Superuser,') == true) {
+                disableFacilitySelection.value = false;
+            }
+
+            if (findUserRoleByName('Superuser,Superuser,') == false) {
+                user_roles.value = findAndRemoveRoleSSU(user_roles.value)
+            }
+        }
+    } catch (error) {
+        
+    }
+}
+
+function findUserRoleByName(name: string) {
+    const roles = userStore.getUserRoles();
+    return roles.some((role: any) => role.toLowerCase() === name.toLowerCase());
+}
+
+function findAndRemoveRoleSSU(data: any[]): any[] {
+    const index = data.findIndex((role: any) => 
+        typeof role.name === 'string' && role.name.toLowerCase() === 'Superuser,Superuser,'.toLowerCase()
+    );
+    
+    if (index !== -1) {
+        data.splice(index, 1);
+    }
+
+    return data;
 }
 
 async function FindLocation(text: any) {
@@ -487,20 +541,20 @@ async function trigerSaveFn() {
             programs: selectedProgramIds,
             villages: selectedVillageIds,
             roles: selectedRoleNames,
-            gender: isSSelection_properties[0].dataValue.value,
+            gender: getGenderCode(isSSelection_properties[0].dataValue.value),
             location_id: selected_location.value.location_id
         }
 
         try {
             const { user } = await UserService.createUser(payload)
             if (user) {
-                // console.log(user.user_id)
-                // console.log(user)
+                await updateuserPersoninf(user.person.person_id)
                 saveEvent(user.user_id)
             }
         } catch (error) {
             //console.error(error)
-            toastDanger("User already exists", 8000)
+            saveEvent('')
+            toastDanger(error as string, 8000)
         }
     }
 }
@@ -525,6 +579,7 @@ async function getUserRoles() {
         )
     })
     user_roles.value = temp_array
+    await getCurrentUserRoles()
 }
 
 function isRoleSelected() {
@@ -661,72 +716,45 @@ function validateTAz() {
     }
 }
 
-function ValidatePassword(): boolean {
-    let is_valid = false
-    let error_foundP_p1 = false
-    let error_foundP_p2 = false
-    let is_password1_valid
-    let is_password2_valid
-    
+function ValidatePassword() {
+    const [password1, password2] = password_input_properties.map(prop => prop.dataValue.value);
+    const defaultErrorMsg = passwordErrorMsgs[0];
+    const mismatchErrorMsg = passwordErrorMsgs[1];
 
-    password_input_properties[0].error_message = passwordErrorMsgs[0]
-    password_input_properties[1].error_message = passwordErrorMsgs[0]
+    password_input_properties.forEach(prop => {
+        prop.error_message = defaultErrorMsg;
+        prop.show_error.value = false;
+    });
 
-    if (password_input_properties[0].dataValue.value == undefined || password_input_properties[0].dataValue.value == "") {
-        password_input_properties[0].show_error.value = true
-        error_foundP_p1 = true
+    const emptyPasswords = password_input_properties.map((prop, index) => {
+        const isEmpty = !prop.dataValue.value;
+        prop.show_error.value = isEmpty;
+        return isEmpty;
+    });
+
+    if (emptyPasswords.some(isEmpty => isEmpty)) {
+        return false;
     }
 
-    if (password_input_properties[1].dataValue.value == undefined || password_input_properties[1].dataValue.value == "") {
-        password_input_properties[1].show_error.value = true
-        error_foundP_p2 = true
+    const validPasswords = password_input_properties.map((prop, index) => {
+        const isValid = isPasswordValid(prop.dataValue.value);
+        prop.show_error.value = !isValid;
+        return isValid;
+    });
+
+    if (validPasswords.some(isValid => !isValid)) {
+        return false;
     }
 
-
-    if (error_foundP_p1 == false) {
-        is_password1_valid = isPasswordValid(password_input_properties[0].dataValue.value)
-
-        if (is_password1_valid == false) {
-            password_input_properties[0].show_error.value = true
-            error_foundP_p1 = true
-        }
-
-        if (is_password1_valid == true) {
-            password_input_properties[0].show_error.value = false
-        }
+    if (password1 !== password2) {
+        password_input_properties.forEach(prop => {
+            prop.error_message = mismatchErrorMsg;
+            prop.show_error.value = true;
+        });
+        return false;
     }
 
-    if (error_foundP_p2 == false) {
-        is_password2_valid = isPasswordValid(password_input_properties[1].dataValue.value)
-
-        if (is_password2_valid == false) {
-            password_input_properties[1].show_error.value = true
-            error_foundP_p2 = true
-        }
-
-        if (is_password2_valid == true) {
-            password_input_properties[1].show_error.value = false
-        }
-    }
-
-    if (error_foundP_p1 == false && error_foundP_p2 == false) {
-        if (is_password1_valid == true && is_password2_valid == true) {
-            if (password_input_properties[0].dataValue.value === password_input_properties[1].dataValue.value) {
-                password_input_properties[0].show_error.value = false
-                password_input_properties[1].show_error.value = false
-                is_valid = true
-            }
-
-            if (password_input_properties[0].dataValue.value != password_input_properties[1].dataValue.value) {
-                password_input_properties[0].error_message = passwordErrorMsgs[1]
-                password_input_properties[1].error_message = passwordErrorMsgs[1]
-                password_input_properties[0].show_error.value = true
-                password_input_properties[1].show_error.value = true
-                is_valid = false
-            }
-        }
-    }
-    return is_valid
+    return true;
 }
 
 const input_properties = [
@@ -754,14 +782,14 @@ const input_properties = [
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
     },
-    // {
-    //     placeHolder: 'phone number',
-    //     property_name: 'phone_number',
-    //     dataHandler: inputUpDated_fn4,
-    //     dataValue: ref(),
-    //     show_error: ref(false),
-    //     error_message: 'Input required, valid input',
-    // },
+    {
+        placeHolder: 'phone number',
+        property_name: 'phone_number',
+        dataHandler: inputUpDated_fn4,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, valid input',
+    },
 ]
 
 const password_input_properties = [
@@ -820,10 +848,11 @@ function listUpdated1(data: any) {
 }
 
 function checkIfSelectedIsHSA(role_list: any) {
+    const HSA_ROLES = ['HSA', 'Health Surveillance']
     village_show_error.value = false
     let is_found = false
     role_list.forEach((item: any) => {
-        if (item?.selected == true && item?.name == 'HSA') {
+        if (item?.selected == true && HSA_ROLES.includes(item?.name)) {
             HSA_found_for_disabling_button.value = false
             is_found = true
         }
@@ -849,6 +878,7 @@ function listUpdated2(data: any) {
 const isSSelection_properties = [
     {
         labels: ['Male','Female',],
+        selectedOption: ref(null),
         dataHandler: sselectionListUpdated,
         dataValue: ref(),
         show_error: ref(false),
@@ -857,12 +887,35 @@ const isSSelection_properties = [
 ]
 
 function sselectionListUpdated(data: any) {
-    isSSelection_properties[0].dataValue.value = data.label 
+    try {
+        isSSelection_properties[0].dataValue.value = data.label 
+    } catch (error) {
+        isSSelection_properties[0].dataValue.value = undefined 
+    }
+    isSSelectionValid()
 }
 
-function inputUpDated_fn1(event: any) {
+async function validateUsernameIfExists(username: string) {
+    try {
+        if (username.length > 0) {
+            const does_username_exist = await UserService.doesUsernameExist(username);
+            if (does_username_exist.exists == true) {
+                input_properties[0].show_error.value = true;
+                input_properties[0].error_message = "Username already exists";
+            } else if (does_username_exist.exists == false) {
+                input_properties[0].show_error.value = false;
+                input_properties[0].error_message = "Input required, Only letters are allowed";
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function inputUpDated_fn1(event: any) {
     const input = event.target.value
     input_properties[0].dataValue.value = input
+    await validateUsernameIfExists(input)
 }
 function inputUpDated_fn2(event: any) {
     const input = event.target.value
@@ -873,8 +926,8 @@ function inputUpDated_fn3(event: any) {
     input_properties[2].dataValue.value = input
 }
 function inputUpDated_fn4(event: any) {
-    // const input = event.target.value
-    // input_properties[2].dataValue.value = input
+    const input = event.target.value
+    input_properties[3].dataValue.value = input
 }
 function passwordInputUpDated_fn1(event: any) {
     const input = event.target.value
@@ -901,7 +954,6 @@ async function getdistrictList() {
     districtList.forEach((district: any ) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
-    //__________________________
 
     return districtList
 }
@@ -938,6 +990,8 @@ function findVillages(district_id: any) {
     
     fetchVillages(district_id, '')
 }
+
+
 
 </script>
 <style scoped>

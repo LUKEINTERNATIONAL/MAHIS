@@ -1,5 +1,13 @@
 import { SymptomsFollowUpService } from "@/services/ANC/symptoms_follow_up_service"
+import {AppEncounterService} from "@/services/app_encounter_service";
 
+
+
+export class SymptomsAndFollowUpService extends AppEncounterService {
+  constructor(patientID: number, providerID: number) {
+    super(patientID, 151, providerID)
+  }
+}
 export class MedicalFollowUpInstance {
   async push(patientID: any,providerID: any, followUpData: any){
     const medicalFollowUpService = new SymptomsFollowUpService(patientID, providerID)

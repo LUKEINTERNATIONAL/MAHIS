@@ -1,6 +1,14 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import { getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+import * as yup from 'yup'
+import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers";
+
+export const pastObstreticValidationShema = yup.object().shape({
+  "Gravida":yup.number().typeError("Gravida can only be number").min(0).max(30),
+  "Abortions/Miscarriages":yup.number().typeError("Abortions/Miscarriages can only be number").min(0),
+  "Stillbirths":yup.number().typeError("Stillbirths can only be number").min(0),
+})
 
 export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
   state: () => ({
@@ -27,7 +35,19 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             },
           ],
         },
+        alerts: [
+          {
+            backgroundColor: "",
+            status: "",
+            icon: "",
+            textColor: "",
+            value: "",
+            name: "",
+            index: "",
+          },
+        ],
       },
+
       {
         isFinishBtn: false,
         sectionHeader: "",
@@ -42,6 +62,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   icon: icons.editPen,
                   name: "Abortions/Miscarriages",
                   required: true,
+                  disabled:false,
                   valueType: "text",
                   eventType: "input",
                   alertsErrorMassage: "",
@@ -51,6 +72,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   inputHeader: "Stillbirths*",
                   value: "",
                   name: "Stillbirths",
+                  disabled:false,
                   required: true,
                   valueType: "text",
                   icon: icons.editPen,
@@ -72,9 +94,9 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
               colData: [
                 {
                   class: "bold",
-                  inputHeader: "Live births*",
+                  inputHeader: "Live births",
                   value: "",
-                  disabled: true,
+                  disabled:true,
                   name: "LiveBirths",
                   required: true,
                   valueType: "text",
@@ -83,8 +105,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                 },
                 {
                   class: "bold",
-                  inputHeader: "Parity*",
-                  disabled: true,
+                  inputHeader: "Parity",
+                  disabled:true,
                   value: "",
                   name: "Parity",
                   valueType: "text",
@@ -96,6 +118,17 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             },
           ],
         },
+        alerts: [
+          {
+            backgroundColor: "",
+            status: "",
+            icon: "",
+            textColor: "",
+            value: "",
+            name: "",
+            index: "",
+          },
+        ],
       },
       {
         selectedData: [],
@@ -107,67 +140,80 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             title: "Was last live birth preterm?",
             selectedValue: "",
             name: "Was last live birth preterm?",
-            displayNone: true,
-          },
-          data: [
-            {
-              name: "Last live birth was preterm",
-              value: "Preterm pregnancy - less than 28 weeks",
-              colSize: "9",
-            },
-            {
-              name: "Last live birth was not preterm/ Last live birth was full term",
-              value: "Preterm pregnancy - 28 to 34 weeks",
-              colSize: "9",
-            },
-            {
-              name: "Last live birth had congenital abnormalities",
-              value: "Preterm premature rupture of membranes (PPROM)",
-              colSize: "9",
-            },
-          ],
-        },
-      },
-    ] as any,
-    abnormalities: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-          header: {
-            title: "Last live birth had congenital abnormalities?",
-            selectedValue: "",
+            displayNone: false,
           },
           data: [
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
+
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Dont know",
-              value: "Dont know",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
+
             },
           ],
         },
       },
-    ],
-    preterm: [],
-    modeOfDelivery: [] as any,
-    Complications: [
+      {
+        selectedData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+          header: {
+            class: "bold",
+            title: "Was last live birth full term (8 to 34 weeks)?",
+            selectedValue: "",
+            name: "Last live birth preterm was full term",
+            displayNone: false,
+          },
+          data: [
+            {
+              name: "Yes",
+              value: "Yes",
+              colSize: "2.5",
+
+            },
+            {
+              name: "No",
+              value: "No",
+              colSize: "2.5",
+
+            },
+          ],
+        },
+      },
+      {
+        selectedData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+          header: {
+            class: "bold",
+            title: "Last live birth had congenital abnormalities??",
+            selectedValue: "",
+            name: "Last live birth had congenital abnormalities",
+            displayNone: false,
+          },
+          data: [
+            {
+              name: "Yes",
+              value: "Yes",
+              colSize: "2.5",
+
+            },
+            {
+              name: "No",
+              value: "No",
+              colSize: "2.5",
+
+            },
+          ],
+        },
+      },
       {
         selectdData: [],
         classDash: "dashed_bottom_border",
@@ -175,9 +221,10 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             class: "bold",
             title:
-              "Did the woman have any of the complications during the past pregnancies?",
+                "Did the woman have any of the complications during the past pregnancies?",
             selectedValue: "",
             name: "past pregnancies complications",
+            displayNone:false
           },
           data: [
             {
@@ -207,6 +254,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             title: "",
             selectedValue: "",
             name: "past pregnancies complications",
+            displayNone:false
+
           },
           data: [
             {
@@ -236,6 +285,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             title: "",
             selectedValue: "",
             name: "past pregnancies complications",
+            displayNone:false
+
           },
           data: [
             {
@@ -257,26 +308,6 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           ],
         },
       },
-      // {
-      //   classDash: "dashed_bottom_border",
-      //   checkboxBtnContent: {
-      //     header: {
-      //       title: "",
-      //       selectedValue: "",
-      //       name: "past pregnancies complications",
-      //     },
-      //     data: [
-      //       // {
-      //       //   name: "Forceps",
-      //       //   value: "forceps",
-      //       //   checked: false,
-      //       //   labelPlacement: "start",
-      //       //   colSize: "6",
-      //       //   justify: "space-between",
-      //       // },
-      //     ],
-      //   },
-      // },
 
       {
         classDash: "dashed_bottom_border",
@@ -285,6 +316,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             title: "",
             selectedValue: "",
             name: "past pregnancies complications",
+            displayNone:false
+
           },
           data: [
             {
@@ -314,6 +347,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             title: "",
             selectedValue: "",
             name: "past pregnancies complications",
+            displayNone:false
+
           },
           data: [
             {
@@ -342,6 +377,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             title: "",
             selectedValue: "",
             name: "past pregnancies complications",
+            displayNone:false
+
           },
           data: [
             {
@@ -390,6 +427,47 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
     ] as any,
+    abnormalities: [
+      {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+          header: {
+            title: "Last live birth had congenital abnormalities?",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Yes",
+              value: "Yes",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "No",
+              value: "No",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "Dont know",
+              value: "Dont know",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+          ],
+        },
+      },
+    ],
+    preterm: [],
+    modeOfDelivery: [] as any,
+    Complications: [
+
+    ] as any,
   }),
   actions: {
     setPrevPregnancies(data: any) {
@@ -436,6 +514,12 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     },
     setComplications(data: any) {
       this.Complications = data;
+    },
+    async validate(){
+      const obstetricHistory = extractArrayOfNameValue(this.prevPregnancies);
+      const obstetricHistoryValid = await validateStore(this.prevPregnancies,pastObstreticValidationShema,obstetricHistory)
+
+      return obstetricHistoryValid;
     },
   },
   // persist: true,

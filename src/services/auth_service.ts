@@ -53,6 +53,7 @@ export class AuthService {
     }
 
     async loadConfig() {
+        localStorage.setItem(AuthVariable.CORE_VERSION, this.getHeadVersion());
         return ApiClient.getFileConfig();
     }
 
@@ -231,22 +232,22 @@ export class AuthService {
     }
 
     versionLockingIsEnabled() {
-        const val = this.getAppConf("enableVersionLocking");
+        // const val = this.getAppConf("enableVersionLocking");
         // Version locking is enabled by default if no config isset
-        return typeof val === "boolean" ? val : true;
+        // return typeof val === "boolean" ? val : true;
     }
 
     getAppConf(confKey: "promptFullScreenDialog" | "showUpdateNotifications" | "enableVersionLocking" | "dataCaching") {
-        const conf: any = localStorage.getItem("appConf");
-        if (conf) {
-            try {
-                const confObj = JSON.parse(conf);
-                return confObj[confKey];
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        return null;
+        // const conf: any = localStorage.getItem("appConf");
+        // if (conf) {
+        //     try {
+        //         const confObj = JSON.parse(conf);
+        //         return confObj[confKey];
+        //     } catch (e) {
+        //         console.error(e);
+        //     }
+        // }
+        // return null;
     }
 
     async getApiVersion(): Promise<string> {

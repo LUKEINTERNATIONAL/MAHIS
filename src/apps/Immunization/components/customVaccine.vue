@@ -54,7 +54,6 @@ import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdm
 import { StockService } from '@/services/stock_service';
 import alert from "@/apps/Immunization/components/Modals/alert.vue";
 import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
-import { mapState } from "pinia";
 export default defineComponent({
     name: "Home",
     components: {
@@ -100,7 +99,19 @@ export default defineComponent({
     },
     watch: {},
     setup() {
-        return {}
+        let isModalOpening = false;
+        const cleanupModal = () => {
+            isModalOpening = false;
+            const modalElement = document.querySelector('.pr_o');
+            if (modalElement) {
+                modalElement.remove();
+            }
+        }
+
+        return {
+            isModalOpening,
+            cleanupModal
+        }
     },
     methods: {
         getColorForVaccine(vaccine: any) {
@@ -145,30 +156,45 @@ export default defineComponent({
             }
         },
         async openAdministerVaccineModal(data: any) {
-            const store = useAdministerVaccineStore();
-            store.setCurrentSelectedDrug(data)
-            const stockService = new StockService();
-            const data_ = await stockService.getItem(data.drug_id)
-            store.setLotNumberData(data_)
+            const modalElement = document.querySelector('.pr_o');
+            if (this.isModalOpening || modalElement) {
+                console.log('Modal already open or opening, current state:', { 
+                    isModalOpening: this.isModalOpening, 
+                    modalExists: !!modalElement 
+                });
+                return;
+            }
 
-            if(data_.length == 0) {
-                if (this.checkIfAdminstredAndAskToVoid() == false) {
-                    if(checkDrugName(data) == false) {
-                        createModal(alert, { class: "otherVitalsModal" })
+            try {
+                    this.isModalOpening = true;
+                    console.log('Starting modal open process');
+
+                    const store = useAdministerVaccineStore();
+                    store.setCurrentSelectedDrug(data);
+
+                    const stockService = new StockService();
+                    const drugBatches = await stockService.getDrugBatches(data.drug_id);
+                    store.setLotNumberData(drugBatches);
+
+                    if (!this.checkIfAdminstredAndAskToVoid()) {
+                        if (drugBatches.length === 0) {
+                            if (!checkDrugName(data)) {
+                                createModal(alert, { class: "otherVitalsModal pr_o" });
+                            } else {
+                                createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
+                            }
+                        } else {
+                            createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
+                        }
                     }
-
-                    if (checkDrugName(data) == true) {
-                        createModal(administerVaccineModal, { class: "otherVitalsModal" });
-                    } 
+                } catch (error) {
+                    console.error('Error opening modal:', error);
+                    throw error;
+                } finally {
+                    this.isModalOpening = false;
+                    console.log('Modal open process completed');
                 }
-            }
-
-            if(data_.length > 0) {
-                if (this.checkIfAdminstredAndAskToVoid() == false) {
-                    createModal(administerVaccineModal, { class: "otherVitalsModal" });
-                }
-            }
-        },
+            },
         disableVaccine(vaccine: any) {
             if (vaccine.status != null && vaccine.status == "administered") {
                 return false;

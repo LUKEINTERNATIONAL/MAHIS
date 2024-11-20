@@ -4,14 +4,9 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="tbTest"></basic-form>
-                <!-- <basic-form :contentData="results"></basic-form> -->
-            </ion-card-content>
-    </ion-card>
+              <basic-form :contentData="reasons"></basic-form>
 
-        <ion-card class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-                <basic-form :contentData="reasons"></basic-form>
+              <!-- <basic-form :contentData="results"></basic-form> -->
             </ion-card-content>
     </ion-card>
 
@@ -94,6 +89,11 @@ export default defineComponent({
           this.handleResults()
           this.handleDate()
           this.handleNotDone()
+        },
+        deep:true
+      },
+      reasons:{
+        handler(){
           this.handleOther()
         },
         deep:true
@@ -139,12 +139,20 @@ export default defineComponent({
     },
 
     handleOther(){
-      if(getCheckboxSelectedValue(this.reasons,'Other')=='Other'){
+      if(getCheckboxSelectedValue(this.reasons,'Other')?.value=='Other'){
         modifyFieldValue(this.reasons,'Other (specify)','displayNone',false)
       }else{
         modifyFieldValue(this.reasons,'Other (specify)','displayNone',true)
       }
     },
+
+      //     handleOtherNotDone(){
+      //   if(getCheckboxSelectedValue(this.urineTest,'Other')?.value=='Other'){
+      //     modifyFieldValue(this.urineTest,'Other (specify)','displayNone',false)
+      //   }else{
+      //      modifyFieldValue(this.urineTest,'Other (specify)','displayNone',true)
+      //   }
+      // },
     }
 })
 
@@ -165,8 +173,6 @@ export default defineComponent({
 }
 
 ion-card {
- box-shadow:none;
-  background-color:inherit;   
   width: 100%;
  color: black;
 }

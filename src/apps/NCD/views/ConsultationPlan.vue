@@ -3,15 +3,46 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper
-                stepperTitle="The consultation plan"
-                :wizardData="wizardData"
-                @updateStatus="markWizard"
-                @finishBtn="saveData()"
-                :StepperData="StepperData"
-            />
+            <div style="width: 85vw; margin: 0 auto; margin-top: 30px">
+                <Wizard
+                    v-if="showWizard"
+                    ref="wizard"
+                    vertical-tabs
+                    navigable-tabs
+                    scrollable-tabs
+                    :doneButton="{
+                        text: 'Finish',
+                        icon: 'check',
+                        hideText: false,
+                        hideIcon: false,
+                        disabled: false,
+                    }"
+                    :custom-tabs="tabs"
+                    :beforeChange="onTabBeforeChange"
+                    @change="onChangeCurrentTab"
+                    @complete:wizard="saveData()"
+                >
+                    <div>
+                        <div class="back_profile">
+                            <DynamicButton
+                                name="Back to profile"
+                                iconSlot="start"
+                                fill="clear"
+                                :icon="chevronBackOutline"
+                                @click="openBackController()"
+                            />
+                        </div>
+                    </div>
+                    <VitalSigns v-if="currentTabIndex === 0" />
+                    <RiskAssessment v-if="currentTabIndex === 1" />
+                    <Investigations v-if="currentTabIndex === 2" />
+                    <DiagnosisComponent v-if="currentTabIndex === 3" />
+                    <ComplicationsScreening v-if="currentTabIndex === 4" />
+                    <TreatmentPlan v-if="currentTabIndex === 5" />
+                    <NextAppointment v-if="currentTabIndex === 6" />
+                </Wizard>
+            </div>
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -44,16 +75,19 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/stores/VitalsStore";
+import { useVitalsStore } from "@/apps/NCD/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
+import DynamicButton from "@/components/DynamicButton.vue";
 import Stepper from "@/components/Stepper.vue";
+// import FormWizard from "@/components/FormWizard.vue";
 import { Service } from "@/services/service";
 import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { useNCDMedicationsStore, MedicationSelectionHasValues } from "@/stores/NCDMedicationStore";
 import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
@@ -68,6 +102,24 @@ import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
 import { UserService } from "@/services/user_service";
 import BasicFooter from "@/components/BasicFooter.vue";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import FormWizard from "@/views/Mixin/FormWizard.vue";
+import DiagnosisComponent from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
+import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
+import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
+import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
+import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
+import { useEnrollementStore } from "@/stores/EnrollmentStore";
+import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
+import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
+import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
+import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
+import { createNCDDrugOrder } from "@/apps/NCD/services/medication_service";
+import { validateInputFiledData } from "@/services/group_validation";
+import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
+import { ObservationService } from "@/services/observation_service";
+import { OrderService } from "@/services/order_service";
+import { ConceptService } from "@/services/concept_service";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -76,7 +128,9 @@ import {
     modifyFieldValue,
     modifyCheckboxValue,
 } from "@/services/data_helpers";
+import { useComplicationsStore } from "@/stores/ComplicationsStore";
 export default defineComponent({
+    mixins: [ScreenSizeMixin, FormWizard],
     name: "Home",
     components: {
         IonContent,
@@ -100,7 +154,16 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
+        FormWizard,
         BasicFooter,
+        DiagnosisComponent,
+        ComplicationsScreening,
+        Investigations,
+        TreatmentPlan,
+        NextAppointment,
+        VitalSigns,
+        DynamicButton,
+        RiskAssessment,
     },
     data() {
         return {
@@ -108,6 +171,39 @@ export default defineComponent({
             StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
+            showWizard: true,
+            tabs: [
+                {
+                    title: "Vitals",
+                    icon: "",
+                },
+                {
+                    title: "Risk Assessment",
+                    icon: "",
+                },
+                {
+                    title: "Investigations",
+                    icon: "",
+                },
+                {
+                    title: "Diagnosis",
+                    icon: "",
+                },
+                {
+                    title: "Complications Screening",
+                    icon: "",
+                },
+
+                {
+                    title: "Treatment Plan",
+                    icon: "",
+                },
+
+                {
+                    title: "Next Appointment",
+                    icon: "",
+                },
+            ],
         };
     },
     computed: {
@@ -115,41 +211,63 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useTreatmentPlanStore, ["nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useNCDMedicationsStore, ["selectedNCDMedicationList"]),
         ...mapState(useGeneralStore, ["NCDActivities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
+        ...mapState(useEnrollementStore, ["substance"]),
+        ...mapState(useComplicationsStore, ["FootScreening", "visualScreening", "cvScreening"]),
     },
     created() {
         this.getData();
     },
-    mounted() {
+    async mounted() {
         if (this.NCDActivities.length == 0) {
             this.$router.push("patientProfile");
         }
-        this.markWizard();
+        await this.markWizard();
     },
     watch: {
         vitals: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
+            },
+            deep: true,
+        },
+        demographics: {
+            async handler() {
+                this.refreshWizard();
+                await this.markWizard();
             },
             deep: true,
         },
         investigations: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
             deep: true,
         },
         diagnosis: {
-            handler() {
-                this.markWizard();
+            async handler() {
+                await this.markWizard();
             },
             deep: true,
         },
-        selectedMedicalDrugsList: {
-            handler() {
-                this.markWizard();
+        substance: {
+            async handler() {
+                await this.markWizard();
+            },
+            deep: true,
+        },
+        selectedNCDMedicationList: {
+            async handler() {
+                await this.markWizard();
+            },
+            deep: true,
+        },
+        $route: {
+            async handler() {
+                await this.markWizard();
             },
         },
     },
@@ -158,6 +276,16 @@ export default defineComponent({
     },
 
     methods: {
+        refreshWizard(): void {
+            this.showWizard = false;
+            this.currentTabIndex = 0;
+            setTimeout(() => {
+                this.showWizard = true;
+            }, 0);
+        },
+        openBackController() {
+            createModal(SaveProgressModal);
+        },
         async getData() {
             // const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
             for (let i = 0; i < this.NCDActivities.length; i++) {
@@ -180,60 +308,44 @@ export default defineComponent({
                 });
             }
         },
-        markWizard() {
-            if (this.vitals.validationStatus) {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+        async markWizard() {
+            if (await validateInputFiledData(this.vitals, false)) {
+                this.tabs[0].icon = "check";
             } else {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: false,
-                });
+                this.tabs[0].icon = "";
+            }
+            const data: any = await formatRadioButtonData(this.substance);
+            if (data.length > 0) {
+                this.tabs[1].icon = "check";
+            } else {
+                this.tabs[1].icon = "";
             }
 
-            if (this.investigations[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+            const labOrders = await OrderService.getOrders(this.demographics.patient_id);
+            const filteredArray = await labOrders.filter((obj: any) => {
+                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+            });
+            if (filteredArray.length > 0) {
+                this.tabs[2].icon = "check";
             } else {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: false,
-                });
+                this.tabs[2].icon = "";
+            }
+            const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, "Primary diagnosis");
+            if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
+                this.tabs[3].icon = "check";
+            } else {
+                this.tabs[3].icon = "";
             }
 
-            if (this.diagnosis[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
+            if (this.selectedNCDMedicationList.length > 0) {
+                console.log(MedicationSelectionHasValues());
+                if (MedicationSelectionHasValues() == true) {
+                    this.tabs[5].icon = "check";
+                } else {
+                    this.tabs[5].icon = "";
+                }
             } else {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: false,
-                });
-            }
-
-            if (this.selectedMedicalDrugsList.length > 0) {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: false,
-                });
-            }
-
-            if (this.dispositions.length > 0) {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: false,
-                });
+                this.tabs[5].icon = "";
             }
         },
 
@@ -243,19 +355,53 @@ export default defineComponent({
             });
         },
         async saveData() {
-            await this.saveVitals();
-            await this.saveDiagnosis();
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
-            resetNCDPatientData();
-            await UserService.setProgramUserActions();
-            this.$router.push("patientProfile");
+            if (await this.saveVitals()) {
+                await this.saveDiagnosis();
+                await this.saveTreatmentPlan();
+                await this.saveOutComeStatus();
+                await this.saveSubstanceAbuse();
+                await this.saveComplications();
+                await resetNCDPatientData();
+                await UserService.setProgramUserActions();
+                this.$router.push("patientProfile");
+            }
+        },
+        async saveComplications() {
+            // await this.saveVisualScreening();
+            // await this.saveFootScreening();
+        },
+        async saveFootScreening() {
+            const childData = await formatRadioButtonData(this.visualScreening);
+            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
+                {
+                    concept_id: await ConceptService.getConceptID("Visual acuity", true),
+                    value_text: "visual acuity test",
+                    obs_datetime: ConceptService.getSessionDate(),
+                    child: childData,
+                },
+            ]);
+        },
+        async saveVisualScreening() {
+            const childData = await formatInputFiledData(this.visualScreening);
+            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
+                {
+                    concept_id: await ConceptService.getConceptID("Visual acuity", true),
+                    value_text: "visual acuity test",
+                    obs_datetime: ConceptService.getSessionDate(),
+                    child: childData,
+                },
+            ]);
         },
         async saveVitals() {
-            if (this.vitals.validationStatus) {
+            if (await validateInputFiledData(this.vitals)) {
                 const userID: any = Service.getUserID();
                 const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
                 vitalsInstance.onFinish(this.vitals);
+                toastSuccess("Vitals saved successfully");
+                return true;
+            } else {
+                toastWarning("Fail to save vitals");
+                return false;
             }
         },
         async saveDiagnosis() {
@@ -265,14 +411,19 @@ export default defineComponent({
                 diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
             }
         },
+        async saveSubstanceAbuse() {
+            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(this.substance));
+        },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
             const patientID = this.demographics.patient_id;
             const treatmentInstance = new Treatment();
 
-            if (!isEmpty(this.selectedMedicalAllergiesList)) {
+            const allergyStore = useAllegyStore();
+            if (!isEmpty(allergyStore.selectedMedicalAllergiesList)) {
                 const allergies = this.mapToAllergies();
-                treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+                await treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+                allergyStore.clearSelectedMedicalAllergiesList();
             }
 
             if (!isEmpty(this.nonPharmalogicalTherapyAndOtherNotes)) {
@@ -286,15 +437,7 @@ export default defineComponent({
                 treatmentInstance.onSubmitNotes(patientID, userID, treatmentNotesTxt);
             }
 
-            if (!isEmpty(this.selectedMedicalDrugsList)) {
-                const drugOrders = this.mapToOrders();
-                const prescriptionService = new DrugPrescriptionService(patientID, userID);
-                const encounter = await prescriptionService.createEncounter();
-                if (!encounter) return toastWarning("Unable to create treatment encounter");
-                const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
-                if (!drugOrder) return toastWarning("Unable to create drug orders!");
-                toastSuccess("Drug order has been created");
-            }
+            await createNCDDrugOrder();
         },
 
         async saveOutComeStatus() {
@@ -338,29 +481,14 @@ export default defineComponent({
         openModal() {
             createModal(SaveProgressModal);
         },
-        mapToOrders(): any[] {
-            return this.selectedMedicalDrugsList.map((drug: any) => {
-                const startDate = DrugPrescriptionService.getSessionDate();
-                const frequency = DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) || ({} as (typeof DRUG_FREQUENCIES)[0]);
-                return {
-                    drug_inventory_id: drug.drug_id,
-                    equivalent_daily_dose: drug.dose == "Unknown" ? 0 : drug.dose * frequency?.value || 0,
-                    start_date: startDate,
-                    auto_expire_date: this.calculateExpireDate(startDate, drug.duration),
-                    units: drug.units,
-                    instructions: `${drug.drugName}: ${drug.dose} ${drug.units} ${frequency?.code || ""} for ${drug.duration} days`,
-                    dose: drug.dose,
-                    frequency: frequency?.code || "",
-                };
-            });
-        },
         calculateExpireDate(startDate: string | Date, duration: any) {
             const date = new Date(startDate);
             date.setDate(date.getDate() + parseInt(duration));
             return HisDate.toStandardHisFormat(date);
         },
         mapToAllergies(): any[] {
-            return this.selectedMedicalAllergiesList.map((allergy: any) => {
+            const allergyStore = useAllegyStore();
+            return allergyStore.selectedMedicalAllergiesList.map((allergy: any) => {
                 return {
                     concept_id: 985,
                     obs_datetime: Service.getSessionDate(),

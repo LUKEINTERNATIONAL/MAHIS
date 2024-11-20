@@ -3,6 +3,7 @@ import OverDueReport from "@/apps/Immunization/components/Reports/OverDueReport.
 import EIR_Report from "@/apps/Immunization/components/Reports/EIR_Report.vue";
 import AEFIReport from "@/apps/Immunization/components/Reports/AEFIReport.vue";
 import AEFIReportTemplate from "@/apps/Immunization/components/Reports/AEFIReportTemplate.vue";
+import Deduplicateclients from "@/apps/Immunization/components/Deduplication/Deduplicatelients.vue";
 export default [
     {
         path: "/EIPMReport",
@@ -27,6 +28,11 @@ export default [
     {
         path: "/OverDueReport",
         name: "OverDueReport",
-        component: OverDueReport
+        component: OverDueReport,
+    },
+    {
+        path: '/Deduplicateclients',
+        name: "Deduplicateclients",
+        component: Deduplicateclients,
     }
 ];

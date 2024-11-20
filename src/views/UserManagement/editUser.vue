@@ -82,7 +82,23 @@
             <ion-col></ion-col>
         </ion-row> -->
 
-        <ion-row v-if="isSuperUser">
+        <ion-row>
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                    >Gender<span style="color: #b42318">*</span></ion-label
+                >
+                <sselectionList
+                    :labels="isSSelection_properties[0].labels.value"
+                    :selected-opt="isSSelection_properties[0].selectedOption.value"
+                    @selection-event="isSSelection_properties[0].dataHandler"
+                />
+
+                <div>
+                    <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
+                        {{ isSSelection_properties[0].error_message }}
+                    </ion-label>
+                </div>
+            </ion-col>
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Activate/Deactivate user<span style="color: #b42318">*</span></ion-label
@@ -100,7 +116,28 @@
         </ion-row>
 
         <ion-row v-if="isSuperUser">
-            <ion-col size="6" v-if="false">
+            <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Role(s)<span style="color: #b42318">*</span></ion-label
+                >
+                <ListPicker
+                    :multiSelection="list_picker_prperties[0].multi_Selection"
+                    :show_label="list_picker_prperties[0].show_list_label"
+                    :uniqueId="list_picker_prperties[0].unqueId"
+                    :name_of_list="list_picker_prperties[0].name_of_list"
+                    :choose_place_holder="list_picker_prperties[0].placeHolder"
+                    :items_-list="user_roles"
+                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                    :disabled="list_picker_prperties[0].disabled.value"
+                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                    @item-search-text="list_picker_prperties[0].searchTextFN"
+                />
+            </ion-col>
+        </ion-row>
+
+        <ion-row v-if="isSuperUser">
+            <ion-col size="6">
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                     >District(s)<span style="color: #b42318">*</span></ion-label
                 >
@@ -147,6 +184,7 @@
                     selectLabel=""
                     label="name"
                     :searchable="true"
+                    :disabled="disableFacilitySelection"
                     @search-change="FindLocation($event)"
                     track-by="location_id"
                     :options="locationData"
@@ -220,27 +258,6 @@
             </div>
         </ion-col>
     </ion-row>
-
-        <ion-row v-if="isSuperUser">
-            <ion-col>
-                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Role(s)<span style="color: #b42318">*</span></ion-label
-                >
-                <ListPicker
-                    :multiSelection="list_picker_prperties[0].multi_Selection"
-                    :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
-                    :name_of_list="list_picker_prperties[0].name_of_list"
-                    :choose_place_holder="list_picker_prperties[0].placeHolder"
-                    :items_-list="user_roles"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[0].disabled.value"
-                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                    @item-search-text="list_picker_prperties[0].searchTextFN"
-                />
-            </ion-col>
-        </ion-row>
 
         <ion-row v-if="isSuperUser">
             <ion-col>
@@ -325,8 +342,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import { text } from "ionicons/icons"
-import { it } from "date-fns/locale"
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
@@ -341,6 +356,7 @@ import { IonButtons,
 import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import Toggle from '@vueform/toggle'
 import ListPicker from "../../components/ListPicker.vue"
+import sselectionList from "@/components/SselectionList.vue"
 import userActivities from "./userActivities.vue"
 import VueMultiselect from "vue-multiselect"
 import { LocationService } from "@/services/location_service"
@@ -356,13 +372,14 @@ import {
     peopleOutline,
     phonePortraitOutline,
 } from "ionicons/icons";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { UserService } from "@/services/user_service";
 import { ProgramService } from "@/services/program_service";
-import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti";
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid, getGenderCode } from "@/utils/GeneralUti";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { useUserStore } from "@/stores/userStore";
+import { PersonService } from "@/services/person_service";
 
 const toggle_local = ref(false);
 const user_roles = ref([] as any);
@@ -380,27 +397,30 @@ const locationId = ref();
 const location_error_message = ref('Select location');
 const location_show_error = ref(false);
 const passwordErrorMsgs = [
-    'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
+    'Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (@#$%^&+=*!-), without spaces',
     'Password does not match'
-]
+];
 const isSuperUser = ref(false);
 const districtList = ref([] as any);
-const HSA_found_for_disabling_button = ref(true)
-const selected_Districts = ref();
+const HSA_found_for_disabling_button = ref(true);
+const selected_Districts = ref([]) as any;
 const district_show_error = ref(false)
-const district_error_message = ref('Select district(s)')
-const village_error_message = ref('Select village(s)')
-const selected_TAz = ref()
-const villageList = ref([] as any)
-const village_show_error = ref(false)
-const TAz_show_error = ref(false)
-const TAz_error_message = ref('Select TA(s)')
-const selected_villages = ref()
-const TAList = ref([] as any)
-const selectedDistrictIds : any[] = []
-const selectedTAIds: any[] = []
-const disableVillageSelection = ref(true)
-const selectedVillageIds: any[] = []
+const district_error_message = ref('Select district(s)');
+const village_error_message = ref('Select village(s)');
+const selected_TAz = ref([]) as any;
+const villageList = ref([] as any);
+const village_show_error = ref(false);
+const TAz_show_error = ref(false);
+const TAz_error_message = ref('Select TA(s)');
+const selected_villages = ref([]) as any;
+const TAList = ref([] as any);
+const selectedDistrictIds: any[] = [];
+const selectedTAIds: any[] = [];
+const disableVillageSelection = ref(true);
+const selectedVillageIds: any[] = [];
+const traditionalAuthorities = ref([]) as any;
+const userStore = useUserStore();
+const disableFacilitySelection = ref(true)
 
 const props = defineProps<{
     toggle: true,
@@ -412,6 +432,7 @@ onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
     await getUserData()
+    await fillUserVillages()
     getCurrentUser()
     districtList.value = await getdistrictList() 
 })
@@ -423,12 +444,32 @@ watch(
     }
 )
 
+watch(
+    () => TAList.value.length,
+    async (newValue) => {
+        setUserTAs()
+    }
+)
+
+watch(
+    () => traditionalAuthorities.value.length,
+    async (newValue) => {
+        setUserDistricts()
+    }
+)
+
+watch(
+    () => districtList.value.length,
+        async (newValue) => {
+        setUserDistricts()
+    }
+)
+
 function selectedLocation(data: any) {
     selected_location.value = data
 }
 
 async function FindLocation(text: any) {
-    console.log(text)
     let srch_text
     if (isEmpty(text) == true) {
         srch_text = ''
@@ -466,9 +507,32 @@ function trigerSaveFn() {
     actionN.value = props.action
     preSavePrograms()
     preSaveRoles()
+    updateuserPersoninf()
     trigerSaveStatusFn()
     updateUserDemographics()
     updatePassword()
+    updateUserVillages()
+}
+
+
+const isSSelection_properties = [
+    {
+        labels: ref(['Male','Female',]),
+        selectedOption: ref(null),
+        dataHandler: sselectionListUpdated,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Please make a selection',
+    }
+]
+
+function sselectionListUpdated(data: any) {
+    try {
+        isSSelection_properties[0].dataValue.value = data.label 
+    } catch (error) {
+        isSSelection_properties[0].dataValue.value = undefined 
+    }
+    isSSelectionValid()
 }
 
 const input_properties = [
@@ -478,8 +542,8 @@ const input_properties = [
         dataHandler: inputUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
-        type: 'text',
+        error_message: 'Input required, Only letters and numbers are allowed',
+        type: 'alphanumeric',
     },
     {
         placeHolder: 'firstname',
@@ -527,10 +591,28 @@ function passwordInputUpDated_fn2(event: any) {
     password_input_properties[1].dataValue.value = input
 }
 
-function inputUpDated_fn1(event: any) {
+async function validateUsernameIfExists(username: string) {
+    try {
+        if (username.length > 0) {
+            const does_username_exist = await UserService.doesUsernameExist(username);
+            if (does_username_exist.exists == true) {
+                input_properties[0].show_error.value = true;
+                input_properties[0].error_message = "Username already exists";
+            } else if (does_username_exist.exists == false) {
+                input_properties[0].show_error.value = false;
+                input_properties[0].error_message = "Input required, Only letters are allowed";
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function inputUpDated_fn1(event: any) {
     const input = event.target.value
     input_properties[0].dataValue.value = input
     user_name.value = input
+    await validateUsernameIfExists(input)
 }
 function inputUpDated_fn2(event: any) {
     const input = event.target.value
@@ -554,100 +636,176 @@ function validateLocation() {
     }
 }
 
-
-function validatePasswordMatch(){
-     const password = password_input_properties[0].dataValue.value;
-    const confirm = password_input_properties[1].dataValue.value;
-
-       if(password!=confirm) {
-         password_input_properties[0].show_error.value=true;
-         password_input_properties[0].error_message="Passwords don't match";
-         return false
-    } 
-         password_input_properties[0].show_error.value=false;
-         password_input_properties[0].error_message="";
-         return true
-    
+async function updatePassword() {
+    if (checkPasswordFieldsEmpty() == false) {
+        if (ValidatePassword() == true) {
+            const new_password = password_input_properties[0].dataValue.value 
+            await UserService.updateUser(userId.value, { password: new_password});
+        }
+    }
 }
 
-async function updatePassword() {
+async function getCurrentUserRoles() {
+    try {
+        const user = await UserService.getCurrentUser();
+        if (user) {
+            const userRoles = user.roles.map((role) => role.role);
+            userStore.setUserRoles(userRoles);
 
-    if(!validatePasswordMatch())  return
+            if (findUserRoleByName('Superuser,Superuser,') == true) {
+                disableFacilitySelection.value = false;
+            }
 
-    const password =password_input_properties[0].dataValue.value;
+            if (findUserRoleByName('Superuser,Superuser,') == false) {
+                user_roles.value = findAndRemoveRoleSSU(user_roles.value)
+            }
+        }
 
-    if(password=="") return
+    } catch (error) {
+        console.error(error);
+    }
+}
 
-    await UserService.updateUser(userId.value, {password});
- }
+function findUserRoleByName(name: string) {
+    const roles = userStore.getUserRoles();
+    return roles.some((role: any) => role.toLowerCase() === name.toLowerCase());
+}
 
-function ValidatePassword(): boolean {
-    let is_valid = false
-    let error_foundP_p1 = false
-    let error_foundP_p2 = false
-    let is_password1_valid
-    let is_password2_valid
+function findAndRemoveRoleSSU(data: any[]): any[] {
+    const index = data.findIndex((role: any) => 
+        typeof role.name === 'string' && role.name.toLowerCase() === 'Superuser,Superuser,'.toLowerCase()
+    );
     
-
-    password_input_properties[0].error_message = passwordErrorMsgs[0]
-    password_input_properties[1].error_message = passwordErrorMsgs[0]
-
-    if (password_input_properties[0].dataValue.value == undefined || password_input_properties[0].dataValue.value == "") {
-        password_input_properties[0].show_error.value = true
-        error_foundP_p1 = true
+    if (index !== -1) {
+        data.splice(index, 1);
     }
 
-    if (password_input_properties[1].dataValue.value == undefined || password_input_properties[1].dataValue.value == "") {
-        password_input_properties[1].show_error.value = true
-        error_foundP_p2 = true
+    return data;
+}
+
+
+async function updateUserVillages() {
+    UserService.updateuserVillages(userId.value, selectedVillageIds as any)
+}
+
+function checkPasswordFieldsEmpty() {
+  return password_input_properties.slice(0, 2).every(prop =>
+    !prop.dataValue.value || prop.dataValue.value.trim() === ""
+  );
+}
+
+function ValidatePassword() {
+    const [password1, password2] = password_input_properties.map(prop => prop.dataValue.value);
+    const defaultErrorMsg = passwordErrorMsgs[0];
+    const mismatchErrorMsg = passwordErrorMsgs[1];
+
+    password_input_properties.forEach(prop => {
+        prop.error_message = defaultErrorMsg;
+        prop.show_error.value = false;
+    });
+
+    const emptyPasswords = password_input_properties.map((prop, index) => {
+        const isEmpty = !prop.dataValue.value;
+        prop.show_error.value = isEmpty;
+        return isEmpty;
+    });
+
+    if (emptyPasswords.some(isEmpty => isEmpty)) {
+        return false;
     }
 
+    const validPasswords = password_input_properties.map((prop, index) => {
+        const isValid = isPasswordValid(prop.dataValue.value);
+        prop.show_error.value = !isValid;
+        return isValid;
+    });
 
-    if (error_foundP_p1 == false) {
-        is_password1_valid = isPasswordValid(password_input_properties[0].dataValue.value)
-
-        if (is_password1_valid == false) {
-            password_input_properties[0].show_error.value = true
-            error_foundP_p1 = true
-        }
-
-        if (is_password1_valid == true) {
-            password_input_properties[0].show_error.value = false
-        }
+    if (validPasswords.some(isValid => !isValid)) {
+        return false;
     }
 
-    if (error_foundP_p2 == false) {
-        is_password2_valid = isPasswordValid(password_input_properties[1].dataValue.value)
-
-        if (is_password2_valid == false) {
-            password_input_properties[1].show_error.value = true
-            error_foundP_p2 = true
-        }
-
-        if (is_password2_valid == true) {
-            password_input_properties[1].show_error.value = false
-        }
+    if (password1 !== password2) {
+        password_input_properties.forEach(prop => {
+            prop.error_message = mismatchErrorMsg;
+            prop.show_error.value = true;
+        });
+        return false;
     }
 
-    if (error_foundP_p1 == false && error_foundP_p2 == false) {
-        if (is_password1_valid == true && is_password2_valid == true) {
-            if (password_input_properties[0].dataValue.value === password_input_properties[1].dataValue.value) {
-                password_input_properties[0].show_error.value = false
-                password_input_properties[1].show_error.value = false
-                is_valid = true
+    return true;
+}
+
+async function fillUserVillages() {
+    userId.value = props.user_id
+    const user_villages = await UserService.getUserVillages(userId.value)
+    user_villages.villages.forEach((village: any, index: number) => {
+        setVillage(village.village_id as any, index)
+    })
+}
+
+async function setVillage(villageId: number, index: number) {
+    const n_village = await LocationService.getVillage(villageId);
+    const arrayWithIds = [{
+        ...n_village,
+        assigned_id: index
+    }];
+    villageList.value = villageList.value.concat(arrayWithIds);
+    selectedVillageIds.push(n_village.village_id);
+    selected_villages.value.push(arrayWithIds[0]);
+    traditionalAuthorities.value.push(n_village.traditional_authority)
+}
+
+async function setUserDistricts() {
+    try {
+        selected_Districts.value = [];
+        const uniqueDistrictIds = new Set();
+        traditionalAuthorities.value.forEach((TA: any) => {
+            const matchingDistrict = districtList.value.find(
+                (DL: any) => DL.district_id === TA.district_id
+            );
+            
+            if (matchingDistrict && !uniqueDistrictIds.has(matchingDistrict.district_id)) {
+                uniqueDistrictIds.add(matchingDistrict.district_id);
+                selected_Districts.value.push(matchingDistrict);
             }
-
-            if (password_input_properties[0].dataValue.value != password_input_properties[1].dataValue.value) {
-                password_input_properties[0].error_message = passwordErrorMsgs[1]
-                password_input_properties[1].error_message = passwordErrorMsgs[1]
-                password_input_properties[0].show_error.value = true
-                password_input_properties[1].show_error.value = true
-                is_valid = false
-            }
-
-        }
+        });
+    } catch (error) {
+        console.error('Error setting user districts:', error);
+        throw error;
     }
-    return is_valid
+}
+
+async function setUserTAs() {
+    try {
+        selected_TAz.value = [];
+        villageList.value = [];
+        const uniqueTAsMap = new Map();
+        
+        selected_villages.value.forEach((village: any, index: number) => {
+            const matchingTA = TAList.value.find(
+                (ta: any) => ta.traditional_authority_id === village.traditional_authority_id
+            );
+
+            if (matchingTA && !uniqueTAsMap.has(matchingTA.traditional_authority_id)) {
+                const TAWithId = {
+                    ...matchingTA,
+                    assigned_id: index
+                };
+                uniqueTAsMap.set(matchingTA.traditional_authority_id, TAWithId);
+            }
+        });
+
+        const uniqueTAs = Array.from(uniqueTAsMap.values());
+        villageList.value = [...villageList.value, ...uniqueTAs];
+        selected_TAz.value = uniqueTAs;
+
+        await Promise.all(
+            selected_TAz.value.map((TA: any) => findVillages(TA.district_id, false))
+        );
+    } catch (error) {
+        console.error('Error in setUserTAs:', error);
+        throw new Error('Failed to set user TAs');
+    }
 }
 
 
@@ -669,6 +827,7 @@ async function getUserData() {
     last_name.value = userLastname(user_data.value.person.names)
     input_properties[2].dataValue.value = last_name.value
 
+    selectGender(user_data.value.person)
     fillUserRoles()
     fillUserPrograms()
     getAPICounterPart() 
@@ -691,15 +850,35 @@ async function preSaveRoles() {
 }
 
 async function updateUserDemographics() {
-    const _areFieldsValid_ = areFieldsValid(input_properties)
-    const _validateLocation = validateLocation()
+  try {
+    const _areFieldsValid = areFieldsValid(input_properties);
+    const isLocationValid = validateLocation();
+    const arePasswordFieldsEmpty = checkPasswordFieldsEmpty();
 
-    if (_areFieldsValid_ == false && _validateLocation == false && !validatePasswordMatch()) {
-        saveEvent(false)
+    if (arePasswordFieldsEmpty) {
+      if (!_areFieldsValid || !isLocationValid) {
+        saveEvent(false);
+      } else {
+        saveEvent(true);
+        await updateUserDetails();
+      }
+    } else {
+      const isPasswordValid = ValidatePassword();
+      if (!_areFieldsValid || !isLocationValid || !isPasswordValid) {
+        saveEvent(false);
+      } else {
+        saveEvent(true);
+        await updateUserDetails();
+      }
     }
+  } catch (error) {
+    console.error('Error updating user demographics:', error);
+    await saveEvent(false);
+  }
+}
 
-    if (_areFieldsValid_ == true && _validateLocation == true && validatePasswordMatch()) {
-        saveEvent(true)
+async function updateUserDetails() {
+    try {
         const payload = {
             given_name: first_name.value,
             family_name: last_name.value,
@@ -707,7 +886,7 @@ async function updateUserDemographics() {
             location_id: selected_location.value.location_id,
             must_append_roles:false,
         }
-        UserService.updateUser(userId.value, payload)
+        await UserService.updateUser(userId.value, payload)
 
         const username_payload = {
             new_username: user_name.value,
@@ -715,12 +894,16 @@ async function updateUserDemographics() {
 
         try {
             const response = await UserService.updateusername(userId.value, username_payload)
+            saveEvent(true);
             toastSuccess("username updated successfully")
         } catch (error) {
+            saveEvent(true);
             toastWarning("username update failed, already existing")
             
         }
-    } 
+    } catch (error) {
+        
+    }
 }
 
 async function saveRoles(roleNames: any) {
@@ -754,7 +937,7 @@ async function savePrograms(programIds: any) {
     })
 }
 
-function fillUserRoles() {
+async function fillUserRoles() {
     user_roles.value.forEach((item: any) => {
         user_data.value.roles.forEach((userR: any) => {
             if (userR.uuid == item.other.uuid) {
@@ -762,6 +945,9 @@ function fillUserRoles() {
             }
         })
     })
+
+    checkIfSelectedIsHSA(user_roles.value)
+    await getCurrentUserRoles()    
 }
 
 function getCurrentUser() {
@@ -846,53 +1032,6 @@ async function getUserPrograms() {
 async function setSelectedUserPrograms() {
 
 }
-
-
-const note_properties = [
-    {
-        placeHolder: 'username',
-        dataHandler: usernameupdated,
-        dataValue: ref() as any,
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-    {
-        placeHolder: 'firstname',
-        dataHandler: ()=>{},
-        dattrueaValue: ref() as any,
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-    {
-        placeHolder: 'lastname',
-        dataHandler: ()=>{},
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-]
-
-function usernameupdated(event: any) {
-    const input = event.target.value
-    user_name.value = input
-}
-
-const dynamic_button_properties = [
-    {
-        showAddItemButton: true,
-        addItemButton: true,
-        name: "save",
-        btnFill: 'clear',
-        fn: ()=>{},
-    },
-    {
-        showAddItemButton: true,
-        addItemButton: true,
-        name: "cancel",
-        btnFill: 'clear',
-        fn: ()=>{},
-    }
-]
 
 const list_picker_prperties = [
     {
@@ -1005,24 +1144,21 @@ async function getdistrictList() {
         districtList.push(...districts);
     }
 
-    //__________________________not ideal
-
     districtList.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id)
     })
 
-    districtList.forEach((district: any ) => {
+    districtList.forEach((district: any) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
-    //__________________________
-
     return districtList
 }
 
-function findVillages(district_id: any) {
+function findVillages(district_id: any, clear_list = true) {
     disableVillageSelection.value = true;
-    selected_villages.value = []
-    
+    if (clear_list == true) {
+        selected_villages.value = []
+    }
     fetchVillages(district_id, '')
 }
 
@@ -1053,16 +1189,17 @@ function selectedTA(selectedTAList: any) {
 
 function selectedVillage(VillagesList: any) {
     selectedVillageIds.length = 0
-    VillagesList.forEach((village: any ) => {
+    VillagesList.forEach((village: any) => {
         selectedVillageIds.push(village.village_id)
     })
 }
 
 function checkIfSelectedIsHSA(role_list: any) {
+    const HSA_ROLES = ['HSA', 'Health Surveillance']
     village_show_error.value = false
     let is_found = false
     role_list.forEach((item: any) => {
-        if (item?.selected == true && item?.name == 'HSA') {
+        if (item?.selected == true && HSA_ROLES.includes(item?.name)) {
             HSA_found_for_disabling_button.value = false
             is_found = true
         }
@@ -1073,6 +1210,42 @@ function checkIfSelectedIsHSA(role_list: any) {
         HSA_found_for_disabling_button.value = true
     }
     return is_found
+}
+
+function isSSelectionValid() {
+    let is_valid = false
+    if (isSSelection_properties[0].dataValue.value == undefined) {
+        isSSelection_properties[0].show_error.value = true
+    }
+    if (isSSelection_properties[0].dataValue.value != undefined) {
+        isSSelection_properties[0].show_error.value = false
+        is_valid = true
+    }
+    return is_valid
+}
+
+async function updateuserPersoninf() {
+    const data1 = getFieldsValuesObj(input_properties)
+    const updatedData = {
+        cell_phone_number: data1.phone_number,
+        gender: getGenderCode(isSSelection_properties[0].dataValue.value),
+    } as any
+    const personService = new PersonService(updatedData);
+    const data = await personService.update(user_data.value.person.person_id);
+    return data
+}
+
+function selectGender(person: any) {
+    let selected_opt = {} as any
+    isSSelection_properties[0].labels.value.forEach((label: string, index: number) => {
+        if (label == getGenderCode(person.gender)) {
+            selected_opt = {
+                label,
+                value: "option_"+index 
+            } as any
+        }
+    })
+    isSSelection_properties[0].selectedOption.value = selected_opt
 }
 
 </script>

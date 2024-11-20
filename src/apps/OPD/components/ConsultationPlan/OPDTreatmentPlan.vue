@@ -693,7 +693,6 @@ function selectedDrugName(data: any) {
     isPresentInAllergyList(data)
 }
 
-
 function editItemAtIndex(index: any) {
     const dataItem = selectedMedicalDrugsList.value[index]
     selectedMedicalDrugsList.value.splice(index, 1)

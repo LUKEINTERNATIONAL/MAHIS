@@ -109,6 +109,7 @@ export default defineComponent({
             const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
             const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
             const mandatoryDone = [] as any;
+            const age = HisDate.getAgeInYears(this.demographics?.birthdate);
             const promises = array.map(async (item: any) => {
                 const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
                 if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
@@ -133,6 +134,10 @@ export default defineComponent({
                     mandatoryDone.push("false");
                 } else {
                     modifyFieldValue(this.vitals, item, "value", "");
+                }
+                if (item === "Respiratory rate" && age <= 5) {
+                    modifyFieldValue(this.vitals, item, "required", true);
+                    modifyFieldValue(this.vitals, item, "inputHeader", "Respiratory rate*");
                 }
             });
 
@@ -200,6 +205,19 @@ export default defineComponent({
                 modifyFieldValue(this.vitals, "Pulse", "disabled", false);
                 modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate*");
                 modifyFieldValue(this.vitals, "Pulse", "value", "");
+                this.validationStatus.bloodPressure = true;
+            }
+            if (inputData?.col?.name == "Respiratory rate Not Done" && inputData.col.checked) {
+                modifyCheckboxInputField(this.vitals, "Respiratory rate Reason", "displayNone", false);
+                modifyFieldValue(this.vitals, "Respiratory rate", "disabled", true);
+                modifyFieldValue(this.vitals, "Respiratory rate", "inputHeader", "Respiratory rate");
+                modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
+                this.validationStatus.bloodPressure = false;
+            } else if (inputData?.col?.name == "Respiratory rate Not Done") {
+                modifyCheckboxInputField(this.vitals, "Respiratory rate Reason", "displayNone", true);
+                modifyFieldValue(this.vitals, "Respiratory rate", "disabled", false);
+                modifyFieldValue(this.vitals, "Respiratory rate", "inputHeader", "Respiratory rate*");
+                modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
         },
@@ -317,7 +335,7 @@ export default defineComponent({
             vitals.icon = BMIService.iconBMI(bmiColor);
             vitals.backgroundColor = bmiColor[0];
             vitals.textColor = bmiColor[1];
-            vitals.index = "BMI " + this.BMI?.index ?? "";
+            vitals.index = "BMI " + (this.BMI?.index ?? "");
             vitals.value = this.BMI?.result ?? "";
         },
         async updateBP(systolic: any, diastolic: any) {

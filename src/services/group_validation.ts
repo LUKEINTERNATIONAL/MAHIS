@@ -11,11 +11,14 @@ import {
 } from "@/services/data_helpers";
 import Validation from "@/validations/StandardValidations";
 
-function validateData(data: any, col: any, value: any) {
-    if (col.validationFunctionName) {
+function validateData(data: any, col: any, value: any, showError = true) {
+    if (col.validationFunctionName && !col.disabled) {
         const validationMessage = Validation[col.validationFunctionName](value);
-        modifyFieldValue(data, col.name, "alertsErrorMassage", validationMessage);
+        if (showError) modifyFieldValue(data, col.name, "alertsErrorMassage", validationMessage);
         return validationMessage;
+    } else {
+        modifyFieldValue(data, col.name, "alertsErrorMassage", "");
+        return null;
     }
     return null;
 }
@@ -29,7 +32,7 @@ export function validateRadioButtonData(data: any) {
     return validationMsg.every((value: any) => value === null);
 }
 
-export function validateInputFiledData(data: any) {
+export function validateInputFiledData(data: any, showError = true) {
     let validationMsg = [] as any;
     data?.map((item: any) => {
         item?.data?.rowData[0]?.colData.map((element: any) => {
@@ -40,7 +43,7 @@ export function validateInputFiledData(data: any) {
                 value = element?.value;
             }
             if (element.buildConceptIgnore) return null;
-            validationMsg.push(validateData(data, element, value));
+            validationMsg.push(validateData(data, element, value, showError));
         });
     });
     return validationMsg.every((value: any) => value === null);

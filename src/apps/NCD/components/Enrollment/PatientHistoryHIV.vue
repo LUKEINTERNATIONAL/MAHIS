@@ -59,7 +59,7 @@ export default defineComponent({
                 mainTitle: "Enrollment",
                 cards: [
                     {
-                        cardTitle: "Patient history & Complications ",
+                        cardTitle: "HIV & TB history  ",
                         content: this.patientHistoryHIV,
                         initialData: enrollment.getInitialPatientHistoryHIV(),
                     },
