@@ -338,7 +338,7 @@ const initialVitals = [
         ],
     },
 ] as any;
-export const useVitalsStore = defineStore("vitalsStore", {
+export const useANCVitalsStore = defineStore("vitalsStore", {
     state: () => ({
         vitals: [...initialVitals] as any,
     }),

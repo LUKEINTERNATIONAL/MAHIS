@@ -78,6 +78,7 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 import HisDate from "@/utils/Date";
 import { useAncEndStore } from "@/apps/ANC/store/ancEnd/ancEndStore";
+import {useANCVitalsStore} from "@/apps/ANC/store/physical exam/VitalsStore";
 export default defineComponent({
     name: "PhysicalExam",
     mixins: [SetUserRole, SetEncounter],
@@ -172,7 +173,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useVitalsStore, ["vitals"]),
+        ...mapState(useANCVitalsStore, ["vitals"]),
         ...mapState(useMaternalExamStore, ["respiratory", "pallor", "breastExam", "vaginalInspection", "cervicalExam", "oedemaPresence"]),
         ...mapState(useFetalAssessment, ["fetalAssessment", "fetalDetails"]),
         ...mapState(usePresentingSigns, ["presentingSigns"]),

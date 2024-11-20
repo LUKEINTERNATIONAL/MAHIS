@@ -16,7 +16,7 @@ import { icons } from "@/utils/svg";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
 import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
+import {useANCVitalsStore} from "@/apps/ANC/store/physical exam/VitalsStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import BasicInputField from "@/components/BasicInputField.vue";
@@ -63,10 +63,10 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-      ...mapState(useVitalsStore,['vitals'])
+      ...mapState(useANCVitalsStore,['vitals'])
     },
    async mounted() {
-      const vitals=useVitalsStore();
+      const vitals=useANCVitalsStore();
       this.initialData=vitals.getInitialVitals()
         await this.setTodayVitals();
         const userID: any = Service.getUserID();
@@ -146,7 +146,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         updateVitalsStores() {
-            const vitalsStore = useVitalsStore();
+            const vitalsStore = useANCVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
         validationController(inputData: any) {

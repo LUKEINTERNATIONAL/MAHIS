@@ -36,7 +36,7 @@ import { mapState } from "pinia";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import BasicCard from "@/components/BasicCard.vue";
 import { usePostnatalWardStayStore } from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
-import { useVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
+import { useANCVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
 import { BMIService } from "@/services/bmi_service";
 import HisDate from "@/utils/Date";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
@@ -120,7 +120,7 @@ export default defineComponent({
         //   this.validationRules(event)
         // },
         updateVitalsStores() {
-            const vitalsStore = useVitalsStore();
+            const vitalsStore = useANCVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
         async validateRowData(inputData: any) {

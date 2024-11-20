@@ -6,7 +6,7 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32 && programID() !=12">
+        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32 && programID() !=12 && programID() != 34 && programID() !=35">
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -182,8 +182,10 @@
                 </ion-card>
             </div>
         </ion-content>
-        <NCDHomePage v-if="programID() == 32" />
-       <ANCHomePage v-if="programID() == 12" />
+      <NCDHomePage v-if="programID() == 32" />
+      <ANCHomePage v-if="programID() == 12" />
+      <LabourHomePage v-if="programID() == 34"/>
+      <PNCHomePage v-if="programID() == 35"/>
 
       <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
     </ion-page>
@@ -263,6 +265,8 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import workerData from "@/activate_worker";
 import { useStatusStore } from "@/stores/StatusStore";
 import ANCHomePage from "@/apps/ANC/components/ANCHomePage.vue";
+import LabourHomePage from "@/apps/ANC/components/LabourHomePage.vue";
+import PNCHomePage from "@/apps/ANC/components/PNCHomePage.vue";
 
 export default defineComponent({
     name: "Home",
@@ -291,7 +295,9 @@ export default defineComponent({
         Pagination,
         Navigation,
         NCDHomePage,
-      ANCHomePage
+      ANCHomePage,
+      LabourHomePage,
+      PNCHomePage,
     },
     data() {
         return {
