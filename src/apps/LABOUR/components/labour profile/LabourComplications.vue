@@ -1,11 +1,28 @@
 <template>
-    <div class="container">
-        <ion-card class="section">
-            <ion-card-content>
-                <basic-form :contentData="labourPrevPregnancies" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
-            </ion-card-content>
-        </ion-card>
-    </div>
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView ion-margin-bottom">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Pregnancy Complications History</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <LabourMedications />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+
+        <div class="container">
+            <ion-card class="section">
+                <ion-card-content>
+                    <basic-form
+                        :contentData="labourPrevPregnancies"
+                        @update:selected="handleInputData"
+                        @update:inputValue="handleInputData"
+                    ></basic-form>
+                </ion-card-content>
+            </ion-card>
+        </div>
+    </ion-row>
 </template>
 
 <script lang="ts">
@@ -25,6 +42,7 @@ import {
     IonRadio,
     IonRadioGroup,
 } from "@ionic/vue";
+import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
 import BasicForm from "../../../../components/BasicForm.vue";
 import { icons } from "@/utils/svg";
 import BasicInputField from "../../../../components/BasicInputField.vue";
@@ -67,6 +85,7 @@ export default defineComponent({
         BasicForm,
         IonRadio,
         IonRadioGroup,
+        LabourMedications,
     },
 
     data() {
@@ -207,5 +226,8 @@ ion-card {
 .sub_item_header {
     font-weight: bold;
     font-size: 14px;
+}
+.custom-spacing {
+    margin-top: 20px; /* Adjust the spacing as needed */
 }
 </style>

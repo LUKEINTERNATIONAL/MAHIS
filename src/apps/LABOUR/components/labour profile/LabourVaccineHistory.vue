@@ -1,5 +1,15 @@
 <template>
     <div class="container">
+        <ion-accordion-group ref="accordionGroup" class="previousView ion-margin-bottom">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Vaccine History</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <LabourMedications />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
         <ion-card class="section">
             <ion-card-content>
                 <basic-form
@@ -31,6 +41,7 @@ import {
     IonRadio,
     IonRadioGroup,
 } from "@ionic/vue";
+import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
 import BasicForm from "../../../../components/BasicForm.vue";
 import { icons } from "../../../../utils/svg";
 import BasicInputField from "../../../../components/BasicInputField.vue";
@@ -64,6 +75,7 @@ export default defineComponent({
         BasicForm,
         IonRadio,
         IonRadioGroup,
+        LabourMedications,
     },
 
     data() {

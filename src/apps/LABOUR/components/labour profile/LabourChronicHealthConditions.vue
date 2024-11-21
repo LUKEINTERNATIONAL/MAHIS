@@ -1,5 +1,15 @@
 <template>
     <div class="container">
+        <ion-accordion-group ref="accordionGroup" class="previousView ion-margin-bottom">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Chronical Health conditions History</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <LabourMedications />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
         <!-- Chronical Health conditions -->
         <ion-card class="section">
             <ion-card-content>
@@ -29,6 +39,7 @@ import {
     IonInput,
     IonSelect,
 } from "@ionic/vue";
+import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 import { ref } from "vue";
@@ -68,6 +79,7 @@ export default defineComponent({
         IonInput,
         BasicInputField,
         BasicForm,
+        LabourMedications,
     },
     data() {
         return {

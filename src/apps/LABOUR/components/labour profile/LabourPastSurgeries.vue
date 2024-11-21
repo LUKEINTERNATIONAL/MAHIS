@@ -1,37 +1,21 @@
 <template>
     <div class="container">
+        <ion-accordion-group ref="accordionGroup" class="previousView ion-margin-bottom">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Surgeries History</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <LabourMedications />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
         <!-- Past Surgeries -->
         <ion-card class="section">
             <ion-card-content>
                 <basic-form :contentData="labourPastSurgeries" :initialData="initialData"></basic-form>
             </ion-card-content>
         </ion-card>
-
-        <!--        &lt;!&ndash; HIV &ndash;&gt;-->
-        <!--            <ion-card  class="section">-->
-        <!--            <ion-card-header>-->
-        <!--                <ion-card-title class="dashed_bottom_border sub_item_header">HIV</ion-card-title>-->
-        <!--            </ion-card-header>-->
-        <!--            <ion-card-content>-->
-        <!--                <basic-form :contentData="hivTest"></basic-form>-->
-        <!--            </ion-card-content>-->
-        <!--            </ion-card>-->
-
-        <!-- Syphilis Test -->
-
-        <!--            <ion-card class="section">-->
-        <!--            <ion-card-header>-->
-        <!--                <ion-card-title class="dashed_bottom_border sub_item_header">Syphilis</ion-card-title>-->
-        <!--            </ion-card-header>-->
-        <!--            <ion-card-content>-->
-        <!--                <basic-form :contentData="syphilisTest"></basic-form>-->
-        <!--            </ion-card-content>-->
-        <!--            </ion-card>-->
-
-        <!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
-        <!--    <div class="navigation-buttons">-->
-        <!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Save</ion-button>-->
-        <!--    </div>-->
     </div>
 </template>
 
@@ -50,6 +34,7 @@ import {
     IonInput,
     IonSelect,
 } from "@ionic/vue";
+import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 import { ref } from "vue";
@@ -89,6 +74,7 @@ export default defineComponent({
         IonInput,
         BasicInputField,
         BasicForm,
+        LabourMedications,
     },
     data() {
         return {
