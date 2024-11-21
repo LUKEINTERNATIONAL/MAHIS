@@ -161,6 +161,7 @@ export default defineComponent({
     computed: {
         ...mapState(EIRreportsStore, ["navigationPayload"]),
         ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
         groupedMedications() {
             return this.medications.reduce((groups: any, medication: any) => {
                 const date = medication.order.date_created.split('T')[0];
@@ -173,6 +174,7 @@ export default defineComponent({
         }
     },
     async mounted() {
+        this.medications = []
         this.initOwnNavData();
         await this.prescribedMedications();
     },
@@ -220,6 +222,15 @@ export default defineComponent({
                 day: 'numeric' 
             });
         },
+    },
+    watch: {
+        demographics: {
+            async handler() {
+                this.medications = []
+                await this.prescribedMedications();
+            },
+        deep:true
+        }   
     }
 });
 </script>
