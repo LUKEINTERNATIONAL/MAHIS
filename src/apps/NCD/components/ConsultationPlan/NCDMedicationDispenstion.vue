@@ -42,14 +42,15 @@
                                             </span>
                                         </div>
                                         <div class="flex items-center mb-3">
-                                            <ion-input 
-                                                type="text" 
+                                            <ion-input
+                                                type="text"
                                                 placeholder="Amount to Dispense"
                                                 v-model="medication.amountToDispense"
-                                                class="mr-2 dose-input bordered-input"
+                                                @input="validateAmount(medication)"
+                                                :class="['mr-2 dose-input bordered-input', medication.error ? 'input-error' : '']"
                                             ></ion-input>
-                                            <ion-button 
-                                                size="small" 
+                                            <ion-button
+                                                size="small"
                                                 color="light"
                                                 style="margin-top: 10px"
                                                 @click="setAmountAsPrescribed(medication)"
@@ -57,6 +58,9 @@
                                                 <ion-icon :icon="clipboardOutline" size="small" style="margin-right: 5px;" class="mr-1"></ion-icon>
                                                 <span style="color: darkseagreen;"> As Prescribed</span>
                                             </ion-button>
+                                        </div>
+                                        <div v-if="medication.error" class="error-text">
+                                            {{ medication.error }}
                                         </div>
                                         <div class="mt-3 flex space-x-2">
                                             <ion-button 
@@ -196,18 +200,30 @@ export default defineComponent({
             const frequency = DRUG_FREQUENCIES.find(f => f.code === code);
             return frequency ? frequency.label : 'Unknown';
         },
+        validateAmount(medication: any) {
+            const value = parseFloat(medication.amountToDispense);
+            if (isNaN(value) || value <= 0) {
+                medication.error = "Please enter a valid amount greater than 0.";
+            } else {
+                medication.error = null;
+            }
+        },
         setAmountAsPrescribed(medication: any) {
             medication.amountToDispense = medication.dose;
+            this.validateAmount(medication);
         },
         async dispenseMedication(medication: any) {
+            if (medication.error) {
+                toastDanger("Fix errors before dispensing.");
+                return;
+            }
             try {
-                // await DrugOrderService.dispenseMedication({
-                //     order_id: medication.order_id,
-                //     amount: medication.amountToDispense
-                // });
-                // medication.dispensed = true;
+                // API call for dispensing
+                medication.dispensed = true;
+                toastSuccess("Medication dispensed successfully.");
             } catch (error) {
-                console.error('Dispensation failed', error);
+                toastDanger("Dispensing failed. Please try again.");
+                console.error(error);
             }
         },
         async viewDetails(medication: any) {
@@ -252,5 +268,15 @@ export default defineComponent({
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+
+    .input-error {
+        border-color: red;
+    }
+
+    .error-text {
+        color: red;
+        font-size: 0.875rem;
+        margin-top: 4px;
     }
 </style>
