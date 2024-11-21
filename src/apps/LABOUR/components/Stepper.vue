@@ -95,6 +95,12 @@ import Obstetric from "./obstetric details/Obstetric.vue";
 import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
 import ImmidiatePostnatalChecksForChild from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
 import ImmidiatePostnatalChecksForMother from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
+LabourAllergies;
+LabourPastSurgeries;
+LabourChronicHealthConditions;
+LabourVaccineHistory;
+LabourMedications;
+LabourObstetricHistory;
 
 export default defineComponent({
     name: "Home",

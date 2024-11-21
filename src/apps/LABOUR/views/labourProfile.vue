@@ -4,7 +4,7 @@
         <ion-content :fullscreen="true">
             <DemographicBar />
             <Stepper
-                stepperTitle="Profile"
+                stepperTitle="Labour Profile"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 :StepperData="StepperData"
@@ -122,7 +122,7 @@ export default defineComponent({
         return {
             wizardData: [
                 {
-                    title: "Woman behavior",
+                    title: "Past pregnancy complications",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -131,7 +131,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Allergies",
+                    title: "Woman behavior",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -140,7 +140,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Past Surgeries",
+                    title: "Allergies",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -149,12 +149,21 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "chronic health conditions",
+                    title: "Past Surgeries",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
                     number: 4,
+                    last_step: "",
+                },
+                {
+                    title: "chronic health conditions",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 5,
                     last_step: "",
                 },
 
@@ -164,20 +173,11 @@ export default defineComponent({
                     checked: "",
                     icon: false,
                     disabled: false,
-                    number: 5,
-                    last_step: "last_step",
-                },
-                {
-                    title: "Current medications",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
                     number: 6,
                     last_step: "",
                 },
                 {
-                    title: "Obstetric history",
+                    title: "Current medications",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -185,42 +185,56 @@ export default defineComponent({
                     number: 7,
                     last_step: "",
                 },
+                {
+                    title: "Obstetric history",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 8,
+                    last_step: "last_step",
+                },
             ],
             StepperData: [
                 {
+                    title: "Past pregnancy complications",
+                    component: "LabourComplications",
+                    value: "1",
+                },
+                {
                     title: "Woman behavior",
                     component: "LabourWomanBehaviour",
-                    value: "1",
+                    value: "2",
                 },
                 {
                     title: "Allergies",
                     component: "LabourAllergies",
-                    value: "2",
+                    value: "3",
                 },
                 {
                     title: "Past Surgeries",
                     component: "LabourPastSurgeries",
-                    value: "3",
+                    value: "4",
                 },
                 {
                     title: "chronic health conditions",
                     component: "LabourChronicHealthConditions",
-                    value: "4",
+                    value: "5",
                 },
                 {
                     title: "vaccine history",
                     component: "LabourVaccineHistory",
-                    value: "5",
+                    value: "6",
                 },
                 {
                     title: "Current medications",
                     component: "LabourMedications",
-                    value: "6",
+                    value: "7",
                 },
                 {
                     title: "Obstetric history",
                     component: "LabourObstetricHistory",
-                    value: "7",
+                    value: "8",
                 },
             ],
             isOpen: false,

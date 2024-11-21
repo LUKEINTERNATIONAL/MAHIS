@@ -183,6 +183,14 @@ import ImmidiatePostnatalChecksForMother from "@/apps/LABOUR/components/delivery
 import SubsequentVisits from "@/apps/ANC/components/quick check/SubsequentVisits.vue";
 import AbdominalExamination from "@/apps/ANC/components/physical exam/AbdominalExamination.vue";
 import ClinicalCounselling from "@/apps/ANC/components/counselling/ClinicalCounselling.vue";
+import LabourWomanBehaviour from "@/apps/LABOUR/components/labour profile/LabourWomanBehaviour.vue";
+import LabourAllergies from "@/apps/LABOUR/components/labour profile/LabourAllergies.vue";
+import LabourPastSurgeries from "@/apps/LABOUR/components/labour profile/LabourPastSurgeries.vue";
+import LabourChronicHealthConditions from "@/apps/LABOUR/components/labour profile/LabourChronicHealthConditions.vue";
+import LabourVaccineHistory from "@/apps/LABOUR/components/labour profile/LabourVaccineHistory.vue";
+import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
+import LabourObstetricHistory from "@/apps/LABOUR/components/labour profile/LabourObstetricHistory.vue";
+import LabourComplications from "@/apps/LABOUR/components/labour profile/LabourComplications.vue";
 
 export default defineComponent({
     mixins: [SetUserRole],
@@ -292,6 +300,14 @@ export default defineComponent({
         SubsequentVisits,
         AbdominalExamination,
         ClinicalCounselling,
+        LabourWomanBehaviour,
+        LabourPastSurgeries,
+        LabourChronicHealthConditions,
+        LabourVaccineHistory,
+        LabourMedications,
+        LabourObstetricHistory,
+        LabourAllergies,
+        LabourComplications,
     },
     data() {
         return {
