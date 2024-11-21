@@ -85,10 +85,6 @@
                             </ion-card-content>
                         </ion-card>
 
-                        <ion-button style="margin: 10px" @click="navToNCDDispensations">
-                            Dispense Medication
-                        </ion-button>
-
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
                                 <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
@@ -669,9 +665,6 @@ export default defineComponent({
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics?.birthdate);
         },
-        navToNCDDispensations() {
-            this.$router.push('NCDDispensations');
-        }
     },
 });
 </script>

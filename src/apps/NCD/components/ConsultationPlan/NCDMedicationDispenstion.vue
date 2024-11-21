@@ -179,7 +179,7 @@ export default defineComponent({
     methods: {
         initOwnNavData() {
             const store = EIRreportsStore();
-            store.setNavigationPayload('Dispense Medication', true, false, '/', 'patientProfile');
+            store.setNavigationPayload('Dispense Medication', true, false, '/', 'home');
         },
         async prescribedMedications() {
             this.medications = await DrugOrderService.drugOrders(this.demographics.patient_id);
