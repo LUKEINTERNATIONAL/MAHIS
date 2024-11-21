@@ -59,6 +59,13 @@ export class DrugOrderService extends Service {
         });
     }
 
+    static findProgramDrugOrdersAwaitingDispensation(patientID: number) {
+        return this.getJson(`patients/${patientID}/find_program_drug_orders_awaiting_dispensation`, {
+            date: this.getSessionDate(),
+            program_id: this.getProgramID(),
+        });
+    }
+
     static getDrugDosages(patientID: number, drugID: number, date = this.getSessionDate()) {
         const params = { drug_id: drugID, date: date };
         return this.getJson(`programs/${this.getProgramID()}/patients/${patientID}/drug_doses`, params);

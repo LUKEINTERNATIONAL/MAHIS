@@ -125,6 +125,7 @@ import SetUser from "@/views/Mixin/SetUser.vue";
 import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import MedicationDetailsModal from "./MedicationDetailsModal.vue";
 import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
+import { DispensationService } from "@/apps/NCD/services/dispensation_service"
 import { medkit, repeat, eye, alertCircleOutline, checkmarkDoneCircleOutline, clipboardOutline, timeOutline  } from 'ionicons/icons';
 
 export default defineComponent({
@@ -188,7 +189,7 @@ export default defineComponent({
             store.setNavigationPayload('Dispense Medication', true, false, '/', 'home');
         },
         async prescribedMedications() {
-            this.medications = await DrugOrderService.drugOrders(this.demographics.patient_id);
+            this.medications = await DrugOrderService.findProgramDrugOrdersAwaitingDispensation(this.demographics.patient_id);
             console.log(this.medications)
             this.medications = this.medications.map((med: any) => ({
                 ...med,
@@ -218,7 +219,9 @@ export default defineComponent({
                 return;
             }
             try {
-                // API call for dispensing
+                const dispensationService = new DispensationService()
+                const dispensationArryObj = dispensationService.getDispensationArryObj(medication.order_id, medication.amountToDispense)
+                await dispensationService.saveDispensations(dispensationArryObj)
                 medication.dispensed = true;
                 toastSuccess("Medication dispensed successfully.");
             } catch (error) {
