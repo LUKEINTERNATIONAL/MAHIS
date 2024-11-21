@@ -68,9 +68,11 @@
 <script>
 import ApexChart from "vue3-apexcharts";
 import { nextTick } from "vue";
-
-export default {
-    name: "MedicalDashboard",
+import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
+import { defineComponent } from "vue";
+export default defineComponent({
+    name: "NCDDashboard",
+    mixins: [DashboardMixin],
     components: {
         ApexChart,
     },
@@ -186,20 +188,14 @@ export default {
         };
     },
     async mounted() {
-        // Initialize chart data
         this.initializeChartData();
-
-        // Wait for the next DOM update cycle
         await nextTick();
-
-        // Set a small timeout to ensure the chart container is fully rendered
         setTimeout(() => {
             this.isChartReady = true;
         }, 100);
     },
     methods: {
         initializeChartData() {
-            // Populate chart data
             this.lineChartOptions.xaxis.categories = this.quarterlyData.map((item) => item.quarter);
             this.lineChartSeries[0].data = this.quarterlyData.map((item) => item.male);
             this.lineChartSeries[1].data = this.quarterlyData.map((item) => item.female);
@@ -210,7 +206,7 @@ export default {
             this.barChartSeries[2].data = this.quarterlyDiagnosisData.map((item) => item.hypertention);
         },
     },
-};
+});
 </script>
 <style scoped>
 .grid {
