@@ -49,13 +49,32 @@
                 </ion-item>
             </ion-col>
         </ion-row>
+        <ion-row>
+            <ion-col size="4">
+                <DateInputField
+                    :inputHeader="'Preferred Next Appointment Date'"
+                    :sectionHeaderFontWeight="20"
+                    :unit="''"
+                    :icon="calendarOutline"
+                    :placeholder="'press to select date'"
+                    :iconRight="''"
+                    :inputWidth="'100%'"
+                    :inputValue="inputPRDate"
+                    :eventType="''"
+                    :minDate="minDate"
+                    :maxDate="''"
+                    :disabled="false"
+                    @update:rawDateValue="handleInput($event)"
+                />
+            </ion-col>
+        </ion-row>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonBadge, IonToolbar, IonMenu, modalController, IonDatetime } from "@ionic/vue";
-import { calendar, checkmark, pulseOutline } from "ionicons/icons";
+import { calendarOutline, checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { createModal } from "@/utils/Alerts";
 import BasicInputField from "../../../../components/BasicInputField.vue";
@@ -70,6 +89,7 @@ import { Appointment } from "@/apps/Immunization/services/ncd_appointment_servic
 import confirmModal from "@/apps/NCD/components/confirmModal.vue"
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { DrugOrderService } from "@/services/drug_order_service";
+import DateInputField from "@/components/DateInputField.vue";
 
 export default defineComponent({
   components: {
@@ -83,17 +103,21 @@ export default defineComponent({
     BasicInputField,
     IonDatetime,
     IonBadge,
+    DateInputField,
   },
   setup() {
     const clinicalDaysStore = useClinicalDaysStore();
     const appointment_count = ref(0);
     const disabledDates = computed(() => clinicalDaysStore.getDisabledDates());
     const datesCounts = computed(() => clinicalDaysStore.getAssignedAppointments());
+      const inputPRDate = ref();
 
     return {
-      disabledDates,
-      datesCounts,
-      appointment_count,
+        disabledDates,
+        datesCounts,
+        appointment_count,
+        calendarOutline,
+        inputPRDate,
     };
   },
   data() {
@@ -106,13 +130,13 @@ export default defineComponent({
       appointment: "" as any,
       drugRunoutDate: "" as any,
       nextAppointmentDate: "" as any,
-      minDate: new Date(),
+      minDate: new Date() as any,
     };
   },
   computed: {
     ...mapState(useNextAppointmentStore, ["nextAppointment"]),
     ...mapState(useClinicalDaysStore, ["maximumNumberOfDaysForEachDay", "assignedAppointmentsDates"]),
-    ...mapState(useDemographicsStore, ["demographics"])
+    ...mapState(useDemographicsStore, ["demographics"]),
   },
   watch: {
     calendarDate: {
@@ -122,7 +146,7 @@ export default defineComponent({
       deep: true,
     },
   },
-    async mounted() {
+  async mounted() {
     setValueProps()
     const userID: any = Service.getUserID();
     const patient = new PatientService();
@@ -180,16 +204,21 @@ export default defineComponent({
     async openCornfirmModal(date: any) {
         this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
         await this.getAppointmentMents(date)
-      const handleCancel = (event: CustomEvent<any>) => {
-        console.log(event.detail)
-      };
-      const handleConfirm = async (event: CustomEvent<any>) => {
-        if (event.detail == true) {
-            await this.handleDateUpdate(date)
-        }
-      };
-      const dataToPass = { message: 'Are you sure you want to add this Appointment?',}
-      createModal(confirmModal, { class: "otherVitalsModal" }, true, dataToPass, { 'cancel': handleCancel, 'confirm':  handleConfirm});
+        const handleCancel = (event: CustomEvent<any>) => {
+            console.log(event.detail)
+        };
+        const handleConfirm = async (event: CustomEvent<any>) => {
+            if (event.detail == true) {
+                await this.handleDateUpdate(date)
+            }
+        };
+        const dataToPass = { message: 'Are you sure you want to add this Appointment?',}
+        createModal(confirmModal, { class: "otherVitalsModal" }, true, dataToPass, { 'cancel': handleCancel, 'confirm':  handleConfirm});
+    },
+
+      async handleInput(date: any) {
+        this.inputPRDate = HisDate.toStandardHisDisplayFormat(date);
+        await this.openCornfirmModal(date)
     },
 
     async supposedRunOutDate() {
