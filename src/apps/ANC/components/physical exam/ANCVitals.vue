@@ -2,7 +2,7 @@
     <div class="container">
         <ion-card class="section">
             <ion-card-content>
-                <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)" :initialData="initialData"> </basic-form>
+                <basic-form :contentData="ANCVitals" @update:inputValue="validaterowData($event)" :initialData="initialData"> </basic-form>
             </ion-card-content>
         </ion-card>
     </div>
@@ -16,7 +16,6 @@ import { icons } from "@/utils/svg";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
 import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import {useANCVitalsStore} from "@/apps/ANC/store/physical exam/VitalsStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import BasicInputField from "@/components/BasicInputField.vue";
@@ -29,6 +28,7 @@ import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
 import { isEmpty } from "lodash";
 import dayjs from "dayjs";
+import {useANCVitalsStore} from "@/apps/ANC/store/physical exam/VitalsStore";
 
 export default defineComponent({
     components: {
@@ -63,7 +63,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-      ...mapState(useANCVitalsStore,['vitals'])
+      ...mapState(useANCVitalsStore,['ANCVitals'])
     },
    async mounted() {
       const vitals=useANCVitalsStore();
@@ -76,7 +76,7 @@ export default defineComponent({
         this.handleVital()
     },
     watch: {
-        vitals: {
+        ANCVitals: {
             handler() {
                 this.checkHeight();
             },
@@ -110,34 +110,34 @@ export default defineComponent({
                 const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
                 if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                     if (item == "Weight") {
-                        modifyCheckboxValue(this.vitals, "Height And Weight Not Done", "displayNone", true);
+                        modifyCheckboxValue(this.ANCVitals, "Height And Weight Not Done", "displayNone", true);
                     }
                     if (item == "Systolic") {
-                        modifyCheckboxValue(this.vitals, "Blood Pressure Not Done", "displayNone", true);
+                        modifyCheckboxValue(this.ANCVitals, "Blood Pressure Not Done", "displayNone", true);
                     }
                     if (item == "Pulse") {
-                        modifyCheckboxValue(this.vitals, "Pulse Rate Not Done", "displayNone", true);
+                        modifyCheckboxValue(this.ANCVitals, "Pulse Rate Not Done", "displayNone", true);
                     }
                     modifyFieldValue(
-                        this.vitals,
+                        this.ANCVitals,
                         item,
                         "value",
                         await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
                     );
-                    modifyFieldValue(this.vitals, item, "disabled", true);
+                    modifyFieldValue(this.ANCVitals, item, "disabled", true);
                     mandatoryDone.push("true");
                 } else if (mandatoryFields.includes(item)) {
                     mandatoryDone.push("false");
                 } else {
-                    modifyFieldValue(this.vitals, item, "value", "");
+                    modifyFieldValue(this.ANCVitals, item, "value", "");
                 }
             });
 
             await Promise.all(promises);
             if (!mandatoryDone.includes("false")) {
-                this.vitals[0].actionBtn = "Finish";
+                this.ANCVitals[0].actionBtn = "Finish";
             } else {
-                this.vitals[0].actionBtn = "Finish and Save";
+                this.ANCVitals[0].actionBtn = "Finish and Save";
             }
             return !mandatoryDone.includes("false");
         },
@@ -147,56 +147,56 @@ export default defineComponent({
         },
         updateVitalsStores() {
             const vitalsStore = useANCVitalsStore();
-            vitalsStore.setVitals(this.vitals);
+            vitalsStore.setVitals(this.ANCVitals);
         },
         validationController(inputData: any) {
             if (inputData?.col?.name == "Height And Weight Not Done" && inputData.col.checked) {
-                modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", false);
-                modifyFieldValue(this.vitals, "Height (cm)", "disabled", true);
-                modifyFieldValue(this.vitals, "Weight", "disabled", true);
-                modifyFieldValue(this.vitals, "Height (cm)", "inputHeader", "Height");
-                modifyFieldValue(this.vitals, "Weight", "inputHeader", "Weight");
-                modifyFieldValue(this.vitals, "Height (cm)", "value", "");
-                modifyFieldValue(this.vitals, "Weight", "value", "");
+                modifyCheckboxInputField(this.ANCVitals, "Height Weight Reason", "displayNone", false);
+                modifyFieldValue(this.ANCVitals, "Height (cm)", "disabled", true);
+                modifyFieldValue(this.ANCVitals, "Weight", "disabled", true);
+                modifyFieldValue(this.ANCVitals, "Height (cm)", "inputHeader", "Height");
+                modifyFieldValue(this.ANCVitals, "Weight", "inputHeader", "Weight");
+                modifyFieldValue(this.ANCVitals, "Height (cm)", "value", "");
+                modifyFieldValue(this.ANCVitals, "Weight", "value", "");
                 this.validationStatus.heightWeight = false;
             } else if (inputData?.col?.name == "Height And Weight Not Done") {
-                modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", true);
-                modifyFieldValue(this.vitals, "Height (cm)", "disabled", false);
-                modifyFieldValue(this.vitals, "Weight", "disabled", false);
-                modifyFieldValue(this.vitals, "Height (cm)", "inputHeader", "Height*");
-                modifyFieldValue(this.vitals, "Weight", "inputHeader", "Weight*");
+                modifyCheckboxInputField(this.ANCVitals, "Height Weight Reason", "displayNone", true);
+                modifyFieldValue(this.ANCVitals, "Height (cm)", "disabled", false);
+                modifyFieldValue(this.ANCVitals, "Weight", "disabled", false);
+                modifyFieldValue(this.ANCVitals, "Height (cm)", "inputHeader", "Height*");
+                modifyFieldValue(this.ANCVitals, "Weight", "inputHeader", "Weight*");
                 this.validationStatus.heightWeight = true;
             }
             if (inputData?.col?.name == "Blood Pressure Not Done" && inputData.col.checked) {
-                modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", false);
-                modifyFieldValue(this.vitals, "Systolic", "disabled", true);
-                modifyFieldValue(this.vitals, "Diastolic", "disabled", true);
-                modifyFieldValue(this.vitals, "Systolic", "inputHeader", "Systolic Pressure");
-                modifyFieldValue(this.vitals, "Diastolic", "inputHeader", "Diastolic pressure");
-                modifyFieldValue(this.vitals, "Systolic", "value", "");
-                modifyFieldValue(this.vitals, "Diastolic", "value", "");
+                modifyCheckboxInputField(this.ANCVitals, "Blood Pressure Reason", "displayNone", false);
+                modifyFieldValue(this.ANCVitals, "Systolic", "disabled", true);
+                modifyFieldValue(this.ANCVitals, "Diastolic", "disabled", true);
+                modifyFieldValue(this.ANCVitals, "Systolic", "inputHeader", "Systolic Pressure");
+                modifyFieldValue(this.ANCVitals, "Diastolic", "inputHeader", "Diastolic pressure");
+                modifyFieldValue(this.ANCVitals, "Systolic", "value", "");
+                modifyFieldValue(this.ANCVitals, "Diastolic", "value", "");
                 this.validationStatus.bloodPressure = false;
             } else if (inputData?.col?.name == "Blood Pressure Not Done") {
-                modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", true);
-                modifyFieldValue(this.vitals, "Systolic", "disabled", false);
-                modifyFieldValue(this.vitals, "Diastolic", "disabled", false);
-                modifyFieldValue(this.vitals, "Systolic", "inputHeader", "Systolic Pressure*");
-                modifyFieldValue(this.vitals, "Diastolic", "inputHeader", "Diastolic pressure*");
-                modifyFieldValue(this.vitals, "Systolic", "value", "");
-                modifyFieldValue(this.vitals, "Diastolic", "value", "");
+                modifyCheckboxInputField(this.ANCVitals, "Blood Pressure Reason", "displayNone", true);
+                modifyFieldValue(this.ANCVitals, "Systolic", "disabled", false);
+                modifyFieldValue(this.ANCVitals, "Diastolic", "disabled", false);
+                modifyFieldValue(this.ANCVitals, "Systolic", "inputHeader", "Systolic Pressure*");
+                modifyFieldValue(this.ANCVitals, "Diastolic", "inputHeader", "Diastolic pressure*");
+                modifyFieldValue(this.ANCVitals, "Systolic", "value", "");
+                modifyFieldValue(this.ANCVitals, "Diastolic", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
             if (inputData?.col?.name == "Pulse Rate Not Done" && inputData.col.checked) {
-                modifyCheckboxInputField(this.vitals, "Pulse Rate Reason", "displayNone", false);
-                modifyFieldValue(this.vitals, "Pulse", "disabled", true);
-                modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate");
-                modifyFieldValue(this.vitals, "Pulse", "value", "");
+                modifyCheckboxInputField(this.ANCVitals, "Pulse Rate Reason", "displayNone", false);
+                modifyFieldValue(this.ANCVitals, "Pulse", "disabled", true);
+                modifyFieldValue(this.ANCVitals, "Pulse", "inputHeader", "Pulse rate");
+                modifyFieldValue(this.ANCVitals, "Pulse", "value", "");
                 this.validationStatus.bloodPressure = false;
             } else if (inputData?.col?.name == "Pulse Rate Not Done") {
-                modifyCheckboxInputField(this.vitals, "Pulse Rate Reason", "displayNone", true);
-                modifyFieldValue(this.vitals, "Pulse", "disabled", false);
-                modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate*");
-                modifyFieldValue(this.vitals, "Pulse", "value", "");
+                modifyCheckboxInputField(this.ANCVitals, "Pulse Rate Reason", "displayNone", true);
+                modifyFieldValue(this.ANCVitals, "Pulse", "disabled", false);
+                modifyFieldValue(this.ANCVitals, "Pulse", "inputHeader", "Pulse rate*");
+                modifyFieldValue(this.ANCVitals, "Pulse", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
         },
@@ -212,8 +212,8 @@ export default defineComponent({
                  * and they return as an adult, provide an option to update their height.
                  */
                 if (!(patientAgeAtPrevRecordedHeight < 18 || patient.getAge() < 18)) {
-                    modifyFieldValue(this.vitals, "Height", "disabled", true);
-                    modifyFieldValue(this.vitals, "Height", "value", recentHeight);
+                    modifyFieldValue(this.ANCVitals, "Height", "disabled", true);
+                    modifyFieldValue(this.ANCVitals, "Height", "value", recentHeight);
                 }
             }
         },
@@ -222,7 +222,7 @@ export default defineComponent({
             this.validationController(inputData);
             this.hasValidationErrors = [];
 
-            this.vitals.forEach((section: any, sectionIndex: any) => {
+            this.ANCVitals.forEach((section: any, sectionIndex: any) => {
                 if (section?.data?.rowData) {
                     section?.data?.rowData.forEach((col: any, colIndex: any) => {
                         if (
@@ -277,15 +277,15 @@ export default defineComponent({
                             if (validateResult?.length > 0) {
                                 this.hasValidationErrors.push("false");
                                 if (input.inputHeader === inputData.inputHeader) {
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
+                                    this.ANCVitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
+                                    this.ANCVitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                         validateResult.flat(Infinity)[0];
                                     return true;
                                 }
                             } else {
                                 this.hasValidationErrors.push("true");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                                this.ANCVitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
+                                this.ANCVitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                             }
 
                             return false;
@@ -294,7 +294,7 @@ export default defineComponent({
                 }
             });
 
-            this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
+            this.ANCVitals.validationStatus = !this.hasValidationErrors.includes("false");
         },
         async setBMI(weight: any, height: any) {
             if(height < 140) this.heightAlert();
@@ -312,7 +312,7 @@ export default defineComponent({
         },
         async updateBMI() {
             const bmiColor = this.BMI?.color ?? [];
-            const vitals = this.vitals[0].alerts[0];
+            const vitals = this.ANCVitals[0].alerts[0];
             vitals.icon = BMIService.iconBMI(bmiColor);
             vitals.backgroundColor = bmiColor[0];
             vitals.textColor = bmiColor[1];
@@ -320,11 +320,11 @@ export default defineComponent({
             vitals.value = this.BMI?.result ?? "";
         },
         async heightAlert(){
-            const existingAlert = this.vitals[0].alerts.find((alert: any) => alert.value === "Below critical height threshold");
+            const existingAlert = this.ANCVitals[0].alerts.find((alert: any) => alert.value === "Below critical height threshold");
 
             if (!existingAlert) 
             {
-                this.vitals[0].alerts.push({
+                this.ANCVitals[0].alerts.push({
                     backgroundColor: "#FFD700", 
                     textColor: "#b42318",       
                     value: "Below critical height threshold",
@@ -332,11 +332,11 @@ export default defineComponent({
             }     
             else 
             {
-                this.vitals[0].alerts = this.vitals[0].alerts.filter((alert: any) => alert.value !== "Below critical height threshold");
+                this.ANCVitals[0].alerts = this.ANCVitals[0].alerts.filter((alert: any) => alert.value !== "Below critical height threshold");
             }
         },
         async updateBP(systolic: any, diastolic: any) {
-            const vitals = this.vitals[2]?.alerts[0] ?? [];
+            const vitals = this.ANCVitals[2]?.alerts[0] ?? [];
             const bpColor = this.BPStatus?.colors ?? [];
             vitals.icon = iconBloodPressure(bpColor);
             vitals.backgroundColor = bpColor[0];
@@ -346,10 +346,10 @@ export default defineComponent({
             console.log(vitals);
         },
         async updateTemperateRate(name: any, index: any, obj: any, objNumber: any) {
-            const filteredArray = this.vitals[objNumber]?.alerts?.filter((item: any) => item.name !== name);
-            this.vitals[objNumber].alerts = filteredArray;
+            const filteredArray = this.ANCVitals[objNumber]?.alerts?.filter((item: any) => item.name !== name);
+            this.ANCVitals[objNumber].alerts = filteredArray;
             const bpColor = obj?.colors ?? [];
-            this.vitals[objNumber]?.alerts.push({
+            this.ANCVitals[objNumber]?.alerts.push({
                 backgroundColor: bpColor[0],
                 status: "",
                 icon: "",
@@ -358,7 +358,7 @@ export default defineComponent({
                 name: name,
                 index: index,
             });
-            console.log(this.vitals[4]?.alerts);
+            console.log(this.ANCVitals[4]?.alerts);
         },
         getBloodPressureStatus(systolic: any, diastolic: any) {
             if (systolic && diastolic) {
