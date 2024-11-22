@@ -3,7 +3,7 @@
         <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
-                    <div class="text-2xl font-bold">{{ todayMetrics.bookedPatients }}</div>
+                    <div class="text-2xl font-bold">{{ appointments.length }}</div>
                     <h3 class="text-sm font-medium">Today's Appointments</h3>
                 </div>
             </ion-card-content>
@@ -70,6 +70,7 @@ import ApexChart from "vue3-apexcharts";
 import { nextTick } from "vue";
 import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
 import { defineComponent } from "vue";
+import { Service } from "@/services/service";
 export default defineComponent({
     name: "NCDDashboard",
     mixins: [DashboardMixin],
@@ -188,6 +189,8 @@ export default defineComponent({
         };
     },
     async mounted() {
+        // const res = await this.getMalariaReport();
+        // console.log("🚀 ~ mounted ~ res:", res);
         this.initializeChartData();
         await nextTick();
         setTimeout(() => {
@@ -205,6 +208,14 @@ export default defineComponent({
             this.barChartSeries[1].data = this.quarterlyDiagnosisData.map((item) => item.diabetesType2);
             this.barChartSeries[2].data = this.quarterlyDiagnosisData.map((item) => item.hypertention);
         },
+        // getMalariaReport() {
+        //     const url = `programs/${32}/reports/malaria_report`;
+        //     return Service.getJson(url, {
+        //         start_date: "2023-01-01",
+        //         end_date: "2024-10-31",
+        //         date: "2024-10-31",
+        //     });
+        // },
     },
 });
 </script>
