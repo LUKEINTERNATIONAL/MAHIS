@@ -43,12 +43,15 @@
                     </ion-item>
                 </ion-accordion>
                 
-                <ion-accordion value="deduplication of client profile records" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
+                <ion-accordion value="6" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
                     <ion-item slot="header" color="light">
                     <ion-icon :icon="peopleOutline" slot="start"></ion-icon>
                     <ion-label class="header lft-drpm">De-Duplication</ion-label>
                     </ion-item>
                 </ion-accordion>
+
+                <ion-accordion></ion-accordion>
+    
                 </ion-accordion-group>
                 <ion-accordion value="6">
                     <ion-item slot="header" color="light">
