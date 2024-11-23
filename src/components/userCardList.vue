@@ -76,12 +76,12 @@
     @save="modalClosed" 
   />
 
-  <ion-footer collapse="fade">
+  <!-- Footer -->
+  <ion-footer class="sticky-footer">
     <ion-row>
-      <ion-col style="flex: none; max-width: 100%">
+      <ion-col size="12" style="max-width: 100%;">
         <bottomNavBar
           v-if="showNavBar"
-          style="margin-left: 20px; margin-right: 20px;"
           :totalItems="filteredUsers.length"
           :currentPage="pagination.page"
           :itemsPerPage="pagination.itemsPerPage"
@@ -269,6 +269,7 @@ ion-card {
   min-width: 250px;
   width: 37%;
   margin-right: auto;
+  margin-top: 10px;
 }
 
 ion-card-content {
@@ -344,5 +345,16 @@ ion-list {
     margin-right: auto;
     margin-left: 10px;
   }
+}
+
+.sticky-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+ion-footer {
+  width: 100%;
 }
 </style>
