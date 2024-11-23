@@ -304,6 +304,8 @@ export default defineComponent({
         },
         updateVaccineName(data: any) {
             this.currentDrugOb = data;
+            const store = useAdministerVaccineStore();
+            store.setCurrentSelectedDrug(data);
             this.pullLotNumbersForVaccine(this.currentDrugOb)
         },
         async pullLotNumbersForVaccine(data: any) {
