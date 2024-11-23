@@ -69,7 +69,14 @@
     </ion-grid>
   </div>
 
-  <ion-footer collapse="fade" style="margin-top: 62px;">
+  <editUserModal 
+    :is_open="isPopooverOpen" 
+    :user_id="user_id" 
+    @close-popoover="modalClosed"
+    @save="modalClosed" 
+  />
+
+  <ion-footer collapse="fade">
     <ion-row>
       <ion-col style="flex: none; max-width: 100%">
         <bottomNavBar
@@ -83,13 +90,6 @@
       </ion-col>
     </ion-row>
   </ion-footer>
-
-  <editUserModal 
-    :is_open="isPopooverOpen" 
-    :user_id="user_id" 
-    @close-popoover="modalClosed"
-    @save="modalClosed" 
-  />
 </template>
 
 <script lang="ts">
