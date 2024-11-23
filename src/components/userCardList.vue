@@ -248,13 +248,13 @@ export default defineComponent({
 
 <style scoped>
 .container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
 }
 
 .dynamic-grid {
+  flex: 1;
   max-height: calc(69.8vh - 1px);
   overflow: auto;
 }
@@ -348,13 +348,13 @@ ion-list {
 }
 
 .sticky-footer {
-  position: sticky;
-  bottom: 0;
-  z-index: 1000;
+  margin-top: auto;
+  position: relative;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
 ion-footer {
   width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 </style>
