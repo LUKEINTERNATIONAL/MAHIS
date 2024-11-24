@@ -11,7 +11,7 @@
         <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
-                    <div class="text-2xl font-bold">{{ todayMetrics.defaulters }}</div>
+                    <div class="text-2xl font-bold">{{ 0 }}</div>
                     <h3 class="text-sm font-medium">Defaulters</h3>
                 </div>
             </ion-card-content>
@@ -19,7 +19,7 @@
         <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
-                    <div class="text-2xl font-bold">{{ todayMetrics.complications }}</div>
+                    <div class="text-2xl font-bold">{{ dashboardData?.total_complications }}</div>
                     <h3 class="text-sm font-medium">Complications</h3>
                 </div>
             </ion-card-content>
@@ -27,7 +27,7 @@
         <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
-                    <div class="text-2xl font-bold">{{ todayMetrics.totalActive }}</div>
+                    <div class="text-2xl font-bold">{{ dashboardData?.total_client_registered }}</div>
                     <h3 class="text-sm font-medium">Total active patients</h3>
                 </div>
             </ion-card-content>
@@ -71,6 +71,7 @@ import { nextTick } from "vue";
 import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
 import { defineComponent } from "vue";
 import { Service } from "@/services/service";
+import HisDate from "@/utils/Date";
 export default defineComponent({
     name: "NCDDashboard",
     mixins: [DashboardMixin],
@@ -79,6 +80,7 @@ export default defineComponent({
     },
     data() {
         return {
+            dashboardData: "",
             isChartReady: false,
             todayMetrics: {
                 bookedPatients: 42,
@@ -189,8 +191,8 @@ export default defineComponent({
         };
     },
     async mounted() {
-        // const res = await this.getMalariaReport();
-        // console.log("🚀 ~ mounted ~ res:", res);
+        this.dashboardData = await this.getDashboardData();
+        console.log("🚀 ~ mounted ~ res:", this.dashboardData);
         this.initializeChartData();
         await nextTick();
         setTimeout(() => {
@@ -199,23 +201,22 @@ export default defineComponent({
     },
     methods: {
         initializeChartData() {
-            this.lineChartOptions.xaxis.categories = this.quarterlyData.map((item) => item.quarter);
-            this.lineChartSeries[0].data = this.quarterlyData.map((item) => item.male);
-            this.lineChartSeries[1].data = this.quarterlyData.map((item) => item.female);
+            this.lineChartOptions.xaxis.categories = this.dashboardData.gender_data.categories;
+            this.lineChartSeries[0].data = this.dashboardData.gender_data.femaleSeries;
+            this.lineChartSeries[1].data = this.dashboardData.gender_data.maleSeries;
 
-            this.barChartOptions.xaxis.categories = this.quarterlyData.map((item) => item.quarter);
-            this.barChartSeries[0].data = this.quarterlyDiagnosisData.map((item) => item.diabetesType1);
-            this.barChartSeries[1].data = this.quarterlyDiagnosisData.map((item) => item.diabetesType2);
-            this.barChartSeries[2].data = this.quarterlyDiagnosisData.map((item) => item.hypertention);
+            this.barChartOptions.xaxis.categories = this.dashboardData.diagnosis_data.categories;
+            this.barChartSeries[0].data = this.dashboardData.diagnosis_data.typeOneSeries;
+            this.barChartSeries[1].data = this.dashboardData.diagnosis_data.typeTwoSeries;
+            this.barChartSeries[2].data = this.dashboardData.diagnosis_data.hypertentionSeries;
         },
-        // getMalariaReport() {
-        //     const url = `programs/${32}/reports/malaria_report`;
-        //     return Service.getJson(url, {
-        //         start_date: "2023-01-01",
-        //         end_date: "2024-10-31",
-        //         date: "2024-10-31",
-        //     });
-        // },
+        getDashboardData() {
+            const url = `programs/${32}/reports/ncd_dashboard`;
+            return Service.getJson(url, {
+                start_date: HisDate.currentDate(),
+                end_date: HisDate.currentDate(),
+            });
+        },
     },
 });
 </script>
