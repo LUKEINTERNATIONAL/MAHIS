@@ -37,7 +37,7 @@ export default defineComponent({
   },
   data() {
       return {
-          backwardsPath: '',
+          backwardsPath: this.backHref,
           comp_title: '',
           can_GoBack: true,
           can_GoForward: false,
@@ -60,12 +60,11 @@ export default defineComponent({
     },
     backHref: {
       type: String,
-      default: '/'
+      default: ''
     }
   },
   computed: {
     ...mapState(EIRreportsStore, ["navigationPayload"]),
-      
   },
   async mounted() {
     this.initNavData()
@@ -93,6 +92,7 @@ export default defineComponent({
   },
   methods: {
     goto(url: string) {
+      console.log("Go forward> ", url)
       this.$router.push(url)
     },
     initNavData() {

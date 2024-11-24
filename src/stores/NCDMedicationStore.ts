@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { DrugService } from "@/services/drug_service";
 
-
 const other = [
     'Aspirin',
     'Statin',

@@ -473,7 +473,11 @@ export default defineComponent({
             if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
-                this.$router.push("dispensation");
+                if (this.programID() == 32) {
+                    this.$router.push('NCDDispensations');
+                } else {
+                     this.$router.push("dispensation");
+                }
             } else if (roles.some((role: any) => role.role === "Lab")) {
                 this.$router.push("OPDConsultationPlan");
             } else if (userPrograms?.length == 1) {
