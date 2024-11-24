@@ -271,7 +271,8 @@ export default defineComponent({
 
         async saveNcdNumber() {
             const NCDNumber = getFieldValue(this.NCDNumber, "NCDNumber", "value");
-            const sitePrefix = await GlobalPropertyService.get("site_prefix");
+            const location_id = localStorage.getItem("locationID");
+            const sitePrefix = await GlobalPropertyService.get(`site_prefix_${location_id}`);
             const formattedNCDNumber = sitePrefix + "-NCD-" + NCDNumber;
             const exists = await IdentifierService.ncdNumberExists(formattedNCDNumber);
             if (exists) toastWarning("NCD number already exists", 5000);
@@ -321,12 +322,28 @@ export default defineComponent({
             await this.savePatientRegistration();
         },
         async savePatientHistory() {
-            const data: any = [
-                ...(await formatRadioButtonData(this.patientHistoryHIV)),
-                ...(await formatCheckBoxData(this.patientHistory)),
-                ...(await formatCheckBoxData(this.familyHistory)),
-            ];
-            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.FAMILY_MEDICAL_HISTORY, "" as any, data);
+            await saveEncounterData(
+                this.demographics.patient_id,
+                EncounterTypeId.FAMILY_MEDICAL_HISTORY,
+                "" as any,
+                await formatCheckBoxData(this.familyHistory)
+            );
+        },
+        async savePatientComplications() {
+            await saveEncounterData(
+                this.demographics.patient_id,
+                EncounterTypeId.COMPLICATIONS,
+                "" as any,
+                await formatCheckBoxData(this.patientHistory)
+            );
+        },
+        async savePatientHIVStatus() {
+            await saveEncounterData(
+                this.demographics.patient_id,
+                EncounterTypeId.HIV_STATUS_AT_ENROLLMENT,
+                "" as any,
+                await formatRadioButtonData(this.patientHistoryHIV)
+            );
         },
 
         async savePatientRegistration() {
