@@ -143,7 +143,7 @@
                 >
                 <VueMultiselect
                     v-model="selected_Districts"
-                    @update:model-value="selectedDistrict($event)"
+                    @update:model-value="selectedDistrictF($event)"
                     :multiple="true"
                     :taggable="false"
                     :hide-selected="true"
@@ -467,6 +467,14 @@ watch(
 
 function selectedLocation(data: any) {
     selected_location.value = data
+
+    const selectedLocation = locationData.value.find((location: any) => location.location_id === data.location_id);
+    const filteredDistricts = selectedLocation
+        ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
+        : [];
+
+    selected_Districts.value = filteredDistricts
+    selectedDistrictF(filteredDistricts);
 }
 
 async function FindLocation(text: any) {
@@ -1113,7 +1121,7 @@ function saveEvent(boolean_value: any) {
     emit("save", boolean_value)
 }
 
-function selectedDistrict(selectedDistrict: any) {
+function selectedDistrictF(selectedDistrict: any) {
     selectedDistrictIds.length = 0
     selectedDistrict.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id)

@@ -125,7 +125,7 @@
             >
             <VueMultiselect
                 v-model="selected_Districts"
-                @update:model-value="selectedDistrict($event)"
+                @update:model-value="selectedDistrictF($event)"
                 :multiple="true"
                 :taggable="false"
                 :hide-selected="true"
@@ -387,8 +387,10 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
-    await getFacilityForCurrentuser()
     districtList.value = await getdistrictList()
+    if (districtList.value.length > 0) {
+        await getFacilityForCurrentuser()
+    }
 })
 
 watch(
@@ -419,7 +421,14 @@ async function updateuserPersoninf(personId: number) {
 }
 
 function selectedLocation(data: any) {
-    locationId.value = data.location_id
+    locationId.value = data.location_id;
+    const selectedLocation = locationData.value.find((location: any) => location.location_id === data.location_id);
+    const filteredDistricts = selectedLocation
+        ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
+        : [];
+
+    selected_Districts.value = filteredDistricts
+    selectedDistrictF(filteredDistricts);
 }
 
 function selectedVillage(VillagesList: any) {
@@ -442,7 +451,7 @@ function selectedTA(selectedTAList: any) {
     
 }
 
-function selectedDistrict(selectedDistrict: any) {
+function selectedDistrictF(selectedDistrict: any) {
     selectedDistrictIds.length = 0
     selectedDistrict.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id)
@@ -458,6 +467,8 @@ async function getFacilityForCurrentuser() {
         const response = await LocationService.getLocation(facilityLocation.value.location_id)
         if (isEmpty(response) == false) {
             selected_location.value = response
+            locationData.value.push(selected_location.value)
+            selectedLocation(selected_location.value)
         }
     } catch (error) {
         console.error(error)
