@@ -23,6 +23,7 @@ export const useComplicationsStore = defineStore("complicationsStore", {
                                     eventType: "input",
                                     alertsErrorMassage: "",
                                     disabled: false,
+                                    valueType: "text",
                                 },
                             ],
                         },
@@ -77,7 +78,7 @@ export const useComplicationsStore = defineStore("complicationsStore", {
                         {
                             header: {
                                 selectedValue: "",
-                                name: "Peripheral neuropathy    ",
+                                name: "Peripheral neuropathy ",
                             },
                             data: [
                                 {
@@ -115,7 +116,7 @@ export const useComplicationsStore = defineStore("complicationsStore", {
                         {
                             header: {
                                 selectedValue: "",
-                                name: "Abnormality for extremities",
+                                name: "Deformity",
                             },
                             data: [
                                 {
