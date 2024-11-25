@@ -82,24 +82,6 @@ export default defineComponent({
         return {
             dashboardData: "",
             isChartReady: false,
-            todayMetrics: {
-                bookedPatients: 42,
-                defaulters: 8,
-                complications: 3,
-                totalActive: 156,
-            },
-            quarterlyData: [
-                { quarter: "Q1 2024", male: 245, female: 120 },
-                { quarter: "Q2 2024", male: 312, female: 165 },
-                { quarter: "Q3 2024", male: 278, female: 138 },
-                { quarter: "Q4 2024", male: 334, female: 187 },
-            ],
-            quarterlyDiagnosisData: [
-                { quarter: "Q1 2024", diabetesType1: 245, diabetesType2: 120, hypertention: 32 },
-                { quarter: "Q2 2024", diabetesType1: 312, diabetesType2: 165, hypertention: 45 },
-                { quarter: "Q3 2024", diabetesType1: 278, diabetesType2: 138, hypertention: 25 },
-                { quarter: "Q4 2024", diabetesType1: 334, diabetesType2: 187, hypertention: 78 },
-            ],
             lineChartOptions: {
                 chart: {
                     height: 350,
@@ -190,17 +172,20 @@ export default defineComponent({
             ],
         };
     },
+    watch: {
+        $route: {
+            async handler() {
+                await this.initializeChartData();
+            },
+            deep: true,
+        },
+    },
     async mounted() {
-        this.dashboardData = await this.getDashboardData();
-        console.log("🚀 ~ mounted ~ res:", this.dashboardData);
-        this.initializeChartData();
-        await nextTick();
-        setTimeout(() => {
-            this.isChartReady = true;
-        }, 100);
+        await this.initializeChartData();
     },
     methods: {
-        initializeChartData() {
+        async initializeChartData() {
+            this.dashboardData = await this.getDashboardData();
             this.lineChartOptions.xaxis.categories = this.dashboardData.gender_data.categories;
             this.lineChartSeries[0].data = this.dashboardData.gender_data.femaleSeries;
             this.lineChartSeries[1].data = this.dashboardData.gender_data.maleSeries;
@@ -209,6 +194,11 @@ export default defineComponent({
             this.barChartSeries[0].data = this.dashboardData.diagnosis_data.typeOneSeries;
             this.barChartSeries[1].data = this.dashboardData.diagnosis_data.typeTwoSeries;
             this.barChartSeries[2].data = this.dashboardData.diagnosis_data.hypertentionSeries;
+
+            await nextTick();
+            setTimeout(() => {
+                this.isChartReady = true;
+            }, 100);
         },
         getDashboardData() {
             const url = `programs/${32}/reports/ncd_dashboard`;
