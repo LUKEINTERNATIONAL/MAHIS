@@ -78,7 +78,7 @@ export const useComplicationsStore = defineStore("complicationsStore", {
                         {
                             header: {
                                 selectedValue: "",
-                                name: "Peripheral neuropathy ",
+                                name: "Peripheral neuropathy",
                             },
                             data: [
                                 {
