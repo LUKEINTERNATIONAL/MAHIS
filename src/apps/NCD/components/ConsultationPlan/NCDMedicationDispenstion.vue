@@ -1,8 +1,100 @@
 <template>
     <ion-page>
         <NavigationMenu />
+        <ViewToggleComponent @view-changed="handleViewChange"/>
         <ion-content>
-            <div class="p-4">
+            <div class="p-4" v-if="currentView === 'list'">
+                <ion-card>
+                    <ion-card-content>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="p-3 text-left">Date</th>
+                                        <th class="p-3 text-left">Medication</th>
+                                        <th class="p-3 text-left">Dose</th>
+                                        <th class="p-3 text-left">Frequency</th>
+                                        <th class="p-3 text-left">Amount to Dispense</th>
+                                        <th class="p-3 text-left">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="medication in medications" 
+                                        :key="medication.order_id"
+                                        class="border-b hover:bg-gray-50">
+                                        <td class="p-3">
+                                            {{ formatHeaderDate(medication.order.date_created.split('T')[0]) }}
+                                        </td>
+                                        <td class="p-3">
+                                            <div class="flex items-center">
+                                                <ion-icon :icon="medkit" class="mr-2"></ion-icon>
+                                                {{ medication.drug.name }}
+                                            </div>
+                                        </td>
+                                        <td class="p-3">
+                                            {{ medication.dose }} {{ medication.units }}
+                                        </td>
+                                        <td class="p-3">
+                                            {{ getFrequencyLabel(medication.frequency) }}
+                                        </td>
+                                        <td class="p-3">
+                                            <div class="flex items-center space-x-2">
+                                                <ion-input
+                                                    type="text"
+                                                    placeholder="Amount"
+                                                    v-model="medication.amountToDispense"
+                                                    @input="validateAmount(medication)"
+                                                    :class="['w-24 dose-input bordered-input', medication.error ? 'input-error' : '']"
+                                                ></ion-input>
+                                                <ion-button
+                                                    size="small"
+                                                    color="light"
+                                                    @click="setAmountAsPrescribed(medication)"
+                                                    style="margin-top: 10px;"
+                                                >
+                                                    <ion-icon :icon="clipboardOutline" size="small" class="mr-1"></ion-icon>
+                                                    <span class="text-green-700">As Prescribed</span>
+                                                </ion-button>
+                                            </div>
+                                            <div v-if="medication.error" class="error-text text-sm">
+                                                {{ medication.error }}
+                                            </div>
+                                        </td>
+                                        <td class="p-3">
+                                            <div class="flex space-x-2">
+                                                <ion-button 
+                                                    color="primary" 
+                                                    size="small"
+                                                    @click="dispenseMedication(medication)"
+                                                    :disabled="!medication.amountToDispense || medication.dispensed"
+                                                >
+                                                    <ion-icon :icon="checkmarkDoneCircleOutline" class="mr-1" style="margin-right: 5px;"></ion-icon>
+                                                    {{ medication.dispensed ? 'Dispensed' : 'Dispense' }}
+                                                </ion-button>
+                                                <ion-button 
+                                                    color="secondary"
+                                                    size="small"
+                                                    @click="viewDetails(medication)"
+                                                    style="margin-left: 10px;"
+                                                >
+                                                    <ion-icon :icon="eye" class="mr-1" style="margin-right: 5px;"></ion-icon>
+                                                    Details
+                                                </ion-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div v-if="medications.length === 0" class="text-center py-8">
+                                <ion-icon :icon="alertCircleOutline" size="large" class="mb-2"></ion-icon>
+                                <p>No medications prescribed</p>
+                            </div>
+                        </div>
+                    </ion-card-content>
+                </ion-card>
+            </div>
+
+            <div class="p-4" v-else>
                 <template v-for="(medicationGroup, date) in groupedMedications" :key="date">
                     <h2 class="text-lg font-bold mb-2">{{ formatHeaderDate(date) }}</h2>
                     <ion-row>
@@ -77,7 +169,7 @@
                                                 @click="viewDetails(medication)"
                                             >
                                                 <ion-icon :icon="eye" class="mr-2" style="margin-right: 5px;"></ion-icon>
-                                                 View Details
+                                                 Details
                                             </ion-button>
                                         </div>
                                     </div>
@@ -119,6 +211,7 @@ import { defineComponent } from "vue";
 import { mapState } from "pinia";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import NavigationMenu from '@/apps/Immunization/components/Reports/NavigationMenu.vue';
+import ViewToggleComponent from '@/apps/NCD/components/ViewToggleComponent.vue'
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { DrugOrderService } from "@/services/drug_order_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
@@ -148,11 +241,12 @@ export default defineComponent({
         MedicationDetailsModal,
         IonRow,
         IonCol,
-        IonIcon
+        IonIcon,
+        ViewToggleComponent,
     },
     data() {
         return {
-            medications: [],
+            medications: [] as any,
             selectedMedication: null as any,
             medkit,
             repeat,
@@ -161,6 +255,7 @@ export default defineComponent({
             checkmarkDoneCircleOutline,
             clipboardOutline,
             timeOutline,
+            currentView: 'list',
         };
     },
     computed: {
@@ -241,6 +336,9 @@ export default defineComponent({
                 day: 'numeric' 
             });
         },
+        handleViewChange(view: string) {
+            this.currentView = view;
+        },
     },
     watch: {
         demographics: {
@@ -253,7 +351,7 @@ export default defineComponent({
     }
 });
 </script>
-<style>
+<style scoped>
     .dose-input {
         --padding-start: 8px;
         --padding-end: 8px;
@@ -281,5 +379,40 @@ export default defineComponent({
         color: red;
         font-size: 0.875rem;
         margin-top: 4px;
+    }
+
+    .dose-input {
+        --padding-start: 8px;
+        --padding-end: 8px;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        padding: 4px;
+    }
+
+    .input-error {
+        border-color: red;
+    }
+
+    .error-text {
+        color: red;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        font-weight: 600;
+        text-align: left;
+    }
+
+    td, th {
+        padding: 12px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    tr:hover {
+        background-color: #f8fafc;
     }
 </style>

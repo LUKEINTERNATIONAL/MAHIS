@@ -3,8 +3,14 @@
         <div class="left_col">
             <nav class="nav-menu">
                 <ul>
-                    <li v-for="item in menuItems" :key="item.id" :class="{ active: activeItem === item.id }" @click="setActiveItem(item.id)">
-                        {{ item.label }}
+                    <li 
+                        v-for="item in menuItems" 
+                        :key="item.id" 
+                        :class="{ active: activeItem === item.id }" 
+                        @click="setActiveItem(item.id)"
+                    >
+                        <ion-icon :icon="item.icon" size="large" class="menu-icon"></ion-icon>
+                        <span>{{ item.label }}</span>
                     </li>
                 </ul>
             </nav>
@@ -13,16 +19,16 @@
             <div>
                 <Referral v-if="activeItem === 'referrals'" />
                 <Dashboard v-if="activeItem === 'dashboard'" />
+                <NCDAppointments v-if="activeItem === 'appointments'" />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonCheckbox } from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonIcon, modalController, IonCheckbox } from "@ionic/vue";
 import { defineComponent } from "vue";
-import { icons } from "@/utils/svg";
-
+import { gridOutline, peopleOutline, calendarOutline } from 'ionicons/icons';
 import DispositionModal from "@/components/ProfileModal/OutcomeModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
@@ -31,10 +37,13 @@ import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
 import Referral from "@/apps/NCD/components/Dashboard/Referrals.vue";
 import Dashboard from "@/apps/NCD/components/Dashboard/Dashboard.vue";
+import NCDAppointments from "@/apps/NCD/components/NCDAppointments.vue";
 import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+
 interface MenuItem {
     id: string;
     label: string;
+    icon: string;
 }
 
 export default defineComponent({
@@ -48,17 +57,31 @@ export default defineComponent({
         IonTitle,
         IonToolbar,
         IonCheckbox,
+        IonIcon,
         BasicForm,
         BasicCard,
         Referral,
         Dashboard,
+        NCDAppointments,
     },
     data() {
         return {
             menuItems: [
-                { id: "dashboard", label: "Dashboard" },
-                { id: "referrals", label: "Referrals" },
-                { id: "appointments", label: "Appointments" },
+                { 
+                    id: "dashboard", 
+                    label: "Dashboard",
+                    icon: gridOutline
+                },
+                { 
+                    id: "referrals", 
+                    label: "Referrals",
+                    icon: peopleOutline
+                },
+                { 
+                    id: "appointments", 
+                    label: "Appointments",
+                    icon: calendarOutline
+                },
             ] as MenuItem[],
             activeItem: "dashboard" as string,
         };
@@ -74,7 +97,7 @@ export default defineComponent({
             deep: true,
         },
     },
-
+    
     mounted() {},
     methods: {
         setActiveItem(id: string): void {
@@ -92,6 +115,7 @@ export default defineComponent({
     padding-top: 1rem;
     width: 15%;
 }
+
 .right_col {
     height: 100vh;
     padding-top: 1rem;
@@ -113,6 +137,9 @@ export default defineComponent({
     padding: 10px 20px;
     cursor: pointer;
     transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .nav-menu li.active {
@@ -127,5 +154,10 @@ export default defineComponent({
 
 .nav-menu li:hover:not(.active) {
     background-color: #f4f4f4;
+}
+
+.menu-icon {
+    font-size: 1.2rem;
+    min-width: 24px;
 }
 </style>

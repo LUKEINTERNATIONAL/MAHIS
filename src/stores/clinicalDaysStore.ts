@@ -316,5 +316,8 @@ export function setValueProps() {
         storeClinicalDaysStore.setAreFridaysDisabled(weekDaysPropertiesObj.weekDays.areFridaysDisabled);
         storeClinicalDaysStore.setAreSaturdaysDisabled(weekDaysPropertiesObj.weekDays.areSaturdaysDisabled);
         storeClinicalDaysStore.setAreSundaysDisabled(weekDaysPropertiesObj.weekDays.areSundaysDisabled);
-    } catch (error) {}
+        return true;
+    } catch (error) {
+        return false;
+    }
 }
