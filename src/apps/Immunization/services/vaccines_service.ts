@@ -12,6 +12,8 @@ import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { useUserStore } from "@/stores/userStore";
 import platform, { FileExportType } from "@/composables/usePlatform";
 import { exportMobile } from "@/utils/Export";
+import db from "@/db";
+import workerData from "@/activate_worker";
 
 export async function getVaccinesSchedule(patientID = null) {
     const patient = new PatientService();
@@ -50,6 +52,33 @@ export async function saveVaccineAdministeredDrugs() {
         }
     }
 }
+
+async function getGenericVaccineSchedule() {
+    try {
+        const querySnapshot = await db.collection("genericVaccineSchedule").get();
+
+        if (!querySnapshot.empty) {
+            const documents: any = []; // Initialize an array to hold document data
+
+            querySnapshot.forEach((doc: any) => {
+                documents.push({
+                    id: doc.id,     // Include document ID
+                    data: doc.data() // Include document data
+                });
+            });
+
+            await workerData.terminate();
+            return documents; // Return all fetched documents
+        } else {
+            console.warn("No documents found in the genericVaccineSchedule collection.");
+            return []; // Return an empty array if no documents exist
+        }
+    } catch (error) {
+        console.error("Error fetching documents or terminating worker:", error);
+        return []; // Return an empty array on error
+    }
+}
+
 
 function mapToOrders(): any[] {
     const store = useAdministerVaccineStore();
