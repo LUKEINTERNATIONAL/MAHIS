@@ -19,6 +19,7 @@
             <div>
                 <Referral v-if="activeItem === 'referrals'" />
                 <Dashboard v-if="activeItem === 'dashboard'" />
+                <NCDAppointments v-if="activeItem === 'appointments'" />
             </div>
         </div>
     </div>
@@ -36,6 +37,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
 import Referral from "@/apps/NCD/components/Dashboard/Referrals.vue";
 import Dashboard from "@/apps/NCD/components/Dashboard/Dashboard.vue";
+import NCDAppointments from "@/apps/NCD/components/NCDAppointments.vue";
 import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 
 interface MenuItem {
@@ -60,6 +62,7 @@ export default defineComponent({
         BasicCard,
         Referral,
         Dashboard,
+        NCDAppointments,
     },
     data() {
         return {
