@@ -52,7 +52,7 @@
                                                     @click="setAmountAsPrescribed(medication)"
                                                     style="margin-top: 10px;"
                                                 >
-                                                    <ion-icon :icon="clipboardOutline" class="mr-1"></ion-icon>
+                                                    <ion-icon :icon="clipboardOutline" size="small" class="mr-1"></ion-icon>
                                                     <span class="text-green-700">As Prescribed</span>
                                                 </ion-button>
                                             </div>
