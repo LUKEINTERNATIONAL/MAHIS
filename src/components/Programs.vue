@@ -124,7 +124,7 @@ ion-fab-button[data-desc]::after {
 .btn {
     min-width: unset;
     min-height: unset;
-    top: 5px;
+    top: 20px;
 }
 
 ion-fab-button[data-desc]:hover::after {
