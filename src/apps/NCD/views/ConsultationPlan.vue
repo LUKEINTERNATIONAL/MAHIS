@@ -127,6 +127,7 @@ import {
     modifyWizardData,
     modifyFieldValue,
     modifyCheckboxValue,
+    modifyGroupedRadioValue,
 } from "@/services/data_helpers";
 import { useComplicationsStore } from "@/stores/ComplicationsStore";
 export default defineComponent({
@@ -225,7 +226,7 @@ export default defineComponent({
         if (this.NCDActivities.length == 0) {
             this.$router.push("patientProfile");
         }
-        await this.setRiskAssessment();
+        await this.setData();
         await this.markWizard();
     },
     watch: {
@@ -278,6 +279,10 @@ export default defineComponent({
     },
 
     methods: {
+        async setData() {
+            await this.setRiskAssessment();
+            await this.setComplications();
+        },
         refreshWizard(): void {
             this.showWizard = false;
             this.currentTabIndex = 0;
@@ -339,6 +344,12 @@ export default defineComponent({
                 this.tabs[3].icon = "";
             }
 
+            if (await this.setComplications()) {
+                this.tabs[4].icon = "check";
+            } else {
+                this.tabs[4].icon = "";
+            }
+
             if (this.selectedNCDMedicationList.length > 0) {
                 console.log(MedicationSelectionHasValues());
                 if (MedicationSelectionHasValues() == true) {
@@ -374,6 +385,27 @@ export default defineComponent({
             if (smoke == "patient smokes") smoke = "Smoking";
             if (smoke) modifyRadioValue(this.substance, "Smoking history", "selectedValue", smoke);
             if (drink) modifyRadioValue(this.substance, "Does the patient drink alcohol?", "selectedValue", drink);
+        },
+        async setComplications() {
+            const neuropathy = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Peripheral neuropathy");
+            const deformity = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Deformity");
+            const ulcers = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Ulcers");
+            const leftEye = await ObservationService.getFirstValueText(this.demographics.patient_id, "Left eye visual acuity");
+            const rightEye = await ObservationService.getFirstValueText(this.demographics.patient_id, "Right eye visual acuity");
+            const cv = await ObservationService.getFirstValueText(this.demographics.patient_id, "CVD");
+
+            if (leftEye) modifyFieldValue(this.visualScreening, "Left eye visual acuity", "value", leftEye);
+            if (rightEye) modifyFieldValue(this.visualScreening, "Right eye visual acuity", "value", rightEye);
+            if (cv) modifyFieldValue(this.cvScreening, "CVD", "value", cv);
+            if (neuropathy) modifyGroupedRadioValue(this.FootScreening, "Peripheral neuropathy", "selectedValue", neuropathy);
+            if (deformity) modifyGroupedRadioValue(this.FootScreening, "Deformity", "selectedValue", deformity);
+            if (ulcers) modifyGroupedRadioValue(this.FootScreening, "Ulcers", "selectedValue", ulcers);
+
+            if (neuropathy || deformity || ulcers || leftEye || rightEye || cv) {
+                return true;
+            } else {
+                return false;
+            }
         },
         async saveComplications() {
             const data = [];
