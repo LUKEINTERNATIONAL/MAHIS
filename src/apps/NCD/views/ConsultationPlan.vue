@@ -225,6 +225,7 @@ export default defineComponent({
         if (this.NCDActivities.length == 0) {
             this.$router.push("patientProfile");
         }
+        await this.setRiskAssessment();
         await this.markWizard();
     },
     watch: {
@@ -255,6 +256,7 @@ export default defineComponent({
         },
         substance: {
             async handler() {
+                await this.setRiskAssessment();
                 await this.markWizard();
             },
             deep: true,
@@ -365,6 +367,13 @@ export default defineComponent({
                 await UserService.setProgramUserActions();
                 this.$router.push("patientProfile");
             }
+        },
+        async setRiskAssessment() {
+            let smoke = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Smoking history");
+            const drink = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Does the patient drink alcohol?");
+            if (smoke == "patient smokes") smoke = "Smoking";
+            if (smoke) modifyRadioValue(this.substance, "Smoking history", "selectedValue", smoke);
+            if (drink) modifyRadioValue(this.substance, "Does the patient drink alcohol?", "selectedValue", drink);
         },
         async saveComplications() {
             const data = [];
