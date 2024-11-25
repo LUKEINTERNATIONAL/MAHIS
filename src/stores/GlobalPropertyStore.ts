@@ -14,13 +14,15 @@ export const useGlobalPropertyStore = defineStore("globalPropertyStore", {
     }),
     actions: {
         async loadSitePrefix() {
-            const req = await Service.getJson("global_properties", { property: "site_prefix" });
-            this.globalPropertyStore.sitePrefix = req["site_prefix"];
+            const location_id = localStorage.getItem("locationID");
+            const req = await Service.getJson("global_properties", { property: `site_prefix_${location_id}` });
+            this.globalPropertyStore.sitePrefix = req[`site_prefix_${location_id}`];
         },
         async loadDDEStatus() {
             const req = await Service.getJson("global_properties", { property: "dde_enabled" });
             this.globalPropertyStore.dde_enabled = req["dde_enabled"];
         },
+
         async loadHolidayDateProperty() {
             const user_store = useUserStore();
             const facility_id = user_store.getfacilityLocation().location_id;
