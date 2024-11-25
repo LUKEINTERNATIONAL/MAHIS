@@ -4,20 +4,38 @@
         <div class="date-filter">
           <ion-row>
             <ion-col>
-              <label>Start Date:</label>
-              <input 
-                type="date" 
-                v-model="startDate" 
-                @change="getAppointments"
-              />
+                <DateInputField
+                    :inputHeader="'Start Date'"
+                    :sectionHeaderFontWeight="20"
+                    :unit="''"
+                    :icon="calendarOutline"
+                    :placeholder="'press to select date'"
+                    :iconRight="''"
+                    :inputWidth="'100%'"
+                    :inputValue="startDate"
+                    :eventType="''"
+                    :minDate="minDate"
+                    :maxDate="''"
+                    :disabled="false"
+                    @update:rawDateValue="getAppointmentsD1"
+                />
             </ion-col>
             <ion-col>
-              <label>End Date:</label>
-              <input 
-                type="date" 
-                v-model="endDate" 
-                @change="getAppointments"
-              />
+                <DateInputField
+                    :inputHeader="'End Date'"
+                    :sectionHeaderFontWeight="20"
+                    :unit="''"
+                    :icon="calendarOutline"
+                    :placeholder="'press to select date'"
+                    :iconRight="''"
+                    :inputWidth="'100%'"
+                    :inputValue="startDate"
+                    :eventType="''"
+                    :minDate="startDate"
+                    :maxDate="''"
+                    :disabled="false"
+                    @update:rawDateValue="getAppointmentsD2"
+                />
             </ion-col>
           </ion-row>
         </div>
@@ -63,6 +81,8 @@ import { defineComponent, ref } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import HisDate from "@/utils/Date";
 import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service";
+import DateInputField from "@/components/DateInputField.vue";
+import { calendarOutline, checkmark, pulseOutline } from "ionicons/icons";
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
@@ -75,15 +95,19 @@ export default defineComponent({
         IonToolbar,
         Toolbar,
         IonRow,
+        DateInputField,
     },
     data() {
         const startDate = ref(HisDate.currentDate());
         const endDate = ref(HisDate.currentDate());
+        const minDate = ref(HisDate.currentDate());
         const people = ref([]) as any;
         return {
+            minDate,
             startDate,
             endDate,
             people,
+            calendarOutline,
         };
     },
     computed: {
@@ -124,7 +148,14 @@ export default defineComponent({
                 };
                 this.people.push(apptOb);
             });
-
+        },
+        async getAppointmentsD1(date: any) {
+            this.startDate = HisDate.toStandardHisFormat(date);
+            await this.getAppointments()
+        },
+        async getAppointmentsD2(date: any) {
+            this.endDate = HisDate.toStandardHisFormat(date);
+            await this.getAppointments()
         }
     },
 });
