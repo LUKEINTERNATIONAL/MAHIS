@@ -167,7 +167,6 @@ export default defineComponent({
 
             try {
                     this.isModalOpening = true;
-                    console.log('Starting modal open process');
 
                     const store = useAdministerVaccineStore();
                     store.setCurrentSelectedDrug(data);
