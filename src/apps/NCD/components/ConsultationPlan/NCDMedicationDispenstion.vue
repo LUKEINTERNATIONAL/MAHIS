@@ -1,8 +1,14 @@
 <template>
     <ion-page>
         <NavigationMenu />
+        <ViewToggleComponent @view-changed="handleViewChange"/>
         <ion-content>
-            <div class="p-4">
+            
+            <div class="p-4" v-if="currentView === 'list'">
+                <!-- list view -->
+            </div>
+
+            <div class="p-4" v-else>
                 <template v-for="(medicationGroup, date) in groupedMedications" :key="date">
                     <h2 class="text-lg font-bold mb-2">{{ formatHeaderDate(date) }}</h2>
                     <ion-row>
@@ -119,6 +125,7 @@ import { defineComponent } from "vue";
 import { mapState } from "pinia";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import NavigationMenu from '@/apps/Immunization/components/Reports/NavigationMenu.vue';
+import ViewToggleComponent from '@/apps/NCD/components/ViewToggleComponent.vue'
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { DrugOrderService } from "@/services/drug_order_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
@@ -148,7 +155,8 @@ export default defineComponent({
         MedicationDetailsModal,
         IonRow,
         IonCol,
-        IonIcon
+        IonIcon,
+        ViewToggleComponent,
     },
     data() {
         return {
@@ -161,6 +169,7 @@ export default defineComponent({
             checkmarkDoneCircleOutline,
             clipboardOutline,
             timeOutline,
+            currentView: 'list',
         };
     },
     computed: {
@@ -240,6 +249,9 @@ export default defineComponent({
                 month: 'long', 
                 day: 'numeric' 
             });
+        },
+        handleViewChange(view: string) {
+            this.currentView = view;
         },
     },
     watch: {
