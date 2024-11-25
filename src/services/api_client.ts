@@ -107,12 +107,10 @@ const ApiClient = (() => {
             const response = await fetch(url, params);
             EventBus.emit(ApiBusEvents.AFTER_API_REQUEST, response);
             handleUnauthorized(response.statusText);
-            localStorage.setItem("appAvailabilityStatus", "online");
             return response;
         } catch (e) {
             if (`${e}`.match(/NetworkError|Failed to fetch/i)) {
-                localStorage.setItem("appAvailabilityStatus", "offline");
-                //EventBus.emit(ApiBusEvents.ON_API_CRASH, e);
+               EventBus.emit(ApiBusEvents.ON_API_CRASH, e);
             } else {
                 EventBus.emit(ApiBusEvents.AFTER_API_REQUEST, {});
             }
