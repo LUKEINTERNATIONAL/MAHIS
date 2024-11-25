@@ -110,7 +110,7 @@ import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigation
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
+import { formatRadioButtonData, formatCheckBoxData, formatGroupRadioButtonData, formatInputFiledData } from "@/services/formatServerData";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
 import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
@@ -367,31 +367,35 @@ export default defineComponent({
             }
         },
         async saveComplications() {
-            // await this.saveVisualScreening();
-            // await this.saveFootScreening();
-        },
-        async saveFootScreening() {
-            const childData = await formatRadioButtonData(this.visualScreening);
-            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
-                {
+            const data = [];
+            const childDataVisualScreening = await formatInputFiledData(this.visualScreening);
+            const childDataFootScreening = await formatGroupRadioButtonData(this.FootScreening);
+            const childDataCVRisk = await formatInputFiledData(this.cvScreening);
+            if (childDataVisualScreening.length > 0) {
+                data.push({
                     concept_id: await ConceptService.getConceptID("Visual acuity", true),
                     value_text: "visual acuity test",
                     obs_datetime: ConceptService.getSessionDate(),
-                    child: childData,
-                },
-            ]);
-        },
-        async saveVisualScreening() {
-            const childData = await formatInputFiledData(this.visualScreening);
-            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
-                {
-                    concept_id: await ConceptService.getConceptID("Visual acuity", true),
-                    value_text: "visual acuity test",
+                    child: childDataVisualScreening,
+                });
+            }
+            if (childDataFootScreening.length > 0) {
+                data.push({
+                    concept_id: await ConceptService.getConceptID("Foot check", true),
+                    value_text: "foot screening",
                     obs_datetime: ConceptService.getSessionDate(),
-                    child: childData,
-                },
-            ]);
+                    child: childDataFootScreening,
+                });
+            }
+            if (childDataCVRisk.length > 0) {
+                data.push(...childDataCVRisk);
+            }
+            if (data.length > 0) {
+                await saveEncounterData(this.demographics.patient_id, EncounterTypeId.SCREENING, "" as any, data);
+                toastSuccess("Complications saved successfully");
+            }
         },
+
         async saveVitals() {
             if (await validateInputFiledData(this.vitals)) {
                 const userID: any = Service.getUserID();
