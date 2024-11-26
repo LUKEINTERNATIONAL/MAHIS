@@ -130,6 +130,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            async handler() {
+                await this.buildTableData();
+            },
+            deep: true,
+        },
     },
     async mounted() {
         await this.buildTableData();
