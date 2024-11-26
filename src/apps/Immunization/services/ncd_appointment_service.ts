@@ -67,4 +67,5 @@ export class Appointment extends AppEncounterService {
         const programID = AppEncounterService.getProgramID();
         return AppEncounterService.getJson(`/programs/${programID}/booked_appointments`, { date, end_date, srch_text, paginate: false });
     }
+    
 }

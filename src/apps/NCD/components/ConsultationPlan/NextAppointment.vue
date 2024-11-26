@@ -110,7 +110,7 @@ export default defineComponent({
     const appointment_count = ref(0);
     const disabledDates = computed(() => clinicalDaysStore.getDisabledDates());
     const datesCounts = computed(() => clinicalDaysStore.getAssignedAppointments());
-      const inputPRDate = ref();
+    const inputPRDate = ref();
 
     return {
         disabledDates,
@@ -124,13 +124,14 @@ export default defineComponent({
     return {
       iconsContent: icons,
       calendarDate: "" as any,
-      date: new Date(),
+      date: new Date(Service.getSessionDate()),
       bookedPatient: 20,
       tomorrow: new Date().getDate() + 1,
       appointment: "" as any,
       drugRunoutDate: "" as any,
       nextAppointmentDate: "" as any,
-      minDate: new Date() as any,
+    minDate: new Date() as any,
+      appointmentCountsCache: {} as { [key: string]: number },
     };
   },
   computed: {
@@ -146,7 +147,8 @@ export default defineComponent({
       deep: true,
     },
   },
-  async mounted() {
+    async mounted() {
+    await this.preloadAppointmentCounts();
     setValueProps()
     const userID: any = Service.getUserID();
     const patient = new PatientService();
@@ -156,15 +158,16 @@ export default defineComponent({
   },
   methods: {
     updateNextAppointment() {
-      const nextAppointmentStore = useNextAppointmentStore();
-      nextAppointmentStore.setNextAppointment(this.calendarDate);
+        const nextAppointmentStore = useNextAppointmentStore();
+        nextAppointmentStore.setNextAppointment(this.calendarDate);
     },
     async handleDateUpdate(date: any) {
-      const storeClinicalDaysStore = useClinicalDaysStore();
-      storeClinicalDaysStore.setsssignedAppointmentsDates(date, true);
-      this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
-      await this.save();
-      await this.getAppointmentMents(date)
+        const storeClinicalDaysStore = useClinicalDaysStore();
+        storeClinicalDaysStore.setsssignedAppointmentsDates(date, true);
+        this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
+        await this.save();
+        await this.getAppointmentMents(date)
+        await this.updateAppointmentCache(date)
     },
     async  getAppointmentMents(date: any) {
         try {
@@ -174,19 +177,9 @@ export default defineComponent({
             
         }
     },
-    async getCounter(date: string | Date): Promise<string | number> {
-        const count = await this.getAppointmentsForDate(date);
-        return count === 0 ? '' : count;
-    },
-    async getAppointmentsForDate(date: any):Promise<number> {
-        try {
-            const appointment_service = new Appointment();
-            const appointments = await appointment_service.getDailiyAppointments(date)
-            return appointments.length;
-        } catch (error) {
-            console.error(error);
-            return 0;
-        }
+    getCounter(date: Date): number | string {
+      const dateKey = HisDate.toStandardHisFormat(date);
+      return this.appointmentCountsCache[dateKey] || '';
     },
     async save() {
         if (this.assignedAppointmentsDates.length >0) {
@@ -224,7 +217,52 @@ export default defineComponent({
     async supposedRunOutDate() {
         const lastMedication = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
         console.log(lastMedication)
-    }
+    },
+   async preloadAppointmentCounts() {
+      try {
+        const startDate = new Date(Service.getSessionDate());
+        startDate.setDate(1);
+        const endDate = new Date(Service.getSessionDate());
+        endDate.setMonth(endDate.getMonth() + 2);
+        endDate.setDate(0);
+        const dates = this.generateDateRange(startDate, endDate);
+        for (const date of dates) {
+          try {
+            const appointments = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
+            const dateKey = HisDate.toStandardHisFormat(date);
+            this.appointmentCountsCache[dateKey] = appointments.length;
+          } catch (error) {
+            console.error(`Error fetching appointments for ${date}:`, error);
+            
+            const dateKey = HisDate.toStandardHisFormat(date);
+            this.appointmentCountsCache[dateKey] = 0;
+          }
+        }
+      } catch (error) {
+        console.error('Error in preload process:', error);
+      }
+    },
+
+    generateDateRange(startDate: Date, endDate: Date): Date[] {
+      const dates: Date[] = [];
+      const currentDate = new Date(startDate);
+
+      while (currentDate <= endDate) {
+        dates.push(new Date(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      return dates;
+    },
+    async updateAppointmentCache(date: Date) {
+      try {
+        const dateKey = HisDate.toStandardHisFormat(date);
+        const appointments = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
+        this.appointmentCountsCache[dateKey] = appointments.length;
+      } catch (error) {
+        console.error('Error updating appointment cache:', error);
+      }
+    },
   },
 });
 </script>
