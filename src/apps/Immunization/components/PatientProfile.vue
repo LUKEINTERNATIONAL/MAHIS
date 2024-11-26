@@ -465,10 +465,22 @@ export default defineComponent({
         },
         async openFollowModal() {
             if (this.demographics?.patient_id) {
-                this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-                const dataToPass = { protectedStatus: this.protectedStatus };
-                if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
+                try {
+                    this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+
+                    // Ensure that lastVaccine is defined and is an array before accessing its length
+                    if (Array.isArray(this.lastVaccine) && this.lastVaccine.length > 0) {
+                    const dataToPass = { protectedStatus: this.protectedStatus };
+                    createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
+                    } else {
+                    // Handle case where lastVaccine is empty or undefined
+                    console.warn("No vaccines received or data is unavailable.");
+                    }
+                } catch (error) {
+                    console.error("Error fetching last drugs received:", error);
+                }
             }
+
         },
         openAdministerVaccineModal() {
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
