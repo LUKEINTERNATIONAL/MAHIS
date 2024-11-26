@@ -14,7 +14,7 @@
                     :inputWidth="'100%'"
                     :inputValue="startDate"
                     :eventType="''"
-                    :minDate="minDate"
+                    :minDate="''"
                     :maxDate="''"
                     :disabled="false"
                     @update:rawDateValue="getAppointmentsD1"
@@ -29,7 +29,7 @@
                     :placeholder="'press to select date'"
                     :iconRight="''"
                     :inputWidth="'100%'"
-                    :inputValue="startDate"
+                    :inputValue="endDate"
                     :eventType="''"
                     :minDate="startDate"
                     :maxDate="''"
@@ -124,39 +124,39 @@ export default defineComponent({
         this.getAppointments()
     },
     methods: {
-        formatBirthdate(birthdate: any) {
-            return HisDate.getBirthdateAge(birthdate);
-        },
-        async getAppointments() {
-            this.people = [];
-            const appointments = await Appointment.getDailiyAppointments(
-                this.startDate,
-                this.endDate,
-                ""
-            );
-            appointments.forEach((client: any) => {
-                const apptOb = {
-                    person_id: client.person_id,
-                    npid: client.npid,
-                    appointment_id: 103,
-                    encounter_id: client.encounter_id,
-                    name: client.given_name.concat(" ", client.family_name),
-                    gender: client.gender,
-                    ageDob: this.formatBirthdate(client.birthdate),
-                    village: client.city_village,
-                    appointmentDate: HisDate.toStandardHisDisplayFormat(client.appointment_date),
-                };
-                this.people.push(apptOb);
-            });
-        },
-        async getAppointmentsD1(date: any) {
-            this.startDate = HisDate.toStandardHisFormat(date);
-            await this.getAppointments()
-        },
-        async getAppointmentsD2(date: any) {
-            this.endDate = HisDate.toStandardHisFormat(date);
-            await this.getAppointments()
-        }
+      formatBirthdate(birthdate: any) {
+        return HisDate.getBirthdateAge(birthdate);
+      },
+      async getAppointments() {
+        this.people = [];
+        const appointments = await Appointment.getAppointments(
+          this.startDate,
+          this.endDate,
+          ""
+        );
+        appointments.forEach((client: any) => {
+          const apptOb = {
+            person_id: client.person_id,
+            npid: client.npid,
+            appointment_id: 103,
+            encounter_id: client.encounter_id,
+            name: client.given_name.concat(" ", client.family_name),
+            gender: client.gender,
+            ageDob: this.formatBirthdate(client.birthdate),
+            village: client.city_village,
+            appointmentDate: HisDate.toStandardHisDisplayFormat(client.appointment_date),
+          };
+          this.people.push(apptOb);
+        });
+      },
+      async getAppointmentsD1(date: any) {
+        this.startDate = HisDate.toStandardHisFormat(date);
+        await this.getAppointments()
+      },
+      async getAppointmentsD2(date: any) {
+        this.endDate = HisDate.toStandardHisFormat(date);
+        await this.getAppointments()
+      }
     },
 });
 </script>

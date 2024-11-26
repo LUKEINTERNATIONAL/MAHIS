@@ -63,7 +63,7 @@ export class Appointment extends AppEncounterService {
         return AppEncounterService.getJson(`/programs/${programID}/booked_appointments`, { date: date, paginate: false });
     }
 
-    static async getDailiyAppointments(date: any, end_date = "", srch_text = "") {
+    static async getAppointments(date: any, end_date = "", srch_text = "") {
         const programID = AppEncounterService.getProgramID();
         return AppEncounterService.getJson(`/programs/${programID}/booked_appointments`, { date, end_date, srch_text, paginate: false });
     }
