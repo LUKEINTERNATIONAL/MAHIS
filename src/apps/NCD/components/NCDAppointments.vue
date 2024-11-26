@@ -100,12 +100,15 @@ import HisDate from "@/utils/Date";
 import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service";
 import DateInputField from "@/components/DateInputField.vue";
 import { calendarOutline, checkmark, pulseOutline, eyeOutline } from "ionicons/icons";
+import { PatientService } from "@/services/patient_service";
+import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
+import { Service } from "@/services/service";
 
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser],
+    mixins: [SetUser, DashboardMixin],
     components: {
       IonContent,
       IonHeader,
@@ -180,10 +183,22 @@ export default defineComponent({
         await this.getAppointments()
       },
       async openClientProfile(patientID: any) {
-        // const patientData = await PatientService.findByNpid(patientID);
-        // this.setDemographics(patientData[0]);
-        // this.$router.push("patientProfile");
+        const patientData = await PatientService.findByNpid(patientID);
+        this.setDemographics(patientData[0]);
+        this.isPharmacist()
       },
+      isPharmacist() {
+        const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
+        const roles: any = roleData ? roleData : [];
+        if (roles.some((role: any) => roles.some((role: any) => role.role === "Pharmacist"))) {
+          this.$router.push("dispensation");
+          if (Service.getProgramID() == 32) {
+            this.$router.push('NCDDispensations');
+          } else {
+             this.$router.push("patientProfile");
+          }
+        }
+      }
     },
 });
 </script>
