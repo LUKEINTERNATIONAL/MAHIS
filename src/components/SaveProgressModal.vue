@@ -8,12 +8,12 @@
             <ion-icon style="font-size: 350px" :icon="iconsContent.triageWarning"></ion-icon>
         </div>
         <div class="center">
-            <h4><b>Save the progress</b></h4>
+            <h4><b>Save progress</b></h4>
         </div>
         <div class="center text_12">
             <p style="text-align: center">
                 Save the updates for the consultation. You’ll be able to complete <br />
-                it later. Click “Save” to save the progress.
+                it later. Click “Save” to save progress.
             </p>
         </div>
         <br />

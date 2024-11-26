@@ -167,8 +167,10 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { UserService } from "@/services/user_service";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { resetPatientData } from "@/services/reset_data";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 
 export default defineComponent({
+    mixins: [SetDemographics],
     name: "Home",
     components: {
         IonContent,
@@ -276,8 +278,7 @@ export default defineComponent({
             else {
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                const demographicsStore = useDemographicsStore();
-                demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
+                this.setDemographics(await PatientService.findByID(this.demographics.patient_id));
                 await this.saveEnrollment();
                 await resetNCDPatientData();
                 await UserService.setProgramUserActions();

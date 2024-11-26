@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="display: flex">
         <div class="left_col">
             <nav class="nav-menu">
                 <ul>
@@ -9,7 +9,12 @@
                 </ul>
             </nav>
         </div>
-        <div class="right_col"></div>
+        <div class="right_col">
+            <div>
+                <Referral v-if="activeItem === 'referrals'" />
+                <Dashboard v-if="activeItem === 'dashboard'" />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -24,6 +29,8 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
+import Referral from "@/apps/NCD/components/Dashboard/Referrals.vue";
+import Dashboard from "@/apps/NCD/components/Dashboard/Dashboard.vue";
 import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 interface MenuItem {
     id: string;
@@ -43,6 +50,8 @@ export default defineComponent({
         IonCheckbox,
         BasicForm,
         BasicCard,
+        Referral,
+        Dashboard,
     },
     data() {
         return {
@@ -81,7 +90,12 @@ export default defineComponent({
     height: 100vh;
     border-right: 1px solid #e0e0e0;
     padding-top: 1rem;
-    width: 16rem;
+    width: 15%;
+}
+.right_col {
+    height: 100vh;
+    padding-top: 1rem;
+    width: 85%;
 }
 
 .nav-menu {

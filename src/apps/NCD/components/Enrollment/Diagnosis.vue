@@ -86,15 +86,16 @@ export default defineComponent({
         async handleInputData(event: any) {
             const type2 = getCheckboxSelectedValue(this.enrollmentDiagnosis, "Type 2 DM");
             const type1 = getCheckboxSelectedValue(this.enrollmentDiagnosis, "Type 1 DM");
-            if (event?.col?.name != "Hypertension") {
+            // if (event?.col?.name != "Hypertension") {
+            //     modifyFieldValue(this.enrollmentDiagnosis, event?.col?.name + " date", "displayNone", false);
+            // }
+            if (type2 && type1) {
                 modifyFieldValue(this.enrollmentDiagnosis, "Type 1 DM date", "displayNone", true);
                 modifyFieldValue(this.enrollmentDiagnosis, "Type 2 DM date", "displayNone", true);
-                modifyFieldValue(this.enrollmentDiagnosis, event?.col?.name + " date", "displayNone", false);
-            }
-            if (type2 && type1) {
                 modifyCheckboxValue(this.enrollmentDiagnosis, "Type 2 DM", "checked", false);
                 modifyCheckboxValue(this.enrollmentDiagnosis, "Type 1 DM", "checked", false);
                 modifyCheckboxValue(this.enrollmentDiagnosis, event?.col?.name, "checked", true);
+                modifyFieldValue(this.enrollmentDiagnosis, event?.col?.name + " date", "displayNone", false);
                 this.buildCards();
             }
         },

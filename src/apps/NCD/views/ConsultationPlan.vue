@@ -265,6 +265,11 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            async handler() {
+                await this.markWizard();
+            },
+        },
     },
     setup() {
         return { chevronBackOutline, checkmark };

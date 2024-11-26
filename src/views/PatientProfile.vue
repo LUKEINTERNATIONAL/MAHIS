@@ -39,84 +39,73 @@
           :title="enrollModalTitle"
       />
 
-      <PatientProfile v-if="activeProgramID == 33" />
-      <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
-        <ion-row class="content_width">
-          <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
-            <ion-card style="margin-bottom: 20px; background-color: #fff">
-              <ion-card-content>
-                <div style="display: flex; justify-content: space-between">
-                  <DynamicButton
-                      name="Activate visit"
-                      v-if="!checkedIn && activeProgramID==14"
-                      @click="toggleCheckInModal()"
-                      fill="clear"
-                      iconSlot="start"
-                      :icon="closeCircleOutline"
-                  />
-                  <DynamicButton
-                      v-if="checkedIn && activeProgramID == 14"
-                      name="Deactivate visit"
-                      @click="toggleCheckOutModal()"
-                      fill="clear"
-                      iconSlot="start"
-                      :icon="closeCircleOutline"
-                      color="danger"
-                  />
-                  <div></div>
-                  <div class="name" style="color: var(--ion-color-primary); margin-top: 10px" @click="openPopover($event)">
-                    <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
-                  </div>
-                </div>
-                <div class="p_name_image">
-                  <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
-                    <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
-                  </div>
-                  <div style="width: 100%">
-                    <div class="p_name">{{ demographics?.name }}</div>
-                  </div>
-                </div>
-                <ion-row>
-                  <ion-col size="4">MRN:</ion-col>
-                  <ion-col class="demoContent">{{ demographics?.mrn }}</ion-col>
-                </ion-row>
-                <ion-row v-if="activeProgramID === 32">
-                  <ion-col size="4">NCDNumber:</ion-col>
-                  <ion-col class="demoContent">{{ demographics?.NCDNumber }}</ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col size="4">Gender:</ion-col>
-                  <ion-col class="demoContent">{{ covertGender(demographics?.gender) }}</ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col size="4">Age:</ion-col>
-                  <ion-col class="demoContent">{{ formatBirthdate() }}</ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col size="4">Address:</ion-col>
-                  <ion-col class="demoContent">{{ covertGender(demographics?.address) }}</ion-col>
-                </ion-row>
-              </ion-card-content>
-            </ion-card>
-            <div style="margin-left: 10px">
-              <DynamicButton
-                  :style="'margin-bottom: 5px; width: 96%; height: 45px'"
-                  @click="handleProgramClick(btn)"
-                  v-for="(btn, index) in programBtn"
-                  :key="index"
-                  :name="checkProgram(btn)"
-                  :fill="activeProgramID != btn.program_id ? 'outline' : 'solid'"
-                  :color="activeProgramID == btn.program_id ? 'success' : ''"
-              />
-            </div>
+            <PatientProfile v-if="activeProgramID == 33" />
+            <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
+                <ion-row class="content_width">
+                    <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
+                        <ion-card style="margin-bottom: 20px; background-color: #fff">
+                            <ion-card-content>
+                                <div style="display: flex; justify-content: space-between">
+                                    <DynamicButton
+                                        name="Activate visit"
+                                        v-if="!checkedIn && activeProgramID == 14"
+                                        @click="toggleCheckInModal()"
+                                        fill="clear"
+                                        iconSlot="start"
+                                        :icon="closeCircleOutline"
+                                    />
+                                    <DynamicButton
+                                        v-if="checkedIn && activeProgramID == 14"
+                                        name="Deactivate visit"
+                                        @click="toggleCheckOutModal()"
+                                        fill="clear"
+                                        iconSlot="start"
+                                        :icon="closeCircleOutline"
+                                        color="danger"
+                                    />
+                                    <div></div>
+                                    <div class="name" style="color: var(--ion-color-primary); margin-top: 10px" @click="openPopover($event)">
+                                        <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
+                                    </div>
+                                </div>
+                                <div class="p_name_image">
+                                    <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
+                                        <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
+                                    </div>
+                                    <div style="width: 100%">
+                                        <div class="p_name">{{ demographics?.name }}</div>
+                                    </div>
+                                </div>
+                                <ion-row>
+                                    <ion-col size="4">MRN:</ion-col>
+                                    <ion-col class="demoContent">{{ demographics?.mrn }}</ion-col>
+                                </ion-row>
+                                <ion-row v-if="activeProgramID === 32">
+                                    <ion-col size="4">NCDNumber:</ion-col>
+                                    <ion-col class="demoContent">{{ demographics?.NCDNumber }}</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="4">Gender:</ion-col>
+                                    <ion-col class="demoContent">{{ covertGender(demographics?.gender) }}</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="4">Age:</ion-col>
+                                    <ion-col class="demoContent">{{ formatBirthdate() }}</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="4">Address:</ion-col>
+                                    <ion-col class="demoContent">{{ covertGender(demographics?.address) }}</ion-col>
+                                </ion-row>
+                            </ion-card-content>
+                        </ion-card>
 
-            <ion-card style="margin-bottom: 20px; background-color: #fff">
-              <ion-accordion-group :value="['first']">
-                <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
-                  <ion-item slot="header" color="white">
-                    <ion-label class="side_title">Alerts & Reminders </ion-label>
-                  </ion-item>
-                  <ion-card-content slot="content">
+                        <ion-card style="margin-bottom: 20px; background-color: #fff">
+                            <ion-accordion-group :value="['first']">
+                                <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
+                                    <ion-item slot="header" color="white">
+                                        <ion-label class="side_title">Alerts & Reminders </ion-label>
+                                    </ion-item>
+                                    <ion-card-content slot="content">
                                         <span v-for="(al, index3) in alerts" :key="index3">
                                             <ion-row
                                                 v-if="al.value"
@@ -141,156 +130,162 @@
                                                 </div>
                                             </ion-row>
                                         </span>
-                  </ion-card-content>
-                </ion-accordion>
-              </ion-accordion-group>
-            </ion-card>
-          </ion-col>
-          <ion-col size-sm="12" size-md="12" size-lg="9.4">
-            <ion-card style="background-color: #fff; margin-inline: 0px">
-              <div style="display: flex; justify-content: space-between">
-                <div class="vitalsTitle">Most recent Vitals & Biometrics</div>
-                <div class="dateClass">Todays Date: {{ getSessionDate() }}</div>
-              </div>
-              <div style="padding-left: 10px; padding-right: 10px">
-                <ion-row>
-                  <ion-col class="vitalsHeading">Weight</ion-col>
-                  <ion-col class="vitalsHeading">Height</ion-col>
-                  <ion-col class="vitalsHeading">Temperature</ion-col>
-                  <ion-col class="vitalsHeading">Blood glucose</ion-col>
-                  <ion-col class="vitalsHeading">Pulse Rate</ion-col>
-                  <ion-col class="vitalsHeading">Blood pressure</ion-col>
+                                    </ion-card-content>
+                                </ion-accordion>
+                            </ion-accordion-group>
+                        </ion-card>
+                    </ion-col>
+                    <ion-col size-sm="12" size-md="12" size-lg="9.4">
+                        <ion-card style="background-color: #fff; margin-inline: 0px; contain: unset; overflow: unset">
+                            <div style="display: flex; justify-content: space-between">
+                                <div class="vitalsTitle">Most recent Vitals & Biometrics</div>
+                                <div class="startVisitClass">
+                                    <Programs
+                                        :btn="true"
+                                        verticalPosition="top"
+                                        side="bottom"
+                                        :programBtn="programBtn"
+                                        @clicked="async (btn) => { await handleProgramClick(btn); }"
+                                    />
+                                </div>
+                            </div>
+                            <div style="padding-left: 10px; padding-right: 10px">
+                                <ion-row>
+                                    <ion-col class="vitalsHeading">Weight</ion-col>
+                                    <ion-col class="vitalsHeading">Height</ion-col>
+                                    <ion-col class="vitalsHeading">Temperature</ion-col>
+                                    <ion-col class="vitalsHeading">Blood glucose</ion-col>
+                                    <ion-col class="vitalsHeading">Pulse Rate</ion-col>
+                                    <ion-col class="vitalsHeading">Blood pressure</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col class="vitalsValue">{{ vitals["Weight"] }} <span class="vitalsUnits">kg</span></ion-col>
+                                    <ion-col class="vitalsValue">{{ vitals["Height"] }} <span class="vitalsUnits">cm</span></ion-col>
+                                    <ion-col class="vitalsValue">{{ vitals["Temp"] }} <span class="vitalsUnits">&deg;C</span></ion-col>
+                                    <ion-col class="vitalsValue">0 <span class="vitalsUnits">mg/dL</span></ion-col>
+                                    <ion-col class="vitalsValue">{{ vitals["Pulse"] }} <span class="vitalsUnits">bpm </span></ion-col>
+                                    <ion-col class="vitalsValue"
+                                        >{{ vitals["Systolic"] }}/{{ vitals["Diastolic"] }}<span class="vitalsUnits">mmhg</span></ion-col
+                                    >
+                                </ion-row>
+                            </div>
+                        </ion-card>
+                        <div>
+                            <ion-segment :value="segmentContent" style="margin-top: 5px">
+                                <ion-segment-button value="Patient Charts" @click="setSegmentContent('Patient Charts')">
+                                    <ion-label>Patient Charts</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Visits History" @click="setSegmentContent('Visits History')">
+                                    <ion-label>Visits History</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Vitals & Measurements Summary" @click="setSegmentContent('Vitals & Measurements Summary')">
+                                    <ion-label>Vitals & Measurements Summary</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Lab Tests History" @click="setSegmentContent('Lab Tests History')">
+                                    <ion-label>Lab Tests History</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Diagnoses History" @click="setSegmentContent('Diagnoses History')">
+                                    <ion-label>Diagnoses History</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Allergies & Contraindication" @click="setSegmentContent('Allergies & Contraindication')">
+                                    <ion-label>Allergies & Contraindication</ion-label>
+                                </ion-segment-button>
+                            </ion-segment>
+                        </div>
+                        <div v-if="segmentContent == 'Patient Charts'">
+                            <div style="display: flex; margin-top: 10px">
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
+                                    <WeightHeightChart />
+                                </div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px">
+                                    <BloodPressure />
+                                </div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px" v-if="!checkUnderFive">
+                                    <PreviousVitals />
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="segmentContent == 'Visits History'">
+                            <VisitsHistory />
+                        </div>
+                        <div v-if="segmentContent == 'Vitals & Measurements Summary'">
+                            <VitalsMeasurementsSummary />
+                        </div>
+                        <div v-if="segmentContent == 'Lab Tests History'">
+                            <LabTestsHistory />
+                        </div>
+                        <div v-if="segmentContent == 'Diagnoses History'">
+                            <DiagnosesHistory />
+                        </div>
+                        <div v-if="segmentContent == 'Allergies & Contraindication'">
+                            <AllergiesContraindication />
+                        </div>
+                    </ion-col>
                 </ion-row>
-                <ion-row>
-                  <ion-col class="vitalsValue">{{ vitals["Weight"] }} <span class="vitalsUnits">kg</span></ion-col>
-                  <ion-col class="vitalsValue">{{ vitals["Height"] }} <span class="vitalsUnits">cm</span></ion-col>
-                  <ion-col class="vitalsValue">{{ vitals["Temp"] }} <span class="vitalsUnits">&deg;C</span></ion-col>
-                  <ion-col class="vitalsValue">0 <span class="vitalsUnits">mg/dL</span></ion-col>
-                  <ion-col class="vitalsValue">{{ vitals["Pulse"] }} <span class="vitalsUnits">bpm </span></ion-col>
-                  <ion-col class="vitalsValue"
-                  >{{ vitals["Systolic"] }}/{{ vitals["Diastolic"] }}<span class="vitalsUnits">mmhg</span></ion-col
-                  >
-                </ion-row>
-              </div>
-            </ion-card>
+            </div>
+        </ion-content>
+        <ion-popover
+            style="--offset-x: -10px"
+            :is-open="popoverOpen"
+            :show-backdrop="false"
+            :dismiss-on-select="true"
+            :event="event"
+            @didDismiss="popoverOpen = false"
+        >
             <div>
-              <ion-segment :value="segmentContent" style="margin-top: 5px">
-                <ion-segment-button value="Patient Charts" @click="setSegmentContent('Patient Charts')">
-                  <ion-label>Patient Charts</ion-label>
-                </ion-segment-button>
-                <ion-segment-button value="Visits History" @click="setSegmentContent('Visits History')">
-                  <ion-label>Visits History</ion-label>
-                </ion-segment-button>
-                <ion-segment-button value="Vitals & Measurements Summary" @click="setSegmentContent('Vitals & Measurements Summary')">
-                  <ion-label>Vitals & Measurements Summary</ion-label>
-                </ion-segment-button>
-                <ion-segment-button value="Lab Tests History" @click="setSegmentContent('Lab Tests History')">
-                  <ion-label>Lab Tests History</ion-label>
-                </ion-segment-button>
-                <ion-segment-button value="Diagnoses History" @click="setSegmentContent('Diagnoses History')">
-                  <ion-label>Diagnoses History</ion-label>
-                </ion-segment-button>
-                <ion-segment-button value="Allergies & Contraindication" @click="setSegmentContent('Allergies & Contraindication')">
-                  <ion-label>Allergies & Contraindication</ion-label>
-                </ion-segment-button>
-              </ion-segment>
+                <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
+                    <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
+                    <ion-item :button="true" :detail="false" @click="openOutCome()" style="cursor: pointer">Update outcome</ion-item>
+                    <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
+                    <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
+                </ion-list>
             </div>
-            <div v-if="segmentContent == 'Patient Charts'">
-              <div style="display: flex; margin-top: 10px">
-                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
-                  <WeightHeightChart />
-                </div>
-                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px">
-                  <BloodPressure />
-                </div>
-                <div style="width: 50vw; background-color: #fff; border-radius: 5px" v-if="!checkUnderFive">
-                  <PreviousVitals />
-                </div>
-              </div>
-              <bottomSummary style="margin-top: 10px"/>
-            </div>
-            <div v-if="segmentContent == 'Visits History'">
-              <VisitsHistory />
-            </div>
-            <div v-if="segmentContent == 'Vitals & Measurements Summary'">
-              <VitalsMeasurementsSummary />
-            </div>
-            <div v-if="segmentContent == 'Lab Tests History'">
-              <LabTestsHistory />
-            </div>
-            <div v-if="segmentContent == 'Diagnoses History'">
-              <DiagnosesHistory />
-            </div>
-            <div v-if="segmentContent == 'Allergies & Contraindication'">
-              <AllergiesContraindication />
-            </div>
-          </ion-col>
-        </ion-row>
-      </div>
-      <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
-    </ion-content>
-    <ion-popover
-        style="--offset-x: -10px"
-        :is-open="popoverOpen"
-        :show-backdrop="false"
-        :dismiss-on-select="true"
-        :event="event"
-        @didDismiss="popoverOpen = false"
-    >
-      <div>
-        <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
-          <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
-          <ion-item :button="true" :detail="false" @click="openOutCome()" style="cursor: pointer">Update outcome</ion-item>
-          <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
-          <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
-        </ion-list>
-      </div>
-    </ion-popover>
-  </ion-page>
+        </ion-popover>
+    </ion-page>
 </template>
 
 <script lang="ts">
 import {
-  IonSegment,
-  IonSegmentButton,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonAccordion,
-  IonAccordionGroup,
-  IonItem,
-  IonLabel,
-  IonModal,
-  IonRow,
-  IonCol,
-  IonGrid,
-  IonIcon,
-  IonFab,
-  IonFabButton,
-  IonFabList,
+    IonSegment,
+    IonSegmentButton,
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonAccordion,
+    IonAccordionGroup,
+    IonItem,
+    IonLabel,
+    IonModal,
+    IonRow,
+    IonCol,
+    IonGrid,
+    IonIcon,
+    IonFab,
+    IonFabButton,
+    IonFabList,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import {
-  medkit,
-  grid,
-  chevronDownCircle,
-  chevronForwardCircle,
-  chevronUpCircle,
-  colorPalette,
-  document,
-  globe,
-  add,
-  checkboxOutline,
-  closeCircleOutline,
+    medkit,
+    grid,
+    chevronDownCircle,
+    chevronForwardCircle,
+    chevronUpCircle,
+    colorPalette,
+    document,
+    globe,
+    add,
+    checkboxOutline,
+    closeCircleOutline,
 } from "ionicons/icons";
 
 import { modalController } from "@ionic/vue";
@@ -323,12 +318,12 @@ import { Service } from "@/services/service";
 import { ObservationService } from "@/services/observation_service";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import {
-  modifyCheckboxInputField,
-  getCheckboxSelectedValue,
-  getRadioSelectedValue,
-  getFieldValue,
-  modifyRadioValue,
-  modifyFieldValue,
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    getFieldValue,
+    modifyRadioValue,
+    modifyFieldValue,
 } from "@/services/data_helpers";
 import {toastDanger, toastSuccess, toastWarning} from "@/utils/Alerts";
 import { ref } from "vue";
@@ -349,9 +344,9 @@ import { createModal } from "@/utils/Alerts";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import PatientProfileMixin from "@/views/Mixin/PatientProfile.vue";
 import { ProgramService } from "@/services/program_service";
-import {usePatientList} from "@/apps/OPD/stores/patientListStore";
-import {PatientOpdList} from "@/services/patient_opd_list";
-import {getUserLocation} from "@/services/userService";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import { getUserLocation } from "@/services/userService";
 import dates from "@/utils/Date";
 import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
 import {useANCEnrollmentStore} from "@/apps/ANC/store/enrollment/ANCEnrollment";
@@ -500,156 +495,137 @@ export default defineComponent({
     };
   },
 
-  methods: {
-    checkAge() {
-      if (this.demographics?.birthdate) {
-        this.checkUnderFourteen = HisDate.getAgeInYears(this.demographics?.birthdate) >= 14 ? true : false;
-        this.checkUnderNine = HisDate.ageInMonths(this.demographics?.birthdate) < 9 ? true : false;
-        this.checkUnderFive = HisDate.getAgeInYears(this.demographics?.birthdate) < 5 ? true : false;
-        this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics?.birthdate) < 42 ? true : false;
-      }
-    },
-    setSegmentContent(name: any) {
-      this.segmentContent = name;
-    },
-    setAlerts() {
-      this.alerts = [
-        {
-          backgroundColor: "#B9E6FE",
-          status: "",
-          icon: iconBMI(["#B9E6FE", "#026AA2", "#9ADBFE"]),
-          textColor: "#026AA2",
-          value: "No further action is required.",
-          name: "",
-          index: "Blood sugar is normal",
+    methods: {
+        checkAge() {
+            if (this.demographics?.birthdate) {
+                this.checkUnderFourteen = HisDate.getAgeInYears(this.demographics?.birthdate) >= 14 ? true : false;
+                this.checkUnderNine = HisDate.ageInMonths(this.demographics?.birthdate) < 9 ? true : false;
+                this.checkUnderFive = HisDate.getAgeInYears(this.demographics?.birthdate) < 5 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics?.birthdate) < 42 ? true : false;
+            }
         },
-        {
-          backgroundColor: "#FEDF89",
-          status: "",
-          icon: iconBMI(["#FEDF89", "#B54708", "#FED667"]),
-          textColor: "#B54708",
-          value: "Please call or follow up!",
-          name: "",
-          index: "Patient Defaulted",
+        setSegmentContent(name: any) {
+            this.segmentContent = name;
         },
-        {
-          backgroundColor: "#FECDCA",
-          status: "",
-          icon: iconBMI(["#FECDCA", "#B42318", "#FDA19B"]),
-          textColor: "#B42318",
-          value: "Administer medications!",
-          name: "",
-          index: "Patient is hypertensive",
+        setAlerts() {
+            this.alerts = [
+                {
+                    backgroundColor: "#B9E6FE",
+                    status: "",
+                    icon: iconBMI(["#B9E6FE", "#026AA2", "#9ADBFE"]),
+                    textColor: "#026AA2",
+                    value: "No further action is required.",
+                    name: "",
+                    index: "Blood sugar is normal",
+                },
+                {
+                    backgroundColor: "#FEDF89",
+                    status: "",
+                    icon: iconBMI(["#FEDF89", "#B54708", "#FED667"]),
+                    textColor: "#B54708",
+                    value: "Please call or follow up!",
+                    name: "",
+                    index: "Patient Defaulted",
+                },
+                {
+                    backgroundColor: "#FECDCA",
+                    status: "",
+                    icon: iconBMI(["#FECDCA", "#B42318", "#FDA19B"]),
+                    textColor: "#B42318",
+                    value: "Administer medications!",
+                    name: "",
+                    index: "Patient is hypertensive",
+                },
+            ];
         },
-      ];
-    },
 
-    convertToDisplayDate(date: any) {
-      return HisDate.toStandardHisDisplayFormat(date);
-    },
-    getSessionDate() {
-      return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
-    },
-    programAccess(programName: string): boolean {
-      const accessPrograms: any = localStorage.getItem("userPrograms");
-      const programs: any = JSON.parse(accessPrograms);
-      if (programs.some((program: any) => program.name === programName)) {
-        return true;
-      } else {
-        return false;
-      }
-    },
+        convertToDisplayDate(date: any) {
+            return HisDate.toStandardHisDisplayFormat(date);
+        },
+        getSessionDate() {
+            return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
+        },
+        programAccess(programName: string): boolean {
+            const accessPrograms: any = localStorage.getItem("userPrograms");
+            const programs: any = JSON.parse(accessPrograms);
+            if (programs.some((program: any) => program.name === programName)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
 
-    openModal() {
-      this.isModalOpen = true;
-    },
-    dismiss() {
-      modalController.dismiss();
-    },
-    closeCheckInModal() {
-      this.checkInModalOpen = false;
-    },
-    closeCheckOutModal() {
-      this.checkOutModalOpen = false;
-    },
-    toggleCheckInModal() {
-      this.checkInModalOpen = !this.checkInModalOpen;
-    },
-    toggleCheckOutModal() {
-      this.checkOutModalOpen = !this.checkOutModalOpen;
-    },
-    async handleCheckInYes() {
-      try {
-        const location = await getUserLocation();
-        const locationId = location ? location.location_id : null;
-        if (!locationId) {
-          toastDanger("Location ID could not be found. Please check your settings.");
-          return;
-        }
-        await PatientOpdList.checkInPatient(
-            this.demographics.patient_id,
-            dates.todayDateFormatted(),
-            locationId
-        );
+        openModal() {
+            this.isModalOpen = true;
+        },
+        dismiss() {
+            modalController.dismiss();
+        },
+        closeCheckInModal() {
+            this.checkInModalOpen = false;
+        },
+        closeCheckOutModal() {
+            this.checkOutModalOpen = false;
+        },
+        toggleCheckInModal() {
+            this.checkInModalOpen = !this.checkInModalOpen;
+        },
+        toggleCheckOutModal() {
+            this.checkOutModalOpen = !this.checkOutModalOpen;
+        },
+        async handleCheckInYes() {
+            try {
+                const location = await getUserLocation();
+                const locationId = location ? location.location_id : null;
+                if (!locationId) {
+                    toastDanger("Location ID could not be found. Please check your settings.");
+                    return;
+                }
+                await PatientOpdList.checkInPatient(this.demographics.patient_id, dates.todayDateFormatted(), locationId);
 
-        await PatientOpdList.addPatientToStage(
-            this.demographics.patient_id,
-            dates.todayDateFormatted(),
-            "VITALS",
-            locationId
-        );
-        await usePatientList().refresh(locationId);
-        this.toggleCheckInModal();
-        this.checkedIn = true;
-        toastSuccess("The patient's visit is now active. Patient is on the waiting list for vitals");
+                await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "VITALS", locationId);
+                await usePatientList().refresh(locationId);
+                this.toggleCheckInModal();
+                this.checkedIn = true;
+                toastSuccess("The patient's visit is now active. Patient is on the waiting list for vitals");
+            } catch (e) {
+                toastDanger("An error occurred while attempting to check in the patient. Please try again.");
+            }
+        },
+        async handleCheckOutYes() {
+            try {
+                const visit = await PatientOpdList.getCheckInStatus(this.demographics.patient_id);
+                await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
+                const location = await getUserLocation();
+                const locationId = location ? location.location_id : null;
+                await usePatientList().refresh(locationId);
+                this.checkedIn = false;
+                this.toggleCheckOutModal();
+                toastSuccess("The patient's visit is now closed");
+            } catch (e) {}
+        },
+        async checkPatientIFCheckedIn() {
+            try {
+                const result = await PatientOpdList.getCheckInStatus(this.demographics.patient_id);
 
-      } catch (e) {
-        toastDanger("An error occurred while attempting to check in the patient. Please try again.");
-      }
-    },
-    async handleCheckOutYes() {
-      try {
-        const visit = await PatientOpdList.getCheckInStatus(
-            this.demographics.patient_id
-        );
-        await PatientOpdList.checkOutPatient(
-            visit[0].id,
-            dates.todayDateFormatted()
-        );
-        const location = await getUserLocation();
-        const locationId = location ? location.location_id : null;
-        await usePatientList().refresh(locationId);
-        this.checkedIn = false;
-        this.toggleCheckOutModal();
-        toastSuccess("The patient's visit is now closed");
+                if (Boolean(result)) {
+                    this.checkedIn = true;
+                }
+            } catch (e) {
+                console.log({ e });
+            }
+        },
 
-      } catch (e) {}
-    },
-    async checkPatientIFCheckedIn() {
-      try {
-        const result = await PatientOpdList.getCheckInStatus(
-            this.demographics.patient_id
-        );
+        handleCheckInNo() {
+            this.toggleCheckInModal();
+        },
+        handleCheckOutNo() {
+            this.toggleCheckOutModal();
+        },
 
-        if(Boolean(result)){
-          this.checkedIn = true;
-        }
-
-      } catch (e) {
-        console.log({ e });
-      }
-    },
-
-    handleCheckInNo() {
-      this.toggleCheckInModal();
-    },
-    handleCheckOutNo() {
-      this.toggleCheckOutModal();
-    },
-
-    togglePopover() {
-      this.popoverOpen = !this.popoverOpen;
-    },
+        togglePopover() {
+            this.popoverOpen = !this.popoverOpen;
+        },
 
     async handleProgramClick(btn: any) {
       await this.refreshPrograms();
@@ -724,19 +700,19 @@ export default defineComponent({
     async refreshPrograms() {
       const programs = await ProgramService.getPatientPrograms(this.demographics.patient_id);
 
-      console.log({ programs });
+            console.log({ programs });
 
-      this.enrolledPrograms = programs.map((p: any) => ({
-        name: p.program.name,
-        id: p.program_id,
-      }));
-    },
-    handleEnrollmentNo() {
-      this.toggleEnrollmentModal();
-    },
-    checkProgram(btn: any) {
-      const found: any = this.enrolledPrograms.find((p: any) => p.id == btn.program_id);
-      if (found) return `Start ${btn.name}`;
+            this.enrolledPrograms = programs.map((p: any) => ({
+                name: p.program.name,
+                id: p.program_id,
+            }));
+        },
+        handleEnrollmentNo() {
+            this.toggleEnrollmentModal();
+        },
+        checkProgram(btn: any) {
+            const found: any = this.enrolledPrograms.find((p: any) => p.id == btn.program_id);
+            if (found) return `Start ${btn.name}`;
 
       return btn.actionName;
     },

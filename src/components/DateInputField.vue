@@ -1,7 +1,7 @@
 <template>
     <h6 v-if="inputHeader">{{ removeAsterisk(inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span></h6>
     <VueDatePicker
-        @date-update="$emit('update:dateValue', formatDate($event))"
+        @date-update="handleDateUpdate"
         auto-apply
         :flow="flow"
         vertical
@@ -136,6 +136,11 @@ export default defineComponent({
             this.showAsterisk = false;
             return str;
         },
+        handleDateUpdate(date: any) {
+            const formattedDate = this.formatDate(date);
+            this.$emit('update:dateValue', formattedDate);
+            this.$emit('update:rawDateValue', date);
+        }
     },
 });
 </script>
