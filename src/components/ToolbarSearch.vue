@@ -301,8 +301,9 @@ export default defineComponent({
             this.page = 1;
         },
         $router: {
-            handler() {
+            async handler() {
                 this.searchValue = "";
+                await this.setOfflinePatients();
             },
             deep: true,
         },
@@ -315,7 +316,7 @@ export default defineComponent({
     },
     async mounted() {
         this.ddeInstance = new PatientDemographicsExchangeService();
-        this.offlinePatients = await db.collection("patientRecords").get();
+        await this.setOfflinePatients();
     },
     methods: {
         async nav(url: any) {
@@ -336,6 +337,9 @@ export default defineComponent({
             } else {
                 toastWarning("Invalid Scan");
             }
+        },
+        async setOfflinePatients() { 
+            this.offlinePatients = await db.collection("patientRecords").get();
         },
         programID() {
             return Service.getProgramID();
