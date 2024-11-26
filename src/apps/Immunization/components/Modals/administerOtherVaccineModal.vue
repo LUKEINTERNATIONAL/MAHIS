@@ -164,6 +164,7 @@ export default defineComponent({
     },
     data() {
         const comp_key = ref(0)
+        const antigens = ref([] as any)
         return {
             iconsContent: icons,
             showPD: false as boolean,
@@ -171,40 +172,7 @@ export default defineComponent({
             vaccineName: "" as string,
             currentDrugOb: {} as any,
             comp_key,
-            otherVaccinesList: [
-                {
-                    concept_id: 11592,
-                    drug_id: 1284,
-                    drug_name: "OPV 3",
-                    status: "administered",
-                    date_administered: "01/Jun/2024 08:40:01",
-                    vaccine_batch_number: null,
-                },
-                {
-                    concept_id: 11592,
-                    drug_id: 1288,
-                    drug_name: "Penta 3",
-                    status: "administered",
-                    date_administered: "31/May/2024 15:16:03",
-                    vaccine_batch_number: null,
-                },
-                {
-                    concept_id: 11592,
-                    drug_id: 1291,
-                    drug_name: "PCV 3",
-                    status: "administered",
-                    date_administered: "01/Jun/2024 08:40:17",
-                    vaccine_batch_number: null,
-                },
-                {
-                    concept_id: 11592,
-                    drug_id: 1301,
-                    drug_name: "Albendazole (200mg tablet) 1",
-                    status: "administered",
-                    date_administered: "31/May/2024 15:33:44",
-                    vaccine_batch_number: null,
-                },
-            ] as any,
+            otherVaccinesList: antigens,
             is_batch_number_valid: false as boolean,
             vaccineDate: "" as any,
             is_vaccine_name_valid: false as boolean,
@@ -223,14 +191,17 @@ export default defineComponent({
             selected_date_: '',
             show_select_batch: false,
             skip_validation: false,
+            antigens,
         };
     },
     computed: {
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
-        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
+        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber", "vaccineSchedule"]),
     },
     async mounted() {
-
+        this.vaccineSchedule.vaccine_schedule.forEach((vaccine: any) => {
+            this.antigens.push(...vaccine.antigens);
+        });
     },
     watch: {
         batchNumber: {
@@ -304,6 +275,9 @@ export default defineComponent({
         },
         updateVaccineName(data: any) {
             this.currentDrugOb = data;
+            console.log(this.currentDrugOb)
+            const store = useAdministerVaccineStore();
+            store.setCurrentSelectedDrug(data);
             this.pullLotNumbersForVaccine(this.currentDrugOb)
         },
         async pullLotNumbersForVaccine(data: any) {
