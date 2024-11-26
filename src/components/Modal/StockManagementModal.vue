@@ -352,10 +352,10 @@ export default defineComponent({
         async adjustStock() {
             let adjust_stock = parseInt(getFieldValue(this.stockDiscard, "quantity", "value"));
             let reason = getFieldValue(this.stockDiscard, "reason", "value").name;
-            if (reason == "Positive Adjustment") {
+            if (reason == "Positive Adjustment" || reason == "Positive Mathematical Error") {
                 adjust_stock = adjust_stock;
             }
-            if (reason == "Negative Adjustment") {
+            if (reason == "Negative Adjustment" || reason == "Negative Mathematical Error") {
                 if (adjust_stock > this.stockData.current_quantity) {
                     toastWarning("Quantity Available can not be greater than adjustment quantity");
                     return false;
@@ -396,6 +396,14 @@ export default defineComponent({
                     {
                         id: 2,
                         name: "Negative Adjustment",
+                    },
+                    {
+                        id: 3,
+                        name: "Negative Mathematical Error",
+                    },
+                    {
+                        id: 4,
+                        name: "Positive Mathematical Error",
                     },
                 ]);
             } else {

@@ -3,7 +3,16 @@
         <ion-fab-button
             v-if="btn"
             color="primary"
-            style="--border-radius: 4px; width: 80px; height: 40px; font-weight: 900; border: 1px solid #cdcdcd; border-radius: 5px"
+            style="
+                --border-radius: 4px;
+                width: 80px;
+                height: 40px;
+                font-weight: 900;
+                top: 20px;
+                position: relative;
+                border: 1px solid #cdcdcd;
+                border-radius: 5px;
+            "
         >
             Start visit
         </ion-fab-button>
@@ -115,7 +124,7 @@ ion-fab-button[data-desc]::after {
 .btn {
     min-width: unset;
     min-height: unset;
-    top: 5px;
+    top: 20px;
 }
 
 ion-fab-button[data-desc]:hover::after {
