@@ -174,19 +174,19 @@ export default defineComponent({
             
         }
     },
-    getCounter(date: string | Date): string | number {
-        const normalizeDate = (date: Date): number => {
-            const d = new Date(date);
-            d.setHours(0, 0, 0, 0);
-            return d.getTime();
-        };
-
-        const dateTimestamp = normalizeDate(new Date(date));
-        const count = this.assignedAppointmentsDates.reduce((sum: number, d: { date: string | Date }) => {
-            return normalizeDate(new Date(d.date)) === dateTimestamp ? sum + 1 : sum;
-        }, 0);
-
+    async getCounter(date: string | Date): Promise<string | number> {
+        const count = await this.getAppointmentsForDate(date);
         return count === 0 ? '' : count;
+    },
+    async getAppointmentsForDate(date: any):Promise<number> {
+        try {
+            const appointment_service = new Appointment();
+            const appointments = await appointment_service.getDailiyAppointments(date)
+            return appointments.length;
+        } catch (error) {
+            console.error(error);
+            return 0;
+        }
     },
     async save() {
         if (this.assignedAppointmentsDates.length >0) {

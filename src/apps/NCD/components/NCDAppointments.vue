@@ -55,7 +55,24 @@
             </thead>
             <tbody>
               <tr v-for="person in people" :key="person.npid">
-                <td>{{ person.name }}</td>
+                <td>
+                  <ion-row>
+                    <ion-col>
+                      {{ person.name }}
+                    </ion-col>
+                    <ion-col>
+                      <ion-button 
+                        style="position: absolute; right: 10px; --padding-start: 8px; --padding-end: 8px; --padding-bottom: 4px; --box-shadow: none;" 
+                        @click="openClientProfile(person.npid)" 
+                        color="primary" 
+                        fill="clear" 
+                        size="small"
+                      >
+                        <ion-icon :icon="eyeOutline" style="font-size: 24px;"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </td>
                 <td>{{ person.npid }}</td>
                 <td>{{ person.ageDob }}</td>
                 <td>{{ person.gender }}</td>
@@ -76,26 +93,30 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard } from "@ionic/vue";
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonIcon, IonButton } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import HisDate from "@/utils/Date";
 import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service";
 import DateInputField from "@/components/DateInputField.vue";
-import { calendarOutline, checkmark, pulseOutline } from "ionicons/icons";
+import { calendarOutline, checkmark, pulseOutline, eyeOutline } from "ionicons/icons";
+
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
     name: "Home",
     mixins: [SetUser],
     components: {
-        IonContent,
-        IonHeader,
-        IonPage,
-        IonToolbar,
-        Toolbar,
-        IonRow,
-        DateInputField,
+      IonContent,
+      IonHeader,
+      IonPage,
+      IonToolbar,
+      Toolbar,
+      IonRow,
+      DateInputField,
+      IonIcon,
+      IonButton,
+      IonCol,
     },
     data() {
         const startDate = ref(HisDate.currentDate());
@@ -103,11 +124,12 @@ export default defineComponent({
         const minDate = ref(HisDate.currentDate());
         const people = ref([]) as any;
         return {
-            minDate,
-            startDate,
-            endDate,
-            people,
-            calendarOutline,
+          minDate,
+          startDate,
+          endDate,
+          people,
+          calendarOutline,
+          eyeOutline,
         };
     },
     computed: {
@@ -156,7 +178,12 @@ export default defineComponent({
       async getAppointmentsD2(date: any) {
         this.endDate = HisDate.toStandardHisFormat(date);
         await this.getAppointments()
-      }
+      },
+      async openClientProfile(patientID: any) {
+        // const patientData = await PatientService.findByNpid(patientID);
+        // this.setDemographics(patientData[0]);
+        // this.$router.push("patientProfile");
+      },
     },
 });
 </script>

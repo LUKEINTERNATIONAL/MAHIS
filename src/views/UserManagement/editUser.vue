@@ -184,7 +184,7 @@
                     selectLabel=""
                     label="name"
                     :searchable="true"
-                    :disabled="disableFacilitySelection"
+                    :disabled="false"
                     @search-change="FindLocation($event)"
                     track-by="location_id"
                     :options="locationData"
