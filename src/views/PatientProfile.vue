@@ -19,21 +19,21 @@
       />
       <AncEnrollmentModal
           :closeModalFunc="closeEnrollmentModal"
-          :onYes="handleEnrollmentYes"
+          :onYes="handleANCEnrollmentYes"
           :onNo="handleEnrollmentNo"
           :isOpen="isEnrollmentModalOpen"
           :title="enrollModalTitle"
       />
       <LabourEnrollmentModal
           :closeModalFunc="closeEnrollmentModal"
-          :onYes="handleEnrollmentYes"
+          :onYes="handleLabourEnrollmentYes"
           :onNo="handleEnrollmentNo"
           :isOpen="isLabourEnrollmentModalOpen"
           :title="enrollModalTitle"
       />
       <PNCEnrollmentModal
           :closeModalFunc="closeEnrollmentModal"
-          :onYes="handleEnrollmentYes"
+          :onYes="handlePNCEnrollmentYes"
           :onNo="handleEnrollmentNo"
           :isOpen="isPNCEnrollmentModalOpen"
           :title="enrollModalTitle"
@@ -145,7 +145,7 @@
                                         verticalPosition="top"
                                         side="bottom"
                                         :programBtn="programBtn"
-                                        @clicked="async (btn) => { await handleProgramClick(btn); }"
+                                        @clicked="async (btn) => { await handleProgramClick(btn);}"
                                     />
                                 </div>
                             </div>
@@ -684,7 +684,7 @@ export default defineComponent({
     toggleEnrollmentModal() {
       this.isEnrollmentModalOpen = !this.isEnrollmentModalOpen;
     },
-    async handleEnrollmentYes() {
+    async handleANCEnrollmentYes() {
           const userID: any = Service.getUserID();
           const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
           const encounter = await quickCheck.createEncounter();
@@ -697,6 +697,17 @@ export default defineComponent({
         this.toggleEnrollmentModal();
         return this.$router.push("ANCHome");
     },
+      async handleLabourEnrollmentYes() {
+        await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, new Date().toString());
+        await this.refreshPrograms();
+        return this.$router.push("LabourHome");
+      },
+      async handlePNCEnrollmentYes() {
+        await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, new Date().toString());
+        await this.refreshPrograms();
+        this.toggleEnrollmentModal();
+        return this.$router.push("PNCHome");
+      },
     async refreshPrograms() {
       const programs = await ProgramService.getPatientPrograms(this.demographics.patient_id);
 

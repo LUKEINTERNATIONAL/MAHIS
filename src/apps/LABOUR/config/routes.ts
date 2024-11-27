@@ -5,7 +5,7 @@ import deliveryDetails from "@/apps/LABOUR/views/deliveryDetails.vue";
 import postnatalChecks from "@/apps/LABOUR/views/postnatalChecks.vue";
 import end from "@/apps/LABOUR/views/end.vue";
 import labourAssessment from "@/apps/LABOUR/views/labourAssessment.vue";
-import labourHome from "@/apps/LABOUR/views/labourHome.vue";
+import LabourHome from "@/apps/LABOUR/views/LabourHome.vue";
 
 export default [
     {
@@ -45,9 +45,9 @@ export default [
         component: end
     },
     {
-        path: '/labour/labourHome',
-        name: 'labourHome',
-        component: labourHome
+        path: '/labourHome',
+        name: 'LabourHome',
+        component: LabourHome
     },
 
 ]
