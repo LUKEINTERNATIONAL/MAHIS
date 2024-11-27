@@ -74,7 +74,6 @@ export default defineComponent({
         IonInput,
         BasicInputField,
         BasicForm,
-        LabourMedications,
     },
     data() {
         return {
