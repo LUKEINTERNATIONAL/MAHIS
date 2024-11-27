@@ -166,7 +166,7 @@ async function createObForEachDrugAdminstred(encounter: any) {
     store.getAdministeredVaccines().map(async (drug: any) => {
         await ObservationService.saveObs(encounter.encounter_id, {
             concept_id: 2876,
-            value_text: drug.drug_.drug.drug_name,
+            value_text: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
             obs_datetime: encounter.encounter_datetime,
         });
     })

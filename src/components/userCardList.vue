@@ -69,12 +69,19 @@
     </ion-grid>
   </div>
 
-  <ion-footer collapse="fade" style="margin-top: 62px;">
+  <editUserModal 
+    :is_open="isPopooverOpen" 
+    :user_id="user_id" 
+    @close-popoover="modalClosed"
+    @save="modalClosed" 
+  />
+
+  <!-- Footer -->
+  <ion-footer class="sticky-footer">
     <ion-row>
-      <ion-col style="flex: none; max-width: 100%">
+      <ion-col size="12" style="max-width: 100%;">
         <bottomNavBar
           v-if="showNavBar"
-          style="margin-left: 20px; margin-right: 20px;"
           :totalItems="filteredUsers.length"
           :currentPage="pagination.page"
           :itemsPerPage="pagination.itemsPerPage"
@@ -83,13 +90,6 @@
       </ion-col>
     </ion-row>
   </ion-footer>
-
-  <editUserModal 
-    :is_open="isPopooverOpen" 
-    :user_id="user_id" 
-    @close-popoover="modalClosed"
-    @save="modalClosed" 
-  />
 </template>
 
 <script lang="ts">
@@ -195,8 +195,8 @@ export default defineComponent({
     };
 
 
-    function reload() {
-      emit("reload", '')
+    function reload(data: any) {
+      emit("reload", data)
     }
 
     watch(() => props.users, (newUsers) => {
@@ -222,8 +222,8 @@ export default defineComponent({
     };
 
     const modalClosed = () => {
-      reload()
       isPopooverOpen.value = false;
+      reload(isPopooverOpen.value)
     };
 
     return {
@@ -248,13 +248,13 @@ export default defineComponent({
 
 <style scoped>
 .container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
 }
 
 .dynamic-grid {
+  flex: 1;
   max-height: calc(69.8vh - 1px);
   overflow: auto;
 }
@@ -269,6 +269,7 @@ ion-card {
   min-width: 250px;
   width: 37%;
   margin-right: auto;
+  margin-top: 10px;
 }
 
 ion-card-content {
@@ -344,5 +345,16 @@ ion-list {
     margin-right: auto;
     margin-left: 10px;
   }
+}
+
+.sticky-footer {
+  margin-top: auto;
+  position: relative;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+ion-footer {
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 </style>

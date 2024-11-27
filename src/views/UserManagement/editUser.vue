@@ -143,7 +143,7 @@
                 >
                 <VueMultiselect
                     v-model="selected_Districts"
-                    @update:model-value="selectedDistrict($event)"
+                    @update:model-value="selectedDistrictF($event)"
                     :multiple="true"
                     :taggable="false"
                     :hide-selected="true"
@@ -184,6 +184,7 @@
                     selectLabel=""
                     label="name"
                     :searchable="true"
+                    :disabled="disableFacilitySelection"
                     @search-change="FindLocation($event)"
                     track-by="location_id"
                     :options="locationData"
@@ -371,7 +372,7 @@ import {
     peopleOutline,
     phonePortraitOutline,
 } from "ionicons/icons";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { UserService } from "@/services/user_service";
 import { ProgramService } from "@/services/program_service";
@@ -398,26 +399,28 @@ const location_show_error = ref(false);
 const passwordErrorMsgs = [
     'Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (@#$%^&+=*!-), without spaces',
     'Password does not match'
-]
+];
 const isSuperUser = ref(false);
 const districtList = ref([] as any);
-const HSA_found_for_disabling_button = ref(true)
+const HSA_found_for_disabling_button = ref(true);
 const selected_Districts = ref([]) as any;
 const district_show_error = ref(false)
-const district_error_message = ref('Select district(s)')
-const village_error_message = ref('Select village(s)')
-const selected_TAz = ref([]) as any
-const villageList = ref([] as any)
-const village_show_error = ref(false)
-const TAz_show_error = ref(false)
-const TAz_error_message = ref('Select TA(s)')
-const selected_villages = ref([]) as any
-const TAList = ref([] as any)
-const selectedDistrictIds : any[] = []
-const selectedTAIds: any[] = []
-const disableVillageSelection = ref(true)
-const selectedVillageIds: any[] = []
-const traditionalAuthorities = ref([]) as any
+const district_error_message = ref('Select district(s)');
+const village_error_message = ref('Select village(s)');
+const selected_TAz = ref([]) as any;
+const villageList = ref([] as any);
+const village_show_error = ref(false);
+const TAz_show_error = ref(false);
+const TAz_error_message = ref('Select TA(s)');
+const selected_villages = ref([]) as any;
+const TAList = ref([] as any);
+const selectedDistrictIds: any[] = [];
+const selectedTAIds: any[] = [];
+const disableVillageSelection = ref(true);
+const selectedVillageIds: any[] = [];
+const traditionalAuthorities = ref([]) as any;
+const userStore = useUserStore();
+const disableFacilitySelection = ref(true)
 
 const props = defineProps<{
     toggle: true,
@@ -464,6 +467,14 @@ watch(
 
 function selectedLocation(data: any) {
     selected_location.value = data
+
+    const selectedLocation = locationData.value.find((location: any) => location.location_id === data.location_id);
+    const filteredDistricts = selectedLocation
+        ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
+        : [];
+
+    selected_Districts.value = filteredDistricts
+    selectedDistrictF(filteredDistricts);
 }
 
 async function FindLocation(text: any) {
@@ -588,10 +599,28 @@ function passwordInputUpDated_fn2(event: any) {
     password_input_properties[1].dataValue.value = input
 }
 
-function inputUpDated_fn1(event: any) {
+async function validateUsernameIfExists(username: string) {
+    try {
+        if (username.length > 0) {
+            const does_username_exist = await UserService.doesUsernameExist(username);
+            if (does_username_exist.exists == true) {
+                input_properties[0].show_error.value = true;
+                input_properties[0].error_message = "Username already exists";
+            } else if (does_username_exist.exists == false) {
+                input_properties[0].show_error.value = false;
+                input_properties[0].error_message = "Input required, Only letters are allowed";
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function inputUpDated_fn1(event: any) {
     const input = event.target.value
     input_properties[0].dataValue.value = input
     user_name.value = input
+    await validateUsernameIfExists(input)
 }
 function inputUpDated_fn2(event: any) {
     const input = event.target.value
@@ -623,6 +652,45 @@ async function updatePassword() {
         }
     }
 }
+
+async function getCurrentUserRoles() {
+    try {
+        const user = await UserService.getCurrentUser();
+        if (user) {
+            const userRoles = user.roles.map((role) => role.role);
+            userStore.setUserRoles(userRoles);
+
+            if (findUserRoleByName('Superuser,Superuser,') == true) {
+                disableFacilitySelection.value = false;
+            }
+
+            if (findUserRoleByName('Superuser,Superuser,') == false) {
+                user_roles.value = findAndRemoveRoleSSU(user_roles.value)
+            }
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function findUserRoleByName(name: string) {
+    const roles = userStore.getUserRoles();
+    return roles.some((role: any) => role.toLowerCase() === name.toLowerCase());
+}
+
+function findAndRemoveRoleSSU(data: any[]): any[] {
+    const index = data.findIndex((role: any) => 
+        typeof role.name === 'string' && role.name.toLowerCase() === 'Superuser,Superuser,'.toLowerCase()
+    );
+    
+    if (index !== -1) {
+        data.splice(index, 1);
+    }
+
+    return data;
+}
+
 
 async function updateUserVillages() {
     UserService.updateuserVillages(userId.value, selectedVillageIds as any)
@@ -877,7 +945,7 @@ async function savePrograms(programIds: any) {
     })
 }
 
-function fillUserRoles() {
+async function fillUserRoles() {
     user_roles.value.forEach((item: any) => {
         user_data.value.roles.forEach((userR: any) => {
             if (userR.uuid == item.other.uuid) {
@@ -887,6 +955,7 @@ function fillUserRoles() {
     })
 
     checkIfSelectedIsHSA(user_roles.value)
+    await getCurrentUserRoles()    
 }
 
 function getCurrentUser() {
@@ -1052,7 +1121,7 @@ function saveEvent(boolean_value: any) {
     emit("save", boolean_value)
 }
 
-function selectedDistrict(selectedDistrict: any) {
+function selectedDistrictF(selectedDistrict: any) {
     selectedDistrictIds.length = 0
     selectedDistrict.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id)
