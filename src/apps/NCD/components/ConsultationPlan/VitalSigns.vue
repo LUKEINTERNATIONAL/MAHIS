@@ -87,6 +87,15 @@ export default defineComponent({
             },
             deep: true,
         },
+        demographics: {
+            async handler() {
+                this.cleanVitalForm();
+                await this.setTodayVitals();
+                await this.validateRowData("onload");
+                this.updateVitalsStores();
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
@@ -94,6 +103,7 @@ export default defineComponent({
     },
     async mounted() {
         await this.checkHeight();
+        await this.setTodayVitals();
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         await this.validateRowData("onload");
@@ -133,6 +143,7 @@ export default defineComponent({
                     modifyFieldValue(this.vitals, item, "disabled", true);
                 } else {
                     modifyFieldValue(this.vitals, item, "value", "");
+                    modifyFieldValue(this.vitals, item, "disabled", false);
                 }
 
                 if (item === "Respiratory rate" && age <= 5) {
