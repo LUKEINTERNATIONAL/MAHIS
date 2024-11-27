@@ -144,7 +144,7 @@
                                         :btn="true"
                                         verticalPosition="top"
                                         side="bottom"
-                                        :programBtn="programBtn"
+                                        :programBtn="programBtn.map((btn:any )=> ({...btn, actionName: checkProgram(btn)}))"
                                         @clicked="async (btn) => { await handleProgramClick(btn);}"
                                     />
                                 </div>
@@ -438,6 +438,7 @@ export default defineComponent({
       enrolledPrograms: [],
       programToEnroll: 0,
       enrollModalTitle: "",
+      programBtn: [],
     };
   },
   computed: {
@@ -700,12 +701,13 @@ export default defineComponent({
       async handleLabourEnrollmentYes() {
         await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, new Date().toString());
         await this.refreshPrograms();
+        toastSuccess("Enrollment is sucessful");
         return this.$router.push("LabourHome");
       },
       async handlePNCEnrollmentYes() {
         await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, new Date().toString());
         await this.refreshPrograms();
-        this.toggleEnrollmentModal();
+        toastSuccess("Enrollment is sucessful");
         return this.$router.push("PNCHome");
       },
     async refreshPrograms() {
