@@ -14,7 +14,7 @@
                     :inputWidth="'100%'"
                     :inputValue="startDate"
                     :eventType="''"
-                    :minDate="minDate"
+                    :minDate="''"
                     :maxDate="''"
                     :disabled="false"
                     @update:rawDateValue="getAppointmentsD1"
@@ -29,7 +29,7 @@
                     :placeholder="'press to select date'"
                     :iconRight="''"
                     :inputWidth="'100%'"
-                    :inputValue="startDate"
+                    :inputValue="endDate"
                     :eventType="''"
                     :minDate="startDate"
                     :maxDate="''"
@@ -55,7 +55,24 @@
             </thead>
             <tbody>
               <tr v-for="person in people" :key="person.npid">
-                <td>{{ person.name }}</td>
+                <td>
+                  <ion-row>
+                    <ion-col>
+                      {{ person.name }}
+                    </ion-col>
+                    <ion-col>
+                      <ion-button 
+                        style="position: absolute; right: 10px; --padding-start: 8px; --padding-end: 8px; --padding-bottom: 4px; --box-shadow: none;" 
+                        @click="openClientProfile(person.npid)" 
+                        color="primary" 
+                        fill="clear" 
+                        size="small"
+                      >
+                        <ion-icon :icon="eyeOutline" style="font-size: 24px;"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </td>
                 <td>{{ person.npid }}</td>
                 <td>{{ person.ageDob }}</td>
                 <td>{{ person.gender }}</td>
@@ -76,26 +93,33 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard } from "@ionic/vue";
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonIcon, IonButton } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import HisDate from "@/utils/Date";
 import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service";
 import DateInputField from "@/components/DateInputField.vue";
-import { calendarOutline, checkmark, pulseOutline } from "ionicons/icons";
+import { calendarOutline, checkmark, pulseOutline, eyeOutline } from "ionicons/icons";
+import { PatientService } from "@/services/patient_service";
+import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
+import { Service } from "@/services/service";
+
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser],
+    mixins: [SetUser, DashboardMixin],
     components: {
-        IonContent,
-        IonHeader,
-        IonPage,
-        IonToolbar,
-        Toolbar,
-        IonRow,
-        DateInputField,
+      IonContent,
+      IonHeader,
+      IonPage,
+      IonToolbar,
+      Toolbar,
+      IonRow,
+      DateInputField,
+      IonIcon,
+      IonButton,
+      IonCol,
     },
     data() {
         const startDate = ref(HisDate.currentDate());
@@ -103,11 +127,12 @@ export default defineComponent({
         const minDate = ref(HisDate.currentDate());
         const people = ref([]) as any;
         return {
-            minDate,
-            startDate,
-            endDate,
-            people,
-            calendarOutline,
+          minDate,
+          startDate,
+          endDate,
+          people,
+          calendarOutline,
+          eyeOutline,
         };
     },
     computed: {
@@ -124,39 +149,56 @@ export default defineComponent({
         this.getAppointments()
     },
     methods: {
-        formatBirthdate(birthdate: any) {
-            return HisDate.getBirthdateAge(birthdate);
-        },
-        async getAppointments() {
-            this.people = [];
-            const appointments = await Appointment.getDailiyAppointments(
-                this.startDate,
-                this.endDate,
-                ""
-            );
-            appointments.forEach((client: any) => {
-                const apptOb = {
-                    person_id: client.person_id,
-                    npid: client.npid,
-                    appointment_id: 103,
-                    encounter_id: client.encounter_id,
-                    name: client.given_name.concat(" ", client.family_name),
-                    gender: client.gender,
-                    ageDob: this.formatBirthdate(client.birthdate),
-                    village: client.city_village,
-                    appointmentDate: HisDate.toStandardHisDisplayFormat(client.appointment_date),
-                };
-                this.people.push(apptOb);
-            });
-        },
-        async getAppointmentsD1(date: any) {
-            this.startDate = HisDate.toStandardHisFormat(date);
-            await this.getAppointments()
-        },
-        async getAppointmentsD2(date: any) {
-            this.endDate = HisDate.toStandardHisFormat(date);
-            await this.getAppointments()
+      formatBirthdate(birthdate: any) {
+        return HisDate.getBirthdateAge(birthdate);
+      },
+      async getAppointments() {
+        this.people = [];
+        const appointments = await Appointment.getAppointments(
+          this.startDate,
+          this.endDate,
+          ""
+        );
+        appointments.forEach((client: any) => {
+          const apptOb = {
+            person_id: client.person_id,
+            npid: client.npid,
+            appointment_id: 103,
+            encounter_id: client.encounter_id,
+            name: client.given_name.concat(" ", client.family_name),
+            gender: client.gender,
+            ageDob: this.formatBirthdate(client.birthdate),
+            village: client.city_village,
+            appointmentDate: HisDate.toStandardHisDisplayFormat(client.appointment_date),
+          };
+          this.people.push(apptOb);
+        });
+      },
+      async getAppointmentsD1(date: any) {
+        this.startDate = HisDate.toStandardHisFormat(date);
+        await this.getAppointments()
+      },
+      async getAppointmentsD2(date: any) {
+        this.endDate = HisDate.toStandardHisFormat(date);
+        await this.getAppointments()
+      },
+      async openClientProfile(patientID: any) {
+        const patientData = await PatientService.findByNpid(patientID);
+        this.setDemographics(patientData[0]);
+        this.isPharmacist()
+      },
+      isPharmacist() {
+        const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
+        const roles: any = roleData ? roleData : [];
+        if (roles.some((role: any) => roles.some((role: any) => role.role === "Pharmacist"))) {
+          this.$router.push("dispensation");
+          if (Service.getProgramID() == 32) {
+            this.$router.push('NCDDispensations');
+          } else {
+             this.$router.push("patientProfile");
+          }
         }
+      }
     },
 });
 </script>

@@ -110,7 +110,7 @@ import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigation
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
+import { formatRadioButtonData, formatCheckBoxData, formatGroupRadioButtonData, formatInputFiledData } from "@/services/formatServerData";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
 import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
@@ -127,6 +127,7 @@ import {
     modifyWizardData,
     modifyFieldValue,
     modifyCheckboxValue,
+    modifyGroupedRadioValue,
 } from "@/services/data_helpers";
 import { useComplicationsStore } from "@/stores/ComplicationsStore";
 export default defineComponent({
@@ -225,6 +226,7 @@ export default defineComponent({
         if (this.NCDActivities.length == 0) {
             this.$router.push("patientProfile");
         }
+        await this.setData();
         await this.markWizard();
     },
     watch: {
@@ -255,6 +257,7 @@ export default defineComponent({
         },
         substance: {
             async handler() {
+                await this.setRiskAssessment();
                 await this.markWizard();
             },
             deep: true,
@@ -276,6 +279,10 @@ export default defineComponent({
     },
 
     methods: {
+        async setData() {
+            await this.setRiskAssessment();
+            await this.setComplications();
+        },
         refreshWizard(): void {
             this.showWizard = false;
             this.currentTabIndex = 0;
@@ -337,6 +344,12 @@ export default defineComponent({
                 this.tabs[3].icon = "";
             }
 
+            if (await this.setComplications()) {
+                this.tabs[4].icon = "check";
+            } else {
+                this.tabs[4].icon = "";
+            }
+
             if (this.selectedNCDMedicationList.length > 0) {
                 console.log(MedicationSelectionHasValues());
                 if (MedicationSelectionHasValues() == true) {
@@ -366,32 +379,64 @@ export default defineComponent({
                 this.$router.push("patientProfile");
             }
         },
+        async setRiskAssessment() {
+            let smoke = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Smoking history");
+            const drink = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Does the patient drink alcohol?");
+            if (smoke == "patient smokes") smoke = "Smoking";
+            if (smoke) modifyRadioValue(this.substance, "Smoking history", "selectedValue", smoke);
+            if (drink) modifyRadioValue(this.substance, "Does the patient drink alcohol?", "selectedValue", drink);
+        },
+        async setComplications() {
+            const neuropathy = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Peripheral neuropathy");
+            const deformity = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Deformity");
+            const ulcers = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Ulcers");
+            const leftEye = await ObservationService.getFirstValueText(this.demographics.patient_id, "Left eye visual acuity");
+            const rightEye = await ObservationService.getFirstValueText(this.demographics.patient_id, "Right eye visual acuity");
+            const cv = await ObservationService.getFirstValueText(this.demographics.patient_id, "CVD");
+
+            if (leftEye) modifyFieldValue(this.visualScreening, "Left eye visual acuity", "value", leftEye);
+            if (rightEye) modifyFieldValue(this.visualScreening, "Right eye visual acuity", "value", rightEye);
+            if (cv) modifyFieldValue(this.cvScreening, "CVD", "value", cv);
+            if (neuropathy) modifyGroupedRadioValue(this.FootScreening, "Peripheral neuropathy", "selectedValue", neuropathy);
+            if (deformity) modifyGroupedRadioValue(this.FootScreening, "Deformity", "selectedValue", deformity);
+            if (ulcers) modifyGroupedRadioValue(this.FootScreening, "Ulcers", "selectedValue", ulcers);
+
+            if (neuropathy || deformity || ulcers || leftEye || rightEye || cv) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         async saveComplications() {
-            // await this.saveVisualScreening();
-            // await this.saveFootScreening();
-        },
-        async saveFootScreening() {
-            const childData = await formatRadioButtonData(this.visualScreening);
-            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
-                {
+            const data = [];
+            const childDataVisualScreening = await formatInputFiledData(this.visualScreening);
+            const childDataFootScreening = await formatGroupRadioButtonData(this.FootScreening);
+            const childDataCVRisk = await formatInputFiledData(this.cvScreening);
+            if (childDataVisualScreening.length > 0) {
+                data.push({
                     concept_id: await ConceptService.getConceptID("Visual acuity", true),
                     value_text: "visual acuity test",
                     obs_datetime: ConceptService.getSessionDate(),
-                    child: childData,
-                },
-            ]);
-        },
-        async saveVisualScreening() {
-            const childData = await formatInputFiledData(this.visualScreening);
-            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
-                {
-                    concept_id: await ConceptService.getConceptID("Visual acuity", true),
-                    value_text: "visual acuity test",
+                    child: childDataVisualScreening,
+                });
+            }
+            if (childDataFootScreening.length > 0) {
+                data.push({
+                    concept_id: await ConceptService.getConceptID("Foot check", true),
+                    value_text: "foot screening",
                     obs_datetime: ConceptService.getSessionDate(),
-                    child: childData,
-                },
-            ]);
+                    child: childDataFootScreening,
+                });
+            }
+            if (childDataCVRisk.length > 0) {
+                data.push(...childDataCVRisk);
+            }
+            if (data.length > 0) {
+                await saveEncounterData(this.demographics.patient_id, EncounterTypeId.SCREENING, "" as any, data);
+                toastSuccess("Complications saved successfully");
+            }
         },
+
         async saveVitals() {
             if (await validateInputFiledData(this.vitals)) {
                 const userID: any = Service.getUserID();
