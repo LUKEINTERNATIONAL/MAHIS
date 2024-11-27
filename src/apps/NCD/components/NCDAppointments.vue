@@ -191,12 +191,11 @@ export default defineComponent({
         const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
         const roles: any = roleData ? roleData : [];
         if (roles.some((role: any) => roles.some((role: any) => role.role === "Pharmacist"))) {
-          this.$router.push("dispensation");
           if (Service.getProgramID() == 32) {
             this.$router.push('NCDDispensations');
-          } else {
-             this.$router.push("patientProfile");
           }
+        } else {
+          this.$router.push("patientProfile");
         }
       }
     },
