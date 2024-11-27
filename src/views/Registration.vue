@@ -438,22 +438,26 @@ export default defineComponent({
             }
         },
         async possibleDuplicates() {
-            const ddeInstance = new PatientDemographicsExchangeService();
-            this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
-            if (this.deduplicationData.length > 0) {
-                const response: any = await createModal(PersonMatchView, { class: "fullScreenModal" }, true, {
-                    to_be_registered: toRaw(this.personInformation[0].selectedData),
-                    deduplicationData: this.deduplicationData,
-                });
-                if (response != "dismiss" && response != "back") {
-                    const result = await ddeInstance.importPatient(response?.person?.id);
-                    await this.findPatient(result.patient_id);
-                    return true;
-                } else if (response == "back") {
-                    return true;
+            try {
+                const ddeInstance = new PatientDemographicsExchangeService();
+                this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
+                if (this.deduplicationData.length > 0) {
+                    const response: any = await createModal(PersonMatchView, { class: "fullScreenModal" }, true, {
+                        to_be_registered: toRaw(this.personInformation[0].selectedData),
+                        deduplicationData: this.deduplicationData,
+                    });
+                    if (response != "dismiss" && response != "back") {
+                        const result = await ddeInstance.importPatient(response?.person?.id);
+                        await this.findPatient(result.patient_id);
+                        return true;
+                    } else if (response == "back") {
+                        return true;
+                    }
+                    return false;
+                } else {
+                    return false;
                 }
-                return false;
-            } else {
+            } catch (error) {
                 return false;
             }
         },
@@ -563,7 +567,7 @@ export default defineComponent({
             } else return "";
         },
         async setOfflineData(item: any) {
-            await await resetPatientData();
+            await resetPatientData();
             this.setOfflineDemographics(item);
             this.isLoading = false;
             let url = "/patientProfile";
@@ -571,7 +575,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         async openNewPage(item: any) {
-            await await resetPatientData();
+            await resetPatientData();
             this.setDemographics(item);
             await UserService.setProgramUserActions();
             this.isLoading = false;
