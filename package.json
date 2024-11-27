@@ -37,11 +37,7 @@
     "@vue/compiler-sfc": "^3.4.31",
     "@vueform/toggle": "^2.1.4",
     "@vuepic/vue-datepicker": "^8.1.0",
-<<<<<<< HEAD
-    "apexcharts": "^4.1.0",
-=======
     "apexcharts": "^4.0.0",
->>>>>>> b01ec3256e55770e5675ee257bc028106b706923
     "bootstrap": "^5.3.3",
     "capacitor-blob-writer": "^1.1.14",
     "chart.js": "^4.4.2",
