@@ -1,4 +1,5 @@
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 import { DRUG_FREQUENCIES, DrugPrescriptionForImmunizationService } from "../../../services/drug_prescription_for_immunization_service";
 import { isEmpty } from "lodash";
 import { Service } from "@/services/service";
@@ -20,23 +21,37 @@ export async function getVaccinesSchedule(patientID = null) {
     const patient = new PatientService();
     const id = patientID !== null ? patientID : patient.getID();
     
-    if (id) {
-      try {
-            const apiStatus: any = await ApiClient.healthCheck();
+    try {
+        const apiStatus: any = await ApiClient.healthCheck();
 
-            // Check if apiStatus is defined and has the 'ok' property
-            if (apiStatus && apiStatus.ok) {
-                const data = await Service.getJson("eir/schedule", { patient_id: id });
+        // Check if apiStatus is defined and has the 'ok' property
+        if (apiStatus && apiStatus.ok) {
+            const data = await Service.getJson("eir/schedule", { patient_id: id });
+            return data;
+        } else {
+            let genericVaccineSchedule = [];
+            if (id) {
+               
+                genericVaccineSchedule = await getGenericVaccineSchedule(patient.getGender())
+                const birthdate = new Date(patient.getBirthdate());
+                const data = await getOfflineVaccineSchedule(birthdate, genericVaccineSchedule);
                 return data;
-            } else {
-                const data = await getOfflineVaccineSchedule(patient);
+            } else { 
+                const demographics = useDemographicsStore().getDemographics();
+                genericVaccineSchedule = await getGenericVaccineSchedule(demographics.gender);
+
+                const birthdateString = demographics.birthdate 
+                const birthdate = new Date(birthdateString); 
+
+                const data = await getOfflineVaccineSchedule(birthdate, genericVaccineSchedule);
                 return data;
             }
-        } catch (error) {
-            console.error("Error during health check:", error);
         }
-
+    } catch (error) {
+        console.error("Error during health check:", error);
     }
+
+    
 }
 
 export async function saveVaccineAdministeredDrugs() {
@@ -67,11 +82,7 @@ export async function saveVaccineAdministeredDrugs() {
     }
 }
 
-async function getOfflineVaccineSchedule(patient: any) { 
-    const genericVaccineSchedule = await getGenericVaccineSchedule(patient.getGender())
-
-    const birthdateString = patient.getBirthdate(); 
-    const birthdate = new Date(birthdateString); 
+async function getOfflineVaccineSchedule(birthdate: Date, genericVaccineSchedule: any ) { 
 
     const vaccineSchudule = await updateMilestoneStatus(birthdate, genericVaccineSchedule)
     return vaccineSchudule;
