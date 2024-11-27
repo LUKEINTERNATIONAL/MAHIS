@@ -15,6 +15,9 @@ export const useDemographicsStore = defineStore("demographicStore", {
         getPatient() {
             return this.patient;
         },
+        getDemographics() { 
+            return this.demographics;
+        }
     },
     persist: true,
 });
