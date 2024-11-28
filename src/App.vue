@@ -92,7 +92,9 @@ export default defineComponent({
                 // });
                 // if (confirm) location.reload();
                 toastSuccess("Connection restored");
-                await workerData.postData("SYNC_PATIENT_RECORD");
+                await workerData.postData("SYNC_UNSAVED_PATIENT_RECORD");
+                await workerData.postData("SYNC_SAVED_PATIENT_RECORD");
+                await workerData.terminate();
             }
             if (res && res.status === 401 && route.name != "Login") {
                 router.push("/login");
