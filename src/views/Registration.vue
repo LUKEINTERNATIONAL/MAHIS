@@ -492,7 +492,7 @@ export default defineComponent({
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 this.offlinePatientID = Date.now();
                 await this.createOfflineRecord(this.offlinePatientID);
-                await workerData.postData("SYNC_UNSAVED_PATIENT_RECORD");
+                await workerData.postData("SYNC_PATIENT_RECORD");
             } else {
                 toastWarning("Please complete all required fields");
             }
