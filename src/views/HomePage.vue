@@ -181,6 +181,7 @@ export default defineComponent({
         await workerData.postData("SET_OFFLINE_LOCATION");
         await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
         await workerData.postData("SYNC_PATIENT_RECORD");
+        await workerData.postData("SET_GENERIC_VACCINE_SCHEDULE");
         resetDemographics();
         this.setView();
         await useGlobalPropertyStore().loadGlobalProperty();

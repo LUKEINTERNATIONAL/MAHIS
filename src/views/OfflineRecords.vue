@@ -17,7 +17,7 @@
                                 <th>Full Name</th>
                                 <th>Offline MRN</th>
                                 <th>Server MRN</th>
-                                <th>Personal Info Status</th>
+                                <th>Sync Status</th>
                                 <th>Birth Registration Status</th>
                                 <th>Guardian Info Status</th>
                                 <th>Vitals Status</th>
@@ -127,6 +127,12 @@ export default defineComponent({
         stock: {
             async handler() {
                 // await this.buildTableData();
+            },
+            deep: true,
+        },
+        $route: {
+            async handler() {
+                await this.buildTableData();
             },
             deep: true,
         },

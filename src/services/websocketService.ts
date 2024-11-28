@@ -2,13 +2,14 @@ import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
 export class WebSocketService {
     private socket: WebSocket | null = null;
-    private channel: string = "ImmunizationReportChannel";
+    private channels: string[];
     private isConnected: boolean = false;
     private pendingFetch: (() => void) | null = null;
     private location_id: any;
 
-    constructor() {
+    constructor(channels: string[])  {
         this.initPromise = this.init();
+        this.channels = channels;
     }
     private initPromise: Promise<void>;
     private async init() {
@@ -57,15 +58,18 @@ export class WebSocketService {
     };
 
     public subscribe() {
-        if (this.socket) {
-            const subscribeMessage = {
-                command: "subscribe",
-                identifier: JSON.stringify({ channel: this.channel, location_id: this.location_id }),
-            };
-            this.socket.send(JSON.stringify(subscribeMessage));
+       if (this.socket) {
+            this.channels.forEach((channel, index) => { 
+                const subscribeMessage = {
+                    command: "subscribe",
+                    identifier: JSON.stringify({ channel: channel, location_id: this.location_id })
+                };
+                this.socket.send(JSON.stringify(subscribeMessage));
+            });
         } else {
             console.error("WebSocket connection not established.");
         }
+
     }
 
     public async getPatientSummary() {

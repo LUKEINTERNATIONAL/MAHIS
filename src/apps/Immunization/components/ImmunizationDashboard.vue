@@ -156,7 +156,7 @@ export default defineComponent({
     watch: {},
 
     async mounted() {
-        const wsService = new WebSocketService();
+        const wsService = new WebSocketService(["ClientDetailsChannel","ImmunizationReportChannel"]);
         wsService.setMessageHandler(this.onMessage);
     },
     methods: {
