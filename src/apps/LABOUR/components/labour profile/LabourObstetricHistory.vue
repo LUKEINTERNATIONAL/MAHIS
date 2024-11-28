@@ -6,7 +6,7 @@
                     <ion-label class="previousLabel">Obstetric History</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <LabourMedications />
+                    <LabourObstetricData />
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -37,7 +37,7 @@ import {
     IonRadio,
     IonRadioGroup,
 } from "@ionic/vue";
-import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
+import LabourObstetricData from "@/apps/LABOUR/components/labour profile/LabourObstetricData.vue";
 import BasicForm from "../../../../components/BasicForm.vue";
 import { icons } from "@/utils/svg";
 import BasicInputField from "../../../../components/BasicInputField.vue";
@@ -80,7 +80,7 @@ export default defineComponent({
         BasicForm,
         IonRadio,
         IonRadioGroup,
-        LabourMedications,
+        LabourObstetricData,
     },
 
     data() {
