@@ -33,7 +33,7 @@ class WorkerManager {
         this.workerApi = useWebWorker(this.workerUrl);
     }
 
-    async updateData() {
+    async updateSettings() {
         // Build API URL
         const protocol = localStorage.getItem("apiProtocol") || "http";
         const apiUrl = localStorage.getItem("apiURL") || "";
@@ -74,7 +74,7 @@ class WorkerManager {
     }
 
     async postData(type: string, payload: any = "") {
-        await this.updateData();
+        await this.updateSettings();
         return this.workerApi.post({
             type,
             url: this.state.value.url,
