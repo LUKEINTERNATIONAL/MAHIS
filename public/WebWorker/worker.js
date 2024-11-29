@@ -1,6 +1,6 @@
 // start common code
 // import { DatabaseManager } from "./db";
-importScripts("db.js", "client.js", "location.js", "patient.js", "program.js", "relationships.js", "sync_patient_data.js");
+importScripts("db.js", "client.js", "location.js", "patient.js", "program.js", "relationships.js", "sync_patient_data.js", "dde.js");
 
 let APIURL = "";
 let APIKEY = "";
@@ -92,6 +92,15 @@ self.onmessage = async (event) => {
                     self.postMessage("Done");
                 } catch (error) {
                     console.log("SYNC_PATIENT_RECORD ~ error:", error);
+                }
+                break;
+            case "SYNC_DDE":
+                try {
+                    await ddeService.setDDEIds();
+                    console.log("SYNC_DDE ~ storeName:", type);
+                    self.postMessage("Done");
+                } catch (error) {
+                    console.log("SYNC_DDE ~ error:", error);
                 }
                 break;
             default:
