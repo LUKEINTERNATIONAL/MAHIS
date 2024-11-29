@@ -1,4 +1,14 @@
 <template>
+    <ion-accordion-group ref="accordionGroup" class="previousView ion-margin-bottom">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+            <ion-item slot="header" color="light">
+                <ion-label class="previousLabel">Woman Behaviour History</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+                <LabourBehaviourHistory />
+            </div>
+        </ion-accordion>
+    </ion-accordion-group>
     <div class="container">
         <!-- Caffeine -->
         <ion-card class="section">
@@ -13,11 +23,6 @@
                 <basic-form :contentData="Tobacco" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
             </ion-card-content>
         </ion-card>
-        <!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
-        <!--    <div class="navigation-buttons">-->
-        <!--      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>-->
-        <!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>-->
-        <!--    </div>-->
     </div>
 </template>
 
@@ -46,6 +51,7 @@ import { mapState } from "pinia";
 import { getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/profile_validation_service";
 import { useLabourWomanBehaviourStore } from "../../stores/labour profile/labourWomanBehaviour";
+import LabourBehaviourHistory from "@/apps/LABOUR/components/labour profile/LabourBehaviourHistory.vue";
 
 export default defineComponent({
     name: "Menu",
@@ -63,6 +69,7 @@ export default defineComponent({
         IonSelectOption,
         IonInput,
         BasicInputField,
+        LabourBehaviourHistory,
     },
     data() {
         return {

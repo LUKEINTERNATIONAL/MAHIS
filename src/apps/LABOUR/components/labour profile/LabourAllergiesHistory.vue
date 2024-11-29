@@ -6,7 +6,7 @@
                     <!-- Chronic conditions section -->
                     <div v-if="immunisation && immunisation.length > 0">
                         <div style="max-width: 1000px">
-                            <div class="heading">PREGNANCY COMPLICATIONS</div>
+                            <div class="heading">ALLERGIES DATA</div>
                             <div>
                                 <ion-row>
                                     <ion-col class="contentTitle"></ion-col>
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="noData" v-else>COMPLICATIONS DATA IS EMPTY</div>
+                    <div class="noData" v-else>ALLERGIES DATA IS EMPTY</div>
                 </div>
             </ion-col>
         </ion-row>
@@ -111,11 +111,12 @@ export default defineComponent({
         },
         async getValueCoded() {
             try {
-                const data = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "past pregnancies complications");
-                console.log("Fetched past pregnancies complications:", data);
+                const data = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Does the woman have any allergies?");
+
+                console.log("Fetched allergies use:", data);
                 this.immunisation = data;
             } catch (error) {
-                console.error("Error fetching past pregnancies complications:", error);
+                console.error("Error fetching allergies use:", error);
             }
         },
         async updateData() {

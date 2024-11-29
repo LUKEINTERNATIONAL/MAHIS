@@ -6,7 +6,7 @@
                     <ion-label class="previousLabel">Surgeries History</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <LabourMedications />
+                    <LabourPastSurgeriesHistory />
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -34,7 +34,7 @@ import {
     IonInput,
     IonSelect,
 } from "@ionic/vue";
-import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
+import LabourPastSurgeriesHistory from "@/apps/LABOUR/components/labour profile/LabourPastSurgeriesHistory.vue";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 import { ref } from "vue";
@@ -74,7 +74,7 @@ export default defineComponent({
         IonInput,
         BasicInputField,
         BasicForm,
-        LabourMedications,
+        LabourPastSurgeriesHistory,
     },
     data() {
         return {

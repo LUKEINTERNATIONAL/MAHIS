@@ -187,7 +187,7 @@ import LabourWomanBehaviour from "@/apps/LABOUR/components/labour profile/Labour
 import LabourAllergies from "@/apps/LABOUR/components/labour profile/LabourAllergies.vue";
 import LabourPastSurgeries from "@/apps/LABOUR/components/labour profile/LabourPastSurgeries.vue";
 import LabourChronicHealthConditions from "@/apps/LABOUR/components/labour profile/LabourChronicHealthConditions.vue";
-import LabourVaccineHistory from "@/apps/LABOUR/components/labour profile/LabourVaccineHistory.vue";
+import LabourVaccineHistory from "@/apps/LABOUR/components/labour profile/LabourVaccine.vue";
 import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
 import LabourObstetricHistory from "@/apps/LABOUR/components/labour profile/LabourObstetricHistory.vue";
 import LabourComplications from "@/apps/LABOUR/components/labour profile/LabourComplications.vue";

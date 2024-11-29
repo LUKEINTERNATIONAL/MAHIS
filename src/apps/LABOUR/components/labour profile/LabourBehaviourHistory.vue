@@ -6,7 +6,7 @@
                     <!-- Chronic conditions section -->
                     <div v-if="immunisation && immunisation.length > 0">
                         <div style="max-width: 1000px">
-                            <div class="heading">PREGNANCY COMPLICATIONS</div>
+                            <div class="heading">WOMAN BEHAVIOUR</div>
                             <div>
                                 <ion-row>
                                     <ion-col class="contentTitle"></ion-col>
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="noData" v-else>COMPLICATIONS DATA IS EMPTY</div>
+                    <div class="noData" v-else>WOMEN BEHAVIOUR DATA IS EMPTY</div>
                 </div>
             </ion-col>
         </ion-row>
@@ -111,11 +111,17 @@ export default defineComponent({
         },
         async getValueCoded() {
             try {
-                const data = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "past pregnancies complications");
-                console.log("Fetched past pregnancies complications:", data);
+                const caffeine = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Daily caffeine use");
+                const tobacco = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Recently quit tobacco products");
+                const smoke = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Exposure to second hand smoke");
+                //const pica = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Pica"); // create its concept first
+                const alcohol = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Alcohol");
+
+                const data = [...caffeine, ...tobacco, ...smoke, ...alcohol];
+                console.log("Fetched Daily caffeine use:", data);
                 this.immunisation = data;
             } catch (error) {
-                console.error("Error fetching past pregnancies complications:", error);
+                console.error("Error fetching Daily caffeine use:", error);
             }
         },
         async updateData() {
