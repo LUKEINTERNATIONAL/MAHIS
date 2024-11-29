@@ -15,7 +15,7 @@ const DatabaseManager = {
 
             request.onupgradeneeded = (event) => {
                 const database = event.target.result;
-                const objectStores = ["relationship", "districts", "TAs", "villages", "countries", "programs", "patientRecords"];
+                const objectStores = ["relationship", "districts", "TAs", "villages", "countries", "programs", "patientRecords", "dde"];
 
                 objectStores.forEach((storeName) => {
                     if (!database.objectStoreNames.contains(storeName)) {
