@@ -3,33 +3,22 @@
         <ion-row>
             <ion-col offset="0.1" size="7">
                 <div class="visitData">
-                    <!-- anc info -->
-                    <div v-if="Object.values(pregnancy).every((value) => value !== '')">
+                    <!-- Chronic conditions section -->
+                    <div v-if="immunisation && immunisation.length > 0">
                         <div style="max-width: 1000px">
-                            <div class="heading">COMPLICATIONS DATA</div>
+                            <div class="heading">CHRONIC CONDITIONS</div>
                             <div>
                                 <ion-row>
-                                    <ion-col class="contentTitle">GRAVIDA</ion-col>
-                                    <ion-col class="contentTitle">Asthma</ion-col>
-                                    <ion-col class="contentTitle">Auto-immune desease</ion-col>
-                                    <!-- <ion-col class="contentTitle">STILLBIRTHS</ion-col>
-                                    <ion-col class="contentTitle">LIVE BIRTHS</ion-col>
-                                    <ion-col class="contentTitle">PREGNANCY COMPLICATIONS</ion-col> -->
+                                    <ion-col class="contentTitle"></ion-col>
                                 </ion-row>
-                                <ion-row>
-                                    <ion-col>{{ pregnancy.Gravida }}</ion-col>
-                                    <ion-col>{{ pregnancy.Asthma }}</ion-col>
-                                    <ion-col>{{ pregnancy["Auto-immune desease"] }}</ion-col>
-                                    <!-- <ion-col>{{ pregnancy["Abortions/Miscarriages"] }}</ion-col>
-                                    <ion-col>{{ pregnancy.test }}</ion-col> -->
+                                <ion-row v-for="(condition, index) in immunisation" :key="index">
+                                    <ion-col>{{ condition }}</ion-col>
                                 </ion-row>
                                 <br />
                             </div>
                         </div>
                     </div>
-                    <div class="noData" v-else-if="activeProgramID !== 32">CHRONIC HISTORY IS EMPTY</div>
-                    <!-- end of anc info -->
-                    <!-- <div class="noData" v-else>ANC-Profile</div> -->
+                    <div class="noData" v-else>CHRONIC CONDITIONS DATA IS EMPTY</div>
                 </div>
             </ion-col>
         </ion-row>
@@ -88,6 +77,7 @@ export default defineComponent({
             vitalsWeightHeight: {} as any,
             savedEncounters: [] as any,
             pregnancy: {} as any,
+            immunisation: [] as string[],
         };
     },
     watch: {
@@ -120,21 +110,12 @@ export default defineComponent({
             this.getValueCoded();
         },
         async getValueCoded() {
-            const immunisation = await ObservationService.getFirstObsValue(this.demographics.patient_id, "chronic conditions", "value_coded");
-            const autoImmun = await ObservationService.getFirstObsValue(this.demographics.patient_id, "chronic conditions", "value_coded");
-
-            if (immunisation === "Asthma") {
-                console.log("Its pulling from backend");
-                this.pregnancy.Asthma = immunisation;
-            } else {
-                console.log("its not pulling from backend");
-            }
-
-            if (autoImmun === "Auto-immune desease") {
-                console.log("Auto-immune desease is pulling from backend");
-                this.pregnancy["Auto-immune desease"] = autoImmun;
-            } else {
-                console.log(" Auto-immune desease its not pulling from backend");
+            try {
+                const data = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "chronic conditions");
+                console.log("Fetched chronic conditions:", data);
+                this.immunisation = data;
+            } catch (error) {
+                console.error("Error fetching chronic conditions:", error);
             }
         },
         async updateData() {
