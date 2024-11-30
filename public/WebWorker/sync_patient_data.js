@@ -4,13 +4,13 @@ const syncPatientDataService = {
         const ids = [];
         await Promise.all(
             patientRecords.map(async (record) => {
-                ids.push(record.serverPatientID);
+                ids.push(record.ID);
             })
         );
         return ids;
     },
     async getPatientData() {
-        const patients_ids = await ApiService.getData("/sync/patients_ids", { ids: "" });
+        const patients_ids = await ApiService.getData("/sync/patients_ids", { ids: await getOfflineSavedPatientIds() });
         await Promise.all(
             patients_ids.map(async (id) => {
                 const record = await ApiService.getData(`/patients/${id}`);
@@ -19,15 +19,13 @@ const syncPatientDataService = {
         );
     },
     async savePatientRecord(data) {
-        console.log("🚀 ~ savePatientRecord ~ data:", data);
-        // await DatabaseManager.addData("patientRecords", data);
+        await DatabaseManager.addData("patientRecords", data);
     },
     async buildPatientData(record) {
-        console.log("🚀 ~ buildPatientData ~ record:", record);
         return {
             patientID: record.patient_id,
             ID: this.patientIdentifier(record, 3),
-            NCDID: this.patientIdentifier(record, 31),
+            NcdID: this.patientIdentifier(record, 31),
             personInformation: {
                 given_name: record.person.names[0].given_name,
                 middle_name: record.person.names[0].middle_name,
@@ -59,9 +57,9 @@ const syncPatientDataService = {
                 relationshipID: "",
             },
             vitals: {},
-            saveStatusPersonInformation: "pending",
-            saveStatusGuardianInformation: "pending",
-            saveStatusBirthRegistration: "pending",
+            saveStatusPersonInformation: "complete",
+            saveStatusGuardianInformation: "complete",
+            saveStatusBirthRegistration: "complete",
             date_created: "",
             creator: "",
         };
