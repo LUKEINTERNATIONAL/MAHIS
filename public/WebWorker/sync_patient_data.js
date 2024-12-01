@@ -2,15 +2,18 @@ const syncPatientDataService = {
     async getOfflineSavedPatientIds() {
         const patientRecords = await DatabaseManager.getOfflineData("patientRecords");
         const ids = [];
-        await Promise.all(
-            patientRecords.map(async (record) => {
-                ids.push(record.ID);
-            })
-        );
+        if (patientRecords) {
+            await Promise.all(
+                patientRecords?.map(async (record) => {
+                    ids.push(record.ID);
+                })
+            );
+        }
+
         return ids;
     },
     async getPatientData() {
-        const patients_ids = await ApiService.getData("/sync/patients_ids", { ids: await getOfflineSavedPatientIds() });
+        const patients_ids = await ApiService.getData("/sync/patients_ids", { ids: await this.getOfflineSavedPatientIds() });
         await Promise.all(
             patients_ids.map(async (id) => {
                 const record = await ApiService.getData(`/patients/${id}`);
