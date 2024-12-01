@@ -15,8 +15,7 @@
                         <thead>
                             <tr>
                                 <th>Full Name</th>
-                                <th>Offline MRN</th>
-                                <th>Server MRN</th>
+                                <th>ID</th>
                                 <th>Personal Info Status</th>
                                 <th>Birth Registration Status</th>
                                 <th>Guardian Info Status</th>
@@ -174,8 +173,7 @@ export default defineComponent({
                         this.reportData = document.map((item: any) => {
                             return [
                                 item.personInformation.given_name + " " + item.personInformation.family_name,
-                                item.offlinePatientID,
-                                this.patientIdentifier(item.patientData),
+                                item.ID,
                                 item.saveStatusPersonInformation,
                                 item.saveStatusBirthRegistration,
                                 item.saveStatusGuardianInformation,
