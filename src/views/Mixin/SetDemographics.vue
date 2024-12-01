@@ -28,10 +28,10 @@ export default defineComponent({
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
         },
-        patientIdentifier(identifiers: any, id: any) {
+        getPatientIdentifier(identifiers: any, id: any) {
             if (identifiers) {
                 return identifiers.patient_identifiers
-                    .filter((identifier: any) => identifier.identifier_type === 3)
+                    .filter((identifier: any) => identifier.identifier_type === id)
                     .map((identifier: any) => identifier.identifier)
                     .join(", ");
             } else {
@@ -44,9 +44,9 @@ export default defineComponent({
         buildPatientData(record: any) {
             return {
                 patientID: record.patient_id,
-                ID: this.patientIdentifier(record, 3),
-                NcdID: this.patientIdentifier(record, 31),
-                DocID: this.patientIdentifier(record, 27),
+                ID: this.getPatientIdentifier(record, 3),
+                NcdID: this.getPatientIdentifier(record, 31),
+                DocID: this.getPatientIdentifier(record, 27),
                 personInformation: {
                     given_name: record.person.names[0].given_name,
                     middle_name: record.person.names[0].middle_name,
