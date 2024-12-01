@@ -571,7 +571,7 @@ export default defineComponent({
         },
         async setOfflineData(item: any) {
             await resetPatientData();
-            this.setOfflineDemographics(item);
+            this.setDemographics(item);
             this.isLoading = false;
             let url = "/patientProfile";
             this.disableSaveBtn = false;
