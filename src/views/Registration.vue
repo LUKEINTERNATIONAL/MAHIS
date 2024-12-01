@@ -500,7 +500,18 @@ export default defineComponent({
         },
         async createOfflineRecord() {
             const ddeIds = await getOfflineRecords("dde");
-            this.ddeId = ddeIds[0].ids[0].npid;
+            this.ddeId = ddeIds.ids[0].npid;
+            const Weight = getFieldValue(this.birthRegistration, "Weight", "value");
+            let vitals: any = [];
+            if (Weight) {
+                vitals = [
+                    {
+                        concept_id: 5089,
+                        obs_datetime: HisDate.currentDate(),
+                        value_numeric: Weight,
+                    },
+                ];
+            }
             const offlineRecord: any = {
                 ID: this.ddeId,
                 NcdID: "",
@@ -513,7 +524,7 @@ export default defineComponent({
                     birthID: this.validatedBirthID(),
                     relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
                 },
-                vitals: {},
+                vitals: vitals,
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",
