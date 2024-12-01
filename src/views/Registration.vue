@@ -152,6 +152,7 @@ import { UserService } from "@/services/user_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
+import { useStatusStore } from "@/stores/StatusStore";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts, SetDemographics],
     components: {
@@ -175,7 +176,7 @@ export default defineComponent({
     data() {
         return {
             workerApi: "" as any,
-            offlinePatientID: null as any,
+            ddeId: null as any,
             iconListStatus: "active_icon",
             deduplicationData: "active_icon",
             iconGridStatus: "inactive_icon",
@@ -207,6 +208,7 @@ export default defineComponent({
         ]),
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
         ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
         nationalID() {
             return getFieldValue(this.personInformation, "nationalID", "value");
         },
@@ -267,11 +269,11 @@ export default defineComponent({
     watch: {
         workerApi: {
             async handler() {
-                if (this.workerApi?.data == "Done" && this.offlinePatientID) {
+                if (this.workerApi?.data == "Done" && this.ddeId) {
                     toastSuccess("Successfully Created Patient");
                     await db
                         .collection("patientRecords")
-                        .doc({ offlinePatientID: this.offlinePatientID })
+                        .doc({ ID: this.ddeId })
                         .get()
                         .then(async (document: any) => {
                             await workerData.terminate();
@@ -463,7 +465,6 @@ export default defineComponent({
             }
         },
         async createPatient() {
-            this.offlinePatientID = "";
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
             await this.buildPersonalInformation();
@@ -482,7 +483,7 @@ export default defineComponent({
                 this.disableSaveBtn = true;
                 this.isLoading = true;
 
-                if (this.globalPropertyStore.dde_enabled === "true") {
+                if (this.globalPropertyStore.dde_enabled === "true" && this.apiStatus) {
                     if (await this.possibleDuplicates()) {
                         this.disableSaveBtn = false;
                         this.isLoading = false;
@@ -491,17 +492,17 @@ export default defineComponent({
                 }
 
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-                this.offlinePatientID = Date.now();
-                await this.createOfflineRecord(this.offlinePatientID);
-                await workerData.postData("SYNC_PATIENT_RECORD");
+                await this.createOfflineRecord();
+                if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD");
             } else {
                 toastWarning("Please complete all required fields");
             }
         },
-        async createOfflineRecord(offlinePatientID: any) {
+        async createOfflineRecord() {
             const ddeIds = await getOfflineRecords("dde");
+            this.ddeId = ddeIds[0].ids[0].npid;
             const offlineRecord: any = {
-                ID: ddeIds[0].ids[0].npid,
+                ID: this.ddeId,
                 NcdID: "",
                 patientID: "",
                 personInformation: toRaw(this.personInformation[0].selectedData),
