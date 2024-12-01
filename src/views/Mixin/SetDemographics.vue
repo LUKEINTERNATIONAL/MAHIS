@@ -8,23 +8,12 @@ export default defineComponent({
     }),
     methods: {
         setDemographics(item: any) {
-            let fullName = "";
-            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
-            } else {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
-            }
             const addressComponents = [
                 item?.person?.addresses[0]?.state_province,
                 item?.person?.addresses[0]?.township_division,
                 item?.person?.addresses[0]?.city_village,
             ];
-
             const address = addressComponents.filter(Boolean).join(",");
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient(this.buildPatientData(item));
-        },
-        setOfflineDemographics(item: any) {
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
         },
