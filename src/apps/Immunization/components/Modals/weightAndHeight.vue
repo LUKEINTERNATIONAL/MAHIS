@@ -104,11 +104,11 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 this.checkAge();
             },
@@ -120,8 +120,8 @@ export default defineComponent({
     setup() {},
     methods: {
         checkAge() {
-            if (!isEmpty(this.demographics.birthdate)) {
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics.birthdate) < 42 ? true : false;
+            if (!isEmpty(this.patient.personInformation.birthdate)) {
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.patient.personInformation.birthdate) < 42 ? true : false;
                 this.controlHeight();
             }
         },
@@ -129,7 +129,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics.birthdate);
+            return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
         },
         controlHeight() {
             if (this.checkUnderSixWeeks) {
@@ -141,7 +141,7 @@ export default defineComponent({
         },
         async validaterowData(event: any) {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            const vitalsInstance = new VitalsService(this.patient.patientID, userID);
 
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
             const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
@@ -162,7 +162,7 @@ export default defineComponent({
         },
         async saveVitals() {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            const vitalsInstance = new VitalsService(this.patient.patientID, userID);
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
             const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
             let height = null;
@@ -197,12 +197,12 @@ export default defineComponent({
             modalController.dismiss();
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.patient.personInformation.gender && this.patient.personInformation.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient.personInformation.gender,
+                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();
