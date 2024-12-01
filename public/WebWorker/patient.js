@@ -77,7 +77,11 @@ const patientService = {
         if (!(await this.validateID(record.otherPersonInformation))) return;
         const patientID = await this.savePersonInformation(record);
         if (!patientID) return;
-        await Promise.all([this.createGuardian(patientID, record), this.saveBirthdayData(patientID, record)]);
+        await Promise.all([
+            await this.createGuardian(patientID, record),
+            await this.saveBirthdayData(patientID, record),
+            await this.saveVitalsData(patientID, record),
+        ]);
         return patientID;
     },
     async validateID({ nationalID, birthID }) {
@@ -158,6 +162,25 @@ const patientService = {
                 }
             } else {
                 await this.updateSaveStatus(record, { saveStatusBirthRegistration: "Not recorded" });
+            }
+        }
+    },
+    async saveVitalsData(patientID, record) {
+        if (record.saveStatusVitals === "pending") {
+            if (record.vitals.length > 0) {
+                try {
+                    const encounter = await this.createEncounter(patientID, 6);
+                    const encounterID = encounter.encounter_id;
+                    await this.saveObs({
+                        encounter_id: encounterID,
+                        observations: record.vitals,
+                    });
+                    await this.updateSaveStatus(record, { saveStatusVitals: "complete" });
+                } catch (error) {
+                    console.error("Failed to save vitals information");
+                }
+            } else {
+                await this.updateSaveStatus(record, { saveStatusVitals: "Not recorded" });
             }
         }
     },
