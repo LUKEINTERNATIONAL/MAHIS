@@ -151,6 +151,7 @@ import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { UserService } from "@/services/user_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import workerData from "@/activate_worker";
+import { getOfflineRecords } from "@/services/offline_service";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts, SetDemographics],
     components: {
@@ -498,10 +499,11 @@ export default defineComponent({
             }
         },
         async createOfflineRecord(offlinePatientID: any) {
+            const ddeIds = await getOfflineRecords("dde");
             const offlineRecord: any = {
-                offlinePatientID: offlinePatientID,
-                serverPatientID: "",
-                patientData: "",
+                ID: ddeIds[0].ids[0].npid,
+                NcdID: "",
+                patientID: "",
                 personInformation: toRaw(this.personInformation[0].selectedData),
                 guardianInformation: toRaw(this.guardianInformation[0].selectedData),
                 birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
