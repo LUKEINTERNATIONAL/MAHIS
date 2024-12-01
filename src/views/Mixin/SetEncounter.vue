@@ -11,12 +11,12 @@ export default defineComponent({
         labOrders: {} as any,
     }),
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     watch: {
         $route: {
             async handler(route: any) {
-                this.labOrders = await OrderService.getOrders(this.demographics.patient_id);
+                this.labOrders = await OrderService.getOrders(this.patient.patientID);
             },
             immediate: true,
             deep: true,
