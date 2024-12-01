@@ -143,7 +143,7 @@ export default defineComponent({
         clientData: "" as any,
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useFollowUpStoreStore, [
             "changeGuardianInfo",
             "vaccineAdverseEffects",
