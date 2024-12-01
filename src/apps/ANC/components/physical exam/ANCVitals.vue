@@ -55,25 +55,25 @@ export default defineComponent({
             RespiratoryStatus: {} as any,
             OxygenStatus: {} as any,
             vValidations: "" as any,
-            initialData:[] as any,
+            initialData: [] as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
-      ...mapState(useVitalsStore,['vitals'])
+        ...mapState(useDemographicsStore, ["patient"]),
+        ...mapState(useVitalsStore, ["vitals"]),
     },
-   async mounted() {
-      const vitals=useVitalsStore();
-      this.initialData=vitals.getInitialVitals()
+    async mounted() {
+        const vitals = useVitalsStore();
+        this.initialData = vitals.getInitialVitals();
         await this.setTodayVitals();
         const userID: any = Service.getUserID();
-        this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+        this.vitalsInstance = new VitalsService(this.patient.patientID, userID);
         await this.validaterowData("onload");
 
-        this.handleVital()
+        this.handleVital();
     },
     watch: {
         vitals: {
@@ -95,19 +95,19 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
-        async handleVital(){
-            this.setVitalValue
+        async handleVital() {
+            this.setVitalValue;
         },
-        async setVitalValue(){
-           const vital = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Systolic", "value_numeric");
-            console.log("+++++ lets see",vital)
+        async setVitalValue() {
+            const vital = await ObservationService.getFirstObsValue(this.patient.patientID, "Systolic", "value_numeric");
+            console.log("+++++ lets see", vital);
         },
         async setTodayVitals() {
             const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
             const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
             const mandatoryDone = [] as any;
             const promises = array.map(async (item: any) => {
-                const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
+                const firstDate = await ObservationService.getFirstObsDatetime(this.patient.patientID, item);
                 if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                     if (item == "Weight") {
                         modifyCheckboxValue(this.vitals, "Height And Weight Not Done", "displayNone", true);
@@ -122,7 +122,7 @@ export default defineComponent({
                         this.vitals,
                         item,
                         "value",
-                        await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
+                        await ObservationService.getFirstValueNumber(this.patient.patientID, item, HisDate.currentDate())
                     );
                     modifyFieldValue(this.vitals, item, "disabled", true);
                     mandatoryDone.push("true");
@@ -297,14 +297,14 @@ export default defineComponent({
             this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
         },
         async setBMI(weight: any, height: any) {
-            if(height < 140) this.heightAlert();
+            if (height < 140) this.heightAlert();
 
-            if (this.demographics.gender && this.demographics.birthdate && weight && height) {
+            if (this.patient.personInformation.gender && this.patient.personInformation.birthdate && weight && height) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient.personInformation.gender,
+                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
                 );
                 console.log("🚀 ~ setBMI ~ this.BMI:", this.BMI);
                 this.updateBMI();
@@ -319,19 +319,16 @@ export default defineComponent({
             vitals.index = "BMI " + (this.BMI?.index ?? "");
             vitals.value = this.BMI?.result ?? "";
         },
-        async heightAlert(){
+        async heightAlert() {
             const existingAlert = this.vitals[0].alerts.find((alert: any) => alert.value === "Below critical height threshold");
 
-            if (!existingAlert) 
-            {
+            if (!existingAlert) {
                 this.vitals[0].alerts.push({
-                    backgroundColor: "#FFD700", 
-                    textColor: "#b42318",       
+                    backgroundColor: "#FFD700",
+                    textColor: "#b42318",
                     value: "Below critical height threshold",
                 });
-            }     
-            else 
-            {
+            } else {
                 this.vitals[0].alerts = this.vitals[0].alerts.filter((alert: any) => alert.value !== "Below critical height threshold");
             }
         },
