@@ -13,31 +13,34 @@
                     "
                 >
                     <div style="margin-right: 5px">
-                        <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                        <div :class="patient.personInformation.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
                             <ion-icon style="color: #fff; font-size: 100px" :icon="person"></ion-icon>
                         </div>
                     </div>
                     <div>
                         <div class="demographicsFirstRow">
-                            <div class="name">{{ demographics.name }}</div>
+                            <div class="name">
+                                {{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
+                                {{ patient.personInformation.family_name }}
+                            </div>
                         </div>
                         <div class="demographicsOtherRow" style="margin-top: 10px">
                             <div class="demographicsText">
-                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
-                                {{ getAge(demographics.birthdate) }} ({{ formatBirthdate() }})
+                                {{ patient.personInformation.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
+                                {{ getAge(this.patient.personInformation.birthdate) }} ({{ formatBirthdate() }})
                             </div>
                         </div>
-                        <div class="demographicsOtherRow" v-if="demographics.address">
+                        <div class="demographicsOtherRow" v-if="patient.personInformation.current_district">
                             <div class="demographicsText">Current Address:</div>
-                            <div class="demographicsText mediumFontColor">{{ demographics.address }}</div>
+                            <div class="demographicsText mediumFontColor">{{ patient.personInformation.current_district }}</div>
                         </div>
-                        <div class="demographicsOtherRow" v-if="demographics.country">
+                        <div class="demographicsOtherRow" v-if="this.patient.personInformation.country">
                             <div class="demographicsText">Country:</div>
-                            <div class="demographicsText mediumFontColor">{{ demographics.country }}</div>
+                            <div class="demographicsText mediumFontColor">{{ this.patient.personInformation.country }}</div>
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">
-                                MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span>
+                                MRN: <span class="mediumFontColor">{{ patient.ID }}</span>
                             </div>
                         </div>
                         <div class="demographicsOtherRow">
@@ -431,7 +434,7 @@ export default defineComponent({
             this.selectedStatus = status;
         },
         async programEnrollment() {
-            this.program = new PatientProgramService(this.demographics.patient_id);
+            this.program = new PatientProgramService(this.patient.patientID);
             const checkEnrollment = await this.program.getProgramCurrentStates();
             if (!checkEnrollment) {
                 try {
@@ -456,11 +459,11 @@ export default defineComponent({
             return HisDate.calculateDisplayAge(HisDate.toStandardHisFormat(dateOfBirth));
         },
         async checkProtectedStatus() {
-            this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+            this.protectedStatus = await ObservationService.getFirstValueText(this.patient.patientID, "Protected at birth");
         },
         checkAge() {
-            if (!isEmpty(this.demographics.birthdate)) {
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics.birthdate) < 42 ? true : false;
+            if (!isEmpty(this.patient.personInformation.birthdate)) {
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.patient.personInformation.birthdate) < 42 ? true : false;
             }
         },
         openVitalsModal() {
@@ -474,7 +477,7 @@ export default defineComponent({
         },
         async openFollowModal() {
             if (this.demographics?.patient_id) {
-                this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+                this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.patient.patientID);
                 const dataToPass = { protectedStatus: this.protectedStatus };
                 if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
             }
@@ -589,7 +592,7 @@ export default defineComponent({
         async saveVitals() {
             if (this.vitals.validationStatus) {
                 const userID: any = Service.getUserID();
-                const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+                const vitalsInstance = new VitalsService(this.patient.patientID, userID);
                 vitalsInstance.onFinish(this.vitals);
             }
         },
@@ -597,12 +600,12 @@ export default defineComponent({
             if (this.diagnosis[0].selectedData.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+                diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.diagnosis[0].selectedData));
             }
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
             const treatmentInstance = new Treatment();
 
             if (!isEmpty(this.selectedMedicalAllergiesList)) {
@@ -634,7 +637,7 @@ export default defineComponent({
 
         async saveOutComeStatus() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
 
             if (!isEmpty(this.dispositions)) {
                 this.dispositions.forEach(async (disposition: any) => {
@@ -690,7 +693,7 @@ export default defineComponent({
             });
         },
         formatBirthdate() {
-            return HisDate.toStandardHisDisplayFormat(this.demographics.birthdate);
+            return HisDate.toStandardHisDisplayFormat(this.patient.personInformation.birthdate);
         },
         calculateExpireDate(startDate: string | Date, duration: any) {
             const date = new Date(startDate);
