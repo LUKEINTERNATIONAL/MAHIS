@@ -55,24 +55,30 @@
                                     </div>
                                 </div>
                                 <div class="p_name_image">
-                                    <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
+                                    <div
+                                        :class="patient.personInformation.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'"
+                                        @click="openPIM()"
+                                    >
                                         <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
                                     </div>
                                     <div style="width: 100%">
-                                        <div class="p_name">{{ demographics?.name }}</div>
+                                        <div class="p_name">
+                                            {{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
+                                            {{ patient.personInformation.family_name }}
+                                        </div>
                                     </div>
                                 </div>
                                 <ion-row>
                                     <ion-col size="4">MRN:</ion-col>
-                                    <ion-col class="demoContent">{{ demographics?.mrn }}</ion-col>
+                                    <ion-col class="demoContent">{{ patient.ID }}</ion-col>
                                 </ion-row>
                                 <ion-row v-if="activeProgramID === 32">
                                     <ion-col size="4">NCDNumber:</ion-col>
-                                    <ion-col class="demoContent">{{ demographics?.NCDNumber }}</ion-col>
+                                    <ion-col class="demoContent">{{ patient.NcdID }}</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Gender:</ion-col>
-                                    <ion-col class="demoContent">{{ covertGender(demographics?.gender) }}</ion-col>
+                                    <ion-col class="demoContent">{{ covertGender(patient.personInformation.gender) }}</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Age:</ion-col>
@@ -80,7 +86,7 @@
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Address:</ion-col>
-                                    <ion-col class="demoContent">{{ covertGender(demographics?.address) }}</ion-col>
+                                    <ion-col class="demoContent">{{ covertGender(patient.personInformation.current_district) }}</ion-col>
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
@@ -415,7 +421,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
         ...mapState(useVitalsStore, ["vitals"]),
@@ -430,7 +436,7 @@ export default defineComponent({
         await this.checkPatientIFCheckedIn();
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
@@ -461,11 +467,11 @@ export default defineComponent({
 
     methods: {
         checkAge() {
-            if (this.demographics?.birthdate) {
-                this.checkUnderFourteen = HisDate.getAgeInYears(this.demographics?.birthdate) >= 14 ? true : false;
-                this.checkUnderNine = HisDate.ageInMonths(this.demographics?.birthdate) < 9 ? true : false;
-                this.checkUnderFive = HisDate.getAgeInYears(this.demographics?.birthdate) < 5 ? true : false;
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics?.birthdate) < 42 ? true : false;
+            if (this.patient.personInformation.birthdate) {
+                this.checkUnderFourteen = HisDate.getAgeInYears(this.patient.personInformation.birthdate) >= 14 ? true : false;
+                this.checkUnderNine = HisDate.ageInMonths(this.patient.personInformation.birthdate) < 9 ? true : false;
+                this.checkUnderFive = HisDate.getAgeInYears(this.patient.personInformation.birthdate) < 5 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.patient.personInformation.birthdate) < 42 ? true : false;
             }
         },
         setSegmentContent(name: any) {
@@ -545,9 +551,9 @@ export default defineComponent({
                     toastDanger("Location ID could not be found. Please check your settings.");
                     return;
                 }
-                await PatientOpdList.checkInPatient(this.demographics.patient_id, dates.todayDateFormatted(), locationId);
+                await PatientOpdList.checkInPatient(this.patient.patientID, dates.todayDateFormatted(), locationId);
 
-                await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "VITALS", locationId);
+                await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "VITALS", locationId);
                 await usePatientList().refresh(locationId);
                 this.toggleCheckInModal();
                 this.checkedIn = true;
@@ -558,7 +564,7 @@ export default defineComponent({
         },
         async handleCheckOutYes() {
             try {
-                const visit = await PatientOpdList.getCheckInStatus(this.demographics.patient_id);
+                const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
                 await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
                 const location = await getUserLocation();
                 const locationId = location ? location.location_id : null;
@@ -570,7 +576,7 @@ export default defineComponent({
         },
         async checkPatientIFCheckedIn() {
             try {
-                const result = await PatientOpdList.getCheckInStatus(this.demographics.patient_id);
+                const result = await PatientOpdList.getCheckInStatus(this.patient.patientID);
 
                 if (Boolean(result)) {
                     this.checkedIn = true;
@@ -621,13 +627,13 @@ export default defineComponent({
             this.isEnrollmentModalOpen = !this.isEnrollmentModalOpen;
         },
         async handleEnrollmentYes() {
-            await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, new Date().toString());
+            await ProgramService.enrollProgram(this.patient.patientID, this.programToEnroll, new Date().toString());
             await this.refreshPrograms();
             this.toggleEnrollmentModal();
             return this.$router.push("ANCHome");
         },
         async refreshPrograms() {
-            const programs = await ProgramService.getPatientPrograms(this.demographics.patient_id);
+            const programs = await ProgramService.getPatientPrograms(this.patient.patientID);
 
             console.log({ programs });
 
@@ -649,7 +655,7 @@ export default defineComponent({
             const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
             // An array to store all promises
             const promises = array.map(async (item) => {
-                const dd = await ObservationService.getFirstValueNumber(this.demographics.patient_id, item);
+                const dd = await ObservationService.getFirstValueNumber(this.patient.patientID, item);
                 return { [item]: dd };
             });
 
@@ -663,7 +669,7 @@ export default defineComponent({
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics?.birthdate);
+            return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
         },
     },
 });
