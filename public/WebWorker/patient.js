@@ -1,11 +1,13 @@
 const patientService = {
     async savePatientRecord() {
         const patientRecords = await DatabaseManager.getOfflineData("patientRecords");
-        await Promise.all(
-            patientRecords.map(async (record) => {
-                return await this.saveDemographicsRecord(record);
-            })
-        );
+        if (patientRecords) {
+            await Promise.all(
+                patientRecords.map(async (record) => {
+                    return await this.saveDemographicsRecord(record);
+                })
+            );
+        }
     },
     findByOtherID(idType, identifier) {
         return ApiService.getData("search/patients/by_identifier", {
