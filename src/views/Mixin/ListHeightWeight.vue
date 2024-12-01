@@ -62,7 +62,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
     data() {
@@ -121,8 +121,8 @@ export default defineComponent({
         },
         async updateData() {
             try {
-                this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
-                this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
+                this.height = await ObservationService.getAll(this.patient.patientID, "Height");
+                this.weight = await ObservationService.getAll(this.patient.patientID, "weight");
                 const weight = this.formatData(this.weight);
                 const height = this.formatData(this.height);
                 // workerManager.workerApi;
