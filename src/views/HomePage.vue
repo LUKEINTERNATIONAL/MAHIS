@@ -68,6 +68,7 @@ import OPDDashboard from "@/apps/OPD/components/OPDDashboard.vue";
 
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import OfflineStatusModal from "@/components/Modal/OfflineStatus.vue";
+import DDERequestIDsModal from "@/components/Modal/DDERequestIDsModal.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
 
@@ -115,7 +116,6 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useStatusStore, [
             "offlineVillageStatus",
             "offlineCountriesStatus",
@@ -162,7 +162,8 @@ export default defineComponent({
                         this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
                     ) {
                         modalController.dismiss();
-                        await workerData.terminate();
+                        // this.openDDERequestIDModal("");
+                        // await workerData.terminate();
                     }
                 }
             },
@@ -181,24 +182,22 @@ export default defineComponent({
         await workerData.postData("SET_OFFLINE_LOCATION");
         await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
         await workerData.postData("SYNC_PATIENT_RECORD");
+        await workerData.postData("SYNC_DDE");
         resetDemographics();
-        this.setView();
         await useGlobalPropertyStore().loadGlobalProperty();
         this.isLoading = false;
     },
     methods: {
-        setView() {
-            Service.getProgramID();
-        },
         programID() {
             return Service.getProgramID();
-        },
-        loadImage(name: any) {
-            return img(name);
         },
         openOfflineStatusModal(name: any) {
             const dataToPass = { title: name };
             createModal(OfflineStatusModal, { class: "fullScreenModal" }, false, this.dataToPass);
+        },
+        openDDERequestIDModal(name: any) {
+            const dataToPass = { title: name };
+            createModal(DDERequestIDsModal, { class: "" }, false, this.dataToPass);
         },
     },
 });

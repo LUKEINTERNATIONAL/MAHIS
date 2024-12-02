@@ -42,8 +42,8 @@ export class PreviousTreatment {
 
     constructor() {
         const store = useDemographicsStore();
-        this.demographics = store.demographics;
-        this.patientID = this.patient.patientID;
+        this.demographics = store.patient;
+        this.patientID = this.demographics.patientID;
         this.date = ObservationService.getSessionDate();
         this.providerID = Service.getUserID() as number;
         this.programID = ObservationService.getProgramID();
@@ -174,7 +174,7 @@ function reverseObjectKeys(obj: any) {
 
 export async function getNCDDiagnosis() {
     const store = useDemographicsStore();
-    const patientId = store.demographics.patient_id;
+    const patientId = store.patient.patientID;
     const ncdConceptIds = [8809, 6410, 6409];
     const names = [];
 
