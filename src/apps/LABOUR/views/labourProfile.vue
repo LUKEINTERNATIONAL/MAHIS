@@ -58,11 +58,6 @@ import LabourVaccineHistory from "@/apps/LABOUR/components/labour profile/Labour
 import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
 import LabourObstetricHistory from "@/apps/LABOUR/components/labour profile/LabourObstetricHistory.vue";
 import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
-// import { useMedicalHistoryStore } from "@/apps/ANC/store/profile/medicalHistoryStore";
-// import { useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
-// import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreganciesStore";
-// import { useMedicationStore } from "@/apps/ANC/store/profile/MedicationStore";
-// import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourStore";
 import { Service } from "@/services/service";
 //import { ProfileService } from "@/services/anc_profile_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -77,12 +72,15 @@ import HisDate from "@/utils/Date";
 import calculateAge from "@/utils/Date";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
+import { useLabourCoplicationsStore } from "../stores/labour profile/labourComplications";
+import { useLabourWomanBehaviourStore } from "../stores/labour profile/labourWomanBehaviour";
+import { useLabourAllergiesStore } from "../stores/labour profile/labourAllergies";
+import { useLabourPastSurgeriesStore } from "../stores/labour profile/labourPastSurgeries";
+import { useLabourChronicHealthConditionsStore } from "../stores/labour profile/labourChronicHealthConditions";
+import { useLabourVaccineStore } from "../stores/labour profile/labourVaccineHistory";
+import { useLabourMedicationStore } from "../stores/labour profile/labourMedications";
+import { useLabourObstreticHistoryStore } from "../stores/labour profile/labourObstetricHistory";
 
-// function someChecked(options, errorMassage) {
-//   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
-//     return errorMassage
-//   }
-// }
 export default defineComponent({
     name: "Home",
     mixins: [SetUserRole, SetEncounter],
@@ -252,11 +250,14 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        // ...mapState(useObstreticHistoryStore, ["preterm", "prevPregnancies", "Complications", "modeOfDelivery"]),
-        // ...mapState(useMedicalHistoryStore, ["medicalHistory", "allegy", "exisitingChronicHealthConditions"]),
-        // ...mapState(useCurrentPregnanciesStore, ["palpation", "tetanus", "lmnp", "ultrasound"]),
-        // ...mapState(useMedicationStore, ["Medication"]),
-        // ...mapState(useWomanBehaviourStore, ["dailyCaffeineIntake", "Tobacco"]),
+        ...mapState(useLabourCoplicationsStore, ["labourPrevPregnancies"]),
+        ...mapState(useLabourWomanBehaviourStore, ["dailyCaffeineIntake"]),
+        ...mapState(useLabourAllergiesStore, ["labourAllergies"]),
+        ...mapState(useLabourPastSurgeriesStore, ["labourPastSurgeries"]),
+        ...mapState(useLabourChronicHealthConditionsStore, ["labourChronicHealthConditions", "labourHivTest", "labourSyphilisTest"]),
+        ...mapState(useLabourVaccineStore, ["labourTetanus"]),
+        ...mapState(useLabourMedicationStore, ["LabourMedication"]),
+        ...mapState(useLabourObstreticHistoryStore, ["prevPregnancies"]),
     },
     mounted() {
         this.markWizard();
@@ -294,33 +295,7 @@ export default defineComponent({
         },
 
         // async saveProfile() {
-        //     const fields: any = ["", ""];
-        //     if (
-        //         await this.validations(
-        //             this.exisitingChronicHealthConditions &&
-        //                 this.Medication &&
-        //                 this.dailyCaffeineIntake &&
-        //                 this.Tobacco &&
-        //                 this.tetanus &&
-        //                 this.prevPregnancies,
-        //             fields
-        //         )
-        //     ) {
-        //         if (
-        //             this.prevPregnancies &&
-        //             // this.lmnp.length > 0
-        //             // &&
-        //             this.exisitingChronicHealthConditions &&
-        //             this.allegy &&
-        //             this.medicalHistory &&
-        //             this.Complications &&
-        //             // &&
-        //             // this.preterm.length > 0
-        //             this.Medication &&
-        //             this.dailyCaffeineIntake
 
-        //             //     //"preterm", "prevPregnancies", "Complications", "modeOfDelivery"
-        //         ) {
         //             const userID: any = Service.getUserID();
         //             const profile = new currentPregnancyService(this.demographics.patient_id, userID);
         //             const encounter = await profile.createEncounter();
@@ -329,65 +304,24 @@ export default defineComponent({
         //             if (!patientStatus) return toastWarning("Unable to create profile information!");
         //             await toastSuccess("Profile information have been created");
         //         }
-        //         console.log("========>", await this.buildProfile());
 
-        //         const number = this.modeOfDelivery.length / 2;
-        //         const children = [];
-        //         for (let i = 0; i < number; i++) {
-        //             const value = getRadioSelectedValue(this.modeOfDelivery, `Mode of delivery ${i}`);
-        //             const other = getFieldValue(this.modeOfDelivery, `Specify ${i}`, "value");
-        //             children.push({ concept: "Mode of delivery", value, other });
-
-        //             const concept_id = await ConceptService.getConceptID("Mode of delivery", true);
-        //             console.log(";;;;;;;;", concept_id);
-        //             const concept_other = await ConceptService.getConceptID("other", true);
-        //             console.log(";;;;;;;;", concept_other);
-        //             const obs_datetime = ConceptService.getSessionDate();
-        //             const obs: any = children.map((child) => {
-        //                 return {
-        //                     concept_id: concept_id,
-        //                     value_text: child.value,
-        //                     obs_datetime,
-        //                 };
-        //             });
-        //             const obs_service = ObservationService.saveObs(82, obs);
-        //         }
-        //         const age = HisDate.getAgeInYears(this.demographics?.birthdate);
-        //         if (age < 19) {
-        //             this.$router.push("headssAssessment");
-        //         } else {
-        //             this.$router.push("ANCHome");
-        //         }
-        //     } else {
-        //         await toastWarning("Please complete all required fields");
-        //     }
-        // },
-
-        // async buildProfile() {
-        //     return [
-        //         ...(await formatInputFiledData(this.prevPregnancies)),
-        //         ...(await formatRadioButtonData(this.preterm)),
-        //         ...(await formatCheckBoxData(this.Complications)),
-        //         ...(await formatInputFiledData(this.Complications)),
-        //         ...(await formatCheckBoxData(this.medicalHistory)),
-        //         ...(await formatInputFiledData(this.medicalHistory)),
-        //         ...(await formatCheckBoxData(this.exisitingChronicHealthConditions)),
-        //         ...(await formatInputFiledData(this.exisitingChronicHealthConditions)),
-        //         ...(await formatRadioButtonData(this.palpation)),
-        //         ...(await formatRadioButtonData(this.tetanus)),
-        //         ...(await formatRadioButtonData(this.lmnp)),
-        //         ...(await formatRadioButtonData(this.ultrasound)),
-        //         ...(await formatInputFiledData(this.ultrasound)),
-        //         ...(await formatCheckBoxData(this.allegy)),
-        //         ...(await formatInputFiledData(this.allegy)),
-        //         ...(await formatCheckBoxData(this.Medication)),
-        //         ...(await formatInputFiledData(this.Medication)),
-        //         ...(await formatCheckBoxData(this.dailyCaffeineIntake)),
-        //         ...(await formatRadioButtonData(this.Tobacco)),
-        //     ];
-        // },
         openModal() {
             createModal(SaveProgressModal);
+        },
+        async buildLabourProfile() {
+            return [
+                ...(await formatCheckBoxData(this.labourPrevPregnancies)),
+                ...(await formatCheckBoxData(this.dailyCaffeineIntake)),
+                ...(await formatRadioButtonData(this.dailyCaffeineIntake)),
+                ...(await formatCheckBoxData(this.labourAllergies)),
+                ...(await formatCheckBoxData(this.labourPastSurgeries)),
+                ...(await formatCheckBoxData(this.labourChronicHealthConditions)),
+                ...(await formatCheckBoxData(this.labourHivTest)),
+                ...(await formatCheckBoxData(this.labourSyphilisTest)),
+                ...(await formatRadioButtonData(this.labourTetanus)),
+                ...(await formatCheckBoxData(this.LabourMedication)),
+                ...(await formatCheckBoxData(this.prevPregnancies)),
+            ];
         },
     },
 });
