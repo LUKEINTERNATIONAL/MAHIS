@@ -13,7 +13,7 @@ const syncPatientDataService = {
         return ids;
     },
     async getPatientData() {
-        const patients_ids = await ApiService.getData("/sync/patients_ids", { ids: await this.getOfflineSavedPatientIds() });
+        const patients_ids = await ApiService.post("/sync/patients_ids", { ids: await this.getOfflineSavedPatientIds() });
         await Promise.all(
             patients_ids.map(async (id) => {
                 const record = await ApiService.getData(`/patients/${id}`);
@@ -59,7 +59,10 @@ const syncPatientDataService = {
                 birthID: "",
                 relationshipID: "",
             },
-            vitals: {},
+            vitals: {
+                saved: await this.getVitals(record.patient_id),
+                unsaved: [],
+            },
             saveStatusPersonInformation: "complete",
             saveStatusGuardianInformation: "complete",
             saveStatusBirthRegistration: "complete",
@@ -79,5 +82,20 @@ const syncPatientDataService = {
     },
     getAttribute(item, name) {
         return item.person.person_attributes.find((attribute) => attribute.type.name === attribute)?.value;
+    },
+    async getVitals(patientId) {
+        const encounters = await ApiService.getData("/encounters", {
+            patient_id: patientId,
+            paginate: false,
+        });
+        return encounters.flatMap((encounter) => {
+            return encounter.observations
+                .filter((observation) => [5089, 5088, 5087, 5086, 5085, 5090, 5092, 5242, 2137].includes(observation.concept_id))
+                .map((observation) => ({
+                    concept_id: observation.concept_id,
+                    obs_datetime: observation.obs_datetime,
+                    value_numeric: observation.value_numeric,
+                }));
+        });
     },
 };
