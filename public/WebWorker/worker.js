@@ -75,6 +75,14 @@ self.onmessage = async (event) => {
                     console.log("ADD_OBJECT_STORE ~ error:", error);
                 }
                 break;
+            case "OVERRIDE_OBJECT_STORE":
+                try {
+                    await DatabaseManager.overRideRecord(payload.storeName, payload.data);
+                    console.log("OVERRIDE_OBJECT_STORE ~ payload:", payload.storeName);
+                } catch (error) {
+                    console.log("OVERRIDE_OBJECT_STORE ~ error:", error);
+                }
+                break;
             case "UPDATE_RECORD":
                 try {
                     await DatabaseManager.updateRecord(payload.storeName, payload.whereClause, payload.data);
