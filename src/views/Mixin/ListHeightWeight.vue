@@ -46,6 +46,7 @@ import { iconGraph, iconList } from "@/utils/SvgDynamicColor";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 import workerManager from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
+import { combineArrays } from "../../utils/GeneralUti";
 
 export default defineComponent({
     name: "Menu",
@@ -121,39 +122,40 @@ export default defineComponent({
         },
         async updateData() {
             try {
-                this.height = await ObservationService.getAll(this.patient.patientID, "Height");
-                this.weight = await ObservationService.getAll(this.patient.patientID, "weight");
-                const weight = this.formatData(this.weight);
-                const height = this.formatData(this.height);
-                // workerManager.workerApi;
-                await workerManager.postData("UPDATE_RECORD", {
-                    storeName: "patientRecords",
-                    whereClause: { offlinePatientID: 1732722090271 },
-                    data: {
-                        vitals: {
-                            height: height,
-                            weight: weight,
-                        },
-                    },
-                });
+                const allData = await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false);
+                if (allData) {
+                    const combineArrays = [...allData?.vitals?.saved, ...allData?.vitals?.unsaved];
+                    this.weight = this.formatData(combineArrays, 5089);
+                    this.height = this.formatData(combineArrays, 5090);
+                } else {
+                    throw "No offline record found";
+                }
             } catch (error) {
-                const data = await getOfflineRecords("patientRecords", { offlinePatientID: 1732722090271 }, false);
-                this.height = data.vitals.height;
-                this.weight = data.vitals.weight;
+                try {
+                    const height = await ObservationService.getAll(this.patient.patientID, "Height");
+                    const weight = await ObservationService.getAll(this.patient.patientID, "weight");
+                    this.weight = this.formatData(weight, 5089);
+                    this.height = this.formatData(height, 5090);
+                } catch (error) {}
             }
 
             this.setListData(this.processObservations());
             this.$emit("click:weight", "");
         },
-        formatData(data: any) {
-            if (data) {
+        formatData(data: any, concept_id: any) {
+            if ((data.concept_id = concept_id)) {
                 return data.map((w: any) => {
-                    return {
-                        value_numeric: w.value_numeric,
-                        obs_datetime: w.obs_datetime,
-                        obs_id: w.obs_id,
-                    };
+                    if (concept_id) {
+                        return {
+                            concept_id: concept_id,
+                            obs_datetime: w.obs_datetime,
+                            value_numeric: w.value_numeric,
+                            obs_id: w.obs_id,
+                        };
+                    }
                 });
+            } else {
+                return [];
             }
         },
         dismiss() {
