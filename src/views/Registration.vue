@@ -269,7 +269,7 @@ export default defineComponent({
     watch: {
         workerApi: {
             async handler() {
-                if (this.workerApi?.data == "Done" && this.ddeId) {
+                if (this.workerApi?.data == "Done Saving" && this.ddeId) {
                     toastSuccess("Successfully Created Patient");
                     await db
                         .collection("patientRecords")
@@ -493,7 +493,7 @@ export default defineComponent({
 
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 await this.createOfflineRecord();
-                if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD");
+                if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
             } else {
                 toastWarning("Please complete all required fields");
             }
