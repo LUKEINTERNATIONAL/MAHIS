@@ -6,7 +6,7 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32">
+        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32 && programID() != 12 && programID() != 34 && programID() != 35">
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -22,6 +22,9 @@
         <ImmunizationDashboard v-if="programID() == 33" />
         <OPDDashboard v-if="programID() == 14" />
         <NCDDashboard v-if="programID() == 32" />
+        <ANCDashboard v-if="programID() == 12" />
+        <LabourDashboard v-if="programID() == 34" />
+        <PNCDashboard v-if="programID() == 35" />
         <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
     </ion-page>
 </template>
@@ -65,6 +68,9 @@ import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import NCDDashboard from "@/apps/NCD/components/NCDDashboard.vue";
 import ImmunizationDashboard from "@/apps/Immunization/components/ImmunizationDashboard.vue";
 import OPDDashboard from "@/apps/OPD/components/OPDDashboard.vue";
+import ANCDashboard from "@/apps/ANC/components/ANCDashboard.vue";
+import LabourDashboard from "@/apps/LABOUR/components/LabourDashboard.vue";
+import PNCDashboard from "@/apps/PNC/components/PNCDashboard.vue";
 
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import OfflineStatusModal from "@/components/Modal/OfflineStatus.vue";
@@ -103,6 +109,9 @@ export default defineComponent({
         NCDDashboard,
         ImmunizationDashboard,
         OPDDashboard,
+        ANCDashboard,
+        LabourDashboard,
+        PNCDashboard,
     },
     data() {
         return {

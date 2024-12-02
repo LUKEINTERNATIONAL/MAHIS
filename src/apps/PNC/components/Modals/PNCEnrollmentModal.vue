@@ -1,12 +1,10 @@
 <template>
     <ion-modal  :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
       <ion-header>
-        <ion-title class="modalTitle">Enroll client in ANC program</ion-title>
+        <ion-title class="modalTitle">Enroll client in PNC program</ion-title>
       </ion-header>
       <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
-        <basic-form
-            :contentData="ConfirmPregnancy"
-        ></basic-form>
+        <ion-title  style="color:black; font-size: 15px">{{title}}</ion-title>
         <hr class="dashed-hr" style="margin-bottom: 0px !important" />
       </ion-content>
       <ion-footer collapse="fade" class="ion-no-border">
@@ -19,28 +17,8 @@
           </ion-col>
         </ion-row>
       </ion-footer>
-
-<!--     <ion-content>-->
-<!--        <ion-title  style="color:black; font-size: 15px">{{title}}</ion-title>-->
-<!--        <div style="display:flex;">-->
-<!--          <DynamicButton-->
-<!--              expand="block"-->
-<!--              @click="onYes()"-->
-<!--              name="Yes"-->
-<!--              :style="`flex:1`"-->
-<!--          />-->
-<!--          <DynamicButton-->
-<!--              expand="block"-->
-<!--              @click="onNo()"-->
-<!--              :style="`flex:1`"-->
-<!--              name="No"-->
-<!--              fill="clear"-->
-<!--          />-->
-<!--        </div>-->
-<!--      </ion-content>-->
     </ion-modal>
   </template>
-
   <script lang="ts">
   import { defineComponent, PropType } from 'vue';
   import {
@@ -181,7 +159,7 @@
     --ion-toolbar-background: #fff;
   }
   ion-modal {
-    --height: 50%;
+    --height: 20%;
     --border-radius: 20px;
 
   }

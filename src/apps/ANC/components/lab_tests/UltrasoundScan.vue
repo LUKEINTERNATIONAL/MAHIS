@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <ion-card class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="ultrasound"></basic-form>
              <basic-form :contentData="reason"></basic-form>
@@ -100,11 +99,24 @@ export default defineComponent({
             if(scanRequired || scanOrdered || scanConducted){
               modifyFieldValue(this.ultrasound,'Scan date','displayNone',false)
               modifyRadioValue(this.reason, 'Amniotic fluid level', 'displayNone', false)
+              modifyFieldValue(this.reason,'Amniotic fluid level result', 'displayNone', false)
+
+              // const normalFluidLevel=getRadioSelectedValue(this.reason,'Normal amniotic fluid level')
+              // const increasedFluidLevel=getRadioSelectedValue(this.reason,'Amniotic fluid level')=='Increased level';
+              // const reducedFluidLevel=getRadioSelectedValue(this.reason,'Amniotic fluid level')=='Reduced level';
+              //  if(normalFluidLevel=='Normal level'){
+              //    modifyFieldValue(this.reason,'Amniotic fluid level result', 'displayNone', false)
+              //  }else {
+              //    modifyFieldValue(this.reason,'Amniotic fluid level result', 'displayNone', true)
+              //
+              //  }
               modifyRadioValue(this.reason, 'Placenta location', 'displayNone', false)
             }else{
                 modifyFieldValue(this.ultrasound,'Scan date','displayNone',true)
               modifyRadioValue(this.reason, 'Amniotic fluid level', 'displayNone', true)
               modifyRadioValue(this.reason, 'Placenta location', 'displayNone', true)
+              modifyFieldValue(this.reason,'Amniotic fluid level result', 'displayNone', true)
+
             }
         },
 
