@@ -123,7 +123,7 @@ export default defineComponent({
         return { chevronBackOutline, checkmark };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useAncEndStore, ["ancInfo"]),
     },
 
@@ -143,7 +143,7 @@ export default defineComponent({
         async saveAncEnd() {
             if (this.ancInfo.length > 0) {
                 const userID: any = Service.getUserID();
-                const ANCpregnancyOutcome = new AncEndService(this.demographics.patient_id, userID);
+                const ANCpregnancyOutcome = new AncEndService(this.patient.patientID, userID);
                 const encounter = await ANCpregnancyOutcome.createEncounter();
                 if (!encounter) return toastWarning("Unable to create ANC pregnancy outcome encounter");
                 const patientStatus = await ANCpregnancyOutcome.saveObservationList(await this.buildAncEnd());
