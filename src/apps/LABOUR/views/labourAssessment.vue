@@ -166,7 +166,7 @@ export default defineComponent({
         },
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabourQuickCheckStore, ["pastProblems"]),
         ...mapState(useLabourPhysicalExamStore, ["vitals"]),
         ...mapState(useLabourPhysicalExamStore, ["anaemia"]),
@@ -289,7 +289,7 @@ export default defineComponent({
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const quickCheckInstance = new QuickCheckInstance();
-                quickCheckInstance.push(this.demographics.patient_id, userID, data);
+                quickCheckInstance.push(this.patient.patientID, userID, data);
                 toastSuccess("Quick check data saved successfully");
             } else {
                 toastWarning("Could not find concepts");
@@ -301,7 +301,7 @@ export default defineComponent({
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const physicalExamInstance = new PhysicalExamInstance();
-                physicalExamInstance.push(this.demographics.patient_id, userID, data);
+                physicalExamInstance.push(this.patient.patientID, userID, data);
                 toastSuccess("Physical examination data saved successfully");
             } else {
                 toastWarning("Could not find concepts");
@@ -313,7 +313,7 @@ export default defineComponent({
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const vaginalExamInstance = new VaginalExamInstance();
-                vaginalExamInstance.push(this.demographics.patient_id, userID, data);
+                vaginalExamInstance.push(this.patient.patientID, userID, data);
                 toastSuccess("First Vaginal Examination data saved successfully");
             } else {
                 toastWarning("Could not find concepts");
@@ -325,7 +325,7 @@ export default defineComponent({
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const pelvicAssessmentInstance = new PelvicAssessmentInstance();
-                pelvicAssessmentInstance.push(this.demographics.patient_id, userID, data);
+                pelvicAssessmentInstance.push(this.patient.patientID, userID, data);
                 toastSuccess("Pelvic Assessment data saved successfully");
             } else {
                 toastWarning("Could not find concepts");
