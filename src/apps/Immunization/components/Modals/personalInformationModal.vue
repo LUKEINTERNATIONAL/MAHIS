@@ -156,11 +156,11 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useFollowUpStoreStore, ["changeGuardianInfo", "vaccineAdverseEffects", "protectedAtBirth"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useRegistrationStore, ["personInformation", "socialHistory", "homeLocation", "currentLocation", "guardianInformation"]),
     },
     watch: {
-        demographics: {
+        patient: {
             handler() {},
             immediate: true,
         },
@@ -209,7 +209,7 @@ export default defineComponent({
         },
         async updateDemographics() {
             const updatedData = {
-                person_id: this.demographics.patient_id,
+                person_id: this.patient.patientID,
                 given_name: getFieldValue(this.personInformation, "firstname", "value"),
                 family_name: getFieldValue(this.personInformation, "lastname", "value"),
                 middle_name: getFieldValue(this.personInformation, "middleName", "value"),
@@ -233,7 +233,7 @@ export default defineComponent({
                 facility_name: "",
                 patient_type: "",
             };
-            await this.updatePerson(this.demographics.patient_id, updatedData);
+            await this.updatePerson(this.patient.patientID, updatedData);
         },
         async updateGuardian() {
             let guardianDetails: any = {
@@ -260,18 +260,18 @@ export default defineComponent({
                 national_id: "",
             };
 
-            let data = await RelationshipService.getRelationships(this.demographics.patient_id);
+            let data = await RelationshipService.getRelationships(this.patient.patientID);
             const selectedID = getFieldValue(this.guardianInformation, "relationship", "value")?.id;
             if (selectedID) {
                 if (data.length > 0) {
-                    const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
-                    await RelationsService.amendRelation(this.demographics.patient_id, data[0].person_b, data[0].relationship_id, selectedID);
+                    const guardianData = await RelationshipService.getRelationships(this.patient.patientID);
+                    await RelationsService.amendRelation(this.patient.patientID, data[0].person_b, data[0].relationship_id, selectedID);
                     await this.updatePerson(guardianData[0]?.person_b, guardianDetails);
                 } else {
                     const guardian: any = new PatientRegistrationService();
                     await guardian.registerGuardian(guardianDetails);
                     const guardianID = guardian.getPersonID();
-                    await RelationsService.createRelation(this.demographics.patient_id, guardianID, selectedID);
+                    await RelationsService.createRelation(this.patient.patientID, guardianID, selectedID);
                 }
             }
         },
@@ -280,7 +280,7 @@ export default defineComponent({
             const data = await personService.update(personID);
         },
         async updatePatientDemographics() {
-            const item = await PatientService.findByID(this.demographics.patient_id);
+            const item = await PatientService.findByID(this.patient.patientID);
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             let fullName = "";
