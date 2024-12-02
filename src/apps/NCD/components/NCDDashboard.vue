@@ -17,7 +17,6 @@
         </div>
         <div class="right_col">
             <div>
-                <Referral v-if="activeItem === 'referrals'" />
                 <Dashboard v-if="activeItem === 'dashboard'" />
                 <NCDAppointments v-if="activeItem === 'appointments'" />
             </div>
