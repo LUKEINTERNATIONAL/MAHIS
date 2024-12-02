@@ -137,7 +137,7 @@
                 label="name"
                 :searchable="true"
                 @search-change=""
-                track-by="district_id"
+                track-by="name"
                 :options="districtList"
                 :disabled="HSA_found_for_disabling_button"
             />
@@ -166,9 +166,9 @@
                 selectLabel=""
                 label="name"
                 :searchable="true"
-                :disabled="disableFacilitySelection"
+                :disabled="false"
                 @search-change="FindLocation($event)"
-                track-by="location_id"
+                track-by="code"
                 :options="locationData"
             />
 
@@ -369,6 +369,7 @@ const district_error_message = ref('Select district(s)')
 const TAz_show_error = ref(false)
 const TAz_error_message = ref('Select TA(s)')
 const districtList = ref([] as any)
+const OLDDistrictsList = ref([] as any)
 const villageList = ref([] as any)
 const TAList = ref([] as any)
 const selected_villages = ref()
@@ -387,10 +388,12 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
-    districtList.value = await getdistrictList()
-    if (districtList.value.length > 0) {
-        await getFacilityForCurrentuser()
-    }
+    OLDDistrictsList.value = await getdistrictList()
+
+    // if (districtList.value.length > 0) {
+    //     await getFacilityForCurrentuser()
+    // }
+    districtList.value = await getFacilityDistricts()
 })
 
 watch(
@@ -453,14 +456,41 @@ function selectedTA(selectedTAList: any) {
 
 function selectedDistrictF(selectedDistrict: any) {
     selectedDistrictIds.length = 0
-    selectedDistrict.forEach((district: any) => {
+
+    const filteredDistricts = OLDDistrictsList.value.filter((district: any) => {
+        return selectedDistrict.some((selected: any) => 
+            selected.name.toLowerCase() === district.name.toLowerCase()
+        );
+    });
+
+    console.log(filteredDistricts);
+
+    filteredDistricts.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id)
     })
 
-    selectedDistrict.forEach((district: any ) => {
+    filteredDistricts.forEach((district: any ) => {
         fetchTraditionalAuthorities(district.district_id, '')
     })
+
+    getDistrictFacilities(selectedDistrict)
 }
+
+async function getDistrictFacilities(selectedDistrict: any) {
+    locationData.value = [];
+
+    for (const district of selectedDistrict) {
+        try {
+            const temp_data1 = await LocationService.getDistrictFacilities(district.name.toLowerCase());
+            locationData.value.push(...temp_data1.facilities);
+        } catch (error) {
+            console.error(`Error fetching facilities for district ${district.name}:`, error);
+        }
+    }
+
+    console.log(locationData.value)
+}
+
 
 async function getFacilityForCurrentuser() {
     try {
@@ -519,13 +549,6 @@ async function FindLocation(text: any) {
     } if (isEmpty(text) == false) {
         srch_text = text
     }
-    const temp_data1 = await LocationService.getFacilities({ name: srch_text })
-    locationData.value = []
-    temp_data1.forEach((item: any) => {
-        if (isEmpty(item.name) == false) {
-                locationData.value.push(item)
-            }
-    })
 }
 
 async function trigerSaveFn() {
@@ -553,7 +576,8 @@ async function trigerSaveFn() {
             villages: selectedVillageIds,
             roles: selectedRoleNames,
             gender: getGenderCode(isSSelection_properties[0].dataValue.value),
-            location_id: selected_location.value.location_id
+            // location_id: selected_location.value.location_id,
+            location_id: selected_location.value.code,
         }
 
         try {
@@ -956,8 +980,6 @@ async function getdistrictList() {
         districtList.push(...districts);
     }
 
-    //__________________________not ideal
-
     districtList.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id)
     })
@@ -967,6 +989,11 @@ async function getdistrictList() {
     })
 
     return districtList
+}
+
+async function getFacilityDistricts() {
+    const data = await LocationService.getFacilityDistricts()
+    return data.districts
 }
 
 async function fetchTraditionalAuthorities(district_id: any,name: string) {  

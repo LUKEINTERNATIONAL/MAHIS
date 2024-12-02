@@ -665,7 +665,7 @@ async function getCurrentUserRoles() {
             }
 
             if (findUserRoleByName('Superuser,Superuser,') == false) {
-                user_roles.value = findAndRemoveRoleSSU(user_roles.value)
+                user_roles.value = findAndRemoveRoleSSU(user_roles.value);
             }
         }
 
