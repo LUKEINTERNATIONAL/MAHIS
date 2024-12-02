@@ -162,8 +162,7 @@ export default defineComponent({
                         this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
                     ) {
                         modalController.dismiss();
-                        // this.openDDERequestIDModal("");
-                        // await workerData.terminate();
+                        await workerData.terminate();
                     }
                 }
             },
