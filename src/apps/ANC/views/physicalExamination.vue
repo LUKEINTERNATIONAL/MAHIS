@@ -78,6 +78,7 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 import HisDate from "@/utils/Date";
 import { useAncEndStore } from "@/apps/ANC/store/ancEnd/ancEndStore";
+import { useANCVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
 export default defineComponent({
     name: "PhysicalExam",
     mixins: [SetUserRole, SetEncounter],
@@ -172,7 +173,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["patient"]),
-        ...mapState(useVitalsStore, ["vitals"]),
+        ...mapState(useANCVitalsStore, ["ANCVitals"]),
         ...mapState(useMaternalExamStore, ["respiratory", "pallor", "breastExam", "vaginalInspection", "cervicalExam", "oedemaPresence"]),
         ...mapState(useFetalAssessment, ["fetalAssessment", "fetalDetails"]),
         ...mapState(usePresentingSigns, ["presentingSigns"]),
@@ -260,8 +261,8 @@ export default defineComponent({
 
         async buildVitals() {
             return [
-                ...(await formatInputFiledData(this.vitals)),
-                ...(await formatCheckBoxData(this.vitals)),
+                ...(await formatInputFiledData(this.ANCVitals)),
+                ...(await formatCheckBoxData(this.ANCVitals)),
                 // ...(await formatCheckBoxData(this.preEclampsia))
             ];
         },
@@ -310,7 +311,7 @@ export default defineComponent({
         async saveVitals() {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(this.patient.patientID, userID);
-            await vitalsInstance.onFinish(this.vitals);
+            await vitalsInstance.onFinish(this.ANCVitals);
         },
         async validaterowData(): Promise<boolean> {
             const userID: any = Service.getUserID();
@@ -322,7 +323,7 @@ export default defineComponent({
             let hasErrors = false; // Flag to track if any errors exist
 
             // Validate each section of vitals
-            this.vitals.forEach((section: any, sectionIndex: any) => {
+            this.ANCVitals.forEach((section: any, sectionIndex: any) => {
                 if (section?.data?.rowData) {
                     section.data.rowData.forEach((col: any, colIndex: any) => {
                         col.colData.some((input: any, inputIndex: any) => {
@@ -331,19 +332,19 @@ export default defineComponent({
                             if (input.name === "Respiratory rate" && age <= 5) {
                                 if (validateResult?.length > 0) {
                                     hasErrors = true; // Set hasErrors to true if validation fails
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
+                                    this.ANCVitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                         validateResult.flat(Infinity)[0];
                                 } else {
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                                    this.ANCVitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                                 }
                             } else {
                                 // General validation for other inputs
                                 if (validateResult?.length > 0) {
                                     hasErrors = true; // Set hasErrors to true if validation fails
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
+                                    this.ANCVitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                         validateResult.flat(Infinity)[0];
                                 } else {
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                                    this.ANCVitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                                 }
                             }
 
@@ -354,7 +355,7 @@ export default defineComponent({
             });
 
             // Update validation status
-            this.vitals.validationStatus = !hasErrors;
+            this.ANCVitals.validationStatus = !hasErrors;
 
             // Return whether there were errors
             return hasErrors; // If true, there were errors; if false, validation passed

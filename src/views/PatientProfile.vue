@@ -19,9 +19,23 @@
             />
             <AncEnrollmentModal
                 :closeModalFunc="closeEnrollmentModal"
-                :onYes="handleEnrollmentYes"
+                :onYes="handleANCEnrollmentYes"
                 :onNo="handleEnrollmentNo"
                 :isOpen="isEnrollmentModalOpen"
+                :title="enrollModalTitle"
+            />
+            <LabourEnrollmentModal
+                :closeModalFunc="closeEnrollmentModal"
+                :onYes="handleLabourEnrollmentYes"
+                :onNo="handleEnrollmentNo"
+                :isOpen="isLabourEnrollmentModalOpen"
+                :title="enrollModalTitle"
+            />
+            <PNCEnrollmentModal
+                :closeModalFunc="closeEnrollmentModal"
+                :onYes="handlePNCEnrollmentYes"
+                :onNo="handleEnrollmentNo"
+                :isOpen="isPNCEnrollmentModalOpen"
                 :title="enrollModalTitle"
             />
 
@@ -136,8 +150,12 @@
                                         :btn="true"
                                         verticalPosition="top"
                                         side="bottom"
-                                        :programBtn="programBtn"
-                                        @clicked="setProgram($event)"
+                                        :programBtn="programBtn.map((btn:any )=> ({...btn, actionName: checkProgram(btn)}))"
+                                        @clicked="
+                                            async (btn) => {
+                                                await handleProgramClick(btn);
+                                            }
+                                        "
                                     />
                                 </div>
                             </div>
@@ -289,6 +307,7 @@ import DemographicBar from "@/components/DemographicBar.vue";
 
 import DispositionGrid from "@/components/PatientProfileGrid/OutcomeGrid.vue";
 import InvestigationsGrid from "@/components/PatientProfileGrid/InvestigationsGrid.vue";
+import bottomSummary from "./bottomSummary.vue";
 import VitalsGrid from "@/components/PatientProfileGrid/VitalsGrid.vue";
 import LabTestsHistory from "@/components/DashboardSegments/LabTestsHistory.vue";
 import DiagnosesHistory from "@/components/DashboardSegments/DiagnosesHistory.vue";
@@ -326,7 +345,9 @@ import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
-import AncEnrollmentModal from "@/components/Modal/AncEnrollmentModal.vue";
+import AncEnrollmentModal from "@/apps/ANC/components/Modals/AncEnrollmentModal.vue";
+import LabourEnrollmentModal from "@/apps/LABOUR/components/Modals/LabourEnrollmentModal.vue";
+import PNCEnrollmentModal from "@/apps/PNC/components/Modals/PNCEnrollmentModal.vue";
 
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
@@ -337,6 +358,9 @@ import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import { getUserLocation } from "@/services/userService";
 import dates from "@/utils/Date";
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
+import { useANCEnrollmentStore } from "@/apps/ANC/store/enrollment/ANCEnrollment";
+import { ConfirmPregnancyService } from "@/apps/ANC/service/confirm_pregnancy_service";
 
 export default defineComponent({
     mixins: [SetPrograms, PatientProfileMixin],
@@ -386,6 +410,9 @@ export default defineComponent({
         Programs,
         CheckInConfirmationModal,
         AncEnrollmentModal,
+        LabourEnrollmentModal,
+        PNCEnrollmentModal,
+        bottomSummary,
     },
     data() {
         return {
@@ -415,9 +442,12 @@ export default defineComponent({
             checkOutModalOpen: false,
             checkedIn: false as Boolean,
             isEnrollmentModalOpen: false,
+            isLabourEnrollmentModalOpen: false,
+            isPNCEnrollmentModalOpen: false,
             enrolledPrograms: [],
             programToEnroll: 0,
             enrollModalTitle: "",
+            programBtn: [],
         };
     },
     computed: {
@@ -425,6 +455,13 @@ export default defineComponent({
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
         ...mapState(useVitalsStore, ["vitals"]),
+        ...mapState(useANCEnrollmentStore, ["ConfirmPregnancy"]),
+        pregnancyConfirmed() {
+            return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy confirmed");
+        },
+        pregnancyPlanned() {
+            return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy planned");
+        },
     },
     async mounted() {
         this.checkAge();
@@ -437,9 +474,10 @@ export default defineComponent({
     },
     watch: {
         patient: {
-            async handler() {
+            async handler(btn: any) {
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
+                await this.handleProgramClick(btn);
             },
             deep: true,
         },
@@ -598,9 +636,10 @@ export default defineComponent({
         },
 
         async handleProgramClick(btn: any) {
-            // TODO: this function is supposed to run in mounted method
             await this.refreshPrograms();
             const lower = (title: string) => title.toLowerCase().replace(/\s+/g, "");
+            const gender = this.covertGender(this.patient.personInformation?.gender);
+            const age = HisDate.getAgeInYears(this.patient.personInformation?.birthdate);
 
             if (
                 lower(btn.actionName) == lower("+ Enroll in ANC Program") ||
@@ -610,27 +649,68 @@ export default defineComponent({
                 const found: any = this.enrolledPrograms.find((p: any) => p.id == btn.program_id);
 
                 if (!found) {
-                    this.isEnrollmentModalOpen = true;
-                    this.enrollModalTitle = `Are you sure you want to Enroll the patient in ${btn.name}`;
-                    this.programToEnroll = btn.program_id;
-                    return;
+                    if (gender === "Male") {
+                        // Toast message for males
+                        toastWarning("Males cannot be enrolled in this program");
+                        return;
+                    } else if (gender === "Female" && age < 9) {
+                        // Toast message for females under 9 years
+                        toastWarning("The client's age is below the required minimum age limit");
+                        return;
+                    } else {
+                        if (lower(btn.actionName) == lower("+ Enroll in ANC Program")) {
+                            this.isEnrollmentModalOpen = true;
+                            this.programToEnroll = btn.program_id;
+                            return;
+                        } else if (lower(btn.actionName) == lower("+ Enroll in Labour and delivery program")) {
+                            this.isLabourEnrollmentModalOpen = true;
+                            this.enrollModalTitle = `Are you sure you want to enroll ${this.patient.personInformation.given_name.toUpperCase()} in this program?`;
+                            this.programToEnroll = btn.program_id;
+                            return;
+                        } else {
+                            this.isPNCEnrollmentModalOpen = true;
+                            this.enrollModalTitle = `Are you sure you want to enroll ${this.patient.personInformation.given_name.toUpperCase()} in this program?`;
+                            this.programToEnroll = btn.program_id;
+                            return;
+                        }
+                    }
                 }
 
                 return this.$router.push(btn.url);
             }
             this.setProgram(btn);
         },
+
         closeEnrollmentModal() {
             this.isEnrollmentModalOpen = false;
         },
         toggleEnrollmentModal() {
             this.isEnrollmentModalOpen = !this.isEnrollmentModalOpen;
         },
-        async handleEnrollmentYes() {
+        async handleANCEnrollmentYes() {
+            const userID: any = Service.getUserID();
+            const quickCheck = new ConfirmPregnancyService(this.patient.patientID, userID);
+            const encounter = await quickCheck.createEncounter();
+            if (!encounter) return toastWarning("Unable to create quick check encounter");
+            const patientStatus = await quickCheck.saveObservationList(await this.buildANCEnrollment());
             await ProgramService.enrollProgram(this.patient.patientID, this.programToEnroll, new Date().toString());
+            if (!patientStatus) return toastWarning("Unable to create quick check details!");
+            toastSuccess("Enrollment is sucessful");
             await this.refreshPrograms();
             this.toggleEnrollmentModal();
             return this.$router.push("ANCHome");
+        },
+        async handleLabourEnrollmentYes() {
+            await ProgramService.enrollProgram(this.patient.patientID, this.programToEnroll, new Date().toString());
+            await this.refreshPrograms();
+            toastSuccess("Enrollment is sucessful");
+            return this.$router.push("LabourHome");
+        },
+        async handlePNCEnrollmentYes() {
+            await ProgramService.enrollProgram(this.patient.patientID, this.programToEnroll, new Date().toString());
+            await this.refreshPrograms();
+            toastSuccess("Enrollment is sucessful");
+            return this.$router.push("PNCHome");
         },
         async refreshPrograms() {
             const programs = await ProgramService.getPatientPrograms(this.patient.patientID);
@@ -671,6 +751,9 @@ export default defineComponent({
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
         },
+        async buildANCEnrollment() {
+            return [...(await formatRadioButtonData(this.ConfirmPregnancy))];
+        },
     },
 });
 </script>
@@ -705,7 +788,7 @@ export default defineComponent({
     color: #00190e;
     padding: 10px;
 }
-.startVisitClass {
+.dateClass {
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -713,9 +796,6 @@ export default defineComponent({
     align-items: center;
     color: #016302;
     padding: 10px;
-    position: absolute;
-    right: 0;
-    top: -25px;
 }
 
 #container {
@@ -855,7 +935,27 @@ ion-segment-button {
     font-size: 12px;
     text-transform: unset;
 }
-
+.bottomSummary {
+    margin-top: 20px;
+    max-width: 600px;
+}
+.bottomSummary .segment-button-checked {
+    background: #fff !important;
+    --indicator-color: none;
+}
+.bottomSummary ion-segment-button {
+    background: #e6e6e6;
+    margin-right: 5px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    text-transform: unset;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+}
+.bottomSummaryContent {
+    background: #fff;
+}
 .initialsBox {
     min-width: 85px;
     height: 90px;

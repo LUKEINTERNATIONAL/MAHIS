@@ -120,42 +120,21 @@ export default defineComponent({
         return {
             wizardData: [
                 {
-                    title: "Confirm pregnancy",
-                    class: "common_step",
-                    checked: false,
-                    disabled: false,
-                    number: 1,
-                    last_step: "",
-                },
-                {
                     title: "Reason for visit",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
-                    number: 2,
+                    number: 1,
                     last_step: "last_step",
                 },
-                // {
-                //   'title': 'Reason for visit',
-                //   'class': 'common_step',
-                //   'checked':'',
-                //   'icon': false,
-                //   'disabled':false,
-                //   'number': 3,
-                //   'last_step': ''
-                // },
             ],
             StepperData: [
-                {
-                    title: "Confirm pregnancy",
-                    component: "ConfirmPregnancy",
-                    value: "1",
-                },
+
                 {
                     title: "Reason for visit",
                     component: "ReasonForVisit",
-                    value: "2",
+                    value: "1",
                 },
                 // {
                 //   title: 'Reason for visit',
@@ -185,14 +164,15 @@ export default defineComponent({
         reasonVisitFacility() {
             return getRadioSelectedValue(this.ReasonForVisit, "Reason for visit");
         },
-        //dangerSigns(){return getCheckboxSelectedValue(this.ReasonForVisit,'Central cyanosis')},//,'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",
         pregnancyConfirmed() {
             return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy confirmed");
         },
         pregnancyPlanned() {
             return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy planned");
         },
-        // referWoman(){return getRadioSelectedValue(this.ReasonForVisit,'Action for danger signs')},
+      dangerSigns() {
+        return getCheckboxSelectedValue(this.DangerSigns, "Danger signs");
+      },
     },
 
     async mounted() {
@@ -272,8 +252,6 @@ export default defineComponent({
                     break;
                 }
             }
-            //return isChecked
-            // return isChecked && fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
 
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
@@ -282,10 +260,10 @@ export default defineComponent({
             await resetPatientData();
         },
         async saveQuickCheck() {
-            const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
+            const fields: any = ["reasonVisitFacility",];
 
-            if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
-                if (this.ConfirmPregnancy && this.ReasonForVisit) {
+            if (await this.validationRules(this.ReasonForVisit, fields)) {
+                if ( this.ReasonForVisit) {
                     const userID: any = Service.getUserID();
                     const quickCheck = new ConfirmPregnancyService(this.patient.patientID, userID);
                     const encounter = await quickCheck.createEncounter();
@@ -300,7 +278,7 @@ export default defineComponent({
                     }
                 }
             } else {
-                await toastWarning("Please complete all required fields");
+                 toastWarning("Please complete all required fields");
             }
             console.log("=============>>>", await this.buildQuickCheck());
         },
