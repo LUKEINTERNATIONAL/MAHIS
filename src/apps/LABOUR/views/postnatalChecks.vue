@@ -129,7 +129,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useImmediatePostnatalChecksForChildStore, ["examsAfterDeliveryForChild"]),
         ...mapState(useImmediatePostnatalChecksForMotherStore, ["examsAfterDelivery"]),
     },
@@ -190,7 +190,7 @@ export default defineComponent({
         async savePostnatalChecks() {
             if (this.examsAfterDeliveryForChild.length > 0 && this.examsAfterDelivery.length > 0) {
                 const userID: any = Service.getUserID();
-                const examsAfterDelivery = new ImmediatePostnatalChecksForChildService(this.demographics.patient_id, userID);
+                const examsAfterDelivery = new ImmediatePostnatalChecksForChildService(this.patient.patientID, userID);
                 const encounter = await examsAfterDelivery.createEncounter();
                 if (!encounter) return toastWarning("Unable to create immediate checks for mother and child encounter");
                 const patientStatus = await examsAfterDelivery.saveObservationList(await this.buildPostnatalChecks());
