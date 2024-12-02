@@ -93,7 +93,6 @@ const patientService = {
                 const data = await this.createPerson(record.personInformation);
                 const patient = await this.createPatient(data.person_id);
                 const patientID = data.person_id;
-                await this.updatePatientInformation(record, patientID);
                 await this.updateSaveStatus(record, {
                     saveStatusPersonInformation: "complete",
                     patientID: patientID,
@@ -107,16 +106,6 @@ const patientService = {
             }
         }
         return record.patientID;
-    },
-    async updatePatientInformation(record, patientID) {
-        const patientData = await this.findByID(patientID);
-        await DatabaseManager.updateRecord(
-            "patientRecords",
-            { offlinePatientID: record.offlinePatientID },
-            {
-                patientData: patientData,
-            }
-        );
     },
     async create_patient_identifiers(newID, type, patientID) {
         await ApiService.post("patient_identifiers", {
@@ -165,21 +154,27 @@ const patientService = {
         }
     },
     async saveVitalsData(patientID, record) {
-        if (record.saveStatusVitals === "pending") {
-            if (record.vitals.length > 0) {
-                try {
-                    const encounter = await this.createEncounter(patientID, 6);
-                    const encounterID = encounter.encounter_id;
-                    await this.saveObs({
-                        encounter_id: encounterID,
-                        observations: record.vitals,
-                    });
-                    await this.updateSaveStatus(record, { saveStatusVitals: "complete" });
-                } catch (error) {
-                    console.error("Failed to save vitals information");
+        if (record.vitals.unsaved.length > 0) {
+            try {
+                const encounter = await this.createEncounter(patientID, 6);
+                const encounterID = encounter.encounter_id;
+                const obs = await this.saveObs({
+                    encounter_id: encounterID,
+                    observations: record.vitals.unsaved,
+                });
+                if (obs?.length > 0) {
+                    const vitals = record.vitals;
+                    vitals.unsaved = [];
+                    await DatabaseManager.updateRecord(
+                        "patientRecords",
+                        { ID: record.ID },
+                        {
+                            vitals: vitals,
+                        }
+                    );
                 }
-            } else {
-                await this.updateSaveStatus(record, { saveStatusVitals: "Not recorded" });
+            } catch (error) {
+                console.error("Failed to save vitals information");
             }
         }
     },
@@ -196,7 +191,7 @@ const patientService = {
     },
     async updateSaveStatus(record, saveStatus) {
         console.log("🚀 ~ updateSaveStatus ~ saveStatus:", saveStatus);
-        DatabaseManager.updateRecord("patientRecords", { offlinePatientID: record.offlinePatientID }, saveStatus);
+        DatabaseManager.updateRecord("patientRecords", { ID: record.ID }, saveStatus);
     },
     async validateNationalID(nationalID) {
         return (
