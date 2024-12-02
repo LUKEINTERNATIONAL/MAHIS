@@ -17,6 +17,9 @@
                 </ion-label>
             </div>
         </ion-col>
+    </ion-row>
+
+    <ion-col>
         <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                 >Last name<span style="color: #b42318">*</span></ion-label
@@ -34,7 +37,7 @@
                 </ion-label>
             </div>
         </ion-col>
-    </ion-row>
+    </ion-col>
 
     <ion-row>
             <ion-col>
@@ -54,21 +57,21 @@
                     </ion-label>
                 </div>
             </ion-col>
-
-            <ion-col>
-                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Phone<span style="color: #b42318">*</span></ion-label
-            >
-                <BasicInputField
-                    :placeholder="'phone number'"
-                    :icon="phonePortraitOutline"
-                    :inputValue="''"
-                    @update:inputValue=""
-                />
-            </ion-col>
     </ion-row>
 
-
+    <ion-row>
+        <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+            >Phone<span style="color: #b42318">*</span></ion-label
+        >
+            <BasicInputField
+                :placeholder="'phone number'"
+                :icon="phonePortraitOutline"
+                :inputValue="''"
+                @update:inputValue=""
+            />
+        </ion-col>
+    </ion-row>
 
         <!-- <ion-row>
             <ion-col>
@@ -99,6 +102,9 @@
                     </ion-label>
                 </div>
             </ion-col>
+        </ion-row>
+
+        <ion-row>
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Activate/Deactivate user<span style="color: #b42318">*</span></ion-label
@@ -137,7 +143,7 @@
         </ion-row>
 
         <ion-row v-if="isSuperUser">
-            <ion-col size="6">
+            <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                     >District(s)<span style="color: #b42318">*</span></ion-label
                 >
@@ -166,8 +172,10 @@
                     </ion-label>
                 </div>
             </ion-col>
+        </ion-row>
 
-            <ion-col size="6">
+        <ion-row>
+            <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Facility name<span style="color: #b42318">*</span></ion-label
                 >
@@ -199,7 +207,7 @@
         </ion-row>
 
         <ion-row>
-        <ion-col size="6">
+        <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >TA(s)<span style="color: #b42318">*</span></ion-label
             >
@@ -228,7 +236,10 @@
                 </ion-label>
             </div>
         </ion-col>
-        <ion-col size="6">
+    </ion-row>
+
+    <ion-row>
+        <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >Village(s)<span style="color: #b42318">*</span></ion-label
             >
@@ -300,41 +311,43 @@
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >New password<span style="color: #b42318">*</span></ion-label
-            >
-            <BasicInputField
-                :placeholder="password_input_properties[0].placeHolder"
-                :icon="keyOutline"
-                :inputValue="password_input_properties[0].dataValue.value"
-                @update:inputValue="password_input_properties[0].dataHandler"
-            />
+                        <ion-col>
+                            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                                >New password<span style="color: #b42318">*</span></ion-label
+                            >
+                            <BasicInputField
+                                :placeholder="password_input_properties[0].placeHolder"
+                                :icon="keyOutline"
+                                :inputValue="password_input_properties[0].dataValue.value"
+                                @update:inputValue="password_input_properties[0].dataHandler"
+                            />
 
-            <div>
-                <ion-label v-if="password_input_properties[0].show_error.value" class="error-label">
-                    {{ password_input_properties[0].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Repeat password<span style="color: #b42318">*</span></ion-label
-            >
-            <BasicInputField
-                :placeholder="password_input_properties[1].placeHolder"
-                :icon="keyOutline"
-                :inputValue="password_input_properties[1].dataValue.value"
-                @update:inputValue="password_input_properties[1].dataHandler"
-            />
+                            <div>
+                                <ion-label v-if="password_input_properties[0].show_error.value" class="error-label">
+                                    {{ password_input_properties[0].error_message }}
+                                </ion-label>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                                >Repeat password<span style="color: #b42318">*</span></ion-label
+                            >
+                            <BasicInputField
+                                :placeholder="password_input_properties[1].placeHolder"
+                                :icon="keyOutline"
+                                :inputValue="password_input_properties[1].dataValue.value"
+                                @update:inputValue="password_input_properties[1].dataHandler"
+                            />
 
-            <div>
-                <ion-label v-if="password_input_properties[1].show_error.value" class="error-label">
-                    {{ password_input_properties[1].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
+                            <div>
+                                <ion-label v-if="password_input_properties[1].show_error.value" class="error-label">
+                                    {{ password_input_properties[1].error_message }}
+                                </ion-label>
+                            </div>
+                        </ion-col>
+                    </ion-row>
                 </div>
             </ion-accordion>
         </ion-accordion-group>
