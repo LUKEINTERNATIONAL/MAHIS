@@ -6,7 +6,10 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32 && programID() != 12 && programID() != 34 && programID() != 35">
+        <ion-content
+            :fullscreen="true"
+            v-if="programID() != 33 && programID() != 14 && programID() != 32 && programID() != 12 && programID() != 34 && programID() != 35"
+        >
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -171,7 +174,7 @@ export default defineComponent({
                         this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
                     ) {
                         modalController.dismiss();
-                        await workerData.terminate();
+                        // await workerData.terminate();
                     }
                 }
             },
