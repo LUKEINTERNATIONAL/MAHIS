@@ -277,11 +277,7 @@ export default defineComponent({
                         .get()
                         .then(async (document: any) => {
                             await workerData.terminate();
-                            if (document.serverPatientID) {
-                                this.openNewPage(document.patientData);
-                            } else {
-                                await this.setOfflineData(document);
-                            }
+                            this.openNewPage(document);
                         });
                 }
             },
@@ -513,9 +509,9 @@ export default defineComponent({
                 ];
             }
             const offlineRecord: any = {
+                patientID: "",
                 ID: this.ddeId,
                 NcdID: "",
-                patientID: "",
                 personInformation: toRaw(this.personInformation[0].selectedData),
                 guardianInformation: toRaw(this.guardianInformation[0].selectedData),
                 birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
@@ -528,6 +524,7 @@ export default defineComponent({
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",
+                saveStatusVitals: "pending",
                 date_created: "",
                 creator: "",
             };
@@ -581,18 +578,10 @@ export default defineComponent({
                 return this.birthID;
             } else return "";
         },
-        async setOfflineData(item: any) {
-            await resetPatientData();
-            this.setDemographics(item);
-            this.isLoading = false;
-            let url = "/patientProfile";
-            this.disableSaveBtn = false;
-            this.$router.push(url);
-        },
         async openNewPage(item: any) {
             await resetPatientData();
             this.setDemographics(item);
-            await UserService.setProgramUserActions();
+            if (this.apiStatus) await UserService.setProgramUserActions();
             this.isLoading = false;
             this.disableSaveBtn = false;
             if (this.programID() == 32) {
