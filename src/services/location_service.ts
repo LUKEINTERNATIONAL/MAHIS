@@ -10,6 +10,10 @@ export class LocationService extends Service {
         return this.getJson(`locations/${locationID}`);
     }
 
+    static getFacility(facilityID: number) {
+        return this.getJson(`facilities/${facilityID}`);
+    }
+
     static getFacilityDistricts() {
         return this.getJson(`facilities/districts`);
     }

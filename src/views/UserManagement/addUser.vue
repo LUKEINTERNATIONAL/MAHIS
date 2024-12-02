@@ -139,7 +139,7 @@
                 @search-change=""
                 track-by="name"
                 :options="districtList"
-                :disabled="HSA_found_for_disabling_button"
+                :disabled="disableFacilitySelection"
             />
 
             <div>
@@ -155,7 +155,7 @@
             >
             <VueMultiselect
                 v-model="selected_location"
-                @update:model-value="selectedLocation($event)"
+                @update:model-value="selectedLocationF($event)"
                 :multiple="false"
                 :taggable="false"
                 :hide-selected="true"
@@ -166,7 +166,7 @@
                 selectLabel=""
                 label="name"
                 :searchable="true"
-                :disabled="false"
+                :disabled="disableFacilitySelection"
                 @search-change="FindLocation($event)"
                 track-by="code"
                 :options="locationData"
@@ -359,7 +359,6 @@ const passwordErrorMsgs = [
 ]
 const selected_location = ref()
 const locationData = ref([]) as any
-const locationId = ref()
 const location_error_message = ref('Select location')
 const location_show_error = ref(false)
 const village_show_error = ref(false)
@@ -389,11 +388,10 @@ onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
     OLDDistrictsList.value = await getdistrictList()
-
-    // if (districtList.value.length > 0) {
-    //     await getFacilityForCurrentuser()
-    // }
     districtList.value = await getFacilityDistricts()
+    if (districtList.value.length > 0) {
+        await getFacilityForCurrentuser()
+    }
 })
 
 watch(
@@ -423,15 +421,13 @@ async function updateuserPersoninf(personId: number) {
     return data
 }
 
-function selectedLocation(data: any) {
-    locationId.value = data.location_id;
-    const selectedLocation = locationData.value.find((location: any) => location.location_id === data.location_id);
+function selectedLocationF(data: any) {
+    const selectedLocation = locationData.value.find((location: any) => location.code === data.code);
     const filteredDistricts = selectedLocation
         ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
         : [];
-
     selected_Districts.value = filteredDistricts
-    selectedDistrictF(filteredDistricts);
+    selected_location.value = data
 }
 
 function selectedVillage(VillagesList: any) {
@@ -463,8 +459,6 @@ function selectedDistrictF(selectedDistrict: any) {
         );
     });
 
-    console.log(filteredDistricts);
-
     filteredDistricts.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id)
     })
@@ -487,19 +481,14 @@ async function getDistrictFacilities(selectedDistrict: any) {
             console.error(`Error fetching facilities for district ${district.name}:`, error);
         }
     }
-
-    console.log(locationData.value)
+    selected_location.value = null;
 }
 
 
 async function getFacilityForCurrentuser() {
     try {
-        const response = await LocationService.getLocation(facilityLocation.value.location_id)
-        if (isEmpty(response) == false) {
-            selected_location.value = response
-            locationData.value.push(selected_location.value)
-            selectedLocation(selected_location.value)
-        }
+        locationData.value.push(facilityLocation.value)
+        selectedLocationF(facilityLocation.value)
     } catch (error) {
         console.error(error)
     }

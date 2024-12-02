@@ -77,7 +77,6 @@ export class AppEncounterService extends ObservationService {
     }
 
     buildValueDate(conceptName: string, value: string) {
-        console.log("value: ", value)
         return AppEncounterService.buildValueDate(conceptName, value, this.date);
     }
 
