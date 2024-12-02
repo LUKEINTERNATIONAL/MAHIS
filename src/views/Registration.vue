@@ -276,8 +276,12 @@ export default defineComponent({
                         .doc({ ID: this.ddeId })
                         .get()
                         .then(async (document: any) => {
+                            const dde = await getOfflineRecords("dde");
+                            dde.ids = dde.ids.slice(1);
+                            await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
+                            await workerData.postData("SYNC_DDE");
+                            await this.openNewPage(document);
                             await workerData.terminate();
-                            this.openNewPage(document);
                         });
                 }
             },
@@ -498,9 +502,12 @@ export default defineComponent({
             const ddeIds = await getOfflineRecords("dde");
             this.ddeId = ddeIds.ids[0].npid;
             const Weight = getFieldValue(this.birthRegistration, "Weight", "value");
-            let vitals: any = [];
+            let vitals: any = {
+                saved: [],
+                unsaved: [],
+            };
             if (Weight) {
-                vitals = [
+                vitals.unsaved = [
                     {
                         concept_id: 5089,
                         obs_datetime: HisDate.currentDate(),
