@@ -27,16 +27,16 @@
                         <div class="demographicsOtherRow" style="margin-top: 10px">
                             <div class="demographicsText">
                                 {{ patient.personInformation.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
-                                {{ getAge(this.patient.personInformation.birthdate) }} ({{ formatBirthdate() }})
+                                {{ getAge(patient.personInformation.birthdate) }} ({{ formatBirthdate() }})
                             </div>
                         </div>
                         <div class="demographicsOtherRow" v-if="patient.personInformation.current_district">
                             <div class="demographicsText">Current Address:</div>
                             <div class="demographicsText mediumFontColor">{{ patient.personInformation.current_district }}</div>
                         </div>
-                        <div class="demographicsOtherRow" v-if="this.patient.personInformation.country">
+                        <div class="demographicsOtherRow" v-if="patient.personInformation.country">
                             <div class="demographicsText">Country:</div>
-                            <div class="demographicsText mediumFontColor">{{ this.patient.personInformation.country }}</div>
+                            <div class="demographicsText mediumFontColor">{{ patient.personInformation.country }}</div>
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">
@@ -258,7 +258,6 @@ import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useOutcomeStore } from "@/stores/OutcomeStore";
-import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
@@ -352,8 +351,6 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useAdministerVaccineStore, [
@@ -365,11 +362,7 @@ export default defineComponent({
             "nextAppointMentDate",
         ]),
     },
-    created() {
-        this.getData();
-    },
     async mounted() {
-        this.markWizard();
         this.loadCurrentMilestone();
         this.checkAge();
         await this.checkProtectedStatus();
@@ -377,29 +370,6 @@ export default defineComponent({
         await this.programEnrollment();
     },
     watch: {
-        vitals: {
-            handler() {
-                this.markWizard();
-            },
-            deep: true,
-        },
-        investigations: {
-            handler() {
-                this.markWizard();
-            },
-            deep: true,
-        },
-        diagnosis: {
-            handler() {
-                this.markWizard();
-            },
-            deep: true,
-        },
-        selectedMedicalDrugsList: {
-            handler() {
-                this.markWizard();
-            },
-        },
         currentMilestone: {
             handler() {
                 this.loadCurrentMilestone();
@@ -413,12 +383,12 @@ export default defineComponent({
                 }
             },
         },
-        demographics: {
+        patient: {
             async handler() {
-                if (this.demographics) {
+                if (this.patient) {
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
-                    if (!this.demographics.active) await this.openFollowModal();
+                    if (!this.patient.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
                 }
@@ -476,7 +446,7 @@ export default defineComponent({
             createModal(vaccinationHistory, { class: "otherVitalsModal vaccineHistoryModal" });
         },
         async openFollowModal() {
-            if (this.demographics?.patient_id) {
+            if (this.patient?.patientID) {
                 this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.patient.patientID);
                 const dataToPass = { protectedStatus: this.protectedStatus };
                 if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
@@ -495,112 +465,16 @@ export default defineComponent({
                 else return false;
             }
         },
-        async getData() {
-            const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];
-            // const steps = this.activities;
-            for (let i = 0; i < steps.length; i++) {
-                const title = steps[i];
-                const number = i + 1;
-
-                this.wizardData.push({
-                    title,
-                    class: "common_step",
-                    checked: i === 0 ? false : "",
-                    disabled: false,
-                    number,
-                    last_step: i === steps.length - 1 ? "last_step" : "",
-                });
-                let component = title;
-                if (title == "Next Appointment") component = "Immunization Next Appointment";
-                this.StepperData.push({
-                    title,
-                    component: component.replace(/\s+/g, ""),
-                    value: number.toString(),
-                });
-            }
-        },
-        markWizard() {
-            if (this.vitals.validationStatus) {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: false,
-                });
-            }
-
-            if (this.investigations[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: false,
-                });
-            }
-
-            if (this.diagnosis[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: false,
-                });
-            }
-
-            if (this.selectedMedicalDrugsList.length > 0) {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: false,
-                });
-            }
-
-            if (this.dispositions.length > 0) {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: false,
-                });
-            }
-        },
-
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
             });
-        },
-        async saveData() {
-            await this.saveVitals();
-            await this.saveDiagnosis();
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
-            await resetPatientData();
-            this.$router.push("patientProfile");
         },
         async saveVitals() {
             if (this.vitals.validationStatus) {
                 const userID: any = Service.getUserID();
                 const vitalsInstance = new VitalsService(this.patient.patientID, userID);
                 vitalsInstance.onFinish(this.vitals);
-            }
-        },
-        async saveDiagnosis() {
-            if (this.diagnosis[0].selectedData.length > 0) {
-                const userID: any = Service.getUserID();
-                const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.diagnosis[0].selectedData));
             }
         },
         async saveTreatmentPlan() {
