@@ -79,7 +79,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(usePostnatalWardStayStore, ["vitals"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         "Systolic blood pressure"() {
             return getFieldValue(this.vitals, "Systolic blood pressure", "value");
         },
@@ -127,12 +127,12 @@ export default defineComponent({
             this.validationRules(inputData);
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.patient.personInformation.gender && this.patient.personInformation.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient.personInformation.gender,
+                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();
