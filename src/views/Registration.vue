@@ -270,19 +270,7 @@ export default defineComponent({
         workerApi: {
             async handler() {
                 if (this.workerApi?.data == "Done Saving" && this.ddeId) {
-                    toastSuccess("Successfully Created Patient");
-                    await db
-                        .collection("patientRecords")
-                        .doc({ ID: this.ddeId })
-                        .get()
-                        .then(async (document: any) => {
-                            const dde = await getOfflineRecords("dde");
-                            dde.ids = dde.ids.slice(1);
-                            await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
-                            await workerData.postData("SYNC_DDE");
-                            await this.openNewPage(document);
-                            await workerData.terminate();
-                        });
+                    await this.redirection();
                 }
             },
             deep: true,
@@ -315,6 +303,21 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        async redirection() {
+            toastSuccess("Successfully Created Patient");
+            await db
+                .collection("patientRecords")
+                .doc({ ID: this.ddeId })
+                .get()
+                .then(async (document: any) => {
+                    const dde = await getOfflineRecords("dde");
+                    dde.ids = dde.ids.slice(1);
+                    await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
+                    await workerData.postData("SYNC_DDE");
+                    await this.openNewPage(document);
+                    await workerData.terminate();
+                });
+        },
         async cancel(event: any) {
             const deleteConfirmed = await popoverConfirmation(`Do you want to cancel registration?`, "", {
                 confirmBtnLabel: "Yes",
@@ -494,6 +497,7 @@ export default defineComponent({
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 await this.createOfflineRecord();
                 if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
+                else await this.redirection();
             } else {
                 toastWarning("Please complete all required fields");
             }
