@@ -95,6 +95,7 @@ const syncPatientDataService = {
                     concept_id: observation.concept_id,
                     obs_datetime: observation.obs_datetime,
                     value_numeric: observation.value_numeric,
+                    obs_id: observation.obs_id,
                 }));
         });
     },
