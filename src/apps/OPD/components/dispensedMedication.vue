@@ -5,33 +5,33 @@
             <ion-item lines="none" class="medicalAl">
                 <ion-row>
                     <div v-for="(item, index) in selectedAllergiesList2" :key="index">
-                      <ion-button v-if="item.selected" class="medicalAlBtn">
-                        {{ item.name }}
-                      </ion-button>
-                  </div>
+                        <ion-button v-if="item.selected" class="medicalAlBtn">
+                            {{ item.name }}
+                        </ion-button>
+                    </div>
                 </ion-row>
             </ion-item>
         </ion-row>
-      <ion-label>Diagnoses</ion-label>
-      <ion-row>
-        <ion-item lines="none" class="medicalAl">
-          <ion-row>
-            <div v-if="list.length > 0" class="diagnosis-list">
-              <div class="diagnosis-header">
-                <span class="header-name">Diagnosis name</span>
-                <span class="header-type">Diagnosis type</span>
-              </div>
-              <div v-for="(item, index) in list" :key="index" class="diagnosis-item">
-                <span class="item-name">{{ item.display[0] }}</span>
-                <span class="item-type">{{ item.display[1] }}</span>
-              </div>
-            </div>
-            <div v-else>No diagnoses were added.</div>
-          </ion-row>
-        </ion-item>
-      </ion-row>
+        <ion-label>Diagnoses</ion-label>
+        <ion-row>
+            <ion-item lines="none" class="medicalAl">
+                <ion-row>
+                    <div v-if="list.length > 0" class="diagnosis-list">
+                        <div class="diagnosis-header">
+                            <span class="header-name">Diagnosis name</span>
+                            <span class="header-type">Diagnosis type</span>
+                        </div>
+                        <div v-for="(item, index) in list" :key="index" class="diagnosis-item">
+                            <span class="item-name">{{ item.display[0] }}</span>
+                            <span class="item-type">{{ item.display[1] }}</span>
+                        </div>
+                    </div>
+                    <div v-else>No diagnoses were added.</div>
+                </ion-row>
+            </ion-item>
+        </ion-row>
 
-      <div class="space" />
+        <div class="space" />
         <ion-label>Prescribed Medications To Be Dispensed</ion-label>
         <div v-if="dispensationStore.getDrugPrescriptions() && dispensationStore.getDrugPrescriptions().length > 0">
             <dynamic-list
@@ -46,125 +46,123 @@
             />
         </div>
         <div v-else>Loading, Please Wait. If this takes more than 2 seconds then something went wrong...</div>
-      <div>
-        <div class="space3" />
-        <ion-button class="primary_btn" style="padding-left: 15px" @click="saveDispensations()">
-          <ion-icon slot="start" name="checkmark-circle"></ion-icon>
-          Dispense
-        </ion-button>
-      </div>
-
+        <div>
+            <div class="space3" />
+            <ion-button class="primary_btn" style="padding-left: 15px" @click="saveDispensations()">
+                <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+                Dispense
+            </ion-button>
+        </div>
     </ion-list>
-  <ion-list>
-    <ion-label>Here is the dispensation summary</ion-label>
-    <div
-        v-if="dispensationStore.getDispensedMedications() && dispensationStore.getDispensedMedications().length > 0">
-      <dynamic-list @click="editDispensations" :dataArray="dispensationStore.getDispensedMedications()" :withCheckboxs="false" :showInputs="false"
-                    :show_actions_buttons="false" />
-    </div>
-    <div v-else>Please complete dispensing of prescribed medications first. Then the summary will appear here.</div>
-  </ion-list>
+    <ion-list>
+        <ion-label>Here is the dispensation summary</ion-label>
+        <div v-if="dispensationStore.getDispensedMedications() && dispensationStore.getDispensedMedications().length > 0">
+            <dynamic-list
+                @click="editDispensations"
+                :dataArray="dispensationStore.getDispensedMedications()"
+                :withCheckboxs="false"
+                :showInputs="false"
+                :show_actions_buttons="false"
+            />
+        </div>
+        <div v-else>Please complete dispensing of prescribed medications first. Then the summary will appear here.</div>
+    </ion-list>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
-import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
+import { useDispensationStore } from "@/apps/OPD/stores/DispensationStore";
 import { ObservationService } from "@/services/observation_service";
 import { isEmpty } from "lodash";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import HisDate from "@/utils/Date";
-import {useOPDDiagnosisStore} from "@/apps/OPD/stores/DiagnosisStore";
-import {Service} from "@/services/service";
-import {resetDemographics} from "@/services/reset_data";
-import {useAllegyStore} from "@/apps/OPD/stores/AllergyStore";
+import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
+import { Service } from "@/services/service";
+import { resetDemographics } from "@/services/reset_data";
+import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
 
 export default defineComponent({
-  watch: {
-    '$route': {
-      immediate: true,
-      deep: true,
-      handler() {
-        // const allergyStore = useAllegyStore();
-        // allergyStore.selectedMedicalAllergiesList = [];
+    watch: {
+        $route: {
+            immediate: true,
+            deep: true,
+            handler() {
+                // const allergyStore = useAllegyStore();
+                // allergyStore.selectedMedicalAllergiesList = [];
 
-        this.getPatientDiagnosis();
-      }
-    }
-  },
+                this.getPatientDiagnosis();
+            },
+        },
+    },
     name: "xxxComponent",
     computed: {
-        ...mapState(useDispensationStore, ['drugPrescriptions']),
-        ...mapState(useDemographicsStore, ["demographics"])
+        ...mapState(useDispensationStore, ["drugPrescriptions"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     data() {
         return {
             list: [] as any,
         };
     },
-  async mounted() {
-   await this.getPatientDiagnosis();
-  },
+    async mounted() {
+        await this.getPatientDiagnosis();
+    },
 
+    methods: {
+        async getPatientDiagnosis() {
+            this.list = [];
+            const patientID = this.patient.patientID;
+            const today = new Date(Service.getSessionDate()).toISOString().split("T")[0];
+            console.log(today);
+            const obs1 = await ObservationService.getAll(patientID, "Primary diagnosis");
+            const obs2 = await ObservationService.getAll(patientID, "Secondary diagnosis");
+            const obs3 = await ObservationService.getAll(patientID, "Attempted/ Differential diagnosis");
 
-  methods: {
-      async getPatientDiagnosis(){
-        this.list = [];
-        const patientID = this.demographics.patient_id;
-        const today = new Date(Service.getSessionDate()).toISOString().split('T')[0];
-        console.log(today);
-        const obs1 = await ObservationService.getAll(patientID, 'Primary diagnosis');
-        const obs2 = await ObservationService.getAll(patientID, 'Secondary diagnosis');
-        const obs3 = await ObservationService.getAll(patientID, 'Attempted/ Differential diagnosis');
+            const additionalDiagnoses = [];
 
-        const additionalDiagnoses = [];
-
-        const filterByToday = (observations: any) => {
-          return observations.filter((ob: any) => {
-            const obDate = new Date(ob.obs_datetime).toISOString().split('T')[0];
-            return obDate === today;
-          });
-        };
-
-        const processDiagnoses = async (obs: any, type: any) => {
-          const filteredObs = filterByToday(obs);
-          return await Promise.all(filteredObs.map(async (ob: any) => {
-            const name = await ObservationService.getConceptName(ob['value_coded']);
-            return {
-              display: [name, type]
+            const filterByToday = (observations: any) => {
+                return observations.filter((ob: any) => {
+                    const obDate = new Date(ob.obs_datetime).toISOString().split("T")[0];
+                    return obDate === today;
+                });
             };
-          }));
-        };
 
-        if (!isEmpty(obs1)) {
-          const primaryDiagnoses = await processDiagnoses(obs1, 'Primary diagnosis');
-          additionalDiagnoses.push(...primaryDiagnoses);
-        }
-        if (!isEmpty(obs2)) {
-          const secondaryDiagnoses = await processDiagnoses(obs2, 'Secondary diagnosis');
-          additionalDiagnoses.push(...secondaryDiagnoses);
-        }
-        if (!isEmpty(obs3)) {
-          const attemptedDiagnoses = await processDiagnoses(obs3, 'Differential diagnosis');
-          additionalDiagnoses.push(...attemptedDiagnoses);
-        }
-        this.list = additionalDiagnoses;
-      },
+            const processDiagnoses = async (obs: any, type: any) => {
+                const filteredObs = filterByToday(obs);
+                return await Promise.all(
+                    filteredObs.map(async (ob: any) => {
+                        const name = await ObservationService.getConceptName(ob["value_coded"]);
+                        return {
+                            display: [name, type],
+                        };
+                    })
+                );
+            };
+
+            if (!isEmpty(obs1)) {
+                const primaryDiagnoses = await processDiagnoses(obs1, "Primary diagnosis");
+                additionalDiagnoses.push(...primaryDiagnoses);
+            }
+            if (!isEmpty(obs2)) {
+                const secondaryDiagnoses = await processDiagnoses(obs2, "Secondary diagnosis");
+                additionalDiagnoses.push(...secondaryDiagnoses);
+            }
+            if (!isEmpty(obs3)) {
+                const attemptedDiagnoses = await processDiagnoses(obs3, "Differential diagnosis");
+                additionalDiagnoses.push(...attemptedDiagnoses);
+            }
+            this.list = additionalDiagnoses;
+        },
         setListData(data: any) {
-            this.list = []
+            this.list = [];
             data.forEach((item: any) => {
-
                 this.list.push({
-                    'display': [
-                        item.name,
-                    ]
-                })
-
-            })
-
-        }
-    }
-
+                    display: [item.name],
+                });
+            });
+        },
+    },
 });
 </script>
 <script setup lang="ts">
@@ -186,13 +184,13 @@ import {
     IonAccordionGroup,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
-import { ref, watch, computed, onMounted, onUpdated } from "vue"
-import { PreviousTreatment } from "@/apps/NCD/services/treatment"
-import { DispensationService } from "@/apps/OPD/services/dispensation_service"
+import { ref, watch, computed, onMounted, onUpdated } from "vue";
+import { PreviousTreatment } from "@/apps/NCD/services/treatment";
+import { DispensationService } from "@/apps/OPD/services/dispensation_service";
 import DynamicList from "@/apps/OPD/components/DynamicList.vue";
-const usedemographics_store = useDemographicsStore()
-const demographics = computed(() => usedemographics_store.demographics)
-const dispensationStore = useDispensationStore()
+const usedemographics_store = useDemographicsStore();
+const demographics = computed(() => usedemographics_store.patient);
+const dispensationStore = useDispensationStore();
 const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
 const selectedReason = ref("");
@@ -212,7 +210,7 @@ onMounted(async () => {
 });
 
 function editDispensations() {
-  dispensationStore.editDispensations()
+    dispensationStore.editDispensations();
 }
 
 function setSelectedReason(event: any) {
@@ -244,12 +242,12 @@ function saveDispensations() {
     if (dispensationStore.validateInputs()) {
         return;
     }
-    dispensationStore.saveDispensedMedications()
-    dispensationStore.setDispensedMedicationsPayload()
-    usedemographics_store
-    const dispensation_srvc = new DispensationService(demographics.value.patient_id, Service.getUserID() as any)
-    const dispensation_payload: any = dispensationStore.getDispensedMedicationsPayload()
-    dispensation_srvc.saveDispensations(dispensation_payload.dispensations)
+    dispensationStore.saveDispensedMedications();
+    dispensationStore.setDispensedMedicationsPayload();
+    usedemographics_store;
+    const dispensation_srvc = new DispensationService(demographics.value.patientID, Service.getUserID() as any);
+    const dispensation_payload: any = dispensationStore.getDispensedMedicationsPayload();
+    dispensation_srvc.saveDispensations(dispensation_payload.dispensations);
 }
 </script>
 
@@ -284,7 +282,6 @@ ion-label {
 }
 
 .space {
-
 }
 
 .space2 {
@@ -420,40 +417,40 @@ ion-list.list-al {
     margin: 4%;
 }
 .diagnosis-list {
-  display: flex;
-  flex-direction: column;
-  width: 90%;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
 }
 
 .diagnosis-header {
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  padding: 10px 0;
-  border-bottom: 2px solid #ccc; /* Line below header */
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    padding: 10px 0;
+    border-bottom: 2px solid #ccc; /* Line below header */
 }
 
-.header-name, .header-type {
-  flex: 1; /* Equal space for both columns */
-  text-align: left; /* Align text to the left */
+.header-name,
+.header-type {
+    flex: 1; /* Equal space for both columns */
+    text-align: left; /* Align text to the left */
 }
 
 .diagnosis-item {
-  display: flex;
-  justify-content: start;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee; /* Light line between items */
+    display: flex;
+    justify-content: start;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee; /* Light line between items */
 }
 
 .item-name {
-  flex: 1; /* Let the name take 1 space */
+    flex: 1; /* Let the name take 1 space */
 }
 
 .item-type {
-  flex: 1; /* Let the type take 1 space */
-  text-align: left; /* Align text to the right */
-  color: #777; /* Slightly muted color for type */
+    flex: 1; /* Let the type take 1 space */
+    text-align: left; /* Align text to the right */
+    color: #777; /* Slightly muted color for type */
 }
-
 </style>
