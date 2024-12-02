@@ -8,7 +8,7 @@ export async function getOfflineRecords(objStore: string, whereClause?: any, ret
     }
 
     return await query.get().then(async (locationData: any) => {
-        if (returnFirst) {
+        if (returnFirst && locationData) {
             return locationData[0];
         }
         return locationData;
