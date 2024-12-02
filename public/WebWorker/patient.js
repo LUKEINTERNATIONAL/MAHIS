@@ -93,11 +93,10 @@ const patientService = {
                 const data = await this.createPerson(record.personInformation);
                 const patient = await this.createPatient(data.person_id);
                 const patientID = data.person_id;
-                console.log("🚀 ~ savePersonInformation ~ patientID:", patientID);
                 await this.updatePatientInformation(record, patientID);
                 await this.updateSaveStatus(record, {
                     saveStatusPersonInformation: "complete",
-                    serverPatientID: patientID,
+                    patientID: patientID,
                 });
                 await this.createIDs(record.otherPersonInformation, patientID);
                 await this.enrollProgram(patientID);
@@ -107,7 +106,7 @@ const patientService = {
                 console.error("Failed to save person information", error);
             }
         }
-        return record.serverPatientID;
+        return record.patientID;
     },
     async updatePatientInformation(record, patientID) {
         const patientData = await this.findByID(patientID);
