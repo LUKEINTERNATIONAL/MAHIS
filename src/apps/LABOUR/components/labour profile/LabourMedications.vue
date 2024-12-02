@@ -1,6 +1,16 @@
 <template>
     <!--  medications-->
     <div class="container">
+        <ion-accordion-group ref="accordionGroup" class="previousView ion-margin-bottom">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Current Medications History</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <LabourMedicationsHistory />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
         <ion-card class="section">
             <ion-card-content>
                 <basic-form
@@ -49,6 +59,7 @@ import {
 } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/profile_validation_service";
 import { useLabourMedicationStore } from "../../stores/labour profile/labourMedications";
+import LabourMedicationsHistory from "@/apps/LABOUR/components/labour profile/LabourMedicationsHistory.vue";
 
 export default defineComponent({
     name: "Menu",
@@ -68,6 +79,7 @@ export default defineComponent({
         IonInput,
         BasicInputField,
         BasicForm,
+        LabourMedicationsHistory,
     },
     data() {
         return {
