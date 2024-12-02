@@ -149,7 +149,7 @@ export default defineComponent({
             deep: true,
         },
         workerApi: {
-            handler() {
+            async handler() {
                 const status = useStatusStore();
                 if (this.workerApi?.data?.payload) {
                     if (this.workerApi?.data?.payload?.total_relationships) status.setOfflineRelationshipStatus(this.workerApi?.data?.payload);
@@ -171,6 +171,7 @@ export default defineComponent({
                         this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
                     ) {
                         modalController.dismiss();
+                        await workerData.terminate();
                     }
                 }
             },
