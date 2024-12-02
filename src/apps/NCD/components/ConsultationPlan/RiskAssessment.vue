@@ -41,7 +41,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useEnrollementStore, ["substance"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     watch: {
         substance: {

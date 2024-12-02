@@ -1,7 +1,7 @@
 <template>
     <ion-page>
         <NavigationMenu />
-        <ViewToggleComponent @view-changed="handleViewChange"/>
+        <ViewToggleComponent @view-changed="handleViewChange" />
         <ion-content>
             <div class="p-4" v-if="currentView === 'list'">
                 <ion-card>
@@ -19,11 +19,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="medication in medications" 
-                                        :key="medication.order_id"
-                                        class="border-b hover:bg-gray-50">
+                                    <tr v-for="medication in medications" :key="medication.order_id" class="border-b hover:bg-gray-50">
                                         <td class="p-3">
-                                            {{ formatHeaderDate(medication.order.date_created.split('T')[0]) }}
+                                            {{ formatHeaderDate(medication.order.date_created.split("T")[0]) }}
                                         </td>
                                         <td class="p-3">
                                             <div class="flex items-center">
@@ -31,9 +29,7 @@
                                                 {{ medication.drug.name }}
                                             </div>
                                         </td>
-                                        <td class="p-3">
-                                            {{ medication.dose }} {{ medication.units }}
-                                        </td>
+                                        <td class="p-3">{{ medication.dose }} {{ medication.units }}</td>
                                         <td class="p-3">
                                             {{ getFrequencyLabel(medication.frequency) }}
                                         </td>
@@ -50,7 +46,7 @@
                                                     size="small"
                                                     color="light"
                                                     @click="setAmountAsPrescribed(medication)"
-                                                    style="margin-top: 10px;"
+                                                    style="margin-top: 10px"
                                                 >
                                                     <ion-icon :icon="clipboardOutline" size="small" class="mr-1"></ion-icon>
                                                     <span class="text-green-700">As Prescribed</span>
@@ -62,22 +58,17 @@
                                         </td>
                                         <td class="p-3">
                                             <div class="flex space-x-2">
-                                                <ion-button 
-                                                    color="primary" 
+                                                <ion-button
+                                                    color="primary"
                                                     size="small"
                                                     @click="dispenseMedication(medication)"
                                                     :disabled="!medication.amountToDispense || medication.dispensed"
                                                 >
-                                                    <ion-icon :icon="checkmarkDoneCircleOutline" class="mr-1" style="margin-right: 5px;"></ion-icon>
-                                                    {{ medication.dispensed ? 'Dispensed' : 'Dispense' }}
+                                                    <ion-icon :icon="checkmarkDoneCircleOutline" class="mr-1" style="margin-right: 5px"></ion-icon>
+                                                    {{ medication.dispensed ? "Dispensed" : "Dispense" }}
                                                 </ion-button>
-                                                <ion-button 
-                                                    color="secondary"
-                                                    size="small"
-                                                    @click="viewDetails(medication)"
-                                                    style="margin-left: 10px;"
-                                                >
-                                                    <ion-icon :icon="eye" class="mr-1" style="margin-right: 5px;"></ion-icon>
+                                                <ion-button color="secondary" size="small" @click="viewDetails(medication)" style="margin-left: 10px">
+                                                    <ion-icon :icon="eye" class="mr-1" style="margin-right: 5px"></ion-icon>
                                                     Details
                                                 </ion-button>
                                             </div>
@@ -105,17 +96,11 @@
                     </ion-row>
                     <ion-row>
                         <!-- Each Medication Card in its Column -->
-                        <ion-col 
-                            v-for="medication in medicationGroup" 
-                            :key="medication.order_id" 
-                            size="12" 
-                            size-md="6" 
-                            size-lg="4"
-                        >
+                        <ion-col v-for="medication in medicationGroup" :key="medication.order_id" size="12" size-md="6" size-lg="4">
                             <ion-card class="mb-4">
                                 <ion-card-header>
                                     <ion-card-title class="medication-details-header">
-                                        <ion-icon :icon="medkit"  class="ion-margin-end"></ion-icon>
+                                        <ion-icon :icon="medkit" class="ion-margin-end"></ion-icon>
                                         <span>{{ medication.drug.name }}</span>
                                     </ion-card-title>
                                 </ion-card-header>
@@ -128,8 +113,8 @@
                                                 Dose: {{ medication.dose }} {{ medication.units }}
                                             </span>
                                             <span class="flex items-center">
-                                                Frequency: 
-                                                {{ getFrequencyLabel(medication.frequency) }} 
+                                                Frequency:
+                                                {{ getFrequencyLabel(medication.frequency) }}
                                                 ({{ medication.frequency }})
                                             </span>
                                         </div>
@@ -147,29 +132,25 @@
                                                 style="margin-top: 10px"
                                                 @click="setAmountAsPrescribed(medication)"
                                             >
-                                                <ion-icon :icon="clipboardOutline" size="small" style="margin-right: 5px;" class="mr-1"></ion-icon>
-                                                <span style="color: darkseagreen;"> As Prescribed</span>
+                                                <ion-icon :icon="clipboardOutline" size="small" style="margin-right: 5px" class="mr-1"></ion-icon>
+                                                <span style="color: darkseagreen"> As Prescribed</span>
                                             </ion-button>
                                         </div>
                                         <div v-if="medication.error" class="error-text">
                                             {{ medication.error }}
                                         </div>
                                         <div class="mt-3 flex space-x-2">
-                                            <ion-button 
-                                                color="primary" 
+                                            <ion-button
+                                                color="primary"
                                                 @click="dispenseMedication(medication)"
                                                 :disabled="!medication.amountToDispense || medication.dispensed"
                                             >
-                                                <ion-icon :icon="checkmarkDoneCircleOutline" class="mr-2" style="margin-right: 5px;"></ion-icon>
-                                                {{ medication.dispensed ? 'Dispensed' : 'Dispense' }}
+                                                <ion-icon :icon="checkmarkDoneCircleOutline" class="mr-2" style="margin-right: 5px"></ion-icon>
+                                                {{ medication.dispensed ? "Dispensed" : "Dispense" }}
                                             </ion-button>
-                                            <ion-button 
-                                                color="secondary"
-                                                style="margin-left: 20px;" 
-                                                @click="viewDetails(medication)"
-                                            >
-                                                <ion-icon :icon="eye" class="mr-2" style="margin-right: 5px;"></ion-icon>
-                                                 Details
+                                            <ion-button color="secondary" style="margin-left: 20px" @click="viewDetails(medication)">
+                                                <ion-icon :icon="eye" class="mr-2" style="margin-right: 5px"></ion-icon>
+                                                Details
                                             </ion-button>
                                         </div>
                                     </div>
@@ -187,14 +168,13 @@
     </ion-page>
 </template>
 
-
 <script lang="ts">
-import { 
-    IonContent, 
-    IonPage, 
-    IonCard, 
-    IonCardHeader, 
-    IonCardTitle, 
+import {
+    IonContent,
+    IonPage,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
     IonCardContent,
     IonButton,
     IonModal,
@@ -210,16 +190,16 @@ import {
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
-import NavigationMenu from '@/apps/Immunization/components/Reports/NavigationMenu.vue';
-import ViewToggleComponent from '@/apps/NCD/components/ViewToggleComponent.vue'
+import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMenu.vue";
+import ViewToggleComponent from "@/apps/NCD/components/ViewToggleComponent.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { DrugOrderService } from "@/services/drug_order_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
 import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
 import MedicationDetailsModal from "./MedicationDetailsModal.vue";
 import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
-import { DispensationService } from "@/apps/NCD/services/dispensation_service"
-import { medkit, repeat, eye, alertCircleOutline, checkmarkDoneCircleOutline, clipboardOutline, timeOutline  } from 'ionicons/icons';
+import { DispensationService } from "@/apps/NCD/services/dispensation_service";
+import { medkit, repeat, eye, alertCircleOutline, checkmarkDoneCircleOutline, clipboardOutline, timeOutline } from "ionicons/icons";
 
 export default defineComponent({
     name: "MedicationDispensation",
@@ -255,46 +235,45 @@ export default defineComponent({
             checkmarkDoneCircleOutline,
             clipboardOutline,
             timeOutline,
-            currentView: 'list',
+            currentView: "list",
         };
     },
     computed: {
         ...mapState(EIRreportsStore, ["navigationPayload"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         groupedMedications() {
             return this.medications.reduce((groups: any, medication: any) => {
-                const date = medication.order.date_created.split('T')[0];
+                const date = medication.order.date_created.split("T")[0];
                 if (!groups[date]) {
                     groups[date] = [];
                 }
                 groups[date].push(medication);
                 return groups;
             }, {}) as any;
-        }
+        },
     },
     async mounted() {
-        this.medications = []
+        this.medications = [];
         this.initOwnNavData();
         await this.prescribedMedications();
     },
     methods: {
         initOwnNavData() {
             const store = EIRreportsStore();
-            store.setNavigationPayload('Dispense Medication', true, false, '/', 'home');
+            store.setNavigationPayload("Dispense Medication", true, false, "/", "home");
         },
         async prescribedMedications() {
-            this.medications = await DrugOrderService.findProgramDrugOrdersAwaitingDispensation(this.demographics.patient_id);
-            console.log(this.medications)
+            this.medications = await DrugOrderService.findProgramDrugOrdersAwaitingDispensation(this.patient.patientID);
+            console.log(this.medications);
             this.medications = this.medications.map((med: any) => ({
                 ...med,
                 amountToDispense: null,
-                dispensed: false
+                dispensed: false,
             })) as any;
         },
         getFrequencyLabel(code: any) {
-            const frequency = DRUG_FREQUENCIES.find(f => f.code === code);
-            return frequency ? frequency.label : 'Unknown';
+            const frequency = DRUG_FREQUENCIES.find((f) => f.code === code);
+            return frequency ? frequency.label : "Unknown";
         },
         validateAmount(medication: any) {
             const value = parseFloat(medication.amountToDispense);
@@ -314,9 +293,9 @@ export default defineComponent({
                 return;
             }
             try {
-                const dispensationService = new DispensationService()
-                const dispensationArryObj = dispensationService.getDispensationArryObj(medication.order_id, medication.amountToDispense)
-                await dispensationService.saveDispensations(dispensationArryObj)
+                const dispensationService = new DispensationService();
+                const dispensationArryObj = dispensationService.getDispensationArryObj(medication.order_id, medication.amountToDispense);
+                await dispensationService.saveDispensations(dispensationArryObj);
                 medication.dispensed = true;
                 toastSuccess("Medication dispensed successfully.");
             } catch (error) {
@@ -326,14 +305,14 @@ export default defineComponent({
         },
         async viewDetails(medication: any) {
             this.selectedMedication = medication;
-            await createModal(MedicationDetailsModal, { class: "large-modal" }, true, {selectedMedication: this.selectedMedication});
+            await createModal(MedicationDetailsModal, { class: "large-modal" }, true, { selectedMedication: this.selectedMedication });
         },
         formatHeaderDate(dateString: any) {
-            return new Date(dateString).toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+            return new Date(dateString).toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
             });
         },
         handleViewChange(view: string) {
@@ -341,78 +320,79 @@ export default defineComponent({
         },
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
-                this.medications = []
+                this.medications = [];
                 await this.prescribedMedications();
             },
-        deep:true
-        }   
-    }
+            deep: true,
+        },
+    },
 });
 </script>
 <style scoped>
-    .dose-input {
-        --padding-start: 8px;
-        --padding-end: 8px;
-        margin-left: 10px;
-        width: 200px;
-    }
+.dose-input {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    margin-left: 10px;
+    width: 200px;
+}
 
-    .bordered-input {
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        padding: 4px;
-    }
+.bordered-input {
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+}
 
-    .medication-details-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+.medication-details-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-    .input-error {
-        border-color: red;
-    }
+.input-error {
+    border-color: red;
+}
 
-    .error-text {
-        color: red;
-        font-size: 0.875rem;
-        margin-top: 4px;
-    }
+.error-text {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 4px;
+}
 
-    .dose-input {
-        --padding-start: 8px;
-        --padding-end: 8px;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        padding: 4px;
-    }
+.dose-input {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+}
 
-    .input-error {
-        border-color: red;
-    }
+.input-error {
+    border-color: red;
+}
 
-    .error-text {
-        color: red;
-    }
+.error-text {
+    color: red;
+}
 
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
 
-    th {
-        font-weight: 600;
-        text-align: left;
-    }
+th {
+    font-weight: 600;
+    text-align: left;
+}
 
-    td, th {
-        padding: 12px;
-        border-bottom: 1px solid #e2e8f0;
-    }
+td,
+th {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
 
-    tr:hover {
-        background-color: #f8fafc;
-    }
+tr:hover {
+    background-color: #f8fafc;
+}
 </style>
