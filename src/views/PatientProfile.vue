@@ -477,7 +477,7 @@ export default defineComponent({
             async handler(btn: any) {
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
-                await this.handleProgramClick(btn);
+                // await this.handleProgramClick(btn);
             },
             deep: true,
         },
@@ -637,7 +637,7 @@ export default defineComponent({
 
         async handleProgramClick(btn: any) {
             await this.refreshPrograms();
-            const lower = (title: string) => title.toLowerCase().replace(/\s+/g, "");
+            const lower = (title: string) => title?.toLowerCase().replace(/\s+/g, "");
             const gender = this.covertGender(this.patient.personInformation?.gender);
             const age = HisDate.getAgeInYears(this.patient.personInformation?.birthdate);
 
