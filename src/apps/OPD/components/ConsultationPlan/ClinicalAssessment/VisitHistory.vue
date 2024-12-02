@@ -2,83 +2,74 @@
     <div class="visitContent">
         <ion-row>
             <ion-col offset="0.1" size="10">
-              <div class="visitData">
-                <!-- Level of consciousness section -->
-                <div v-if="Object.values(vitals).every((value) => value !== '')">
-                  <div style="max-width: 300px">
-                    <div class="heading">1. Level of consciousness presented</div>
-                  </div>
-                </div>
-                <div class="noData" v-else>1. No level of consciousness were recorded</div>
+                <div class="visitData">
+                    <!-- Level of consciousness section -->
+                    <div v-if="Object.values(vitals).every((value) => value !== '')">
+                        <div style="max-width: 300px">
+                            <div class="heading">1. Level of consciousness presented</div>
+                        </div>
+                    </div>
+                    <div class="noData" v-else>1. No level of consciousness were recorded</div>
 
-                <!-- Presenting Complaints Section -->
-                <div v-if="uniquePresentingComplaints?.length > 0">
-                  <div class="heading">2. Presenting Complaints recorded</div>
-                  <div style="display: flex; flex-wrap: wrap">
-                    <div class="spanContent" v-for="(complaint, index) in uniquePresentingComplaints" :key="index">{{ complaint }}</div>
-                  </div>
-                </div>
-                <div class="noData" v-else>2. No presenting complaints were recorded</div>
+                    <!-- Presenting Complaints Section -->
+                    <div v-if="uniquePresentingComplaints?.length > 0">
+                        <div class="heading">2. Presenting Complaints recorded</div>
+                        <div style="display: flex; flex-wrap: wrap">
+                            <div class="spanContent" v-for="(complaint, index) in uniquePresentingComplaints" :key="index">{{ complaint }}</div>
+                        </div>
+                    </div>
+                    <div class="noData" v-else>2. No presenting complaints were recorded</div>
 
-                <!-- Primary Diagnosis Section -->
-                <div v-if="primaryDiagnosis?.length > 0">
-                  <div class="heading">3. Pregnancy and breastfeeding status recorded</div>
-                  <div style="display: flex; flex-wrap: wrap">
-                    <div class="spanContent" v-for="(diagnosis, index) in primaryDiagnosis" :key="index">{{ diagnosis }}</div>
-                  </div>
-                </div>
-                <div class="noData" v-else>3. No pregnancy and breastfeeding status was recorded</div>
+                    <!-- Primary Diagnosis Section -->
+                    <div v-if="primaryDiagnosis?.length > 0">
+                        <div class="heading">3. Pregnancy and breastfeeding status recorded</div>
+                        <div style="display: flex; flex-wrap: wrap">
+                            <div class="spanContent" v-for="(diagnosis, index) in primaryDiagnosis" :key="index">{{ diagnosis }}</div>
+                        </div>
+                    </div>
+                    <div class="noData" v-else>3. No pregnancy and breastfeeding status was recorded</div>
 
-                <!-- Past Medical History Section -->
-                <div v-if="uniquePastMedicalHistory?.length > 0">
-                  <div class="heading">4. Past medical history recorded</div>
-                  <div style="display: flex; flex-wrap: wrap">
-                    <div class="spanContent" v-for="(medicalHistory, index) in uniquePastMedicalHistory" :key="index">{{ medicalHistory }}</div>
-                  </div>
-                </div>
-                <div class="noData" v-else>4. No past medical history was recorded</div>
+                    <!-- Past Medical History Section -->
+                    <div v-if="uniquePastMedicalHistory?.length > 0">
+                        <div class="heading">4. Past medical history recorded</div>
+                        <div style="display: flex; flex-wrap: wrap">
+                            <div class="spanContent" v-for="(medicalHistory, index) in uniquePastMedicalHistory" :key="index">
+                                {{ medicalHistory }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="noData" v-else>4. No past medical history was recorded</div>
 
-                <!-- Allergies Section -->
-                <div v-if="selectedAllergiesList2?.length > 0">
-                  <div class="heading">5. Allergies recorded</div>
-                  <ion-item lines="none" class="medicalAl">
-                    <ion-row>
-                      <div v-for="(item, index) in selectedAllergiesList2" :key="index">
-                        <ion-button style="padding: 2px" v-if="item.selected" class="medicalAlBtn">
-                          {{ item.name }}
-                        </ion-button>
-                      </div>
-                    </ion-row>
-                  </ion-item>
-                </div>
-                <div class="noData" v-else>5. No allergies were recorded</div>
+                    <!-- Allergies Section -->
+                    <div v-if="selectedAllergiesList2?.length > 0">
+                        <div class="heading">5. Allergies recorded</div>
+                        <ion-item lines="none" class="medicalAl">
+                            <ion-row>
+                                <div v-for="(item, index) in selectedAllergiesList2" :key="index">
+                                    <ion-button style="padding: 2px" v-if="item.selected" class="medicalAlBtn">
+                                        {{ item.name }}
+                                    </ion-button>
+                                </div>
+                            </ion-row>
+                        </ion-item>
+                    </div>
+                    <div class="noData" v-else>5. No allergies were recorded</div>
 
-                <!-- Physical Exam Section -->
-                <div v-if="nextAppointMent">
-                  <span class="heading">6. Physical examinations recorded</span>
-                  <span class="nextDate">06 September 2024</span>
+                    <!-- Physical Exam Section -->
+                    <div v-if="nextAppointMent">
+                        <span class="heading">6. Physical examinations recorded</span>
+                        <span class="nextDate">06 September 2024</span>
+                    </div>
+                    <div class="noData" v-else>6. No physical exams were recorded</div>
                 </div>
-                <div class="noData" v-else>6. No physical exams were recorded</div>
-              </div>
-
             </ion-col>
         </ion-row>
     </div>
 </template>
 
 <script lang="ts">
-import {
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonList,
-  IonTitle,
-  IonToolbar,
-  IonMenu,
-  modalController,
-  IonButton
-} from "@ionic/vue";
-import {computed, defineComponent} from "vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonButton } from "@ionic/vue";
+import { computed, defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { ref } from "vue";
 import { icons } from "@/utils/svg";
@@ -94,11 +85,11 @@ import { ProgramService } from "@/services/program_service";
 import HisDate from "@/utils/Date";
 import { ConceptService } from "@/services/concept_service";
 import { BMIService } from "@/services/bmi_service";
-import {useAllegyStore} from "@/apps/OPD/stores/AllergyStore";
+import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
 export default defineComponent({
     name: "Menu",
     components: {
-      IonButton,
+        IonButton,
         IonContent,
         IonHeader,
         IonItem,
@@ -109,13 +100,13 @@ export default defineComponent({
         UpcomingFeature,
         DynamicButton,
     },
-  setup() {
-    const store = useAllegyStore();
-    const selectedAllergiesList2 = computed(() => store.selectedMedicalAllergiesList);
-    return {
-      selectedAllergiesList2,
-    };
-  },
+    setup() {
+        const store = useAllegyStore();
+        const selectedAllergiesList2 = computed(() => store.selectedMedicalAllergiesList);
+        return {
+            selectedAllergiesList2,
+        };
+    },
     data() {
         return {
             iconsContent: icons,
@@ -134,12 +125,11 @@ export default defineComponent({
             vitals: {} as any,
             vitalsWeightHeight: {} as any,
             savedEncounters: [] as any,
-            pregnancy: {} as any
-
+            pregnancy: {} as any,
         };
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 await this.updateData();
             },
@@ -157,17 +147,17 @@ export default defineComponent({
         await this.updateData();
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
-      todayVisit() {
-        const todayDate = HisDate.toStandardHisFormat(new Date());
-        return this.visits.find((date:any) => date === todayDate) || null;
-      },
-      uniquePastMedicalHistory() {
-        return [...new Map(this.pastMedicalHistory.map((item:any) => [item, item])).values()];
-      },
-      uniquePresentingComplaints() {
-        return [...new Map(this.presentingComplaint.map((item:any) => [item, item])).values()];
-      },
+        ...mapState(useDemographicsStore, ["patient"]),
+        todayVisit() {
+            const todayDate = HisDate.toStandardHisFormat(new Date());
+            return this.visits.find((date: any) => date === todayDate) || null;
+        },
+        uniquePastMedicalHistory() {
+            return [...new Map(this.pastMedicalHistory.map((item: any) => [item, item])).values()];
+        },
+        uniquePresentingComplaints() {
+            return [...new Map(this.presentingComplaint.map((item: any) => [item, item])).values()];
+        },
     },
     methods: {
         async updateData() {
@@ -180,14 +170,14 @@ export default defineComponent({
         },
         async loadSavedEncounters(patientVisitDate: any) {
             this.visitDate = patientVisitDate;
-            const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
+            const encounters = await EncounterService.getEncounters(this.patient.patientID, { date: patientVisitDate });
             await this.setDiagnosisEncounters(encounters);
             await this.setVitalsEncounters(encounters);
             await this.setPresentingComplainsEncounters(encounters);
             await this.setLevelOfConsciousnessEncounters(encounters);
             await this.setTreatmentEncounters(encounters);
-            await this.setPastMedicalHistoryEncounters(encounters)
-            await this.setAllergiesEncounters(encounters)
+            await this.setPastMedicalHistoryEncounters(encounters);
+            await this.setAllergiesEncounters(encounters);
         },
         findEncounter(data: any, encounterType: any) {
             return data.find((obj: any) => obj.type && obj.type.name === encounterType);
@@ -207,8 +197,6 @@ export default defineComponent({
             this.vitals.systolic = this.filterObs(observations, "Systolic")?.[0]?.value_numeric ?? "";
             this.vitals.respirationRate = this.filterObs(observations, "Respiration rate")?.[0]?.value_numeric ?? "";
             this.vitals.diastolic = this.filterObs(observations, "Diastolic")?.[0]?.value_numeric ?? "";
-            
-            
 
             if (this.vitals.weight && this.vitals.height) {
                 await this.setBMI(this.vitals.weight, this.vitals.height);
@@ -219,18 +207,18 @@ export default defineComponent({
             const observations = this.findEncounter(data, "PRESENTING COMPLAINTS")?.observations;
             this.presentingComplaint = await this.getConceptValues(this.filterObs(observations, "Presenting complaint"), "coded");
         },
-      async setLevelOfConsciousnessEncounters(data: any) {
-        const observations = this.findEncounter(data, "PRESENTING COMPLAINTS")?.observations;
-        this.presentingComplaint = await this.getConceptValues(this.filterObs(observations, "Presenting complaint"), "coded");
-      },
-      async setPastMedicalHistoryEncounters(data: any) {
-        const observations = this.findEncounter(data, "MEDICAL HISTORY")?.observations;
-        this.pastMedicalHistory = await this.getConceptValues(this.filterObs(observations, "Chronic disease"), "coded");
-      },
-      async setAllergiesEncounters(data: any) {
-        const observations = this.findEncounter(data, "MEDICAL HISTORY")?.observations;
-        this.allergies = await this.getConceptValues(this.filterObs(observations, "Chronic disease"), "coded");
-      },
+        async setLevelOfConsciousnessEncounters(data: any) {
+            const observations = this.findEncounter(data, "PRESENTING COMPLAINTS")?.observations;
+            this.presentingComplaint = await this.getConceptValues(this.filterObs(observations, "Presenting complaint"), "coded");
+        },
+        async setPastMedicalHistoryEncounters(data: any) {
+            const observations = this.findEncounter(data, "MEDICAL HISTORY")?.observations;
+            this.pastMedicalHistory = await this.getConceptValues(this.filterObs(observations, "Chronic disease"), "coded");
+        },
+        async setAllergiesEncounters(data: any) {
+            const observations = this.findEncounter(data, "MEDICAL HISTORY")?.observations;
+            this.allergies = await this.getConceptValues(this.filterObs(observations, "Chronic disease"), "coded");
+        },
         async setLabOrderEncounters(data: any) {
             const observations = this.findEncounter(data, "LAB ORDERS")?.observations;
             this.labOrders = await this.getConceptValues(this.filterObs(observations, "Primary diagnosis"), "coded");
@@ -252,12 +240,12 @@ export default defineComponent({
             createModal(InvestigationsModal);
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.patient.personInformation.gender && this.patient.personInformation.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient.personInformation.gender,
+                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();
@@ -344,9 +332,9 @@ h3 {
     padding-left: 20px;
 }
 ion-button.medicalAlBtn {
-  --background: #fecdca;
-  --color: #b42318;
-  text-transform: none;
+    --background: #fecdca;
+    --color: #b42318;
+    text-transform: none;
 }
 .noData {
     border: #a3a1a1 solid 1px;

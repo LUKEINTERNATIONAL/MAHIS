@@ -121,7 +121,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useVitalsStore, ["vitals"]),
         "Height Weight Reason"() {
             return getFieldValue(this.vitals, "Height Weight Reason", "value");
@@ -187,25 +187,25 @@ export default defineComponent({
                         const location = await getUserLocation();
                         const locationId = location ? location.location_id : null;
                         if (userRoles.includes("Nurse")) {
-                          await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
+                            await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
                             this.$router.push("patientProfile");
                         } else {
-                          await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                          this.$router.push("OPDConsultationPlan");
+                            await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
+                            this.$router.push("OPDConsultationPlan");
                         }
                     } else {
                         await this.validaterowData();
                         toastWarning("Please fill all required fields");
                     }
                 } else {
-                  const location = await getUserLocation();
-                  const locationId = location ? location.location_id : null;
+                    const location = await getUserLocation();
+                    const locationId = location ? location.location_id : null;
                     if (userRoles.includes("Nurse")) {
-                      await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                      this.$router.push("patientProfile");
+                        await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
+                        this.$router.push("patientProfile");
                     } else {
-                      await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                      this.$router.push("OPDConsultationPlan");
+                        await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
+                        this.$router.push("OPDConsultationPlan");
                     }
                 }
             } catch (error) {
@@ -228,7 +228,7 @@ export default defineComponent({
                             toastDanger("Location ID could not be found. Please check your settings.");
                             return;
                         }
-                        await PatientOpdList.addPatientToStage(this.demographics.patient_id, dates.todayDateFormatted(), "CONSULTATION", locationId);
+                        await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
                         this.$router.push("OPDConsultationPlan");
                     } else {
                         await this.validaterowData();
@@ -246,13 +246,13 @@ export default defineComponent({
 
         async saveVitals() {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            const vitalsInstance = new VitalsService(this.patient.patientID, userID);
             await vitalsInstance.onFinish(this.vitals);
         },
         async validaterowData() {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+            const vitalsInstance = new VitalsService(this.patient.patientID, userID);
+            const age = HisDate.getAgeInYears(this.patient.personInformation.birthdate);
 
             this.vitals.forEach((section: any, sectionIndex: any) => {
                 if (section?.data?.rowData) {
