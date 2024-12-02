@@ -17,6 +17,9 @@
                 </ion-label>
             </div>
         </ion-col>
+    </ion-row>
+
+    <ion-row>
         <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >Last name<span style="color: #b42318">*</span></ion-label
@@ -54,23 +57,25 @@
                     </ion-label>
                 </div>
             </ion-col>
+    </ion-row>
 
-            <ion-col>
-                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                    >Gender<span style="color: #b42318">*</span></ion-label
-                >
-                <sselectionList
-                    :labels="isSSelection_properties[0].labels"
-                    :selected-opt="isSSelection_properties[0].selectedOption.value"
-                    @selection-event="isSSelection_properties[0].dataHandler"
-                />
+    <ion-row>
+        <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Gender<span style="color: #b42318">*</span></ion-label
+            >
+            <sselectionList
+                :labels="isSSelection_properties[0].labels"
+                :selected-opt="isSSelection_properties[0].selectedOption.value"
+                @selection-event="isSSelection_properties[0].dataHandler"
+            />
 
-                <div>
-                    <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
-                        {{ isSSelection_properties[0].error_message }}
-                    </ion-label>
-                </div>
-            </ion-col>
+            <div>
+                <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
+                    {{ isSSelection_properties[0].error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
     </ion-row>
 
     <ion-row>
@@ -90,6 +95,9 @@
                 </ion-label>
             </div>
         </ion-col>
+    </ion-row>
+
+    <ion-row>
         <ion-col>
             <ion-col>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
@@ -119,7 +127,7 @@
     </ion-row>
 
     <ion-row>
-        <ion-col size="6" v-if="true">
+        <ion-col v-if="true">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >District(s)<span style="color: #b42318">*</span></ion-label
             >
@@ -148,8 +156,10 @@
                 </ion-label>
             </div>
         </ion-col>
+    </ion-row>
 
-        <ion-col size="6">
+    <ion-row>
+        <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >Facility name<span style="color: #b42318">*</span></ion-label
             >
@@ -181,7 +191,7 @@
     </ion-row>
 
     <ion-row>
-        <ion-col size="6">
+        <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >TA(s)<span style="color: #b42318">*</span></ion-label
             >
@@ -210,7 +220,10 @@
                 </ion-label>
             </div>
         </ion-col>
-        <ion-col size="6">
+    </ion-row>
+
+    <ion-row>
+        <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >Village(s)<span style="color: #b42318">*</span></ion-label
             >
@@ -287,6 +300,9 @@
                 </ion-label>
             </div>
         </ion-col>
+    </ion-row>
+
+    <ion-row>
         <ion-col>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
                 >Repeat password<span style="color: #b42318">*</span></ion-label
@@ -315,7 +331,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import { IonContent, IonHeader, IonItem, IonCol, IonLabel, IonToolbar, IonMenu, IonAccordionGroup, IonAccordion, AccordionGroupCustomEvent } from "@ionic/vue"
+import { IonContent, IonHeader, IonItem, IonCol, IonLabel, IonRow, IonToolbar, IonMenu, IonAccordionGroup, IonAccordion, AccordionGroupCustomEvent } from "@ionic/vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import sselectionList from "@/components/SselectionList.vue"
 import { areFieldsValid, getFieldsValuesObj, isPasswordValid, getGenderCode } from "@/utils/GeneralUti"
