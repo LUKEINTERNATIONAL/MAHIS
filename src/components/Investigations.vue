@@ -7,7 +7,6 @@
             <div class="ion-padding" slot="content" style="margin-bottom: 125px">
                 <span>
                     <labOrderResults :propOrders="labOrders" />
-
                 </span>
 
                 <span v-if="search_item">
@@ -130,7 +129,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         inputFields() {
             return this.investigations[0].data.rowData[0].colData;
         },
@@ -142,9 +141,9 @@ export default defineComponent({
             },
             deep: true,
         },
-        demographics: {
+        patient: {
             async handler() {
-                this.labOrders = await OrderService.getOrders(this.demographics.patient_id);
+                this.labOrders = await OrderService.getOrders(this.patient.patientID);
             },
             deep: true,
         },
@@ -170,7 +169,7 @@ export default defineComponent({
             this.labOrderStatus = !this.labOrderStatus;
         },
         async updateInvestigationWizard() {
-            this.labOrders = await OrderService.getOrders(this.demographics.patient_id);
+            this.labOrders = await OrderService.getOrders(this.patient.patientID);
             const filteredArray = await this.labOrders.filter((obj: any) => {
                 return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
             });
@@ -229,7 +228,7 @@ export default defineComponent({
         },
         async saveTest() {
             const investigationInstance = new LabOrder();
-            await investigationInstance.postActivities(this.demographics.patient_id, [
+            await investigationInstance.postActivities(this.patient.patientID, [
                 {
                     concept_id: this.inputFields[0].value.concept_id,
                     name: this.inputFields[0].value.name,
@@ -239,7 +238,7 @@ export default defineComponent({
                 },
             ]);
             modifyFieldValue(this.investigations, "specimen", "disabled", true);
-            this.labOrders = await OrderService.getOrders(this.demographics.patient_id);
+            this.labOrders = await OrderService.getOrders(this.patient.patientID);
         },
 
         async handleInputData(col: any) {

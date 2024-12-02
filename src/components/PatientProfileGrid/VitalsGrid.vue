@@ -105,21 +105,21 @@ export default defineComponent({
         };
     },
     async mounted() {
-        this.weight = (await ObservationService.getFirstObs(this.demographics.patient_id, "weight")) || "";
-        this.Height = (await ObservationService.getFirstObs(this.demographics.patient_id, "Height")) || "";
-        this.Systolic = (await ObservationService.getFirstObs(this.demographics.patient_id, "Systolic")) || "";
-        this.Diastolic = (await ObservationService.getFirstObs(this.demographics.patient_id, "Diastolic")) || "";
+        this.weight = (await ObservationService.getFirstObs(this.patient.patientID, "weight")) || "";
+        this.Height = (await ObservationService.getFirstObs(this.patient.patientID, "Height")) || "";
+        this.Systolic = (await ObservationService.getFirstObs(this.patient.patientID, "Systolic")) || "";
+        this.Diastolic = (await ObservationService.getFirstObs(this.patient.patientID, "Diastolic")) || "";
         this.BMI = await BMIService.getBMI(
             parseInt(this.weight.value_numeric),
             parseInt(this.Height.value_numeric),
-            this.demographics.gender,
-            HisDate.calculateAge(this.demographics.birthdate, this.weight.obs_datetime)
+            this.patient.personInformation.gender,
+            HisDate.calculateAge(this.patient.personInformation.birthdate, this.weight.obs_datetime)
         );
         this.vitalsIcon = BMIService.iconBMI(this.BMI.color);
     },
     computed: {
         ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     methods: {
         openNotesModal() {

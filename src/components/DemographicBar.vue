@@ -2,25 +2,33 @@
     <ion-card class="second_bar">
         <ul class="second_bar_list desktop position_content">
             <li>
-                Fullname: <b>{{ demographics.name }}</b>
+                Fullname:
+                <b
+                    >{{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
+                    {{ patient.personInformation.family_name }}</b
+                >
             </li>
             <li>
-                MRN: <b>{{ demographics.mrn }}</b>
+                MRN: <b>{{ patient.ID }}</b>
             </li>
             <li>
                 Birthday: <b>{{ formatBirthdate() }} </b>
             </li>
             <li>Category: <b> </b></li>
             <li>
-                Sex: <b>{{ demographics.gender }}</b>
+                Sex: <b>{{ patient.personInformation.gender }}</b>
             </li>
         </ul>
         <ul class="second_bar_list mobile position_content">
             <li>
-                Fullname: <b>{{ demographics.name }}</b>
+                Fullname:
+                <b
+                    >{{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
+                    {{ patient.personInformation.family_name }}</b
+                >
             </li>
             <li>
-                MRN: <b>{{ demographics.mrn }}</b>
+                MRN: <b>{{ patient.ID }}</b>
             </li>
             <li><ion-icon :icon="ellipsisVerticalSharp"></ion-icon></li>
         </ul>
@@ -52,7 +60,7 @@ export default defineComponent({
     data: () => ({}),
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     methods: {
         navigationMenu(url: any) {
@@ -63,7 +71,7 @@ export default defineComponent({
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics.birthdate);
+            return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
         },
     },
 });
