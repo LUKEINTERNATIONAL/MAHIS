@@ -117,7 +117,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabourReferralStore, ["labourReferral"]),
     },
     mounted() {
@@ -170,7 +170,7 @@ export default defineComponent({
         async saveReferal() {
             if (this.labourReferral.length > 0) {
                 const userID: any = Service.getUserID();
-                const Referal = new ReferralService(this.demographics.patient_id, userID);
+                const Referal = new ReferralService(this.patient.patientID, userID);
                 const encounter = await Referal.createEncounter();
                 if (!encounter) return toastWarning("Unable to create Referal encounter");
                 const patientStatus = await Referal.saveObservationList(await this.buildReferal());

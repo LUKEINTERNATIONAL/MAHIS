@@ -205,7 +205,7 @@ export default defineComponent({
         },
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useObstreticHistoryStore, ["preterm", "prevPregnancies", "Complications", "modeOfDelivery"]),
         ...mapState(useMedicalHistoryStore, ["medicalHistory", "allegy", "exisitingChronicHealthConditions"]),
         ...mapState(useCurrentPregnanciesStore, ["palpation", "tetanus", "lmnp", "ultrasound"]),
@@ -245,7 +245,7 @@ export default defineComponent({
         },
 
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics?.birthdate);
+            return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
         },
 
         async saveProfile() {
@@ -277,7 +277,7 @@ export default defineComponent({
                     //     //"preterm", "prevPregnancies", "Complications", "modeOfDelivery"
                 ) {
                     const userID: any = Service.getUserID();
-                    const profile = new currentPregnancyService(this.demographics.patient_id, userID);
+                    const profile = new currentPregnancyService(this.patient.patientID, userID);
                     const encounter = await profile.createEncounter();
                     if (!encounter) return toastWarning("Unable to create profile encounter");
                     const patientStatus = await profile.saveObservationList(await this.buildProfile());
@@ -307,7 +307,7 @@ export default defineComponent({
                     });
                     const obs_service = ObservationService.saveObs(82, obs);
                 }
-                const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+                const age = HisDate.getAgeInYears(this.patient.personInformation.birthdate);
                 if (age < 19) {
                     this.$router.push("headssAssessment");
                 } else {

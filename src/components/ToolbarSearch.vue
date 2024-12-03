@@ -439,23 +439,17 @@ export default defineComponent({
                 });
             }
         },
-        patientIdentifier(identifiers: any) {
-            return identifiers.patient_identifiers
-                .filter((identifier: any) => identifier.identifier_type === 3)
-                .map((identifier: any) => identifier.identifier)
-                .join(", ");
-        },
         async setOfflineDemo(data: any) {
             this.popoverOpen = false;
             await resetPatientData();
-            this.setOfflineDemographics(data);
+            this.setDemographics(data);
             let url = "/patientProfile";
             this.$router.push(url);
         },
         async openNewPage(url: any, item: any) {
             this.popoverOpen = false;
             this.searchValue = "";
-            this.setDemographics(item);
+            this.setDemographics(this.buildPatientData(item));
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
                 await resetNCDPatientData();
             } else if (Service.getProgramID() == 14) {
@@ -474,9 +468,9 @@ export default defineComponent({
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 if (this.programID() == 32) {
-                    this.$router.push('NCDDispensations');
+                    this.$router.push("NCDDispensations");
                 } else {
-                     this.$router.push("dispensation");
+                    this.$router.push("dispensation");
                 }
             } else if (roles.some((role: any) => role.role === "Lab")) {
                 this.$router.push("OPDConsultationPlan");

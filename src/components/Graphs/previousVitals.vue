@@ -44,7 +44,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     data() {
         return {
@@ -141,7 +141,7 @@ export default defineComponent({
         this.iconBg.graph = "iconBg";
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 await this.updateData();
             },

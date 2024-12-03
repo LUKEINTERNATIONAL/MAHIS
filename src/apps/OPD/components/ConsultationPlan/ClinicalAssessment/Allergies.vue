@@ -39,7 +39,7 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { IonButton, IonLabel, IonCard, IonCardContent, IonCardHeader, IonIcon, IonInput } from "@ionic/vue";
-import { alertCircleOutline } from 'ionicons/icons';
+import { alertCircleOutline } from "ionicons/icons";
 import { useAllegyStore, searchHealthcareEquipmentAllergies, concatenateArrays } from "@/apps/OPD/stores/AllergyStore";
 import { ConceptService } from "@/services/concept_service";
 import { ref, watch, computed, onMounted } from "vue";
@@ -50,7 +50,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 const allergyStore = useAllegyStore();
 const DemographicsStore = useDemographicsStore();
 const selectedAllergiesList = computed(() => allergyStore.selectedMedicalAllergiesList) as any;
-const demographics = computed(() => DemographicsStore.demographics) as any;
+const demographics = computed(() => DemographicsStore.patient) as any;
 const allergiesList = computed(() => allergyStore.medicalAllergiesList);
 const uniqueId = ref(generateUniqueId(8, "item-"));
 
@@ -88,7 +88,7 @@ watch(
     async (newValue) => {
         allergyStore.clearSelectedMedicalAllergiesList();
     }
-)
+);
 
 function listUpdated1(data: any) {
     data.forEach((item: any) => {
@@ -159,10 +159,10 @@ async function addCustomAllergy(allergyName: string) {
 
             showOtherInput.value = false;
             addingCustomAllergy.value = true;
-            allergyToAdd.value = ''
+            allergyToAdd.value = "";
 
-            const Other = allergyStore.findSelectedAllergyByName('Other')
-            allergyStore.removeSelectedAllergy(Other)
+            const Other = allergyStore.findSelectedAllergyByName("Other");
+            allergyStore.removeSelectedAllergy(Other);
         }
     } catch (error) {
         console.error(error);

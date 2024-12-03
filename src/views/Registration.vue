@@ -151,6 +151,8 @@ import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { UserService } from "@/services/user_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import workerData from "@/activate_worker";
+import { getOfflineRecords } from "@/services/offline_service";
+import { useStatusStore } from "@/stores/StatusStore";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts, SetDemographics],
     components: {
@@ -174,7 +176,7 @@ export default defineComponent({
     data() {
         return {
             workerApi: "" as any,
-            offlinePatientID: null as any,
+            ddeId: null as any,
             iconListStatus: "active_icon",
             deduplicationData: "active_icon",
             iconGridStatus: "inactive_icon",
@@ -206,6 +208,7 @@ export default defineComponent({
         ]),
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
         ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
         nationalID() {
             return getFieldValue(this.personInformation, "nationalID", "value");
         },
@@ -266,20 +269,8 @@ export default defineComponent({
     watch: {
         workerApi: {
             async handler() {
-                if (this.workerApi?.data == "Done" && this.offlinePatientID) {
-                    toastSuccess("Successfully Created Patient");
-                    await db
-                        .collection("patientRecords")
-                        .doc({ offlinePatientID: this.offlinePatientID })
-                        .get()
-                        .then(async (document: any) => {
-                            await workerData.terminate();
-                            if (document.serverPatientID) {
-                                this.openNewPage(document.patientData);
-                            } else {
-                                await this.setOfflineData(document);
-                            }
-                        });
+                if (this.workerApi?.data == "Done Saving" && this.ddeId) {
+                    await this.redirection();
                 }
             },
             deep: true,
@@ -312,6 +303,21 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        async redirection() {
+            toastSuccess("Successfully Created Patient");
+            await db
+                .collection("patientRecords")
+                .doc({ ID: this.ddeId })
+                .get()
+                .then(async (document: any) => {
+                    const dde = await getOfflineRecords("dde");
+                    dde.ids = dde.ids.slice(1);
+                    await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
+                    await workerData.postData("SYNC_DDE");
+                    await this.openNewPage(document);
+                    await workerData.terminate();
+                });
+        },
         async cancel(event: any) {
             const deleteConfirmed = await popoverConfirmation(`Do you want to cancel registration?`, "", {
                 confirmBtnLabel: "Yes",
@@ -438,27 +444,30 @@ export default defineComponent({
             }
         },
         async possibleDuplicates() {
-            const ddeInstance = new PatientDemographicsExchangeService();
-            this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
-            if (this.deduplicationData.length > 0) {
-                const response: any = await createModal(PersonMatchView, { class: "fullScreenModal" }, true, {
-                    to_be_registered: toRaw(this.personInformation[0].selectedData),
-                    deduplicationData: this.deduplicationData,
-                });
-                if (response != "dismiss" && response != "back") {
-                    const result = await ddeInstance.importPatient(response?.person?.id);
-                    await this.findPatient(result.patient_id);
-                    return true;
-                } else if (response == "back") {
-                    return true;
+            try {
+                const ddeInstance = new PatientDemographicsExchangeService();
+                this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
+                if (this.deduplicationData.length > 0) {
+                    const response: any = await createModal(PersonMatchView, { class: "fullScreenModal" }, true, {
+                        to_be_registered: toRaw(this.personInformation[0].selectedData),
+                        deduplicationData: this.deduplicationData,
+                    });
+                    if (response != "dismiss" && response != "back") {
+                        const result = await ddeInstance.importPatient(response?.person?.id);
+                        await this.findPatient(result.patient_id);
+                        return true;
+                    } else if (response == "back") {
+                        return true;
+                    }
+                    return false;
+                } else {
+                    return false;
                 }
-                return false;
-            } else {
+            } catch (error) {
                 return false;
             }
         },
         async createPatient() {
-            this.offlinePatientID = "";
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
             await this.buildPersonalInformation();
@@ -477,7 +486,7 @@ export default defineComponent({
                 this.disableSaveBtn = true;
                 this.isLoading = true;
 
-                if (this.globalPropertyStore.dde_enabled === "true") {
+                if (this.globalPropertyStore.dde_enabled === "true" && this.apiStatus) {
                     if (await this.possibleDuplicates()) {
                         this.disableSaveBtn = false;
                         this.isLoading = false;
@@ -486,18 +495,34 @@ export default defineComponent({
                 }
 
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-                this.offlinePatientID = Date.now();
-                await this.createOfflineRecord(this.offlinePatientID);
-                await workerData.postData("SYNC_PATIENT_RECORD");
+                await this.createOfflineRecord();
+                if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
+                else await this.redirection();
             } else {
                 toastWarning("Please complete all required fields");
             }
         },
-        async createOfflineRecord(offlinePatientID: any) {
+        async createOfflineRecord() {
+            const ddeIds = await getOfflineRecords("dde");
+            this.ddeId = ddeIds.ids[0].npid;
+            const Weight = getFieldValue(this.birthRegistration, "Weight", "value");
+            let vitals: any = {
+                saved: [],
+                unsaved: [],
+            };
+            if (Weight) {
+                vitals.unsaved = [
+                    {
+                        concept_id: 5089,
+                        obs_datetime: HisDate.currentDate(),
+                        value_numeric: Weight,
+                    },
+                ];
+            }
             const offlineRecord: any = {
-                offlinePatientID: offlinePatientID,
-                serverPatientID: "",
-                patientData: "",
+                patientID: "",
+                ID: this.ddeId,
+                NcdID: "",
                 personInformation: toRaw(this.personInformation[0].selectedData),
                 guardianInformation: toRaw(this.guardianInformation[0].selectedData),
                 birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
@@ -506,9 +531,11 @@ export default defineComponent({
                     birthID: this.validatedBirthID(),
                     relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
                 },
+                vitals: vitals,
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",
+                saveStatusVitals: "pending",
                 date_created: "",
                 creator: "",
             };
@@ -562,18 +589,10 @@ export default defineComponent({
                 return this.birthID;
             } else return "";
         },
-        async setOfflineData(item: any) {
-            await await resetPatientData();
-            this.setOfflineDemographics(item);
-            this.isLoading = false;
-            let url = "/patientProfile";
-            this.disableSaveBtn = false;
-            this.$router.push(url);
-        },
         async openNewPage(item: any) {
-            await await resetPatientData();
+            await resetPatientData();
             this.setDemographics(item);
-            await UserService.setProgramUserActions();
+            if (this.apiStatus) await UserService.setProgramUserActions();
             this.isLoading = false;
             this.disableSaveBtn = false;
             if (this.programID() == 32) {

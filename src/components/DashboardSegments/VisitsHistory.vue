@@ -257,7 +257,7 @@ export default defineComponent({
         };
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 await this.updateData();
             },
@@ -275,7 +275,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         inputFields() {
             return this.investigations[0].selectedData;
         },
@@ -291,7 +291,7 @@ export default defineComponent({
         },
         async loadSavedEncounters(patientVisitDate: any) {
             this.visitDate = patientVisitDate;
-            const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
+            const encounters = await EncounterService.getEncounters(this.patient.patientID, { date: patientVisitDate });
             await this.setDiagnosisEncounters(encounters);
             await this.setVitalsEncounters(encounters);
             await this.setPresentingComplainsEncounters(encounters);
@@ -389,12 +389,12 @@ export default defineComponent({
             createModal(InvestigationsModal);
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.patient.personInformation.gender && this.patient.personInformation.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient.personInformation.gender,
+                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();

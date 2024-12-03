@@ -114,7 +114,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     watch: {
         $route: {
@@ -161,7 +161,7 @@ export default defineComponent({
         },
         async loadSavedEncounters(patientVisitDate: any) {
             this.visitDate = patientVisitDate;
-            const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
+            const encounters = await EncounterService.getEncounters(this.patient.patientID, { date: patientVisitDate });
             await this.setVitalsEncounters(encounters, patientVisitDate);
         },
         findEncounter(data: any, encounterType: any) {
@@ -199,12 +199,12 @@ export default defineComponent({
             ]);
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.patient.personInformation.gender && this.patient.personInformation.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient.personInformation.gender,
+                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();
@@ -218,8 +218,8 @@ export default defineComponent({
             this.vitalsWeightHeight.value = this.BMI?.result ?? "";
         },
         async setListData() {
-            const obsP = await ObservationService.getAll(this.demographics.patient_id, "Primary diagnosis");
-            const obsS = await ObservationService.getAll(this.demographics.patient_id, "Secondary diagnosis");
+            const obsP = await ObservationService.getAll(this.patient.patientID, "Primary diagnosis");
+            const obsS = await ObservationService.getAll(this.patient.patientID, "Secondary diagnosis");
             const observations = [...(obsP || []), ...(obsS || [])];
             // this.tableData = await this.generateListItems(observations);
             DataTable.use(DataTablesCore);

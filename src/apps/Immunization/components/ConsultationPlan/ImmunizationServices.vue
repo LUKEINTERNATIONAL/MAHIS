@@ -233,7 +233,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useImmunizationStore, [
             "birthImmunization",
             "sixWeeksImmunization",
@@ -261,7 +261,7 @@ export default defineComponent({
     async mounted() {
         this.updateInvestigationsStores();
         this.setDashedBox();
-        this.orders = await OrderService.getOrders(this.demographics.patient_id);
+        this.orders = await OrderService.getOrders(this.patient.patientID);
         this.labOrders = await OrderService.getTestTypes();
     },
     methods: {
@@ -338,7 +338,7 @@ export default defineComponent({
         },
         async saveTest() {
             const investigationInstance = new LabOrder();
-            await investigationInstance.postActivities(this.demographics.patient_id, [
+            await investigationInstance.postActivities(this.patient.patientID, [
                 {
                     concept_id: this.test[0].concept_id,
                     name: this.inputFields[0].value,
@@ -347,7 +347,7 @@ export default defineComponent({
                     specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value),
                 },
             ]);
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.orders = await OrderService.getOrders(this.patient.patientID);
         },
         buildResults() {
             const modifier = this.inputFields[1].value.charAt(0);

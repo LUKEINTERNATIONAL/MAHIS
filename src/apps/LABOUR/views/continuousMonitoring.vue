@@ -128,7 +128,7 @@ export default defineComponent({
     },
     watch: {},
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabourVitalsStore, ["vitals"]),
         ...mapState(useOtherExamsStore, ["otherExams", "urine"]),
     },
@@ -184,7 +184,7 @@ export default defineComponent({
         async saveVitals() {
             if (this.vitals.length > 0) {
                 const userID: any = Service.getUserID();
-                const Monitoring = new ContinuousMonitoringVitalsService(this.demographics.patient_id, userID);
+                const Monitoring = new ContinuousMonitoringVitalsService(this.patient.patientID, userID);
                 const encounter = await Monitoring.createEncounter();
                 if (!encounter) return toastWarning("Unable to create Vitals encounter");
                 const patientStatus = await Monitoring.saveObservationList(await this.buildVitals());
@@ -196,7 +196,7 @@ export default defineComponent({
         async saveOtherExams() {
             if (this.otherExams.length > 0) {
                 const userID: any = Service.getUserID();
-                const otherExams = new OtherExamsService(this.demographics.patient_id, userID);
+                const otherExams = new OtherExamsService(this.patient.patientID, userID);
                 const encounter = await otherExams.createEncounter();
                 if (!encounter) return toastWarning("Unable to create Other Exams encounter");
                 const patientStatus = await otherExams.saveObservationList(await this.buildOtherExams());

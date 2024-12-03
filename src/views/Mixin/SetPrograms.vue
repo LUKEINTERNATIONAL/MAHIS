@@ -36,7 +36,7 @@ export default defineComponent({
         activeProgramID: "" as any,
     }),
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     setup() {
         return {
@@ -55,7 +55,7 @@ export default defineComponent({
         };
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 await this.setProgramInfo();
             },
@@ -70,8 +70,7 @@ export default defineComponent({
         },
     },
     async mounted() {
-      // await this.setProgramInfo();
-      
+        // await this.setProgramInfo();
     },
     methods: {
         async setProgram(program: any) {
@@ -79,18 +78,18 @@ export default defineComponent({
             store.setCurrentUserProgram(program);
             localStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
             await this.setProgramInfo();
-            if (this.demographics.patient_id) await this.nav(program.url);
+            if (this.patient.patientID) await this.nav(program.url);
         },
         async nav(url: any) {
             await UserService.setProgramUserActions();
             this.$router.push(url);
         },
         async setProgramInfo() {
-          let program: any = localStorage.getItem("app");
-       
+            let program: any = localStorage.getItem("app");
+
             program = JSON.parse(program);
-            this.activeProgramID = program? program.programID : null;
-            this.programBtn = await UserService.userProgramData(this.demographics.patient_id);
+            this.activeProgramID = program ? program.programID : null;
+            this.programBtn = await UserService.userProgramData(this.patient.patientID);
             const programStore = useProgramStore();
             programStore.setProgramInformation({ program: program, programBtn: this.programBtn });
         },

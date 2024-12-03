@@ -1,23 +1,23 @@
-import { NotesService } from "@/services/notes_service"
-import { DrugAllergyService } from "@/services/drug_allargy_service"
-import { isEmpty } from "lodash"
-import { EncounterService } from "@/services/encounter_service"
-import { ObservationService, ObsValue } from "@/services/observation_service"
-import { ConceptService } from "@/services/concept_service"
-import { Service } from "@/services/service"
-import { useDemographicsStore } from "@/stores/DemographicStore"
-import { PatientService } from "@/services/patient_service"
-import { ProgramService } from "@/services/program_service"
-import { DrugOrderService } from "@/services/drug_order_service"
+import { NotesService } from "@/services/notes_service";
+import { DrugAllergyService } from "@/services/drug_allargy_service";
+import { isEmpty } from "lodash";
+import { EncounterService } from "@/services/encounter_service";
+import { ObservationService, ObsValue } from "@/services/observation_service";
+import { ConceptService } from "@/services/concept_service";
+import { Service } from "@/services/service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { PatientService } from "@/services/patient_service";
+import { ProgramService } from "@/services/program_service";
+import { DrugOrderService } from "@/services/drug_order_service";
 import HisDate from "@/utils/Date";
-import { getFrequencyLabelOrCheckCode } from "@/services/drug_prescription_service"
+import { getFrequencyLabelOrCheckCode } from "@/services/drug_prescription_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 
 export class Treatment {
     async onSubmitNotes(patientID: any, providerID: any, treatmentNotesData: any) {
-        const notesService = new NotesService(patientID, providerID)
-        await notesService.createEncounter()
-        await notesService.saveObservationList(treatmentNotesData)
+        const notesService = new NotesService(patientID, providerID);
+        await notesService.createEncounter();
+        await notesService.saveObservationList(treatmentNotesData);
     }
 
     async onSubmitAllergies(patientID: any, providerID: any, allergiesDataObs: any) {
@@ -26,9 +26,7 @@ export class Treatment {
             await drug_allergy_service.createEncounter();
             await drug_allergy_service.saveObservationList(allergiesDataObs);
             toastSuccess("Allergies saved successfully");
-        } catch (error) {
-            
-        }
+        } catch (error) {}
     }
 }
 
@@ -44,8 +42,8 @@ export class PreviousTreatment {
 
     constructor() {
         const store = useDemographicsStore();
-        this.demographics = store.demographics;
-        this.patientID = this.demographics.patient_id;
+        this.demographics = store.patient;
+        this.patientID = this.demographics.patientID;
         this.date = ObservationService.getSessionDate();
         this.providerID = Service.getUserID() as number;
         this.programID = ObservationService.getProgramID();
@@ -65,9 +63,7 @@ export class PreviousTreatment {
                         if (!isEmpty(observations)) {
                             observations.forEach((observation: any) => {
                                 if (observation.concept_id == "2688") {
-                                    const date = HisDate.toStandardHisDisplayFormat(
-                                        observation.obs_datetime
-                                    );
+                                    const date = HisDate.toStandardHisDisplayFormat(observation.obs_datetime);
                                     if (isEmpty(this.previousClinicalNotes.hasOwnProperty(date))) {
                                         this.previousClinicalNotes[date] = [];
                                     }
@@ -90,9 +86,7 @@ export class PreviousTreatment {
                                     if (obs?.concept?.concept_names) {
                                         concept = obs.concept.concept_names[0].name;
                                     } else {
-                                        concept = await ConceptService.getConceptName(
-                                            obs.concept_id
-                                        );
+                                        concept = await ConceptService.getConceptName(obs.concept_id);
                                     }
                                 } catch (e) {
                                     console.error(obs, e);
@@ -146,15 +140,13 @@ export class PreviousTreatment {
     }
 
     async getPatientVisitDates() {
-        return (await PatientService.getPatientVisits(this.patientID, false)).map(
-            (date: string) => ({
-                label: HisDate.toStandardHisDisplayFormat(date),
-                value: date,
-                other: {
-                    isActive: date === ProgramService.getSessionDate(),
-                },
-            })
-        );
+        return (await PatientService.getPatientVisits(this.patientID, false)).map((date: string) => ({
+            label: HisDate.toStandardHisDisplayFormat(date),
+            value: date,
+            other: {
+                isActive: date === ProgramService.getSessionDate(),
+            },
+        }));
     }
 }
 
@@ -168,9 +160,7 @@ function extractNumberBeforeDays(text: string): number | null {
 }
 
 function sortObjectByDateDescending(obj: { [key: string]: any }) {
-    const sortedKeys = Object.keys(obj).sort(
-        (a: string, b: string) => new Date(b).getTime() - new Date(a).getTime()
-    );
+    const sortedKeys = Object.keys(obj).sort((a: string, b: string) => new Date(b).getTime() - new Date(a).getTime());
     const sortedObj: { [key: string]: any } = {};
     sortedKeys.forEach((key: string) => {
         sortedObj[key] = obj[key];
@@ -184,7 +174,7 @@ function reverseObjectKeys(obj: any) {
 
 export async function getNCDDiagnosis() {
     const store = useDemographicsStore();
-    const patientId = store.demographics.patient_id;
+    const patientId = store.patient.patientID;
     const ncdConceptIds = [8809, 6410, 6409];
     const names = [];
 
