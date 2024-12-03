@@ -56,7 +56,7 @@
                         </div>
                         <div class="demographicsOtherRow" style="margin-bottom: 10px">
                             <div class="demographicsText smallFont">
-                                Status:
+                                Status: {{ protectedStatus }}
                                 <span v-if="protectedStatus == 'No'" style="background: #fedf89; color: #b54708" class="protectedStatus"
                                     >Unprotected at birth</span
                                 >
@@ -429,7 +429,10 @@ export default defineComponent({
             return HisDate.calculateDisplayAge(HisDate.toStandardHisFormat(dateOfBirth));
         },
         async checkProtectedStatus() {
-            this.protectedStatus = await ObservationService.getFirstValueText(this.patient.patientID, "Protected at birth");
+            this.protectedStatus = this.getData(this.patient.birthRegistration, 11759)[0];
+        },
+        getData(data: any, concept_id: any) {
+            return data.filter((w: any) => w.concept_id == concept_id).map((w: any) => w.value_text);
         },
         checkAge() {
             if (!isEmpty(this.patient.personInformation.birthdate)) {
@@ -460,10 +463,8 @@ export default defineComponent({
         },
         isChild() {
             const patient = new PatientService();
-            if (patient.getID()) {
-                if (patient.isUnderFive()) return true;
-                else return false;
-            }
+            if (patient.isUnderFive()) return true;
+            else return false;
         },
         getFormatedData(data: any) {
             return data.map((item: any) => {
