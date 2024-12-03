@@ -53,7 +53,7 @@ const syncPatientDataService = {
                 education_level: this.getAttribute(record, "EDUCATION LEVEL"),
             },
             guardianInformation: "",
-            birthRegistration: "",
+            birthRegistration: await this.getBirthRegistration(record.patient_id),
             otherPersonInformation: {
                 nationalID: "",
                 birthID: "",
@@ -85,6 +85,7 @@ const syncPatientDataService = {
     },
     async getVitals(patientId) {
         const encounters = await ApiService.getData("/encounters", {
+            encounter_type_id: 6,
             patient_id: patientId,
             paginate: false,
         });
@@ -96,6 +97,22 @@ const syncPatientDataService = {
                     obs_datetime: observation.obs_datetime,
                     value_numeric: observation.value_numeric,
                     obs_id: observation.obs_id,
+                }));
+        });
+    },
+    async getBirthRegistration(patientId) {
+        const encounters = await ApiService.getData("/encounters", {
+            encounter_type_id: 5,
+            patient_id: patientId,
+            paginate: false,
+        });
+        return encounters.flatMap((encounter) => {
+            return encounter.observations
+                .filter((observation) => [11764, 11759, 3753].includes(observation.concept_id))
+                .map((observation) => ({
+                    concept_id: observation.concept_id,
+                    obs_datetime: observation.obs_datetime,
+                    value_text: observation.value_text,
                 }));
         });
     },
