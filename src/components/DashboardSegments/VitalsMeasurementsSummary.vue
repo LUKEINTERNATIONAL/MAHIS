@@ -199,12 +199,12 @@ export default defineComponent({
             ]);
         },
         async setBMI(weight: any, height: any) {
-            if (this.patient.personInformation.gender && this.patient.personInformation.birthdate) {
+            if (this.patient?.personInformation?.gender && this.patient?.personInformation?.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.patient.personInformation.gender,
-                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();

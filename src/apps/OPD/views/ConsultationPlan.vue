@@ -703,7 +703,7 @@ export default defineComponent({
                 const encounter = await consciousness.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient complaints encounter");
 
-                const patientAge = HisDate.getAgeInYears(this.patient.personInformation.birthdate);
+                const patientAge = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
 
                 let data;
 

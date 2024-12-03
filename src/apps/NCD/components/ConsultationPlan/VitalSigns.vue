@@ -108,7 +108,7 @@ export default defineComponent({
         },
         async setTodayVitals() {
             const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
-            const age = HisDate.getAgeInYears(this.patient.personInformation.birthdate);
+            const age = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
             const promises = array.map(async (item: any) => {
                 const firstDate = await ObservationService.getFirstObsDatetime(this.patient.patientID, item);
                 if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
@@ -261,16 +261,16 @@ export default defineComponent({
         },
         async setBMI(height: any, weight: any) {
             if (
-                this.patient.personInformation.gender &&
-                this.patient.personInformation.birthdate &&
+                this.patient?.personInformation?.gender &&
+                this.patient?.personInformation?.birthdate &&
                 Validation.vitalsHeight(height) == null &&
                 Validation.vitalsWeight(weight) == null
             ) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.patient.personInformation.gender,
-                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
             } else {
                 this.BMI = {};

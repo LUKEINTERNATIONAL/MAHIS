@@ -18,7 +18,7 @@ export default defineComponent({
         ...mapState(useRegistrationStore, ["guardianInformation", "personInformation"]),
         ...mapState(useDemographicsStore, ["patient"]),
         gender() {
-            return getRadioSelectedValue(this.personInformation, "gender") || this.patient.personInformation.gender;
+            return getRadioSelectedValue(this.personInformation, "gender") || this.patient?.personInformation?.gender;
         },
     },
     watch: {

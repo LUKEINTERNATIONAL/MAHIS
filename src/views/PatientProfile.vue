@@ -70,15 +70,15 @@
                                 </div>
                                 <div class="p_name_image">
                                     <div
-                                        :class="patient.personInformation.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'"
+                                        :class="patient?.personInformation?.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'"
                                         @click="openPIM()"
                                     >
                                         <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
                                     </div>
                                     <div style="width: 100%">
                                         <div class="p_name">
-                                            {{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
-                                            {{ patient.personInformation.family_name }}
+                                            {{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                                            {{ patient?.personInformation?.family_name }}
                                         </div>
                                     </div>
                                 </div>
@@ -92,7 +92,7 @@
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Gender:</ion-col>
-                                    <ion-col class="demoContent">{{ covertGender(patient.personInformation.gender) }}</ion-col>
+                                    <ion-col class="demoContent">{{ covertGender(patient?.personInformation?.gender) }}</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Age:</ion-col>
@@ -100,7 +100,7 @@
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Address:</ion-col>
-                                    <ion-col class="demoContent">{{ covertGender(patient.personInformation.current_district) }}</ion-col>
+                                    <ion-col class="demoContent">{{ covertGender(patient?.personInformation?.current_district) }}</ion-col>
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
@@ -505,11 +505,12 @@ export default defineComponent({
 
     methods: {
         checkAge() {
-            if (this.patient.personInformation.birthdate) {
-                this.checkUnderFourteen = HisDate.getAgeInYears(this.patient.personInformation.birthdate) >= 14 ? true : false;
-                this.checkUnderNine = HisDate.ageInMonths(this.patient.personInformation.birthdate) < 9 ? true : false;
-                this.checkUnderFive = HisDate.getAgeInYears(this.patient.personInformation.birthdate) < 5 ? true : false;
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.patient.personInformation.birthdate) < 42 ? true : false;
+            if (this.patient?.personInformation?.birthdate) {
+                this.checkUnderFourteen = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate) >= 14 ? true : false;
+                this.checkUnderNine = HisDate.ageInMonths(this.patient?.personInformation?.birthdate) < 9 ? true : false;
+                this.checkUnderFive = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate) < 5 ? true : false;
+                this.checkUnderSixWeeks =
+                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
             }
         },
         setSegmentContent(name: any) {
@@ -664,12 +665,12 @@ export default defineComponent({
                             return;
                         } else if (lower(btn.actionName) == lower("+ Enroll in Labour and delivery program")) {
                             this.isLabourEnrollmentModalOpen = true;
-                            this.enrollModalTitle = `Are you sure you want to enroll ${this.patient.personInformation.given_name.toUpperCase()} in this program?`;
+                            this.enrollModalTitle = `Are you sure you want to enroll ${this.patient?.personInformation?.given_name.toUpperCase()} in this program?`;
                             this.programToEnroll = btn.program_id;
                             return;
                         } else {
                             this.isPNCEnrollmentModalOpen = true;
-                            this.enrollModalTitle = `Are you sure you want to enroll ${this.patient.personInformation.given_name.toUpperCase()} in this program?`;
+                            this.enrollModalTitle = `Are you sure you want to enroll ${this.patient?.personInformation?.given_name.toUpperCase()} in this program?`;
                             this.programToEnroll = btn.program_id;
                             return;
                         }
@@ -749,7 +750,7 @@ export default defineComponent({
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
+            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
         },
         async buildANCEnrollment() {
             return [...(await formatRadioButtonData(this.ConfirmPregnancy))];

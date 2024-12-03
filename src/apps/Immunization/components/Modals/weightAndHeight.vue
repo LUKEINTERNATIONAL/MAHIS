@@ -120,8 +120,9 @@ export default defineComponent({
     setup() {},
     methods: {
         checkAge() {
-            if (!isEmpty(this.patient.personInformation.birthdate)) {
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.patient.personInformation.birthdate) < 42 ? true : false;
+            if (!isEmpty(this.patient?.personInformation?.birthdate)) {
+                this.checkUnderSixWeeks =
+                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
                 this.controlHeight();
             }
         },
@@ -129,7 +130,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
+            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
         },
         controlHeight() {
             if (this.checkUnderSixWeeks) {
@@ -197,12 +198,12 @@ export default defineComponent({
             modalController.dismiss();
         },
         async setBMI(weight: any, height: any) {
-            if (this.patient.personInformation.gender && this.patient.personInformation.birthdate) {
+            if (this.patient?.personInformation?.gender && this.patient?.personInformation?.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.patient.personInformation.gender,
-                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();

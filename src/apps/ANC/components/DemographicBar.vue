@@ -4,8 +4,8 @@
             <li>
                 Fullname:
                 <b
-                    >{{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
-                    {{ patient.personInformation.family_name }}</b
+                    >{{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                    {{ patient?.personInformation?.family_name }}</b
                 >
             </li>
             <li>
@@ -23,8 +23,8 @@
             <li>
                 Fullname:
                 <b
-                    >{{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
-                    {{ patient.personInformation.family_name }}</b
+                    >{{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                    {{ patient?.personInformation?.family_name }}</b
                 >
             </li>
             <li>
@@ -84,7 +84,7 @@ export default defineComponent({
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
+            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
         },
     },
 });

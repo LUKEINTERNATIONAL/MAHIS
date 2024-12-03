@@ -196,7 +196,7 @@ export default defineComponent({
             this.stepSize = 3;
             if (this.weight) {
                 this.valueNumericArray = this.weight?.map((item: any) => {
-                    return { x: HisDate.getAgeInFloatYears(this.patient.personInformation.birthdate, item.obs_datetime), y: item.value_numeric };
+                    return { x: HisDate.getAgeInFloatYears(this.patient?.personInformation?.birthdate, item.obs_datetime), y: item.value_numeric };
                 });
                 await this.calculateWeightZScore();
             }
@@ -205,7 +205,7 @@ export default defineComponent({
             this.stepSize = 5;
             if (this.height) {
                 this.valueNumericArray = this.height.map((item: any) => {
-                    return { x: HisDate.getAgeInFloatYears(this.patient.personInformation.birthdate, item.obs_datetime), y: item.value_numeric };
+                    return { x: HisDate.getAgeInFloatYears(this.patient?.personInformation?.birthdate, item.obs_datetime), y: item.value_numeric };
                 });
                 await this.calculateHeightZScore();
             }
@@ -213,8 +213,8 @@ export default defineComponent({
         async calculateHeightZScore() {
             this.setValues();
             const obs_datetime = await ObservationService.getFirstObsValue(this.patient.patientID, "Height", "obs_datetime");
-            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient.personInformation.birthdate);
-            const gender = this.patient.personInformation.gender;
+            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
+            const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Height";
             let params;
             if (gender === "M") {
@@ -234,8 +234,8 @@ export default defineComponent({
         async calculateWeightZScore() {
             await this.setValues();
             const obs_datetime = await ObservationService.getFirstObsValue(this.patient.patientID, "weight", "obs_datetime");
-            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient.personInformation.birthdate);
-            const gender = this.patient.personInformation.gender;
+            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
+            const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Weight";
             let params;
             if (gender === "M") {

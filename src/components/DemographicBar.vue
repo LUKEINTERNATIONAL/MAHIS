@@ -4,8 +4,8 @@
             <li>
                 Fullname:
                 <b
-                    >{{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
-                    {{ patient.personInformation.family_name }}</b
+                    >{{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                    {{ patient?.personInformation?.family_name }}</b
                 >
             </li>
             <li>
@@ -16,15 +16,15 @@
             </li>
             <li>Category: <b> </b></li>
             <li>
-                Sex: <b>{{ patient.personInformation.gender }}</b>
+                Sex: <b>{{ patient?.personInformation?.gender }}</b>
             </li>
         </ul>
         <ul class="second_bar_list mobile position_content">
             <li>
                 Fullname:
                 <b
-                    >{{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
-                    {{ patient.personInformation.family_name }}</b
+                    >{{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                    {{ patient?.personInformation?.family_name }}</b
                 >
             </li>
             <li>
@@ -71,7 +71,7 @@ export default defineComponent({
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
+            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
         },
     },
 });

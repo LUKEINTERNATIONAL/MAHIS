@@ -105,7 +105,7 @@ export default defineComponent({
             }
         },
         handleGenitalExam() {
-            const Gender = this.patient.personInformation.gender;
+            const Gender = this.patient?.personInformation?.gender;
             if (Gender == "M") {
                 modifyCheckboxValue(this.physicalExam, "Vulva examination", "disabled", true);
                 modifyCheckboxValue(this.physicalExam, "Visible bleeding", "disabled", true);

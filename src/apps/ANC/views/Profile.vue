@@ -245,7 +245,7 @@ export default defineComponent({
         },
 
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.patient.personInformation.birthdate);
+            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
         },
 
         async saveProfile() {
@@ -307,7 +307,7 @@ export default defineComponent({
                     });
                     const obs_service = ObservationService.saveObs(82, obs);
                 }
-                const age = HisDate.getAgeInYears(this.patient.personInformation.birthdate);
+                const age = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
                 if (age < 19) {
                     this.$router.push("headssAssessment");
                 } else {

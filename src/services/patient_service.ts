@@ -270,11 +270,11 @@ export class PatientService extends Service {
     }
 
     getGender() {
-        return this.patient.personInformation.gender;
+        return this.patient?.personInformation?.gender;
     }
 
     getAge() {
-        return dayjs(Service.getSessionDate()).diff(this.patient.personInformation.birthdate, "years");
+        return dayjs(Service.getSessionDate()).diff(this.patient?.personInformation?.birthdate, "years");
     }
 
     getAgeInMonths() {
@@ -282,15 +282,15 @@ export class PatientService extends Service {
     }
 
     getBirthdate() {
-        return this.patient.personInformation.birthdate;
+        return this.patient?.personInformation?.birthdate;
     }
 
     getGivenName() {
-        return this.patient.personInformation.given_name;
+        return this.patient?.personInformation?.given_name;
     }
 
     getFamilyName() {
-        return this.patient.personInformation.family_name;
+        return this.patient?.personInformation?.family_name;
     }
 
     private normaliseName(name: string) {
@@ -355,15 +355,15 @@ export class PatientService extends Service {
     }
 
     getClosestLandmark() {
-        return this.patient.personInformation.landmark;
+        return this.patient?.personInformation?.landmark;
     }
 
     getOccupation() {
-        return this.patient.personInformation.occupation;
+        return this.patient?.personInformation?.occupation;
     }
 
     getPhoneNumber() {
-        return this.patient.personInformation.cell_phone_number;
+        return this.patient?.personInformation?.cell_phone_number;
     }
 
     patientIsComplete() {

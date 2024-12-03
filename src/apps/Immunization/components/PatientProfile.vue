@@ -13,30 +13,30 @@
                     "
                 >
                     <div style="margin-right: 5px">
-                        <div :class="patient.personInformation.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                        <div :class="patient?.personInformation?.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
                             <ion-icon style="color: #fff; font-size: 100px" :icon="person"></ion-icon>
                         </div>
                     </div>
                     <div>
                         <div class="demographicsFirstRow">
                             <div class="name">
-                                {{ patient.personInformation.given_name }} {{ patient.personInformation.middle_name }}
-                                {{ patient.personInformation.family_name }}
+                                {{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                                {{ patient?.personInformation?.family_name }}
                             </div>
                         </div>
                         <div class="demographicsOtherRow" style="margin-top: 10px">
                             <div class="demographicsText">
-                                {{ patient.personInformation.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
-                                {{ getAge(patient.personInformation.birthdate) }} ({{ formatBirthdate() }})
+                                {{ patient?.personInformation?.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
+                                {{ getAge(patient?.personInformation?.birthdate) }} ({{ formatBirthdate() }})
                             </div>
                         </div>
-                        <div class="demographicsOtherRow" v-if="patient.personInformation.current_district">
+                        <div class="demographicsOtherRow" v-if="patient?.personInformation?.current_district">
                             <div class="demographicsText">Current Address:</div>
-                            <div class="demographicsText mediumFontColor">{{ patient.personInformation.current_district }}</div>
+                            <div class="demographicsText mediumFontColor">{{ patient?.personInformation?.current_district }}</div>
                         </div>
-                        <div class="demographicsOtherRow" v-if="patient.personInformation.country">
+                        <div class="demographicsOtherRow" v-if="patient?.personInformation?.country">
                             <div class="demographicsText">Country:</div>
-                            <div class="demographicsText mediumFontColor">{{ patient.personInformation.country }}</div>
+                            <div class="demographicsText mediumFontColor">{{ patient?.personInformation?.country }}</div>
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">
@@ -435,8 +435,9 @@ export default defineComponent({
             return data.filter((w: any) => w.concept_id == concept_id).map((w: any) => w.value_text);
         },
         checkAge() {
-            if (!isEmpty(this.patient.personInformation.birthdate)) {
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.patient.personInformation.birthdate) < 42 ? true : false;
+            if (!isEmpty(this.patient?.personInformation?.birthdate)) {
+                this.checkUnderSixWeeks =
+                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
             }
         },
         openVitalsModal() {
@@ -568,7 +569,7 @@ export default defineComponent({
             });
         },
         formatBirthdate() {
-            return HisDate.toStandardHisDisplayFormat(this.patient.personInformation.birthdate);
+            return HisDate.toStandardHisDisplayFormat(this.patient?.personInformation?.birthdate);
         },
         calculateExpireDate(startDate: string | Date, duration: any) {
             const date = new Date(startDate);

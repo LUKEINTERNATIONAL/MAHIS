@@ -112,8 +112,8 @@ export default defineComponent({
         this.BMI = await BMIService.getBMI(
             parseInt(this.weight.value_numeric),
             parseInt(this.Height.value_numeric),
-            this.patient.personInformation.gender,
-            HisDate.calculateAge(this.patient.personInformation.birthdate, this.weight.obs_datetime)
+            this.patient?.personInformation?.gender,
+            HisDate.calculateAge(this.patient?.personInformation?.birthdate, this.weight.obs_datetime)
         );
         this.vitalsIcon = BMIService.iconBMI(this.BMI.color);
     },
