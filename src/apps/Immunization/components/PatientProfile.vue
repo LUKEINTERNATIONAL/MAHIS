@@ -377,7 +377,7 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
-                if (data.name == "patientProfile") {
+                if (data.name == "patientProfile" && this.patient) {
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
                 }
@@ -432,7 +432,8 @@ export default defineComponent({
             this.protectedStatus = this.getData(this.patient.birthRegistration, 11759)[0];
         },
         getData(data: any, concept_id: any) {
-            return data.filter((w: any) => w.concept_id == concept_id).map((w: any) => w.value_text);
+            if (data) return data.filter((w: any) => w.concept_id == concept_id).map((w: any) => w.value_text);
+            else return "";
         },
         checkAge() {
             if (!isEmpty(this.patient?.personInformation?.birthdate)) {
