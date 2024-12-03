@@ -39,7 +39,7 @@
           :title="enrollModalTitle"
       />
 
-            <PatientProfile v-if="activeProgramID == 33" />
+      <PatientProfile v-if="activeProgramID == 33" />
             <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
                 <ion-row class="content_width">
                     <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
@@ -689,10 +689,10 @@ export default defineComponent({
           const userID: any = Service.getUserID();
           const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
           const encounter = await quickCheck.createEncounter();
-          if (!encounter) return toastWarning("Unable to create quick check encounter");
+          if (!encounter) return toastWarning("Unable to create Enrollment encounter");
           const patientStatus = await quickCheck.saveObservationList(await this.buildANCEnrollment());
           await ProgramService.enrollProgram(this.demographics.patient_id, this.programToEnroll, new Date().toString());
-          if (!patientStatus) return toastWarning("Unable to create quick check details!");
+          if (!patientStatus) return toastWarning("Unable to create Enrollment details!");
           toastSuccess("Enrollment is sucessful");
           await this.refreshPrograms();
         this.toggleEnrollmentModal();
