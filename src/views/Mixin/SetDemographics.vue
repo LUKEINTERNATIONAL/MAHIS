@@ -5,6 +5,7 @@ import { getPersonAttribute } from "@/interfaces/personAttribute";
 export default defineComponent({
     data: () => ({
         districtList: [] as any,
+        workerApi: "" as any,
     }),
     methods: {
         setDemographics(item: any) {
@@ -26,56 +27,6 @@ export default defineComponent({
             } else {
                 return "";
             }
-        },
-        getPhone(item: any) {
-            return item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value;
-        },
-        buildPatientData(record: any) {
-            return {
-                patientID: record.patient_id,
-                ID: this.getPatientIdentifier(record, 3),
-                NcdID: this.getPatientIdentifier(record, 31),
-                DocID: this.getPatientIdentifier(record, 27),
-                personInformation: {
-                    given_name: record.person.names[0].given_name,
-                    middle_name: record.person.names[0].middle_name,
-                    family_name: record.person.names[0].family_name,
-                    gender: record.person.gender,
-                    birthdate: record.person.birthdate,
-                    birthdate_estimated: "false",
-                    home_region: "",
-                    home_district: record?.person?.addresses[0]?.address2,
-                    home_traditional_authority: record?.person?.addresses[0]?.county_district,
-                    home_village: record?.person?.addresses[0]?.neighborhood_cell,
-                    current_region: "",
-                    current_district: record?.person?.addresses[0]?.state_province,
-                    current_traditional_authority: record?.person?.addresses[0]?.township_division,
-                    current_village: record?.person?.addresses[0]?.city_village,
-                    country: record?.person?.addresses[0]?.country,
-                    landmark: "",
-                    cell_phone_number: this.getAttribute(record, "Cell Phone Number"),
-                    occupation: this.getAttribute(record, "Occupation"),
-                    marital_status: this.getAttribute(record, "Civil Status"),
-                    religion: "",
-                    education_level: this.getAttribute(record, "EDUCATION LEVEL"),
-                },
-                guardianInformation: "",
-                birthRegistration: "",
-                otherPersonInformation: {
-                    nationalID: "",
-                    birthID: "",
-                    relationshipID: "",
-                },
-                vitals: {},
-                saveStatusPersonInformation: "complete",
-                saveStatusGuardianInformation: "complete",
-                saveStatusBirthRegistration: "complete",
-                date_created: "",
-                creator: "",
-            };
-        },
-        getAttribute(item: any, name: any) {
-            return item.person.person_attributes.find((attribute: any) => attribute.type.name === attribute)?.value;
         },
     },
 });
