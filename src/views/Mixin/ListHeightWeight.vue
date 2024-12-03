@@ -126,7 +126,9 @@ export default defineComponent({
                 if (allData) {
                     const combineArrays = [...allData?.vitals?.saved, ...allData?.vitals?.unsaved];
                     this.weight = this.formatData(combineArrays, 5089);
+                    console.log("🚀 ~ updateData ~ this.weight:", this.weight);
                     this.height = this.formatData(combineArrays, 5090);
+                    console.log("🚀 ~ updateData ~ this.height:", this.height);
                 } else {
                     throw "No offline record found";
                 }
@@ -143,20 +145,14 @@ export default defineComponent({
             this.$emit("click:weight", "");
         },
         formatData(data: any, concept_id: any) {
-            if ((data.concept_id = concept_id)) {
-                return data.map((w: any) => {
-                    if (concept_id) {
-                        return {
-                            concept_id: concept_id,
-                            obs_datetime: w.obs_datetime,
-                            value_numeric: w.value_numeric,
-                            obs_id: w.obs_id,
-                        };
-                    }
-                });
-            } else {
-                return [];
-            }
+            return data
+                .filter((w: any) => w.concept_id == concept_id)
+                .map((w: any) => ({
+                    concept_id: concept_id,
+                    obs_datetime: w.obs_datetime,
+                    value_numeric: w.value_numeric,
+                    obs_id: w.obs_id,
+                }));
         },
         dismiss() {
             modalController.dismiss();
