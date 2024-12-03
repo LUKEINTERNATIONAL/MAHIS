@@ -56,7 +56,7 @@
                         </div>
                         <div class="demographicsOtherRow" style="margin-bottom: 10px">
                             <div class="demographicsText smallFont">
-                                Status: {{ protectedStatus }}
+                                Status:
                                 <span v-if="protectedStatus == 'No'" style="background: #fedf89; color: #b54708" class="protectedStatus"
                                     >Unprotected at birth</span
                                 >
