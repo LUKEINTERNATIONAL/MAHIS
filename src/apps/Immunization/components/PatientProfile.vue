@@ -301,8 +301,9 @@ import PatientProfileVue from "@/views/PatientProfile.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import Enrollment from "@/apps/NCD/views/Enrollment.vue";
 import { PatientProgramService } from "@/services/patient_program_service";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 export default defineComponent({
-    mixins: [PatientProfileMixin],
+    mixins: [PatientProfileMixin, SetDemographics],
     name: "Home",
     components: {
         IonContent,
@@ -370,6 +371,16 @@ export default defineComponent({
         await this.programEnrollment();
     },
     watch: {
+        workerApi: {
+            async handler() {
+                if (this.workerApi?.data == "Done Saving") {
+                    await this.getOfflinePatientData();
+                    toastSuccess("Saved on server successfully");
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
         currentMilestone: {
             handler() {
                 this.loadCurrentMilestone();
