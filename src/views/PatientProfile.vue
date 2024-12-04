@@ -361,9 +361,10 @@ import dates from "@/utils/Date";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { useANCEnrollmentStore } from "@/apps/ANC/store/enrollment/ANCEnrollment";
 import { ConfirmPregnancyService } from "@/apps/ANC/service/confirm_pregnancy_service";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 
 export default defineComponent({
-    mixins: [SetPrograms, PatientProfileMixin],
+    mixins: [SetPrograms, PatientProfileMixin, SetDemographics],
     components: {
         WeightHeightChart,
         PreviousVitals,
@@ -473,6 +474,16 @@ export default defineComponent({
         await this.checkPatientIFCheckedIn();
     },
     watch: {
+        workerApi: {
+            async handler() {
+                if (this.workerApi?.data == "Done Saving") {
+                    await this.getOfflinePatientData();
+                    toastSuccess("Saved on server successfully");
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
         patient: {
             async handler(btn: any) {
                 await this.updateData();
