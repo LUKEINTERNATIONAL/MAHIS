@@ -8,7 +8,7 @@
                 width: 80px;
                 height: 40px;
                 font-weight: 900;
-                top: 20px;
+                top: -5px;
                 position: relative;
                 border: 1px solid #cdcdcd;
                 border-radius: 5px;
