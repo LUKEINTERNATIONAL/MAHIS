@@ -212,7 +212,7 @@
                         selectLabel=""
                         label="name"
                         :searchable="true"
-                        :disabled="false"
+                        :disabled="HSA_found_for_disabling_button"
                         @search-change="FindLocation($event)"
                         track-by="code"
                         :options="locationData"
