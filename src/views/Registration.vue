@@ -265,6 +265,16 @@ export default defineComponent({
         this.checkAge();
     },
     watch: {
+        workerApi: {
+            async handler() {
+                if (this.workerApi?.data == "Done Saving") {
+                    toastSuccess("Saved on server successfully");
+                    await this.redirection();
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
         personInformation: {
             handler() {
                 const data = useRegistrationStore();
@@ -292,7 +302,6 @@ export default defineComponent({
     },
     methods: {
         async redirection() {
-            toastSuccess("Successfully Created Patient");
             await db
                 .collection("patientRecords")
                 .doc({ ID: this.ddeId })
@@ -500,13 +509,12 @@ export default defineComponent({
                         await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
                         await workerData.postData("SYNC_DDE");
                         if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
-                        await this.openNewPage(offlinePatientData);
+                        if (this.programID() == 32) {
+                            if (!this.apiStatus) await this.redirection();
+                        } else await this.openNewPage(offlinePatientData);
                     } else {
                         toastDanger("No dde ids available");
                     }
-
-                    // if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
-                    // else await this.redirection();
                 } else {
                     toastWarning("Please complete all required fields");
                 }
