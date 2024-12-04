@@ -1,11 +1,10 @@
 <template>
-
     <ion-row>
-        <ion-col>
+        <ion-col size="12" size-md="6">
             <ion-row>
                 <ion-col>
                     <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                        >First Name<span style="color: #b42318">*</span></ion-label
+                        >First name<span style="color: #b42318">*</span></ion-label
                     >
                     <BasicInputField
                         :placeholder="input_properties[1].placeHolder"
@@ -98,7 +97,7 @@
             </ion-row>
         </ion-col>
 
-        <ion-col>
+        <ion-col size="12" size-md="6">
             <ion-row>
                 <ion-col>
                     <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
@@ -161,7 +160,7 @@
     </ion-row>
 
     <ion-row>
-        <ion-col>
+        <ion-col size="12" size-md="6">
             <ion-row v-if="isSuperUser">
                 <ion-col>
                     <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
@@ -348,9 +347,8 @@
             </ion-row>
 
         </ion-col>
-        <!-- ll -->
 
-        <ion-col>
+        <ion-col size="12" size-md="6">
             <ion-row>
                 <ion-col>
                     <div v-for="(item, index) in user_programs.slice().reverse()" :key="index">

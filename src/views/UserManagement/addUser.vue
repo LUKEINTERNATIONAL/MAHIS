@@ -1,324 +1,340 @@
 <template>
     <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >First name<span style="color: #b42318">*</span></ion-label
-            >
-            <BasicInputField
-                :placeholder="input_properties[1].placeHolder"
-                :icon="personOutline"
-                :inputValue="first_name"
-                @update:inputValue="input_properties[1].dataHandler"
-            />
+        <ion-col size="12" size-md="6">
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >First name<span style="color: #b42318">*</span></ion-label
+                    >
+                    <BasicInputField
+                        :placeholder="input_properties[1].placeHolder"
+                        :icon="personOutline"
+                        :inputValue="first_name"
+                        @update:inputValue="input_properties[1].dataHandler"
+                    />
 
-            <div>
-                <ion-label v-if="input_properties[1].show_error.value" class="error-label">
-                    {{ input_properties[1].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
+                    <div>
+                        <ion-label v-if="input_properties[1].show_error.value" class="error-label">
+                            {{ input_properties[1].error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
 
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Last name<span style="color: #b42318">*</span></ion-label
-            >
-            <BasicInputField
-                :placeholder="input_properties[2].placeHolder"
-                :icon="peopleOutline"
-                :inputValue="last_name"
-                @update:inputValue="input_properties[2].dataHandler"
-            />
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >Last name<span style="color: #b42318">*</span></ion-label
+                    >
+                    <BasicInputField
+                        :placeholder="input_properties[2].placeHolder"
+                        :icon="peopleOutline"
+                        :inputValue="last_name"
+                        @update:inputValue="input_properties[2].dataHandler"
+                    />
 
-            <div>
-                <ion-label v-if="input_properties[2].show_error.value" class="error-label">
-                    {{ input_properties[2].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
+                    <div>
+                        <ion-label v-if="input_properties[2].show_error.value" class="error-label">
+                            {{ input_properties[2].error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
 
-    <ion-row>
-            <ion-col>
-                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Username<span style="color: #b42318">*</span></ion-label
-            >
-                <BasicInputField
-                    :placeholder="input_properties[0].placeHolder"
-                    :icon="personCircleOutline"
-                    :inputValue="user_name"
-                    @update:inputValue="input_properties[0].dataHandler"
-                />
+            <ion-row>
+                    <ion-col>
+                        <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >Username<span style="color: #b42318">*</span></ion-label
+                    >
+                        <BasicInputField
+                            :placeholder="input_properties[0].placeHolder"
+                            :icon="personCircleOutline"
+                            :inputValue="user_name"
+                            @update:inputValue="input_properties[0].dataHandler"
+                        />
 
-                <div>
-                    <ion-label v-if="input_properties[0].show_error.value" class="error-label">
-                        {{ input_properties[0].error_message }}
-                    </ion-label>
-                </div>
-            </ion-col>
-    </ion-row>
+                        <div>
+                            <ion-label v-if="input_properties[0].show_error.value" class="error-label">
+                                {{ input_properties[0].error_message }}
+                            </ion-label>
+                        </div>
+                    </ion-col>
+            </ion-row>
 
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Gender<span style="color: #b42318">*</span></ion-label
-            >
-            <sselectionList
-                :labels="isSSelection_properties[0].labels"
-                :selected-opt="isSSelection_properties[0].selectedOption.value"
-                @selection-event="isSSelection_properties[0].dataHandler"
-            />
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >Gender<span style="color: #b42318">*</span></ion-label
+                    >
+                    <sselectionList
+                        :labels="isSSelection_properties[0].labels"
+                        :selected-opt="isSSelection_properties[0].selectedOption.value"
+                        @selection-event="isSSelection_properties[0].dataHandler"
+                    />
 
-            <div>
-                <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
-                    {{ isSSelection_properties[0].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
+                    <div>
+                        <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
+                            {{ isSSelection_properties[0].error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
 
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-            >Phone<span style="color: #b42318">*</span></ion-label
-        >
-            <BasicInputField
-                :placeholder="input_properties[3].placeHolder"
-                :icon="phonePortraitOutline"
-                :inputValue="phone_number"
-                @update:inputValue="input_properties[3].dataHandler"
-            />
-            <div>
-                <ion-label v-if="input_properties[3].show_error.value" class="error-label">
-                    {{ input_properties[3].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
-
-    <ion-row>
-        <ion-col>
-            <ion-col>
-                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Role(s)<span style="color: #b42318">*</span></ion-label
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                    >Phone<span style="color: #b42318">*</span></ion-label
                 >
-                <ListPicker
-                    :multiSelection="list_picker_prperties[0].multi_Selection"
-                    :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
-                    :name_of_list="list_picker_prperties[0].name_of_list"
-                    :choose_place_holder="list_picker_prperties[0].placeHolder"
-                    :items_-list="user_roles"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[0].disabled.value"
-                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                    @item-search-text="list_picker_prperties[0].searchTextFN"
-                />
+                    <BasicInputField
+                        :placeholder="input_properties[3].placeHolder"
+                        :icon="phonePortraitOutline"
+                        :inputValue="phone_number"
+                        @update:inputValue="input_properties[3].dataHandler"
+                    />
+                    <div>
+                        <ion-label v-if="input_properties[3].show_error.value" class="error-label">
+                            {{ input_properties[3].error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-col>
 
-                <div>
-                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label" style="margin-top: -10px;">
-                        {{ list_picker_prperties[0].error_message }}
-                    </ion-label>
-                </div>
-            </ion-col>
+        <ion-col size="12" size-md="6">
+            <ion-row>
+                <ion-col v-if="true">
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >District(s)<span style="color: #b42318">*</span></ion-label
+                    >
+                    <VueMultiselect
+                        v-model="selected_Districts"
+                        @update:model-value="selectedDistrictF($event)"
+                        :multiple="true"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Find and select District(s)"
+                        placeholder="Find and select District(s)"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        @search-change=""
+                        track-by="name"
+                        :options="districtList"
+                        :disabled="disableFacilitySelection"
+                    />
+
+                    <div>
+                        <ion-label v-if="district_show_error" class="error-label">
+                            {{ district_error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >Facility name<span style="color: #b42318">*</span></ion-label
+                    >
+                    <VueMultiselect
+                        v-model="selected_location"
+                        @update:model-value="selectedLocationF($event)"
+                        :multiple="false"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Find and select facility name"
+                        placeholder="Find and select facility name"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        :disabled="disableFacilitySelection"
+                        @search-change="FindLocation($event)"
+                        track-by="code"
+                        :options="locationData"
+                    />
+
+                    <div>
+                        <ion-label v-if="location_show_error" class="error-label">
+                            {{ location_error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >TA(s)<span style="color: #b42318">*</span></ion-label
+                    >
+                    <VueMultiselect
+                        v-model="selected_TAz"
+                        @update:model-value="selectedTA($event)"
+                        :multiple="true"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Find and select Traditional Authority (TA)"
+                        placeholder="Find and select Traditional Authority (TA)"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        @search-change=""
+                        track-by="assigned_id"
+                        :options="TAList"
+                        :disabled="HSA_found_for_disabling_button"
+                    />
+
+                    <div>
+                        <ion-label v-if="TAz_show_error" class="error-label">
+                            {{ TAz_error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >Village(s)<span style="color: #b42318">*</span></ion-label
+                    >
+                    <VueMultiselect
+                        v-model="selected_villages"
+                        @update:model-value="selectedVillage($event)"
+                        :multiple="true"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Find and select village(s)"
+                        placeholder="Find and select village(s)"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        @search-change=""
+                        track-by="assigned_id"
+                        :options="villageList"
+                        :disabled="HSA_found_for_disabling_button"
+                    />
+
+                    <div>
+                        <ion-label v-if="village_show_error" class="error-label">
+                            {{ village_error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
         </ion-col>
     </ion-row>
 
-    <ion-row>
-        <ion-col v-if="true">
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >District(s)<span style="color: #b42318">*</span></ion-label
-            >
-            <VueMultiselect
-                v-model="selected_Districts"
-                @update:model-value="selectedDistrictF($event)"
-                :multiple="true"
-                :taggable="false"
-                :hide-selected="true"
-                :close-on-select="true"
-                openDirection="bottom"
-                tag-placeholder="Find and select District(s)"
-                placeholder="Find and select District(s)"
-                selectLabel=""
-                label="name"
-                :searchable="true"
-                @search-change=""
-                track-by="name"
-                :options="districtList"
-                :disabled="disableFacilitySelection"
-            />
 
-            <div>
-                <ion-label v-if="district_show_error" class="error-label">
-                    {{ district_error_message }}
-                </ion-label>
-            </div>
+
+    <ion-row>
+        <ion-col size="12" size-md="6">
+            <ion-row>
+                <ion-col>
+                    <ion-col>
+                        <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                            >Role(s)<span style="color: #b42318">*</span></ion-label
+                        >
+                        <ListPicker
+                            :multiSelection="list_picker_prperties[0].multi_Selection"
+                            :show_label="list_picker_prperties[0].show_list_label"
+                            :uniqueId="list_picker_prperties[0].unqueId"
+                            :name_of_list="list_picker_prperties[0].name_of_list"
+                            :choose_place_holder="list_picker_prperties[0].placeHolder"
+                            :items_-list="user_roles"
+                            :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                            :disabled="list_picker_prperties[0].disabled.value"
+                            @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                            @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                            @item-search-text="list_picker_prperties[0].searchTextFN"
+                        />
+
+                        <div>
+                            <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label" style="margin-top: -10px;">
+                                {{ list_picker_prperties[0].error_message }}
+                            </ion-label>
+                        </div>
+                    </ion-col>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                        >Program(s)<span style="color: #b42318">*</span></ion-label
+                    >
+                    <ListPicker
+                        :multiSelection="list_picker_prperties[1].multi_Selection"
+                        :show_label="list_picker_prperties[1].show_list_label"
+                        :uniqueId="list_picker_prperties[1].unqueId"
+                        :name_of_list="list_picker_prperties[1].name_of_list"
+                        :choose_place_holder="list_picker_prperties[1].placeHolder"
+                        :items_-list="user_programs"
+                        :use_internal_filter="list_picker_prperties[1].use_internal_filter"
+                        :disabled="list_picker_prperties[1].disabled.value"
+                        @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
+                        @item-list-filtered="list_picker_prperties[1].listFilteredFN"
+                        @item-search-text="list_picker_prperties[1].searchTextFN"
+                    />
+
+                    <div>
+                        <ion-label v-if="list_picker_prperties[1].show_error.value" class="error-label">
+                            {{ list_picker_prperties[1].error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+                <ion-col></ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >Password<span style="color: #b42318">*</span></ion-label
+                    >
+                    <BasicInputField
+                        :placeholder="password_input_properties[0].placeHolder"
+                        :icon="keyOutline"
+                        :inputValue="password_input_properties[0].dataValue.value"
+                        @update:inputValue="password_input_properties[0].dataHandler"
+                    />
+
+                    <div>
+                        <ion-label v-if="password_input_properties[0].show_error.value" class="error-label">
+                            {{ password_input_properties[0].error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                        >Repeat password<span style="color: #b42318">*</span></ion-label
+                    >
+                    <BasicInputField
+                        :placeholder="password_input_properties[1].placeHolder"
+                        :icon="keyOutline"
+                        :inputValue="password_input_properties[1].dataValue.value"
+                        @update:inputValue="password_input_properties[1].dataHandler"
+                    />
+
+                    <div>
+                        <ion-label v-if="password_input_properties[1].show_error.value" class="error-label">
+                            {{ password_input_properties[1].error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
         </ion-col>
-    </ion-row>
 
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Facility name<span style="color: #b42318">*</span></ion-label
-            >
-            <VueMultiselect
-                v-model="selected_location"
-                @update:model-value="selectedLocationF($event)"
-                :multiple="false"
-                :taggable="false"
-                :hide-selected="true"
-                :close-on-select="true"
-                openDirection="bottom"
-                tag-placeholder="Find and select facility name"
-                placeholder="Find and select facility name"
-                selectLabel=""
-                label="name"
-                :searchable="true"
-                :disabled="disableFacilitySelection"
-                @search-change="FindLocation($event)"
-                track-by="code"
-                :options="locationData"
-            />
+        <ion-col size="12" size-md="6">
 
-            <div>
-                <ion-label v-if="location_show_error" class="error-label">
-                    {{ location_error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
-
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >TA(s)<span style="color: #b42318">*</span></ion-label
-            >
-            <VueMultiselect
-                v-model="selected_TAz"
-                @update:model-value="selectedTA($event)"
-                :multiple="true"
-                :taggable="false"
-                :hide-selected="true"
-                :close-on-select="true"
-                openDirection="bottom"
-                tag-placeholder="Find and select Traditional Authority (TA)"
-                placeholder="Find and select Traditional Authority (TA)"
-                selectLabel=""
-                label="name"
-                :searchable="true"
-                @search-change=""
-                track-by="assigned_id"
-                :options="TAList"
-                :disabled="HSA_found_for_disabling_button"
-            />
-
-            <div>
-                <ion-label v-if="TAz_show_error" class="error-label">
-                    {{ TAz_error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
-
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Village(s)<span style="color: #b42318">*</span></ion-label
-            >
-            <VueMultiselect
-                v-model="selected_villages"
-                @update:model-value="selectedVillage($event)"
-                :multiple="true"
-                :taggable="false"
-                :hide-selected="true"
-                :close-on-select="true"
-                openDirection="bottom"
-                tag-placeholder="Find and select village(s)"
-                placeholder="Find and select village(s)"
-                selectLabel=""
-                label="name"
-                :searchable="true"
-                @search-change=""
-                track-by="assigned_id"
-                :options="villageList"
-                :disabled="HSA_found_for_disabling_button"
-            />
-
-            <div>
-                <ion-label v-if="village_show_error" class="error-label">
-                    {{ village_error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
-
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Program(s)<span style="color: #b42318">*</span></ion-label
-            >
-            <ListPicker
-                :multiSelection="list_picker_prperties[1].multi_Selection"
-                :show_label="list_picker_prperties[1].show_list_label"
-                :uniqueId="list_picker_prperties[1].unqueId"
-                :name_of_list="list_picker_prperties[1].name_of_list"
-                :choose_place_holder="list_picker_prperties[1].placeHolder"
-                :items_-list="user_programs"
-                :use_internal_filter="list_picker_prperties[1].use_internal_filter"
-                :disabled="list_picker_prperties[1].disabled.value"
-                @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
-                @item-list-filtered="list_picker_prperties[1].listFilteredFN"
-                @item-search-text="list_picker_prperties[1].searchTextFN"
-            />
-
-            <div>
-                <ion-label v-if="list_picker_prperties[1].show_error.value" class="error-label">
-                    {{ list_picker_prperties[1].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-        <ion-col></ion-col>
-    </ion-row>
-
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Password<span style="color: #b42318">*</span></ion-label
-            >
-            <BasicInputField
-                :placeholder="password_input_properties[0].placeHolder"
-                :icon="keyOutline"
-                :inputValue="password_input_properties[0].dataValue.value"
-                @update:inputValue="password_input_properties[0].dataHandler"
-            />
-
-            <div>
-                <ion-label v-if="password_input_properties[0].show_error.value" class="error-label">
-                    {{ password_input_properties[0].error_message }}
-                </ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
-
-    <ion-row>
-        <ion-col>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                >Repeat password<span style="color: #b42318">*</span></ion-label
-            >
-            <BasicInputField
-                :placeholder="password_input_properties[1].placeHolder"
-                :icon="keyOutline"
-                :inputValue="password_input_properties[1].dataValue.value"
-                @update:inputValue="password_input_properties[1].dataHandler"
-            />
-
-            <div>
-                <ion-label v-if="password_input_properties[1].show_error.value" class="error-label">
-                    {{ password_input_properties[1].error_message }}
-                </ion-label>
-            </div>
         </ion-col>
     </ion-row>
 </template>
@@ -1033,8 +1049,6 @@ function findVillages(district_id: any) {
     
     fetchVillages(district_id, '')
 }
-
-
 
 </script>
 <style scoped>
