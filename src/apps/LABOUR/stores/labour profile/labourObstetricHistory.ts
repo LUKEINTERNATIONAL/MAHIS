@@ -22,7 +22,7 @@ export const useLabourObstreticHistoryStore = defineStore("labourObstreticHistor
                             colData: [
                                 {
                                     class: "bold",
-                                    inputHeader: "Gravida*",
+                                    inputHeader: "Gravida",
                                     value: "",
                                     name: "Gravida",
                                     icon: icons.editPen,
@@ -57,7 +57,7 @@ export const useLabourObstreticHistoryStore = defineStore("labourObstreticHistor
                             colData: [
                                 {
                                     class: "bold",
-                                    inputHeader: "Abortions/Miscarriages*",
+                                    inputHeader: "Abortions/Miscarriages",
                                     value: "",
                                     icon: icons.editPen,
                                     name: "Abortions/Miscarriages",
@@ -69,7 +69,7 @@ export const useLabourObstreticHistoryStore = defineStore("labourObstreticHistor
                                 },
                                 {
                                     class: "bold",
-                                    inputHeader: "Stillbirths*",
+                                    inputHeader: "Stillbirths",
                                     value: "",
                                     name: "Stillbirths",
                                     disabled: false,

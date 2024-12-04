@@ -285,6 +285,8 @@ export default defineComponent({
             // }
             // await this.saveProfile();
             // await await resetPatientData();
+            this.saveLabourProfile();
+            await await resetPatientData();
         },
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
@@ -293,17 +295,31 @@ export default defineComponent({
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics?.birthdate);
         },
-
-        // async saveProfile() {
-
-        //             const userID: any = Service.getUserID();
-        //             const profile = new currentPregnancyService(this.demographics.patient_id, userID);
-        //             const encounter = await profile.createEncounter();
-        //             if (!encounter) return toastWarning("Unable to create profile encounter");
-        //             const patientStatus = await profile.saveObservationList(await this.buildProfile());
-        //             if (!patientStatus) return toastWarning("Unable to create profile information!");
-        //             await toastSuccess("Profile information have been created");
-        //         }
+        async saveLabourProfile() {
+            if (
+                this.labourPrevPregnancies &&
+                this.dailyCaffeineIntake &&
+                this.labourAllergies &&
+                this.labourPastSurgeries &&
+                this.labourChronicHealthConditions &&
+                this.labourHivTest &&
+                this.labourSyphilisTest &&
+                this.labourTetanus &&
+                this.LabourMedication &&
+                this.prevPregnancies
+            ) {
+                const userID: any = Service.getUserID();
+                const profile = new currentPregnancyService(this.demographics.patient_id, userID);
+                const encounter = await profile.createEncounter();
+                if (!encounter) return toastWarning("Unable to create profile encounter");
+                const patientStatus = await profile.saveObservationList(await this.buildLabourProfile());
+                if (!patientStatus) return toastWarning("Unable to create profile information!");
+                await toastSuccess("LabourProfile information have been created");
+            } else {
+                await toastWarning("fail to save");
+            }
+            console.log("<<<<>>>", await this.buildLabourProfile());
+        },
 
         openModal() {
             createModal(SaveProgressModal);
