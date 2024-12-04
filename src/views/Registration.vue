@@ -175,7 +175,6 @@ export default defineComponent({
     },
     data() {
         return {
-            workerApi: "" as any,
             ddeId: null as any,
             iconListStatus: "active_icon",
             deduplicationData: "active_icon",
@@ -260,22 +259,12 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.workerApi = workerData.workerApi;
         resetDemographics();
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
     },
     watch: {
-        workerApi: {
-            async handler() {
-                if (this.workerApi?.data == "Done Saving" && this.ddeId) {
-                    await this.redirection();
-                }
-            },
-            deep: true,
-            immediate: true,
-        },
         personInformation: {
             handler() {
                 const data = useRegistrationStore();
@@ -291,7 +280,6 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
-                this.workerApi = workerData.workerApi;
                 this.currentStep = "Personal Information";
                 // await await resetPatientData();
                 if (data.name == "registration") resetDemographics();
@@ -472,43 +460,61 @@ export default defineComponent({
             }
         },
         async createPatient() {
-            const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
-            const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
-            const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
-            const isOtherSelected = selectedLandmark?.name === "Other";
+            const ddeIds = await getOfflineRecords("dde");
+            if (ddeIds) {
+                this.ddeId = ddeIds.ids[0].npid;
 
-            if (isOtherSelected) {
-                currentFields.push("Other (specify)");
-            }
-            if (
-                (await this.validations(this.personInformation, fields)) &&
-                (await this.validateLocation()) &&
-                (await this.validateBirthData()) &&
-                this.validateGaudiarnInfo()
-            ) {
-                this.disableSaveBtn = true;
-                this.isLoading = true;
+                const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
+                const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
+                const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
+                const isOtherSelected = selectedLandmark?.name === "Other";
 
-                if (this.globalPropertyStore.dde_enabled === "true" && this.apiStatus) {
-                    if (await this.possibleDuplicates()) {
-                        this.disableSaveBtn = false;
-                        this.isLoading = false;
-                        return;
-                    }
+                if (isOtherSelected) {
+                    currentFields.push("Other (specify)");
                 }
+                if (
+                    (await this.validations(this.personInformation, fields)) &&
+                    (await this.validateLocation()) &&
+                    (await this.validateBirthData()) &&
+                    this.validateGaudiarnInfo()
+                ) {
+                    await this.buildPersonalInformation();
+                    this.disableSaveBtn = true;
+                    this.isLoading = true;
 
-                if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-                await this.createOfflineRecord();
-                if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
-                else await this.redirection();
+                    if (this.globalPropertyStore.dde_enabled === "true" && this.apiStatus) {
+                        if (await this.possibleDuplicates()) {
+                            this.disableSaveBtn = false;
+                            this.isLoading = false;
+                            return;
+                        }
+                    }
+
+                    if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
+
+                    const offlinePatientData = await this.createOfflineRecord();
+
+                    const dde = await getOfflineRecords("dde");
+                    if (dde) {
+                        dde.ids = dde.ids.slice(1);
+                        await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
+                        await workerData.postData("SYNC_DDE");
+                        if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
+                        await this.openNewPage(offlinePatientData);
+                    } else {
+                        toastDanger("No dde ids available");
+                    }
+
+                    // if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
+                    // else await this.redirection();
+                } else {
+                    toastWarning("Please complete all required fields");
+                }
             } else {
-                toastWarning("Please complete all required fields");
+                toastDanger("DDE IDs are not available. Please connect to the server to sync the IDs.");
             }
         },
         async createOfflineRecord() {
-            const ddeIds = await getOfflineRecords("dde");
-            this.ddeId = ddeIds.ids[0].npid;
-            await this.buildPersonalInformation();
             const Weight = getFieldValue(this.birthRegistration, "Weight", "value");
             let vitals: any = {
                 saved: [],
@@ -545,6 +551,7 @@ export default defineComponent({
             };
 
             await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: offlineRecord });
+            return offlineRecord;
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
