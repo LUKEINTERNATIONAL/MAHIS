@@ -129,7 +129,7 @@ import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { resetPatientData } from "@/services/reset_data";
 import { validateField } from "@/services/validation_service";
-import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import { toastSuccess, toastWarning, popoverConfirmation, toastDanger } from "@/utils/Alerts";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
@@ -311,11 +311,15 @@ export default defineComponent({
                 .get()
                 .then(async (document: any) => {
                     const dde = await getOfflineRecords("dde");
-                    dde.ids = dde.ids.slice(1);
-                    await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
-                    await workerData.postData("SYNC_DDE");
-                    await this.openNewPage(document);
-                    await workerData.terminate();
+                    if (dde) {
+                        dde.ids = dde.ids.slice(1);
+                        await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
+                        await workerData.postData("SYNC_DDE");
+                        await this.openNewPage(document);
+                        await workerData.terminate();
+                    } else {
+                        toastDanger("Not able to remove used DDE id");
+                    }
                 });
         },
         async cancel(event: any) {
@@ -470,7 +474,6 @@ export default defineComponent({
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
-            await this.buildPersonalInformation();
             const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
             const isOtherSelected = selectedLandmark?.name === "Other";
 
@@ -505,6 +508,7 @@ export default defineComponent({
         async createOfflineRecord() {
             const ddeIds = await getOfflineRecords("dde");
             this.ddeId = ddeIds.ids[0].npid;
+            await this.buildPersonalInformation();
             const Weight = getFieldValue(this.birthRegistration, "Weight", "value");
             let vitals: any = {
                 saved: [],
@@ -613,6 +617,7 @@ export default defineComponent({
             const otherLandmark = getFieldValue(this.currentLocation, "Other (specify)", "value");
             const landmark = closestLandmark === "Other" ? otherLandmark : closestLandmark;
             this.personInformation[0].selectedData = {
+                dde_id: this.ddeId,
                 given_name: getFieldValue(this.personInformation, "firstname", "value"),
                 middle_name: getFieldValue(this.personInformation, "middleName", "value"),
                 family_name: getFieldValue(this.personInformation, "lastname", "value"),
