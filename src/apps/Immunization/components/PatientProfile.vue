@@ -32,7 +32,7 @@
                         </div>
                         <div class="demographicsOtherRow" v-if="patient?.personInformation?.current_district">
                             <div class="demographicsText">Current Address:</div>
-                            <div class="demographicsText mediumFontColor">{{ patient?.personInformation?.current_district }}</div>
+                            <div class="demographicsText mediumFontColor">{{ formatCurrentAddress(patient) }}</div>
                         </div>
                         <div class="demographicsOtherRow" v-if="patient?.personInformation?.country">
                             <div class="demographicsText">Country:</div>
