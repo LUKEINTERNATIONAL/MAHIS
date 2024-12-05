@@ -279,17 +279,23 @@ export default defineComponent({
     },
 
     methods: {
-     getSaveFunction(index: any) {
+      getSaveFunction(index: any) {
         const disableNextButton = this.userRole !== "Lab" && this.hasPatientsWaitingForLab && index >= 1;
 
         if (index < this.StepperData.length - 1) {
           switch (index) {
             case 0:
-              if (this.presentingComplaints.length === 0) {
-                return this.saveClinicalAssessment;
-              } else {
-                return () => Promise.resolve();
-              }
+              // if (
+              //     !this.presentingComplaints ||
+              //     this.presentingComplaints.length === 0 ||
+              //     (this.presentingComplaints[0] && this.presentingComplaints[0]?.selectedData.length === 0)
+              // ) {
+              //   return this.saveClinicalAssessment;
+              // } else {
+              //   return () => Promise.resolve();
+              // }
+              return disableNextButton ? () => Promise.resolve() : this.saveClinicalAssessment;
+
             case 1:
               return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
             case 2:
@@ -322,8 +328,6 @@ export default defineComponent({
               this.$router.push("home");
               toastSuccess("Lab results submitted!");
             }
-
-
           };
         }
       },
@@ -474,7 +478,6 @@ export default defineComponent({
             });
         },
       async saveClinicalAssessment(){
-        this.isLoading = true;
         try {
           const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
           let filteredArray = [];
@@ -483,22 +486,21 @@ export default defineComponent({
               return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
             });
           }
-          if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+          if (
+              this.presentingComplaints[0] &&
+              (this.presentingComplaints[0]?.selectedData.length > 0 || filteredArray.length > 0)
+          ) {
             await this.saveWomenStatus();
             await this.savePresentingComplaints();
             await this.savePastMedicalHistory();
             await this.saveConsciousness();
             await this.savePhysicalExam();
             resetOPDPatientData();
-
-          }
-          else {
+          } else {
             toastWarning("Patient complaints are required");
           }
         } catch (error) {
           console.error("Error in saveData: ", error);
-        } finally {
-          this.isLoading = false;
         }
       },
       async saveData() {
@@ -549,18 +551,23 @@ export default defineComponent({
                 toastSuccess("Past medical history has been created");
             }
         },
-        async savePresentingComplaints() {
-            if (this.presentingComplaints[0].selectedData.length > 0) {
-                const userID: any = Service.getUserID();
-                const PatientComplaints = new PatientComplaintsService(this.demographics.patient_id, userID);
-                const encounter = await PatientComplaints.createEncounter();
-                if (!encounter) return toastWarning("Unable to create patient complaints encounter");
-                const patientStatus = await PatientComplaints.saveObservationList(this.getFormatedData(this.presentingComplaints[0].selectedData));
-                if (!patientStatus) return toastWarning("Unable to create patient complaints  !");
-                toastSuccess("Patient complaints has been created");
-            }
-            this.presentingComplaints[0].selectedData;
-        },
+      async savePresentingComplaints() {
+        if (this.presentingComplaints[0]?.selectedData?.length > 0) {
+          const userID: any = Service.getUserID();
+          const PatientComplaints = new PatientComplaintsService(this.demographics.patient_id, userID);
+          const encounter = await PatientComplaints.createEncounter();
+          if (!encounter) {
+            return toastWarning("Unable to create patient complaints encounter");
+          }
+          const patientStatus = await PatientComplaints.saveObservationList(this.getFormatedData(this.presentingComplaints[0].selectedData));
+          if (!patientStatus) {
+            return toastWarning("Unable to create patient complaints!");
+          }
+          toastSuccess("Patient complaints have been created");
+        } else {
+          toastWarning("Please select presenting complaints");
+        }
+      },
         async savePhysicalExam() {
             const data = await this.buildPhysicalExamination();
             if (data.length > 0) {
