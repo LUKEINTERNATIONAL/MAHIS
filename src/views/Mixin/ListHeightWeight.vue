@@ -126,9 +126,7 @@ export default defineComponent({
                 if (allData) {
                     const combineArrays = [...allData?.vitals?.saved, ...allData?.vitals?.unsaved];
                     this.weight = this.formatData(combineArrays, 5089);
-                    console.log("🚀 ~ updateData ~ this.weight:", this.weight);
                     this.height = this.formatData(combineArrays, 5090);
-                    console.log("🚀 ~ updateData ~ this.height:", this.height);
                 } else {
                     throw "No offline record found";
                 }

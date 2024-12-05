@@ -252,7 +252,7 @@ export default defineComponent({
         async validaterowData() {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(this.patient.patientID, userID);
-            const age = HisDate.getAgeInYears(this.patient.personInformation.birthdate);
+            const age = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
 
             this.vitals.forEach((section: any, sectionIndex: any) => {
                 if (section?.data?.rowData) {

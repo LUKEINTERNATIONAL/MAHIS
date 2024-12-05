@@ -299,12 +299,12 @@ export default defineComponent({
         async setBMI(weight: any, height: any) {
             if (height < 140) this.heightAlert();
 
-            if (this.patient.personInformation.gender && this.patient.personInformation.birthdate && weight && height) {
+            if (this.patient?.personInformation?.gender && this.patient?.personInformation?.birthdate && weight && height) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.patient.personInformation.gender,
-                    HisDate.calculateAge(this.patient.personInformation.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
                 console.log("🚀 ~ setBMI ~ this.BMI:", this.BMI);
                 this.updateBMI();

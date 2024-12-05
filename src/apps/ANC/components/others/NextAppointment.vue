@@ -361,7 +361,7 @@ async function getMobilePhones() {
             }
         }
 
-        if (user.patient.personInformation.cell_phone_number) {
+        if (user.patient?.personInformation?.cell_phone_number) {
             phoneNumbers.value.push(user.patient.patientID);
         }
     } catch (error) {}

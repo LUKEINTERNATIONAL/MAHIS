@@ -47,7 +47,7 @@ export default defineComponent({
         console.log(minor);
 
         const gcs = ref("");
-        const patientAge = ref(HisDate.getAgeInYears(this.patient.personInformation.birthdate));
+        const patientAge = ref(HisDate.getAgeInYears(this.patient?.personInformation?.birthdate));
 
         const setGcs = (value: any) => {
             gcs.value = value;
