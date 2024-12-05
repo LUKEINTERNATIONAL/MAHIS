@@ -5,8 +5,7 @@ const ddeService = {
             const existingDDE = await DatabaseManager.getOfflineData("dde");
 
             // Constants
-            const MAX_IDS_COUNT = 20;
-            const PROGRAM_ID = 33;
+            const MAX_IDS_COUNT = 10;
             const today = new Date().toDateString();
 
             // Determine how many new IDs to fetch
@@ -28,7 +27,7 @@ const ddeService = {
             }
 
             // Fetch new DDE IDs
-            let newDDEIds = await ApiService.getData(`/dde/patients/sync_npids?count=${requiredIdCount}&program_id=${PROGRAM_ID}`);
+            let newDDEIds = await ApiService.getData(`/dde/patients/sync_npids?count=${requiredIdCount}&program_id=${PROGRAMID}`);
 
             // Ensure we have valid IDs
             newDDEIds = newDDEIds?.npids || [];
