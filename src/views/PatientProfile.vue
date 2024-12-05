@@ -100,7 +100,7 @@
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Address:</ion-col>
-                                    <ion-col class="demoContent">{{ covertGender(patient?.personInformation?.current_district) }}</ion-col>
+                                    <ion-col class="demoContent">{{ formatCurrentAddress(patient) }}</ion-col>
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
@@ -478,7 +478,7 @@ export default defineComponent({
             async handler() {
                 if (this.workerApi?.data == "Done Saving") {
                     await this.getOfflinePatientData();
-                    toastSuccess("Saved on server successfully");
+                    // toastSuccess("Saved on server successfully");
                 }
             },
             deep: true,
