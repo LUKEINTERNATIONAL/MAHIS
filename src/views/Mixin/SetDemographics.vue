@@ -18,12 +18,6 @@ export default defineComponent({
     },
     methods: {
         setDemographics(item: any) {
-            const addressComponents = [
-                item?.person?.addresses[0]?.state_province,
-                item?.person?.addresses[0]?.township_division,
-                item?.person?.addresses[0]?.city_village,
-            ];
-            const address = addressComponents.filter(Boolean).join(",");
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
         },
@@ -36,6 +30,14 @@ export default defineComponent({
             } else {
                 return "";
             }
+        },
+        formatCurrentAddress(data: any) {
+            const addressComponents = [
+                data?.personInformation?.current_district,
+                data?.personInformation?.current_traditional_authority,
+                data?.personInformation?.current_village,
+            ];
+            return addressComponents.filter(Boolean).join(",");
         },
         async getOfflinePatientData() {
             this.setDemographics(await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false));
