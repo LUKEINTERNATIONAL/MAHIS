@@ -16,9 +16,9 @@ const ddeService = {
                 const latestDDE = existingDDE[0];
 
                 // If data is from today, adjust required count
-                if (latestDDE.id_created_date === today) {
-                    requiredIdCount -= latestDDE.ids?.length || 0;
-                }
+                // if (latestDDE.id_created_date === today) {
+                requiredIdCount -= latestDDE.ids?.length || 0;
+                // }
             }
 
             // Skip fetching if we already have enough IDs
@@ -34,7 +34,8 @@ const ddeService = {
 
             // Merge with existing IDs if applicable
             let finalDDEIds = newDDEIds;
-            if (existingDDE && existingDDE[0]?.id_created_date === today) {
+            // if (existingDDE && existingDDE[0]?.id_created_date === today) {
+            if (existingDDE) {
                 finalDDEIds = [...(existingDDE[0].ids || []), ...newDDEIds];
             }
 
