@@ -69,7 +69,7 @@ const patientService = {
     },
     async createPatient(personId) {
         return await ApiService.post(`/patients/`, {
-            program_id: 32,
+            program_id: PROGRAMID,
             person_id: personId,
         });
     },
