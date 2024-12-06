@@ -116,7 +116,7 @@ export default defineComponent({
         });
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(usePostnatalWardStayStore, ["dangerSigns", "vitals", "otherExams"]),
     },
     mounted() {
@@ -170,7 +170,7 @@ export default defineComponent({
         async saveWardMonitoring() {
             if (this.dangerSigns.length > 0 && this.vitals.length > 0 && this.otherExams.length > 0) {
                 const userID: any = Service.getUserID();
-                const wardMonitoring = new PostnatalWardStayService(this.demographics.patient_id, userID);
+                const wardMonitoring = new PostnatalWardStayService(this.patient.patientID, userID);
                 const encounter = await wardMonitoring.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient postnatal ward stay encounter");
                 const patientStatus = await wardMonitoring.saveObservationList(await this.buildWardStayMonitoring());

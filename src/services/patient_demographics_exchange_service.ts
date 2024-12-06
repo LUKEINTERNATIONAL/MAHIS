@@ -86,7 +86,7 @@ export class PatientDemographicsExchangeService extends Service {
             const p = new PatientService();
             return {
                 patient_type: type,
-                doc_id: p.getPatientIdentifier(27),
+                doc_id: p.getDocID(),
                 ...d,
             };
         };

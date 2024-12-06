@@ -109,7 +109,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     watch: {
         $route: {
@@ -143,8 +143,8 @@ export default defineComponent({
             await this.setListData();
         },
         async setListData() {
-            const obsP = await ObservationService.getAll(this.demographics.patient_id, "Primary diagnosis");
-            const obsS = await ObservationService.getAll(this.demographics.patient_id, "Secondary diagnosis");
+            const obsP = await ObservationService.getAll(this.patient.patientID, "Primary diagnosis");
+            const obsS = await ObservationService.getAll(this.patient.patientID, "Secondary diagnosis");
             const observations = [...(obsP || []), ...(obsS || [])];
             this.tableData = await this.generateListItems(observations);
             DataTable.use(DataTablesCore);

@@ -209,6 +209,7 @@ import HisDate from "@/utils/Date";
 import { combineArrays } from "@/utils/GeneralUti";
 import { mapState } from 'pinia';
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { useUserStore } from "@/stores/userStore";
   
   const toggle_local = ref(false);
   const disable_weekends = ref(true);
@@ -233,6 +234,11 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
   const disabledDates = computed(() => {
     const store = useClinicalDaysStore();
     return store.getDisabledDates2() as any;
+  })
+
+  const facilityId = computed(() => {
+    const user_store = useUserStore();
+    return user_store.getfacilityLocation().location_id;
   })
   
   const onCheckboxChange = (event: CustomEvent, id: string) => {
@@ -296,22 +302,34 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
     () => router.currentRoute.value.name,
     async (newValue) => {
       if (newValue == 'clinicaldays') {
-        setValueProps();
-        setNavigation();
-        loadDataFromStore();
+        clearClinicalaysStores()
       }
     }
   );
+
+  watch(
+    () => facilityId,
+    async (newValue) => {
+      clearClinicalaysStores()
+    }
+  )
 
   const clinical_Days_Store = computed(() => {
     return mapState(useClinicalDaysStore, ["holidayDates"]) 
   })
 
   onMounted(() => {
-    setValueProps();
-    setNavigation();
-    loadDataFromStore();
+    clearClinicalaysStores()
   });
+
+  function clearClinicalaysStores() {
+    setNavigation();
+    const store = useClinicalDaysStore();
+    store.$reset();
+    if (setValueProps() == true) {
+      loadDataFromStore();
+    };
+  }
   
   function setNavigation() {
     const store = EIRreportsStore();

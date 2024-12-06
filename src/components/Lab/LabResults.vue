@@ -67,7 +67,7 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabResultsStore, ["labResults"]),
     },
     mounted() {
@@ -81,7 +81,7 @@ export default defineComponent({
             modalController.dismiss();
         },
         async saveLabOrder() {
-            const patientLabResultService = new PatientLabOrderService(this.demographics.patient_id);
+            const patientLabResultService = new PatientLabOrderService(this.patient.patientID);
             patientLabResultService.setTestID(this.labResults[0].id);
             patientLabResultService.setResultDate(HisDate.currentDate());
             await patientLabResultService.createEncounter();

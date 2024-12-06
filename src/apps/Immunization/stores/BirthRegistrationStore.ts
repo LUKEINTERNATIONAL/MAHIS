@@ -40,6 +40,7 @@ const initialBirthRegistration = [
                             alertsErrorMassage: "",
                             required: true,
                             validationFunctionName: "validateWeight",
+                            buildConceptIgnore: true,
                         },
                     ],
                 },

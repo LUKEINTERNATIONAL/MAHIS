@@ -114,7 +114,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     async mounted() {
         await this.getDiagnosis("");
@@ -132,7 +132,7 @@ export default defineComponent({
             modifyFieldValue(this.diagnosis, "diagnosis", "alertsErrorMassage", "");
             if (diagnosis) {
                 const concept_id = await ConceptService.getConceptID(diagnosis, true);
-                await saveEncounterData(this.demographics.patient_id, EncounterTypeId.DIAGNOSIS, "" as any, [
+                await saveEncounterData(this.patient.patientID, EncounterTypeId.DIAGNOSIS, "" as any, [
                     {
                         concept_id: 6542, //primary diagnosis
                         value_coded: concept_id,

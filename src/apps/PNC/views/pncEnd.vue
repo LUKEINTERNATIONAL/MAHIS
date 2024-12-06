@@ -11,7 +11,6 @@
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
-
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -59,9 +58,9 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "pncEnd",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
-      BasicFooter,
+    mixins: [SetUserRole, SetEncounter],
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -115,7 +114,7 @@ export default defineComponent({
         });
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(usePNCEndStore, ["pncEnd"]),
     },
 
@@ -154,9 +153,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
-      getSaveFunction(){
-
-      },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -170,7 +167,7 @@ export default defineComponent({
         async savePNCEnd() {
             if (this.pncEnd.length > 0) {
                 const userID: any = Service.getUserID();
-                const pncEnd = new PNCEndService(this.demographics.patient_id, userID);
+                const pncEnd = new PNCEndService(this.patient.patientID, userID);
                 const encounter = await pncEnd.createEncounter();
                 if (!encounter) return toastWarning("Unable to create PNC end encounter");
                 const patientStatus = await pncEnd.saveObservationList(await this.buildPNCEnd());

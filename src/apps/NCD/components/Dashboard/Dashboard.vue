@@ -3,7 +3,7 @@
         <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
-                    <div class="text-2xl font-bold">{{ todayMetrics.bookedPatients }}</div>
+                    <div class="text-2xl font-bold">{{ appointments.length }}</div>
                     <h3 class="text-sm font-medium">Today's Appointments</h3>
                 </div>
             </ion-card-content>
@@ -11,7 +11,7 @@
         <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
-                    <div class="text-2xl font-bold">{{ todayMetrics.defaulters }}</div>
+                    <div class="text-2xl font-bold">{{ 0 }}</div>
                     <h3 class="text-sm font-medium">Defaulters</h3>
                 </div>
             </ion-card-content>
@@ -19,7 +19,7 @@
         <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
-                    <div class="text-2xl font-bold">{{ todayMetrics.complications }}</div>
+                    <div class="text-2xl font-bold">{{ dashboardData?.total_complications }}</div>
                     <h3 class="text-sm font-medium">Complications</h3>
                 </div>
             </ion-card-content>
@@ -27,7 +27,7 @@
         <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
-                    <div class="text-2xl font-bold">{{ todayMetrics.totalActive }}</div>
+                    <div class="text-2xl font-bold">{{ dashboardData?.total_client_registered }}</div>
                     <h3 class="text-sm font-medium">Total active patients</h3>
                 </div>
             </ion-card-content>
@@ -68,33 +68,20 @@
 <script>
 import ApexChart from "vue3-apexcharts";
 import { nextTick } from "vue";
-
-export default {
-    name: "MedicalDashboard",
+import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
+import { defineComponent } from "vue";
+import { Service } from "@/services/service";
+import HisDate from "@/utils/Date";
+export default defineComponent({
+    name: "NCDDashboard",
+    mixins: [DashboardMixin],
     components: {
         ApexChart,
     },
     data() {
         return {
+            dashboardData: "",
             isChartReady: false,
-            todayMetrics: {
-                bookedPatients: 42,
-                defaulters: 8,
-                complications: 3,
-                totalActive: 156,
-            },
-            quarterlyData: [
-                { quarter: "Q1 2024", male: 245, female: 120 },
-                { quarter: "Q2 2024", male: 312, female: 165 },
-                { quarter: "Q3 2024", male: 278, female: 138 },
-                { quarter: "Q4 2024", male: 334, female: 187 },
-            ],
-            quarterlyDiagnosisData: [
-                { quarter: "Q1 2024", diabetesType1: 245, diabetesType2: 120, hypertention: 32 },
-                { quarter: "Q2 2024", diabetesType1: 312, diabetesType2: 165, hypertention: 45 },
-                { quarter: "Q3 2024", diabetesType1: 278, diabetesType2: 138, hypertention: 25 },
-                { quarter: "Q4 2024", diabetesType1: 334, diabetesType2: 187, hypertention: 78 },
-            ],
             lineChartOptions: {
                 chart: {
                     height: 350,
@@ -185,32 +172,43 @@ export default {
             ],
         };
     },
-    async mounted() {
-        // Initialize chart data
-        this.initializeChartData();
-
-        // Wait for the next DOM update cycle
-        await nextTick();
-
-        // Set a small timeout to ensure the chart container is fully rendered
-        setTimeout(() => {
-            this.isChartReady = true;
-        }, 100);
-    },
-    methods: {
-        initializeChartData() {
-            // Populate chart data
-            this.lineChartOptions.xaxis.categories = this.quarterlyData.map((item) => item.quarter);
-            this.lineChartSeries[0].data = this.quarterlyData.map((item) => item.male);
-            this.lineChartSeries[1].data = this.quarterlyData.map((item) => item.female);
-
-            this.barChartOptions.xaxis.categories = this.quarterlyData.map((item) => item.quarter);
-            this.barChartSeries[0].data = this.quarterlyDiagnosisData.map((item) => item.diabetesType1);
-            this.barChartSeries[1].data = this.quarterlyDiagnosisData.map((item) => item.diabetesType2);
-            this.barChartSeries[2].data = this.quarterlyDiagnosisData.map((item) => item.hypertention);
+    watch: {
+        $route: {
+            async handler() {
+                await this.initializeChartData();
+            },
+            deep: true,
         },
     },
-};
+    async mounted() {
+        await this.initializeChartData();
+    },
+    methods: {
+        async initializeChartData() {
+            this.dashboardData = await this.getDashboardData();
+            this.lineChartOptions.xaxis.categories = this.dashboardData.gender_data.categories;
+            this.lineChartSeries[0].data = this.dashboardData.gender_data.femaleSeries;
+            this.lineChartSeries[1].data = this.dashboardData.gender_data.maleSeries;
+
+            this.barChartOptions.xaxis.categories = this.dashboardData.diagnosis_data.categories;
+            this.barChartSeries[0].data = this.dashboardData.diagnosis_data.typeOneSeries;
+            this.barChartSeries[1].data = this.dashboardData.diagnosis_data.typeTwoSeries;
+            this.barChartSeries[2].data = this.dashboardData.diagnosis_data.hypertentionSeries;
+
+            await nextTick();
+            setTimeout(() => {
+                this.isChartReady = true;
+            }, 100);
+        },
+        getDashboardData() {
+            const url = `programs/${32}/reports/ncd_dashboard`;
+            return Service.getJson(url, {
+                start_date: HisDate.currentDate(),
+                end_date: HisDate.currentDate(),
+            });
+        },
+    },
+});
 </script>
 <style scoped>
 .grid {

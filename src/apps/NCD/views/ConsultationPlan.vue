@@ -110,7 +110,7 @@ import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigation
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import RiskAssessment from "@/apps/NCD/components/ConsultationPlan/RiskAssessment.vue";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
+import { formatRadioButtonData, formatCheckBoxData, formatGroupRadioButtonData, formatInputFiledData } from "@/services/formatServerData";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
 import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
@@ -120,6 +120,7 @@ import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { ObservationService } from "@/services/observation_service";
 import { OrderService } from "@/services/order_service";
 import { ConceptService } from "@/services/concept_service";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -127,10 +128,11 @@ import {
     modifyWizardData,
     modifyFieldValue,
     modifyCheckboxValue,
+    modifyGroupedRadioValue,
 } from "@/services/data_helpers";
 import { useComplicationsStore } from "@/stores/ComplicationsStore";
 export default defineComponent({
-    mixins: [ScreenSizeMixin, FormWizard],
+    mixins: [ScreenSizeMixin, FormWizard, SetDemographics],
     name: "Home",
     components: {
         IonContent,
@@ -207,7 +209,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
@@ -225,16 +227,27 @@ export default defineComponent({
         if (this.NCDActivities.length == 0) {
             this.$router.push("patientProfile");
         }
+        await this.setData();
         await this.markWizard();
     },
     watch: {
+        workerApi: {
+            async handler() {
+                if (this.workerApi?.data == "Done Saving") {
+                    await this.getOfflinePatientData();
+                    toastSuccess("Saved on server successfully");
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
         vitals: {
             async handler() {
                 await this.markWizard();
             },
             deep: true,
         },
-        demographics: {
+        patient: {
             async handler() {
                 this.refreshWizard();
                 await this.markWizard();
@@ -255,6 +268,7 @@ export default defineComponent({
         },
         substance: {
             async handler() {
+                await this.setRiskAssessment();
                 await this.markWizard();
             },
             deep: true,
@@ -276,6 +290,10 @@ export default defineComponent({
     },
 
     methods: {
+        async setData() {
+            await this.setRiskAssessment();
+            await this.setComplications();
+        },
         refreshWizard(): void {
             this.showWizard = false;
             this.currentTabIndex = 0;
@@ -321,7 +339,7 @@ export default defineComponent({
                 this.tabs[1].icon = "";
             }
 
-            const labOrders = await OrderService.getOrders(this.demographics.patient_id);
+            const labOrders = await OrderService.getOrders(this.patient.patientID);
             const filteredArray = await labOrders.filter((obj: any) => {
                 return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
             });
@@ -330,11 +348,17 @@ export default defineComponent({
             } else {
                 this.tabs[2].icon = "";
             }
-            const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, "Primary diagnosis");
+            const firstDate = await ObservationService.getFirstObsDatetime(this.patient.patientID, "Primary diagnosis");
             if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                 this.tabs[3].icon = "check";
             } else {
                 this.tabs[3].icon = "";
+            }
+
+            if (await this.setComplications()) {
+                this.tabs[4].icon = "check";
+            } else {
+                this.tabs[4].icon = "";
             }
 
             if (this.selectedNCDMedicationList.length > 0) {
@@ -366,36 +390,68 @@ export default defineComponent({
                 this.$router.push("patientProfile");
             }
         },
+        async setRiskAssessment() {
+            let smoke = await ObservationService.getFirstValueCoded(this.patient.patientID, "Smoking history");
+            const drink = await ObservationService.getFirstValueCoded(this.patient.patientID, "Does the patient drink alcohol?");
+            if (smoke == "patient smokes") smoke = "Smoking";
+            if (smoke) modifyRadioValue(this.substance, "Smoking history", "selectedValue", smoke);
+            if (drink) modifyRadioValue(this.substance, "Does the patient drink alcohol?", "selectedValue", drink);
+        },
+        async setComplications() {
+            const neuropathy = await ObservationService.getFirstValueCoded(this.patient.patientID, "Peripheral neuropathy");
+            const deformity = await ObservationService.getFirstValueCoded(this.patient.patientID, "Deformity");
+            const ulcers = await ObservationService.getFirstValueCoded(this.patient.patientID, "Ulcers");
+            const leftEye = await ObservationService.getFirstValueText(this.patient.patientID, "Left eye visual acuity");
+            const rightEye = await ObservationService.getFirstValueText(this.patient.patientID, "Right eye visual acuity");
+            const cv = await ObservationService.getFirstValueText(this.patient.patientID, "CVD");
+
+            if (leftEye) modifyFieldValue(this.visualScreening, "Left eye visual acuity", "value", leftEye);
+            if (rightEye) modifyFieldValue(this.visualScreening, "Right eye visual acuity", "value", rightEye);
+            if (cv) modifyFieldValue(this.cvScreening, "CVD", "value", cv);
+            if (neuropathy) modifyGroupedRadioValue(this.FootScreening, "Peripheral neuropathy", "selectedValue", neuropathy);
+            if (deformity) modifyGroupedRadioValue(this.FootScreening, "Deformity", "selectedValue", deformity);
+            if (ulcers) modifyGroupedRadioValue(this.FootScreening, "Ulcers", "selectedValue", ulcers);
+
+            if (neuropathy || deformity || ulcers || leftEye || rightEye || cv) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         async saveComplications() {
-            // await this.saveVisualScreening();
-            // await this.saveFootScreening();
-        },
-        async saveFootScreening() {
-            const childData = await formatRadioButtonData(this.visualScreening);
-            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
-                {
+            const data = [];
+            const childDataVisualScreening = await formatInputFiledData(this.visualScreening);
+            const childDataFootScreening = await formatGroupRadioButtonData(this.FootScreening);
+            const childDataCVRisk = await formatInputFiledData(this.cvScreening);
+            if (childDataVisualScreening.length > 0) {
+                data.push({
                     concept_id: await ConceptService.getConceptID("Visual acuity", true),
                     value_text: "visual acuity test",
                     obs_datetime: ConceptService.getSessionDate(),
-                    child: childData,
-                },
-            ]);
-        },
-        async saveVisualScreening() {
-            const childData = await formatInputFiledData(this.visualScreening);
-            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.COMPLICATIONS, "" as any, [
-                {
-                    concept_id: await ConceptService.getConceptID("Visual acuity", true),
-                    value_text: "visual acuity test",
+                    child: childDataVisualScreening,
+                });
+            }
+            if (childDataFootScreening.length > 0) {
+                data.push({
+                    concept_id: await ConceptService.getConceptID("Foot check", true),
+                    value_text: "foot screening",
                     obs_datetime: ConceptService.getSessionDate(),
-                    child: childData,
-                },
-            ]);
+                    child: childDataFootScreening,
+                });
+            }
+            if (childDataCVRisk.length > 0) {
+                data.push(...childDataCVRisk);
+            }
+            if (data.length > 0) {
+                await saveEncounterData(this.patient.patientID, EncounterTypeId.SCREENING, "" as any, data);
+                toastSuccess("Complications saved successfully");
+            }
         },
+
         async saveVitals() {
             if (await validateInputFiledData(this.vitals)) {
                 const userID: any = Service.getUserID();
-                const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+                const vitalsInstance = new VitalsService(this.patient.patientID, userID);
                 vitalsInstance.onFinish(this.vitals);
                 toastSuccess("Vitals saved successfully");
                 return true;
@@ -408,15 +464,15 @@ export default defineComponent({
             if (this.diagnosis[0].selectedData.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+                diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.diagnosis[0].selectedData));
             }
         },
         async saveSubstanceAbuse() {
-            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(this.substance));
+            await saveEncounterData(this.patient.patientID, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(this.substance));
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
             const treatmentInstance = new Treatment();
 
             const allergyStore = useAllegyStore();
@@ -442,7 +498,7 @@ export default defineComponent({
 
         async saveOutComeStatus() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
 
             if (!isEmpty(this.dispositions)) {
                 this.dispositions.forEach(async (disposition: any) => {

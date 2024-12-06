@@ -2,10 +2,14 @@
     <ion-card class="second_bar">
         <ul class="second_bar_list position_content">
             <li>
-                Facility Name: <b>{{ demographics.name }}</b>
+                Facility Name:
+                <b
+                    >{{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                    {{ patient?.personInformation?.family_name }}</b
+                >
             </li>
             <li>
-                Date: <b>{{ demographics.mrn }}</b>
+                Date: <b>{{ patient.ID }}</b>
             </li>
         </ul>
     </ion-card>
@@ -30,7 +34,7 @@ export default defineComponent({
     },
     data: () => ({}),
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     methods: {
         navigationMenu(url: any) {
@@ -41,7 +45,7 @@ export default defineComponent({
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics.birthdate);
+            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
         },
     },
 });
