@@ -45,7 +45,7 @@ import HisDate from "@/utils/Date";
 import { iconGraph, iconList } from "@/utils/SvgDynamicColor";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 import workerManager from "@/activate_worker";
-import { getOfflineRecords } from "@/services/offline_service";
+import { getOfflineRecords, getOfflineFirstObsValue } from "@/services/offline_service";
 import { combineArrays } from "../../utils/GeneralUti";
 
 export default defineComponent({
@@ -81,7 +81,19 @@ export default defineComponent({
             activeHeight: [] as any,
             activeBMI: [] as any,
             list: [] as any,
+            allPatientData: [] as any,
         };
+    },
+    watch: {
+        $route: {
+            async handler() {
+                this.allPatientData = await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false);
+            },
+            deep: true,
+        },
+    },
+    async mounted() {
+        this.allPatientData = await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false);
     },
     props: {
         propsContent: {
