@@ -610,7 +610,7 @@ export default defineComponent({
         },
         async openNewPage(item: any) {
             await resetPatientData();
-            this.setDemographics(item);
+            this.setOfflineRecord(item);
             if (this.apiStatus) await UserService.setProgramUserActions();
             this.isLoading = false;
             this.disableSaveBtn = false;
