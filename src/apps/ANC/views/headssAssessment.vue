@@ -100,7 +100,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useHeadssAssessmentStore, ["headssAssesment"]),
         "Who does the client live with"() {
             return getRadioSelectedValue(this.headssAssesment, "Who does the client live with");
@@ -122,7 +122,7 @@ export default defineComponent({
             if (await this.validations(this.headssAssesment, fields)) {
                 if (this.headssAssesment.length > 0) {
                     const userID: any = Service.getUserID();
-                    const headssAssesment = new HeadssAssessmentService(this.demographics.patient_id, userID);
+                    const headssAssesment = new HeadssAssessmentService(this.patient.patientID, userID);
                     const encounter = await headssAssesment.createEncounter();
                     if (!encounter) return toastWarning("Unable to create patient HEADSS assessment encounter");
                     const patientStatus = await headssAssesment.saveObservationList(await this.buildHeadssAssesment());

@@ -64,7 +64,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useRegistrationStore, ["socialHistory"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     props: {
         editable: {

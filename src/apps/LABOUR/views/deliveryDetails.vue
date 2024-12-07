@@ -125,7 +125,7 @@ export default defineComponent({
     },
     watch: {},
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useThirdStageOfLabourStore, ["placentaExamination"]),
         ...mapState(useSecondStageOfLabourStore, ["secondStageDetails", "newbornComplications", "obstetricComplications"]),
     },
@@ -190,7 +190,7 @@ export default defineComponent({
                 this.obstetricComplications.length > 0
             ) {
                 const userID: any = Service.getUserID();
-                const secondStageDelivery = new SecondStageDeliveryService(this.demographics.patient_id, userID);
+                const secondStageDelivery = new SecondStageDeliveryService(this.patient.patientID, userID);
                 const encounter = await secondStageDelivery.createEncounter();
                 if (!encounter) return toastWarning("Unable to create Second stage and Third stage of labour encounter");
                 const patientStatus = await secondStageDelivery.saveObservationList(await this.buildSecondStageOfLabour());

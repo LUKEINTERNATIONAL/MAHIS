@@ -89,13 +89,13 @@ export default defineComponent({
         },
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
         await this.checkHeight();
         const userID: any = Service.getUserID();
-        this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+        this.vitalsInstance = new VitalsService(this.patient.patientID, userID);
         await this.validateRowData("onload");
     },
     setup() {
@@ -108,9 +108,9 @@ export default defineComponent({
         },
         async setTodayVitals() {
             const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
-            const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+            const age = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
             const promises = array.map(async (item: any) => {
-                const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
+                const firstDate = await ObservationService.getFirstObsDatetime(this.patient.patientID, item);
                 if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                     if (item == "Weight") {
                         modifyCheckboxValue(this.vitals, "Height And Weight Not Done", "displayNone", true);
@@ -128,7 +128,7 @@ export default defineComponent({
                         this.vitals,
                         item,
                         "value",
-                        await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
+                        await ObservationService.getFirstValueNumber(this.patient.patientID, item, HisDate.currentDate())
                     );
                     modifyFieldValue(this.vitals, item, "disabled", true);
                 } else {
@@ -261,16 +261,16 @@ export default defineComponent({
         },
         async setBMI(height: any, weight: any) {
             if (
-                this.demographics.gender &&
-                this.demographics.birthdate &&
+                this.patient?.personInformation?.gender &&
+                this.patient?.personInformation?.birthdate &&
                 Validation.vitalsHeight(height) == null &&
                 Validation.vitalsWeight(weight) == null
             ) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
             } else {
                 this.BMI = {};

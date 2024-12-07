@@ -38,7 +38,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
     },
     data() {
@@ -75,7 +75,7 @@ export default defineComponent({
             immediate: true,
             deep: true,
         },
-        demographics: {
+        patient: {
             async handler() {
                 await this.updateList();
             },
@@ -87,7 +87,7 @@ export default defineComponent({
     },
     methods: {
         async updateList() {
-            const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+            const obs = await ObservationService.getAll(this.patient.patientID, "Presenting complaint");
             const presentingComplaint = !isEmpty(obs)
                 ? Promise.all(
                       obs.map(async (ob: any) => {

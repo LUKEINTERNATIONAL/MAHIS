@@ -177,7 +177,7 @@ export default defineComponent({
             "woman_threatened",
         ]),
         ...mapState(useFatalMovementStore, ["fatalMovement"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     mounted() {
         this.markWizard();
@@ -232,7 +232,7 @@ export default defineComponent({
         async saveMedicalFollowUp() {
             if (this.medicalFollowUp.length > 0) {
                 const userID: any = Service.getUserID();
-                const medicalFollowUp = new SymptomsFollowUpService(this.demographics.patient_id, userID);
+                const medicalFollowUp = new SymptomsFollowUpService(this.patient.patientID, userID);
                 const encounter = await medicalFollowUp.createEncounter();
                 if (!encounter) return toastWarning("Unable to create medical follow up encounter");
                 const patientStatus = await medicalFollowUp.saveObservationList(await this.buildMedicalFollowUp());
@@ -245,7 +245,7 @@ export default defineComponent({
         async savePersistentBehaviours() {
             if (this.medicalFollowUp.length > 0) {
                 const userID: any = Service.getUserID();
-                const persistentBehaviour = new PersistentBehaviourService(this.demographics.patient_id, userID);
+                const persistentBehaviour = new PersistentBehaviourService(this.patient.patientID, userID);
                 const encounter = await persistentBehaviour.createEncounter();
                 if (!encounter) return toastWarning("Unable to create persistent behaviour encounter");
                 const patientStatus = await persistentBehaviour.saveObservationList(await this.buildPersistentBehaviours());
@@ -257,7 +257,7 @@ export default defineComponent({
         async saveIPV() {
             if (this.medicalFollowUp.length > 0) {
                 const userID: any = Service.getUserID();
-                const IPV = new PersistentBehaviourService(this.demographics.patient_id, userID);
+                const IPV = new PersistentBehaviourService(this.patient.patientID, userID);
                 const encounter = await IPV.createEncounter();
                 if (!encounter) return toastWarning("Unable to create IPV encounter");
                 const patientStatus = await IPV.saveObservationList(await this.buildIPV());

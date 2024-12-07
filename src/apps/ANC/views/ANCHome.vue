@@ -98,7 +98,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useScheduleNextAppointmentStore, ["nextAppointmentDate"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     methods: {
         calendar() {
@@ -118,7 +118,7 @@ export default defineComponent({
             }
         },
         async handleAppointment() {
-            const dateOfAppointment = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Appointment date", "value_text");
+            const dateOfAppointment = await ObservationService.getFirstObsValue(this.patient.patientID, "Appointment date", "value_text");
             this.dateOfAppointment = dateOfAppointment;
         },
         async saveData() {
@@ -136,7 +136,7 @@ export default defineComponent({
         async saveDate() {
             if (this.nextAppointmentDate.length >= 0) {
                 const userID: any = Service.getUserID();
-                const AppointmentDate = new NextAppointmentService(this.demographics.patient_id, userID);
+                const AppointmentDate = new NextAppointmentService(this.patient.patientID, userID);
                 const encounter = await AppointmentDate.createEncounter();
                 if (!encounter) return toastWarning("Unable to create appointment date encounter");
                 const patientStatus = await AppointmentDate.saveObservationList(await this.buildNextAppointment());

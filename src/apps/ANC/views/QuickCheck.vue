@@ -148,7 +148,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(usePregnancyStore, ["pregnancy"]),
         ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
         ...mapState(usePastMedicalHistoryStore, ["pastMedicalHistory"]),
@@ -265,7 +265,7 @@ export default defineComponent({
             if (await this.validationRules(this.ReasonForVisit, fields)) {
                 if ( this.ReasonForVisit) {
                     const userID: any = Service.getUserID();
-                    const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
+                    const quickCheck = new ConfirmPregnancyService(this.patient.patientID, userID);
                     const encounter = await quickCheck.createEncounter();
                     if (!encounter) return toastWarning("Unable to create quick check encounter");
                     const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());

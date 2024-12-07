@@ -1,17 +1,16 @@
 <template>
-  <SendToLabConfirmationModal
-      :closeModalFunc="closeSendToLabModal"
-      :onYes="handleSendToLabYes"
-      :onNo="handleSendToLabNo"
-      :isOpen="sendToLabModalOpen"
-      :title="`Do you really want to send patient to lab?`"
-  />
+    <SendToLabConfirmationModal
+        :closeModalFunc="closeSendToLabModal"
+        :onYes="handleSendToLabYes"
+        :onNo="handleSendToLabNo"
+        :isOpen="sendToLabModalOpen"
+        :title="`Do you really want to send patient to lab?`"
+    />
     <DashBox v-if="listResults.length < 1 && listOrders.length < 1" :content="'No Investigations added '" />
     <div class="modal_wrapper" v-if="listResults.length > 1">
         <div style="font-weight: 700">Lab Results</div>
         <div style="--background: #fff" class="scrollable-container">
-            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder">
-            </list>
+            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"> </list>
         </div>
         <div style="margin-top: 5px" v-if="listResults.length <= 4 && listSeeMoreResults.length >= 4">
             <DynamicButton @click="seeOrderStatus('more')" name="Show More Lab Results" fill="clear" iconSlot="icon-only" />
@@ -24,9 +23,11 @@
     <div class="modal_wrapper" v-if="listOrders.length > 1">
         <div style="font-weight: 700">Lab Orders</div>
         <div class="scrollable-container">
-            <list :listData="listOrders.map((item:any) => ({...item, disabledEnterResults: hasPatientsWaitingForLab && activeProgramID === 14 && (userRoles === 'Clinician' || userRoles === 'Superuser'), }))"
-                  @clicked:delete="voidLabOrder"
-                  @clicked:results="openResultsForm">
+            <list
+                :listData="listOrders.map((item:any) => ({...item, disabledEnterResults: hasPatientsWaitingForLab && activeProgramID === 14 && (userRoles === 'Clinician' || userRoles === 'Superuser'), }))"
+                @clicked:delete="voidLabOrder"
+                @clicked:results="openResultsForm"
+            >
             </list>
         </div>
         <div style="margin-top: 5px" v-if="listOrders.length <= 4 && listSeeMoreOrders.length >= 4">
@@ -36,31 +37,25 @@
             <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
     </div>
-  <div v-if="activeProgramID==14 &&  hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
-    <div v-if="hasPatientsWaitingForLab">
-      <DynamicButton
-          class="no-margin-left"
-          fill="clear"
-          icon="notification_icon"
-          iconSlot="icon-only"
-          name="Waiting for results from the lab. Consultation paused!"
-      />
+    <div v-if="activeProgramID == 14 && hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
+        <div v-if="hasPatientsWaitingForLab">
+            <DynamicButton
+                class="no-margin-left"
+                fill="clear"
+                icon="notification_icon"
+                iconSlot="icon-only"
+                name="Waiting for results from the lab. Consultation paused!"
+            />
+        </div>
+        <div v-else>
+            <DynamicButton fill="solid" :icon="iconsContent.plus" iconSlot="icon-only" @click="toggleSendToLabModal()" name="Send to Lab" />
+        </div>
     </div>
-    <div v-else>
-      <DynamicButton
-          fill="solid"
-          :icon="iconsContent.plus"
-          iconSlot="icon-only"
-          @click="toggleSendToLabModal()"
-          name="Send to Lab"
-      />
-    </div>
-  </div>
     <LabModal :popoverOpen="openModal" @saved="updateLabList" @closeModal="openModal = false" />
     <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
 </template>
 
-<script lang="ts">    
+<script lang="ts">
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
@@ -79,7 +74,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import table from "@/components/DataViews/tables/ReportDataTable";
 import DashBox from "@/components/DashBox.vue";
 import { PatientLabService } from "@/services/lab/patient_lab_service";
-import {createModal, toastDanger, toastSuccess} from "@/utils/Alerts";
+import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
 import LabResults from "@/components/Lab/LabResults.vue";
 import { PatientLabResultService } from "@/services/patient_lab_result_service";
 import LabModal from "@/components/Lab/LabModal.vue";
@@ -88,19 +83,19 @@ import labOrderResults from "@/components/Lab/labOrderResults.vue";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
 import SendToLabConfirmationModal from "@/components/Lab/SendToLabConfirmationModal.vue";
-import {Service} from "@/services/service";
-import {getUserLocation} from "@/services/userService";
-import {PatientOpdList} from "@/services/patient_opd_list";
+import { Service } from "@/services/service";
+import { getUserLocation } from "@/services/userService";
+import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
-import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 
 export default defineComponent({
     name: "Menu",
-  mixins: [SetPrograms],
-  components: {
-      CheckInConfirmationModal,
+    mixins: [SetPrograms],
+    components: {
+        CheckInConfirmationModal,
         IonContent,
         IonHeader,
         IonItem,
@@ -114,21 +109,25 @@ export default defineComponent({
         DashBox,
         LabModal,
         LabViewResultsModal,
-      SendToLabConfirmationModal
+        SendToLabConfirmationModal,
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabResultsStore, ["labResults"]),
         ...mapState(useInvestigationStore, ["investigations"]),
-      ...mapState(usePatientList, ["patientsWaitingForVitals", "patientsWaitingForConsultation", "patientsWaitingForLab", "patientsWaitingForDispensation"]),
-      hasEnterResults(): boolean {
-        return this.listOrders.some((item: any) =>
-            item.btn && item.btn.includes("enter_results")
-        );
-      },
-      hasPatientsWaitingForLab(): boolean {
-        return Array.isArray(this.patientsWaitingForLab) && this.patientsWaitingForLab.length > 0;      }
+        ...mapState(usePatientList, [
+            "patientsWaitingForVitals",
+            "patientsWaitingForConsultation",
+            "patientsWaitingForLab",
+            "patientsWaitingForDispensation",
+        ]),
+        hasEnterResults(): boolean {
+            return this.listOrders.some((item: any) => item.btn && item.btn.includes("enter_results"));
+        },
+        hasPatientsWaitingForLab(): boolean {
+            return Array.isArray(this.patientsWaitingForLab) && this.patientsWaitingForLab.length > 0;
+        },
     },
     props: {
         propOrders: {
@@ -137,16 +136,16 @@ export default defineComponent({
     },
     data() {
         return {
-          iconsContent: icons,
-          valueNumericArray: [] as any,
+            iconsContent: icons,
+            valueNumericArray: [] as any,
             obsDatetime: [] as any,
             graphIcon: iconGraph(["#006401"]),
             listIcon: iconList(["#636363"]),
             displayGraph: true,
-          sendToLabModalOpen: false,
-          orders: [] as any,
-          userRoles: [] as any,
-          height: [] as any,
+            sendToLabModalOpen: false,
+            orders: [] as any,
+            userRoles: [] as any,
+            height: [] as any,
             BMI: [] as any,
             iconBg: {} as any,
             activeWeight: [] as any,
@@ -176,18 +175,18 @@ export default defineComponent({
     setup() {
         return { checkmark, pulseOutline };
     },
-  async mounted() {
-    this.orders = this.propOrders;
-    this.setListData(this.orders);
-    this.service = new PatientLabService(this.demographics.patient_id);
-    this.userRoles = await Service.getUserRoles();
-  },
-
-  watch: {
-    patientsWaitingForLab(newValue) {
-      this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.demographics.patient_id);
-      console.log("Updated lab waiting status:", this.hasPatientsWaitingForLab);
+    async mounted() {
+        this.orders = this.propOrders;
+        this.setListData(this.orders);
+        this.service = new PatientLabService(this.patient.patientID);
+        this.userRoles = await Service.getUserRoles();
     },
+
+    watch: {
+        patientsWaitingForLab(newValue) {
+            this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.patient.patientID);
+            console.log("Updated lab waiting status:", this.hasPatientsWaitingForLab);
+        },
         propOrders: {
             handler() {
                 this.orders = this.propOrders;
@@ -196,56 +195,56 @@ export default defineComponent({
             deep: true,
         },
         $route: {
-          immediate: true,
-          handler() {
+            immediate: true,
+            handler() {
                 this.updateLabList();
                 this.fetchPatientLabStageData();
             },
         },
     },
     methods: {
-      toggleSendToLabModal() {
-        this.sendToLabModalOpen = !this.sendToLabModalOpen;
-      },
-      async fetchPatientLabStageData() {
-        const location = await getUserLocation();
-        const locationId = location ? location.location_id : null;
+        toggleSendToLabModal() {
+            this.sendToLabModalOpen = !this.sendToLabModalOpen;
+        },
+        async fetchPatientLabStageData() {
+            const location = await getUserLocation();
+            const locationId = location ? location.location_id : null;
 
-        if (locationId) {
-          const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
-          await usePatientList().refresh(locationId);
-          if (this.demographics.patient_id) {
-            this.patientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.demographics.patient_id);
-          }
-        }
-      },
-      async handleSendToLabYes(){
-        const location = await getUserLocation();
-        const locationId = location ? location.location_id : null;
-        if (!locationId) {
-          toastDanger("Location ID could not be found. Please check your settings.");
-          return;
-        }
-        await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"LAB", locationId);
-        await usePatientList().refresh(locationId);
-        toastSuccess("Lab orders submitted to the lab successfully. Consultation paused")
-        await this.fetchPatientLabStageData()
-        this.closeSendToLabModal()
-      },
-      async handleSendToLabNo(){
-        this.toggleSendToLabModal();
-      },
-      closeSendToLabModal() {
-        this.sendToLabModalOpen = false;
-      },
+            if (locationId) {
+                const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
+                await usePatientList().refresh(locationId);
+                if (this.patient.patientID) {
+                    this.patientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.patient.patientID);
+                }
+            }
+        },
+        async handleSendToLabYes() {
+            const location = await getUserLocation();
+            const locationId = location ? location.location_id : null;
+            if (!locationId) {
+                toastDanger("Location ID could not be found. Please check your settings.");
+                return;
+            }
+            await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "LAB", locationId);
+            await usePatientList().refresh(locationId);
+            toastSuccess("Lab orders submitted to the lab successfully. Consultation paused");
+            await this.fetchPatientLabStageData();
+            this.closeSendToLabModal();
+        },
+        async handleSendToLabNo() {
+            this.toggleSendToLabModal();
+        },
+        closeSendToLabModal() {
+            this.sendToLabModalOpen = false;
+        },
         async updateLabList() {
             this.openModal = false;
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.orders = await OrderService.getOrders(this.patient.patientID);
             this.setListData(this.orders);
             this.updateInvestigationWizard();
         },
         async updateInvestigationWizard() {
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.orders = await OrderService.getOrders(this.patient.patientID);
             const filteredArray = await this.orders.filter((obj: any) => {
                 return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
             });
@@ -265,13 +264,11 @@ export default defineComponent({
 
         handleIcon() {},
         async openResultsForm(obs: any) {
-
             console.log(obs.item.concept_id);
             const testIndicators = await PatientLabResultService.getTestIndicatorsWithID(obs.item.concept_id);
 
-            console.log({testIndicators})
+            console.log({ testIndicators });
 
-        
             const indicators = [
                 obs.item,
                 {
@@ -285,7 +282,6 @@ export default defineComponent({
                     },
                 },
             ] as any;
-
 
             testIndicators.forEach((item: any) => {
                 let data = {
@@ -334,15 +330,13 @@ export default defineComponent({
                     item.name == "Lam" ||
                     item.name == "CrAg" ||
                     item.name == "CD4 count" ||
-
                     //dip Stick
                     item.name == "Leukocytes" ||
-                    item.name=="Protein" ||
-                    item.name=="Nitrite" ||
-                    item.name=="Urine Ketones" ||
-
+                    item.name == "Protein" ||
+                    item.name == "Nitrite" ||
+                    item.name == "Urine Ketones" ||
                     //hiv
-                    item.name=="HIV test"
+                    item.name == "HIV test"
                 ) {
                     let multiData = [] as any;
                     if (item.name == "MRDT" || item.name == "Vdrl" || item.name == "Hepatitis B" || item.name == "CrAg" || item.name == "Lam") {
@@ -368,13 +362,14 @@ export default defineComponent({
                             { id: "2", name: "above reference line" },
                         ];
                     }
-                    if ( item.name == "Leukocytes" ||
-                    item.name=="Protein" ||
-                    item.name=="Nitrite" ||
-                    item.name=="Ketones" ||
-                    item.name=="Urine Ketones" 
-                    ){
-                         multiData = [
+                    if (
+                        item.name == "Leukocytes" ||
+                        item.name == "Protein" ||
+                        item.name == "Nitrite" ||
+                        item.name == "Ketones" ||
+                        item.name == "Urine Ketones"
+                    ) {
+                        multiData = [
                             { id: "2", name: "Negative" },
                             { id: "1", name: "Trace" },
                             { id: "3", name: "1+" },
@@ -382,16 +377,13 @@ export default defineComponent({
                             { id: "5", name: "3+" },
                             { id: "6", name: "4+" },
                         ];
-
                     }
 
-
-                    if( item.name=="HIV test"){
-                         multiData = [
+                    if (item.name == "HIV test") {
+                        multiData = [
                             { id: "2", name: "Positive" },
                             { id: "1", name: "Negative" },
                             { id: "3", name: "Invalid" },
-                           
                         ];
                     }
 
@@ -410,25 +402,21 @@ export default defineComponent({
                     } as any;
                 }
 
-
                 //TODO: urine deep stick enter result
-
-
 
                 indicators[1].data.rowData[0].colData.push(data);
             });
             const lab = useLabResultsStore();
 
-
             lab.setLabResults(indicators);
             this.openModal = true;
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.orders = await OrderService.getOrders(this.patient.patientID);
         },
         async viewLabOrder(labResults: any) {
             console.log("🚀 ~ openResultsForm ~ labResults:", labResults);
             this.labResultsContent = labResults;
             this.openResultsModal = true;
-            //  this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            //  this.orders = await OrderService.getOrders(this.patient.patientID);
             // const labf = createModal(LabResults);
             // console.log("🚀 ~ openResultsForm ~ labf:", labf);
         },
@@ -558,15 +546,14 @@ export default defineComponent({
     padding: 10px;
 }
 .no-margin-left {
-  margin: 0;
-  display: flex;
-  justify-content: flex-start;
-  background: lightcyan;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    background: lightcyan;
 }
 .scrollable-container {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
 }
-
 </style>

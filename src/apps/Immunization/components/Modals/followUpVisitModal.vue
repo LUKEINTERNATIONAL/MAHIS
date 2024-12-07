@@ -174,7 +174,7 @@ export default defineComponent({
         },
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useFollowUpStoreStore, [
             "changeGuardianInfo",
             "vaccineAdverseEffects",
@@ -205,7 +205,7 @@ export default defineComponent({
         this.initialSeriousData = followUp.getInitialSerious();
         this.initialFirstDecisionData = followUp.getInitialFirstDecision();
         this.initialOutcomeData = followUp.getInitialOutcome();
-        const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
+        const guardianData = await RelationshipService.getRelationships(this.patient.patientID);
 
         modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
         modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
@@ -251,7 +251,7 @@ export default defineComponent({
                 await guardian.registerGuardian(data);
                 const guardianID = guardian.getPersonID();
                 const selectedID = getFieldValue(this.changeGuardianInfo, "relationship", "value").id;
-                if (selectedID) await RelationsService.createRelation(this.demographics.patient_id, guardianID, selectedID);
+                if (selectedID) await RelationsService.createRelation(this.patient.patientID, guardianID, selectedID);
                 toastSuccess("Guarding information save successfully", 3000);
                 return true;
             } else {
@@ -291,8 +291,8 @@ export default defineComponent({
             }
         },
         async saveVaccineAdverseEffects() {
-            if (this.demographics.patient_id) {
-                const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+            if (this.patient.patientID) {
+                const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.patient.patientID);
                 const date = getFieldValue(this.outcome, "Date of death", "value") || HisDate.currentDate();
                 const serious = await formatCheckBoxData(this.serious, HisDate.currentDate(), lastVaccine);
                 const outcome = await formatRadioButtonData(this.outcome, date, lastVaccine);
@@ -312,7 +312,7 @@ export default defineComponent({
 
                 const userID: any = Service.getUserID();
                 if (vaccineAdverseEffects.length > 0) {
-                    const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
+                    const registration = new AppEncounterService(this.patient.patientID, 203, userID);
                     await registration.createEncounter();
                     await registration.saveObservationList(result);
                     toastSuccess("Vaccine adverse effects saved success", 1500);
@@ -326,7 +326,7 @@ export default defineComponent({
 
         async guardianData() {
             return {
-                person_id: this.demographics.patient_id,
+                person_id: this.patient.patientID,
                 given_name: this.guardianFirstname,
                 family_name: this.guardianLastname,
                 middle_name: this.guardianMiddleName,

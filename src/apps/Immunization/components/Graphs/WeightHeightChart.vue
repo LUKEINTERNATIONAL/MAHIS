@@ -69,7 +69,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
     async mounted() {
@@ -78,7 +78,7 @@ export default defineComponent({
         await this.displayWeightGraph();
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 await this.updateData();
                 await this.changeGraph("weight");
@@ -189,14 +189,14 @@ export default defineComponent({
         },
         async setValues() {
             this.dataset = [];
-            this.currentHeight = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Height", "value_numeric");
-            this.currentWeight = await ObservationService.getFirstObsValue(this.demographics.patient_id, "weight", "value_numeric");
+            this.currentHeight = await ObservationService.getFirstObsValue(this.patient.patientID, "Height", "value_numeric");
+            this.currentWeight = await ObservationService.getFirstObsValue(this.patient.patientID, "weight", "value_numeric");
         },
         async displayWeightGraph() {
             this.stepSize = 3;
             if (this.weight) {
                 this.valueNumericArray = this.weight?.map((item: any) => {
-                    return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
+                    return { x: HisDate.getAgeInFloatYears(this.patient?.personInformation?.birthdate, item.obs_datetime), y: item.value_numeric };
                 });
                 await this.calculateWeightZScore();
             }
@@ -205,16 +205,16 @@ export default defineComponent({
             this.stepSize = 5;
             if (this.height) {
                 this.valueNumericArray = this.height.map((item: any) => {
-                    return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
+                    return { x: HisDate.getAgeInFloatYears(this.patient?.personInformation?.birthdate, item.obs_datetime), y: item.value_numeric };
                 });
                 await this.calculateHeightZScore();
             }
         },
         async calculateHeightZScore() {
             this.setValues();
-            const obs_datetime = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Height", "obs_datetime");
-            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.demographics?.birthdate);
-            const gender = this.demographics.gender;
+            const obs_datetime = await ObservationService.getFirstObsValue(this.patient.patientID, "Height", "obs_datetime");
+            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
+            const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Height";
             let params;
             if (gender === "M") {
@@ -233,9 +233,9 @@ export default defineComponent({
         },
         async calculateWeightZScore() {
             await this.setValues();
-            const obs_datetime = await ObservationService.getFirstObsValue(this.demographics.patient_id, "weight", "obs_datetime");
-            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.demographics?.birthdate);
-            const gender = this.demographics.gender;
+            const obs_datetime = await ObservationService.getFirstObsValue(this.patient.patientID, "weight", "obs_datetime");
+            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
+            const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Weight";
             let params;
             if (gender === "M") {

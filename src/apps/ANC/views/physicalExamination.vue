@@ -78,7 +78,7 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 import HisDate from "@/utils/Date";
 import { useAncEndStore } from "@/apps/ANC/store/ancEnd/ancEndStore";
-import {useANCVitalsStore} from "@/apps/ANC/store/physical exam/VitalsStore";
+import { useANCVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
 export default defineComponent({
     name: "PhysicalExam",
     mixins: [SetUserRole, SetEncounter],
@@ -172,7 +172,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useANCVitalsStore, ["ANCVitals"]),
         ...mapState(useMaternalExamStore, ["respiratory", "pallor", "breastExam", "vaginalInspection", "cervicalExam", "oedemaPresence"]),
         ...mapState(useFetalAssessment, ["fetalAssessment", "fetalDetails"]),
@@ -310,13 +310,13 @@ export default defineComponent({
 
         async saveVitals() {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            const vitalsInstance = new VitalsService(this.patient.patientID, userID);
             await vitalsInstance.onFinish(this.ANCVitals);
         },
         async validaterowData(): Promise<boolean> {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+            const vitalsInstance = new VitalsService(this.patient.patientID, userID);
+            const age = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
 
             // Reset validation errors for new validation
             this.hasValidationErrors = []; // Clear previous errors
@@ -364,7 +364,7 @@ export default defineComponent({
         async saveMaternalExam() {
             if (this.pallor.length >= 0 || this.cervicalExam.length >= 0 || this.vaginalInspection.length >= 0 || this.breastExam.length >= 0) {
                 const userID: any = Service.getUserID();
-                const maternalExam = new MaternalExamService(this.demographics.patient_id, userID);
+                const maternalExam = new MaternalExamService(this.patient.patientID, userID);
                 const encounter = await maternalExam.createEncounter();
                 if (!encounter) return toastWarning("Unable to create maternal exam encounter");
                 const patientStatus = await maternalExam.saveObservationList(await this.buildMaternalExam());
@@ -377,7 +377,7 @@ export default defineComponent({
         async saveAbdominalExam() {
             if (this.fetalAssessment.length >= 0 || this.fetalDetails.length >= 0) {
                 const userID: any = Service.getUserID();
-                const abdominalExam = new AbdominalAssessmentService(this.demographics.patient_id, userID);
+                const abdominalExam = new AbdominalAssessmentService(this.patient.patientID, userID);
                 const encounter = await abdominalExam.createEncounter();
                 if (!encounter) return toastWarning("Unable to create abdominal exam encounter");
                 const patientStatus = await abdominalExam.saveObservationList(await this.buildAbdominalExam());
@@ -390,7 +390,7 @@ export default defineComponent({
         async savePresentingSigns() {
             if (this.presentingSigns.length >= 0) {
                 const userID: any = Service.getUserID();
-                const presentingSigns = new PresentingSignsService(this.demographics.patient_id, userID);
+                const presentingSigns = new PresentingSignsService(this.patient.patientID, userID);
                 const encounter = await presentingSigns.createEncounter();
                 if (!encounter) return toastWarning("Unable to create presenting signs encounter");
                 const patientStatus = await presentingSigns.saveObservationList(await this.buildPresentingSigns());

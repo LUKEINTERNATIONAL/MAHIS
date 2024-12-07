@@ -6,7 +6,10 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="programID() != 33 && programID() != 14 && programID() != 32 && programID() != 12 && programID() != 34 && programID() != 35">
+        <ion-content
+            :fullscreen="true"
+            v-if="programID() != 33 && programID() != 14 && programID() != 32 && programID() != 12 && programID() != 34 && programID() != 35"
+        >
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -74,6 +77,7 @@ import PNCDashboard from "@/apps/PNC/components/PNCDashboard.vue";
 
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import OfflineStatusModal from "@/components/Modal/OfflineStatus.vue";
+import DDERequestIDsModal from "@/components/Modal/DDERequestIDsModal.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
 
@@ -124,7 +128,6 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useStatusStore, [
             "offlineVillageStatus",
             "offlineCountriesStatus",
@@ -171,7 +174,7 @@ export default defineComponent({
                         this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
                     ) {
                         modalController.dismiss();
-                        await workerData.terminate();
+                        // await workerData.terminate();
                     }
                 }
             },
@@ -189,25 +192,23 @@ export default defineComponent({
         this.workerApi = workerData.workerApi;
         await workerData.postData("SET_OFFLINE_LOCATION");
         await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
-        await workerData.postData("SYNC_PATIENT_RECORD");
+        await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
+        await workerData.postData("SYNC_DDE");
         resetDemographics();
-        this.setView();
         await useGlobalPropertyStore().loadGlobalProperty();
         this.isLoading = false;
     },
     methods: {
-        setView() {
-            Service.getProgramID();
-        },
         programID() {
             return Service.getProgramID();
-        },
-        loadImage(name: any) {
-            return img(name);
         },
         openOfflineStatusModal(name: any) {
             const dataToPass = { title: name };
             createModal(OfflineStatusModal, { class: "fullScreenModal" }, false, this.dataToPass);
+        },
+        openDDERequestIDModal(name: any) {
+            const dataToPass = { title: name };
+            createModal(DDERequestIDsModal, { class: "" }, false, this.dataToPass);
         },
     },
 });

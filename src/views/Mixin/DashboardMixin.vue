@@ -61,7 +61,7 @@ export default defineComponent({
         await this.setAppointments();
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     watch: {
         $route: {

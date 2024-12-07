@@ -44,18 +44,18 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import {createModal, toastSuccess} from "@/utils/Alerts";
+import { createModal, toastSuccess } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { defineComponent } from "vue";
 import { useDispensationStore } from "@/apps/OPD/stores/DispensationStore";
-import {PatientOpdList} from "@/services/patient_opd_list";
+import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
-import {getUserLocation} from "@/services/userService";
-import {usePatientList} from "@/apps/OPD/stores/patientListStore";
-import {useDemographicsStore} from "@/stores/DemographicStore";
+import { getUserLocation } from "@/services/userService";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     name: "Home",
@@ -84,12 +84,12 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDispensationStore, ["StepperData"]),
-      ...mapState(useDemographicsStore,["demographics"])
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     data() {
         return {
-          checkedIn: false as Boolean,
-          dispositions: "" as any,
+            checkedIn: false as Boolean,
+            dispositions: "" as any,
             showUndispensedMedication: false,
             wizardData: [
                 {
@@ -140,24 +140,18 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
-     async getSaveFunction(){
-        try {
-          const visit = await PatientOpdList.getCheckInStatus(
-              this.demographics.patient_id
-          );
-          await PatientOpdList.checkOutPatient(
-              visit[0].id,
-              dates.todayDateFormatted()
-          );
-          const location = await getUserLocation();
-          const locationId = location ? location.location_id : null;
-          await usePatientList().refresh(locationId);
-          this.checkedIn = false;
-          toastSuccess("The patient's visit is now closed");
-
-        } catch (e) {}
-        this.$router.push("/home");
-      },
+        async getSaveFunction() {
+            try {
+                const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
+                await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
+                const location = await getUserLocation();
+                const locationId = location ? location.location_id : null;
+                await usePatientList().refresh(locationId);
+                this.checkedIn = false;
+                toastSuccess("The patient's visit is now closed");
+            } catch (e) {}
+            this.$router.push("/home");
+        },
         saveData() {
             this.$router.push("/pharmacy");
         },
