@@ -36,10 +36,10 @@
                                     <ion-col>{{ patient.fullName }}</ion-col>
                                     <ion-col>{{ waitingTime(patient.arrivalTime) }}</ion-col>
                                     <ion-col>
-                                        <ion-button size="small" class="btn-edit" @click="navigateTo(patient.patientID, buttonLink)">{{
+                                        <ion-button size="small" class="btn-edit" @click="navigateTo(patient.patient_id, buttonLink)">{{
                                             buttonTitle
                                         }}</ion-button>
-                                        <ion-button size="small" class="btn-edit" @click="navigateTo(patient.patientID, '/patientProfile')"
+                                        <ion-button size="small" class="btn-edit" @click="navigateTo(patient.patient_id, '/patientProfile')"
                                             >Profile</ion-button
                                         >
                                         <ion-button size="small" class="btn-edit" @click="handleAbscond(patient)">Abscond</ion-button>
@@ -236,7 +236,7 @@ export default defineComponent({
         },
         async navigateTo(id: any, route: string) {
             const patient = await PatientService.findByID(id);
-            this.setDemographics(patient);
+            this.setServerRecord(patient);
             this.$router.push(route);
         },
         async handleAbscond(patient: any) {
@@ -244,7 +244,7 @@ export default defineComponent({
                 const location = await getUserLocation();
                 const locationId = location ? location.id : null;
                 await PatientOpdList.checkOutPatient(patient.visit_id, dates.todayDateFormatted());
-                this.patients = this.patients.filter((p: any) => p.patient_id !== patient.patientID);
+                this.patients = this.patients.filter((p: any) => p.patient_id !== patient.patient_id);
                 toastSuccess("Patient absconded successfully.");
             } catch (e) {
                 console.error("Error absconding patient:", e);
