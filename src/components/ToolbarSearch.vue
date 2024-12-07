@@ -297,17 +297,6 @@ export default defineComponent({
         };
     },
     watch: {
-        workerApi: {
-            async handler() {
-                if (this.workerApi?.data?.msg == "done building patient record") {
-                    this.setDemographics(this.workerApi?.data?.payload);
-                    workerData.postData("RESET");
-                    await this.openNewPage();
-                }
-            },
-            deep: true,
-            immediate: true,
-        },
         page() {
             this.searchDemographicPayload(this.searchText);
         },
@@ -456,7 +445,7 @@ export default defineComponent({
         async setOfflineDemo(data: any) {
             this.popoverOpen = false;
             await resetPatientData();
-            this.setDemographics(data);
+            this.setOfflineRecord(data);
             let url = "/patientProfile";
             this.$router.push(url);
         },
@@ -466,11 +455,10 @@ export default defineComponent({
             this.searchValue = "";
             const allData = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
             if (allData) {
-                this.setDemographics(allData);
+                this.setOfflineRecord(allData);
                 await this.openNewPage();
             } else {
-                this.workerApi = workerData.workerApi;
-                workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
+                this.setServerRecord(item);
             }
         },
         async openNewPage() {
