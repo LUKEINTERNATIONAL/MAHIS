@@ -84,6 +84,14 @@ export default defineComponent({
             allPatientData: [] as any,
         };
     },
+    watch: {
+        $route: {
+            async handler() {
+                this.allPatientData = await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false);
+            },
+            deep: true,
+        },
+    },
     async mounted() {
         this.allPatientData = await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false);
     },

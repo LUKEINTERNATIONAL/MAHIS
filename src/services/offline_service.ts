@@ -15,10 +15,9 @@ export async function getOfflineRecords(objStore: string, whereClause?: any, ret
     });
 }
 
-export async function getOfflineFirstObsValue(allData: any, value_type: string, concept_id?: number): Promise<string | number | undefined> {
+export async function getOfflineFirstObsValue(data: any, value_type: string, concept_id?: number): Promise<string | number | undefined> {
     // If concept_id is provided, filter the data first
-    const combineArrays = [...allData?.vitals?.saved, ...allData?.vitals?.unsaved];
-    const filteredData = concept_id ? combineArrays.filter((item: any) => item.concept_id === concept_id) : combineArrays;
+    const filteredData = concept_id ? data.filter((item: any) => item.concept_id === concept_id) : data;
 
     // Then sort and return the first item's specified value
     return filteredData.sort((a: any, b: any) => new Date(b.obs_datetime).getTime() - new Date(a.obs_datetime).getTime())[0]?.[value_type];
