@@ -189,8 +189,16 @@ export default defineComponent({
         },
         async setValues() {
             this.dataset = [];
-            this.currentHeight = await getOfflineFirstObsValue(this.allPatientData, "value_numeric", 5090);
-            this.currentWeight = await getOfflineFirstObsValue(this.allPatientData, "value_numeric", 5089);
+            this.currentHeight = await getOfflineFirstObsValue(
+                [...this.allPatientData?.vitals?.saved, ...this.allPatientData?.vitals?.unsaved],
+                "value_numeric",
+                5090
+            );
+            this.currentWeight = await getOfflineFirstObsValue(
+                [...this.allPatientData?.vitals?.saved, ...this.allPatientData?.vitals?.unsaved],
+                "value_numeric",
+                5089
+            );
         },
         async displayWeightGraph() {
             this.stepSize = 3;
@@ -212,7 +220,11 @@ export default defineComponent({
         },
         async calculateHeightZScore() {
             this.setValues();
-            const obs_datetime: any = await getOfflineFirstObsValue(this.allPatientData, "obs_datetime", 5090);
+            const obs_datetime: any = await getOfflineFirstObsValue(
+                [...this.allPatientData?.vitals?.saved, ...this.allPatientData?.vitals?.unsaved],
+                "obs_datetime",
+                5090
+            );
             const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
             const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Height";
@@ -233,7 +245,11 @@ export default defineComponent({
         },
         async calculateWeightZScore() {
             await this.setValues();
-            const obs_datetime: any = await getOfflineFirstObsValue(this.allPatientData, "obs_datetime", 5089);
+            const obs_datetime: any = await getOfflineFirstObsValue(
+                [...this.allPatientData?.vitals?.saved, ...this.allPatientData?.vitals?.unsaved],
+                "obs_datetime",
+                5089
+            );
             const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
             const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Weight";

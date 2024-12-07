@@ -79,6 +79,7 @@ import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
 import db from "@/db";
+import { getOfflineRecords } from "@/services/offline_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -169,15 +170,27 @@ export default defineComponent({
             let height = null;
             if (heightValue) height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
-            db.collection("patientRecords")
-                .doc({ patientID: 1721822809464 })
-                .update({
-                    vitals: {
-                        weight: weightValue,
-                        height: heightValue,
-                    },
-                });
+
             if (weight == null && height == null) {
+                const allData = await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false);
+                let unSaveVitals = allData?.vitals;
+                let vitals: any = {
+                    saved: [],
+                    unsaved: [],
+                };
+                unSaveVitals.unsaved = [
+                    ...unSaveVitals.unsaved,
+                    {
+                        concept_id: 5090,
+                        obs_datetime: HisDate.currentDate(),
+                        value_numeric: heightValue,
+                    },
+                    {
+                        concept_id: 5089,
+                        obs_datetime: HisDate.currentDate(),
+                        value_numeric: weightValue,
+                    },
+                ];
                 const encounter = await vitalsInstance.createEncounter();
                 if (!encounter) return toastWarning("Unable to create vitals encounter");
                 const data = await formatInputFiledData(this.vitalsWeightHeight, this.vitals_date);
