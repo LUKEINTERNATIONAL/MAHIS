@@ -174,10 +174,6 @@ export default defineComponent({
             if (weight == null && height == null) {
                 const allData = await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false);
                 let unSaveVitals = allData?.vitals;
-                let vitals: any = {
-                    saved: [],
-                    unsaved: [],
-                };
                 unSaveVitals.unsaved = [
                     ...unSaveVitals.unsaved,
                     {
