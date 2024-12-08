@@ -130,8 +130,8 @@ export default defineComponent({
     methods: {
         async handleFollowUp(id: any) {
             const patientData = await PatientService.findByID(id);
+            this.route = "patientProfile";
             this.setServerRecord(patientData);
-            this.$router.push("patientProfile");
         },
         async handleInputData(event: any) {
             if (event.inputHeader == "Start date") {
