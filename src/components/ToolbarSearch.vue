@@ -446,17 +446,19 @@ export default defineComponent({
             this.popoverOpen = false;
             await resetPatientData();
             this.setOfflineRecord(data);
-            let url = "/patientProfile";
-            this.$router.push(url);
+            this.route = "/patientProfile";
+            await this.openNewPage();
+            this.$router.push(this.route);
         },
         async setPatientData(url: any, item: any) {
-            this.url = url;
+            this.route = url;
             this.popoverOpen = false;
             this.searchValue = "";
+            await this.openNewPage();
             const allData = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
             if (allData) {
                 this.setOfflineRecord(allData);
-                await this.openNewPage();
+                this.$router.push(this.route);
             } else {
                 this.setServerRecord(item);
             }
@@ -480,22 +482,18 @@ export default defineComponent({
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 if (this.programID() == 32) {
-                    this.$router.push("NCDDispensations");
+                    this.route = "NCDDispensations";
                 } else {
-                    this.$router.push("dispensation");
+                    this.route = "dispensation";
                 }
             } else if (roles.some((role: any) => role.role === "Lab")) {
-                this.$router.push("OPDConsultationPlan");
+                this.route = "OPDConsultationPlan";
             } else if (userPrograms?.length == 1) {
                 if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
-                    this.$router.push("OPDvitals");
-                } else {
-                    this.$router.push(this.url);
+                    this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32) {
-                this.$router.push(this.NCDUserActions.url);
-            } else {
-                this.$router.push(this.url);
+                this.route = this.NCDUserActions.url;
             }
         },
         getPhone(item: any) {
