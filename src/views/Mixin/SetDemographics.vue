@@ -36,10 +36,16 @@ export default defineComponent({
         setOfflineRecord(item: any) {
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
+            if (this.route) this.$router.push(this.route);
         },
-        setServerRecord(item: any) {
-            this.workerApi = workerData.workerApi;
-            workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
+        async setServerRecord(item: any) {
+            const patientRecord = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
+            if (patientRecord) {
+                this.setOfflineRecord(patientRecord);
+            } else {
+                this.workerApi = workerData.workerApi;
+                workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
+            }
         },
         getPatientIdentifier(identifiers: any, id: any) {
             if (identifiers) {
