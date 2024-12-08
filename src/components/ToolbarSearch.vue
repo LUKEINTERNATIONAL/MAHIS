@@ -189,8 +189,6 @@ import { getUserLocation } from "@/services/userService";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import dates from "@/utils/Date";
 import workerData from "@/activate_worker";
-import { getOfflineRecords } from "@/services/offline_service";
-
 export default defineComponent({
     name: "ToolbarSearch",
     mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
@@ -455,13 +453,7 @@ export default defineComponent({
             this.popoverOpen = false;
             this.searchValue = "";
             await this.openNewPage();
-            const allData = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
-            if (allData) {
-                this.setOfflineRecord(allData);
-                this.$router.push(this.route);
-            } else {
-                await this.setServerRecord(item);
-            }
+            await this.setServerRecord(item);
         },
         async openNewPage() {
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {

@@ -53,7 +53,7 @@ import WeightForAgeGirls from "@/Data/WeightForAgeGirls";
 import HeightForAgeGirls from "@/Data/HeightForAgeGirls";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 import ListHeightWeight from "@/views/Mixin/ListHeightWeight.vue";
-import { getOfflineRecords, getOfflineFirstObsValue } from "@/services/offline_service";
+import { getOfflineFirstObsValue } from "@/services/offline_service";
 export default defineComponent({
     mixins: [ListHeightWeight],
     name: "Menu",
@@ -190,12 +190,12 @@ export default defineComponent({
         async setValues() {
             this.dataset = [];
             this.currentHeight = await getOfflineFirstObsValue(
-                [...this.allPatientData?.vitals?.saved, ...this.allPatientData?.vitals?.unsaved],
+                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
                 "value_numeric",
                 5090
             );
             this.currentWeight = await getOfflineFirstObsValue(
-                [...this.allPatientData?.vitals?.saved, ...this.allPatientData?.vitals?.unsaved],
+                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
                 "value_numeric",
                 5089
             );
@@ -221,7 +221,7 @@ export default defineComponent({
         async calculateHeightZScore() {
             this.setValues();
             const obs_datetime: any = await getOfflineFirstObsValue(
-                [...this.allPatientData?.vitals?.saved, ...this.allPatientData?.vitals?.unsaved],
+                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
                 "obs_datetime",
                 5090
             );
@@ -246,7 +246,7 @@ export default defineComponent({
         async calculateWeightZScore() {
             await this.setValues();
             const obs_datetime: any = await getOfflineFirstObsValue(
-                [...this.allPatientData?.vitals?.saved, ...this.allPatientData?.vitals?.unsaved],
+                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
                 "obs_datetime",
                 5089
             );
