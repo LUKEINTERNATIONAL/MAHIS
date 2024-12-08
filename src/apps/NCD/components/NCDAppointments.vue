@@ -181,7 +181,7 @@ export default defineComponent({
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
             this.isPharmacist();
-            this.setServerRecord(patientData[0]);
+            await this.setServerRecord(patientData[0]);
         },
         isPharmacist() {
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);

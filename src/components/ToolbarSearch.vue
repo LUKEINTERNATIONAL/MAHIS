@@ -460,7 +460,7 @@ export default defineComponent({
                 this.setOfflineRecord(allData);
                 this.$router.push(this.route);
             } else {
-                this.setServerRecord(item);
+                await this.setServerRecord(item);
             }
         },
         async openNewPage() {
