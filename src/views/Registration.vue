@@ -509,9 +509,10 @@ export default defineComponent({
                         await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
                         await workerData.postData("SYNC_DDE");
                         if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
-                        if (this.programID() == 32) {
-                            if (!this.apiStatus) await this.redirection();
-                        } else await this.openNewPage(offlinePatientData);
+                        else await this.redirection();
+                        if (this.programID() == 33) {
+                            await this.openNewPage(offlinePatientData);
+                        }
                     } else {
                         toastDanger("No dde ids available");
                     }
@@ -610,16 +611,15 @@ export default defineComponent({
         },
         async openNewPage(item: any) {
             await resetPatientData();
-            this.setOfflineRecord(item);
             if (this.apiStatus) await UserService.setProgramUserActions();
             this.isLoading = false;
             this.disableSaveBtn = false;
             if (this.programID() == 32) {
-                this.$router.push(this.NCDUserActions.url);
+                this.route = this.NCDUserActions.url;
             } else {
-                let url = "/patientProfile";
-                this.$router.push(url);
+                this.route = "/patientProfile";
             }
+            this.setPatientRecord(item);
         },
         patientIdentifier(item: any) {
             // return item
