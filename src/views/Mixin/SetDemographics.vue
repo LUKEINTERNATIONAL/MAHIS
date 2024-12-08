@@ -9,6 +9,8 @@ export default defineComponent({
     data: () => ({
         districtList: [] as any,
         workerApi: "" as any,
+        doneLoading: false,
+        route: "" as any,
     }),
     computed: {
         ...mapState(useDemographicsStore, ["patient"]),
@@ -22,6 +24,8 @@ export default defineComponent({
                 if (this.workerApi?.data?.msg == "done building patient record") {
                     this.setOfflineRecord(this.workerApi?.data?.payload);
                     workerData.postData("RESET");
+                    this.doneLoading = true;
+                    if (this.route) this.$router.push(this.route);
                 }
             },
             deep: true,
