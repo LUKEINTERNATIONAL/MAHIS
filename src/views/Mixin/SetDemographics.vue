@@ -5,12 +5,14 @@ import { getPersonAttribute } from "@/interfaces/personAttribute";
 import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
 import { mapState } from "pinia";
+import { toastSuccess, toastWarning, popoverConfirmation, toastDanger } from "@/utils/Alerts";
 export default defineComponent({
     data: () => ({
         districtList: [] as any,
         workerApi: "" as any,
         doneLoading: false,
         route: "" as any,
+        patientID: "",
     }),
     computed: {
         ...mapState(useDemographicsStore, ["patient"]),
@@ -25,6 +27,10 @@ export default defineComponent({
                     workerData.postData("RESET");
                     this.doneLoading = true;
                     this.setRecord(this.workerApi?.data?.payload);
+                }
+                if (this.workerApi?.data == "saved successfully") {
+                    toastSuccess("Saved on server successfully");
+                    this.setRecord(await this.getOfflinePatientData());
                 }
             },
             deep: true,
@@ -41,7 +47,8 @@ export default defineComponent({
             if (item.ID) {
                 this.setRecord(item);
             } else {
-                const patientRecord = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
+                this.patientID = this.getPatientIdentifier(item, 3);
+                const patientRecord: any = await this.getOfflinePatientData();
                 if (patientRecord) {
                     this.setRecord(patientRecord);
                 } else {
@@ -69,7 +76,11 @@ export default defineComponent({
             return addressComponents.filter(Boolean).join(",");
         },
         async getOfflinePatientData() {
-            this.setRecord(await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false));
+            await getOfflineRecords("patientRecords", { ID: this.patientID }, false);
+        },
+        async savePatientRecord(record: any) {
+            this.patientID = record.ID;
+            workerData.postData("SAVE_PATIENT_RECORD", { data: toRaw(record) });
         },
     },
 });
