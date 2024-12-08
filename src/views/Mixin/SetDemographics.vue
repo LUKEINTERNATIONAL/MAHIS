@@ -28,9 +28,13 @@ export default defineComponent({
                     this.doneLoading = true;
                     this.setRecord(this.workerApi?.data?.payload);
                 }
-                if (this.workerApi?.data == "saved successfully") {
-                    toastSuccess("Saved on server successfully");
-                    this.setRecord(await this.getOfflinePatientData());
+                if (this.workerApi?.data?.msg == "saved successfully") {
+                    this.patientID = this.workerApi?.data?.payload?.ID;
+                    if (this.patientID) {
+                        workerData.postData("RESET");
+                        toastSuccess("Saved on server successfully");
+                        this.setRecord(await this.getOfflinePatientData());
+                    }
                 }
             },
             deep: true,
@@ -76,10 +80,10 @@ export default defineComponent({
             return addressComponents.filter(Boolean).join(",");
         },
         async getOfflinePatientData() {
-            await getOfflineRecords("patientRecords", { ID: this.patientID }, false);
+            console.log("🚀 ~ getOfflinePatientData ~ this.patientID :", this.patientID);
+            if (this.patientID) return await getOfflineRecords("patientRecords", { ID: this.patientID }, false);
         },
         async savePatientRecord(record: any) {
-            this.patientID = record.ID;
             workerData.postData("SAVE_PATIENT_RECORD", { data: toRaw(record) });
         },
     },
