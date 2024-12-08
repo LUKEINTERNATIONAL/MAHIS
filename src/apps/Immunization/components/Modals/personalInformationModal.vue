@@ -283,7 +283,7 @@ export default defineComponent({
         },
         async updatePatientDemographics() {
             const item = await PatientService.findByID(this.patient.patientID);
-            this.setServerRecord(item);
+            await this.setServerRecord(item);
         },
         patientIdentifier(item: any) {
             // return item

@@ -209,10 +209,10 @@ export default defineComponent({
             createModal(PersonCardComponent, { class: "large-modal" }, true, dataToPass, { "view-client": handleModalAction });
         },
         async openPatientProfile(client_id: any) {
-            this.personsDemoData.value.forEach((person: any) => {
+            this.personsDemoData.value.forEach(async (person: any) => {
                 if (person[0].patient_id == client_id) {
                     this.route = "patientProfile";
-                    this.setServerRecord(person[0]);
+                    await this.setServerRecord(person[0]);
                     return;
                 }
             });

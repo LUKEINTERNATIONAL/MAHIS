@@ -178,7 +178,7 @@ export default defineComponent({
                 if (indnt.identifier_type == 3) {
                     const patientData2 = await PatientService.findByNpid(indnt.identifier);
                     this.route = "patientProfile";
-                    this.setServerRecord(patientData2[0]);
+                    await this.setServerRecord(patientData2[0]);
                 }
             });
         },
