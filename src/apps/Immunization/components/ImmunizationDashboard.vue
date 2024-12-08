@@ -189,7 +189,7 @@ export default defineComponent({
         async openClientProfile(patientID: any) {
             this.route = "patientProfile";
             const patientData = await PatientService.findByNpid(patientID);
-            await this.setServerRecord(patientData[0]);
+            await this.setPatientRecord(patientData[0]);
         },
     },
 });

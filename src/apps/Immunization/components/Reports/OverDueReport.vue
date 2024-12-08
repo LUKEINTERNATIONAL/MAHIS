@@ -131,7 +131,7 @@ export default defineComponent({
         async handleFollowUp(id: any) {
             const patientData = await PatientService.findByID(id);
             this.route = "patientProfile";
-            await this.setServerRecord(patientData);
+            await this.setPatientRecord(patientData);
         },
         async handleInputData(event: any) {
             if (event.inputHeader == "Start date") {

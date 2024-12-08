@@ -22,10 +22,9 @@ export default defineComponent({
         workerApi: {
             async handler() {
                 if (this.workerApi?.data?.msg == "done building patient record") {
-                    this.setOfflineRecord(this.workerApi?.data?.payload);
                     workerData.postData("RESET");
                     this.doneLoading = true;
-                    if (this.route) this.$router.push(this.route);
+                    this.setRecord(this.workerApi?.data?.payload);
                 }
             },
             deep: true,
@@ -33,18 +32,22 @@ export default defineComponent({
         },
     },
     methods: {
-        setOfflineRecord(item: any) {
+        setRecord(item: any) {
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             if (this.route) this.$router.push(this.route);
         },
-        async setServerRecord(item: any) {
-            const patientRecord = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
-            if (patientRecord) {
-                this.setOfflineRecord(patientRecord);
+        async setPatientRecord(item: any) {
+            if (item.ID) {
+                this.setRecord(item);
             } else {
-                this.workerApi = workerData.workerApi;
-                workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
+                const patientRecord = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
+                if (patientRecord) {
+                    this.setRecord(patientRecord);
+                } else {
+                    this.workerApi = workerData.workerApi;
+                    workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
+                }
             }
         },
         getPatientIdentifier(identifiers: any, id: any) {
@@ -66,7 +69,7 @@ export default defineComponent({
             return addressComponents.filter(Boolean).join(",");
         },
         async getOfflinePatientData() {
-            this.setOfflineRecord(await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false));
+            this.setRecord(await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false));
         },
     },
 });

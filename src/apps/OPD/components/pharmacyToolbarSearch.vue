@@ -175,7 +175,7 @@ export default defineComponent({
         },
         async openNewPage(url: any, item: any) {
             this.route = url;
-            await this.setServerRecord(item);
+            await this.setPatientRecord(item);
             await resetPatientData();
         },
 

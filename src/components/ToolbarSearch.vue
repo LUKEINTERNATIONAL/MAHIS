@@ -75,7 +75,7 @@
                 class="search_result clickable-row"
                 v-for="(item, index) in offlineFilteredPatients"
                 :key="index"
-                @click="setOfflineDemo(item)"
+                @click="setPatientData('/patientProfile', item)"
             >
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                     item.personInformation.given_name + " " + item.personInformation.family_name
@@ -440,20 +440,12 @@ export default defineComponent({
                 });
             }
         },
-        async setOfflineDemo(data: any) {
-            this.popoverOpen = false;
-            await resetPatientData();
-            this.setOfflineRecord(data);
-            this.route = "/patientProfile";
-            await this.openNewPage();
-            this.$router.push(this.route);
-        },
         async setPatientData(url: any, item: any) {
             this.route = url;
             this.popoverOpen = false;
             this.searchValue = "";
             await this.openNewPage();
-            await this.setServerRecord(item);
+            await this.setPatientRecord(item);
         },
         async openNewPage() {
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {

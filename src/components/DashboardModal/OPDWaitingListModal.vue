@@ -237,7 +237,7 @@ export default defineComponent({
         async navigateTo(id: any, route: string) {
             const patient = await PatientService.findByID(id);
             this.route = route;
-            await this.setServerRecord(patient);
+            await this.setPatientRecord(patient);
         },
         async handleAbscond(patient: any) {
             try {

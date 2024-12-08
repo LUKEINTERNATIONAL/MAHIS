@@ -212,7 +212,7 @@ export default defineComponent({
             this.personsDemoData.value.forEach(async (person: any) => {
                 if (person[0].patient_id == client_id) {
                     this.route = "patientProfile";
-                    await this.setServerRecord(person[0]);
+                    await this.setPatientRecord(person[0]);
                     return;
                 }
             });

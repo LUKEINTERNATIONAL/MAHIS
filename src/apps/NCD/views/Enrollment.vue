@@ -279,7 +279,7 @@ export default defineComponent({
             else {
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                await this.setServerRecord(await PatientService.findByID(this.patient.patientID));
+                await this.setPatientRecord(await PatientService.findByID(this.patient.patientID));
                 await this.saveEnrollment();
                 await resetNCDPatientData();
                 await UserService.setProgramUserActions();
