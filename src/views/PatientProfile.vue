@@ -465,7 +465,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        console.log(".....................kkkkkkkk..............", this.$route);
         this.checkAge();
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
