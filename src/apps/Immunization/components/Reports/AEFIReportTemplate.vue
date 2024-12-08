@@ -211,8 +211,8 @@ export default defineComponent({
         async openPatientProfile(client_id: any) {
             this.personsDemoData.value.forEach((person: any) => {
                 if (person[0].patient_id == client_id) {
+                    this.route = "patientProfile";
                     this.setServerRecord(person[0]);
-                    this.$router.push("patientProfile");
                     return;
                 }
             });
