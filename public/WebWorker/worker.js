@@ -107,7 +107,7 @@ self.onmessage = async (event) => {
                     self.postMessage("");
                     await patientService.saveDemographicsRecord(payload.data);
                     console.log("SAVE_PATIENT_RECORD ~ storeName:", type);
-                    self.postMessage("saved successfully");
+                    self.postMessage({ payload: payload.data, msg: "saved successfully" });
                 } catch (error) {
                     console.log("SAVE_PATIENT_RECORD ~ error:", error);
                 }
