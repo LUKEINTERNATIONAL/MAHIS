@@ -284,9 +284,9 @@ export default defineComponent({
                 await resetNCDPatientData();
                 await UserService.setProgramUserActions();
                 if (this.NCDActivities.length == 0) {
-                    this.$router.push("patientProfile");
+                    this.route = "patientProfile";
                 } else {
-                    this.$router.push("consultationPlan");
+                    this.route = "consultationPlan";
                 }
             }
         },

@@ -180,8 +180,8 @@ export default defineComponent({
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
-            this.setServerRecord(patientData[0]);
             this.isPharmacist();
+            this.setServerRecord(patientData[0]);
         },
         isPharmacist() {
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
@@ -189,9 +189,9 @@ export default defineComponent({
             if (roles.some((role: any) => roles.some((role: any) => role.role === "Pharmacist"))) {
                 this.$router.push("dispensation");
                 if (Service.getProgramID() == 32) {
-                    this.$router.push("NCDDispensations");
+                    this.route = "NCDDispensations";
                 } else {
-                    this.$router.push("patientProfile");
+                    this.route = "patientProfile";
                 }
             }
         },
