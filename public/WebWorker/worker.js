@@ -102,6 +102,16 @@ self.onmessage = async (event) => {
                     console.log("SYNC_PATIENT_RECORD ~ error:", error);
                 }
                 break;
+            case "SAVE_PATIENT_RECORD":
+                try {
+                    self.postMessage("");
+                    await patientService.saveDemographicsRecord(payload.data);
+                    console.log("SAVE_PATIENT_RECORD ~ storeName:", type);
+                    self.postMessage("saved successfully");
+                } catch (error) {
+                    console.log("SAVE_PATIENT_RECORD ~ error:", error);
+                }
+                break;
             case "BUILD_PATIENT_RECORD":
                 try {
                     const patientData = await syncPatientDataService.buildPatientData(payload.data);
