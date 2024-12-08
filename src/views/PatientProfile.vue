@@ -465,6 +465,7 @@ export default defineComponent({
         },
     },
     async mounted() {
+        console.log(".....................kkkkkkkk..............", this.$route);
         this.checkAge();
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
@@ -474,16 +475,6 @@ export default defineComponent({
         await this.checkPatientIFCheckedIn();
     },
     watch: {
-        workerApi: {
-            async handler() {
-                if (this.workerApi?.data == "Done Saving") {
-                    await this.getOfflinePatientData();
-                    // toastSuccess("Saved on server successfully");
-                }
-            },
-            deep: true,
-            immediate: true,
-        },
         patient: {
             async handler(btn: any) {
                 await this.updateData();

@@ -231,16 +231,6 @@ export default defineComponent({
         await this.markWizard();
     },
     watch: {
-        workerApi: {
-            async handler() {
-                if (this.workerApi?.data == "Done Saving") {
-                    await this.getOfflinePatientData();
-                    toastSuccess("Saved on server successfully");
-                }
-            },
-            deep: true,
-            immediate: true,
-        },
         vitals: {
             async handler() {
                 await this.markWizard();
