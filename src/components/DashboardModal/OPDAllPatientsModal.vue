@@ -28,7 +28,7 @@
                                     <ion-col>{{ patient.fullName }}</ion-col>
                                     <ion-col>{{ formatArrivalTime(patient.arrivalTime) }}</ion-col>
                                     <ion-col>
-                                        <ion-button size="small" class="btn-edit" @click="navigateTo(patient.patientID, '/patientProfile')"
+                                        <ion-button size="small" class="btn-edit" @click="navigateTo(patient.patient_id, '/patientProfile')"
                                             >Profile</ion-button
                                         >
                                     </ion-col>
@@ -187,7 +187,8 @@ export default defineComponent({
         },
         async navigateTo(id: any, route: string) {
             const patient = await PatientService.findByID(id);
-            this.setDemographics(patient);
+            console.log("🚀 ~ navigateTo ~ patient:", patient);
+            await this.setServerRecord(patient);
             this.$router.push(route);
         },
         async handleAbscond(visitId: any) {

@@ -279,14 +279,14 @@ export default defineComponent({
             else {
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                this.setDemographics(await PatientService.findByID(this.patient.patientID));
+                await this.setServerRecord(await PatientService.findByID(this.patient.patientID));
                 await this.saveEnrollment();
                 await resetNCDPatientData();
                 await UserService.setProgramUserActions();
                 if (this.NCDActivities.length == 0) {
-                    this.$router.push("patientProfile");
+                    this.route = "patientProfile";
                 } else {
-                    this.$router.push("consultationPlan");
+                    this.route = "consultationPlan";
                 }
             }
         },

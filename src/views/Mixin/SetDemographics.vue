@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, toRaw } from "vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { getPersonAttribute } from "@/interfaces/personAttribute";
 import workerData from "@/activate_worker";
@@ -9,6 +9,8 @@ export default defineComponent({
     data: () => ({
         districtList: [] as any,
         workerApi: "" as any,
+        doneLoading: false,
+        route: "" as any,
     }),
     computed: {
         ...mapState(useDemographicsStore, ["patient"]),
@@ -16,10 +18,34 @@ export default defineComponent({
     mounted() {
         this.workerApi = workerData.workerApi;
     },
+    watch: {
+        workerApi: {
+            async handler() {
+                if (this.workerApi?.data?.msg == "done building patient record") {
+                    this.setOfflineRecord(this.workerApi?.data?.payload);
+                    workerData.postData("RESET");
+                    this.doneLoading = true;
+                    if (this.route) this.$router.push(this.route);
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
+    },
     methods: {
-        setDemographics(item: any) {
+        setOfflineRecord(item: any) {
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
+            if (this.route) this.$router.push(this.route);
+        },
+        async setServerRecord(item: any) {
+            const patientRecord = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
+            if (patientRecord) {
+                this.setOfflineRecord(patientRecord);
+            } else {
+                this.workerApi = workerData.workerApi;
+                workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
+            }
         },
         getPatientIdentifier(identifiers: any, id: any) {
             if (identifiers) {
@@ -40,7 +66,7 @@ export default defineComponent({
             return addressComponents.filter(Boolean).join(",");
         },
         async getOfflinePatientData() {
-            this.setDemographics(await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false));
+            this.setOfflineRecord(await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false));
         },
     },
 });

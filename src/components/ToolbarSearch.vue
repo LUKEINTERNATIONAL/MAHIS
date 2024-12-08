@@ -189,8 +189,6 @@ import { getUserLocation } from "@/services/userService";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import dates from "@/utils/Date";
 import workerData from "@/activate_worker";
-import { getOfflineRecords } from "@/services/offline_service";
-
 export default defineComponent({
     name: "ToolbarSearch",
     mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
@@ -297,17 +295,6 @@ export default defineComponent({
         };
     },
     watch: {
-        workerApi: {
-            async handler() {
-                if (this.workerApi?.data?.msg == "done building patient record") {
-                    this.setDemographics(this.workerApi?.data?.payload);
-                    workerData.postData("RESET");
-                    await this.openNewPage();
-                }
-            },
-            deep: true,
-            immediate: true,
-        },
         page() {
             this.searchDemographicPayload(this.searchText);
         },
@@ -456,22 +443,17 @@ export default defineComponent({
         async setOfflineDemo(data: any) {
             this.popoverOpen = false;
             await resetPatientData();
-            this.setDemographics(data);
-            let url = "/patientProfile";
-            this.$router.push(url);
+            this.setOfflineRecord(data);
+            this.route = "/patientProfile";
+            await this.openNewPage();
+            this.$router.push(this.route);
         },
         async setPatientData(url: any, item: any) {
-            this.url = url;
+            this.route = url;
             this.popoverOpen = false;
             this.searchValue = "";
-            const allData = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
-            if (allData) {
-                this.setDemographics(allData);
-                await this.openNewPage();
-            } else {
-                this.workerApi = workerData.workerApi;
-                workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
-            }
+            await this.openNewPage();
+            await this.setServerRecord(item);
         },
         async openNewPage() {
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
@@ -492,22 +474,18 @@ export default defineComponent({
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 if (this.programID() == 32) {
-                    this.$router.push("NCDDispensations");
+                    this.route = "NCDDispensations";
                 } else {
-                    this.$router.push("dispensation");
+                    this.route = "dispensation";
                 }
             } else if (roles.some((role: any) => role.role === "Lab")) {
-                this.$router.push("OPDConsultationPlan");
+                this.route = "OPDConsultationPlan";
             } else if (userPrograms?.length == 1) {
                 if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
-                    this.$router.push("OPDvitals");
-                } else {
-                    this.$router.push(this.url);
+                    this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32) {
-                this.$router.push(this.NCDUserActions.url);
-            } else {
-                this.$router.push(this.url);
+                this.route = this.NCDUserActions.url;
             }
         },
         getPhone(item: any) {

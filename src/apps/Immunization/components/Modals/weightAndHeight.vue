@@ -79,7 +79,6 @@ import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
 import db from "@/db";
-import { getOfflineRecords } from "@/services/offline_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -172,8 +171,7 @@ export default defineComponent({
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
 
             if (weight == null && height == null) {
-                const allData = await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false);
-                let unSaveVitals = allData?.vitals;
+                let unSaveVitals = this.patient?.vitals;
                 unSaveVitals.unsaved = [
                     ...unSaveVitals.unsaved,
                     {

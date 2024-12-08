@@ -64,9 +64,11 @@ import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
 import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 
 export default defineComponent({
     name: "Home",
+    mixins: [SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -172,18 +174,9 @@ export default defineComponent({
             else return "";
         },
         async openNewPage(url: any, item: any) {
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient(item);
-            demographicsStore.setDemographics({
-                name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
-                mrn: this.patientIdentifier(item),
-                birthdate: item.person.birthdate,
-                category: "",
-                gender: item.person.gender,
-                patient_id: item.patient_id,
-            });
+            this.route = url;
+            await this.setServerRecord(item);
             await resetPatientData();
-            this.$router.push(url);
         },
 
         openPopover(e: any) {

@@ -113,9 +113,11 @@ import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 
 export default defineComponent({
     name: "Home",
+    mixins: [SetDemographics],
     username: "",
     components: {
         IonContent,
@@ -281,30 +283,7 @@ export default defineComponent({
         },
         async updatePatientDemographics() {
             const item = await PatientService.findByID(this.patient.patientID);
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient(item);
-            let fullName = "";
-            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
-            } else {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
-            }
-            demographicsStore.setDemographics({
-                active: true,
-                name: fullName,
-                mrn: this.patientIdentifier(item),
-                birthdate: item.person.birthdate,
-                category: "",
-                gender: item.person.gender,
-                patient_id: item.patient_id,
-                address:
-                    item?.person?.addresses[0]?.state_province +
-                    "," +
-                    item?.person?.addresses[0]?.township_division +
-                    "," +
-                    item?.person?.addresses[0]?.city_village,
-                phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
-            });
+            await this.setServerRecord(item);
         },
         patientIdentifier(item: any) {
             // return item
