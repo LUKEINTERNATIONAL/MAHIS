@@ -174,9 +174,9 @@ export default defineComponent({
             else return "";
         },
         async openNewPage(url: any, item: any) {
+            this.route = url;
             this.setServerRecord(item);
             await resetPatientData();
-            this.$router.push(url);
         },
 
         openPopover(e: any) {
