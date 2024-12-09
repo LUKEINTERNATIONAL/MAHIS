@@ -60,11 +60,11 @@ import BasicForm from "@/components/BasicForm.vue";
 import { toastWarning } from "@/utils/Alerts";
 import "datatables.net-select";
 import { PatientService } from "@/services/patient_service";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser, SetDemographics],
+    mixins: [SetUser],
     components: {
         IonContent,
         IonHeader,
@@ -130,8 +130,8 @@ export default defineComponent({
     methods: {
         async handleFollowUp(id: any) {
             const patientData = await PatientService.findByID(id);
-            this.route = "patientProfile";
-            await this.setPatientRecord(patientData);
+            useWorkerStore().route = "patientProfile";
+            useWorkerStore().setPatientRecord(patientData);
         },
         async handleInputData(event: any) {
             if (event.inputHeader == "Start date") {

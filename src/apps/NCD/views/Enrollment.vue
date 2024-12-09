@@ -167,10 +167,8 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { UserService } from "@/services/user_service";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { resetPatientData } from "@/services/reset_data";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
-
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
-    mixins: [SetDemographics],
     name: "Home",
     components: {
         IonContent,
@@ -279,14 +277,14 @@ export default defineComponent({
             else {
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                await this.setPatientRecord(await PatientService.findByID(this.patient.patientID));
+                useWorkerStore().setPatientRecord(await PatientService.findByID(this.patient.patientID));
                 await this.saveEnrollment();
                 await resetNCDPatientData();
                 await UserService.setProgramUserActions();
                 if (this.NCDActivities.length == 0) {
-                    this.route = "patientProfile";
+                    useWorkerStore().route = "patientProfile";
                 } else {
-                    this.route = "consultationPlan";
+                    useWorkerStore().route = "consultationPlan";
                 }
             }
         },
