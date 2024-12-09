@@ -264,8 +264,7 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             const appointment_service = new Appointment();
             const data = await appointment_service.getNextAppointment();
-            const appointmentDate = data?.next_appointment_date ? data.next_appointment_date : "";
-            store.setNextAppointMentDate(appointmentDate);
+            data?.next_appointment_date ? store.setNextAppointMentDate(data.next_appointment_date) : "";
         },
     },
 });
