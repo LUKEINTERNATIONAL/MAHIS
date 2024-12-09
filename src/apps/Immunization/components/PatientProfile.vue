@@ -377,7 +377,7 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
-                if (data.name == "patientProfile" && this.patient) {
+                if (data.name == "patientProfile" && this.patient.patientID) {
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
                 }
@@ -385,7 +385,7 @@ export default defineComponent({
         },
         patient: {
             async handler() {
-                if (this.patient) {
+                if (this.patient.patientID) {
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
                     if (!this.patient.active) await this.openFollowModal();
