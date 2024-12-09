@@ -111,7 +111,7 @@ export default defineComponent({
             createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
         },
         async loadVaccineSchedule() {
-            this.setAppointmentDate()
+            this.setAppointmentDate();
             const data__ = await getVaccinesSchedule();
             const vaccineScheduleStore = useAdministerVaccineStore();
 
@@ -126,7 +126,7 @@ export default defineComponent({
 
             vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
                 this.findMissingVaccines(vaccineSchudule);
-                
+
                 this.findPreviouslyAdministeredVaccineSchedule(vaccineSchudule);
                 this.handleSchedule(vaccineSchudule);
                 const obj = { visit: vaccineSchudule.visit, age: vaccineSchudule.age };
@@ -243,16 +243,15 @@ export default defineComponent({
             }
         },
         findPreviouslyAdministeredVaccineSchedule(milestone: any) {
-            const vaccinesPreviouslyAdministered = [] as any
+            const vaccinesPreviouslyAdministered = [] as any;
             milestone.antigens.forEach((vaccine: any) => {
-                    if (vaccine.status == "administered") {
-                        vaccinesPreviouslyAdministered.push(vaccine)
-                    }
-
-                })
+                if (vaccine.status == "administered") {
+                    vaccinesPreviouslyAdministered.push(vaccine);
+                }
+            });
             if (vaccinesPreviouslyAdministered.length > 0) {
-                const vaccineScheduleStore = useAdministerVaccineStore()
-                vaccineScheduleStore.setLastVaccinesGiven(vaccinesPreviouslyAdministered)
+                const vaccineScheduleStore = useAdministerVaccineStore();
+                vaccineScheduleStore.setLastVaccinesGiven(vaccinesPreviouslyAdministered);
             }
         },
         reloadVaccines() {
@@ -265,8 +264,8 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             const appointment_service = new Appointment();
             const data = await appointment_service.getNextAppointment();
-            const appointmentDate = data.next_appointment_date ? data.next_appointment_date : ''
-            store.setNextAppointMentDate(appointmentDate)
+            const appointmentDate = data?.next_appointment_date ? data.next_appointment_date : "";
+            store.setNextAppointMentDate(appointmentDate);
         },
     },
 });
