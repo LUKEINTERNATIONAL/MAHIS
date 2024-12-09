@@ -108,6 +108,7 @@ import { calendarOutline, checkmark, pulseOutline, eyeOutline } from "ionicons/i
 import { PatientService } from "@/services/patient_service";
 import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
 import { Service } from "@/services/service";
+import { useWorkerStore } from "@/stores/workerStore";
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
@@ -181,7 +182,7 @@ export default defineComponent({
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
             this.isPharmacist();
-            await this.setPatientRecord(patientData[0]);
+            useWorkerStore().setPatientRecord(patientData[0]);
         },
         isPharmacist() {
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
@@ -189,9 +190,9 @@ export default defineComponent({
             if (roles.some((role: any) => roles.some((role: any) => role.role === "Pharmacist"))) {
                 this.$router.push("dispensation");
                 if (Service.getProgramID() == 32) {
-                    this.route = "NCDDispensations";
+                    useWorkerStore().route = "NCDDispensations";
                 } else {
-                    this.route = "patientProfile";
+                    useWorkerStore().route = "patientProfile";
                 }
             }
         },
