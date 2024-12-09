@@ -395,7 +395,7 @@ export default defineComponent({
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
             this.setURLs();
-            this.setPatientRecord(patientData);
+            this.workerStore.setPatientRecord(patientData);
         },
 
         validateGaudiarnInfo() {
@@ -486,7 +486,7 @@ export default defineComponent({
                         // workerData.postData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
                         // this.savePatientRecord(offlinePatientData);
                     } else {
-                        this.setPatientRecord(offlinePatientData);
+                        this.workerStore.setPatientRecord(offlinePatientData);
                     }
                 } else {
                     toastWarning("Please complete all required fields");
@@ -588,10 +588,8 @@ export default defineComponent({
             this.disableSaveBtn = false;
             if (this.programID() == 32) {
                 this.workerStore.route = this.NCDUserActions.url;
-            } else if (this.programID() != 33) {
+            } else if (this.programID()) {
                 this.workerStore.route = "/patientProfile";
-            } else {
-                this.$router.push("/patientProfile");
             }
         },
         patientIdentifier(item: any) {
