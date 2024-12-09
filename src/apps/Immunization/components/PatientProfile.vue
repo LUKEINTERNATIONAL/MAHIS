@@ -301,9 +301,8 @@ import PatientProfileVue from "@/views/PatientProfile.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import Enrollment from "@/apps/NCD/views/Enrollment.vue";
 import { PatientProgramService } from "@/services/patient_program_service";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 export default defineComponent({
-    mixins: [PatientProfileMixin, SetDemographics],
+    mixins: [PatientProfileMixin],
     name: "Home",
     components: {
         IonContent,

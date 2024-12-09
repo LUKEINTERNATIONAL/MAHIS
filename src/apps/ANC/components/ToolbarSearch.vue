@@ -59,11 +59,10 @@ import DynButton from "@/components/DynamicButton.vue";
 import { createModal } from "@/utils/Alerts";
 import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 
 export default defineComponent({
     name: "Home",
-    mixins: [SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -119,8 +118,8 @@ export default defineComponent({
             else return "";
         },
         async openNewPage(url: any, item: any) {
-            this.route = url;
-            await this.setPatientRecord(item);
+            useWorkerStore().route = url;
+            useWorkerStore().setPatientRecord(item);
             await resetPatientData();
         },
 

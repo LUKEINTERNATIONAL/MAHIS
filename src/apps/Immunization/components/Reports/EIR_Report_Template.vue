@@ -74,17 +74,15 @@ import { defineComponent } from "vue";
 import { IonContent, IonPage, IonRow, IonCol, IonFab, IonFabButton } from "@ionic/vue";
 import NavigationMenu from "./NavigationMenu.vue";
 import { mapState } from "pinia";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { getVaccinesAdministered, getImmunizationVaccineNames, exportReportToCSV } from "@/apps/Immunization/services/vaccines_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { add, fileTray, downloadOutline } from "ionicons/icons";
 import PersonCardComponent from "@/apps/Immunization/components/Modals/PersonCardComponent.vue";
 import { createModal } from "@/utils/Alerts";
 import { PatientService } from "@/services/patient_service";
-
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
     name: "TableComponent",
-    mixins: [SetDemographics],
     components: { IonContent, IonPage, IonFab, IonFabButton, NavigationMenu, IonRow, IonCol, PersonCardComponent },
     data() {
         return {
@@ -177,8 +175,8 @@ export default defineComponent({
             patientData.patient_identifiers.forEach(async (indnt: any) => {
                 if (indnt.identifier_type == 3) {
                     const patientData2 = await PatientService.findByNpid(indnt.identifier);
-                    this.route = "patientProfile";
-                    await this.setPatientRecord(patientData2[0]);
+                    useWorkerStore().route = "patientProfile";
+                    useWorkerStore().setPatientRecord(patientData2[0]);
                 }
             });
         },
