@@ -130,14 +130,13 @@ import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 import { getPatientsList } from "@/apps/OPD/services/opd_dashboard";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import { getUserLocation } from "@/services/userService";
+import { useWorkerStore } from "@/stores/workerStore";
 
 export default defineComponent({
-    mixins: [SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -167,6 +166,7 @@ export default defineComponent({
             batchNumber: "" as any,
             clientDetails: [] as any,
             dueData: [] as any,
+            workerStore: useWorkerStore() as any,
             options: {
                 responsive: true,
                 select: false,
@@ -236,8 +236,9 @@ export default defineComponent({
         },
         async navigateTo(id: any, route: string) {
             const patient = await PatientService.findByID(id);
-            this.route = route;
-            await this.setPatientRecord(patient);
+            console.log("🚀 ~ navigateTo ~ patient:", patient);
+            useWorkerStore().route = route;
+            useWorkerStore().setPatientRecord(patient);
         },
         async handleAbscond(patient: any) {
             try {

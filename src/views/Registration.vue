@@ -147,14 +147,14 @@ import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { UserService } from "@/services/user_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
-    mixins: [ScreenSizeMixin, Districts, SetDemographics],
+    mixins: [ScreenSizeMixin, Districts],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -191,6 +191,7 @@ export default defineComponent({
             checkUnderSixWeeks: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             disableSaveBtn: false,
+            workerStore: useWorkerStore() as any,
         };
     },
     props: ["registrationType"],
@@ -443,7 +444,7 @@ export default defineComponent({
         },
         async createPatient() {
             const ddeIds = await getOfflineRecords("dde");
-            if (ddeIds) {
+            if (ddeIds.ids.length > 0) {
                 this.ddeId = ddeIds.ids[0].npid;
 
                 const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
@@ -476,18 +477,16 @@ export default defineComponent({
 
                     const offlinePatientData = await this.createOfflineRecord();
 
-                    const dde = await getOfflineRecords("dde");
-                    if (dde) {
-                        dde.ids = dde.ids.slice(1);
-                        await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
+                    ddeIds.ids = ddeIds.ids.slice(1);
+                    await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: ddeIds });
+                    await this.setURLs();
+                    if (this.apiStatus) {
                         await workerData.postData("SYNC_DDE");
-                        await this.setURLs();
-                        if (this.apiStatus) this.savePatientRecord(offlinePatientData);
-                        else {
-                            this.setPatientRecord(offlinePatientData);
-                        }
+                        this.workerStore.postWorkerData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
+                        // workerData.postData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
+                        // this.savePatientRecord(offlinePatientData);
                     } else {
-                        toastDanger("No dde ids available");
+                        this.setPatientRecord(offlinePatientData);
                     }
                 } else {
                     toastWarning("Please complete all required fields");
@@ -588,9 +587,9 @@ export default defineComponent({
             this.isLoading = false;
             this.disableSaveBtn = false;
             if (this.programID() == 32) {
-                this.route = this.NCDUserActions.url;
+                this.workerStore.route = this.NCDUserActions.url;
             } else if (this.programID() != 33) {
-                this.route = "/patientProfile";
+                this.workerStore.route = "/patientProfile";
             } else {
                 this.$router.push("/patientProfile");
             }

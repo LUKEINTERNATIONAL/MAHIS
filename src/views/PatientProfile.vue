@@ -361,10 +361,8 @@ import dates from "@/utils/Date";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { useANCEnrollmentStore } from "@/apps/ANC/store/enrollment/ANCEnrollment";
 import { ConfirmPregnancyService } from "@/apps/ANC/service/confirm_pregnancy_service";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
-
 export default defineComponent({
-    mixins: [SetPrograms, PatientProfileMixin, SetDemographics],
+    mixins: [SetPrograms, PatientProfileMixin],
     components: {
         WeightHeightChart,
         PreviousVitals,

@@ -86,12 +86,11 @@ import { Service } from "@/services/service";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import { PatientService } from "@/services/patient_service";
 import dates from "@/utils/Date";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import { getUserLocation } from "@/services/userService";
 
 export default defineComponent({
-    mixins: [SetDemographics],
     components: {
         IonRow,
         IonCol,
@@ -188,7 +187,7 @@ export default defineComponent({
         async navigateTo(id: any, route: string) {
             const patient = await PatientService.findByID(id);
             console.log("🚀 ~ navigateTo ~ patient:", patient);
-            await this.setPatientRecord(patient);
+            useWorkerStore().setPatientRecord(patient);
             this.$router.push(route);
         },
         async handleAbscond(visitId: any) {
