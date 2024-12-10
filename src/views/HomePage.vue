@@ -191,6 +191,7 @@ export default defineComponent({
         await workerData.postData("SET_OFFLINE_LOCATION");
         await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
         await workerData.postData("SYNC_DDE");
+        await workerData.postData("SYNC_STOCK_RECORD");
         await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
         resetDemographics();
         await useGlobalPropertyStore().loadGlobalProperty();
