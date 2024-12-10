@@ -394,8 +394,8 @@ export class PatientService extends Service {
         return addressOBJ;
     }
 
-    public static async getCachedClientProfileDuplicates() {
-        const res = await Service.getJson("/dde/patients/matches");
+    public static async getCachedClientProfileDuplicates(page = 1, pageSize = 10) {
+        const res = await Service.getJson(`/dde/patients/matches?page=${page}&page_size=${pageSize}`);
         return res;
     }
 }

@@ -1,18 +1,23 @@
 <template>
   <ion-page>
     <NavigationMenu/>
+    <ion-header style="background-color: transparent;" class="ion-no-border">
+      <ion-row>
+        <ion-col size="12" size-md="10" size-lg="8" offset-md="1" offset-lg="2">
+          <ion-searchbar
+            placeholder="Search clients"
+            v-model="searchQuery"
+            @ionInput="filterClients"
+          />
+        </ion-col>
+      </ion-row>
+    </ion-header>
     <ion-content>
       <ion-grid>
         <ion-row>
           <ion-col size="12" size-md="10" size-lg="8" offset-md="1" offset-lg="2">
-            <h2 class="ion-padding" style="font-size: large;">Client Deduplication</h2>
             <ion-card>
               <ion-card-content>
-                <ion-searchbar
-                  placeholder="Search clients"
-                  v-model="searchQuery"
-                  @ionInput="filterClients"
-                ></ion-searchbar>
                 <ion-list>
                   <div v-for="client in filteredClients" :key="client.primary_patient_id" class="client-container">
                     <div class="sticky-header">
@@ -33,7 +38,7 @@
                     </div>
                     
                     <div v-if="selectedPrimaryClient === client" class="client-details">
-                      <ion-card>
+                      <ion-card style="margin-bottom: 10px; margin-top: 5px;">
                         <ion-card-header color="light">
                           <ion-card-subtitle>Primary Client Details</ion-card-subtitle>
                         </ion-card-header>
@@ -106,15 +111,31 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+
     </ion-content>
+    <!-- Footer -->
+    <ion-footer class="sticky-footer">
+      <ion-row>
+        <ion-col size="12" style="max-width: 100%;">
+          <bottomNavBar
+            v-if="showNavBar"
+            :totalItems="totalCount"
+            :currentPage="currentPage"
+            :itemsPerPage="itemsPer_Page"
+            @update:pagination="handlePaginationUpdate"
+          />
+        </ion-col>
+      </ion-row>
+    </ion-footer>
   </ion-page>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import { IonContent, IonGrid, IonPage, IonRow, IonCol, IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonCheckbox, IonButton, IonIcon, IonAvatar, IonBadge, IonCardSubtitle, IonSearchbar, IonItemSliding, IonItemOption, IonItemOptions } from "@ionic/vue";
+import { IonContent, IonGrid, IonPage, IonRow, IonCol, IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonCheckbox, IonButton, IonIcon, IonAvatar, IonBadge, IonCardSubtitle, IonSearchbar, IonItemSliding, IonItemOption, IonItemOptions, IonFooter, IonHeader } from "@ionic/vue";
 import { personCircle, calendar, male, female, fingerPrint, location, linkOutline, chevronDown, chevronUp } from 'ionicons/icons';
 import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMenu.vue";
+import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
 import { PatientService } from "@/services/patient_service";
 import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
@@ -125,7 +146,7 @@ export default defineComponent({
     IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonLabel, 
     IonCard, IonCardHeader, IonPage, IonCardTitle, IonCardContent, IonCheckbox, IonButton, 
     IonIcon, IonAvatar, IonBadge, NavigationMenu, IonCardSubtitle, IonSearchbar,
-    IonItemSliding, IonItemOption, IonItemOptions
+    IonItemSliding, IonItemOption, IonItemOptions, IonFooter, bottomNavBar, IonHeader,
   },
   setup() {
     const clients = ref([]);
@@ -133,6 +154,16 @@ export default defineComponent({
     const selectedPrimaryClient = ref(null);
     const programId = ref(33);
     const searchQuery = ref('');
+    const totalCount = ref(0)
+    const currentPage = ref(1);
+    const itemsPer_Page = ref(10);
+    const showNavBar = computed(() => true);
+
+    const handlePaginationUpdate = async ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
+      currentPage.value = page;
+      itemsPer_Page.value = itemsPerPage;
+      await initNavData()
+    };
 
     const toggleClientDetails = (client: any) => {
       if (selectedPrimaryClient.value === client) {
@@ -166,11 +197,16 @@ export default defineComponent({
     };
 
     const initNavData = async () => {
-      const store = EIRreportsStore();
-      store.setNavigationPayload('Client De-Duplication', true, false, '/', 'home', '');
-      const duplicateClients = await PatientService.getCachedClientProfileDuplicates();
-      clients.value = duplicateClients.map((client: any[]) => client[0]);
-      filteredClients.value = clients.value;
+      try {
+        const store = EIRreportsStore();
+        store.setNavigationPayload('Client De-Duplication', true, false, '/', 'home', '');
+        const duplicateClients = await PatientService.getCachedClientProfileDuplicates(currentPage.value, itemsPerPage.value);
+        clients.value = duplicateClients.results.map((client: any[]) => client[0]);
+        totalCount.value = duplicateClients.count;
+        filteredClients.value = clients.value;
+      } catch (error) {
+        
+      }
     };
 
     const getGenderIcon = (gender: string) => {
@@ -214,7 +250,12 @@ export default defineComponent({
       location,
       linkOutline,
       chevronDown,
-      chevronUp
+      chevronUp,
+      showNavBar,
+      totalCount,
+      currentPage,
+      itemsPer_Page,
+      handlePaginationUpdate,
     };
   },
   watch: {
@@ -277,10 +318,21 @@ h2 {
 ion-searchbar {
   --background: var(--ion-color-light);
   --border-radius: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 1px;
 }
 
 ion-item-sliding {
   margin-bottom: 8px;
+}
+
+.sticky-footer {
+  margin-top: auto;
+  position: relative;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+ion-footer {
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 </style>
