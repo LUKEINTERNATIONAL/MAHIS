@@ -66,8 +66,6 @@ import ApiClient from "@/services/api_client";
 import { Appointment } from "../apps/Immunization/services/immunization_appointment_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
-
 import NCDDashboard from "@/apps/NCD/components/NCDDashboard.vue";
 import ImmunizationDashboard from "@/apps/Immunization/components/ImmunizationDashboard.vue";
 import OPDDashboard from "@/apps/OPD/components/OPDDashboard.vue";
@@ -90,7 +88,7 @@ import { useStatusStore } from "@/stores/StatusStore";
 
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser, SetDemographics, SetPrograms, SetUserRole],
+    mixins: [SetUser, SetPrograms, SetUserRole],
     components: {
         IonContent,
         IonHeader,
@@ -192,8 +190,9 @@ export default defineComponent({
         this.workerApi = workerData.workerApi;
         await workerData.postData("SET_OFFLINE_LOCATION");
         await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
-        await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
         await workerData.postData("SYNC_DDE");
+        await workerData.postData("SYNC_STOCK_RECORD");
+        await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
         resetDemographics();
         await useGlobalPropertyStore().loadGlobalProperty();
         this.isLoading = false;

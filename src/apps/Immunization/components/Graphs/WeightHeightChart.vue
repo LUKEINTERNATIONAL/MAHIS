@@ -73,16 +73,20 @@ export default defineComponent({
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
     async mounted() {
-        await this.updateData();
-        await this.changeGraph("weight");
-        await this.displayWeightGraph();
+        if (this.patient?.vitals) {
+            await this.updateData();
+            await this.changeGraph("weight");
+            await this.displayWeightGraph();
+        }
     },
     watch: {
         patient: {
             async handler() {
-                await this.updateData();
-                await this.changeGraph("weight");
-                await this.displayWeightGraph();
+                if (this.patient?.vitals) {
+                    await this.updateData();
+                    await this.changeGraph("weight");
+                    await this.displayWeightGraph();
+                }
             },
             deep: true,
         },
@@ -171,7 +175,6 @@ export default defineComponent({
         },
         async changeGraph(name: any) {
             this.propsContent.list = this.list;
-            console.log("🚀 ~ changeGraph ~ this.propsContent.list:", this.propsContent.list);
             this.activeGraph = name;
             this.setActive(name);
             this.propsContent.weight = this.weight;
@@ -189,16 +192,18 @@ export default defineComponent({
         },
         async setValues() {
             this.dataset = [];
-            this.currentHeight = await getOfflineFirstObsValue(
-                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
-                "value_numeric",
-                5090
-            );
-            this.currentWeight = await getOfflineFirstObsValue(
-                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
-                "value_numeric",
-                5089
-            );
+            if (this.patient?.vitals?.unsaved?.length > 0) {
+                this.currentHeight = await getOfflineFirstObsValue(
+                    [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
+                    "value_numeric",
+                    5090
+                );
+                this.currentWeight = await getOfflineFirstObsValue(
+                    [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
+                    "value_numeric",
+                    5089
+                );
+            }
         },
         async displayWeightGraph() {
             this.stepSize = 3;

@@ -75,7 +75,7 @@
                 class="search_result clickable-row"
                 v-for="(item, index) in offlineFilteredPatients"
                 :key="index"
-                @click="setOfflineDemo(item)"
+                @click="setPatientData('/patientProfile', item)"
             >
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                     item.personInformation.given_name + " " + item.personInformation.family_name
@@ -167,7 +167,7 @@ import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
 import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 import DeviceDetection from "@/views/Mixin/DeviceDetection.vue";
 import { scannedData, extractDetails } from "@/services/national_id";
 import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
@@ -191,7 +191,7 @@ import dates from "@/utils/Date";
 import workerData from "@/activate_worker";
 export default defineComponent({
     name: "ToolbarSearch",
-    mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
+    mixins: [DeviceDetection, SetPersonInformation],
     components: {
         IonContent,
         IonHeader,
@@ -440,20 +440,12 @@ export default defineComponent({
                 });
             }
         },
-        async setOfflineDemo(data: any) {
-            this.popoverOpen = false;
-            await resetPatientData();
-            this.setOfflineRecord(data);
-            this.route = "/patientProfile";
-            await this.openNewPage();
-            this.$router.push(this.route);
-        },
         async setPatientData(url: any, item: any) {
-            this.route = url;
+            useWorkerStore().route = url;
             this.popoverOpen = false;
             this.searchValue = "";
             await this.openNewPage();
-            await this.setServerRecord(item);
+            await useWorkerStore().setPatientRecord(item);
         },
         async openNewPage() {
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
@@ -474,18 +466,18 @@ export default defineComponent({
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 if (this.programID() == 32) {
-                    this.route = "NCDDispensations";
+                    useWorkerStore().route = "NCDDispensations";
                 } else {
-                    this.route = "dispensation";
+                    useWorkerStore().route = "dispensation";
                 }
             } else if (roles.some((role: any) => role.role === "Lab")) {
-                this.route = "OPDConsultationPlan";
+                useWorkerStore().route = "OPDConsultationPlan";
             } else if (userPrograms?.length == 1) {
                 if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
-                    this.route = "OPDvitals";
+                    useWorkerStore().route = "OPDvitals";
                 }
             } else if (this.programID() == 32) {
-                this.route = this.NCDUserActions.url;
+                useWorkerStore().route = this.NCDUserActions.url;
             }
         },
         getPhone(item: any) {

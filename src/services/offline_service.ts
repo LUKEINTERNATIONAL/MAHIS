@@ -1,9 +1,9 @@
 import db from "@/db";
 
-export async function getOfflineRecords(objStore: string, whereClause?: any, returnFirst: boolean = true) {
+export async function getOfflineRecords(objStore: string, whereClause: any = "", returnFirst: boolean = true) {
     let query = db.collection(objStore);
 
-    if (whereClause) {
+    if (whereClause && objStore !== "relationship") {
         query = query.doc(whereClause);
     }
 

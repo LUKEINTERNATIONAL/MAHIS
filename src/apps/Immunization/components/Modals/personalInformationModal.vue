@@ -113,11 +113,9 @@ import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
-
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
     name: "Home",
-    mixins: [SetDemographics],
     username: "",
     components: {
         IonContent,
@@ -283,7 +281,7 @@ export default defineComponent({
         },
         async updatePatientDemographics() {
             const item = await PatientService.findByID(this.patient.patientID);
-            await this.setServerRecord(item);
+            useWorkerStore().setPatientRecord(item);
         },
         patientIdentifier(item: any) {
             // return item

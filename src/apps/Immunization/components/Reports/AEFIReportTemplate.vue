@@ -44,7 +44,7 @@ import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { PatientService } from "@/services/patient_service";
 import { createModal } from "@/utils/Alerts";
 import PersonCardComponent from "@/apps/Immunization/components/Modals/PersonCardComponent.vue";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 interface Category {
     cases: Case[];
 }
@@ -74,7 +74,6 @@ interface AefiReportData {
 
 export default defineComponent({
     name: "TableComponent",
-    mixins: [SetDemographics],
     components: { IonContent, IonPage, IonRow, IonCol },
     data() {
         const personsDemoData = ref([]) as any;
@@ -211,8 +210,8 @@ export default defineComponent({
         async openPatientProfile(client_id: any) {
             this.personsDemoData.value.forEach(async (person: any) => {
                 if (person[0].patient_id == client_id) {
-                    this.route = "patientProfile";
-                    await this.setServerRecord(person[0]);
+                    useWorkerStore().route = "patientProfile";
+                    useWorkerStore().setPatientRecord(person[0]);
                     return;
                 }
             });

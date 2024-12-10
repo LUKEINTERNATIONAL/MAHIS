@@ -53,7 +53,8 @@ export class Appointment extends AppEncounterService {
     }
 
     async getNextAppointment() {
-        return AppEncounterService.getJson(`/programs/${this.programID}/patients/${this.patientID}/next_appointment_date`, { date: this.date });
+        if (this.programID && this.patientID)
+            return AppEncounterService.getJson(`/programs/${this.programID}/patients/${this.patientID}/next_appointment_date`, { date: this.date });
     }
 
     async getDailiyAppointments(date: any) {

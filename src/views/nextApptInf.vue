@@ -63,7 +63,7 @@ import { calendarOutline, trashOutline, personCircleOutline, eyeOutline } from "
 import { createModal } from "@/utils/Alerts";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 import { PatientService } from "@/services/patient_service";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 import { voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
 import _ from "lodash";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
@@ -74,7 +74,6 @@ import smsConfirmation from "@/apps/Immunization/components/Modals/smsConfirmati
 import { SmsService } from "@/apps/Immunization/services/sms_service";
 export default defineComponent({
     name: "PersonCard",
-    mixins: [SetDemographics],
     components: {
         IonCard,
         IonCardContent,
@@ -114,7 +113,7 @@ export default defineComponent({
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
-            await this.setServerRecord(patientData[0]);
+            useWorkerStore().setPatientRecord(patientData[0]);
             this.$router.push("patientProfile");
         },
         async voidAppoinment() {

@@ -147,14 +147,14 @@ import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import { UserService } from "@/services/user_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
-    mixins: [ScreenSizeMixin, Districts, SetDemographics],
+    mixins: [ScreenSizeMixin, Districts],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -191,6 +191,7 @@ export default defineComponent({
             checkUnderSixWeeks: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             disableSaveBtn: false,
+            workerStore: useWorkerStore() as any,
         };
     },
     props: ["registrationType"],
@@ -265,16 +266,6 @@ export default defineComponent({
         this.checkAge();
     },
     watch: {
-        workerApi: {
-            async handler() {
-                if (this.workerApi?.data == "Done Saving") {
-                    toastSuccess("Saved on server successfully");
-                    await this.redirection();
-                }
-            },
-            deep: true,
-            immediate: true,
-        },
         personInformation: {
             handler() {
                 const data = useRegistrationStore();
@@ -301,24 +292,6 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
-        async redirection() {
-            await db
-                .collection("patientRecords")
-                .doc({ ID: this.ddeId })
-                .get()
-                .then(async (document: any) => {
-                    const dde = await getOfflineRecords("dde");
-                    if (dde) {
-                        dde.ids = dde.ids.slice(1);
-                        await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
-                        await workerData.postData("SYNC_DDE");
-                        await this.openNewPage(document);
-                        await workerData.terminate();
-                    } else {
-                        toastDanger("Not able to remove used DDE id");
-                    }
-                });
-        },
         async cancel(event: any) {
             const deleteConfirmed = await popoverConfirmation(`Do you want to cancel registration?`, "", {
                 confirmBtnLabel: "Yes",
@@ -421,7 +394,8 @@ export default defineComponent({
         },
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
-            this.openNewPage(patientData);
+            this.setURLs();
+            this.workerStore.setPatientRecord(patientData);
         },
 
         validateGaudiarnInfo() {
@@ -470,7 +444,7 @@ export default defineComponent({
         },
         async createPatient() {
             const ddeIds = await getOfflineRecords("dde");
-            if (ddeIds) {
+            if (ddeIds.ids.length > 0) {
                 this.ddeId = ddeIds.ids[0].npid;
 
                 const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
@@ -503,17 +477,16 @@ export default defineComponent({
 
                     const offlinePatientData = await this.createOfflineRecord();
 
-                    const dde = await getOfflineRecords("dde");
-                    if (dde) {
-                        dde.ids = dde.ids.slice(1);
-                        await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: dde });
+                    ddeIds.ids = ddeIds.ids.slice(1);
+                    await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: ddeIds });
+                    await this.setURLs();
+                    if (this.apiStatus) {
                         await workerData.postData("SYNC_DDE");
-                        if (this.apiStatus) await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Saving" });
-                        if (this.programID() == 32) {
-                            if (!this.apiStatus) await this.redirection();
-                        } else await this.openNewPage(offlinePatientData);
+                        this.workerStore.postWorkerData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
+                        // workerData.postData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
+                        // this.savePatientRecord(offlinePatientData);
                     } else {
-                        toastDanger("No dde ids available");
+                        this.workerStore.setPatientRecord(offlinePatientData);
                     }
                 } else {
                     toastWarning("Please complete all required fields");
@@ -608,17 +581,15 @@ export default defineComponent({
                 return this.birthID;
             } else return "";
         },
-        async openNewPage(item: any) {
+        async setURLs() {
             await resetPatientData();
-            this.setOfflineRecord(item);
             if (this.apiStatus) await UserService.setProgramUserActions();
             this.isLoading = false;
             this.disableSaveBtn = false;
             if (this.programID() == 32) {
-                this.$router.push(this.NCDUserActions.url);
-            } else {
-                let url = "/patientProfile";
-                this.$router.push(url);
+                this.workerStore.route = this.NCDUserActions.url;
+            } else if (this.programID()) {
+                this.workerStore.route = "/patientProfile";
             }
         },
         patientIdentifier(item: any) {

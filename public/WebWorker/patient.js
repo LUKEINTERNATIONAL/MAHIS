@@ -191,7 +191,6 @@ const patientService = {
         await this.saveValueCodedObs("Type of patient", "New Patient", encounterID);
     },
     async updateSaveStatus(record, saveStatus) {
-        console.log("🚀 ~ updateSaveStatus ~ saveStatus:", saveStatus);
         DatabaseManager.updateRecord("patientRecords", { ID: record.ID }, saveStatus);
     },
     async validateNationalID(nationalID) {
