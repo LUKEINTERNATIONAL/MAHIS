@@ -164,6 +164,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            async handler() {
+                await this.setPrograms();
+            },
+            deep: true,
+        },
     },
     computed: {},
     setup() {
@@ -174,13 +180,16 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.workerApi = workerData.workerApi;
         const auth = new AuthService();
         await auth.loadConfig();
         this.setVersion();
-        await workerData.postData("SET_OFFLINE_PROGRAMS");
+        await this.setPrograms();
     },
     methods: {
+        async setPrograms() {
+            this.workerApi = workerData.workerApi;
+            await workerData.postData("SET_OFFLINE_PROGRAMS");
+        },
         async getPrograms() {
             if (this.programList && Object.keys(this.programList).length > 0) {
                 this.programList.sort((a: any, b: any) => a.name.localeCompare(b.name));

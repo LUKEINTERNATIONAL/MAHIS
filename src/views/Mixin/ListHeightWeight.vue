@@ -44,9 +44,6 @@ import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import { iconGraph, iconList } from "@/utils/SvgDynamicColor";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
-import workerManager from "@/activate_worker";
-import { getOfflineRecords } from "@/services/offline_service";
-import { combineArrays } from "../../utils/GeneralUti";
 
 export default defineComponent({
     name: "Menu",
@@ -122,9 +119,8 @@ export default defineComponent({
         },
         async updateData() {
             try {
-                const allData = await getOfflineRecords("patientRecords", { ID: this.patient.ID }, false);
-                if (allData) {
-                    const combineArrays = [...allData?.vitals?.saved, ...allData?.vitals?.unsaved];
+                if (this.patient) {
+                    const combineArrays = [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved];
                     this.weight = this.formatData(combineArrays, 5089);
                     this.height = this.formatData(combineArrays, 5090);
                 } else {

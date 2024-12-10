@@ -66,12 +66,11 @@ import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import "datatables.net-select";
 import db from "@/db";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 // DataTable.use(DataTablesCore);
 
 export default defineComponent({
     name: "offline-records",
-    mixins: [SetUser, SetDemographics],
+    mixins: [SetUser],
     components: {
         IonContent,
         IonHeader,

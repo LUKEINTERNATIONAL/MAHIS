@@ -175,10 +175,9 @@ export default defineComponent({
             "counter",
         ]),
     },
-    async created() {
-        await this.getData();
-    },
+    async created() {},
     async mounted() {
+        await this.getData();
         await this.fetchPatientLabStageData();
         this.markWizard();
     },
@@ -703,7 +702,7 @@ export default defineComponent({
                 const encounter = await consciousness.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient complaints encounter");
 
-                const patientAge = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
+                const patientAge = HisDate.getAgeInYears(this.patient.personInformation.birthdate);
 
                 let data;
 

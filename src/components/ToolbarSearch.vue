@@ -75,7 +75,7 @@
                 class="search_result clickable-row"
                 v-for="(item, index) in offlineFilteredPatients"
                 :key="index"
-                @click="setOfflineDemo(item)"
+                @click="setPatientData('/patientProfile', item)"
             >
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                     item.personInformation.given_name + " " + item.personInformation.family_name
@@ -167,7 +167,7 @@ import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
 import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 import DeviceDetection from "@/views/Mixin/DeviceDetection.vue";
 import { scannedData, extractDetails } from "@/services/national_id";
 import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
@@ -189,11 +189,9 @@ import { getUserLocation } from "@/services/userService";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import dates from "@/utils/Date";
 import workerData from "@/activate_worker";
-import { getOfflineRecords } from "@/services/offline_service";
-
 export default defineComponent({
     name: "ToolbarSearch",
-    mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
+    mixins: [DeviceDetection, SetPersonInformation],
     components: {
         IonContent,
         IonHeader,
@@ -297,17 +295,6 @@ export default defineComponent({
         };
     },
     watch: {
-        workerApi: {
-            async handler() {
-                if (this.workerApi?.data?.msg == "done building patient record") {
-                    this.setDemographics(this.workerApi?.data?.payload);
-                    workerData.postData("RESET");
-                    await this.openNewPage();
-                }
-            },
-            deep: true,
-            immediate: true,
-        },
         page() {
             this.searchDemographicPayload(this.searchText);
         },
@@ -453,25 +440,12 @@ export default defineComponent({
                 });
             }
         },
-        async setOfflineDemo(data: any) {
-            this.popoverOpen = false;
-            await resetPatientData();
-            this.setDemographics(data);
-            let url = "/patientProfile";
-            this.$router.push(url);
-        },
         async setPatientData(url: any, item: any) {
-            this.url = url;
+            useWorkerStore().route = url;
             this.popoverOpen = false;
             this.searchValue = "";
-            const allData = await getOfflineRecords("patientRecords", { ID: this.getPatientIdentifier(item, 3) }, false);
-            if (allData) {
-                this.setDemographics(allData);
-                await this.openNewPage();
-            } else {
-                this.workerApi = workerData.workerApi;
-                workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
-            }
+            await this.openNewPage();
+            await useWorkerStore().setPatientRecord(item);
         },
         async openNewPage() {
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
@@ -492,22 +466,18 @@ export default defineComponent({
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 if (this.programID() == 32) {
-                    this.$router.push("NCDDispensations");
+                    useWorkerStore().route = "NCDDispensations";
                 } else {
-                    this.$router.push("dispensation");
+                    useWorkerStore().route = "dispensation";
                 }
             } else if (roles.some((role: any) => role.role === "Lab")) {
-                this.$router.push("OPDConsultationPlan");
+                useWorkerStore().route = "OPDConsultationPlan";
             } else if (userPrograms?.length == 1) {
                 if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
-                    this.$router.push("OPDvitals");
-                } else {
-                    this.$router.push(this.url);
+                    useWorkerStore().route = "OPDvitals";
                 }
             } else if (this.programID() == 32) {
-                this.$router.push(this.NCDUserActions.url);
-            } else {
-                this.$router.push(this.url);
+                useWorkerStore().route = this.NCDUserActions.url;
             }
         },
         getPhone(item: any) {
@@ -723,7 +693,7 @@ export default defineComponent({
                 let isAlreadyCheckedIn = false;
                 for (const stage of stages) {
                     const patientList = (await PatientOpdList.getPatientList(stage, locationId)) as Array<{ patient_id: string }>;
-                    if (patientList.some((patient) => patient.patient_id === this.selectedPatient.patient_id)) {
+                    if (patientList.some((patient) => patient.patientID === this.selectedPatient.patient_id)) {
                         isAlreadyCheckedIn = true;
                         break;
                     }

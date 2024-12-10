@@ -120,7 +120,6 @@ import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { ObservationService } from "@/services/observation_service";
 import { OrderService } from "@/services/order_service";
 import { ConceptService } from "@/services/concept_service";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -132,7 +131,7 @@ import {
 } from "@/services/data_helpers";
 import { useComplicationsStore } from "@/stores/ComplicationsStore";
 export default defineComponent({
-    mixins: [ScreenSizeMixin, FormWizard, SetDemographics],
+    mixins: [ScreenSizeMixin, FormWizard],
     name: "Home",
     components: {
         IonContent,
@@ -231,16 +230,6 @@ export default defineComponent({
         await this.markWizard();
     },
     watch: {
-        workerApi: {
-            async handler() {
-                if (this.workerApi?.data == "Done Saving") {
-                    await this.getOfflinePatientData();
-                    toastSuccess("Saved on server successfully");
-                }
-            },
-            deep: true,
-            immediate: true,
-        },
         vitals: {
             async handler() {
                 await this.markWizard();

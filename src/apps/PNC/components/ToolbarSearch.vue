@@ -59,7 +59,7 @@ import DynButton from "@/components/DynamicButton.vue";
 import { createModal } from "@/utils/Alerts";
 import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
-
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
     name: "Home",
     components: {
@@ -117,17 +117,9 @@ export default defineComponent({
             else return "";
         },
         async openNewPage(url: any, item: any) {
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setDemographics({
-                name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
-                mrn: this.patientIdentifier(item),
-                birthdate: item.person.birthdate,
-                category: "",
-                gender: item.person.gender,
-                patient_id: item.patient_id,
-            });
+            useWorkerStore().route = url;
+            useWorkerStore().setPatientRecord(item);
             await resetPatientData();
-            this.$router.push(url);
         },
 
         openPopover(e: any) {

@@ -1,5 +1,5 @@
 <template>
-    <ion-page :class="{ loading: isLoading}">
+    <ion-page :class="{ loading: isLoading }">
         <!-- Spinner -->
         <div v-if="isLoading" class="spinner-overlay">
             <ion-spinner name="bubles"></ion-spinner>
@@ -8,9 +8,7 @@
         <Toolbar />
         <ion-content>
             <div class="container">
-                <h1 style="width: 100%; text-align: center; font-weight: 700">
-                    Overdue  Report
-                </h1>
+                <h1 style="width: 100%; text-align: center; font-weight: 700">Overdue Report</h1>
                 <div style="display: flex; justify-content: space-between">
                     <div style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
                         <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
@@ -62,11 +60,11 @@ import BasicForm from "@/components/BasicForm.vue";
 import { toastWarning } from "@/utils/Alerts";
 import "datatables.net-select";
 import { PatientService } from "@/services/patient_service";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser, SetDemographics],
+    mixins: [SetUser],
     components: {
         IonContent,
         IonHeader,
@@ -91,32 +89,32 @@ export default defineComponent({
             startDate: HisDate.currentDate(),
             endDate: HisDate.currentDate(),
             options: {
-                responsive: true, 
+                responsive: true,
                 select: false,
             } as any,
             selectButton: "all",
             isLoading: false,
         };
     },
-    
+
     computed: {
         ...mapState(useStartEndDate, ["startEndDate"]),
     },
     watch: {
         $route: {
-        async handler(data) {
-          if (data.name == "OverDueReport"){
-            await this.buildTableData().then(() => {
-                const table = (this.$refs.dataTable as any)?.dt;
+            async handler(data) {
+                if (data.name == "OverDueReport") {
+                    await this.buildTableData().then(() => {
+                        const table = (this.$refs.dataTable as any)?.dt;
 
-                table.on("click", ".follow-up-btn", (e: Event) => {
-                    const id = (e.target as HTMLElement ).getAttribute("data-id");
-                    this.handleFollowUp(id);
-                });
-            });
-          }   
-        },
-        deep: true,
+                        table.on("click", ".follow-up-btn", (e: Event) => {
+                            const id = (e.target as HTMLElement).getAttribute("data-id");
+                            this.handleFollowUp(id);
+                        });
+                    });
+                }
+            },
+            deep: true,
         },
     },
     async mounted() {
@@ -124,22 +122,22 @@ export default defineComponent({
             const table = (this.$refs.dataTable as any)?.dt;
 
             table.on("click", ".follow-up-btn", (e: Event) => {
-                const id = (e.target as HTMLElement ).getAttribute("data-id");
+                const id = (e.target as HTMLElement).getAttribute("data-id");
                 this.handleFollowUp(id);
             });
         });
-    }, 
+    },
     methods: {
-        async handleFollowUp(id: any){
-            const patientData  = await PatientService.findByID(id);
-            this.setDemographics(patientData);
-            this.$router.push("patientProfile");
+        async handleFollowUp(id: any) {
+            const patientData = await PatientService.findByID(id);
+            useWorkerStore().route = "patientProfile";
+            useWorkerStore().setPatientRecord(patientData);
         },
-        async handleInputData(event: any){
-            if(event.inputHeader == "Start date") {
+        async handleInputData(event: any) {
+            if (event.inputHeader == "Start date") {
                 this.startDate = HisDate.toStandardHisFormat(event.value);
             }
-            if(event.inputHeader == "End date"){
+            if (event.inputHeader == "End date") {
                 this.endDate = HisDate.toStandardHisFormat(event.value);
             }
             await this.buildTableData();
@@ -150,44 +148,42 @@ export default defineComponent({
             try {
                 this.reportData = [];
                 const vaccineData = await getVaccinesData();
-                
+
                 //Loop hrough each item in the vaccineData
                 vaccineData.forEach((dataItem: any) => {
-                    const overdue_clients = dataItem.value.under_five_missed_visits.concat(dataItem.value.over_five_missed_visits)
-                   
+                    const overdue_clients = dataItem.value.under_five_missed_visits.concat(dataItem.value.over_five_missed_visits);
+
                     overdue_clients.forEach((visit: any) => {
-                        let doses =  0;
-                        // Extract personal details from each visit 
+                        let doses = 0;
+                        // Extract personal details from each visit
                         let item = visit.client.table;
 
-                        visit.missed_visits.forEach(( missed_visit: any) => {
-                            doses += missed_visit.antigens.length   
+                        visit.missed_visits.forEach((missed_visit: any) => {
+                            doses += missed_visit.antigens.length;
                         });
-                        
+
                         this.reportData.push([
                             `${item.given_name} ${item.family_name}`,
                             item.birthdate,
                             doses,
-                            `<button class="btn btn-sm btn-primary follow-up-btn" data-id="${item.patient_id}">Follow UP</button>`
+                            `<button class="btn btn-sm btn-primary follow-up-btn" data-id="${item.patient_id}">Follow UP</button>`,
                         ]);
-                        
                     });
-                })
+                });
 
                 DataTable.use(DataTablesCore);
-
-            } catch(error){
+            } catch (error) {
                 toastWarning("An error occure while loading data.");
                 console.log(error);
             } finally {
-                this.isLoading = false; 
+                this.isLoading = false;
             }
         },
-        async selectedButton(button: any){
+        async selectedButton(button: any) {
             this.selectButton = button;
             await this.buildTableData();
         },
-        async selectButton(button: any){
+        async selectButton(button: any) {
             this.selectedButton = button;
             await this.buildTableData();
         },

@@ -41,13 +41,13 @@ export default defineComponent({
     setup() {
         const { adult, minor } = useLevelOfConsciousnessStore();
 
-        const { demographics } = useDemographicsStore();
+        const { patient } = useDemographicsStore();
 
         console.log(adult);
         console.log(minor);
 
         const gcs = ref("");
-        const patientAge = ref(HisDate.getAgeInYears(this.patient?.personInformation?.birthdate));
+        const patientAge = ref(HisDate.getAgeInYears(patient?.personInformation?.birthdate));
 
         const setGcs = (value: any) => {
             gcs.value = value;

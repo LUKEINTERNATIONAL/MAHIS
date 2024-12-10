@@ -104,6 +104,7 @@ import DueModal from "@/components/DashboardModal/DueModal.vue";
 import { PatientService } from "@/services/patient_service";
 import img from "@/utils/Img";
 import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
     name: "Menu",
     mixins: [DashboardMixin],
@@ -187,9 +188,9 @@ export default defineComponent({
         },
 
         async openClientProfile(patientID: any) {
+            useWorkerStore().route = "patientProfile";
             const patientData = await PatientService.findByNpid(patientID);
-            this.setDemographics(patientData[0]);
-            this.$router.push("patientProfile");
+            useWorkerStore().setPatientRecord(patientData[0]);
         },
     },
 });
