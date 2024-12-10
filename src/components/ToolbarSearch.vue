@@ -721,7 +721,7 @@ export default defineComponent({
             if (this.programs?.program?.applicationName == "OPD Program") {
                 try {
                     const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
-                    if (Boolean(checkInStatus)) {
+                    if (checkInStatus.length > 0) {
                         this.setPatientData("patientProfile", item);
                         return;
                     }
