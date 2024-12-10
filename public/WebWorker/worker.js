@@ -1,6 +1,17 @@
 // start common code
 // import { DatabaseManager } from "./db";
-importScripts("db.js", "client.js", "location.js", "patient.js", "program.js", "relationships.js", "sync_patient_data.js", "dde.js", "generics.js");
+importScripts(
+    "db.js",
+    "client.js",
+    "location.js",
+    "patient.js",
+    "program.js",
+    "relationships.js",
+    "sync_patient_data.js",
+    "dde.js",
+    "generics.js",
+    "stock.js"
+);
 
 let APIURL = "";
 let APIKEY = "";
@@ -121,6 +132,14 @@ self.onmessage = async (event) => {
                     console.log("BUILD_PATIENT_RECORD ~ error:", error);
                 }
                 break;
+            case "SYNC_STOCK_RECORD":
+                try {
+                    await stockService.setStock();
+                    console.log("SYNC_STOCK_RECORD ~ storeName:", type);
+                } catch (error) {
+                    console.log("SYNC_STOCK_RECORD ~ error:", error);
+                }
+                break;
             case "SYNC_DDE":
                 try {
                     await ddeService.setDDEIds();
@@ -129,6 +148,7 @@ self.onmessage = async (event) => {
                 } catch (error) {
                     console.log("SYNC_DDE ~ error:", error);
                 }
+                break;
             case "RESET":
                 self.postMessage("");
                 break;
