@@ -15,8 +15,7 @@
                         <thead>
                             <tr>
                                 <th>Full Name</th>
-                                <th>Offline MRN</th>
-                                <th>Server MRN</th>
+                                <th>ID</th>
                                 <th>Personal Info Status</th>
                                 <th>Birth Registration Status</th>
                                 <th>Guardian Info Status</th>
@@ -67,12 +66,11 @@ import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import "datatables.net-select";
 import db from "@/db";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 // DataTable.use(DataTablesCore);
 
 export default defineComponent({
     name: "offline-records",
-    mixins: [SetUser, SetDemographics],
+    mixins: [SetUser],
     components: {
         IonContent,
         IonHeader,
@@ -174,8 +172,7 @@ export default defineComponent({
                         this.reportData = document.map((item: any) => {
                             return [
                                 item.personInformation.given_name + " " + item.personInformation.family_name,
-                                item.offlinePatientID,
-                                this.patientIdentifier(item.patientData),
+                                item.ID,
                                 item.saveStatusPersonInformation,
                                 item.saveStatusBirthRegistration,
                                 item.saveStatusGuardianInformation,

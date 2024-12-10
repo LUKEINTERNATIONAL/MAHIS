@@ -167,12 +167,12 @@ export class UserService extends Service {
                     filteredPrograms.push(ANCItem);
                 } else if (item.name === "LABOUR AND DELIVERY PROGRAM") {
                     let labourItem = { ...item }; // Create a new object
-                    labourItem.url = "labour/labourHome";
+                    labourItem.url = "LabourHome";
                     labourItem.actionName = "+ Enroll in Labour and delivery program";
                     filteredPrograms.push(labourItem);
                 } else if (item.name === "PNC PROGRAM") {
                     let pncItem = { ...item }; // Create a new object
-                    pncItem.url = "pnc/Home";
+                    pncItem.url = "PNCHome";
                     pncItem.actionName = "+ Enroll in PNC program";
                     filteredPrograms.push(pncItem);
                 }

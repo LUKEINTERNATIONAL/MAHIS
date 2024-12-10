@@ -1,9 +1,9 @@
-import { useDemographicsStore } from "@/stores/DemographicStore"
-import { Service } from "@/services/service"
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { Service } from "@/services/service";
 import { AppEncounterService } from "@/services/app_encounter_service";
 import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
 import HisDate from "@/utils/Date";
-import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 export class Appointment extends AppEncounterService {
     patientID: number;
     providerID: number;
@@ -20,8 +20,8 @@ export class Appointment extends AppEncounterService {
 
     private static getPatientID(): number {
         const store = useDemographicsStore();
-        const demographics = store.demographics;
-        const patientID = demographics.patient_id;
+        const demographics = store.patient;
+        const patientID = demographics.patientID;
         return patientID;
     }
 
@@ -68,5 +68,4 @@ export class Appointment extends AppEncounterService {
         const programID = AppEncounterService.getProgramID();
         return AppEncounterService.getJson(`/programs/${programID}/booked_appointments`, { date, end_date, srch_text, paginate: false });
     }
-    
 }

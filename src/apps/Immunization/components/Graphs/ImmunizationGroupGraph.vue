@@ -36,7 +36,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     data() {
         return {
@@ -131,9 +131,9 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     async mounted() {
-        // this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
-        // this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
-        // this.BMI = await ObservationService.getAll(this.demographics.patient_id, "BMI");
+        // this.weight = await ObservationService.getAll(this.patient.patientID, "weight");
+        // this.height = await ObservationService.getAll(this.patient.patientID, "Height");
+        // this.BMI = await ObservationService.getAll(this.patient.patientID, "BMI");
         this.setData();
         this.iconBg.graph = "iconBg";
     },

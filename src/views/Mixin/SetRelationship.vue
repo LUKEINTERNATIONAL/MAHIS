@@ -16,9 +16,9 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useRegistrationStore, ["guardianInformation", "personInformation"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         gender() {
-            return getRadioSelectedValue(this.personInformation, "gender") || this.demographics.gender;
+            return getRadioSelectedValue(this.personInformation, "gender") || this.patient?.personInformation?.gender;
         },
     },
     watch: {
@@ -33,7 +33,7 @@ export default defineComponent({
     methods: {
         async getRelationships() {
             if (this.gender) {
-                this.relationshipsData = await getOfflineRecords("relationship");
+                this.relationshipsData = await getOfflineRecords("relationship", "");
                 this.filterRelationships();
 
                 this.relationships = this.filteredRelationships

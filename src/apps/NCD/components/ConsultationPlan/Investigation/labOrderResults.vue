@@ -85,7 +85,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabResultsStore, ["labResults"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(usePatientList, [
@@ -186,7 +186,7 @@ export default defineComponent({
             });
         });
         this.orders = this.propOrders;
-        this.service = new PatientLabService(this.demographics.patient_id);
+        this.service = new PatientLabService(this.patient.patientID);
         this.userRoles = await Service.getUserRoles();
     },
 
@@ -205,7 +205,7 @@ export default defineComponent({
         },
         async saveTest(data: any) {
             const investigationInstance = new LabOrder();
-            await investigationInstance.postActivities(this.demographics.patient_id, [
+            await investigationInstance.postActivities(this.patient.patientID, [
                 {
                     concept_id: await ConceptService.getConceptID(data.name, true),
                     name: data.name,
@@ -232,14 +232,14 @@ export default defineComponent({
             if (locationId) {
                 const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
                 await usePatientList().refresh(locationId);
-                if (this.demographics.patient_id) {
-                    this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.demographics.patient_id);
+                if (this.patient.patientID) {
+                    this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.patient.patientID);
                 }
             }
         },
 
         async updateInvestigationWizard() {
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.orders = await OrderService.getOrders(this.patient.patientID);
             const filteredArray = await this.orders.filter((obj: any) => {
                 return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
             });
@@ -406,7 +406,7 @@ export default defineComponent({
 
             lab.setLabResults(indicators);
             this.openModal = true;
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.orders = await OrderService.getOrders(this.patient.patientID);
             console.log("🚀 ~ openResultsForm ~ this.orders:", this.orders);
         },
         async viewLabOrder(labResults: any) {
@@ -414,7 +414,7 @@ export default defineComponent({
             this.openResultsModal = true;
         },
         async setListData() {
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.orders = await OrderService.getOrders(this.patient.patientID);
             const tableData: any = this.generateListItems(this.orders, "order");
             const predefineTests = [
                 [

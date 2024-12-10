@@ -13,7 +13,9 @@
                     <template #day="{ day, date }">
                         <template v-if="true">
                             <p>
-                                <span>{{ day }}<sup class="count-badge">{{ getCounter(date) }}</sup></span>
+                                <span
+                                    >{{ day }}<sup class="count-badge">{{ getCounter(date) }}</sup></span
+                                >
                             </p>
                         </template>
                         <template v-else>
@@ -85,185 +87,186 @@ import { AppointmentService } from "@/services/appointment_service";
 import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
 import { useClinicalDaysStore, setValueProps } from "@/stores/clinicalDaysStore";
-import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service"
-import confirmModal from "@/apps/NCD/components/confirmModal.vue"
+import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service";
+import confirmModal from "@/apps/NCD/components/confirmModal.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { DrugOrderService } from "@/services/drug_order_service";
 import DateInputField from "@/components/DateInputField.vue";
 
 export default defineComponent({
-  components: {
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonMenu,
-    IonTitle,
-    IonToolbar,
-    BasicInputField,
-    IonDatetime,
-    IonBadge,
-    DateInputField,
-  },
-  setup() {
-    const clinicalDaysStore = useClinicalDaysStore();
-    const appointment_count = ref(0);
-    const disabledDates = computed(() => clinicalDaysStore.getDisabledDates());
-    const datesCounts = computed(() => clinicalDaysStore.getAssignedAppointments());
-    const inputPRDate = ref();
-
-    return {
-        disabledDates,
-        datesCounts,
-        appointment_count,
-        calendarOutline,
-        inputPRDate,
-    };
-  },
-  data() {
-    return {
-      iconsContent: icons,
-      calendarDate: "" as any,
-      date: new Date(Service.getSessionDate()),
-      bookedPatient: 20,
-      tomorrow: new Date().getDate() + 1,
-      appointment: "" as any,
-      drugRunoutDate: "" as any,
-      nextAppointmentDate: "" as any,
-    minDate: new Date() as any,
-      appointmentCountsCache: {} as { [key: string]: number },
-    };
-  },
-  computed: {
-    ...mapState(useNextAppointmentStore, ["nextAppointment"]),
-    ...mapState(useClinicalDaysStore, ["maximumNumberOfDaysForEachDay", "assignedAppointmentsDates"]),
-    ...mapState(useDemographicsStore, ["demographics"]),
-  },
-  watch: {
-    calendarDate: {
-      handler() {
-        this.updateNextAppointment();
-      },
-      deep: true,
+    components: {
+        IonContent,
+        IonHeader,
+        IonItem,
+        IonList,
+        IonMenu,
+        IonTitle,
+        IonToolbar,
+        BasicInputField,
+        IonDatetime,
+        IonBadge,
+        DateInputField,
     },
-  },
+    setup() {
+        const clinicalDaysStore = useClinicalDaysStore();
+        const appointment_count = ref(0);
+        const disabledDates = computed(() => clinicalDaysStore.getDisabledDates());
+        const datesCounts = computed(() => clinicalDaysStore.getAssignedAppointments());
+        const inputPRDate = ref();
+
+        return {
+            disabledDates,
+            datesCounts,
+            appointment_count,
+            calendarOutline,
+            inputPRDate,
+        };
+    },
+    data() {
+        return {
+            iconsContent: icons,
+            calendarDate: "" as any,
+            date: new Date(Service.getSessionDate()),
+            bookedPatient: 20,
+            tomorrow: new Date().getDate() + 1,
+            appointment: "" as any,
+            drugRunoutDate: "" as any,
+            nextAppointmentDate: "" as any,
+            minDate: new Date() as any,
+            appointmentCountsCache: {} as { [key: string]: number },
+        };
+    },
+    computed: {
+        ...mapState(useNextAppointmentStore, ["nextAppointment"]),
+        ...mapState(useClinicalDaysStore, ["maximumNumberOfDaysForEachDay", "assignedAppointmentsDates"]),
+        ...mapState(useDemographicsStore, ["patient"]),
+    },
+    watch: {
+        calendarDate: {
+            handler() {
+                this.updateNextAppointment();
+            },
+            deep: true,
+        },
+    },
     async mounted() {
-    await this.preloadAppointmentCounts();
-    setValueProps()
-    const userID: any = Service.getUserID();
-    const patient = new PatientService();
-    this.appointment = new AppointmentService(patient.getID(), userID);
+        await this.preloadAppointmentCounts();
+        setValueProps();
+        const userID: any = Service.getUserID();
+        const patient = new PatientService();
+        this.appointment = new AppointmentService(patient.getID(), userID);
         this.nextAppointmentDate = this.appointment.date;
-    this.supposedRunOutDate()
-  },
-  methods: {
-    updateNextAppointment() {
-        const nextAppointmentStore = useNextAppointmentStore();
-        nextAppointmentStore.setNextAppointment(this.calendarDate);
+        this.supposedRunOutDate();
     },
-    async handleDateUpdate(date: any) {
-        const storeClinicalDaysStore = useClinicalDaysStore();
-        storeClinicalDaysStore.setsssignedAppointmentsDates(date, true);
-        this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
-        await this.save();
-        await this.getAppointmentMents(date)
-        await this.updateAppointmentCache(date)
-    },
-    async  getAppointmentMents(date: any) {
-        try {
-            const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
-            this.appointment_count = res.length;
-        } catch (error) {
-            
-        }
-    },
-    getCounter(date: Date): number | string {
-      const dateKey = HisDate.toStandardHisFormat(date);
-      return this.appointmentCountsCache[dateKey] || '';
-    },
-    async save() {
-        if (this.assignedAppointmentsDates.length >0) {
+    methods: {
+        updateNextAppointment() {
+            const nextAppointmentStore = useNextAppointmentStore();
+            nextAppointmentStore.setNextAppointment(this.calendarDate);
+        },
+        async handleDateUpdate(date: any) {
+            const storeClinicalDaysStore = useClinicalDaysStore();
+            storeClinicalDaysStore.setsssignedAppointmentsDates(date, true);
+            this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
+            await this.save();
+            await this.getAppointmentMents(date);
+            await this.updateAppointmentCache(date);
+        },
+        async getAppointmentMents(date: any) {
             try {
-                const appointment_service = new Appointment();
-                const appointmentDetails = await appointment_service.createAppointment();
+                const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
+                this.appointment_count = res.length;
+            } catch (error) {}
+        },
+        getCounter(date: Date): number | string {
+            const dateKey = HisDate.toStandardHisFormat(date);
+            return this.appointmentCountsCache[dateKey] || "";
+        },
+        async save() {
+            if (this.assignedAppointmentsDates.length > 0) {
+                try {
+                    const appointment_service = new Appointment();
+                    const appointmentDetails = await appointment_service.createAppointment();
+                } catch (error) {}
+            } else {
+                // toastWarning("please select next appointment date on the calendar");
+            }
+        },
+        async openCornfirmModal(date: any) {
+            this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
+            await this.getAppointmentMents(date);
+            const handleCancel = (event: CustomEvent<any>) => {
+                console.log(event.detail);
+            };
+            const handleConfirm = async (event: CustomEvent<any>) => {
+                if (event.detail == true) {
+                    await this.handleDateUpdate(date);
+                }
+            };
+            const dataToPass = { message: "Are you sure you want to add this Appointment?" };
+            createModal(confirmModal, { class: "otherVitalsModal" }, true, dataToPass, { cancel: handleCancel, confirm: handleConfirm });
+        },
+
+        async handleInput(date: any) {
+            this.inputPRDate = HisDate.toStandardHisDisplayFormat(date);
+            await this.openCornfirmModal(date);
+        },
+
+        async supposedRunOutDate() {
+            const lastMedication = await DrugOrderService.getLastDrugsReceived(this.patient.patientID);
+            console.log(lastMedication);
+        },
+        async preloadAppointmentCounts() {
+            try {
+                const startDate = new Date(Service.getSessionDate());
+                startDate.setDate(1);
+                const endDate = new Date(Service.getSessionDate());
+                endDate.setMonth(endDate.getMonth() + 2);
+                endDate.setDate(0);
+                const dates = this.generateDateRange(startDate, endDate);
+                for (const date of dates) {
+                    try {
+                        const appointments = await AppointmentService.getDailiyAppointments(
+                            HisDate.toStandardHisFormat(date),
+                            HisDate.toStandardHisFormat(date)
+                        );
+                        const dateKey = HisDate.toStandardHisFormat(date);
+                        this.appointmentCountsCache[dateKey] = appointments.length;
+                    } catch (error) {
+                        console.error(`Error fetching appointments for ${date}:`, error);
+
+                        const dateKey = HisDate.toStandardHisFormat(date);
+                        this.appointmentCountsCache[dateKey] = 0;
+                    }
+                }
             } catch (error) {
-                
+                console.error("Error in preload process:", error);
             }
-        } else {
-            // toastWarning("please select next appointment date on the calendar");
-        }
+        },
 
-    },
-    async openCornfirmModal(date: any) {
-        this.calendarDate = HisDate.toStandardHisDisplayFormat(date);
-        await this.getAppointmentMents(date)
-        const handleCancel = (event: CustomEvent<any>) => {
-            console.log(event.detail)
-        };
-        const handleConfirm = async (event: CustomEvent<any>) => {
-            if (event.detail == true) {
-                await this.handleDateUpdate(date)
+        generateDateRange(startDate: Date, endDate: Date): Date[] {
+            const dates: Date[] = [];
+            const currentDate = new Date(startDate);
+
+            while (currentDate <= endDate) {
+                dates.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
             }
-        };
-        const dataToPass = { message: 'Are you sure you want to add this Appointment?',}
-        createModal(confirmModal, { class: "otherVitalsModal" }, true, dataToPass, { 'cancel': handleCancel, 'confirm':  handleConfirm});
-    },
 
-      async handleInput(date: any) {
-        this.inputPRDate = HisDate.toStandardHisDisplayFormat(date);
-        await this.openCornfirmModal(date)
+            return dates;
+        },
+        async updateAppointmentCache(date: Date) {
+            try {
+                const dateKey = HisDate.toStandardHisFormat(date);
+                const appointments = await AppointmentService.getDailiyAppointments(
+                    HisDate.toStandardHisFormat(date),
+                    HisDate.toStandardHisFormat(date)
+                );
+                this.appointmentCountsCache[dateKey] = appointments.length;
+            } catch (error) {
+                console.error("Error updating appointment cache:", error);
+            }
+        },
     },
-
-    async supposedRunOutDate() {
-        const lastMedication = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-        console.log(lastMedication)
-    },
-   async preloadAppointmentCounts() {
-      try {
-        const startDate = new Date(Service.getSessionDate());
-        startDate.setDate(1);
-        const endDate = new Date(Service.getSessionDate());
-        endDate.setMonth(endDate.getMonth() + 2);
-        endDate.setDate(0);
-        const dates = this.generateDateRange(startDate, endDate);
-        for (const date of dates) {
-          try {
-            const appointments = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
-            const dateKey = HisDate.toStandardHisFormat(date);
-            this.appointmentCountsCache[dateKey] = appointments.length;
-          } catch (error) {
-            console.error(`Error fetching appointments for ${date}:`, error);
-            
-            const dateKey = HisDate.toStandardHisFormat(date);
-            this.appointmentCountsCache[dateKey] = 0;
-          }
-        }
-      } catch (error) {
-        console.error('Error in preload process:', error);
-      }
-    },
-
-    generateDateRange(startDate: Date, endDate: Date): Date[] {
-      const dates: Date[] = [];
-      const currentDate = new Date(startDate);
-
-      while (currentDate <= endDate) {
-        dates.push(new Date(currentDate));
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-
-      return dates;
-    },
-    async updateAppointmentCache(date: Date) {
-      try {
-        const dateKey = HisDate.toStandardHisFormat(date);
-        const appointments = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
-        this.appointmentCountsCache[dateKey] = appointments.length;
-      } catch (error) {
-        console.error('Error updating appointment cache:', error);
-      }
-    },
-  },
 });
 </script>
 

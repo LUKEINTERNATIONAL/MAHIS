@@ -183,7 +183,7 @@ export default defineComponent({
         this.markWizard();
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useBehaviourCousellingStore, ["behaviourInfo"]),
         ...mapState(usePhysiologicalCounselingStore, ["physiologicalCounselingInfo"]),
         ...mapState(useDietCounsellingStore, ["dietCounsellingInfo"]),
@@ -216,7 +216,7 @@ export default defineComponent({
                 this.preventativeCounselling >= 0
             ) {
                 const userID: any = Service.getUserID();
-                const counsellingInfo = new CounsellingService(this.demographics.patient_id, userID);
+                const counsellingInfo = new CounsellingService(this.patient.patientID, userID);
                 const encounter = await counsellingInfo.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient counselling encounter");
                 const patientStatus = await counsellingInfo.saveObservationList(await this.buildCounselling());

@@ -89,7 +89,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async serverPrefetch() {
@@ -101,14 +101,12 @@ export default defineComponent({
 
         // An array to store all promises
         const promises = array.map(async (item: any) => {
-            if (
-                HisDate.toStandardHisFormat(await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item)) == HisDate.currentDate()
-            ) {
+            if (HisDate.toStandardHisFormat(await ObservationService.getFirstObsDatetime(this.patient.patientID, item)) == HisDate.currentDate()) {
                 modifyFieldValue(
                     this.vitals,
                     item,
                     "value",
-                    await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
+                    await ObservationService.getFirstValueNumber(this.patient.patientID, item, HisDate.currentDate())
                 );
             }
         });
@@ -117,7 +115,7 @@ export default defineComponent({
         await Promise.all(promises);
         // After all async operations are finished
         const userID: any = Service.getUserID();
-        this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+        this.vitalsInstance = new VitalsService(this.patient.patientID, userID);
         this.updateVitalsStores();
         this.validaterowData({});
     },
@@ -237,12 +235,12 @@ export default defineComponent({
             this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.patient?.personInformation?.gender && this.patient?.personInformation?.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();
@@ -332,7 +330,7 @@ export default defineComponent({
         },
         saveVitals() {
             const userID: any = Service.getUserID();
-            const vitalsService = new VitalsService(this.demographics.patient_id, userID);
+            const vitalsService = new VitalsService(this.patient.patientID, userID);
             const vitalsToSave = this.vitals;
             modalController.dismiss();
             vitalsService.onFinish(vitalsToSave).then(() => {

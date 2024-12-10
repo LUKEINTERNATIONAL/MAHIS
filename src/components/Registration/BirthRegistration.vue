@@ -115,7 +115,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
@@ -180,7 +180,7 @@ export default defineComponent({
             //     const patient = new PatientService();
             //     patient.createNcdNumber(formattedNCDNumber);
             //     const demographicsStore = useDemographicsStore();
-            //     demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
+            //     demographicsStore.setPatient(await PatientService.findByID(this.patient.patientID));
             //     generalStore.setSaveProgressStatus("");
             //     await resetPatientData();
             //     if (this.activities.length == 0) {
@@ -232,7 +232,7 @@ export default defineComponent({
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
+                diagnosisInstance.onSubmit(this.patient.patientID, userID, data);
             }
         },
         buildCards() {

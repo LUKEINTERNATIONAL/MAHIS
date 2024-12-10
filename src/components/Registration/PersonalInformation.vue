@@ -58,7 +58,6 @@ export default defineComponent({
             },
             deep: true,
         },
-        
     },
     props: {
         editable: {
@@ -68,7 +67,7 @@ export default defineComponent({
     computed: {
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         nationalID() {
             return getFieldValue(this.personInformation, "nationalID", "value");
         },
@@ -116,17 +115,18 @@ export default defineComponent({
         getPhoneNumber() {
             let attribute = this.patient.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number");
             if (attribute) {
-               if (attribute.value.includes("+")) { 
-                    if(this.selectedCountry.dialCode){ return attribute.value.split(this.selectedCountry.dialCode)[1];}
-                    else{ return attribute.value.split("265")[1]; }                   
-                }
-                else if(attribute.value.startsWith('08') || attribute.value.startsWith('09')) {
+                if (attribute.value.includes("+")) {
+                    if (this.selectedCountry.dialCode) {
+                        return attribute.value.split(this.selectedCountry.dialCode)[1];
+                    } else {
+                        return attribute.value.split("265")[1];
+                    }
+                } else if (attribute.value.startsWith("08") || attribute.value.startsWith("09")) {
                     return attribute.value.substring(1);
-                }
-                else{
+                } else {
                     return attribute.value;
                 }
-             }
+            }
         },
         buildCards() {
             const personalInformation = useRegistrationStore();

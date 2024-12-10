@@ -20,6 +20,7 @@ import { mapState } from 'pinia';
  import BasicForm from '@/components/BasicForm.vue';
  import { validateField } from "@/services/ANC/symptoms_validation";
  import {checkmark, pulseOutline} from "ionicons/icons";
+ import {getCheckboxSelectedValue, modifyCheckboxValue} from "@/services/data_helpers";
 
 
 export default defineComponent({
@@ -41,14 +42,56 @@ export default defineComponent({
   },
 
     mounted(){
-        const medicalFollowUp =useMedicalFollowUpStore();
+      this.handleMedicalFollowup();
+      this.handleSideEffects();
+      const medicalFollowUp =useMedicalFollowUpStore();
       this.initialData=medicalFollowUp.getInitial()
     },
       computed:{
         ...mapState(useMedicalFollowUpStore,["medicalFollowUp"]),
     },
+  watch:{
+      medicalFollowUp:{
+        handler(){
+          this.handleMedicalFollowup();
+          this.handleSideEffects();
+        },
+        deep:true
+      }
+  },
     methods: {
-   
+     handleMedicalFollowup(){
+       const checkBoxes=['Taking Calcium Supplements','Taking iron and folic acid (IFA) tablets',
+         'Taking aspirin tablets','Taking penicillin treatment for syphilis','Taking vitamin A supplements',
+         'Taking Albendazole for deworming','Other medication']
+
+       if (getCheckboxSelectedValue(this.medicalFollowUp, 'None')?.checked) {
+         checkBoxes.forEach((checkbox) => {
+           modifyCheckboxValue(this.medicalFollowUp, checkbox, 'checked', false);
+           modifyCheckboxValue(this.medicalFollowUp, checkbox, 'disabled', true);
+         });
+       } else {
+         checkBoxes.forEach((checkbox) => {
+           modifyCheckboxValue(this.medicalFollowUp, checkbox, 'disabled', false);
+         });
+       }
+     },
+      handleSideEffects(){
+        const checkBoxes=['Side-effects from calcium supplements','Side-effects from iron and folic acid supplements',
+          'Side-effects from Aspirin supplements', 'Side-effects from Vitamin A supplements', 'Side-effects from Penicillin',
+          'Side-effects from Albendazole','Other']
+
+        if (getCheckboxSelectedValue(this.medicalFollowUp, 'No side effects')?.checked) {
+          checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.medicalFollowUp, checkbox, 'checked', false);
+            modifyCheckboxValue(this.medicalFollowUp, checkbox, 'disabled', true);
+          });
+        } else {
+          checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.medicalFollowUp, checkbox, 'disabled', false);
+          });
+        }
+      }
     }
 })
 </script>

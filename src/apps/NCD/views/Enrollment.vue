@@ -167,10 +167,8 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { UserService } from "@/services/user_service";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { resetPatientData } from "@/services/reset_data";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
-
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
-    mixins: [SetDemographics],
     name: "Home",
     components: {
         IonContent,
@@ -224,7 +222,7 @@ export default defineComponent({
         },
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
@@ -279,14 +277,14 @@ export default defineComponent({
             else {
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                this.setDemographics(await PatientService.findByID(this.demographics.patient_id));
+                useWorkerStore().setPatientRecord(await PatientService.findByID(this.patient.patientID));
                 await this.saveEnrollment();
                 await resetNCDPatientData();
                 await UserService.setProgramUserActions();
                 if (this.NCDActivities.length == 0) {
-                    this.$router.push("patientProfile");
+                    useWorkerStore().route = "patientProfile";
                 } else {
-                    this.$router.push("consultationPlan");
+                    useWorkerStore().route = "consultationPlan";
                 }
             }
         },
@@ -323,23 +321,18 @@ export default defineComponent({
         },
         async savePatientHistory() {
             await saveEncounterData(
-                this.demographics.patient_id,
+                this.patient.patientID,
                 EncounterTypeId.FAMILY_MEDICAL_HISTORY,
                 "" as any,
                 await formatCheckBoxData(this.familyHistory)
             );
         },
         async savePatientComplications() {
-            await saveEncounterData(
-                this.demographics.patient_id,
-                EncounterTypeId.COMPLICATIONS,
-                "" as any,
-                await formatCheckBoxData(this.patientHistory)
-            );
+            await saveEncounterData(this.patient.patientID, EncounterTypeId.COMPLICATIONS, "" as any, await formatCheckBoxData(this.patientHistory));
         },
         async savePatientHIVStatus() {
             await saveEncounterData(
-                this.demographics.patient_id,
+                this.patient.patientID,
                 EncounterTypeId.HIV_STATUS_AT_ENROLLMENT,
                 "" as any,
                 await formatRadioButtonData(this.patientHistoryHIV)
@@ -348,7 +341,7 @@ export default defineComponent({
 
         async savePatientRegistration() {
             await saveEncounterData(
-                this.demographics.patient_id,
+                this.patient.patientID,
                 EncounterTypeId.PATIENT_REGISTRATION,
                 "" as any,
                 await formatRadioButtonData(this.patientType)
@@ -356,12 +349,7 @@ export default defineComponent({
         },
 
         async saveDiagnosis() {
-            await saveEncounterData(
-                this.demographics.patient_id,
-                EncounterTypeId.DIAGNOSIS,
-                "" as any,
-                await formatCheckBoxData(this.enrollmentDiagnosis)
-            );
+            await saveEncounterData(this.patient.patientID, EncounterTypeId.DIAGNOSIS, "" as any, await formatCheckBoxData(this.enrollmentDiagnosis));
         },
     },
 });

@@ -7,13 +7,13 @@
                 <div class="back_profile">
                     <DynamicButton :name="backBtn" iconSlot="start" fill="clear" :icon="chevronBackOutline()" @click="openBackController()" />
                     <div class="AppointmentDate">
-                        <span style="font-size: 14px">Next Appt. Date: </span>
+                        <span style="font-size: 14px">Appointment Date: </span>
                         <b style="color: #0b5ed7">{{ dateOfAppointment || "Not scheduled" }}</b>
                     </div>
                 </div>
-                <div class="button-container">
-                    <DynamicButton name="New ANC contact" iconSlot="start" fill="solid" :icon="checkmark" @click="navigateToContact" />
-                    <DynamicButton name="View ANC contacts" iconSlot="start" fill="solid" :icon="eye()" @click="previousContacts" />
+                <div class="button-container ion-justify-content-center ion-align-items-center">
+                    <DynamicButton style="padding-right: 1%" name="New ANC contact" iconSlot="start" fill="solid" :icon="checkmark" @click="navigateToContact" />
+                    <DynamicButton style="padding-right: 1%" name="View ANC contacts" iconSlot="start" fill="solid" :icon="eye()" @click="previousContacts" />
                     <DynamicButton name="Schedule next contact" iconSlot="start" fill="solid" :icon="calendar()" @click="nextAppointment" />
                 </div>
                 <NextAppointmentModal
@@ -98,7 +98,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useScheduleNextAppointmentStore, ["nextAppointmentDate"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     methods: {
         calendar() {
@@ -118,7 +118,7 @@ export default defineComponent({
             }
         },
         async handleAppointment() {
-            const dateOfAppointment = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Appointment date", "value_text");
+            const dateOfAppointment = await ObservationService.getFirstObsValue(this.patient.patientID, "Appointment date", "value_text");
             this.dateOfAppointment = dateOfAppointment;
         },
         async saveData() {
@@ -136,7 +136,7 @@ export default defineComponent({
         async saveDate() {
             if (this.nextAppointmentDate.length >= 0) {
                 const userID: any = Service.getUserID();
-                const AppointmentDate = new NextAppointmentService(this.demographics.patient_id, userID);
+                const AppointmentDate = new NextAppointmentService(this.patient.patientID, userID);
                 const encounter = await AppointmentDate.createEncounter();
                 if (!encounter) return toastWarning("Unable to create appointment date encounter");
                 const patientStatus = await AppointmentDate.saveObservationList(await this.buildNextAppointment());
@@ -177,7 +177,7 @@ export default defineComponent({
 <style scoped>
 .container {
     text-align: center;
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     top: 35%;
@@ -235,7 +235,10 @@ ion-card {
     .button-container {
         display: flex;
         justify-content: space-around;
-        margin: 5px 0;
+        margin: 5px ;
+       padding-left: 1%;
+       padding-right: 1%;
+
     }
     .back_profile {
         display: flex;

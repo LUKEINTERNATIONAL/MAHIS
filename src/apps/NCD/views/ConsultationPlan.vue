@@ -208,7 +208,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
@@ -236,7 +236,7 @@ export default defineComponent({
             },
             deep: true,
         },
-        demographics: {
+        patient: {
             async handler() {
                 this.refreshWizard();
                 await this.markWizard();
@@ -328,7 +328,7 @@ export default defineComponent({
                 this.tabs[1].icon = "";
             }
 
-            const labOrders = await OrderService.getOrders(this.demographics.patient_id);
+            const labOrders = await OrderService.getOrders(this.patient.patientID);
             const filteredArray = await labOrders.filter((obj: any) => {
                 return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
             });
@@ -337,7 +337,7 @@ export default defineComponent({
             } else {
                 this.tabs[2].icon = "";
             }
-            const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, "Primary diagnosis");
+            const firstDate = await ObservationService.getFirstObsDatetime(this.patient.patientID, "Primary diagnosis");
             if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                 this.tabs[3].icon = "check";
             } else {
@@ -380,19 +380,19 @@ export default defineComponent({
             }
         },
         async setRiskAssessment() {
-            let smoke = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Smoking history");
-            const drink = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Does the patient drink alcohol?");
+            let smoke = await ObservationService.getFirstValueCoded(this.patient.patientID, "Smoking history");
+            const drink = await ObservationService.getFirstValueCoded(this.patient.patientID, "Does the patient drink alcohol?");
             if (smoke == "patient smokes") smoke = "Smoking";
             if (smoke) modifyRadioValue(this.substance, "Smoking history", "selectedValue", smoke);
             if (drink) modifyRadioValue(this.substance, "Does the patient drink alcohol?", "selectedValue", drink);
         },
         async setComplications() {
-            const neuropathy = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Peripheral neuropathy");
-            const deformity = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Deformity");
-            const ulcers = await ObservationService.getFirstValueCoded(this.demographics.patient_id, "Ulcers");
-            const leftEye = await ObservationService.getFirstValueText(this.demographics.patient_id, "Left eye visual acuity");
-            const rightEye = await ObservationService.getFirstValueText(this.demographics.patient_id, "Right eye visual acuity");
-            const cv = await ObservationService.getFirstValueText(this.demographics.patient_id, "CVD");
+            const neuropathy = await ObservationService.getFirstValueCoded(this.patient.patientID, "Peripheral neuropathy");
+            const deformity = await ObservationService.getFirstValueCoded(this.patient.patientID, "Deformity");
+            const ulcers = await ObservationService.getFirstValueCoded(this.patient.patientID, "Ulcers");
+            const leftEye = await ObservationService.getFirstValueText(this.patient.patientID, "Left eye visual acuity");
+            const rightEye = await ObservationService.getFirstValueText(this.patient.patientID, "Right eye visual acuity");
+            const cv = await ObservationService.getFirstValueText(this.patient.patientID, "CVD");
 
             if (leftEye) modifyFieldValue(this.visualScreening, "Left eye visual acuity", "value", leftEye);
             if (rightEye) modifyFieldValue(this.visualScreening, "Right eye visual acuity", "value", rightEye);
@@ -432,7 +432,7 @@ export default defineComponent({
                 data.push(...childDataCVRisk);
             }
             if (data.length > 0) {
-                await saveEncounterData(this.demographics.patient_id, EncounterTypeId.SCREENING, "" as any, data);
+                await saveEncounterData(this.patient.patientID, EncounterTypeId.SCREENING, "" as any, data);
                 toastSuccess("Complications saved successfully");
             }
         },
@@ -440,7 +440,7 @@ export default defineComponent({
         async saveVitals() {
             if (await validateInputFiledData(this.vitals)) {
                 const userID: any = Service.getUserID();
-                const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+                const vitalsInstance = new VitalsService(this.patient.patientID, userID);
                 vitalsInstance.onFinish(this.vitals);
                 toastSuccess("Vitals saved successfully");
                 return true;
@@ -453,15 +453,15 @@ export default defineComponent({
             if (this.diagnosis[0].selectedData.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+                diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.diagnosis[0].selectedData));
             }
         },
         async saveSubstanceAbuse() {
-            await saveEncounterData(this.demographics.patient_id, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(this.substance));
+            await saveEncounterData(this.patient.patientID, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(this.substance));
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
             const treatmentInstance = new Treatment();
 
             const allergyStore = useAllegyStore();
@@ -487,7 +487,7 @@ export default defineComponent({
 
         async saveOutComeStatus() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
 
             if (!isEmpty(this.dispositions)) {
                 this.dispositions.forEach(async (disposition: any) => {
