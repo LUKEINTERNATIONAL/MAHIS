@@ -11,7 +11,6 @@ import { mapState } from "pinia";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { AppointmentService } from "@/services/appointment_service";
 import HisDate from "@/utils/Date";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import {
     medkit,
     chevronBackOutline,
@@ -31,7 +30,6 @@ import {
 } from "ionicons/icons";
 export default defineComponent({
     name: "Menu",
-    mixins: [SetDemographics],
     data() {
         return {
             isMobile: false as any,

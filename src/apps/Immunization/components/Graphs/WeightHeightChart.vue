@@ -53,7 +53,7 @@ import WeightForAgeGirls from "@/Data/WeightForAgeGirls";
 import HeightForAgeGirls from "@/Data/HeightForAgeGirls";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 import ListHeightWeight from "@/views/Mixin/ListHeightWeight.vue";
-
+import { getOfflineFirstObsValue } from "@/services/offline_service";
 export default defineComponent({
     mixins: [ListHeightWeight],
     name: "Menu",
@@ -73,16 +73,20 @@ export default defineComponent({
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
     async mounted() {
-        await this.updateData();
-        await this.changeGraph("weight");
-        await this.displayWeightGraph();
+        if (this.patient?.vitals) {
+            await this.updateData();
+            await this.changeGraph("weight");
+            await this.displayWeightGraph();
+        }
     },
     watch: {
         patient: {
             async handler() {
-                await this.updateData();
-                await this.changeGraph("weight");
-                await this.displayWeightGraph();
+                if (this.patient?.vitals) {
+                    await this.updateData();
+                    await this.changeGraph("weight");
+                    await this.displayWeightGraph();
+                }
             },
             deep: true,
         },
@@ -171,7 +175,6 @@ export default defineComponent({
         },
         async changeGraph(name: any) {
             this.propsContent.list = this.list;
-            console.log("🚀 ~ changeGraph ~ this.propsContent.list:", this.propsContent.list);
             this.activeGraph = name;
             this.setActive(name);
             this.propsContent.weight = this.weight;
@@ -189,8 +192,18 @@ export default defineComponent({
         },
         async setValues() {
             this.dataset = [];
-            this.currentHeight = await ObservationService.getFirstObsValue(this.patient.patientID, "Height", "value_numeric");
-            this.currentWeight = await ObservationService.getFirstObsValue(this.patient.patientID, "weight", "value_numeric");
+            if (this.patient?.vitals?.unsaved?.length > 0) {
+                this.currentHeight = await getOfflineFirstObsValue(
+                    [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
+                    "value_numeric",
+                    5090
+                );
+                this.currentWeight = await getOfflineFirstObsValue(
+                    [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
+                    "value_numeric",
+                    5089
+                );
+            }
         },
         async displayWeightGraph() {
             this.stepSize = 3;
@@ -212,7 +225,11 @@ export default defineComponent({
         },
         async calculateHeightZScore() {
             this.setValues();
-            const obs_datetime = await ObservationService.getFirstObsValue(this.patient.patientID, "Height", "obs_datetime");
+            const obs_datetime: any = await getOfflineFirstObsValue(
+                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
+                "obs_datetime",
+                5090
+            );
             const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
             const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Height";
@@ -233,7 +250,11 @@ export default defineComponent({
         },
         async calculateWeightZScore() {
             await this.setValues();
-            const obs_datetime = await ObservationService.getFirstObsValue(this.patient.patientID, "weight", "obs_datetime");
+            const obs_datetime: any = await getOfflineFirstObsValue(
+                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
+                "obs_datetime",
+                5089
+            );
             const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
             const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Weight";
@@ -648,6 +669,20 @@ export default defineComponent({
         },
     },
 });
+[
+    {
+        concept_id: 5089,
+        obs_datetime: "2024-11-03T07:09:51.000+02:00",
+        value_numeric: 12,
+        obs_id: 515,
+    },
+    {
+        concept_id: 5088,
+        obs_datetime: "2024-10-28T19:19:16.000+02:00",
+        value_numeric: 34,
+        obs_id: 353,
+    },
+];
 </script>
 
 <style scoped>

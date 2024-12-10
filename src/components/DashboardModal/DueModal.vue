@@ -147,10 +147,8 @@ import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
-
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
-    mixins: [SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -257,7 +255,7 @@ export default defineComponent({
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
-            this.setDemographics(patientData);
+            useWorkerStore().setPatientRecord(patientData);
             this.$router.push("patientProfile");
         },
         processData() {

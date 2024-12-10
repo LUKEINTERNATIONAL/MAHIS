@@ -169,15 +169,22 @@ export default defineComponent({
             let height = null;
             if (heightValue) height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
-            db.collection("patientRecords")
-                .doc({ patientID: 1721822809464 })
-                .update({
-                    vitals: {
-                        weight: weightValue,
-                        height: heightValue,
-                    },
-                });
+
             if (weight == null && height == null) {
+                let unSaveVitals = this.patient?.vitals;
+                unSaveVitals.unsaved = [
+                    ...unSaveVitals.unsaved,
+                    {
+                        concept_id: 5090,
+                        obs_datetime: HisDate.currentDate(),
+                        value_numeric: heightValue,
+                    },
+                    {
+                        concept_id: 5089,
+                        obs_datetime: HisDate.currentDate(),
+                        value_numeric: weightValue,
+                    },
+                ];
                 const encounter = await vitalsInstance.createEncounter();
                 if (!encounter) return toastWarning("Unable to create vitals encounter");
                 const data = await formatInputFiledData(this.vitalsWeightHeight, this.vitals_date);
