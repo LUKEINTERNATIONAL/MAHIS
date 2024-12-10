@@ -75,7 +75,7 @@ export default defineComponent({
         ...mapState(useImmunizationStore, ["HepB3"]),
         ...mapState(useImmunizationStore, ["hepBReason"]),
 
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     mounted() {
         this.handleB1();
@@ -149,8 +149,8 @@ export default defineComponent({
             this.setValues();
         },
         async setValues() {
-            const immunisation = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Number of tetanus doses", "value_coded");
-            const vitals = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Systolic", "value_text");
+            const immunisation = await ObservationService.getFirstObsValue(this.patient.patientID, "Number of tetanus doses", "value_coded");
+            const vitals = await ObservationService.getFirstObsValue(this.patient.patientID, "Systolic", "value_text");
             console.log(immunisation);
             if (immunisation == "Two doses") {
                 modifyFieldValue(this.ttDoses, "hepb1 Date", "displayNone", false);

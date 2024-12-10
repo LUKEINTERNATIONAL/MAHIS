@@ -43,7 +43,29 @@ export async function formatRadioButtonData(data: any, date: any = ConceptServic
 
     return (await Promise.all(buildObjPromises)).filter((obj) => obj !== null);
 }
+export async function formatGroupRadioButtonData(data: any, date: any = ConceptService.getSessionDate(), childData = []) {
+    const buildObjPromises: Promise<any>[] = data.map(async (item: any) => {
+        if (
+            item &&
+            item.groupedRadioBtnContent &&
+            item.groupedRadioBtnContent.groupedData &&
+            item.groupedRadioBtnContent.groupedData[0]?.header?.selectedValue
+        ) {
+            const value_coded = await ConceptService.getConceptID(item.groupedRadioBtnContent.groupedData[0]?.header?.selectedValue, true);
+            const concept_id = await ConceptService.getConceptID(item.groupedRadioBtnContent.groupedData[0]?.header?.name, true);
+            const obs_datetime = date || ConceptService.getSessionDate();
+            return {
+                concept_id,
+                value_coded,
+                obs_datetime,
+            };
+        } else {
+            return null;
+        }
+    });
 
+    return (await Promise.all(buildObjPromises)).filter((obj) => obj !== null);
+}
 export async function formatInputFiledData(data: any, obs_datetime: any = ConceptService.getSessionDate(), childData = "") {
     const buildObjPromises = data.map(async (item: any) => {
         if (!item?.data?.rowData) return [];

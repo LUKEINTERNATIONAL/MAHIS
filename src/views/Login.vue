@@ -12,7 +12,9 @@
                                 </div>
                                 <div style="font-size: 12px; color: #34af4d">({{ mode }} mode)</div>
                             </span>
-                            <span v-else>MaHIS</span>
+                            <span v-else
+                                >MaHIS <small style="font-size: 15px">(v{{ version }})</small></span
+                            >
                         </ion-title>
                         <span style="text-align: left">
                             <ion-input
@@ -162,6 +164,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            async handler() {
+                await this.setPrograms();
+            },
+            deep: true,
+        },
     },
     computed: {},
     setup() {
@@ -172,13 +180,16 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.workerApi = workerData.workerApi;
         const auth = new AuthService();
         await auth.loadConfig();
         this.setVersion();
-        await workerData.postData("SET_OFFLINE_PROGRAMS");
+        await this.setPrograms();
     },
     methods: {
+        async setPrograms() {
+            this.workerApi = workerData.workerApi;
+            await workerData.postData("SET_OFFLINE_PROGRAMS");
+        },
         async getPrograms() {
             if (this.programList && Object.keys(this.programList).length > 0) {
                 this.programList.sort((a: any, b: any) => a.name.localeCompare(b.name));

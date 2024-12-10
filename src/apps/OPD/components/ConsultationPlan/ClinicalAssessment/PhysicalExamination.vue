@@ -40,7 +40,7 @@ import {
 import BasicCard from "@/components/BasicCard.vue";
 import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExamination";
 import physicalExam from "@/apps/LABOUR/views/labourAssessment.vue";
-import {useDemographicsStore} from "@/stores/DemographicStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     name: "immidiatePostnatalChecksForChild",
@@ -74,7 +74,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     mounted() {
         const physicalEx = usePhysicalExaminationStore();
@@ -86,8 +86,7 @@ export default defineComponent({
         physicalExam: {
             handler() {
                 this.handlePhysicalExam();
-              this.handleGenitalExam();
-
+                this.handleGenitalExam();
             },
             deep: true,
         },
@@ -104,20 +103,19 @@ export default defineComponent({
                 modifyRadioValue(this.physicalExam, "Reason why physical examination not done", "displayNone", true);
                 modifyRadioValue(this.physicalExam, "Reason why physical examination not done", "selectedValue", "");
             }
-
         },
-      handleGenitalExam(){
-        const Gender=this.demographics?.gender;
-        if(Gender=="M"){
-          modifyCheckboxValue(this.physicalExam,"Vulva examination","disabled", true)
-          modifyCheckboxValue(this.physicalExam,"Visible bleeding","disabled", true)
-        }
-        if(Gender=="F"){
-          modifyCheckboxValue(this.physicalExam,"Urethral meatus abnormal","disabled", true)
-          modifyCheckboxValue(this.physicalExam,"Scrotal swelling","disabled", true)
-          modifyCheckboxValue(this.physicalExam,"Tastes swelling","disabled", true)
-        }
-      }
+        handleGenitalExam() {
+            const Gender = this.patient?.personInformation?.gender;
+            if (Gender == "M") {
+                modifyCheckboxValue(this.physicalExam, "Vulva examination", "disabled", true);
+                modifyCheckboxValue(this.physicalExam, "Visible bleeding", "disabled", true);
+            }
+            if (Gender == "F") {
+                modifyCheckboxValue(this.physicalExam, "Urethral meatus abnormal", "disabled", true);
+                modifyCheckboxValue(this.physicalExam, "Scrotal swelling", "disabled", true);
+                modifyCheckboxValue(this.physicalExam, "Tastes swelling", "disabled", true);
+            }
+        },
     },
 });
 </script>

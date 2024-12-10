@@ -85,7 +85,7 @@ export default defineComponent({
         return { chevronBackOutline, checkmark };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useReferralStore, ["referralInfo"]),
     },
 
@@ -99,7 +99,7 @@ export default defineComponent({
         async saveReferral() {
             if (this.referralInfo.length > 0) {
                 const userID: any = Service.getUserID();
-                const ANCreferral = new ReferralService(this.demographics.patient_id, userID);
+                const ANCreferral = new ReferralService(this.patient.patientID, userID);
                 const encounter = await ANCreferral.createEncounter();
                 if (!encounter) return toastWarning("Unable to create ANC referral encounter");
                 const patientStatus = await ANCreferral.saveObservationList(await this.buildANCReferral());

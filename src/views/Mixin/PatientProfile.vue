@@ -23,7 +23,7 @@ export default defineComponent({
     },
     mounted() {},
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     methods: {
         openPopover(e: Event) {
@@ -37,16 +37,24 @@ export default defineComponent({
             createModal(Outcome, { class: "otherVitalsModal largeModal" });
         },
         async printVisitSummary() {
-            this.visits = await PatientService.getPatientVisits(this.demographics.patient_id, false);
+            this.visits = await PatientService.getPatientVisits(this.patient.patientID, false);
             if (this.visits.length) {
-                const lbl = new PatientPrintoutService(this.demographics.patient_id);
+                const lbl = new PatientPrintoutService(this.patient.patientID);
                 return lbl.printVisitSummaryLbl(this.visits[0]);
             } else {
                 toastWarning("No visits available");
             }
         },
         printID() {
-            new PatientPrintoutService(this.demographics.patient_id).printNidLbl();
+            new PatientPrintoutService(this.patient.patientID).printNidLbl();
+        },
+        formatCurrentAddress(data: any) {
+            const addressComponents = [
+                data?.personInformation?.current_district,
+                data?.personInformation?.current_traditional_authority,
+                data?.personInformation?.current_village,
+            ];
+            return addressComponents.filter(Boolean).join(",");
         },
     },
 });

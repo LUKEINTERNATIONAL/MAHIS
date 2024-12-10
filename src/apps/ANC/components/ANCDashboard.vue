@@ -47,9 +47,9 @@ export default defineComponent({
     data() {
         return {
             menuItems: [
-                { id: "dashboard", label: "Dashboard" },
-                { id: "referrals", label: "Referrals" },
-                { id: "appointments", label: "Appointments" },
+              { id: "dashboard", label: "Dashboard" },
+              { id: "appointments", label: "Appointments" },
+              { id: "referrals", label: "Referrals" },
             ] as MenuItem[],
             activeItem: "dashboard" as string,
         };

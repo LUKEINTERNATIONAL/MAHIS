@@ -338,13 +338,13 @@ const initialVitals = [
         ],
     },
 ] as any;
-export const useVitalsStore = defineStore("vitalsStore", {
+export const useANCVitalsStore = defineStore("vitalsStore", {
     state: () => ({
-        vitals: [...initialVitals] as any,
+        ANCVitals: [...initialVitals] as any,
     }),
     actions: {
         setVitals(data: any) {
-            this.vitals = data;
+            this.ANCVitals = data;
         },
         getInitialVitals() {
             const data = _.cloneDeep(initialVitals);

@@ -1,34 +1,46 @@
 <template>
     <div :fullscreen="true" style="--background: #fff">
         <div class="demographics">
-            <div style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
-                <ion-row>
-                    <ion-col size="3.3">
-                        <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+                <div
+                    style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-content: center;
+                        padding-bottom: 5px;
+                        padding-top: 5px;
+                        padding-left: 5px;
+                    "
+                >
+                    <div style="margin-right: 5px">
+                        <div :class="patient?.personInformation?.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
                             <ion-icon style="color: #fff; font-size: 100px" :icon="person"></ion-icon>
                         </div>
-                    </ion-col>
-                    <ion-col size="8.7">
+                    </div>
+                    <div>
                         <div class="demographicsFirstRow">
-                            <div class="name">{{ demographics.name }}</div>
+                            <div class="name">
+                                {{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                                {{ patient?.personInformation?.family_name }}
+                            </div>
                         </div>
                         <div class="demographicsOtherRow" style="margin-top: 10px">
                             <div class="demographicsText">
-                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
-                                {{ getAge(demographics.birthdate) }} ({{ formatBirthdate() }})
+                                {{ patient?.personInformation?.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
+                                {{ getAge(patient?.personInformation?.birthdate) }} ({{ formatBirthdate() }})
                             </div>
                         </div>
-                        <div class="demographicsOtherRow" v-if="demographics.address">
+                        <div class="demographicsOtherRow" v-if="patient?.personInformation?.current_district">
                             <div class="demographicsText">Current Address:</div>
-                            <div class="demographicsText mediumFontColor">{{ demographics.address }}</div>
+                            <div class="demographicsText mediumFontColor">{{ formatCurrentAddress(patient) }}</div>
                         </div>
-                        <div class="demographicsOtherRow" v-if="demographics.country">
+                        <div class="demographicsOtherRow" v-if="patient?.personInformation?.country">
                             <div class="demographicsText">Country:</div>
-                            <div class="demographicsText mediumFontColor">{{ demographics.country }}</div>
+                            <div class="demographicsText mediumFontColor">{{ patient?.personInformation?.country }}</div>
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">
-                                MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span>
+                                MRN: <span class="mediumFontColor">{{ patient.ID }}</span>
                             </div>
                         </div>
                         <div class="demographicsOtherRow">
@@ -54,8 +66,8 @@
                                 <span v-else class="protectedStatus" style="background: #fecdca; color: #b42318">Unknown protection at birth</span>
                             </div>
                         </div>
-                    </ion-col>
-                </ion-row>
+                    </div>
+                </div>
             </div>
             <div class="name" style="color: var(--ion-color-primary); margin-top: 10px" @click="openPopover($event)">
                 <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
@@ -246,7 +258,6 @@ import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useOutcomeStore } from "@/stores/OutcomeStore";
-import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
@@ -340,8 +351,6 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useAdministerVaccineStore, [
@@ -353,11 +362,7 @@ export default defineComponent({
             "nextAppointMentDate",
         ]),
     },
-    created() {
-        this.getData();
-    },
     async mounted() {
-        this.markWizard();
         this.loadCurrentMilestone();
         this.checkAge();
         await this.checkProtectedStatus();
@@ -365,29 +370,6 @@ export default defineComponent({
         await this.programEnrollment();
     },
     watch: {
-        vitals: {
-            handler() {
-                this.markWizard();
-            },
-            deep: true,
-        },
-        investigations: {
-            handler() {
-                this.markWizard();
-            },
-            deep: true,
-        },
-        diagnosis: {
-            handler() {
-                this.markWizard();
-            },
-            deep: true,
-        },
-        selectedMedicalDrugsList: {
-            handler() {
-                this.markWizard();
-            },
-        },
         currentMilestone: {
             handler() {
                 this.loadCurrentMilestone();
@@ -395,18 +377,18 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
-                if (data.name == "patientProfile") {
+                if (data.name == "patientProfile" && this.patient.patientID) {
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
                 }
             },
         },
-        demographics: {
+        patient: {
             async handler() {
-                if (this.demographics) {
+                if (this.patient.patientID) {
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
-                    if (!this.demographics.active) await this.openFollowModal();
+                    if (!this.patient.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
                 }
@@ -422,7 +404,7 @@ export default defineComponent({
             this.selectedStatus = status;
         },
         async programEnrollment() {
-            this.program = new PatientProgramService(this.demographics.patient_id);
+            this.program = new PatientProgramService(this.patient.patientID);
             const checkEnrollment = await this.program.getProgramCurrentStates();
             if (!checkEnrollment) {
                 try {
@@ -447,11 +429,16 @@ export default defineComponent({
             return HisDate.calculateDisplayAge(HisDate.toStandardHisFormat(dateOfBirth));
         },
         async checkProtectedStatus() {
-            this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+            this.protectedStatus = this.getData(this.patient.birthRegistration, 11759)[0];
+        },
+        getData(data: any, concept_id: any) {
+            if (data) return data.filter((w: any) => w.concept_id == concept_id).map((w: any) => w.value_text);
+            else return "";
         },
         checkAge() {
-            if (!isEmpty(this.demographics.birthdate)) {
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics.birthdate) < 42 ? true : false;
+            if (!isEmpty(this.patient?.personInformation?.birthdate)) {
+                this.checkUnderSixWeeks =
+                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
             }
         },
         openVitalsModal() {
@@ -464,8 +451,8 @@ export default defineComponent({
             createModal(vaccinationHistory, { class: "otherVitalsModal vaccineHistoryModal" });
         },
         async openFollowModal() {
-            if (this.demographics?.patient_id) {
-                this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+            if (this.patient?.patientID) {
+                this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.patient.patientID);
                 const dataToPass = { protectedStatus: this.protectedStatus };
                 if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
             }
@@ -478,122 +465,24 @@ export default defineComponent({
         },
         isChild() {
             const patient = new PatientService();
-            if (patient.getID()) {
-                if (patient.isUnderFive()) return true;
-                else return false;
-            }
+            if (patient.isUnderFive()) return true;
+            else return false;
         },
-        async getData() {
-            const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];
-            // const steps = this.activities;
-            for (let i = 0; i < steps.length; i++) {
-                const title = steps[i];
-                const number = i + 1;
-
-                this.wizardData.push({
-                    title,
-                    class: "common_step",
-                    checked: i === 0 ? false : "",
-                    disabled: false,
-                    number,
-                    last_step: i === steps.length - 1 ? "last_step" : "",
-                });
-                let component = title;
-                if (title == "Next Appointment") component = "Immunization Next Appointment";
-                this.StepperData.push({
-                    title,
-                    component: component.replace(/\s+/g, ""),
-                    value: number.toString(),
-                });
-            }
-        },
-        markWizard() {
-            if (this.vitals.validationStatus) {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: false,
-                });
-            }
-
-            if (this.investigations[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: false,
-                });
-            }
-
-            if (this.diagnosis[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: false,
-                });
-            }
-
-            if (this.selectedMedicalDrugsList.length > 0) {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: false,
-                });
-            }
-
-            if (this.dispositions.length > 0) {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: false,
-                });
-            }
-        },
-
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
             });
         },
-        async saveData() {
-            await this.saveVitals();
-            await this.saveDiagnosis();
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
-            await resetPatientData();
-            this.$router.push("patientProfile");
-        },
         async saveVitals() {
             if (this.vitals.validationStatus) {
                 const userID: any = Service.getUserID();
-                const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+                const vitalsInstance = new VitalsService(this.patient.patientID, userID);
                 vitalsInstance.onFinish(this.vitals);
-            }
-        },
-        async saveDiagnosis() {
-            if (this.diagnosis[0].selectedData.length > 0) {
-                const userID: any = Service.getUserID();
-                const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
             }
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
             const treatmentInstance = new Treatment();
 
             if (!isEmpty(this.selectedMedicalAllergiesList)) {
@@ -625,7 +514,7 @@ export default defineComponent({
 
         async saveOutComeStatus() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
 
             if (!isEmpty(this.dispositions)) {
                 this.dispositions.forEach(async (disposition: any) => {
@@ -681,7 +570,7 @@ export default defineComponent({
             });
         },
         formatBirthdate() {
-            return HisDate.toStandardHisDisplayFormat(this.demographics.birthdate);
+            return HisDate.toStandardHisDisplayFormat(this.patient?.personInformation?.birthdate);
         },
         calculateExpireDate(startDate: string | Date, duration: any) {
             const date = new Date(startDate);

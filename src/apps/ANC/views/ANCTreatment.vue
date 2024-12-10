@@ -155,7 +155,7 @@ export default defineComponent({
         return { chevronBackOutline, checkmark };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useDiagnosisStore, ["diagnoses"]),
         ...mapState(useMedicationDispensedStore, ["iron", "folicAcid"]),
         ...mapState(useImmunizationStore, ["ttDoses", "HepBCounselling", "HepB1", "HepB2", "HepB3", "hepBReason"]),
@@ -197,7 +197,7 @@ export default defineComponent({
         async saveDiagnosis() {
             if (this.diagnoses.length > 0) {
                 const userID: any = Service.getUserID();
-                const medicationDispensed = new DiagnosisTreatmentService(this.demographics.patient_id, userID);
+                const medicationDispensed = new DiagnosisTreatmentService(this.patient.patientID, userID);
                 const encounter = await medicationDispensed.createEncounter();
                 if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
                 const patientStatus = await medicationDispensed.saveObservationList(await this.buildDiagnosis());
@@ -208,7 +208,7 @@ export default defineComponent({
         async saveMedicationDispensed() {
             if (this.folicAcid.length > 0) {
                 const userID: any = Service.getUserID();
-                const medicationDispensed = new MedicationDispensedService(this.demographics.patient_id, userID);
+                const medicationDispensed = new MedicationDispensedService(this.patient.patientID, userID);
                 const encounter = await medicationDispensed.createEncounter();
                 if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
                 const patientStatus = await medicationDispensed.saveObservationList(await this.buildMedicationDispensed());
@@ -221,7 +221,7 @@ export default defineComponent({
         async saveImmunisation() {
             if (this.HepB1.length > 0) {
                 const userID: any = Service.getUserID();
-                const Immunisation = new ImmunizationService(this.demographics.patient_id, userID);
+                const Immunisation = new ImmunizationService(this.patient.patientID, userID);
                 const encounter = await Immunisation.createEncounter();
                 if (!encounter) return toastWarning("Unable to create immunisation encounter");
                 const patientStatus = await Immunisation.saveObservationList(await this.buildImmunisation());

@@ -76,7 +76,7 @@ export async function resetPatientData() {
     const medications = useMedicationsStore();
     const treatmentPlan = useTreatmentPlanStore();
     const diagnosis = useDiagnosisStore();
-    const enrollement = useEnrollementStore();
+    const enrollment = useEnrollementStore();
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
     const weightHeightVitals = useWeightHeightVitalsStore();
@@ -151,18 +151,18 @@ export async function resetPatientData() {
     registration.setCountry(registration.getInitialCountry());
     weightHeightVitals.setVitals(weightHeightVitals.getInitialVitals());
 
-    enrollement.setDiagnosis(enrollement.getInitialEnrollmentDiagnosis());
-    enrollement.setPatientHistory(enrollement.getInitialPatientHistory());
-    enrollement.setSubstance(enrollement.getInitialSubstance());
-    enrollement.setPatientHistory(enrollement.getInitialFamilyHistory());
-    enrollement.setNCDNumber(enrollement.getInitialNCDNumber());
-    enrollement.setPatientHistoryHIV(enrollement.getInitialPatientHistoryHIV());
+    enrollment.setDiagnosis(enrollment.getInitialEnrollmentDiagnosis());
+    enrollment.setPatientHistory(enrollment.getInitialPatientHistory());
+    enrollment.setSubstance(enrollment.getInitialSubstance());
+    enrollment.setFamilyHistory(enrollment.getInitialFamilyHistory());
+    enrollment.setNCDNumber(enrollment.getInitialNCDNumber());
+    enrollment.setPatientType(enrollment.getInitialPatientType());
+    enrollment.setPatientHistoryHIV(enrollment.getInitialPatientHistoryHIV());
     investigations.$reset();
     outcome.$reset();
     medications.$reset();
     treatmentPlan.$reset();
     diagnosis.$reset();
-    enrollement.$reset();
     nextAppointment.$reset();
 
     ANCobstreticHistory.$reset();

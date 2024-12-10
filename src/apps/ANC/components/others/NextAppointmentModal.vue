@@ -1,8 +1,11 @@
 <template>
   <ion-modal :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
+    <ion-header>
     <ion-row>
     <ion-col style="margin-left: -3px">
-      <div class="om" style="font-weight: 600; color: #8d8686">Set Next Appointment Date</div>
+      <div class="om" style="font-weight: 600; color: #8d8686">
+        Set Next Appointment Date
+      </div>
     </ion-col>
     <ion-col size="6" style="text-align: right">
       <ion-label class="lbl-tl" style="font-size: 13px">
@@ -10,29 +13,25 @@
       >
     </ion-col>
     </ion-row>
-    <ion-content>
+    </ion-header>
+    <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
           <basic-form
               :contentData="nextAppointmentDate"
               :initialData="initialData"
               @update:selected="handleInputData"
               @update:inputValue="handleInputData"
           ></basic-form>
-
-      <div class="button-container">
-        <DynamicButton
-            expand="block"
-            @click="confirm()"
-            name="Save"
-            class="action-button"
-        />
-        <DynamicButton
-            expand="block"
-            @click="onNo()"
-            name="Cancel"
-            fill="clear"
-            class="action-button"
-        />
-      </div>
+      <hr class="dashed-hr" style="margin-bottom: 0px !important" />
+      <ion-footer collapse="fade" class="ion-no-border">
+        <ion-row>
+          <ion-col>
+            <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="onNo()"> Cancel </ion-button>
+          </ion-col>
+          <ion-col>
+            <DynamicButton name="Submit" fill="solid" @click="confirm()" style="float: right; margin: 2%; width: 130px" />
+          </ion-col>
+        </ion-row>
+      </ion-footer>
     </ion-content>
   </ion-modal>
 </template>
@@ -49,7 +48,7 @@ import {
   IonContent,
   IonCard,
   IonCardContent,
-  IonIcon, IonCol, IonLabel,
+  IonIcon, IonCol, IonLabel, IonFooter, IonRow,
 } from "@ionic/vue";
 import { closeOutline } from "ionicons/icons";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -70,6 +69,7 @@ const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
 export default defineComponent({
   name: "BabyDetailsModal",
   components: {
+    IonRow, IonFooter,
     IonLabel, IonCol,
     DynamicButton,
     IonModal,
@@ -169,7 +169,7 @@ export default defineComponent({
 ion-modal {
   --background: rgba(0, 0, 0, 0.9);
   --width: 80%;
-  --height: 40%;
+  --height: 50%;
   --max-width: 500px;
   --max-height: 250px;
 }
@@ -211,5 +211,10 @@ ion-card-content {
 
 ion-button {
   --background: var(--ion-color-danger);
+}
+.dashed-hr {
+  border: none;
+  border-top: 1px dashed #b3b3b3;
+  margin: 20px 0;
 }
 </style>

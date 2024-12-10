@@ -15,6 +15,7 @@ import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
 import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
 import setDDE from "@/views/Configurations/setDDE.vue";
+import SetSitePrefix from "@/views/Configurations/SetSitePrefix.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
@@ -48,6 +49,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/setDDE",
         name: "setDDE",
         component: setDDE,
+    },
+    {
+        path: "/setSitePrefix",
+        name: "setSitePrefix",
+        component: SetSitePrefix,
     },
     {
         path: "/scheduleImmunization",

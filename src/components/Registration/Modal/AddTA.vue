@@ -81,7 +81,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useRegistrationStore, ["addTA", "currentLocation", "homeLocation"]),
     },
     mounted() {

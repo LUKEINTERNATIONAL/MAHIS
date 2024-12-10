@@ -36,7 +36,7 @@ import { mapState } from "pinia";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import BasicCard from "@/components/BasicCard.vue";
 import { usePostnatalWardStayStore } from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
-import { useVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
+import { useANCVitalsStore } from "@/apps/ANC/store/physical exam/VitalsStore";
 import { BMIService } from "@/services/bmi_service";
 import HisDate from "@/utils/Date";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
@@ -79,7 +79,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(usePostnatalWardStayStore, ["vitals"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         "Systolic blood pressure"() {
             return getFieldValue(this.vitals, "Systolic blood pressure", "value");
         },
@@ -120,19 +120,19 @@ export default defineComponent({
         //   this.validationRules(event)
         // },
         updateVitalsStores() {
-            const vitalsStore = useVitalsStore();
+            const vitalsStore = useANCVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
         async validateRowData(inputData: any) {
             this.validationRules(inputData);
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.patient?.personInformation?.gender && this.patient?.personInformation?.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();

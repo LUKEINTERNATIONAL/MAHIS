@@ -41,7 +41,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     data() {
         return {
@@ -125,7 +125,7 @@ export default defineComponent({
         };
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 await this.updateData();
             },
@@ -145,8 +145,8 @@ export default defineComponent({
         },
         handleIcon() {},
         async updateData() {
-            this.systolic = await ObservationService.getAll(this.demographics.patient_id, "Systolic");
-            this.diastolic = await ObservationService.getAll(this.demographics.patient_id, "Diastolic");
+            this.systolic = await ObservationService.getAll(this.patient.patientID, "Systolic");
+            this.diastolic = await ObservationService.getAll(this.patient.patientID, "Diastolic");
             this.setData();
         },
         setData() {

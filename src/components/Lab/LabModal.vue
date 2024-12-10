@@ -104,7 +104,7 @@ export default defineComponent({
         },
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabResultsStore, ["labResults"]),
     },
     mounted() {},
@@ -113,7 +113,7 @@ export default defineComponent({
             modalController.dismiss();
         },
         async saveResults() {
-            const patientLabResultService = new PatientLabResultService(this.demographics.patient_id);
+            const patientLabResultService = new PatientLabResultService(this.patient.patientID);
             patientLabResultService.setTestID(this.labResults[0].id);
             patientLabResultService.setResultDate(HisDate.currentDate());
             await patientLabResultService.createEncounter();

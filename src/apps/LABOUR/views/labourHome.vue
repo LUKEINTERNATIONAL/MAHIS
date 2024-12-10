@@ -96,7 +96,7 @@ export default defineComponent({
             router.push({ path });
         };
         const cardsData = [
-            { title: "Labour profile", path: "/labourProfile", icon: medical, color: "grey", isSaved: false },
+            { title: "Labour Profile", path: "/labourProfile", icon: people, color: "grey", isSaved: false },
             { title: "Labour assessment", path: "/labourAssessment", icon: medical, color: "grey", isSaved: false },
             { title: "Delivery details", path: "/labourDeliveryDetails", icon: documentText, color: "grey" },
             { title: "Immediate postnatal checks", path: "/postnatalChecks", icon: checkmarkCircle, color: "grey", isSaved: false },
@@ -112,7 +112,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useObstreticHistoryStore, ["prevPregnancies"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     mounted() {
         this.handleProfile();
@@ -129,7 +129,7 @@ export default defineComponent({
         },
 
         async handleProfile() {
-            const gravida = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Gravida", "value_text");
+            const gravida = await ObservationService.getFirstObsValue(this.patient.patientID, "Gravida", "value_text");
             this.gravida = gravida;
         },
     },

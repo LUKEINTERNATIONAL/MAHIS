@@ -45,7 +45,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useRegistrationStore, ["currentLocation", "country"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         selected_country() {
             return getFieldValue(this.country, "country", "value")?.name;
         },

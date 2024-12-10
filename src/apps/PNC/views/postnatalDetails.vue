@@ -158,7 +158,7 @@ export default defineComponent({
         });
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useObstetricDetailsStore, ["obstetricDetails"]),
         ...mapState(useDeliveryDetailsStore, ["deliveryDetails"]),
         ...mapState(useHIVStatusAndTreatmentStore, ["hivStatusAndTreatment"]),
@@ -230,7 +230,7 @@ export default defineComponent({
         async savePostnatalDetails() {
             if (this.obstetricDetails.length > 0 && this.deliveryDetails.length > 0 && this.hivStatusAndTreatment.length > 0) {
                 const userID: any = Service.getUserID();
-                const postnatalDetails = new PostnatalDetailsService(this.demographics.patient_id, userID);
+                const postnatalDetails = new PostnatalDetailsService(this.patient.patientID, userID);
                 const encounter = await postnatalDetails.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient postnatal details  encounter");
                 const patientStatus = await postnatalDetails.saveObservationList(await this.buildPostnatalDetails());

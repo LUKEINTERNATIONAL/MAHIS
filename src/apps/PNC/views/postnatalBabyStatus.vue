@@ -115,7 +115,7 @@ export default defineComponent({
         });
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useBabyStatusStore, ["babyStatusDetails"]),
     },
     mounted() {
@@ -168,7 +168,7 @@ export default defineComponent({
         async saveBabyMonitoring() {
             if (this.babyStatusDetails.length > 0) {
                 const userID: any = Service.getUserID();
-                const babyStatusDetails = new BabyMonitoringService(this.demographics.patient_id, userID);
+                const babyStatusDetails = new BabyMonitoringService(this.patient.patientID, userID);
                 const encounter = await babyStatusDetails.createEncounter();
                 if (!encounter) return toastWarning("Unable to create baby monitoring details encounter");
                 const patientStatus = await babyStatusDetails.saveObservationList(await this.buildBabyMonitoring());

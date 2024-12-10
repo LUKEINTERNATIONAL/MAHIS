@@ -125,38 +125,36 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
         inputFields() {
             return this.presentingComplaints[0].data.rowData[0].colData;
         },
 
-      "Other (specify)"() {
-        return getFieldValue(this.presentingComplaints, "Other (specify)", "value")
-      },
-      selectedComplaintValue() {
-        return this.presentingComplaints[0].data.rowData[0].colData[0].value;
-      },
+        "Other (specify)"() {
+            return getFieldValue(this.presentingComplaints, "Other (specify)", "value");
+        },
+        selectedComplaintValue() {
+            return this.presentingComplaints[0].data.rowData[0].colData[0].value;
+        },
     },
     async mounted() {
         this.updatePresentingComplaintsListStores();
         this.setDashedBox();
         this.getPresenting();
-      this.validaterowData({});
-      this.checkComplaints();
-
+        this.validaterowData({});
+        this.checkComplaints();
     },
     watch: {
-      selectedComplaintValue(newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.checkComplaints();
-        }
-      },
+        selectedComplaintValue(newVal, oldVal) {
+            if (newVal !== oldVal) {
+                this.checkComplaints();
+            }
+        },
         presentingComplaints: {
-          handler() {
-              this.setDashedBox();
-
-          },
+            handler() {
+                this.setDashedBox();
+            },
             deep: true,
         },
         $router: {
@@ -192,16 +190,19 @@ export default defineComponent({
                 this.addItemButton = true;
                 this.buildpresentingComplaintsList();
             }
-          this.presentingComplaints[0].data.rowData[0].colData[0].value = "";
-          this.presentingComplaints[0].data.rowData[0].colData[1].value = "";
-          this.presentingComplaints[0].data.rowData[0].colData[1].unitsData.value = "";
-          modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", true);
-          modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
+            this.presentingComplaints[0].data.rowData[0].colData[0].value = "";
+            this.presentingComplaints[0].data.rowData[0].colData[1].value = "";
+            this.presentingComplaints[0].data.rowData[0].colData[1].unitsData.value = "";
+            modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", true);
+            modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
         },
         checkPresentingComplaints() {
-          const complaintName = this.inputFields[0].value.name === "Other" ? getFieldValue(this.presentingComplaints, "Other (specify)", "value") : this.inputFields[0].value.name;
+            const complaintName =
+                this.inputFields[0].value.name === "Other"
+                    ? getFieldValue(this.presentingComplaints, "Other (specify)", "value")
+                    : this.inputFields[0].value.name;
 
-          if (!this.isNameInData(complaintName, this.presentingComplaints[0].selectedData)) {
+            if (!this.isNameInData(complaintName, this.presentingComplaints[0].selectedData)) {
                 modifyFieldValue(this.presentingComplaints, "PresentingComplaints", "alertsErrorMassage", "");
                 return true;
             } else {
@@ -209,36 +210,39 @@ export default defineComponent({
                 return false;
             }
         },
-      buildpresentingComplaintsList() {
-        const duration = this.inputFields[1].value + " " + this.inputFields[1].unitsData.value.name;
-        const complaintName = this.inputFields[0].value.name === "Other" ? getFieldValue(this.presentingComplaints, "Other (specify)", "value") : this.inputFields[0].value.name;
+        buildpresentingComplaintsList() {
+            const duration = this.inputFields[1].value + " " + this.inputFields[1].unitsData.value.name;
+            const complaintName =
+                this.inputFields[0].value.name === "Other"
+                    ? getFieldValue(this.presentingComplaints, "Other (specify)", "value")
+                    : this.inputFields[0].value.name;
 
-        this.presentingComplaints[0].selectedData.push({
-          actionBtn: true,
-          btn: ["edit", "delete"],
-          name: complaintName,
-          concept_id: this.inputFields[0].value.concept_id,
-          duration: this.inputFields[1].value,
-          durationUnits: this.inputFields[1].unitsData.value,
-          display: [complaintName, duration],
-          data: [
-            {
-              concept_id: 8578,
-              value_coded: this.inputFields[0].value.concept_id,
-              obs_datetime: Service.getSessionDate(),
-              child: [
-                {
-                  concept_id: this.inputFields[0].value.concept_id,
-                  value_text: duration,
-                  obs_datetime: Service.getSessionDate(),
-                },
-              ],
-            },
-          ],
-        });
-      },
+            this.presentingComplaints[0].selectedData.push({
+                actionBtn: true,
+                btn: ["edit", "delete"],
+                name: complaintName,
+                concept_id: this.inputFields[0].value.concept_id,
+                duration: this.inputFields[1].value,
+                durationUnits: this.inputFields[1].unitsData.value,
+                display: [complaintName, duration],
+                data: [
+                    {
+                        concept_id: 8578,
+                        value_coded: this.inputFields[0].value.concept_id,
+                        obs_datetime: Service.getSessionDate(),
+                        child: [
+                            {
+                                concept_id: this.inputFields[0].value.concept_id,
+                                value_text: duration,
+                                obs_datetime: Service.getSessionDate(),
+                            },
+                        ],
+                    },
+                ],
+            });
+        },
 
-      isNameInData(name: any, dataArray: any) {
+        isNameInData(name: any, dataArray: any) {
             return dataArray.some((item: any) => item.name === name);
         },
         updatePresentingComplaintsListStores() {
@@ -249,63 +253,63 @@ export default defineComponent({
             this.event = e;
             this.popoverOpen = true;
         },
-      checkComplaints() {
-        const selectedComplaint = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
+        checkComplaints() {
+            const selectedComplaint = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
 
-        let shouldShowAlert = true;
+            let shouldShowAlert = true;
 
-        if (selectedComplaint) {
-          const isValidComplaint = this.complaints.some((complaint: any) =>
-              complaint.name.toLowerCase() === selectedComplaint.name?.toLowerCase()
-          );
+            if (selectedComplaint) {
+                const isValidComplaint = this.complaints.some(
+                    (complaint: any) => complaint.name.toLowerCase() === selectedComplaint.name?.toLowerCase()
+                );
 
-          if (isValidComplaint || selectedComplaint.name === "Other") {
-            shouldShowAlert = false;
-          }
-        }
+                if (isValidComplaint || selectedComplaint.name === "Other") {
+                    shouldShowAlert = false;
+                }
+            }
 
-        if (shouldShowAlert) {
-          if (!this.presentingComplaints[0].alerts[0] || this.presentingComplaints[0].alerts[0].name !== "NoMatchAlert") {
-            this.presentingComplaints[0].alerts[0] = {
-              backgroundColor: "lightyellow",
-              status: "Warning",
-              colSize:"4px",
-              textColor: "black",
-              value: "Please search thoroughly for the complaint. If it is not listed, search and select the 'Other' option to specify the complaint.",
-              name: "noMatchAlert",
-            };
-          }
-        } else {
-          if (this.presentingComplaints[0].alerts[0]?.value) {
-            this.presentingComplaints[0].alerts[0] = {
-              backgroundColor: "",
-              status: "",
-              icon: "",
-              textColor: "",
-              value: "",
-              name: "",
-            };
-          }
-        }
-      },
+            if (shouldShowAlert) {
+                if (!this.presentingComplaints[0].alerts[0] || this.presentingComplaints[0].alerts[0].name !== "NoMatchAlert") {
+                    this.presentingComplaints[0].alerts[0] = {
+                        backgroundColor: "lightyellow",
+                        status: "Warning",
+                        colSize: "4px",
+                        textColor: "black",
+                        value: "Please search thoroughly for the complaint. If it is not listed, search and select the 'Other' option to specify the complaint.",
+                        name: "noMatchAlert",
+                    };
+                }
+            } else {
+                if (this.presentingComplaints[0].alerts[0]?.value) {
+                    this.presentingComplaints[0].alerts[0] = {
+                        backgroundColor: "",
+                        status: "",
+                        icon: "",
+                        textColor: "",
+                        value: "",
+                        name: "",
+                    };
+                }
+            }
+        },
 
-      async handleInputData(col: any) {
-        if (col.inputHeader === "Presenting Complaints") {
-          this.checkPresentingComplaints();
-        } else if (col.inputHeader === "Duration") {
-          this.validateDuration();
-        }
+        async handleInputData(col: any) {
+            if (col.inputHeader === "Presenting Complaints") {
+                this.checkPresentingComplaints();
+            } else if (col.inputHeader === "Duration") {
+                this.validateDuration();
+            }
 
-        if (col.inputHeader === "Presenting Complaints") {
-          const selectedComplaint = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
-          if (selectedComplaint?.name === "Other") {
-            modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", false);
-          } else {
-            modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", true);
-            modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
-          }
-        }
-      },
+            if (col.inputHeader === "Presenting Complaints") {
+                const selectedComplaint = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
+                if (selectedComplaint?.name === "Other") {
+                    modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", false);
+                } else {
+                    modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", true);
+                    modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
+                }
+            }
+        },
 
         validateDuration() {
             this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = false;
@@ -325,13 +329,13 @@ export default defineComponent({
                 return false;
             }
         },
-      validationRules(event: any) {
-        return validateField(this.presentingComplaints,event.name, (this as any)[event.name]);
-      },
-      validaterowData(event: any) {
-        this.validationRules(event)
-      },
-      editpresentingComplaintsList(test: any) {
+        validationRules(event: any) {
+            return validateField(this.presentingComplaints, event.name, (this as any)[event.name]);
+        },
+        validaterowData(event: any) {
+            this.validationRules(event);
+        },
+        editpresentingComplaintsList(test: any) {
             this.deletepresentingComplaintsList(test.item);
             this.presentingComplaints[0].data.rowData[0].colData[0].value = test.item;
             this.presentingComplaints[0].data.rowData[0].colData[1].value = test.item.duration;
@@ -361,7 +365,7 @@ export default defineComponent({
             }
         },
         async updateList() {
-            // const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+            // const obs = await ObservationService.getAll(this.patient.patientID, "Presenting complaint");
             // const filteredArray = await obs.filter((obj: any) => {
             //     return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
             // });

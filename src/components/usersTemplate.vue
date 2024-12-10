@@ -1,6 +1,6 @@
 <template>
       <ion-row>
-        <ion-col>
+        <!-- <ion-col>
           <ListPicker
               style="margin-left: 30px"
               :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -15,11 +15,13 @@
               @item-list-filtered="list_picker_prperties[0].listFilteredFN"
               @item-search-text="list_picker_prperties[0].searchTextFN"
           />
-        </ion-col>
+        </ion-col> -->
         
-        <ion-col>
           <ion-row>
             <ion-col>
+
+            </ion-col>
+            <ion-col size="4">
               <BasicInputField
                 :placeholder="note_properties[0].placeHolder"
                 :icon="searchOutline"
@@ -39,11 +41,10 @@
               </ion-button>
             </ion-col>
           </ion-row>
-        </ion-col>
       </ion-row>
 
       <ion-row>
-        <user-card-list :users="items" style="margin-left: 20px;" :filterValue="searchValue" @reload="reload"/>
+        <user-card-list :users="items" style="margin-left: 20px;" :filterValue="searchValue" @reload="closeModal"/>
       </ion-row>
 
       <addUserModal
@@ -93,7 +94,7 @@
 
 const note_properties = [
     {
-        placeHolder: 'search for user (based on search field)',
+        placeHolder: 'search for username',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
@@ -142,9 +143,13 @@ function reload(user_id: any) {
   emit("reload", user_id)
 }
 
+function closeModal(data: any) {
+  emit("closeModal", data)
+}
+
 const emit = defineEmits<{
-  (e: "clickRow", ObjectsArray: any): void
   (e: "reload", ObjectsArray: any): void
+  (e: "closeModal", value: any): void
 }>()
 
 </script>

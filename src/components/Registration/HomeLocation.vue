@@ -50,7 +50,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useRegistrationStore, ["homeLocation", "currentLocation"]),
         home_district() {
             return getFieldValue(this.homeLocation, "home_district", "value")?.name;
