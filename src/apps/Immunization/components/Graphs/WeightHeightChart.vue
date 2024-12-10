@@ -175,7 +175,6 @@ export default defineComponent({
         },
         async changeGraph(name: any) {
             this.propsContent.list = this.list;
-            console.log("🚀 ~ changeGraph ~ this.propsContent.list:", this.propsContent.list);
             this.activeGraph = name;
             this.setActive(name);
             this.propsContent.weight = this.weight;
