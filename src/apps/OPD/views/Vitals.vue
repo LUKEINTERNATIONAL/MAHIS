@@ -175,7 +175,6 @@ export default defineComponent({
         async getSaveFunction() {
             const userID: any = Service.getUserID();
             const userRoles = Service.getUserRoles();
-            console.log("Lets the name of the user: ", userRoles);
             this.isLoading = true;
 
             try {

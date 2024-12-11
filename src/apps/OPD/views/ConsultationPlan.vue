@@ -233,7 +233,7 @@ export default defineComponent({
         },
     },
     setup() {
-        const presentingComplaints = ref<string[]>([]);
+        const presentingComplaintsValue = ref<string[]>([]);
 
         async function loadSavedEncounters(patientVisitDate: any) {
             const patient = new PatientService();
@@ -244,9 +244,9 @@ export default defineComponent({
         async function setPresentingComplainsEncounters(data: any) {
             const observations = data.find((encounter: any) => encounter.type.name === "PRESENTING COMPLAINTS")?.observations;
             if (observations) {
-                presentingComplaints.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
+              presentingComplaintsValue.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
             } else {
-                presentingComplaints.value = [];
+              presentingComplaintsValue.value = [];
             }
         }
 
@@ -271,8 +271,8 @@ export default defineComponent({
         };
         mounted();
         return {
-            presentingComplaints,
-            loadSavedEncounters,
+          presentingComplaintsValue,
+          loadSavedEncounters,
             chevronBackOutline,
             checkmark,
         };
@@ -285,7 +285,7 @@ export default defineComponent({
             if (index < this.StepperData.length - 1) {
                 switch (index) {
                     case 0:
-                        if (this.presentingComplaints.length === 0) {
+                        if (this.presentingComplaintsValue.length === 0) {
                             return this.saveClinicalAssessment;
                         } else {
                             return () => Promise.resolve();
@@ -333,7 +333,6 @@ export default defineComponent({
                 const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
                 if (this.patient.patientID) {
                     this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.patient.patientID);
-                    console.log("Patients waiting for lab updated:", this.hasPatientsWaitingForLab);
                 }
             }
         },
@@ -480,6 +479,7 @@ export default defineComponent({
                         return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
                     });
                 }
+                console.log(this.presentingComplaints)
                 if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
                     await this.saveWomenStatus();
                     await this.savePresentingComplaints();
