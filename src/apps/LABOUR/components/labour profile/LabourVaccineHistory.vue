@@ -6,7 +6,7 @@
                     <!-- Chronic conditions section -->
                     <div v-if="immunisation && immunisation.length > 0">
                         <div style="max-width: 1000px">
-                            <div class="heading">PAST SURGERIES DATA</div>
+                            <div class="heading">IMMUNISATION DATA</div>
                             <div>
                                 <ion-row>
                                     <ion-col class="contentTitle"></ion-col>
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="noData" v-else>PAST SURGERIES DATA IS EMPTY</div>
+                    <div class="noData" v-else>IMMUNISATION DATA IS EMPTY</div>
                 </div>
             </ion-col>
         </ion-row>
@@ -111,12 +111,15 @@ export default defineComponent({
         },
         async getValueCoded() {
             try {
-                const data = await ObservationService.getAllValueCoded(this.patient?.patientID || "", "Does the woman have any past surgeries done?");
+                const data = await ObservationService.getAllValueCoded(
+                    this.patient?.patientID || "",
+                    "The woman received tetanus doses for immunization?"
+                );
 
-                console.log("Fetched past surgeries use:", data);
+                console.log("Fetched tetanus doses for immunization:", data);
                 this.immunisation = data;
             } catch (error) {
-                console.error("Error fetching past surgeries use:", error);
+                console.error("Error fetching tetanus doses for immunization:", error);
             }
         },
         async updateData() {

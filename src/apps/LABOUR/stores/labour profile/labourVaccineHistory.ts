@@ -415,14 +415,14 @@ const initialLMNP = [
 const initialTetenus = [] as any;
 export const useLabourVaccineStore = defineStore("labourVaccineStore", {
     state: () => ({
-        labourTetanus: [...initialTetenus] as any,
+        labourTetanus: [...initialLMNP] as any,
     }),
     actions: {
         setTetanus(data: any) {
             this.labourTetanus = data;
         },
-        getInitial2() {
-            const data = _.cloneDeep(initialTetenus);
+        getInitial() {
+            const data = _.cloneDeep(initialLMNP);
             return [...data]; // Return a copy of the initial state
         },
     },

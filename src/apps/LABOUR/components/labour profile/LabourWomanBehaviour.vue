@@ -1,5 +1,5 @@
 <template>
-    <ion-accordion-group ref="accordionGroup" class="previousView ion-margin-bottom">
+    <!-- <ion-accordion-group ref="accordionGroup" class="previousView ion-margin-bottom">
         <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Woman Behaviour History</ion-label>
@@ -8,7 +8,7 @@
                 <LabourBehaviourHistory />
             </div>
         </ion-accordion>
-    </ion-accordion-group>
+    </ion-accordion-group> -->
     <div class="container">
         <!-- Caffeine -->
         <ion-card class="section">

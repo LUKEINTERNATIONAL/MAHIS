@@ -6,10 +6,11 @@
                     <ion-label class="previousLabel">Vaccine History</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <LabourMedications />
+                    <LabourVaccineHistory />
                 </div>
             </ion-accordion>
         </ion-accordion-group>
+
         <ion-card class="section">
             <ion-card-content>
                 <basic-form
@@ -41,7 +42,7 @@ import {
     IonRadio,
     IonRadioGroup,
 } from "@ionic/vue";
-import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
+import LabourVaccineHistory from "@/apps/LABOUR/components/labour profile/LabourVaccineHistory.vue";
 import BasicForm from "../../../../components/BasicForm.vue";
 import { icons } from "../../../../utils/svg";
 import BasicInputField from "../../../../components/BasicInputField.vue";
@@ -75,7 +76,7 @@ export default defineComponent({
         BasicForm,
         IonRadio,
         IonRadioGroup,
-        LabourMedications,
+        LabourVaccineHistory,
     },
 
     data() {
@@ -100,10 +101,10 @@ export default defineComponent({
         const palpation = useCurrentPregnanciesStore();
         const lnmp = useCurrentPregnanciesStore();
         const ultrasound = useCurrentPregnanciesStore();
-        const tetanus = useCurrentPregnanciesStore();
-        this.initialData = lnmp.getInitial();
-        this.initialData1 = ultrasound.getInitial1();
-        this.initialData2 = tetanus.getInitial2();
+        const tetanus = useLabourVaccineStore();
+        this.initialData = tetanus.getInitial();
+        // this.initialData1 = ultrasound.getInitial1();
+        // this.initialData2 = tetanus.getInitial();
         this.handleTetanus();
         this.validaterowData({});
         // this.handlettv1()
@@ -122,7 +123,7 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     watch: {
-        lmnp: {
+        labourTetanus: {
             handler(event) {
                 this.handleInputData(event);
                 this.handleTetanus();
