@@ -109,7 +109,7 @@
                     <VueMultiselect
                         v-model="selected_Districts"
                         @update:model-value="selectedDistrictF($event)"
-                        :multiple="true"
+                        :multiple="false"
                         :taggable="false"
                         :hide-selected="true"
                         :close-on-select="true"
@@ -486,9 +486,7 @@ function selectedDistrictF(selectedDistrict: any) {
     selectedDistrictIds.length = 0
 
     const filteredDistricts = OLDDistrictsList.value.filter((district: any) => {
-        return selectedDistrict.some((selected: any) => 
-            selected.name.toLowerCase() === district.name.toLowerCase()
-        );
+        selectedDistrict.name.toLowerCase() === district.name.toLowerCase()
     });
 
     filteredDistricts.forEach((district: any) => {
@@ -502,17 +500,16 @@ function selectedDistrictF(selectedDistrict: any) {
     getDistrictFacilities(selectedDistrict)
 }
 
-async function getDistrictFacilities(selectedDistrict: any) {
+async function getDistrictFacilities(district: any) {
     locationData.value = [];
 
-    for (const district of selectedDistrict) {
-        try {
-            const temp_data1 = await LocationService.getDistrictFacilities(district.name.toLowerCase());
-            locationData.value.push(...temp_data1.facilities);
-        } catch (error) {
-            console.error(`Error fetching facilities for district ${district.name}:`, error);
-        }
+    try {
+        const temp_data1 = await LocationService.getDistrictFacilities(district.name.toLowerCase());
+        locationData.value.push(...temp_data1.facilities);
+    } catch (error) {
+        console.error(`Error fetching facilities for district ${district.name}:`, error);
     }
+    
     selected_location.value = null;
 }
 

@@ -168,8 +168,8 @@
                     >
                     <VueMultiselect
                         v-model="selected_Districts"
-                        @update:model-value="selectedDistrictF($event)"
-                        :multiple="true"
+                        @update:model-value="selectedDistrictF($event, true)"
+                        :multiple="false"
                         :taggable="false"
                         :hide-selected="true"
                         :close-on-select="true"
@@ -180,9 +180,9 @@
                         label="name"
                         :searchable="true"
                         @search-change=""
-                        track-by="district_id"
+                        track-by="id"
                         :options="districtList"
-                        :disabled="HSA_found_for_disabling_button"
+                        :disabled="disableFacilitySelection"
                     />
 
                     <div>
@@ -211,7 +211,7 @@
                         selectLabel=""
                         label="name"
                         :searchable="true"
-                        :disabled="HSA_found_for_disabling_button"
+                        :disabled="disableFacilitySelection"
                         @search-change="FindLocation($event)"
                         track-by="code"
                         :options="locationData"
@@ -462,6 +462,7 @@ onMounted(async () => {
     getCurrentUser()
     OLDDistrictsList.value = await getdistrictList()
     districtList.value = await getFacilityDistricts()
+
 })
 
 watch(
@@ -479,28 +480,37 @@ watch(
 )
 
 watch(
-    () => traditionalAuthorities.value.length,
+    () => selected_location.value,
     async (newValue) => {
         setUserDistricts()
     }
 )
 
 watch(
-    () => districtList.value.length,
-        async (newValue) => {
-        setUserDistricts()
+    () => locationData.value.length > 0 && districtList.value.length > 0,
+    async (newValue) => {
+        setSelectedDistrict()
     }
 )
 
 function selectedLocation(data: any) {
     selected_location.value = data
+}
 
-    const selectedLocation = locationData.value.find((location: any) => location.code === data.code);
-    const filteredDistricts = selectedLocation
-        ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
-        : [];
+function setSelectedDistrict() {
+    try {
+        if (selected_location.value != null) {
+            const selectedLocation = locationData.value.find((location: any) => location.code === selected_location.value.code);
+            const filteredDistricts = selectedLocation
+                ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
+                : [];
 
-    selected_Districts.value = filteredDistricts
+            console.log(filteredDistricts)
+            selected_Districts.value = filteredDistricts[0]
+        }
+    } catch (error) {
+        
+    }
 }
 
 async function FindLocation(text: any) {
@@ -710,7 +720,6 @@ function findAndRemoveRoleSSU(data: any[]): any[] {
     return data;
 }
 
-
 async function updateUserVillages() {
     UserService.updateuserVillages(userId.value, selectedVillageIds as any)
 }
@@ -784,22 +793,10 @@ async function setVillage(villageId: number, index: number) {
 
 async function setUserDistricts() {
     try {
-        selected_Districts.value = [];
-        const uniqueDistrictIds = new Set();
-        traditionalAuthorities.value.forEach((TA: any) => {
-            const matchingDistrict = OLDDistrictsList.value.find(
-                (DL: any) => DL.district_id === TA.district_id
-            );
-            
-            if (matchingDistrict && !uniqueDistrictIds.has(matchingDistrict.district_id)) {
-                uniqueDistrictIds.add(matchingDistrict.district_id);
-                selected_Districts.value.push(matchingDistrict);
-                selectedDistrictF(matchingDistrict)
-            }
-        });
+        const district = { name: selected_location.value.district }
+        selectedDistrictF(district)
     } catch (error) {
-        console.error('Error setting user districts:', error);
-        throw error;
+        console.log('Error setting user districts:',);
     }
 }
 
@@ -835,7 +832,6 @@ async function setUserTAs() {
         throw new Error('Failed to set user TAs');
     }
 }
-
 
 async function getUserData() {
     userId.value = props.user_id
@@ -1057,10 +1053,6 @@ async function getUserPrograms() {
     user_programs.value = temp_array
 }
 
-async function setSelectedUserPrograms() {
-
-}
-
 const list_picker_prperties = [
     {
         multi_Selection: true as any,
@@ -1141,11 +1133,13 @@ function saveEvent(boolean_value: any) {
     emit("save", boolean_value)
 }
 
-function selectedDistrictF(selectedDistrict: any) {
+function selectedDistrictF(selectedDistrict: any, clearFL = false) {
+    if (clearFL == true) {
+        selected_location.value = null;
+        selected_Districts.value = selectedDistrict
+    }
     selectedDistrict = [selectedDistrict]
     selectedDistrictIds.length = 0
-
-    console.log("selectedDistrict......: ", selectedDistrict)
 
     const filteredDistricts = OLDDistrictsList.value.filter((district: any) => {
         return selectedDistrict.some((selected: any) => 
