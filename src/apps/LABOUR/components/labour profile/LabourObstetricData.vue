@@ -108,7 +108,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient", "patient"]),
         inputFields() {
             return this.investigations[0].selectedData;
         },
@@ -124,7 +124,7 @@ export default defineComponent({
         },
         async loadSavedEncounters(patientVisitDate: any) {
             this.visitDate = patientVisitDate;
-            const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
+            const encounters = await EncounterService.getEncounters(this.patient.patientID, { date: patientVisitDate });
             await this.setANCProfileEncounters(encounters);
         },
         findEncounter(data: any, encounterType: any) {

@@ -100,7 +100,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient", "patient"]),
         inputFields() {
             return this.investigations[0].selectedData;
         },
@@ -111,11 +111,11 @@ export default defineComponent({
         },
         async getValueCoded() {
             try {
-                const caffeine = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Daily caffeine use");
-                const tobacco = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Recently quit tobacco products");
-                const smoke = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Exposure to second hand smoke");
-                //const pica = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Pica"); // create its concept first
-                const alcohol = await ObservationService.getAllValueCoded(this.demographics?.patient_id || "", "Alcohol");
+                const caffeine = await ObservationService.getAllValueCoded(this.patient?.patientID || "", "Daily caffeine use");
+                const tobacco = await ObservationService.getAllValueCoded(this.patient?.patientID || "", "Recently quit tobacco products");
+                const smoke = await ObservationService.getAllValueCoded(this.patient?.patientID || "", "Exposure to second hand smoke");
+                //const pica = await ObservationService.getAllValueCoded(this.patient?.patientID|| "", "Pica"); // create its concept first
+                const alcohol = await ObservationService.getAllValueCoded(this.patient?.patientID || "", "Alcohol");
 
                 const data = [...caffeine, ...tobacco, ...smoke, ...alcohol];
                 console.log("Fetched Daily caffeine use:", data);
@@ -134,7 +134,7 @@ export default defineComponent({
         },
         async loadSavedEncounters(patientVisitDate: any) {
             this.visitDate = patientVisitDate;
-            const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
+            const encounters = await EncounterService.getEncounters(this.patient.patient_id, { date: patientVisitDate });
             await this.setANCProfileEncounters(encounters);
         },
         findEncounter(data: any, encounterType: any) {

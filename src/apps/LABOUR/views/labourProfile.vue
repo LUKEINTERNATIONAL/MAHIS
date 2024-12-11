@@ -249,7 +249,7 @@ export default defineComponent({
         // },
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabourCoplicationsStore, ["labourPrevPregnancies"]),
         ...mapState(useLabourWomanBehaviourStore, ["dailyCaffeineIntake"]),
         ...mapState(useLabourAllergiesStore, ["labourAllergies"]),
@@ -293,7 +293,7 @@ export default defineComponent({
         },
 
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics?.birthdate);
+            return HisDate.getBirthdateAge(this.patient?.birthdate);
         },
         async saveLabourProfile() {
             if (
@@ -309,7 +309,7 @@ export default defineComponent({
                 this.prevPregnancies
             ) {
                 const userID: any = Service.getUserID();
-                const profile = new currentPregnancyService(this.demographics.patient_id, userID);
+                const profile = new currentPregnancyService(this.patient.patient_id, userID);
                 const encounter = await profile.createEncounter();
                 if (!encounter) return toastWarning("Unable to create profile encounter");
                 const patientStatus = await profile.saveObservationList(await this.buildLabourProfile());
