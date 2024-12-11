@@ -309,7 +309,7 @@ export default defineComponent({
                 this.prevPregnancies
             ) {
                 const userID: any = Service.getUserID();
-                const profile = new currentPregnancyService(this.patient.patient_id, userID);
+                const profile = new currentPregnancyService(this.patient.patientID, userID);
                 const encounter = await profile.createEncounter();
                 if (!encounter) return toastWarning("Unable to create profile encounter");
                 const patientStatus = await profile.saveObservationList(await this.buildLabourProfile());
