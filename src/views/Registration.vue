@@ -523,6 +523,8 @@ export default defineComponent({
                     relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
                 },
                 vitals: vitals,
+                vaccineAdministration: [],
+                immunizationDispensations: [],
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",
