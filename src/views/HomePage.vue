@@ -175,6 +175,7 @@ export default defineComponent({
                         await workerData.postData("SYNC_DDE");
                         await workerData.postData("SYNC_STOCK_RECORD");
                         await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
+                        await workerData.postData("SET_GENERIC_VACCINE_SCHEDULE");
                         // await workerData.terminate();
                     }
                 }
