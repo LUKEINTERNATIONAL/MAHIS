@@ -103,6 +103,7 @@ import { useSearchName } from "@/stores/SearchName";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import { getOfflineRecords } from "@/services/offline_service";
 import {
     medkit,
     chevronBackOutline,
@@ -117,6 +118,27 @@ import {
     add,
     person,
 } from "ionicons/icons";
+interface DrugBatch {
+    id: number;
+    pharmacy_batch_id: number;
+    drug_id: number;
+    delivered_quantity: number;
+    current_quantity: number;
+    delivery_date: string;
+    expiry_date: string;
+    drug_legacy_name: string;
+    doses_wasted: number;
+    dispensed_quantity: number;
+}
+
+interface CombinedDrugBatch {
+    drug_legacy_name: string;
+    delivered_quantity: number;
+    current_quantity: number;
+    dispensed_quantity: number;
+    doses_wasted: number;
+}
+
 export default defineComponent({
     name: "StockManagement",
     mixins: [SetUser],
@@ -200,6 +222,33 @@ export default defineComponent({
         await this.buildTableData();
     },
     methods: {
+        combineDrugBatches(batches: DrugBatch[]): CombinedDrugBatch[] {
+            // Group batches by drug_legacy_name
+            const groupedBatches = batches.reduce<Record<string, DrugBatch[]>>((acc, batch) => {
+                const key = batch.drug_legacy_name;
+                if (!acc[key]) {
+                    acc[key] = [];
+                }
+                acc[key].push(batch);
+                return acc;
+            }, {});
+
+            // Combine batches with the same drug_legacy_name
+            const combinedBatches = Object.keys(groupedBatches).map<CombinedDrugBatch>((key) => {
+                const batchGroup = groupedBatches[key];
+
+                return {
+                    drug_legacy_name: key,
+                    delivered_quantity: batchGroup.reduce((sum, batch) => sum + batch.delivered_quantity, 0),
+                    current_quantity: batchGroup.reduce((sum, batch) => sum + batch.current_quantity, 0),
+                    dispensed_quantity: batchGroup.reduce((sum, batch) => sum + batch.dispensed_quantity, 0),
+                    doses_wasted: batchGroup.reduce((sum, batch) => sum + batch.doses_wasted, 0),
+                };
+            });
+
+            return combinedBatches;
+        },
+
         async onClickHandler(page: any) {
             await this.buildTableData(page);
         },
@@ -227,15 +276,8 @@ export default defineComponent({
         async buildTableData(page = 1) {
             this.isLoading = true;
             try {
-                const stockService = new StockService();
-                this.reportData = await stockService.getItems({
-                    start_date: "2000-01-01",
-                    end_date: this.endDate,
-                    drug_name: this.filter,
-                    page: page,
-                    page_size: 4,
-                    display_details: "true",
-                });
+                const stock: any = await getOfflineRecords("stock");
+                this.reportData = this.combineDrugBatches(stock);
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
