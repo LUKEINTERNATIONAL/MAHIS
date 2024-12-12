@@ -134,7 +134,7 @@ import { Service } from "@/services/service";
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
-import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
+import { saveVaccineAdministeredDrugs } from "@/apps/Immunization/services/vaccines_service";
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import VueMultiselect from "vue-multiselect";
