@@ -11,7 +11,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 radioBtnContent: {
                     header: {
                         title: "What is the reason for coming to the facility?",
-                        name:"reason",
+                        name: "reason",
                         class: "bold",
                         selectedValue: "",
                     },
@@ -30,6 +30,20 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                             colSize: "7",
                             justify: "space-between",
                         },
+                        {
+                            name: "Home Delivery",
+                            value: "Home Delivery",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "Sick",
+                            value: "Sick",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
                     ],
                 },
             },
@@ -40,7 +54,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     header: {
                         title: "Danger signs",
                         class: "bold",
-                        name:"Danger signs",
+                        name: "Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -69,7 +83,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
-                        name:"Danger signs",
+                        name: "Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -97,7 +111,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
-                        name:"Danger signs",
+                        name: "Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -125,7 +139,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
-                        name:"Danger signs",
+                        name: "Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -153,13 +167,41 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
-                        name:"Danger signs",
+                        name: "Danger signs",
                         selectedValue: "",
                     },
                     data: [
                         {
-                            name: "Severe vomiting",
-                            value: "severe vomiting",
+                            name: "No fetal movement",
+                            value: "no fetal movement",
+                            checked: false,
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "Jaundice",
+                            value: "jaundice",
+                            checked: false,
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
+                        },
+                    ],
+                },
+            },
+            {
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        name: "Danger signs",
+                        selectedValue: "",
+                    },
+                    data: [
+                        {
+                            name: "Difficulties in breathing",
+                            value: "difficulties in breathing",
                             checked: false,
                             labelPlacement: "start",
                             colSize: "6",
@@ -182,7 +224,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                 checkboxBtnContent: {
                     header: {
                         title: "",
-                        name:"Danger signs",
+                        name: "Danger signs",
                         selectedValue: "",
                     },
                     data: [
@@ -207,6 +249,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                             colData: [
                                 {
                                     inputHeader: "specify",
+                                    displayNone: true,
                                     unit: "",
                                     icon: icons.editPen,
                                     value: "",
@@ -223,11 +266,13 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
             {
                 selectdData: [],
                 isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
                 radioBtnContent: {
                     header: {
                         title: "Labour onset type",
                         name: "Labour onset type",
                         selectedValue: "",
+                        displayNone: true,
                     },
                     data: [
                         {
@@ -257,6 +302,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                             colData: [
                                 {
                                     inputHeader: "Time of onset of labour",
+                                    displayNone: true,
                                     value: "",
                                     name: "Time",
                                     icon: icons.time,
@@ -317,6 +363,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                             colData: [
                                 {
                                     inputHeader: "Time membranes ruptured",
+                                    displayNone: true,
                                     value: "",
                                     name: "Time Membrane",
                                     icon: icons.time,
@@ -349,6 +396,7 @@ export const useLabourQuickCheckStore = defineStore("labourDetailsStore", {
                     header: {
                         title: "Has she had food in 4 hours? ",
                         selectedValue: "",
+                        name: "food in 4 hours",
                     },
                     data: [
                         {

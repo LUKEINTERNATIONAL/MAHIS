@@ -245,7 +245,7 @@ export default defineComponent({
         },
 
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
+            return HisDate.getBirthdateAge(this.patient?.birthdate);
         },
 
         async saveProfile() {
@@ -277,6 +277,7 @@ export default defineComponent({
                     //     //"preterm", "prevPregnancies", "Complications", "modeOfDelivery"
                 ) {
                     const userID: any = Service.getUserID();
+                    console.log("Tione zinthu", this.patient);
                     const profile = new currentPregnancyService(this.patient.patientID, userID);
                     const encounter = await profile.createEncounter();
                     if (!encounter) return toastWarning("Unable to create profile encounter");
@@ -307,7 +308,7 @@ export default defineComponent({
                     });
                     const obs_service = ObservationService.saveObs(82, obs);
                 }
-                const age = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
+                const age = HisDate.getAgeInYears(this.patient?.birthdate);
                 if (age < 19) {
                     this.$router.push("headssAssessment");
                 } else {

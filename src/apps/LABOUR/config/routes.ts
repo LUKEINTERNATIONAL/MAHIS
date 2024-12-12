@@ -1,3 +1,4 @@
+import labourProfile from "@/apps/LABOUR/views/labourProfile.vue";
 import obstetricDetails from "@/apps/LABOUR/views/obstetricDetails.vue";
 import continuousMonitoring from "@/apps/LABOUR/views/continuousMonitoring.vue";
 import referral from "@/apps/LABOUR/views/referral.vue";
@@ -9,46 +10,49 @@ import LabourHome from "@/apps/LABOUR/views/LabourHome.vue";
 
 export default [
     {
-        path: '/obstetric',
-        name: 'obstetricDetails',
-        component: obstetricDetails
+        path: "/labourProfile",
+        name: "labourProfile",
+        component: labourProfile,
     },
     {
-        path: '/labourAssessment',
-        name: 'labourAssessment',
-        component: labourAssessment
+        path: "/obstetric",
+        name: "obstetricDetails",
+        component: obstetricDetails,
     },
     {
-        path: '/continuousMonitoring',
-        name: 'continuousMonitoring',
-        component: continuousMonitoring
+        path: "/labourAssessment",
+        name: "labourAssessment",
+        component: labourAssessment,
     },
     {
-        path: '/labourReferral',
-        name: 'referral',
-        component: referral
+        path: "/continuousMonitoring",
+        name: "continuousMonitoring",
+        component: continuousMonitoring,
     },
     {
-        path: '/labourDeliveryDetails',
-        name: 'deliveryDetails',
-        component: deliveryDetails
+        path: "/labourReferral",
+        name: "referral",
+        component: referral,
     },
     {
-        path: '/postnatalChecks',
-        name: 'postnatalChecks',
-        component: postnatalChecks
+        path: "/labourDeliveryDetails",
+        name: "deliveryDetails",
+        component: deliveryDetails,
+    },
+    {
+        path: "/postnatalChecks",
+        name: "postnatalChecks",
+        component: postnatalChecks,
     },
 
     {
-        path: '/labourEnd',
-        name: 'end',
-        component: end
+        path: "/labourEnd",
+        name: "end",
+        component: end,
     },
     {
-        path: '/labourHome',
-        name: 'LabourHome',
-        component: LabourHome
+        path: "/labourHome",
+        name: "LabourHome",
+        component: LabourHome,
     },
-
-]
-
+];
