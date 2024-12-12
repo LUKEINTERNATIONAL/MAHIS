@@ -4,7 +4,7 @@ const stockService = {
         const endDate = await previousSyncService.getCurrentDateFormatted();
         let startDate = "2000-01-01";
         if (stockData) {
-            startDate = stockData[0][0]?.latest_date_changed;
+            startDate = stockData[0]?.latest_date_changed;
         }
         let stocks = [];
         try {
@@ -14,10 +14,7 @@ const stockService = {
                 paginate: false,
             });
         } catch (error) {}
-
-        if (!stockData) {
-            await DatabaseManager.overRideRecord("stock", stocks);
-        } else if (stocks.length > 0) {
+        if (stocks.length > 0) {
             await Promise.all(
                 stocks.map(async (stock) => {
                     this.updateStock(stock);
