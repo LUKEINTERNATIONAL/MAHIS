@@ -12,14 +12,30 @@ import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { useUserStore } from "@/stores/userStore";
 import platform, { FileExportType } from "@/composables/usePlatform";
 import { exportMobile } from "@/utils/Export";
+import db from "@/db";
+import workerData from "@/activate_worker";
+import ApiClient, { ApiBusEvents } from "@/services/api_client";
 
 export async function getVaccinesSchedule(patientID = null) {
     const patient = new PatientService();
     const id = patientID !== null ? patientID : patient.getID();
     
     if (id) {
-        const data = await Service.getJson("eir/schedule", { patient_id: id });
-        return data;
+      try {
+            const apiStatus: any = await ApiClient.healthCheck();
+
+            // Check if apiStatus is defined and has the 'ok' property
+            if (apiStatus && apiStatus.ok) {
+                const data = await Service.getJson("eir/schedule", { patient_id: id });
+                return data;
+            } else {
+                const data = await getOfflineVaccineSchedule(patient);
+                return data;
+            }
+        } catch (error) {
+            console.error("Error during health check:", error);
+        }
+
     }
 }
 
@@ -50,6 +66,80 @@ export async function saveVaccineAdministeredDrugs() {
         }
     }
 }
+
+async function getOfflineVaccineSchedule(patient: any) { 
+    const genericVaccineSchedule = await getGenericVaccineSchedule(patient.getGender())
+
+    const birthdateString = patient.getBirthdate(); 
+    const birthdate = new Date(birthdateString); 
+
+    const vaccineSchudule = await updateMilestoneStatus(birthdate, genericVaccineSchedule)
+    return vaccineSchudule;
+}   
+
+async function getGenericVaccineSchedule(gender: string) {
+    try {
+        const genericVaccineSchedule = await db.collection("genericVaccineSchedule").get();
+
+        await workerData.terminate();
+
+        if (gender == "M") {
+           return genericVaccineSchedule[0].genericVaccineSchedule.male_schedule 
+        } else if (gender == "F") { 
+           return  genericVaccineSchedule[0].genericVaccineSchedule.female_schedule 
+        }
+    } catch (error) {
+        console.error("Error fetching documents or terminating worker:", error);
+        return [];
+    }
+}
+
+async function updateMilestoneStatus(birthdate: Date, schedule: any[]) {
+  const today = new Date();
+
+  schedule.forEach((visit) => {
+    const milestoneAge = visit.age.toLowerCase();
+
+    // Determine the target date for this milestone
+    let targetDate: Date | null = null;
+
+    if (milestoneAge === "at birth") {
+      targetDate = new Date(birthdate); // At birth means the same day as birthdate
+    } else if (milestoneAge.includes("weeks")) {
+      const weeks = parseInt(milestoneAge.split(" ")[0], 10);
+      targetDate = new Date(birthdate);
+      targetDate.setDate(birthdate.getDate() + weeks * 7); // Add weeks to birthdate
+    } else if (milestoneAge.includes("months")) {
+      const months = parseInt(milestoneAge.split(" ")[0], 10);
+      targetDate = new Date(birthdate);
+      targetDate.setMonth(birthdate.getMonth() + months); // Add months to birthdate
+    } else if (milestoneAge.includes("years")) {
+      const years = parseInt(milestoneAge.split(" ")[0], 10);
+      targetDate = new Date(birthdate);
+      targetDate.setFullYear(birthdate.getFullYear() + years); // Add years to birthdate
+    }
+
+    // Determine the milestone status based on the target date
+    if (targetDate) {
+      if (targetDate > today) {
+        visit.milestone_status = "upcoming";
+      } else if (
+        targetDate.toDateString() === today.toDateString() // Same date as today
+      ) {
+        visit.milestone_status = "current";
+      } else {
+        visit.milestone_status = "passed";
+      }
+    } else {
+      visit.milestone_status = "unknown"; // In case no valid age is parsed
+    }
+  });
+
+    return { vaccine_schedule: schedule };
+}
+
+
+
 
 function mapToOrders(): any[] {
     const store = useAdministerVaccineStore();
