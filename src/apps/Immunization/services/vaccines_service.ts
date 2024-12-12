@@ -15,27 +15,25 @@ import { exportMobile } from "@/utils/Export";
 import db from "@/db";
 import workerData from "@/activate_worker";
 import ApiClient, { ApiBusEvents } from "@/services/api_client";
+import { getOfflineRecords } from "@/services/offline_service";
 
 export async function getVaccinesSchedule(patientID = null) {
     const patient = new PatientService();
     const id = patientID !== null ? patientID : patient.getID();
-    
-    if (id) {
-      try {
-            const apiStatus: any = await ApiClient.healthCheck();
 
-            // Check if apiStatus is defined and has the 'ok' property
-            if (apiStatus && apiStatus.ok) {
-                const data = await Service.getJson("eir/schedule", { patient_id: id });
-                return data;
-            } else {
-                const data = await getOfflineVaccineSchedule(patient);
-                return data;
-            }
-        } catch (error) {
-            console.error("Error during health check:", error);
+    try {
+        const apiStatus: any = await ApiClient.healthCheck();
+
+        // Check if apiStatus is defined and has the 'ok' property
+        if (apiStatus && apiStatus.ok) {
+            const data = await Service.getJson("eir/schedule", { patient_id: id });
+            return data;
+        } else {
+            const data = await getOfflineVaccineSchedule(patient);
+            return data;
         }
-
+    } catch (error) {
+        console.error("Error during health check:", error);
     }
 }
 
@@ -48,16 +46,16 @@ export async function saveVaccineAdministeredDrugs() {
     if (!isEmpty(store.getAdministeredVaccines())) {
         try {
             const drugOrders = mapToOrders();
-            const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), '' as any);
+            const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), "" as any);
             const encounter = await prescriptionService.createEncounter();
             if (!encounter) return toastWarning("Unable to create immunization encounter");
             const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId);
-            await createObForEachDrugAdminstred(encounter)
+            await createObForEachDrugAdminstred(encounter);
             if (!drugOrder) return toastWarning("Unable register vaccine!");
             toastSuccess("Vaccine registred successfully");
             store.setVaccineReload(!store.getVaccineReload());
-            if(drugOrder) {
-                store.setLastVaccineAdminstredOnschedule(drugOrder)
+            if (drugOrder) {
+                store.setLastVaccineAdminstredOnschedule(drugOrder);
             }
         } catch (error: any) {
             if (validateBatchString(error.errors) == true) {
@@ -67,26 +65,26 @@ export async function saveVaccineAdministeredDrugs() {
     }
 }
 
-async function getOfflineVaccineSchedule(patient: any) { 
-    const genericVaccineSchedule = await getGenericVaccineSchedule(patient.getGender())
+async function getOfflineVaccineSchedule(patient: any) {
+    const genericVaccineSchedule = await getGenericVaccineSchedule(patient.getGender());
 
-    const birthdateString = patient.getBirthdate(); 
-    const birthdate = new Date(birthdateString); 
+    const birthdateString = patient.getBirthdate();
+    const birthdate = new Date(birthdateString);
 
-    const vaccineSchudule = await updateMilestoneStatus(birthdate, genericVaccineSchedule)
+    const vaccineSchudule = await updateMilestoneStatus(birthdate, genericVaccineSchedule);
     return vaccineSchudule;
-}   
+}
 
 async function getGenericVaccineSchedule(gender: string) {
     try {
-        const genericVaccineSchedule = await db.collection("genericVaccineSchedule").get();
+        const genericVaccineSchedule: any = await getOfflineRecords("genericVaccineSchedule");
 
         await workerData.terminate();
 
         if (gender == "M") {
-           return genericVaccineSchedule[0].genericVaccineSchedule.male_schedule 
-        } else if (gender == "F") { 
-           return  genericVaccineSchedule[0].genericVaccineSchedule.female_schedule 
+            return genericVaccineSchedule[0].genericVaccineSchedule.male_schedule;
+        } else if (gender == "F") {
+            return genericVaccineSchedule[0].genericVaccineSchedule.female_schedule;
         }
     } catch (error) {
         console.error("Error fetching documents or terminating worker:", error);
@@ -95,51 +93,48 @@ async function getGenericVaccineSchedule(gender: string) {
 }
 
 async function updateMilestoneStatus(birthdate: Date, schedule: any[]) {
-  const today = new Date();
+    const today = new Date();
 
-  schedule.forEach((visit) => {
-    const milestoneAge = visit.age.toLowerCase();
+    schedule.forEach((visit) => {
+        const milestoneAge = visit.age.toLowerCase();
 
-    // Determine the target date for this milestone
-    let targetDate: Date | null = null;
+        // Determine the target date for this milestone
+        let targetDate: Date | null = null;
 
-    if (milestoneAge === "at birth") {
-      targetDate = new Date(birthdate); // At birth means the same day as birthdate
-    } else if (milestoneAge.includes("weeks")) {
-      const weeks = parseInt(milestoneAge.split(" ")[0], 10);
-      targetDate = new Date(birthdate);
-      targetDate.setDate(birthdate.getDate() + weeks * 7); // Add weeks to birthdate
-    } else if (milestoneAge.includes("months")) {
-      const months = parseInt(milestoneAge.split(" ")[0], 10);
-      targetDate = new Date(birthdate);
-      targetDate.setMonth(birthdate.getMonth() + months); // Add months to birthdate
-    } else if (milestoneAge.includes("years")) {
-      const years = parseInt(milestoneAge.split(" ")[0], 10);
-      targetDate = new Date(birthdate);
-      targetDate.setFullYear(birthdate.getFullYear() + years); // Add years to birthdate
-    }
+        if (milestoneAge === "at birth") {
+            targetDate = new Date(birthdate); // At birth means the same day as birthdate
+        } else if (milestoneAge.includes("weeks")) {
+            const weeks = parseInt(milestoneAge.split(" ")[0], 10);
+            targetDate = new Date(birthdate);
+            targetDate.setDate(birthdate.getDate() + weeks * 7); // Add weeks to birthdate
+        } else if (milestoneAge.includes("months")) {
+            const months = parseInt(milestoneAge.split(" ")[0], 10);
+            targetDate = new Date(birthdate);
+            targetDate.setMonth(birthdate.getMonth() + months); // Add months to birthdate
+        } else if (milestoneAge.includes("years")) {
+            const years = parseInt(milestoneAge.split(" ")[0], 10);
+            targetDate = new Date(birthdate);
+            targetDate.setFullYear(birthdate.getFullYear() + years); // Add years to birthdate
+        }
 
-    // Determine the milestone status based on the target date
-    if (targetDate) {
-      if (targetDate > today) {
-        visit.milestone_status = "upcoming";
-      } else if (
-        targetDate.toDateString() === today.toDateString() // Same date as today
-      ) {
-        visit.milestone_status = "current";
-      } else {
-        visit.milestone_status = "passed";
-      }
-    } else {
-      visit.milestone_status = "unknown"; // In case no valid age is parsed
-    }
-  });
+        // Determine the milestone status based on the target date
+        if (targetDate) {
+            if (targetDate > today) {
+                visit.milestone_status = "upcoming";
+            } else if (
+                targetDate.toDateString() === today.toDateString() // Same date as today
+            ) {
+                visit.milestone_status = "current";
+            } else {
+                visit.milestone_status = "passed";
+            }
+        } else {
+            visit.milestone_status = "unknown"; // In case no valid age is parsed
+        }
+    });
 
     return { vaccine_schedule: schedule };
 }
-
-
-
 
 function mapToOrders(): any[] {
     const store = useAdministerVaccineStore();
@@ -155,7 +150,7 @@ function mapToOrders(): any[] {
             instructions: "",
             dose: 1,
             frequency: "Unknown",
-            batch_number:drug.batch_number || 'Unknown',
+            batch_number: drug.batch_number || "Unknown",
             prn: 0,
         };
     });
@@ -169,7 +164,7 @@ async function createObForEachDrugAdminstred(encounter: any) {
             value_text: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
             obs_datetime: encounter.encounter_datetime,
         });
-    })
+    });
 }
 
 function calculateExpireDate(startDate: string | Date, duration: any) {
@@ -192,23 +187,23 @@ function validateBatchString(input: any) {
 
 export async function checkIfLastVaccineAdministered() {
     const store = useAdministerVaccineStore();
-    const lastVaccineAdminstredOnschedule = store.getLastVaccineAdminstredOnschedule()
+    const lastVaccineAdminstredOnschedule = store.getLastVaccineAdminstredOnschedule();
     if (lastVaccineAdminstredOnschedule.length > 0) {
         store.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
-            if(checkIfAllVaccinesAdministeredOnSchedule(vaccineSchudule.antigens) == true) {
+            if (checkIfAllVaccinesAdministeredOnSchedule(vaccineSchudule.antigens) == true) {
                 vaccineSchudule.antigens.forEach((antigen: any) => {
                     if (antigen.drug_id == lastVaccineAdminstredOnschedule[0].drug_inventory_id) {
                         openNextVaccineAppoinment();
                     }
-                })
+                });
             }
-        })
+        });
     }
     store.setLastVaccineAdminstredOnschedule([]);
 }
 
 function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
-    return antigens.every((antigen: any) => antigen.status === 'administered');
+    return antigens.every((antigen: any) => antigen.status === "administered");
 }
 
 export async function voidVaccine(orderId: number, reason: string) {
@@ -217,7 +212,7 @@ export async function voidVaccine(orderId: number, reason: string) {
 
 export async function voidVaccineEncounter(encounterId: number, reason: string) {
     return Service.void(`/encounters/${encounterId}`, { reason });
-} 
+}
 
 export function checkDrugName(drug: any) {
     if (isNameInList(drug.drug_name) == true) {
@@ -228,46 +223,41 @@ export function checkDrugName(drug: any) {
 }
 
 function isNameInList(name: string): boolean {
-    const nameList = ['Vit','Albendazole'];
+    const nameList = ["Vit", "Albendazole"];
     const nameParts = name.toLowerCase().split(/[\s,()]+/); // Split the input name into parts
-    
-    return nameList.some(listedName => {
+
+    return nameList.some((listedName) => {
         const listedNameParts = listedName.toLowerCase().split(/[\s,()]+/); // Split each listed name into parts
-        
+
         // Check if any part of the input name matches any part of the listed name
-        return listedNameParts.some(listedPart => 
-            nameParts.some(namePart => namePart.includes(listedPart) || listedPart.includes(namePart))
-        );
+        return listedNameParts.some((listedPart) => nameParts.some((namePart) => namePart.includes(listedPart) || listedPart.includes(namePart)));
     });
 }
 
-
-
 export async function getMonthsList(): Promise<any> {
     const data = await Service.getJson("immunization/months_picker");
-    return data
+    return data;
 }
 
 export async function getVaccinesAdministered(start_date: string, end_date: string): Promise<any> {
-    const data = await Service.getJson(`immunization/vaccines_administered`, {start_date: start_date, end_date: end_date})
-    return data
+    const data = await Service.getJson(`immunization/vaccines_administered`, { start_date: start_date, end_date: end_date });
+    return data;
 }
 
 export async function getAefiReport(start_date: string, end_date: string): Promise<any> {
-    const data = await Service.getJson(`immunization/aefi_report`, {start_date: start_date, end_date: end_date})
-    return data
+    const data = await Service.getJson(`immunization/aefi_report`, { start_date: start_date, end_date: end_date });
+    return data;
 }
 
 export async function getunderfiveImmunizationsDrugs() {
-    const data = await Service.getJson(`immunization/under_five_immunizations_drugs`)
-    return data
+    const data = await Service.getJson(`immunization/under_five_immunizations_drugs`);
+    return data;
 }
 
 export async function getImmunizationVaccineNames(): Promise<any> {
-    const data = await Service.getJson(`/immunization/vaccine_names`)
-    return data
+    const data = await Service.getJson(`/immunization/vaccine_names`);
+    return data;
 }
-
 
 // Define interfaces for better type safety
 interface ImmunizationRecord {
@@ -315,18 +305,18 @@ function escapeCSV(str: string): string {
 
 export function exportReportToCSV(): void {
     try {
-        const store = EIRreportsStore()
-        const user_store = useUserStore()
+        const store = EIRreportsStore();
+        const user_store = useUserStore();
         const { activePlatformProfile } = platform();
 
         let CSVString = generateCSVStringForImmunizationMonthly(store.$state.immunizationMonthlyRepoartData as any);
-        CSVString += '\n';
+        CSVString += "\n";
         CSVString += generateCSVStringForAEFIMonthly(store.$state.AEFIReportData as any);
-        CSVString += '\n';
+        CSVString += "\n";
         CSVString += `
-        Date Created: ${new Date().toISOString().split('T')[0]}
+        Date Created: ${new Date().toISOString().split("T")[0]}
         Report Period: ${store.$state.navigationPayload.subTxt}
-        Site: ${user_store.$state.userFacilityName}`
+        Site: ${user_store.$state.userFacilityName}`;
 
         const csvData = new Blob([CSVString], { type: "text/csv;charset=utf-8;" });
         const reportTitle = `${user_store.$state.userFacilityName}_${store.$state.navigationPayload.subTxt}_${store.$state.navigationPayload.title}`;
@@ -335,7 +325,7 @@ export function exportReportToCSV(): void {
             const link = document.createElement("a");
             link.href = window.URL.createObjectURL(csvData);
             link.setAttribute("download", `${reportTitle}.csv`);
-            link.style.display = 'none';
+            link.style.display = "none";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -357,20 +347,20 @@ function generateCSVStringForImmunizationMonthly(data: ImmunizationRecord[]): st
             record.fixed.lessThan1y,
             record.fixed.moreThan1y,
             record.outreach.lessThan1y,
-            record.outreach.moreThan1y
-        ].join(',');
-        CSVString += row + '\n';
+            record.outreach.moreThan1y,
+        ].join(",");
+        CSVString += row + "\n";
     }
     return CSVString;
 }
 
 function generateCSVStringForAEFIMonthly(data: AEFIData): string {
-    let CSVString = 'Cases,' + data.vaccines.map(v => escapeCSV(v.name)).join(',') + '\n';
+    let CSVString = "Cases," + data.vaccines.map((v) => escapeCSV(v.name)).join(",") + "\n";
     for (const category of data.categories) {
-        CSVString += escapeCSV(category.name) + '\n';
+        CSVString += escapeCSV(category.name) + "\n";
         for (const caseItem of category.cases) {
-            const rowData = [escapeCSV(caseItem.name), ...caseItem.data.map(d => d.count)];
-            CSVString += rowData.join(',') + '\n';
+            const rowData = [escapeCSV(caseItem.name), ...caseItem.data.map((d) => d.count)];
+            CSVString += rowData.join(",") + "\n";
         }
     }
     return CSVString;
