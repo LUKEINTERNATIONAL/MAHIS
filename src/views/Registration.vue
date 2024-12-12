@@ -443,7 +443,7 @@ export default defineComponent({
             }
         },
         async createPatient() {
-            const ddeIds = await getOfflineRecords("dde");
+            const ddeIds: any = await getOfflineRecords("dde").then((data: any) => data?.[0]);
             if (ddeIds.ids.length > 0) {
                 this.ddeId = ddeIds.ids[0].npid;
 

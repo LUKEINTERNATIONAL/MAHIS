@@ -194,6 +194,7 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { getOfflineRecords } from "@/services/offline_service";
 import {
     medkit,
     chevronBackOutline,
@@ -468,14 +469,7 @@ export default defineComponent({
         async buildTableData(page = 1) {
             this.isLoading = true;
             try {
-                const stockService = new StockService();
-                this.reportData = await stockService.getItems({
-                    start_date: "2000-01-01",
-                    end_date: this.endDate,
-                    drug_name: this.data.drug_legacy_name,
-                    page: page,
-                    page_size: 4,
-                });
+                this.reportData = await getOfflineRecords("stock", { drug_legacy_name: this.data.drug_legacy_name });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {

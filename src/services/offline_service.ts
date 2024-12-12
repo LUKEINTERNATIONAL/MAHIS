@@ -1,17 +1,65 @@
-import db from "@/db";
+// IndexedDB Helper Functions for MaHis Database
 
-export async function getOfflineRecords(objStore: string, whereClause: any = "", returnFirst: boolean = true) {
-    let query = db.collection(objStore);
+const DB_NAME = "MaHis";
+const DB_VERSION = 1;
 
-    if (whereClause && objStore !== "relationship") {
-        query = query.doc(whereClause);
-    }
+/**
+ * Open or create the IndexedDB database connection
+ * @param storeName - Name of the object store to create/use
+ * @param keyPath - Key path for the object store
+ * @returns Promise resolving to IDBDatabase
+ */
+function openDatabase(storeName: string = "defaultStore", keyPath: string = "id"): Promise<IDBDatabase> {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-    return await query.get().then(async (locationData: any) => {
-        if (returnFirst && locationData) {
-            return locationData[0];
-        }
-        return locationData;
+        request.onupgradeneeded = (event) => {
+            const db = (event.target as IDBOpenDBRequest).result;
+
+            // Create object store if it doesn't exist
+            if (!db.objectStoreNames.contains(storeName)) {
+                db.createObjectStore(storeName, { keyPath });
+            }
+        };
+
+        request.onsuccess = (event) => {
+            resolve((event.target as IDBOpenDBRequest).result);
+        };
+
+        request.onerror = (event) => {
+            reject(`IndexedDB error: ${(event.target as IDBOpenDBRequest).error}`);
+        };
+    });
+}
+
+/**
+ * Retrieve data from the database with object-based filtering
+ * @param storeName - Name of the object store
+ * @param whereClause - Object with key-value pairs to match
+ * @returns Promise resolving to matched records
+ */
+export async function getOfflineRecords<T = any>(storeName: string, whereClause?: Partial<T>) {
+    const db = await openDatabase(storeName);
+
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction([storeName], "readonly");
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.getAll();
+
+        request.onsuccess = (event) => {
+            const allRecords = (event.target as IDBRequest).result as T[];
+
+            // Apply where clause if provided
+            const filteredRecords = whereClause
+                ? allRecords.filter((record) => Object.entries(whereClause).every(([key, value]) => record[key as keyof T] === value))
+                : allRecords;
+
+            resolve(filteredRecords);
+        };
+
+        request.onerror = (event) => {
+            reject(`Error retrieving data: ${(event.target as IDBRequest).error}`);
+        };
     });
 }
 

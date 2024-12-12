@@ -172,6 +172,10 @@ export default defineComponent({
                         this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
                     ) {
                         modalController.dismiss();
+                        await workerData.postData("SYNC_DDE");
+                        await workerData.postData("SYNC_STOCK_RECORD");
+                        await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
+                        await workerData.postData("SET_GENERIC_VACCINE_SCHEDULE");
                         // await workerData.terminate();
                     }
                 }
@@ -190,17 +194,13 @@ export default defineComponent({
         this.workerApi = workerData.workerApi;
         await workerData.postData("SET_OFFLINE_LOCATION");
         await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
-        await workerData.postData("SET_GENERIC_VACCINE_SCHEDULE");
-        await workerData.postData("SYNC_DDE");
-        await workerData.postData("SYNC_STOCK_RECORD");
-        await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
         resetDemographics();
         await useGlobalPropertyStore().loadGlobalProperty();
         this.isLoading = false;
     },
     methods: {
         programID() {
-            return Service.getProgramID(); 
+            return Service.getProgramID();
         },
         openOfflineStatusModal(name: any) {
             const dataToPass = { title: name };
