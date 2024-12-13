@@ -45,7 +45,8 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
-                        :total-items="reportData[0]?.total_count"
+                        v-if="combinedBatches?.length > 0"
+                        :total-items="combinedBatches?.length"
                         :items-per-page="4"
                         :max-pages-shown="2"
                         v-model="currentPage"
@@ -180,6 +181,7 @@ export default defineComponent({
             } as any,
             selectedButton: "all",
             isLoading: false,
+            combinedBatches: [] as any,
         };
     },
     setup() {
@@ -236,7 +238,7 @@ export default defineComponent({
             }, {});
 
             // Combine batches with the same drug_legacy_name
-            const combinedBatches = Object.keys(groupedBatches).map<CombinedDrugBatch>((key) => {
+            this.combinedBatches = Object.keys(groupedBatches).map<CombinedDrugBatch>((key) => {
                 const batchGroup = groupedBatches[key];
 
                 return {
@@ -248,7 +250,7 @@ export default defineComponent({
                 };
             });
 
-            return combinedBatches;
+            return this.combinedBatches;
         },
 
         async onClickHandler(page: any) {

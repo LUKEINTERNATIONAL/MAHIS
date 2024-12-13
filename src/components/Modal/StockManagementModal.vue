@@ -90,6 +90,7 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
+                        v-if="reportData[0]?.total_count"
                         :total-items="reportData[0]?.total_count"
                         :items-per-page="4"
                         :max-pages-shown="2"
