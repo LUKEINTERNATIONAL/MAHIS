@@ -53,7 +53,7 @@
                     />
                 </div>
             </div>
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')">
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')" v-if="apiStatus">
                 <ion-fab-button color="primary"> <ion-icon :icon="add"></ion-icon> </ion-fab-button>
             </ion-fab>
         </ion-content>
@@ -104,6 +104,7 @@ import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { getOfflineRecords } from "@/services/offline_service";
+import { useStatusStore } from "@/stores/StatusStore";
 import {
     medkit,
     chevronBackOutline,
@@ -203,6 +204,7 @@ export default defineComponent({
     computed: {
         ...mapState(useStockStore, ["stock"]),
         ...mapState(useSearchName, ["searchName"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
     },
     watch: {
         stock: {

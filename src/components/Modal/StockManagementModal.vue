@@ -56,7 +56,7 @@
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
                         </ion-row>
 
-                        <div>
+                        <div v-if="apiStatus">
                             <ion-button
                                 size="small"
                                 color="danger"
@@ -184,6 +184,7 @@ import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
+import { useStatusStore } from "@/stores/StatusStore";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -290,6 +291,7 @@ export default defineComponent({
         ...mapState(useStockStore, ["stock"]),
         ...mapState(useSearchName, ["searchName"]),
         ...mapState(useStockDiscard, ["stockDiscard"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
     },
     $route: {
         async handler() {
