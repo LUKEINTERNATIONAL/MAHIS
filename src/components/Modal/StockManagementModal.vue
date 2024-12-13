@@ -474,7 +474,7 @@ export default defineComponent({
             this.isLoading = true;
             await workerData.postData("SYNC_STOCK_RECORD");
             try {
-                this.reportData = await getOfflineRecords("stock", { drug_legacy_name: this.data.drug_legacy_name });
+                this.reportData = await getOfflineRecords("stock", { whereClause: { drug_legacy_name: this.data.drug_legacy_name } });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
