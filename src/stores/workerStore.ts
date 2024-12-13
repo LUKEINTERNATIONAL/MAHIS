@@ -74,7 +74,7 @@ export const useWorkerStore = defineStore("worker", () => {
     async function getOfflinePatientData() {
         if (patientID.value) {
             const { getOfflineRecords } = await import("@/services/offline_service");
-            return await getOfflineRecords("patientRecords", { ID: await patientID.value }).then((data: any) => data?.[0]);
+            return await getOfflineRecords("patientRecords", { whereClause: { ID: await patientID.value } }).then((data: any) => data?.[0]);
         }
         return null;
     }

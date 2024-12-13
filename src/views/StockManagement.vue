@@ -13,7 +13,7 @@
                     <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
                 </div>
                 <div class="drug_container">
-                    <div class="drug_content" v-for="(item, index) in reportData" :key="index">
+                    <div class="drug_content" v-for="(item, index) in reportData?.items" :key="index">
                         <ion-row class="search_header">
                             <ion-col class="">
                                 <span style="font-weight: 700; font-size: 16px; color: #939393">{{ item.drug_legacy_name }}</span>
@@ -45,7 +45,8 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
-                        :total-items="reportData[0]?.total_count"
+                        v-if="combinedBatches?.length > 0"
+                        :total-items="combinedBatches?.length"
                         :items-per-page="4"
                         :max-pages-shown="2"
                         v-model="currentPage"
@@ -180,6 +181,7 @@ export default defineComponent({
             } as any,
             selectedButton: "all",
             isLoading: false,
+            combinedBatches: [] as any,
         };
     },
     setup() {
@@ -236,7 +238,7 @@ export default defineComponent({
             }, {});
 
             // Combine batches with the same drug_legacy_name
-            const combinedBatches = Object.keys(groupedBatches).map<CombinedDrugBatch>((key) => {
+            this.combinedBatches = Object.keys(groupedBatches).map<CombinedDrugBatch>((key) => {
                 const batchGroup = groupedBatches[key];
 
                 return {
@@ -248,7 +250,7 @@ export default defineComponent({
                 };
             });
 
-            return combinedBatches;
+            return this.combinedBatches;
         },
 
         async onClickHandler(page: any) {
@@ -279,12 +281,35 @@ export default defineComponent({
             this.isLoading = true;
             try {
                 const stock: any = await getOfflineRecords("stock");
-                this.reportData = this.combineDrugBatches(stock);
+                this.reportData = this.paginateArray(this.combineDrugBatches(stock), this.currentPage);
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
                 this.isLoading = false;
             }
+        },
+        paginateArray(data: any, currentPage: any) {
+            // Validate inputs
+            if (!Array.isArray(data)) {
+                throw new Error("Input must be an array");
+            }
+
+            // Ensure currentPage is a positive number, defaulting to 1 if invalid
+            const page = Math.max(1, Number(currentPage) || 1);
+
+            // Calculate the start and end indices for slicing
+            const startIndex = (page - 1) * 4;
+            const endIndex = startIndex + 4;
+
+            // Slice the array to get the four items for the current page
+            const paginatedItems = data.slice(startIndex, endIndex);
+
+            return {
+                currentPage: page,
+                totalPages: Math.ceil(data.length / 4),
+                totalItems: data.length,
+                items: paginatedItems,
+            };
         },
         async selectButton(button: any) {
             this.selectedButton = button;

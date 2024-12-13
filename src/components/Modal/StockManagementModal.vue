@@ -90,6 +90,7 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
+                        v-if="reportData[0]?.total_count"
                         :total-items="reportData[0]?.total_count"
                         :items-per-page="4"
                         :max-pages-shown="2"
@@ -185,6 +186,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
+import workerData from "@/activate_worker";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -470,8 +472,9 @@ export default defineComponent({
         },
         async buildTableData(page = 1) {
             this.isLoading = true;
+            await workerData.postData("SYNC_STOCK_RECORD");
             try {
-                this.reportData = await getOfflineRecords("stock", { drug_legacy_name: this.data.drug_legacy_name });
+                this.reportData = await getOfflineRecords("stock", { whereClause: { drug_legacy_name: this.data.drug_legacy_name } });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
