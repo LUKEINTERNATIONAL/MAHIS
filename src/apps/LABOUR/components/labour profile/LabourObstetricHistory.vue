@@ -1,0 +1,355 @@
+<template>
+    <div class="container">
+        <ion-accordion-group ref="accordionGroup" class="previousView ion-margin-bottom">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Obstetric History</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <LabourObstetricData />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-card class="section">
+            <ion-card-content>
+                <basic-form :contentData="prevPregnancies" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+                <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
+                <basic-form :contentData="preterm"></basic-form>
+            </ion-card-content>
+        </ion-card>
+    </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonTitle,
+    IonToolbar,
+    IonMenu,
+    IonToggle,
+    IonSelectOption,
+    IonInput,
+    IonSelect,
+    IonRadio,
+    IonRadioGroup,
+} from "@ionic/vue";
+import LabourObstetricData from "@/apps/LABOUR/components/labour profile/LabourObstetricData.vue";
+import BasicForm from "../../../../components/BasicForm.vue";
+import { icons } from "@/utils/svg";
+import BasicInputField from "../../../../components/BasicInputField.vue";
+import { mapState } from "pinia";
+import { pastObstreticValidationShema, useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
+import { checkmark, pulseOutline } from "ionicons/icons";
+import {
+    dynamicValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    getRadioSelectedValue,
+    modifyCheckboxHeader,
+    modifyCheckboxValue,
+    modifyDynamicFieldValue,
+    modifyFieldValue,
+    modifyRadioValue,
+} from "@/services/data_helpers";
+import StandardValidations from "@/validations/StandardValidations";
+import { validateField } from "@/services/ANC/profile_validation_service";
+import BasicCard from "@/components/BasicCard.vue";
+import { Service } from "@/services/service";
+import { YupValidateField } from "@/services/validation_service";
+import { useLabourObstreticHistoryStore } from "../../stores/labour profile/labourObstetricHistory";
+export default defineComponent({
+    name: "History",
+    components: {
+        BasicCard,
+        IonContent,
+        IonHeader,
+        IonItem,
+        IonList,
+        IonMenu,
+        IonTitle,
+        IonToolbar,
+        IonToggle,
+        IonSelect,
+        IonSelectOption,
+        IonInput,
+        BasicInputField,
+        BasicForm,
+        IonRadio,
+        IonRadioGroup,
+        LabourObstetricData,
+    },
+
+    data() {
+        return {
+            modeOfDelieveryRef: {},
+            iconsContent: icons,
+            vValidations: "" as any,
+            hasValidationErrors: [] as any,
+            prevPregnanciesInstance: {} as any,
+            modeOfDeliveryInstance: {} as any,
+            currentSection: 0,
+            inputField: "" as any,
+            alertMessage: "" as string,
+        };
+    },
+    computed: {
+        ...mapState(useLabourObstreticHistoryStore, ["prevPregnancies"]),
+        ...mapState(useLabourObstreticHistoryStore, ["preterm"]),
+        ...mapState(useLabourObstreticHistoryStore, ["modeOfDelivery"]),
+        ...mapState(useLabourObstreticHistoryStore, ["Complications"]),
+        Stillbirths() {
+            return getFieldValue(this.prevPregnancies, "Stillbirths", "value");
+        },
+        Gravida() {
+            return getFieldValue(this.prevPregnancies, "Gravida", "value");
+        },
+        LiveBirths() {
+            return getFieldValue(this.prevPregnancies, "LiveBirths", "value");
+        },
+        Parity() {
+            return getFieldValue(this.prevPregnancies, "Parity", "value");
+        },
+        "Abortions/Miscarriages"() {
+            return getFieldValue(this.prevPregnancies, "Abortions/Miscarriages", "value");
+        },
+    },
+    created() {
+        this.modeOfDelieveryRef = { ...this.modeOfDelivery[0], ...this.modeOfDelivery[1] };
+    },
+    mounted() {
+        this.prevPregnanciesInstance = useObstreticHistoryStore();
+        // this.prevPregnanciesInstance.setModeOfDelivery([])
+        this.handleOther();
+        this.handleDynamic();
+        this.handleGravida(event);
+        this.validaterowData({});
+    },
+    watch: {
+        LiveBirths: {
+            handler(val) {
+                if (val == 0 || !val) {
+                    this.prevPregnanciesInstance.setModeOfDelivery(0);
+                }
+            },
+        },
+        prevPregnancies: {
+            handler(val) {
+                if (val && val[2].data.rowData[0].colData[0].value) {
+                    const liveBirths = parseInt(val[2].data.rowData[0].colData[0].value);
+                    this.prevPregnanciesInstance.setModeOfDelivery(liveBirths);
+                }
+                this.handleGravida(val);
+                this.handleOther();
+            },
+
+            deep: true,
+        },
+        modeOfDelivery: {
+            handler() {
+                this.handleDynamic();
+                this.prevPregnanciesInstance.checkChanges();
+            },
+            deep: true,
+        },
+    },
+    setup() {
+        return { checkmark, pulseOutline };
+    },
+    methods: {
+        async handleObstreticValidation(event: any) {
+            YupValidateField(this.prevPregnancies, pastObstreticValidationShema, event.name, event.value);
+        },
+        handleOther() {
+            if (getCheckboxSelectedValue(this.prevPregnancies, "Other")?.value == "other") {
+                modifyFieldValue(this.prevPregnancies, "Other notes", "displayNone", false);
+            } else {
+                modifyFieldValue(this.prevPregnancies, "Other notes", "displayNone", true);
+            }
+            const checkBoxes = [
+                "Asphyxia",
+                "Does not know",
+                "Pre-eclampsia",
+                "Eclampsia",
+                "Puerperal Sepsis",
+                "Baby died within 24hrs of birth",
+                "Convulsions",
+                "Forceps",
+                "Gestational diabetes mellitus",
+                "Heavy bleeding",
+                "Macrosomia",
+                "Perineal tear (3rd or 4th degree)",
+                "Other",
+            ];
+
+            if (getCheckboxSelectedValue(this.prevPregnancies, "None")?.checked) {
+                checkBoxes.forEach((checkbox) => {
+                    modifyCheckboxValue(this.prevPregnancies, checkbox, "checked", false);
+                    modifyCheckboxValue(this.prevPregnancies, checkbox, "disabled", true);
+                });
+            } else {
+                checkBoxes.forEach((checkbox) => {
+                    modifyCheckboxValue(this.prevPregnancies, checkbox, "disabled", false);
+                });
+            }
+        },
+
+        handleDynamic() {
+            if (getRadioSelectedValue(this.modeOfDelivery, "Mode of delivery") == "caesarean section") {
+                modifyFieldValue(this.modeOfDelivery, "Specify", "displayNone", false);
+            } else {
+                modifyFieldValue(this.modeOfDelivery, "Specify", "displayNone", true);
+            }
+        },
+        handleAlert(e: any) {
+            if (dynamicValue(this.modeOfDelivery, "Mode of delivery", e.id) == "caesarean section") {
+                modifyDynamicFieldValue(e.id, this.modeOfDelivery, "Specify", "displayNone", false);
+            } else {
+                modifyDynamicFieldValue(e.id, this.modeOfDelivery, "Specify", "displayNone", true);
+            }
+        },
+
+        validationRules(event: any) {
+            return validateField(this.prevPregnancies, event.name, (this as any)[event.name]);
+        },
+
+        //Handling input data on Profile-Past Obstetric history
+        async handleInputData(event: any) {
+            this.validaterowData(event);
+            this.handleObstreticValidation(event);
+            this.calculateParity(event);
+            this.calculateLiveBirths(event);
+        },
+
+        // Validations
+        validaterowData(event: any) {
+            //this.validationRules(event)
+        },
+
+        calculateLiveBirths(event: any) {
+            if (event.name === "Parity" || event.name === "Stillbirths") {
+                const stillbirthValue = parseInt(getFieldValue(this.prevPregnancies, "Stillbirths", "value"));
+                const parityValue = parseInt(getFieldValue(this.prevPregnancies, "Parity", "value"));
+                if (!isNaN(stillbirthValue) && !isNaN(parityValue)) {
+                    const liveBirthValue = parityValue - stillbirthValue; //
+                    modifyFieldValue(this.prevPregnancies, "LiveBirths", "value", liveBirthValue);
+                } else {
+                    modifyFieldValue(this.prevPregnancies, "LiveBirths", "value", null);
+                }
+            }
+        },
+        // Calculating parity.
+        calculateParity(event: any) {
+            if (event.name === "Gravida" || event.name === "Abortions/Miscarriages") {
+                let errorMessage: any = "";
+                const gravidaValue = parseInt(getFieldValue(this.prevPregnancies, "Gravida", "value"));
+                const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, "Abortions/Miscarriages", "value"));
+                if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
+                    const parityValue = gravidaValue - abortionsValue - 1;
+                    modifyFieldValue(this.prevPregnancies, "Parity", "value", parityValue);
+                } else {
+                    modifyFieldValue(this.prevPregnancies, "Parity", "value", null);
+                }
+            }
+        },
+        handleGravida(event: any) {
+            const gravida = getFieldValue(this.prevPregnancies, "Gravida", "value");
+            const alertMessage = "First pregnancy, take note";
+            const existingAlert = this.prevPregnancies[0].alerts.findIndex((alert: any) => alert.value === alertMessage);
+
+            if (gravida === null || gravida === "") {
+                modifyFieldValue(this.prevPregnancies, "Abortions/Miscarriages", "value", "");
+                modifyFieldValue(this.prevPregnancies, "Abortions/Miscarriages", "disabled", false);
+                modifyFieldValue(this.prevPregnancies, "Stillbirths", "value", "");
+                modifyFieldValue(this.prevPregnancies, "Stillbirths", "disabled", false);
+                modifyFieldValue(this.prevPregnancies, "LiveBirths", "value", "");
+                modifyFieldValue(this.prevPregnancies, "LiveBirths", "disabled", false);
+                modifyFieldValue(this.prevPregnancies, "Parity", "value", "");
+                modifyFieldValue(this.prevPregnancies, "Parity", "disabled", false);
+
+                if (existingAlert !== -1) {
+                    this.prevPregnancies[0].alerts.splice(existingAlert, 1);
+                }
+            } else if (gravida == 1) {
+                modifyRadioValue(this.prevPregnancies, "Was last live birth preterm?", "displayNone", true);
+                modifyRadioValue(this.prevPregnancies, "Last live birth had congenital abnormalities", "displayNone", true);
+                modifyRadioValue(this.prevPregnancies, "Last live birth preterm was full term", "displayNone", true);
+                modifyCheckboxHeader(this.prevPregnancies, "past pregnancies complications", "displayNone", true);
+
+                modifyFieldValue(this.prevPregnancies, "Abortions/Miscarriages", "value", "");
+                modifyFieldValue(this.prevPregnancies, "Abortions/Miscarriages", "disabled", true);
+                modifyFieldValue(this.prevPregnancies, "Stillbirths", "value", "");
+                modifyFieldValue(this.prevPregnancies, "Stillbirths", "disabled", true);
+                modifyFieldValue(this.prevPregnancies, "LiveBirths", "value", "");
+                modifyFieldValue(this.prevPregnancies, "LiveBirths", "disabled", true);
+                modifyFieldValue(this.prevPregnancies, "Parity", "value", "");
+                modifyFieldValue(this.prevPregnancies, "Parity", "disabled", true);
+
+                if (existingAlert === -1) {
+                    this.prevPregnancies[0].alerts.push({
+                        backgroundColor: "#FFD700",
+                        status: "info",
+                        icon: "info-circle",
+                        textColor: "#000000",
+                        value: alertMessage,
+                        name: "LiveBirths",
+                    });
+                }
+            } else {
+                modifyRadioValue(this.prevPregnancies, "Was last live birth preterm?", "displayNone", false);
+                modifyRadioValue(this.prevPregnancies, "Last live birth preterm was full term", "displayNone", false);
+                modifyRadioValue(this.prevPregnancies, "Last live birth had congenital abnormalities", "displayNone", false);
+                modifyCheckboxHeader(this.prevPregnancies, "past pregnancies complications", "displayNone", false);
+
+                modifyFieldValue(this.prevPregnancies, "Abortions/Miscarriages", "disabled", false);
+                modifyFieldValue(this.prevPregnancies, "Stillbirths", "disabled", false);
+                modifyFieldValue(this.prevPregnancies, "LiveBirths", "disabled", false);
+                modifyFieldValue(this.prevPregnancies, "Parity", "disabled", false);
+
+                if (existingAlert !== -1) {
+                    this.prevPregnancies[0].alerts.splice(existingAlert, 1);
+                }
+            }
+        },
+    },
+});
+</script>
+
+<style scoped>
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.section {
+    width: 100%;
+    max-width: 1300px;
+    margin-bottom: 20px;
+}
+
+ion-card {
+    width: 100%;
+    color: black;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 500px;
+}
+
+@media (max-width: 1500px) {
+    .container {
+        padding: 10px;
+    }
+}
+.sub_item_header {
+    font-weight: bold;
+    font-size: 14px;
+}
+</style>
