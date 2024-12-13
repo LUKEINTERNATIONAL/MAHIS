@@ -104,7 +104,7 @@ import { useSearchName } from "@/stores/SearchName";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
-import { getOfflineRecords, getPaginatedRecords } from "@/services/offline_service";
+import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
 import {
     medkit,
@@ -280,8 +280,8 @@ export default defineComponent({
         async buildTableData(page = 1) {
             this.isLoading = true;
             try {
-                const stock: any = await getPaginatedRecords("stock");
-                this.reportData = this.paginateArray(this.combineDrugBatches(stock.records), this.currentPage);
+                const stock: any = await getOfflineRecords("stock");
+                this.reportData = this.paginateArray(this.combineDrugBatches(stock), this.currentPage);
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
