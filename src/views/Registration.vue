@@ -443,7 +443,7 @@ export default defineComponent({
             }
         },
         async createPatient() {
-            const ddeIds = await getOfflineRecords("dde");
+            const ddeIds: any = await getOfflineRecords("dde").then((data: any) => data?.[0]);
             if (ddeIds.ids.length > 0) {
                 this.ddeId = ddeIds.ids[0].npid;
 
@@ -523,6 +523,8 @@ export default defineComponent({
                     relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
                 },
                 vitals: vitals,
+                vaccineAdministration: [],
+                immunizationDispensations: [],
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",

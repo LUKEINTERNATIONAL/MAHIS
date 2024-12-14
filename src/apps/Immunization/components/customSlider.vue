@@ -91,12 +91,12 @@ export default defineComponent({
         ...mapState(useAdministerVaccineStore, ["vaccineReload"]),
     },
     async mounted() {
-        this.loadVaccineSchedule();
+        await this.loadVaccineSchedule();
     },
     watch: {
         vaccineReload: {
-            handler() {
-                this.loadVaccineSchedule();
+            async handler() {
+                await this.loadVaccineSchedule();
             },
             deep: true,
         },

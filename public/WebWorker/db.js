@@ -26,6 +26,7 @@ const DatabaseManager = {
                     "dde",
                     "generics",
                     "stock",
+                    "genericVaccineSchedule",
                 ];
 
                 objectStores.forEach((storeName) => {
@@ -55,7 +56,16 @@ const DatabaseManager = {
 
             clearRequest.onsuccess = () => {
                 // After clearing, add the new data
-                const addRequest = objectStore.add(data);
+                let addRequest = "";
+                if (data.length > 0) {
+                    Promise.all(
+                        data.map(async (item) => {
+                            addRequest = objectStore.add(item);
+                        })
+                    );
+                } else {
+                    addRequest = objectStore.add(data);
+                }
 
                 addRequest.onerror = (event) => {
                     reject(event.target.error);

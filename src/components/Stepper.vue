@@ -146,7 +146,7 @@ import BehaviourCounselling from "@/apps/ANC/components/counselling/BehaviourCou
 import PhysiologicalCounseling from "@/apps/ANC/components/counselling/PhysiologicalCounseling.vue";
 import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
-import ANCVitals from "../apps/ANC/components/physical exam/ANCVitals.vue"
+import ANCVitals from "../apps/ANC/components/physical exam/ANCVitals.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
 import ImmunizationServices from "@/apps/Immunization/components/ConsultationPlan/ImmunizationServices.vue";
 import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue";
@@ -171,7 +171,7 @@ import ObstetricDetails from "@/apps/PNC/components/postnatal details/ObstetricD
 import VisitForMother from "@/apps/PNC/components/postnatal visits/VisitForMother.vue";
 import VisitForBaby from "@/apps/PNC/components/postnatal visits/VisitForBaby.vue";
 import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
-import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
+import QuickCheck from "@/apps/LABOUR/components/physical exam/LabourQuickCheck.vue";
 import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
 import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
 import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
@@ -186,174 +186,188 @@ import ImmidiatePostnatalChecksForMother from "@/apps/LABOUR/components/delivery
 import SubsequentVisits from "@/apps/ANC/components/quick check/SubsequentVisits.vue";
 import AbdominalExamination from "@/apps/ANC/components/physical exam/AbdominalExamination.vue";
 import ClinicalCounselling from "@/apps/ANC/components/counselling/ClinicalCounselling.vue";
+import LabourWomanBehaviour from "@/apps/LABOUR/components/labour profile/LabourWomanBehaviour.vue";
+import LabourAllergies from "@/apps/LABOUR/components/labour profile/LabourAllergies.vue";
+import LabourPastSurgeries from "@/apps/LABOUR/components/labour profile/LabourPastSurgeries.vue";
+import LabourChronicHealthConditions from "@/apps/LABOUR/components/labour profile/LabourChronicHealthConditions.vue";
+import LabourVaccineHistory from "@/apps/LABOUR/components/labour profile/LabourVaccine.vue";
+import LabourMedications from "@/apps/LABOUR/components/labour profile/LabourMedications.vue";
+import LabourObstetricHistory from "@/apps/LABOUR/components/labour profile/LabourObstetricHistory.vue";
+import LabourComplications from "@/apps/LABOUR/components/labour profile/LabourComplications.vue";
 
 export default defineComponent({
-  mixins: [SetUserRole],
-  name: "Home",
-  components: {
-    dispensationSummary,
-    dispensedMedication,
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    Toolbar,
-    ToolbarSearch,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonAccordion,
-    IonAccordionGroup,
-    IonItem,
-    IonLabel,
-    VitalSigns,
-    PresentingComplaints,
-    ClinicalAssessment,
-    Diagnosis,
-    ComplicationsScreening,
-    ConfirmDiagnosis,
-    Outcome,
-    Investigations,
-    TreatmentPlan,
-    NextAppointment,
-    IonModal,
-    Medications,
-    WomanBehaviour,
-    MedicalHistory,
-    DangerSigns,
-    ReasonForVisit,
-    ConfirmPregnancy,
-    SpecificHealthConcerns,
-    FetalPresentation,
-    FetalAssessment,
-    ANCVitals,
-    MaternalExam,
-    PresentingSigns,
-    CurrentPregnancies,
-    PastObstreticHistory,
-    UltrasoundScan,
-    UrineTest,
-    TB,
-    MedicalFollowUp,
-    PersistentBehaviour,
-    CurrentPhysiologicalSymptoms,
-    Ipv,
-    FatalMovement,
-    BehaviourCounselling,
-    PhysiologicalCounseling,
-    DietCounselling,
-    Referral,
-    AncEnd,
-    DiagnosisTreatment,
-    MedicationDispensed,
-    DiagnosisCounselling,
-    Immunization,
-    // IntimatePartner,
-    Deworming,
-    OPDDiagnosis,
-    OPDTreatmentPlan,
-    OPDOutcome,
-    DynamicButton,
-    ImmunizationServices,
-    ChangeStatus,
-    ImmunizationNextAppointment,
-    HeadAssessment,
-    ANCTreatment,
-    ANCDiagnosis,
-    ANCDiagnosisCounselling,
-    ANCImmunization,
-    ANCIntimatePartner,
-    ANCDeworming,
-    ANCMedicationDispensed,
-    DischargeWoman,
-    PNCEnd,
-    BabyStatus,
-    PostnatalWardMonitoring,
-    DeliveryDetails,
-    HIVStatusAndTreatment,
-    ObstetricDetails,
-    VisitForMother,
-    VisitForBaby,
-    Labour,
-    QuickCheck,
-    PhysicalExamination,
-    PelvicAssessment,
-    PatientReferral,
-    FirstVaginalExamination,
-    SecondStageDelivery,
-    ThirdStageDelivery,
-    end,
-    OtherExams,
-    LabourVitals,
-    ImmidiatePostnatalChecksForChild,
-    ImmidiatePostnatalChecksForMother,
-    SubsequentVisits,
-    AbdominalExamination,
-    ClinicalCounselling
-  },
-  data() {
-    return {
-      isOpen: false,
-      iconsContent: icons,
-      currentOpenStepper: this.openStepper
-    };
-  },
-  props: {
-    wizardData: {
-      default: [] as any,
+    mixins: [SetUserRole],
+    name: "Home",
+    components: {
+        dispensationSummary,
+        dispensedMedication,
+        IonContent,
+        IonHeader,
+        IonMenuButton,
+        IonPage,
+        IonTitle,
+        IonToolbar,
+        Toolbar,
+        ToolbarSearch,
+        IonButton,
+        IonCard,
+        IonCardContent,
+        IonCardHeader,
+        IonCardSubtitle,
+        IonCardTitle,
+        IonAccordion,
+        IonAccordionGroup,
+        IonItem,
+        IonLabel,
+        VitalSigns,
+        PresentingComplaints,
+        ClinicalAssessment,
+        Diagnosis,
+        ComplicationsScreening,
+        ConfirmDiagnosis,
+        Outcome,
+        Investigations,
+        TreatmentPlan,
+        NextAppointment,
+        IonModal,
+        Medications,
+        WomanBehaviour,
+        MedicalHistory,
+        DangerSigns,
+        ReasonForVisit,
+        ConfirmPregnancy,
+        SpecificHealthConcerns,
+        FetalPresentation,
+        FetalAssessment,
+        ANCVitals,
+        MaternalExam,
+        PresentingSigns,
+        CurrentPregnancies,
+        PastObstreticHistory,
+        UltrasoundScan,
+        UrineTest,
+        TB,
+        MedicalFollowUp,
+        PersistentBehaviour,
+        CurrentPhysiologicalSymptoms,
+        Ipv,
+        FatalMovement,
+        BehaviourCounselling,
+        PhysiologicalCounseling,
+        DietCounselling,
+        Referral,
+        AncEnd,
+        DiagnosisTreatment,
+        MedicationDispensed,
+        DiagnosisCounselling,
+        Immunization,
+        // IntimatePartner,
+        Deworming,
+        OPDDiagnosis,
+        OPDTreatmentPlan,
+        OPDOutcome,
+        DynamicButton,
+        ImmunizationServices,
+        ChangeStatus,
+        ImmunizationNextAppointment,
+        HeadAssessment,
+        ANCTreatment,
+        ANCDiagnosis,
+        ANCDiagnosisCounselling,
+        ANCImmunization,
+        ANCIntimatePartner,
+        ANCDeworming,
+        ANCMedicationDispensed,
+        DischargeWoman,
+        PNCEnd,
+        BabyStatus,
+        PostnatalWardMonitoring,
+        DeliveryDetails,
+        HIVStatusAndTreatment,
+        ObstetricDetails,
+        VisitForMother,
+        VisitForBaby,
+        Labour,
+        QuickCheck,
+        PhysicalExamination,
+        PelvicAssessment,
+        PatientReferral,
+        FirstVaginalExamination,
+        SecondStageDelivery,
+        ThirdStageDelivery,
+        end,
+        OtherExams,
+        LabourVitals,
+        ImmidiatePostnatalChecksForChild,
+        ImmidiatePostnatalChecksForMother,
+        SubsequentVisits,
+        AbdominalExamination,
+        ClinicalCounselling,
+        LabourWomanBehaviour,
+        LabourPastSurgeries,
+        LabourChronicHealthConditions,
+        LabourVaccineHistory,
+        LabourMedications,
+        LabourObstetricHistory,
+        LabourAllergies,
+        LabourComplications,
     },
-    StepperData: {
-      default: [] as any,
+    data() {
+        return {
+            isOpen: false,
+            iconsContent: icons,
+            currentOpenStepper: this.openStepper,
+        };
     },
-    stepperTitle: {
-      type: String,
-      default: "",
+    props: {
+        wizardData: {
+            default: [] as any,
+        },
+        StepperData: {
+            default: [] as any,
+        },
+        stepperTitle: {
+            type: String,
+            default: "",
+        },
+        openStepper: {
+            type: String,
+            default: "1",
+        },
+        backBtn: {
+            type: String,
+            default: "Back to profile",
+        },
+        backUrl: {
+            type: String,
+            default: "",
+        },
+        getSaveFunction: {
+            type: Function,
+            required: true,
+        },
+        hasPatientsWaitingList: {
+            type: Boolean,
+            default: false,
+        },
+      specialButtonLabel: {
+        type: String,
+        required: false,
+        default: ''
+      },
+      specialButtonFn: {
+        type: Function,
+        required: false,
+        default: null,
+      },
+      userRole: {
+        type: String,
+        required:false,
+      },
     },
-    openStepper: {
-      type: String,
-      default: "1",
+    setup() {
+        return { chevronBackOutline, checkmark };
     },
-    backBtn: {
-      type: String,
-      default: "Back to profile",
-    },
-    backUrl: {
-      type: String,
-      default: "",
-    },
-    getSaveFunction: {
-      type: Function,
-      required: true,
-    },
-    hasPatientsWaitingList: {
-      type: Boolean,
-      default: false,
-    },
-    specialButtonLabel: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    specialButtonFn: {
-      type: Function,
-      required: false,
-      default: null,
-    },
-    userRole: {
-      type: String,
-      required:false,
-    },
-  },
-  setup() {
-    return { chevronBackOutline, checkmark,
-
-    };
-  },
 
   methods: {
     chevronBack() {

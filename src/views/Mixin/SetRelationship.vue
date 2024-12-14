@@ -33,7 +33,7 @@ export default defineComponent({
     methods: {
         async getRelationships() {
             if (this.gender) {
-                this.relationshipsData = await getOfflineRecords("relationship", "");
+                this.relationshipsData = await getOfflineRecords("relationship");
                 this.filterRelationships();
 
                 this.relationships = this.filteredRelationships
