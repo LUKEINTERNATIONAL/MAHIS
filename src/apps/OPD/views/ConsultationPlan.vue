@@ -302,20 +302,18 @@ export default defineComponent({
                             return () => Promise.resolve();
                         }
                     case 1:
-                        return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
+                        return disableNextButton ? () => Promise.resolve() : this.saveInvestigations;
                     case 2:
                         return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
                     case 3:
-                        return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
-                    case 4:
                         return disableNextButton ? () => Promise.resolve() : this.saveTreatmentPlan;
                     default:
                         return () => Promise.resolve();
                 }
             } else {
                 return async () => {
-                    await this.saveTreatmentPlan();
-                    await this.saveOutComeStatus();
+                    // await this.saveTreatmentPlan();
+                    // await this.saveOutComeStatus();
                     const location = await getUserLocation();
                     const locationId = location ? location.location_id : null;
 
@@ -644,6 +642,9 @@ export default defineComponent({
                 }
             }
         },
+      saveInvestigations(){
+
+      },
         openModal() {
             createModal(SaveProgressModal);
         },
