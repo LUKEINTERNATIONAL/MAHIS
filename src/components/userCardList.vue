@@ -72,7 +72,7 @@
   <editUserModal 
     :is_open="isPopooverOpen" 
     :user_id="user_id" 
-    @close-popoover="modalClosed"
+    @close-popoover="softModalClosed"
     @save="modalClosed" 
   />
 
@@ -226,6 +226,11 @@ export default defineComponent({
       reload(isPopooverOpen.value)
     };
 
+    const softModalClosed = () => {
+      isPopooverOpen.value = false;
+    };
+
+
     return {
       filteredUsers,
       pagination,
@@ -241,6 +246,7 @@ export default defineComponent({
       user_id,
       isPopooverOpen,
       modalClosed,
+      softModalClosed,
     };
   },
 });

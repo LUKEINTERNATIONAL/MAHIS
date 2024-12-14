@@ -133,7 +133,7 @@ export default defineComponent({
 
     async mounted() {
         const location = await getUserLocation();
-        const locationId = location ? location.location_id : null;
+        const locationId = location ? location.code : null;
         try {
             const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
             const filteredVisits = visitsToday.filter((visit: any) => visit.location_id === locationId);
