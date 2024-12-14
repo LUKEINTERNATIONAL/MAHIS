@@ -184,7 +184,7 @@ export default defineComponent({
                         await resetOPDPatientData();
 
                         const location = await getUserLocation();
-                        const locationId = location ? location.location_id : null;
+                        const locationId = location ? location.code : null;
                         if (userRoles.includes("Nurse")) {
                             await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
                           toastSuccess("Vitals have been saved!");
@@ -200,7 +200,7 @@ export default defineComponent({
                     }
                 } else {
                     const location = await getUserLocation();
-                    const locationId = location ? location.location_id : null;
+                    const locationId = location ? location.code : null;
                     if (userRoles.includes("Nurse")) {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
                       toastSuccess("Vitals have been saved!");
