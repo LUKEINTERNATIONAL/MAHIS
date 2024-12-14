@@ -187,10 +187,12 @@ export default defineComponent({
                         const locationId = location ? location.location_id : null;
                         if (userRoles.includes("Nurse")) {
                             await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                            this.$router.push("patientProfile");
+                          toastSuccess("Vitals have been saved!");
+                          this.$router.push("patientProfile");
                         } else {
                             await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                            this.$router.push("OPDConsultationPlan");
+                            toastSuccess("Vitals have been saved!");
+                          this.$router.push("OPDConsultationPlan");
                         }
                     } else {
                         await this.validaterowData();
@@ -201,10 +203,12 @@ export default defineComponent({
                     const locationId = location ? location.location_id : null;
                     if (userRoles.includes("Nurse")) {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                        this.$router.push("patientProfile");
+                      toastSuccess("Vitals have been saved!");
+                      this.$router.push("patientProfile");
                     } else {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                        this.$router.push("OPDConsultationPlan");
+                      toastSuccess("Vitals have been saved!");
+                      this.$router.push("OPDConsultationPlan");
                     }
                 }
             } catch (error) {

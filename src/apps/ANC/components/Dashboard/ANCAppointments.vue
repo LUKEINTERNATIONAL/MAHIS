@@ -201,7 +201,7 @@ export default defineComponent({
       },
       async openClientProfile(patientID: any) {
         const patientData = await PatientService.findByNpid(patientID);
-        this.setDemographics(patientData[0]);
+        // this.setDemographics(patientData[0]);
         this.isPharmacist()
       },
       isPharmacist() {

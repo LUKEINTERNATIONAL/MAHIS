@@ -50,6 +50,13 @@
                     {{ index < StepperData.length - 1 ? 'Next' : 'Finish' }}
                   </ion-button>
                 </div>
+                <ion-button
+
+                    v-if="index === StepperData.length - 1 && specialButtonLabel && specialButtonFn && (userRole === 'Clinician' || userRole === 'Superuser')"                    class="special-button"
+                    @click="(event) => specialButtonFn(event)"                >
+                  <ion-icon :icon="index < StepperData.length - 1 ? chevronForward() : checkmark" slot="start"></ion-icon>
+                  {{ specialButtonLabel }}
+                </ion-button>
               </div>
             </div>
           </ion-accordion>
@@ -327,6 +334,20 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    specialButtonLabel: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    specialButtonFn: {
+      type: Function,
+      required: false,
+      default: null,
+    },
+    userRole: {
+      type: String,
+      required:false,
+    },
   },
   setup() {
     return { chevronBackOutline, checkmark,
@@ -410,6 +431,14 @@ export default defineComponent({
   color: white;
   border-radius: 1px;
   width: 100%;
+  margin-right: 30px;
+}
+.special-button{
+  margin-left: 20px;
+  background-color: var(--ion-color-primary);
+  color: white;
+  border-radius: 1px;
+  width: 30%;
 }
 
 #container {

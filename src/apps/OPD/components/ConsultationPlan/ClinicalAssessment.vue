@@ -1,6 +1,6 @@
 <template>
     <ion-row>
-        <div v-if="presentingComplaints.length > 0" style="width: 100%">
+        <div v-if="presentingComplaints && presentingComplaints.length > 0" style="width: 100%">
             <VisitHistory />
         </div>
         <div style="width: 100%" v-else>
@@ -193,7 +193,7 @@ export default defineComponent({
         }
 
         const mounted = async () => {
-            const todayDate = new Date().toISOString().split("T")[0]; // Gets today's date
+            const todayDate = new Date().toISOString().split("T")[0];
             await loadSavedEncounters(todayDate);
         };
         mounted();
@@ -206,9 +206,12 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["patient"]),
     },
     watch: {
-        presentingComplaints(newValue) {
-            console.log("Presenting complaints updated:", newValue);
+      presentingComplaints: {
+        handler(newValue) {
+
         },
+        deep: true
+      }
     },
 
     methods: {

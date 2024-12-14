@@ -555,5 +555,6 @@ export default defineComponent({
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     width: 100%;
+  white-space: nowrap;
 }
 </style>
