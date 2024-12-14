@@ -21,7 +21,8 @@
                 :hasPatientsWaitingList="hasPatientsWaitingForLab"
             />
         </ion-content>
-        <div v-if="(userRole === 'Clinician' || userRole === 'Superuser') && showAlert" class="pause-alert">
+      <OPDFooter @finishBtn="saveData()" />
+      <div v-if="(userRole === 'Clinician' || userRole === 'Superuser') && showAlert" class="pause-alert">
             Consultation for this patient is paused due to lab orders.
         </div>
     </ion-page>
@@ -108,6 +109,7 @@ import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import { PatientService } from "@/services/patient_service";
 import { EncounterService } from "@/services/encounter_service";
 import { ConceptService } from "@/services/concept_service";
+import OPDFooter from "@/apps/OPD/components/OPDFooter.vue";
 
 export default defineComponent({
     name: "ConsultationPlan",
@@ -135,6 +137,7 @@ export default defineComponent({
         IonModal,
         Stepper,
         BasicFooter,
+        OPDFooter,
     },
     data() {
         return {
@@ -148,6 +151,8 @@ export default defineComponent({
             isLoading: false,
             patients: [] as any,
             showAlert: false,
+          checkedIn: false as Boolean,
+
         };
     },
     props: {
@@ -186,7 +191,6 @@ export default defineComponent({
             this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.patient.patientID);
             this.showAlert = this.hasPatientsWaitingForLab;
             if (this.showAlert) {
-                // Automatically hide the alert after 15 seconds
                 setTimeout(() => {
                     this.showAlert = false;
                 }, 15000);
@@ -497,39 +501,16 @@ export default defineComponent({
             }
         },
         async saveData() {
-            this.isLoading = true;
-            try {
-                const obs = await ObservationService.getAll(this.patient.patientID, "Presenting complaint");
-                let filteredArray = [];
-                if (obs) {
-                    filteredArray = obs.filter((obj: any) => {
-                        return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
-                    });
-                }
-                if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
-                    await this.saveDiagnosis();
-                    await this.saveTreatmentPlan();
-                    await this.saveOutComeStatus();
-                    await this.saveWomenStatus();
-                    await this.savePresentingComplaints();
-                    await this.savePastMedicalHistory();
-                    await this.saveConsciousness();
-                    await this.savePhysicalExam();
-                    resetOPDPatientData();
-
-                    if (this.userRole == "Lab") {
-                        this.$router.push("home");
-                    } else {
-                        this.$router.push("patientProfile");
-                    }
-                } else {
-                    toastWarning("Patient complaints are required");
-                }
-            } catch (error) {
-                console.error("Error in saveData: ", error);
-            } finally {
-                this.isLoading = false;
-            }
+          try {
+            const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
+            await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
+            const location = await getUserLocation();
+            const locationId = location ? location.location_id : null;
+            await usePatientList().refresh(locationId);
+            this.checkedIn = false;
+            toastSuccess("Consultation ended");
+          } catch (e) {}
+          this.$router.push("/home");
         },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
