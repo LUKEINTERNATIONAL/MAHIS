@@ -56,7 +56,7 @@
                             <ion-col style="max-width: 188px; min-width: 100px" class="content">{{ item.current_quantity }}</ion-col>
                         </ion-row>
 
-                        <div>
+                        <div v-if="apiStatus">
                             <ion-button
                                 size="small"
                                 color="danger"
@@ -90,6 +90,7 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
+                        v-if="reportData[0]?.total_count"
                         :total-items="reportData[0]?.total_count"
                         :items-per-page="4"
                         :max-pages-shown="2"
@@ -184,6 +185,8 @@ import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
+import { useStatusStore } from "@/stores/StatusStore";
+import workerData from "@/activate_worker";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -194,6 +197,7 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { getOfflineRecords } from "@/services/offline_service";
 import {
     medkit,
     chevronBackOutline,
@@ -289,6 +293,7 @@ export default defineComponent({
         ...mapState(useStockStore, ["stock"]),
         ...mapState(useSearchName, ["searchName"]),
         ...mapState(useStockDiscard, ["stockDiscard"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
     },
     $route: {
         async handler() {
@@ -467,15 +472,9 @@ export default defineComponent({
         },
         async buildTableData(page = 1) {
             this.isLoading = true;
+            await workerData.postData("SYNC_STOCK_RECORD");
             try {
-                const stockService = new StockService();
-                this.reportData = await stockService.getItems({
-                    start_date: "2000-01-01",
-                    end_date: this.endDate,
-                    drug_name: this.data.drug_legacy_name,
-                    page: page,
-                    page_size: 4,
-                });
+                this.reportData = await getOfflineRecords("stock", { whereClause: { drug_legacy_name: this.data.drug_legacy_name } });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {

@@ -46,7 +46,7 @@ import { useTBScreeningStore } from "@/apps/ANC/store/TBScreeningStore";
 import { useUrineTestStore } from "@/apps/ANC/store/UrineTestStore";
 import { useLabourObstreticHistoryStore } from "@/apps/LABOUR/stores/obstetric details/obstetric";
 import { useLabourDetailsStore } from "@/apps/LABOUR/stores/obstetric details/labour";
-import { useLabourQuickCheckStore } from "@/apps/LABOUR/stores/physical exam/quickCheck";
+import { useLabourQuickCheckStore } from "@/apps/LABOUR/stores/physical exam/labourQuickCheck";
 import { useLabourPhysicalExamStore } from "@/apps/LABOUR/stores/physical exam/physicalExamination";
 import { usefirstVaginalExaminationStore } from "@/apps/LABOUR/stores/physical exam/firstVaginalExamination";
 import { usePelvicAssessmentStore } from "@/apps/LABOUR/stores/physical exam/pelvicAssessment";

@@ -15,7 +15,19 @@ const DatabaseManager = {
 
             request.onupgradeneeded = (event) => {
                 const database = event.target.result;
-                const objectStores = ["relationship", "districts", "TAs", "villages", "countries", "programs", "patientRecords", "dde", "generics"];
+                const objectStores = [
+                    "relationship",
+                    "districts",
+                    "TAs",
+                    "villages",
+                    "countries",
+                    "programs",
+                    "patientRecords",
+                    "dde",
+                    "generics",
+                    "stock",
+                    "genericVaccineSchedule",
+                ];
 
                 objectStores.forEach((storeName) => {
                     if (!database.objectStoreNames.contains(storeName)) {
@@ -44,7 +56,16 @@ const DatabaseManager = {
 
             clearRequest.onsuccess = () => {
                 // After clearing, add the new data
-                const addRequest = objectStore.add(data);
+                let addRequest = "";
+                if (data.length > 0) {
+                    Promise.all(
+                        data.map(async (item) => {
+                            addRequest = objectStore.add(item);
+                        })
+                    );
+                } else {
+                    addRequest = objectStore.add(data);
+                }
 
                 addRequest.onerror = (event) => {
                     reject(event.target.error);

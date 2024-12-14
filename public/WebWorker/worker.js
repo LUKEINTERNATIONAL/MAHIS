@@ -1,6 +1,18 @@
 // start common code
 // import { DatabaseManager } from "./db";
-importScripts("db.js", "client.js", "location.js", "patient.js", "program.js", "relationships.js", "sync_patient_data.js", "dde.js", "generics.js");
+importScripts(
+    "db.js",
+    "client.js",
+    "location.js",
+    "patient.js",
+    "program.js",
+    "relationships.js",
+    "sync_patient_data.js",
+    "dde.js",
+    "generics.js",
+    "generic_vaccine_schedule.js",
+    "stock.js"
+);
 
 let APIURL = "";
 let APIKEY = "";
@@ -59,6 +71,15 @@ self.onmessage = async (event) => {
                     console.log("SET_OFFLINE_RELATIONSHIPS ~ error:", error);
                 }
                 break;
+            case "SET_GENERIC_VACCINE_SCHEDULE":
+                try {
+                    await genericsService.setOfflineGenericVaccineSchedule()
+
+                    console.log("SET_OFFLINE_LOCATION ~ storeName:", type);
+                } catch (error) { 
+                  console.log("GET_OFFLINE_LOCATION ~ error:", error);
+                }
+                break;
             case "DELETE_OBJECT_STORE":
                 try {
                     await DatabaseManager.deleteObjectStore(payload.storeName);
@@ -102,6 +123,16 @@ self.onmessage = async (event) => {
                     console.log("SYNC_PATIENT_RECORD ~ error:", error);
                 }
                 break;
+            case "SAVE_PATIENT_RECORD":
+                try {
+                    self.postMessage("");
+                    await patientService.saveDemographicsRecord(payload.data);
+                    console.log("SAVE_PATIENT_RECORD ~ storeName:", type);
+                    self.postMessage({ payload: payload.data, msg: "saved successfully" });
+                } catch (error) {
+                    console.log("SAVE_PATIENT_RECORD ~ error:", error);
+                }
+                break;
             case "BUILD_PATIENT_RECORD":
                 try {
                     const patientData = await syncPatientDataService.buildPatientData(payload.data);
@@ -109,6 +140,14 @@ self.onmessage = async (event) => {
                     self.postMessage({ payload: patientData, msg: "done building patient record" });
                 } catch (error) {
                     console.log("BUILD_PATIENT_RECORD ~ error:", error);
+                }
+                break;
+            case "SYNC_STOCK_RECORD":
+                try {
+                    await stockService.setStock();
+                    console.log("SYNC_STOCK_RECORD ~ storeName:", type);
+                } catch (error) {
+                    console.log("SYNC_STOCK_RECORD ~ error:", error);
                 }
                 break;
             case "SYNC_DDE":
@@ -119,6 +158,7 @@ self.onmessage = async (event) => {
                 } catch (error) {
                     console.log("SYNC_DDE ~ error:", error);
                 }
+                break;
             case "RESET":
                 self.postMessage("");
                 break;

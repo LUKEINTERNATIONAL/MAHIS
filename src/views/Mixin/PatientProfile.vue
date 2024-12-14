@@ -48,6 +48,14 @@ export default defineComponent({
         printID() {
             new PatientPrintoutService(this.patient.patientID).printNidLbl();
         },
+        formatCurrentAddress(data: any) {
+            const addressComponents = [
+                data?.personInformation?.current_district,
+                data?.personInformation?.current_traditional_authority,
+                data?.personInformation?.current_village,
+            ];
+            return addressComponents.filter(Boolean).join(",");
+        },
     },
 });
 </script>

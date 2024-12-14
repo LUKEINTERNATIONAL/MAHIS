@@ -110,7 +110,7 @@ import { toastWarning, toastDanger } from "@/utils/Alerts";
 import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
-import { getUserLocation } from "@/services/userService";
+import { getUserFacility } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
 import workerData from "@/activate_worker";
 
@@ -164,6 +164,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            async handler() {
+                await this.setPrograms();
+            },
+            deep: true,
+        },
     },
     computed: {},
     setup() {
@@ -174,13 +180,16 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.workerApi = workerData.workerApi;
         const auth = new AuthService();
         await auth.loadConfig();
         this.setVersion();
-        await workerData.postData("SET_OFFLINE_PROGRAMS");
+        await this.setPrograms();
     },
     methods: {
+        async setPrograms() {
+            this.workerApi = workerData.workerApi;
+            await workerData.postData("SET_OFFLINE_PROGRAMS");
+        },
         async getPrograms() {
             if (this.programList && Object.keys(this.programList).length > 0) {
                 this.programList.sort((a: any, b: any) => a.name.localeCompare(b.name));
@@ -231,7 +240,7 @@ export default defineComponent({
         },
         async facilityB() {
             const store = useUserStore();
-            const data = await getUserLocation();
+            const data = await getUserFacility();
             store.setUserFacilityName(data.name);
             store.setFacilityLocation(data);
             store.setCurrentUserProgram(this.program);

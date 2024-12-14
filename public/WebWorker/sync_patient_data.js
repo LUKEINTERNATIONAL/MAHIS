@@ -19,12 +19,12 @@ const syncPatientDataService = {
         await Promise.all(
             patients_sync_data.not_synced_ids.map(async (id) => {
                 const record = await ApiService.getData(`/patients/${id}`);
-                await this.savePatientRecord(await this.buildPatientData(record));
+                await this.saveSyncedPatientRecord(await this.buildPatientData(record));
             })
         );
         await previousSyncService.setPreviousSyncDate(patients_sync_data.latest_encounter_datetime);
     },
-    async savePatientRecord(data) {
+    async saveSyncedPatientRecord(data) {
         if (data) DatabaseManager.deleteRecord("patientRecords", { patientID: data.patientID });
         if (data) DatabaseManager.addData("patientRecords", data);
     },
@@ -68,6 +68,8 @@ const syncPatientDataService = {
                 saved: await this.getVitals(record.patient_id),
                 unsaved: [],
             },
+            vaccineAdministration: await this.getVaccineAdministration(record.patient_id),
+            immunizationDispensations: [],
             saveStatusPersonInformation: "complete",
             saveStatusGuardianInformation: "complete",
             saveStatusBirthRegistration: "complete",
@@ -104,6 +106,9 @@ const syncPatientDataService = {
                     obs_id: observation.obs_id,
                 }));
         });
+    },
+    async getVaccineAdministration(patientID) {
+        return await ApiService.getData("eir/schedule", { patient_id: patientID });
     },
     async getBirthRegistration(patientId) {
         const encounters = await ApiService.getData("/encounters", {

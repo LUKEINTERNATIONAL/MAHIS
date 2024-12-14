@@ -97,7 +97,7 @@ export class PatientProgramService extends ProgramService {
     }
 
     enrollProgram() {
-        return ProgramService.enrollProgram(this.patientId, this.programId, this.programDate);
+        if (!this.getProgramCurrentStates()) return ProgramService.enrollProgram(this.patientId, this.programId, this.programDate);
     }
 
     printTransferout(date: string) {
