@@ -10,6 +10,25 @@ export class LocationService extends Service {
         return this.getJson(`locations/${locationID}`);
     }
 
+    static getFacility(facilityID: number) {
+        return this.getJson(`facilities/${facilityID}`);
+    }
+
+    static getFacilityDistricts() {
+        return this.getJson(`facilities/districts`);
+    }
+
+    static getDistrictFacilities(districtName: string) {
+        return super.getJson(`/facilities?district_name=${districtName}`);
+    }
+
+    static getCityVillages(cityVillage: string) {
+        const params = {
+            city_village: cityVillage,
+        };
+        return this.getJson('locations', params);
+    }
+
     static createAddress(type: string, name: string, parentLocation: number) {
         console.log({
             address_type: type,

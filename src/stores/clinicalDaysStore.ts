@@ -185,6 +185,7 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
         setsssignedAppointmentsDates(data: any, next_apt: boolean = false): void {
             const programID = ProgramService.getProgramID();
             const patientID = useDemographicsStore().getPatient().patient_id;
+            this.assignedAppointmentsDates.length = 0;
 
             if (Array.isArray(this.assignedAppointmentsDates)) {
                 this.assignedAppointmentsDates.forEach((appointment) => {
