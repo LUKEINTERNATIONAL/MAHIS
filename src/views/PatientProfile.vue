@@ -596,7 +596,7 @@ export default defineComponent({
         async handleCheckInYes() {
             try {
                 const location = await getUserLocation();
-                const locationId = location ? location.location_id : null;
+                const locationId = location ? location.code : null;
                 if (!locationId) {
                     toastDanger("Location ID could not be found. Please check your settings.");
                     return;
