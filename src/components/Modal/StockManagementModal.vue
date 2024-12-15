@@ -15,7 +15,7 @@
                     <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
                 </div>
                 <div class="drug_container">
-                    <div class="drug_content" v-for="(item, index) in reportData" :key="index">
+                    <div class="drug_content" v-for="(item, index) in reportData.records" :key="index">
                         <div class="watermark" v-if="!checkExpired(item)">EXPIRED</div>
                         <div class="watermark" v-if="item.current_quantity <= 0">Stock out</div>
                         <ion-row class="search_header">
@@ -90,8 +90,8 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
-                        v-if="reportData[0]?.total_count"
-                        :total-items="reportData[0]?.total_count"
+                        v-if="reportData.totalCount"
+                        :total-items="reportData.totalCount"
                         :items-per-page="4"
                         :max-pages-shown="2"
                         v-model="currentPage"
@@ -474,7 +474,11 @@ export default defineComponent({
             this.isLoading = true;
             await workerData.postData("SYNC_STOCK_RECORD");
             try {
-                this.reportData = await getOfflineRecords("stock", { whereClause: { drug_legacy_name: this.data.drug_legacy_name } });
+                this.reportData = await getOfflineRecords(
+                    "stock",
+                    { whereClause: { drug_legacy_name: this.data.drug_legacy_name }, startIndex: this.currentPage, endIndex: this.currentPage + 4 },
+                    true
+                );
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
