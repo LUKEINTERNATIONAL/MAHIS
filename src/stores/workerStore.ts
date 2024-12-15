@@ -3,6 +3,8 @@ import { ref, watch, toRaw } from "vue";
 import workerData from "@/activate_worker";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess } from "@/utils/Alerts";
+import { UserService } from "@/services/user_service";
+import { Service } from "@/services/service";
 
 export const useWorkerStore = defineStore("worker", () => {
     const workerApi = ref<any>(null);
@@ -18,7 +20,7 @@ export const useWorkerStore = defineStore("worker", () => {
             if (newValue?.data?.msg === "done building patient record") {
                 workerData.postData("RESET");
                 doneLoading.value = true;
-                setRecord(newValue?.data?.payload);
+                await setRecord(newValue?.data?.payload);
             }
 
             if (newValue?.data?.msg === "saved successfully") {
@@ -27,7 +29,7 @@ export const useWorkerStore = defineStore("worker", () => {
                     workerData.postData("RESET");
                     toastSuccess("Saved on server successfully");
                     const offlinePatientData = await getOfflinePatientData();
-                    setRecord(offlinePatientData);
+                    await setRecord(offlinePatientData);
                 }
             }
         },
@@ -37,25 +39,30 @@ export const useWorkerStore = defineStore("worker", () => {
         }
     );
 
-    function setRecord(item: any) {
+    async function setRecord(item: any) {
         const demographicsStore = useDemographicsStore();
-
         demographicsStore.setPatient(item);
         if (route.value && router) {
             router.push(route.value);
+        } else if (programID() == 32) {
+            const actions = await UserService.setProgramUserActions();
+            router.push(actions?.url);
         }
     }
     function setRouter(routerInstance: any) {
         router = routerInstance;
     }
+    function programID() {
+        return Service.getProgramID();
+    }
     async function setPatientRecord(item: any) {
         if (item?.ID) {
-            setRecord(item);
+            await setRecord(item);
         } else {
             patientID.value = getPatientIdentifier(item, 3);
             const patientRecord: any = await getOfflinePatientData();
             if (patientRecord) {
-                setRecord(patientRecord);
+                await setRecord(patientRecord);
             } else {
                 workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
             }
