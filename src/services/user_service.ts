@@ -234,6 +234,6 @@ export class UserService extends Service {
         const actions = await this.setNCDValue();
         const generalStore = useGeneralStore();
         generalStore.setNCDUserActions(actions);
-        return actions;
+g        return actions;
     }
 }
