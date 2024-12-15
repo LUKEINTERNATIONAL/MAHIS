@@ -315,7 +315,7 @@ export default defineComponent({
                     // await this.saveTreatmentPlan();
                     // await this.saveOutComeStatus();
                     const location = await getUserLocation();
-                    const locationId = location ? location.location_id : null;
+                    const locationId = location ? location.code : null;
 
                     if (!locationId) {
                         toastDanger("Location ID could not be found. Please check your settings.");
@@ -337,7 +337,7 @@ export default defineComponent({
         },
         async fetchPatientLabStageData() {
             const location = await getUserLocation();
-            const locationId = location ? location.location_id : null;
+            const locationId = location ? location.code : null;
 
             if (locationId) {
                 const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
@@ -507,12 +507,10 @@ export default defineComponent({
         },
         async saveData() {
           try {
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
             const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
             await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
             const location = await getUserLocation();
-            const locationId = location ? location.location_id : null;
+            const locationId = location ? location.code : null;
             await usePatientList().refresh(locationId);
             this.checkedIn = false;
            await toastSuccess("Finished and visit closed");
