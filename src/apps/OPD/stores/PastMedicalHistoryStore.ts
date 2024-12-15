@@ -492,5 +492,5 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
             return [...data]; // Return a copy of the initial state
         },
     },
-   // persist: true,
+   persist: true,
 });

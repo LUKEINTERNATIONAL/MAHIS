@@ -145,7 +145,7 @@ export default defineComponent({
                 const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
                 await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
                 const location = await getUserLocation();
-                const locationId = location ? location.location_id : null;
+                const locationId = location ? location.code : null;
                 await usePatientList().refresh(locationId);
                 this.checkedIn = false;
                 toastSuccess("The patient's visit is now closed");

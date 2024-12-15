@@ -61,7 +61,6 @@ export default defineComponent({
   methods: {
     async loadUserFacilityDetails() {
       const data = await getUserLocation();
-      // this.facilityName = `Facility name: ${data.name}`;
       this.locationID = data.location_id;
       this.updateReportUrl();
     },

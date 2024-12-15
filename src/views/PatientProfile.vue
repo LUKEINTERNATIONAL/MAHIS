@@ -48,14 +48,14 @@
                                 <div style="display: flex; justify-content: space-between">
                                     <DynamicButton
                                         name="Activate visit"
-                                        v-if="!checkedIn && activeProgramID == 14"
+                                        v-if="activateVisitButtonVisible"
                                         @click="toggleCheckInModal()"
                                         fill="clear"
                                         iconSlot="start"
                                         :icon="closeCircleOutline"
                                     />
                                     <DynamicButton
-                                        v-if="checkedIn && activeProgramID == 14"
+                                        v-if="deactivateVisitButtonVisible"
                                         name="Deactivate visit"
                                         @click="toggleCheckOutModal()"
                                         fill="clear"
@@ -461,6 +461,12 @@ export default defineComponent({
         pregnancyPlanned() {
             return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy planned");
         },
+      activateVisitButtonVisible() {
+        return !this.checkedIn && this.activeProgramID == 14;
+      },
+      deactivateVisitButtonVisible() {
+        return this.checkedIn && this.activeProgramID == 14;
+      },
     },
     async mounted() {
         this.checkAge();
@@ -476,10 +482,12 @@ export default defineComponent({
             async handler(btn: any) {
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
-                // await this.handleProgramClick(btn);
+               this.updateCheckInStatus();
+              // await this.handleProgramClick(btn);
             },
             deep: true,
         },
+
     },
     setup() {
         const modal = ref();
@@ -569,6 +577,10 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
+      async updateCheckInStatus() {
+        const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
+        this.checkedIn = !!visit.length;
+      },
         closeCheckInModal() {
             this.checkInModalOpen = false;
         },
@@ -615,10 +627,10 @@ export default defineComponent({
         async checkPatientIFCheckedIn() {
             try {
                 const result = await PatientOpdList.getCheckInStatus(this.patient.patientID);
-
-                if (Boolean(result)) {
-                    this.checkedIn = true;
-                }
+              this.checkedIn = result.length > 0;
+                // if (Boolean(result)) {
+                //     this.checkedIn = true;
+                // }
             } catch (e) {
                 console.log({ e });
             }
