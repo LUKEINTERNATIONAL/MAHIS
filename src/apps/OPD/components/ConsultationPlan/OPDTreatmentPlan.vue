@@ -90,7 +90,7 @@
                         label="name"
                         :searchable="true"
                         @search-change="FindDrugName($event)"
-                        track-by="uuid"
+                        track-by="drug_id"
                         :options="OPDDrugList"
                     />
                     <div>
@@ -567,8 +567,6 @@ function frequencyDropDownUpdated(event: any) {
 
 async function saveData() {
     const are_fieldsValid = await areFieldsValid();
-    
-    console.log({are_fieldsValid})
 
     if (!are_fieldsValid) {
         toastWarning("Please enter correct data values", 4000);
@@ -576,7 +574,6 @@ async function saveData() {
     }
     dissmissDrugAddField();
     const systemSessionDate = Service.getSessionDate();
-    const daysToAdd = duration.value;
     const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value));
     let highlightbackground = false
 
@@ -601,13 +598,12 @@ async function saveData() {
     selectedMedicalDrugsList.value.push(drugString);
     drugName.value = "";
     dose.value = "";
-    selected_frequency.value = ref()
+    selected_frequency.value = null;
     duration.value = "";
     prescription.value = "";
     componentKey.value++;
-    selected_drug.value = ref()
-    selected_pres_method.value = ref()
-    saveStateValuesState();
+    selected_drug.value = null;
+    selected_pres_method.value = null;
 }
 
 async function FindDrugName(text: any) {
@@ -648,8 +644,6 @@ async function FindDrugName2(text: any) {
         value: drug.name,
         other: drug,
     }));
-
-    store.setPartialOPDdrugList(drugs)
     return drugs;
 }
 
@@ -698,14 +692,13 @@ function editItemAtIndex(index: any) {
     selectedMedicalDrugsList.value.splice(index, 1)
     drugName.value = dataItem.drugName
     dose.value = dataItem.dose
-    selected_frequency.value = {label: dataItem.frequency, code: dataItem.frequency_code},
+    selected_frequency.value = {label: dataItem.frequency, code: dataItem.frequency_code}
     duration.value = dataItem.duration
     prescription.value = dataItem.prescription
     addItemButton.value = !addItemButton
+    selected_drug.value = dataItem
+    selected_pres_method.value = { concept_id: dataItem.route_concept_id, name: dataItem.route_name }
     componentKey.value++
-    selected_drug.value = {id:dataItem.drug_id, name:dataItem.drugdrugName}
-    selected_pres_method.value = {concept_id:dataItem.route_concept_id, name: dataItem.route_name}
-    saveStateValuesState()
 }
 
 function removeItemAtIndex(index: any) {

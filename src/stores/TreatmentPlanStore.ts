@@ -33,8 +33,14 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         getSelectedMedicalAllergiesList() {
             return this.selectedMedicalAllergiesList;
         },
-        setPartialOPDdrugList(data: any): void {
-            this.partialOPDdrugList = data;
+        setPartialOPDdrugList(data: any[]): void {
+            const uniqueDrugsMap = new Map();
+            data.forEach(drug => {
+                if (drug && drug.drug_id) {
+                    uniqueDrugsMap.set(drug.drug_id, drug);
+                }
+            });
+            this.partialOPDdrugList = Array.from(uniqueDrugsMap.values());
         },
         getPartialOPDdrugList(): any {
             return this.partialOPDdrugList;
