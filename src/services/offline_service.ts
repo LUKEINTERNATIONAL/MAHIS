@@ -41,18 +41,17 @@ function openDatabase(storeName: string = "defaultStore", keyPath: string = "id"
 export async function getOfflineRecords<T = any>(
     storeName: string,
     options: {
-        startIndex?: number;
-        endIndex?: number;
+        currentPage?: number;
+        itemsPerPage?: number;
         whereClause?: Partial<T>;
         sortBy?: keyof T;
         sortOrder?: "asc" | "desc";
     } = {},
     pagination = false
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
-    const { startIndex = 0, endIndex, whereClause, sortBy, sortOrder = "asc" } = options;
+    const { currentPage = 1, itemsPerPage = 10, whereClause, sortBy, sortOrder = "asc" } = options;
 
     const db = await openDatabase(storeName);
-
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([storeName], "readonly");
         const objectStore = transaction.objectStore(storeName);
@@ -71,7 +70,6 @@ export async function getOfflineRecords<T = any>(
                 filteredRecords.sort((a, b) => {
                     const valueA = a[sortBy];
                     const valueB = b[sortBy];
-
                     if (valueA < valueB) return sortOrder === "asc" ? -1 : 1;
                     if (valueA > valueB) return sortOrder === "asc" ? 1 : -1;
                     return 0;
@@ -81,8 +79,12 @@ export async function getOfflineRecords<T = any>(
             // Calculate total count before pagination
             const totalCount = filteredRecords.length;
 
+            // Calculate start and end indices based on currentPage and itemsPerPage
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
             // Apply pagination
-            const paginatedRecords = endIndex !== undefined ? filteredRecords.slice(startIndex, endIndex + 1) : filteredRecords.slice(startIndex);
+            const paginatedRecords = filteredRecords.slice(startIndex, endIndex);
 
             if (pagination) {
                 resolve({
