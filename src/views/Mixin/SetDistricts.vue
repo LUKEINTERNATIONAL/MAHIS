@@ -11,12 +11,15 @@ export default defineComponent({
         locations: [] as any,
     }),
     async mounted() {
-        this.districtList = await getOfflineRecords("districts");
-        this.countriesList = await getOfflineRecords("countries");
-        this.TAsList = await getOfflineRecords("TAs");
-        this.villageList = await getOfflineRecords("villages");
+        await this.getLocationData();
     },
     methods: {
+        async getLocationData() {
+            this.districtList = await getOfflineRecords("districts");
+            this.countriesList = await getOfflineRecords("countries");
+            this.TAsList = await getOfflineRecords("TAs");
+            this.villageList = await getOfflineRecords("villages");
+        },
         async getVillages(targetId: any) {
             if (this.villageList == "") return null;
             return this.villageList?.filter((obj: any) => obj.traditional_authority_id === targetId);

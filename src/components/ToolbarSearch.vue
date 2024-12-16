@@ -475,7 +475,7 @@ export default defineComponent({
                 if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
                     useWorkerStore().route = "OPDvitals";
                 }
-            } else if (this.programID() == 32) {
+            } else if (this.programID() == 32 && this.apiStatus) {
                 useWorkerStore().route = "";
             }
         },
