@@ -11,7 +11,7 @@
         </ion-header>
         <ion-content style="--background: #fff">
             <div class="container">
-                <div style="width: 80vw; top: -10px; position: relative; margin-right: 10px">
+                <div style="width: 70vw; top: -2px; position: relative; margin-right: 10px">
                     <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
                 </div>
                 <div class="drug_container">
@@ -476,7 +476,11 @@ export default defineComponent({
             try {
                 this.reportData = await getOfflineRecords(
                     "stock",
-                    { whereClause: { drug_legacy_name: this.data.drug_legacy_name }, startIndex: this.currentPage, endIndex: this.currentPage + 4 },
+                    {
+                        whereClause: { drug_legacy_name: this.data.drug_legacy_name },
+                        currentPage: this.currentPage,
+                        itemsPerPage: 4,
+                    },
                     true
                 );
             } catch (error) {
