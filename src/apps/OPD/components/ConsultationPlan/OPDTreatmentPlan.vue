@@ -410,7 +410,7 @@ const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
 const currentDrugOb = ref()
-const editingDrugItem = ref<number | null>(null)
+const editingDrugItem = computed(() => store.editingDrugItem)
 
 const pres_methodErrMsg = ref('Select a route')
 const show_error_msg_for_pres_method = ref(false)
@@ -566,7 +566,39 @@ function frequencyDropDownUpdated(event: any) {
 
 async function saveData() {
     if (editingDrugItem.value !== null) {
+        const are_fieldsValid = await areFieldsValid();
+
+        if (!are_fieldsValid) {
+            toastWarning("Please enter correct data values", 4000);
+            return;
+        }
+
+        const systemSessionDate = Service.getSessionDate();
+        const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value));
+        let highlightbackground = false
+
+        if (isPresentInAllergyList(currentDrugOb.value) == true) {
+            highlightbackground = true;
+        }
+
+        const updatedDrugObj = {
+            drugName: drugName.value,
+            dose: dose.value,
+            frequency: selected_frequency.value.label,
+            frequency_code: selected_frequency.value.code,
+            duration: duration.value,
+            prescription: generatedPrescriptionDate,
+            drug_id: drug_id.value,
+            units: units.value,
+            route_concept_id: selected_pres_method.value.concept_id,
+            route_name: selected_pres_method.value.name,
+            highlightbackground: highlightbackground
+        };
         
+        const treatmentPlanStore = useTreatmentPlanStore();
+        console.log(treatmentPlanStore.setSelectedMedicalDrugsList([updatedDrugObj]));
+        treatmentPlanStore.editingDrugItem = null;
+        addItemButton.value = true;
     } else {
         const are_fieldsValid = await areFieldsValid();
 
@@ -599,15 +631,17 @@ async function saveData() {
         
         const treatmentPlanStore = useTreatmentPlanStore();
         treatmentPlanStore.setSelectedMedicalDrugsList([drugString]);
-        drugName.value = "";
-        dose.value = "";
-        selected_frequency.value = null;
-        duration.value = "";
-        prescription.value = "";
-        componentKey.value++;
-        selected_drug.value = null;
-        selected_pres_method.value = null;
     }
+
+    drug_id.value = '';
+    drugName.value = "";
+    dose.value = "";
+    selected_frequency.value = null;
+    duration.value = "";
+    prescription.value = "";
+    componentKey.value++;
+    selected_drug.value = null;
+    selected_pres_method.value = null;
 }
 
 async function FindDrugName(text: any) {
@@ -700,18 +734,22 @@ function selectedDrugName(data: any) {
 function editItemAtIndex(index: any) {
     const originalItem = selectedMedicalDrugsList.value[index]
     
-    editingDrugItem.value = originalItem
-
-    selectedMedicalDrugsList.value.splice(index, 1)
     
-    drugName.value = ''
-    dose.value = ''
-    selected_frequency.value = null
-    duration.value = ''
-    prescription.value = ''
-    selected_drug.value = null
-    selected_pres_method.value = null
 
+    const treatmentPlanStore = useTreatmentPlanStore();
+    treatmentPlanStore.removeDrugById(originalItem.drug_id);
+    treatmentPlanStore.editingDrugItem = originalItem
+
+    drug_id.value = '';
+    drugName.value = '';
+    dose.value = '';
+    selected_frequency.value = null;
+    duration.value = '';
+    prescription.value = '';
+    selected_drug.value = null;
+    selected_pres_method.value = null;
+
+    drug_id.value = originalItem.drug_id;
     drugName.value = originalItem.drugName
     dose.value = originalItem.dose
     selected_frequency.value = {
@@ -740,6 +778,7 @@ function editItemAtIndex(index: any) {
 
 function cancelEdit() {
     if (editingDrugItem.value !== null) {  
+        drug_id.value = '';
         drugName.value = ''
         dose.value = ''
         selected_frequency.value = null
@@ -750,8 +789,7 @@ function cancelEdit() {
 
         const treatmentPlanStore = useTreatmentPlanStore();
         treatmentPlanStore.setSelectedMedicalDrugsList([editingDrugItem.value]);
-        
-        editingDrugItem.value = null
+        treatmentPlanStore.editingDrugItem = null
     }
     
     addItemButton.value = true
@@ -845,11 +883,11 @@ function removeOuterArray(arr: any) {
     return arr[1];
 }
 
-const dynamic_button_properties = [
+const dynamic_button_properties = computed(() => [
     {
         showAddItemButton: true,
         addItemButton: true,
-        name: "Add",
+        name: editingDrugItem.value !== null ? "Update" : "Add",
         btnFill: 'clear',
         fn: saveData,
     },
@@ -860,7 +898,7 @@ const dynamic_button_properties = [
         btnFill: 'clear',
         fn: cancelEdit,
     }
-]
+])
 </script>
 
 <style scoped>

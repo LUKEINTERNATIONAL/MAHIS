@@ -1,33 +1,30 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 
-export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
+export const useTreatmentPlanStore = defineStore("TreatmentPlanStore", {
     state: () => ({
         selectedMedicalDrugsList: [] as any,
         medicalAllergiesList: [] as any,
         selectedMedicalAllergiesList: [] as any,
-        nonPharmalogicalTherapyAndOtherNotes: '' as string,
+        nonPharmalogicalTherapyAndOtherNotes: "" as string,
         partialOPDdrugList: [] as any,
+        editingDrugItem: null,
     }),
-    actions:{
-        setSelectedMedicalDrugsList(data: any[]): void {
-            const uniqueDrugsMap = new Map();
-
-            console.log("nnnn: ", this.selectedMedicalDrugsList);
-
-            this.selectedMedicalDrugsList.forEach((drug: any) => {
-                if (drug && drug.drug_id) {
-                    uniqueDrugsMap.set(drug.drug_id, drug);
-                }
+    actions: {
+        setSelectedMedicalDrugsList(data: any[]): any[] {
+            const drugMap = new Map(this.selectedMedicalDrugsList.map((drug: any) => [drug.drug_id, drug]));
+            data.forEach((newDrug) => {
+                drugMap.set(newDrug.drug_id, newDrug);
             });
+            this.selectedMedicalDrugsList = Array.from(drugMap.values());
+            return this.selectedMedicalDrugsList;
+        },
+        removeDrugById(drugId: string | number): void {
+            const index = this.selectedMedicalDrugsList.findIndex((drug: any) => drug.drug_id === drugId);
 
-            data.forEach(drug => {
-                if (drug && drug.drug_id) {
-                    uniqueDrugsMap.set(drug.drug_id, drug);
-                }
-            });
-
-            this.selectedMedicalDrugsList = Array.from(uniqueDrugsMap.values());
+            if (index !== -1) {
+                this.selectedMedicalDrugsList.splice(index, 1);
+            }
         },
         setMedicalAllergiesList(data: any) {
             this.medicalAllergiesList = data;
@@ -41,7 +38,7 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         setSelectedMedicalAllergiesList(data: any) {
             this.selectedMedicalAllergiesList.forEach((allergy: any, index: number) => {
                 if (allergy.concept_name_id == data.concept_name_id) {
-                    this.selectedMedicalAllergiesList.splice(index, 1)
+                    this.selectedMedicalAllergiesList.splice(index, 1);
                 }
             });
             this.selectedMedicalAllergiesList.push(data);
@@ -51,7 +48,7 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         },
         setPartialOPDdrugList(data: any[]): void {
             const uniqueDrugsMap = new Map();
-            data.forEach(drug => {
+            data.forEach((drug) => {
                 if (drug && drug.drug_id) {
                     uniqueDrugsMap.set(drug.drug_id, drug);
                 }
@@ -62,5 +59,5 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
             return this.partialOPDdrugList;
         },
     },
-    persist:true,
-})
+    persist: true,
+});
