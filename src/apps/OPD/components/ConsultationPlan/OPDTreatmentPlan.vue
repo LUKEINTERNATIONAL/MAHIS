@@ -76,7 +76,6 @@
             <ion-row v-if="!addItemButton">
                 <ion-col>
                     <VueMultiselect
-                        style="margin-top: 27px;"
                         v-model="selected_drug"
                         @update:model-value="selectedDrugName($event)"
                         :multiple="false"
@@ -680,24 +679,50 @@ function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
 }
 
 function selectedDrugName(data: any) {
-    drugName.value = data.name;
-    drug_id.value = data.drug_id;
-    units.value = data.units;
-    currentDrugOb.value = data
-    isPresentInAllergyList(data)
+    if (data) {
+        drugName.value = data.name;
+        drug_id.value = data.drug_id;
+        units.value = data.units;
+        currentDrugOb.value = data
+        isPresentInAllergyList(data)
+    }
 }
 
 function editItemAtIndex(index: any) {
     const dataItem = selectedMedicalDrugsList.value[index]
     selectedMedicalDrugsList.value.splice(index, 1)
+    
+    drugName.value = ''
+    dose.value = ''
+    selected_frequency.value = null
+    duration.value = ''
+    prescription.value = ''
+    selected_drug.value = null
+    selected_pres_method.value = null
+
     drugName.value = dataItem.drugName
     dose.value = dataItem.dose
-    selected_frequency.value = {label: dataItem.frequency, code: dataItem.frequency_code}
+    selected_frequency.value = {
+        label: dataItem.frequency, 
+        code: dataItem.frequency_code
+    }
     duration.value = dataItem.duration
     prescription.value = dataItem.prescription
-    addItemButton.value = !addItemButton
-    selected_drug.value = dataItem
-    selected_pres_method.value = { concept_id: dataItem.route_concept_id, name: dataItem.route_name }
+    
+    const fullDrugObject = OPDDrugList.value.find(
+        (drug: any) => drug.name === dataItem.drugName
+    )
+    
+    if (fullDrugObject) {
+        selected_drug.value = fullDrugObject
+    }
+    
+    selected_pres_method.value = { 
+        concept_id: dataItem.route_concept_id, 
+        name: dataItem.route_name 
+    }
+    
+    addItemButton.value = false
     componentKey.value++
 }
 
