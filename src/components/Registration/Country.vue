@@ -76,6 +76,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            async handler() {
+                await this.buildCards();
+                this.setData();
+            },
+        },
     },
     props: {
         editable: {
@@ -83,7 +89,7 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.buildCards();
+        await this.buildCards();
         this.setData();
     },
     methods: {
