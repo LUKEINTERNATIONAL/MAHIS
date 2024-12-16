@@ -101,8 +101,12 @@ export default defineComponent({
             this.$emit('edit-item', index)
         },
         highLightBnd(item: any) {
-            if (item.highlightbackground !== undefined && item.highlightbackground == true) {
-                return this.$props.highLightBackground
+            if (item) {
+                if (item.highlightbackground !== undefined && item.highlightbackground == true) {
+                    return this.$props.highLightBackground
+                }
+            } else {
+                return false
             }
         }
     }

@@ -410,6 +410,7 @@ const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
 const currentDrugOb = ref()
+const editingDrugItem = ref<number | null>(null)
 
 const pres_methodErrMsg = ref('Select a route')
 const show_error_msg_for_pres_method = ref(false)
@@ -563,46 +564,50 @@ function frequencyDropDownUpdated(event: any) {
     selected_frequency.value = event
 }
 
-
 async function saveData() {
-    const are_fieldsValid = await areFieldsValid();
+    if (editingDrugItem.value !== null) {
+        
+    } else {
+        const are_fieldsValid = await areFieldsValid();
 
-    if (!are_fieldsValid) {
-        toastWarning("Please enter correct data values", 4000);
-        return;
+        if (!are_fieldsValid) {
+            toastWarning("Please enter correct data values", 4000);
+            return;
+        }
+        dissmissDrugAddField();
+        const systemSessionDate = Service.getSessionDate();
+        const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value));
+        let highlightbackground = false
+
+        if (isPresentInAllergyList(currentDrugOb.value) == true) {
+            highlightbackground = true;
+        }
+
+        const drugString = {
+            drugName: drugName.value,
+            dose: dose.value,
+            frequency: selected_frequency.value.label,
+            frequency_code: selected_frequency.value.code,
+            duration: duration.value,
+            prescription: generatedPrescriptionDate,
+            drug_id: drug_id.value,
+            units: units.value,
+            route_concept_id: selected_pres_method.value.concept_id,
+            route_name: selected_pres_method.value.name,
+            highlightbackground: highlightbackground
+        };
+        
+        const treatmentPlanStore = useTreatmentPlanStore();
+        treatmentPlanStore.setSelectedMedicalDrugsList([drugString]);
+        drugName.value = "";
+        dose.value = "";
+        selected_frequency.value = null;
+        duration.value = "";
+        prescription.value = "";
+        componentKey.value++;
+        selected_drug.value = null;
+        selected_pres_method.value = null;
     }
-    dissmissDrugAddField();
-    const systemSessionDate = Service.getSessionDate();
-    const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value));
-    let highlightbackground = false
-
-    if (isPresentInAllergyList(currentDrugOb.value) == true) {
-        highlightbackground = true;
-    }
-
-    const drugString = {
-        drugName: drugName.value,
-        dose: dose.value,
-        frequency: selected_frequency.value.label,
-        frequency_code: selected_frequency.value.code,
-        duration: duration.value,
-        prescription: generatedPrescriptionDate,
-        drug_id: drug_id.value,
-        units: units.value,
-        route_concept_id: selected_pres_method.value.concept_id,
-        route_name: selected_pres_method.value.name,
-        highlightbackground: highlightbackground
-    };
-    
-    selectedMedicalDrugsList.value.push(drugString);
-    drugName.value = "";
-    dose.value = "";
-    selected_frequency.value = null;
-    duration.value = "";
-    prescription.value = "";
-    componentKey.value++;
-    selected_drug.value = null;
-    selected_pres_method.value = null;
 }
 
 async function FindDrugName(text: any) {
@@ -673,9 +678,13 @@ async function findIfDrugNameExists() {
 }
 
 function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
-    return mainArray.some((item: any) => 
-        idsToFilter.includes(item.concept_id as never)
-    );
+    try {
+        return mainArray.some((item: any) => 
+            idsToFilter.includes(item.concept_id as never)
+        ); 
+    } catch (error) {
+        return false
+    }
 }
 
 function selectedDrugName(data: any) {
@@ -689,7 +698,10 @@ function selectedDrugName(data: any) {
 }
 
 function editItemAtIndex(index: any) {
-    const dataItem = selectedMedicalDrugsList.value[index]
+    const originalItem = selectedMedicalDrugsList.value[index]
+    
+    editingDrugItem.value = originalItem
+
     selectedMedicalDrugsList.value.splice(index, 1)
     
     drugName.value = ''
@@ -700,17 +712,17 @@ function editItemAtIndex(index: any) {
     selected_drug.value = null
     selected_pres_method.value = null
 
-    drugName.value = dataItem.drugName
-    dose.value = dataItem.dose
+    drugName.value = originalItem.drugName
+    dose.value = originalItem.dose
     selected_frequency.value = {
-        label: dataItem.frequency, 
-        code: dataItem.frequency_code
+        label: originalItem.frequency, 
+        code: originalItem.frequency_code
     }
-    duration.value = dataItem.duration
-    prescription.value = dataItem.prescription
+    duration.value = originalItem.duration
+    prescription.value = originalItem.prescription
     
     const fullDrugObject = OPDDrugList.value.find(
-        (drug: any) => drug.name === dataItem.drugName
+        (drug: any) => drug.name === originalItem.drugName
     )
     
     if (fullDrugObject) {
@@ -718,29 +730,43 @@ function editItemAtIndex(index: any) {
     }
     
     selected_pres_method.value = { 
-        concept_id: dataItem.route_concept_id, 
-        name: dataItem.route_name 
+        concept_id: originalItem.route_concept_id, 
+        name: originalItem.route_name 
     }
     
     addItemButton.value = false
     componentKey.value++
 }
 
+function cancelEdit() {
+    if (editingDrugItem.value !== null) {  
+        drugName.value = ''
+        dose.value = ''
+        selected_frequency.value = null
+        duration.value = ''
+        prescription.value = ''
+        selected_drug.value = null
+        selected_pres_method.value = null
+
+        const treatmentPlanStore = useTreatmentPlanStore();
+        treatmentPlanStore.setSelectedMedicalDrugsList([editingDrugItem.value]);
+        
+        editingDrugItem.value = null
+    }
+    
+    addItemButton.value = true
+    componentKey.value++
+}
+
 function removeItemAtIndex(index: any) {
     selectedMedicalDrugsList.value.splice(index, 1);
     componentKey.value++;
-    saveStateValuesState();
     toastWarning("you have removed a drug from list", 6000)
 }
 
 function validateNotes(ev: any) {
     let value = ev.target.value
     refSetNonPharmalogicalTherapyAndOtherNotes(value)
-}
-
-function saveStateValuesState() {
-    const treatmentPlanStore = useTreatmentPlanStore();
-    treatmentPlanStore.setSelectedMedicalDrugsList(selectedMedicalDrugsList);
 }
 
 function refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
@@ -832,7 +858,7 @@ const dynamic_button_properties = [
         addItemButton: true,
         name: "Cancel",
         btnFill: 'clear',
-        fn: addData,
+        fn: cancelEdit,
     }
 ]
 </script>
