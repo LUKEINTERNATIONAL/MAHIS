@@ -5,7 +5,7 @@
             <div class="TodaysDate">Todays Date: <span></span> {{ todays_date }}</div>
         </div>
         <div class="">
-            <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
+            <basic-form :contentData="vitals" @update:inputValue="validateRowData()"></basic-form>
         </div>
         <customDatePicker v-if="showPD" />
         <div class="btnContent">
@@ -50,6 +50,7 @@ import customDatePicker from "@/apps/Immunization/components/customDatePicker.vu
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
+import VitalsMixin from "@/views/Mixin/VitalsMixin.vue";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -60,6 +61,7 @@ import {
 } from "@/services/data_helpers";
 
 export default defineComponent({
+    mixins: [VitalsMixin],
     components: {
         IonContent,
         IonHeader,
@@ -77,8 +79,6 @@ export default defineComponent({
     data() {
         return {
             iconsContent: icons,
-            BMI: {} as any,
-            BPStatus: {} as any,
             vValidations: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
@@ -97,31 +97,15 @@ export default defineComponent({
         this.updateVitalsStores();
     },
     async mounted() {
-        const array = ["height", "weight", "Systolic blood pressure", "Diastolic blood pressure", "Temp", "Pulse", "SP02", "Respiratory"];
-
-        // An array to store all promises
-        const promises = array.map(async (item: any) => {
-            if (HisDate.toStandardHisFormat(await ObservationService.getFirstObsDatetime(this.patient.patientID, item)) == HisDate.currentDate()) {
-                modifyFieldValue(
-                    this.vitals,
-                    item,
-                    "value",
-                    await ObservationService.getFirstValueNumber(this.patient.patientID, item, HisDate.currentDate())
-                );
-            }
-        });
-
-        // Wait for all promises to resolve
-        await Promise.all(promises);
-        // After all async operations are finished
-        const userID: any = Service.getUserID();
-        this.vitalsInstance = new VitalsService(this.patient.patientID, userID);
+        this.vitalsData = this.vitals;
+        await this.setTodayVitals();
         this.updateVitalsStores();
-        this.validaterowData({});
+        await this.validateRowData();
     },
     watch: {
         vitals: {
             handler() {
+                this.vitalsData = this.vitals;
                 this.updateVitalsStores();
             },
             deep: true,
@@ -139,189 +123,33 @@ export default defineComponent({
             const vitalsStore = useVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
-        validationController(inputData: any) {
-            if (inputData?.col?.name == "Height And Weight Not Done" && inputData.col.checked) {
-                modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", false);
-                modifyFieldValue(this.vitals, "Height", "disabled", true);
-                modifyFieldValue(this.vitals, "Weight", "disabled", true);
-                modifyFieldValue(this.vitals, "Height", "inputHeader", "Height");
-                modifyFieldValue(this.vitals, "Weight", "inputHeader", "Weight");
-                modifyFieldValue(this.vitals, "Height", "value", "");
-                modifyFieldValue(this.vitals, "Weight", "value", "");
-                this.validationStatus.heightWeight = false;
-            } else if (inputData?.col?.name == "Height And Weight Not Done") {
-                modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", true);
-                modifyFieldValue(this.vitals, "Height", "disabled", false);
-                modifyFieldValue(this.vitals, "Weight", "disabled", false);
-                modifyFieldValue(this.vitals, "Height", "inputHeader", "Height*");
-                modifyFieldValue(this.vitals, "Weight", "inputHeader", "Weight*");
-                this.validationStatus.heightWeight = true;
-            }
-            if (inputData?.col?.name == "Blood Pressure Not Done" && inputData.col.checked) {
-                modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", false);
-                modifyFieldValue(this.vitals, "Systolic", "disabled", true);
-                modifyFieldValue(this.vitals, "Diastolic", "disabled", true);
-                modifyFieldValue(this.vitals, "Systolic", "inputHeader", "Systolic Pressure");
-                modifyFieldValue(this.vitals, "Diastolic", "inputHeader", "Diastolic pressure");
-                modifyFieldValue(this.vitals, "Systolic", "value", "");
-                modifyFieldValue(this.vitals, "Diastolic", "value", "");
-                this.validationStatus.bloodPressure = false;
-            } else if (inputData?.col?.name == "Blood Pressure Not Done") {
-                modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", true);
-                modifyFieldValue(this.vitals, "Systolic", "disabled", false);
-                modifyFieldValue(this.vitals, "Diastolic", "disabled", false);
-                modifyFieldValue(this.vitals, "Systolic", "inputHeader", "Systolic Pressure*");
-                modifyFieldValue(this.vitals, "Diastolic", "inputHeader", "Diastolic pressure*");
-                modifyFieldValue(this.vitals, "Systolic", "value", "");
-                modifyFieldValue(this.vitals, "Diastolic", "value", "");
-                this.validationStatus.bloodPressure = true;
-            }
-            if (inputData?.col?.name == "Pulse Rate Not Done" && inputData.col.checked) {
-                modifyCheckboxInputField(this.vitals, "Pulse Rate Reason", "displayNone", false);
-                modifyFieldValue(this.vitals, "Pulse", "disabled", true);
-                modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate");
-                modifyFieldValue(this.vitals, "Pulse", "value", "");
-                this.validationStatus.pulseRate = false;
-            } else if (inputData?.col?.name == "Pulse Rate Not Done") {
-                modifyCheckboxInputField(this.vitals, "Pulse Rate Reason", "displayNone", true);
-                modifyFieldValue(this.vitals, "Pulse", "disabled", false);
-                modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate*");
-                modifyFieldValue(this.vitals, "Pulse", "value", "");
-                this.validationStatus.pulseRate = true;
-            }
-        },
-        async validaterowData(inputData: any) {
-            this.validationController(inputData);
-            this.hasValidationErrors = [];
-            this.vitals.forEach((section: any, sectionIndex: any) => {
-                if (section?.data?.rowData) {
-                    section?.data?.rowData.forEach((col: any, colIndex: any) => {
-                        if (col.colData[0].inputHeader == "Systolic Pressure*") {
-                            const isSystolicValid =
-                                this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
-                            this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value, col.colData[1].value) : {};
-                            this.updateBP(col.colData[0].value, col.colData[1].value);
-                        }
 
-                        if (col.colData[0].inputHeader == "Height*") {
-                            const isHeightValid =
-                                this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
-                            this.BMI = isHeightValid ? this.setBMI(col.colData[1].value, col.colData[0].value) : {};
-                            this.updateBMI();
-                        }
+        async validateRowData() {
+            const height = getFieldValue(this.vitals, "Height (cm)", "value");
+            const weight = getFieldValue(this.vitals, "Weight", "value");
+            const systolic = getFieldValue(this.vitals, "Systolic", "value");
+            const diastolic = getFieldValue(this.vitals, "Diastolic", "value");
+            const temp = getFieldValue(this.vitals, "Temp", "value");
+            const pulse = getFieldValue(this.vitals, "Pulse", "value");
+            const respiratoryRate = getFieldValue(this.vitals, "Respiratory rate", "value");
+            const SP02 = getFieldValue(this.vitals, "SP02", "value");
 
-                        col.colData.some((input: any, inputIndex: any) => {
-                            const validateResult = this.vitalsInstance.validator(input);
-                            if (validateResult?.length > 0) {
-                                this.hasValidationErrors.push("false");
-                                if (input.inputHeader === inputData.inputHeader) {
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
-                                        validateResult.flat(Infinity)[0];
-                                    return true;
-                                }
-                            } else {
-                                this.hasValidationErrors.push("true");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
-                            }
+            await this.setBMI(height, weight);
+            await this.updateBP(systolic, diastolic);
 
-                            return false;
-                        });
-                    });
-                }
-            });
+            const pulseStatus = this.getPulseRateStatus(pulse);
+            await this.updateRate("pulse", pulse, " BMP", pulseStatus, 4);
 
-            this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
-        },
-        async setBMI(weight: any, height: any) {
-            if (this.patient?.personInformation?.gender && this.patient?.personInformation?.birthdate) {
-                this.BMI = await BMIService.getBMI(
-                    parseInt(weight),
-                    parseInt(height),
-                    this.patient?.personInformation?.gender,
-                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
-                );
-            }
-            this.updateBMI();
-        },
-        async updateBMI() {
-            const bmiColor = this.BMI?.color ?? [];
-            const vitals = this.vitals[0].alerts[0];
-            vitals.icon = BMIService.iconBMI(bmiColor);
-            vitals.backgroundColor = bmiColor[0];
-            vitals.textColor = bmiColor[1];
-            vitals.index = "BMI " + (this.BMI?.index ?? "");
-            vitals.value = this.BMI?.result ?? "";
-        },
-        async updateBP(systolic: any, diastolic: any) {
-            const vitals = this.vitals[2]?.alerts[0] ?? [];
-            const bpColor = this.BPStatus?.colors ?? [];
-            vitals.icon = iconBloodPressure(bpColor);
-            vitals.backgroundColor = bpColor[0];
-            vitals.textColor = bpColor[1];
-            vitals.index = systolic + "/" + diastolic;
-            vitals.value = this.BPStatus?.value ?? "";
-        },
-        getBloodPressureStatus(systolic: any, diastolic: any) {
-            let ageGroup;
-            let minSystolic;
-            let maxSystolic;
-            let minDiastolic;
-            let maxDiastolic;
-            const patient = new PatientService();
-            const age = patient.getAge();
-            // Determine age group and corresponding normal ranges
-            if (age < 1) {
-                ageGroup = "less than 1 year";
-                minSystolic = 75;
-                maxSystolic = 100;
-                minDiastolic = 50;
-                maxDiastolic = 70;
-            } else if (age >= 1 && age < 6) {
-                ageGroup = "1-5 years";
-                minSystolic = 80;
-                maxSystolic = 110;
-                minDiastolic = 50;
-                maxDiastolic = 80;
-            } else if (age >= 6 && age < 13) {
-                ageGroup = "6-13 years";
-                minSystolic = 85;
-                maxSystolic = 120;
-                minDiastolic = 55;
-                maxDiastolic = 80;
-            } else if (age >= 13 && age < 18) {
-                ageGroup = "13-18 years";
-                minSystolic = 95;
-                maxSystolic = 140;
-                minDiastolic = 60;
-                maxDiastolic = 90;
-            } else {
-                ageGroup = "above 18 years";
-                minSystolic = 100;
-                maxSystolic = 130;
-                minDiastolic = 60;
-                maxDiastolic = 90;
-            }
+            const tempStatus = this.getTemperatureStatus(temp);
+            this.updateRate("temp", temp, "°C", tempStatus, 4);
 
-            // Diastolic pressure is within normal range, check systolic pressure
-            if (systolic < minSystolic && diastolic < minDiastolic) {
-                return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup };
-            } else if (systolic >= minSystolic && systolic <= maxSystolic && diastolic >= minDiastolic && diastolic <= maxDiastolic) {
-                return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup };
-            } else if (systolic > maxSystolic && diastolic > maxDiastolic) {
-                return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup };
-            } else {
-                // Diastolic pressure is not within normal range, consider only systolic pressure
-                if (systolic < minSystolic) {
-                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup + " (Using Systolic Only)" };
-                } else if (systolic >= minSystolic && systolic <= maxSystolic) {
-                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup + " (Using Systolic Only)" };
-                } else {
-                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup + " (Using Systolic Only)" };
-                }
-            }
+            const respiratoryStatus = this.getRespiratoryRateStatus(respiratoryRate);
+            this.updateRate("respiratory", respiratoryRate, "BMP", respiratoryStatus, 6);
+
+            const oxygenStatus = this.getOxygenSaturationStatus(SP02);
+            this.updateRate("oxygen", SP02, "%", oxygenStatus, 6);
         },
+
         showCPD() {
             this.showPD = true as boolean;
         },
