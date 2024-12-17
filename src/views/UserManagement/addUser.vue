@@ -618,7 +618,7 @@ async function trigerSaveFn() {
         } catch (error) {
             //console.error(error)
             saveEvent('')
-            toastDanger(error as string, 8000)
+            toastDanger(error as string, 2000)
         }
     }
 }
