@@ -8,7 +8,7 @@ const initialVitals = [
                 {
                     colData: [
                         {
-                            inputHeader: "Systolic Pressure*",
+                            inputHeader: "Systolic Pressure",
                             unit: "mmHg",
                             icon: icons.systolicPressure,
                             value: "",
@@ -19,7 +19,7 @@ const initialVitals = [
                             validationFunctionName: "vitalsSystolic",
                         },
                         {
-                            inputHeader: "Diastolic pressure*",
+                            inputHeader: "Diastolic pressure",
                             unit: "mmHg",
                             icon: icons.diastolicPressure,
                             value: "",
@@ -40,63 +40,12 @@ const initialVitals = [
                 icon: "",
                 textColor: "",
                 value: "",
-                name: "",
+                name: "bp",
                 index: "",
             },
         ],
         previousView: {
             name: "vitals",
-        },
-    },
-    {
-        classDash: "dashed_bottom_border",
-        selectedData: [],
-        sideColSize: 3.8,
-        checkboxBtnContent: {
-            header: {
-                title: "",
-                selectedValue: " ",
-                name: "Primary diagnosis",
-            },
-            data: [
-                {
-                    colSize: "12",
-                    name: "Blood Pressure Not Done",
-                    value: "Blood Pressure Not Done",
-                    checked: false,
-                    displayNone: false,
-                },
-            ],
-            inputFields: [
-                {
-                    inputHeader: "Specify Reason",
-                    icon: icons.search,
-                    isMultiSelect: true,
-                    popOver: true,
-                    value: "",
-                    name: "Blood Pressure Reason",
-                    multiSelectData: [
-                        {
-                            id: 1,
-                            name: "Patient uncooperative",
-                        },
-                        {
-                            id: 2,
-                            name: "Machine not working",
-                        },
-                        {
-                            id: 3,
-                            name: "Machine not available",
-                        },
-                    ],
-                    eventType: "input",
-                    required: true,
-                    alertsErrorMassage: "",
-                    id: "",
-                    idName: "district_id",
-                    displayNone: true,
-                },
-            ],
         },
     },
     {
@@ -114,7 +63,7 @@ const initialVitals = [
                             validationFunctionName: "vitalsTemperature",
                         },
                         {
-                            inputHeader: "Pulse rate*",
+                            inputHeader: "Pulse rate",
                             unit: "BMP",
                             icon: icons.pulse,
                             value: "",
@@ -133,61 +82,19 @@ const initialVitals = [
                 icon: "",
                 textColor: "",
                 value: "",
-                name: "",
+                name: "temp",
+                index: "",
+            },
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "pulse",
                 index: "",
             },
         ],
-    },
-    {
-        classDash: "dashed_bottom_border",
-        selectedData: [],
-        sideColSize: 3.8,
-        checkboxBtnContent: {
-            header: {
-                title: "",
-                selectedValue: " ",
-                name: "Primary diagnosis",
-            },
-            data: [
-                {
-                    colSize: "12",
-                    name: "Pulse Rate Not Done",
-                    value: "Pulse Rate Not Done",
-                    checked: false,
-                    displayNone: false,
-                },
-            ],
-            inputFields: [
-                {
-                    inputHeader: "Specify Reason",
-                    icon: icons.search,
-                    isMultiSelect: true,
-                    popOver: true,
-                    value: "",
-                    name: "Pulse Rate Reason",
-                    multiSelectData: [
-                        {
-                            id: 1,
-                            name: "Patient uncooperative",
-                        },
-                        {
-                            id: 2,
-                            name: "Machine not working",
-                        },
-                        {
-                            id: 3,
-                            name: "Machine not available",
-                        },
-                    ],
-                    eventType: "input",
-                    required: true,
-                    alertsErrorMassage: "",
-                    id: "",
-                    idName: "district_id",
-                    displayNone: true,
-                },
-            ],
-        },
     },
     {
         data: {
@@ -223,61 +130,19 @@ const initialVitals = [
                 icon: "",
                 textColor: "",
                 value: "",
-                name: "",
+                name: "respiratory",
+                index: "",
+            },
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "oxygen",
                 index: "",
             },
         ],
-    },
-    {
-        classDash: "dashed_bottom_border",
-        selectedData: [],
-        sideColSize: 3.8,
-        checkboxBtnContent: {
-            header: {
-                title: "",
-                selectedValue: " ",
-                name: "Primary diagnosis",
-            },
-            data: [
-                {
-                    colSize: "12",
-                    name: "Respiratory rate Not Done",
-                    value: "Respiratory rate Not Done",
-                    checked: false,
-                    displayNone: false,
-                },
-            ],
-            inputFields: [
-                {
-                    inputHeader: "Specify Reason",
-                    icon: icons.search,
-                    isMultiSelect: true,
-                    popOver: true,
-                    value: "",
-                    name: "Respiratory rate Reason",
-                    multiSelectData: [
-                        {
-                            id: 1,
-                            name: "Patient uncooperative",
-                        },
-                        {
-                            id: 2,
-                            name: "Machine not working",
-                        },
-                        {
-                            id: 3,
-                            name: "Machine not available",
-                        },
-                    ],
-                    eventType: "input",
-                    required: true,
-                    alertsErrorMassage: "",
-                    id: "",
-                    idName: "district_id",
-                    displayNone: true,
-                },
-            ],
-        },
     },
 ] as any;
 export const useVitalsStore = defineStore("immunizationVitalsStore", {
