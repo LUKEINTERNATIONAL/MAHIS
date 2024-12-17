@@ -90,39 +90,35 @@ export default defineComponent({
         async updateBMI() {
             if (!this.vitalsData[0]) return;
             const bmiColor = this.BMI?.color ?? [];
-            const vitals = this.vitalsData[0].alerts[0];
-            vitals.icon = BMIService.iconBMI(bmiColor);
-            vitals.backgroundColor = bmiColor[0];
-            vitals.textColor = bmiColor[1];
-            vitals.index = "BMI " + (this.BMI?.index ?? "");
-            vitals.value = this.BMI?.result ?? "";
+            this.updateRate(
+                "bmi",
+                "BMI " + (this.BMI?.index ?? ""),
+                "",
+                { colors: bmiColor, value: this.BMI?.result ?? "" },
+                BMIService.iconBMI(bmiColor)
+            );
         },
         async updateBP(systolic: any, diastolic: any) {
             this.BPStatus = this.getBloodPressureStatus(systolic, diastolic);
             if (!(Validation.vitalsSystolic(systolic) == null && Validation.vitalsDiastolic(diastolic) == null)) this.BPStatus = {};
-            const vitals = this.vitalsData[2]?.alerts[0] ?? [];
             const bpColor = this.BPStatus?.colors ?? [];
-            vitals.icon = iconBloodPressure(bpColor);
-            vitals.backgroundColor = bpColor[0];
-            vitals.textColor = bpColor[1];
-            vitals.index = systolic + "/" + diastolic;
-            vitals.value = this.BPStatus?.value ?? "";
+            this.updateRate(
+                "bp",
+                systolic + "/" + diastolic,
+                "mmHg",
+                { colors: bpColor, value: this.BPStatus?.value ?? "" },
+                iconBloodPressure(bpColor)
+            );
         },
-        async updateRate(name: any, value: any, units: any, obj: any, objNumber: any) {
+        async updateRate(name: any, value: any, units: any, obj: any, icon: any = "") {
             if (!value) return;
             const index = value + " " + units;
-            const filteredArray = this.vitalsData[objNumber]?.alerts?.filter((item: any) => item.name !== name);
-            this.vitalsData[objNumber].alerts = filteredArray;
             const bpColor = obj?.colors ?? [];
-            this.vitalsData[objNumber]?.alerts.push({
-                backgroundColor: bpColor[0],
-                status: "",
-                icon: "",
-                textColor: bpColor[1],
-                value: obj?.value ?? "",
-                name: name,
-                index: index,
-            });
+            modifyAlertsValue(this.vitalsData, name, "icon", icon || "");
+            modifyAlertsValue(this.vitalsData, name, "textColor", bpColor[1]);
+            modifyAlertsValue(this.vitalsData, name, "index", index);
+            modifyAlertsValue(this.vitalsData, name, "backgroundColor", bpColor[0]);
+            modifyAlertsValue(this.vitalsData, name, "value", obj?.value ?? "");
         },
         getBloodPressureStatus(systolic: any, diastolic: any) {
             if (systolic && diastolic) {
