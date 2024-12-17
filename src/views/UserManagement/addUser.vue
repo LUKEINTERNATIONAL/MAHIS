@@ -91,7 +91,7 @@
                         :inputValue="phone_number"
                         @update:inputValue="input_properties[3].dataHandler"
                     />
-                    <userPhoneInput/>
+                    <userPhoneInput @validateInput="userPhoneChange"/>
                     <div>
                         <ion-label v-if="input_properties[3].show_error.value" class="error-label">
                             {{ input_properties[3].error_message }}
@@ -560,6 +560,10 @@ function findAndRemoveRoleSSU(data: any[]): any[] {
     }
 
     return data;
+}
+
+async function userPhoneChange(data: any) {
+    console.log(data)
 }
 
 async function FindLocation(text: any) {
