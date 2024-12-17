@@ -41,41 +41,34 @@
                 </ion-col>
             </ion-row>
 
-
             <ion-row>
-                    <ion-col>
-                        <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                            >Username<span style="color: #b42318">*</span></ion-label
-                        >
-                        <BasicInputField
-                            :placeholder="input_properties[0].placeHolder"
-                            :icon="personCircleOutline"
-                            :inputValue="user_name"
-                            @update:inputValue="input_properties[0].dataHandler"
-                        />
+                <ion-col>
+                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                        >Username<span style="color: #b42318">*</span></ion-label
+                    >
+                    <BasicInputField
+                        :placeholder="input_properties[0].placeHolder"
+                        :icon="personCircleOutline"
+                        :inputValue="user_name"
+                        @update:inputValue="input_properties[0].dataHandler"
+                    />
 
-                        <div>
-                            <ion-label v-if="input_properties[0].show_error.value" class="error-label">
-                                {{ input_properties[0].error_message }}
-                            </ion-label>
-                        </div>
-                    </ion-col>
+                    <div>
+                        <ion-label v-if="input_properties[0].show_error.value" class="error-label">
+                            {{ input_properties[0].error_message }}
+                        </ion-label>
+                    </div>
+                </ion-col>
             </ion-row>
 
             <ion-row>
                 <ion-col>
                     <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                    >Phone<span style="color: #b42318">*</span></ion-label
-                >
-                    <BasicInputField
-                        :placeholder="'phone number'"
-                        :icon="phonePortraitOutline"
-                        :inputValue="''"
-                        @update:inputValue=""
-                    />
+                        >Phone<span style="color: #b42318">*</span></ion-label
+                    >
+                    <BasicInputField :placeholder="'phone number'" :icon="phonePortraitOutline" :inputValue="''" @update:inputValue="" />
                 </ion-col>
             </ion-row>
-
 
             <ion-row>
                 <ion-col>
@@ -107,7 +100,7 @@
                         class="toggle-green"
                         :classes="{
                             container: 'inline-block rounded-full outline-none focus:ring focus:ring-green-500 focus:ring-opacity-30',
-                        }" 
+                        }"
                         v-model="toggle_local"
                         :offLabel="'inactive'"
                         :onLabel="'active'"
@@ -292,21 +285,22 @@
             <ion-row>
                 <ion-col>
                     <ion-accordion-group ref="accordionGroup" class="previousView">
-                        <ion-accordion 
-                            value="fourth" 
-                            toggle-icon-slot="start" 
-                            style="
-                                border-radius: 10px; 
-                                background:  #4caf50;
-                                box-shadow: 0 4px 6px rgba(0,0,0,0.4);"
+                        <ion-accordion
+                            value="fourth"
+                            toggle-icon-slot="start"
+                            style="border-radius: 10px; background: #4caf50; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4)"
                         >
-                            <ion-item slot="header" style="--background: rgba(255,255,255,0.5);">
+                            <ion-item slot="header" style="--background: rgba(255, 255, 255, 0.5)">
                                 <ion-label class="previousLabel">Change Password</ion-label>
                             </ion-item>
-                            <div class="ion-padding" slot="content" style="background: rgba(255,255,255,0.5); border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                            <div
+                                class="ion-padding"
+                                slot="content"
+                                style="background: rgba(255, 255, 255, 0.5); border-bottom-left-radius: 10px; border-bottom-right-radius: 10px"
+                            >
                                 <ion-row>
                                     <ion-col>
-                                        <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: #333;">
+                                        <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: #333">
                                             New password<span style="color: #b42318">*</span>
                                         </ion-label>
                                         <BasicInputField
@@ -324,7 +318,7 @@
                                 </ion-row>
                                 <ion-row>
                                     <ion-col>
-                                        <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: #333;">
+                                        <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: #333">
                                             Repeat password<span style="color: #b42318">*</span>
                                         </ion-label>
                                         <BasicInputField
@@ -345,19 +339,13 @@
                     </ion-accordion-group>
                 </ion-col>
             </ion-row>
-
         </ion-col>
 
         <ion-col size="12" size-md="6">
             <ion-row>
                 <ion-col>
                     <div v-for="(item, index) in user_programs.slice().reverse()" :key="index">
-                        <userActivities
-                            v-if="item.selected"
-                            :userId="userId"
-                            :user_programs="item"
-                            :action="actionN"
-                        />
+                        <userActivities v-if="item.selected" :userId="userId" :user_programs="item" :action="actionN" />
                     </div>
                 </ion-col>
             </ion-row>
@@ -366,26 +354,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent } from "vue";
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
-})
+});
 </script>
 <script setup lang="ts">
-import { IonButtons,
-    IonButton, IonList, IonRow,
-     IonImg, IonLabel,
-     IonPage, IonCard,     IonAccordionGroup,
-    AccordionGroupCustomEvent, } from "@ionic/vue"
-import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, modalController } from "@ionic/vue"
-import Toggle from '@vueform/toggle'
-import ListPicker from "../../components/ListPicker.vue"
-import sselectionList from "@/components/SselectionList.vue"
-import userActivities from "./userActivities.vue"
-import VueMultiselect from "vue-multiselect"
-import { LocationService } from "@/services/location_service"
-import { isEmpty } from "lodash"
+import { IonButtons, IonButton, IonList, IonRow, IonImg, IonLabel, IonPage, IonCard, IonAccordionGroup, AccordionGroupCustomEvent } from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, modalController } from "@ionic/vue";
+import Toggle from "@vueform/toggle";
+import ListPicker from "../../components/ListPicker.vue";
+import sselectionList from "@/components/SselectionList.vue";
+import userActivities from "./userActivities.vue";
+import VueMultiselect from "vue-multiselect";
+import { LocationService } from "@/services/location_service";
+import { isEmpty } from "lodash";
 import {
     addOutline,
     pencilOutline,
@@ -415,29 +399,29 @@ const first_name = ref();
 const last_name = ref();
 const userId = ref() as any;
 const show_user_programs = ref(false);
-const actionN = ref('');
+const actionN = ref("");
 const selected_location = ref();
 const locationData = ref([]) as any;
 const locationId = ref();
-const location_error_message = ref('Select location');
+const location_error_message = ref("Select location");
 const location_show_error = ref(false);
 const passwordErrorMsgs = [
-    'Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (@#$%^&+=*!-), without spaces',
-    'Password does not match'
+    "Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (@#$%^&+=*!-), without spaces",
+    "Password does not match",
 ];
 const isSuperUser = ref(false);
 const districtList = ref([] as any);
-const OLDDistrictsList = ref([] as any)
+const OLDDistrictsList = ref([] as any);
 const HSA_found_for_disabling_button = ref(true);
 const selected_Districts = ref([]) as any;
-const district_show_error = ref(false)
-const district_error_message = ref('Select district(s)');
-const village_error_message = ref('Select village(s)');
+const district_show_error = ref(false);
+const district_error_message = ref("Select district(s)");
+const village_error_message = ref("Select village(s)");
 const selected_TAz = ref([]) as any;
 const villageList = ref([] as any);
 const village_show_error = ref(false);
 const TAz_show_error = ref(false);
-const TAz_error_message = ref('Select TA(s)');
+const TAz_error_message = ref("Select TA(s)");
 const selected_villages = ref([]) as any;
 const TAList = ref([] as any);
 const selectedDistrictIds: any[] = [];
@@ -446,55 +430,54 @@ const disableVillageSelection = ref(true);
 const selectedVillageIds: any[] = [];
 const traditionalAuthorities = ref([]) as any;
 const userStore = useUserStore();
-const disableFacilitySelection = ref(true)
+const disableFacilitySelection = ref(true);
 
 const props = defineProps<{
-    toggle: true,
-    user_id: any,
-    action: any
-}>()
+    toggle: true;
+    user_id: any;
+    action: any;
+}>();
 
 onMounted(async () => {
-    await getUserRoles()
-    await getUserPrograms()
-    await getUserData()
-    await fillUserVillages()
-    getCurrentUser()
-    OLDDistrictsList.value = await getdistrictList()
-    districtList.value = await getFacilityDistricts()
-
-})
+    await getUserRoles();
+    await getUserPrograms();
+    await getUserData();
+    await fillUserVillages();
+    getCurrentUser();
+    OLDDistrictsList.value = await getdistrictList();
+    districtList.value = await getFacilityDistricts();
+});
 
 watch(
     () => props.action,
     async (newValue) => {
-        trigerSaveFn()
+        trigerSaveFn();
     }
-)
+);
 
 watch(
     () => TAList.value.length,
     async (newValue) => {
-        setUserTAs()
+        setUserTAs();
     }
-)
+);
 
 watch(
     () => selected_location.value,
     async (newValue) => {
-        setUserDistricts()
+        setUserDistricts();
     }
-)
+);
 
 watch(
     () => locationData.value.length > 0 && districtList.value.length > 0,
     async (newValue) => {
-        setSelectedDistrict()
+        setSelectedDistrict();
     }
-)
+);
 
 function selectedLocation(data: any) {
-    selected_location.value = data
+    selected_location.value = data;
 }
 
 function setSelectedDistrict() {
@@ -505,127 +488,125 @@ function setSelectedDistrict() {
                 ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
                 : [];
 
-            console.log(filteredDistricts)
-            selected_Districts.value = filteredDistricts[0]
+            console.log(filteredDistricts);
+            selected_Districts.value = filteredDistricts[0];
         }
-    } catch (error) {
-        
-    }
+    } catch (error) {}
 }
 
 async function FindLocation(text: any) {
-    let srch_text
+    let srch_text;
     if (isEmpty(text) == true) {
-        srch_text = ''
-    } if (isEmpty(text) == false) {
-        srch_text = text
+        srch_text = "";
+    }
+    if (isEmpty(text) == false) {
+        srch_text = text;
     }
 }
 
 async function getUserStatus() {
-    const deactivated_on = user_data.value.deactivated_on
+    const deactivated_on = user_data.value.deactivated_on;
     if (deactivated_on == null) {
-        toggle_local.value = true
+        toggle_local.value = true;
     } else if (deactivated_on != null) {
-        toggle_local.value = false
+        toggle_local.value = false;
     }
 }
 
 async function trigerSaveStatusFn() {
     if (toggle_local.value == false) {
-        UserService.deactivateUser(userId.value)
+        UserService.deactivateUser(userId.value);
     }
     if (toggle_local.value == true) {
-        UserService.activateUser(userId.value)
+        UserService.activateUser(userId.value);
     }
 }
 
 function trigerSaveFn() {
-    actionN.value = props.action
-    preSavePrograms()
-    preSaveRoles()
-    updateuserPersoninf()
-    trigerSaveStatusFn()
-    updateUserDemographics()
-    updatePassword()
-    updateUserVillages()
+    actionN.value = props.action;
+    preSavePrograms();
+    preSaveRoles();
+    updateuserPersoninf();
+    trigerSaveStatusFn();
+    updateUserDemographics();
+    updatePassword();
+    updateUserVillages();
 }
-
 
 const isSSelection_properties = [
     {
-        labels: ref(['Male','Female',]),
+        labels: ref(["Male", "Female"]),
         selectedOption: ref(null),
         dataHandler: sselectionListUpdated,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Please make a selection',
-    }
-]
+        error_message: "Please make a selection",
+    },
+];
 
 function sselectionListUpdated(data: any) {
     try {
-        isSSelection_properties[0].dataValue.value = data.label 
+        isSSelection_properties[0].dataValue.value = data.label;
     } catch (error) {
-        isSSelection_properties[0].dataValue.value = undefined 
+        isSSelection_properties[0].dataValue.value = undefined;
     }
-    isSSelectionValid()
+    isSSelectionValid();
 }
 
 const input_properties = [
     {
-        placeHolder: 'username',
-        property_name: 'username',
+        placeHolder: "username",
+        property_name: "username",
         dataHandler: inputUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters and numbers are allowed',
-        type: 'alphanumeric',
+        error_message: "Input required, Only letters and numbers are allowed",
+        type: "alphanumeric",
     },
     {
-        placeHolder: 'firstname',
-        property_name: 'firstname',
+        placeHolder: "firstname",
+        property_name: "firstname",
         dataHandler: inputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
-        type: 'text',
+        error_message: "Input required, Only letters allowed",
+        type: "text",
     },
     {
-        placeHolder: 'last name',
-        property_name: 'last_name',
+        placeHolder: "last name",
+        property_name: "last_name",
         dataHandler: inputUpDated_fn3,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
-        type: 'text',
+        error_message: "Input required, Only letters allowed",
+        type: "text",
     },
-]
+];
 
 const password_input_properties = [
     {
-        placeHolder: 'new password',
+        placeHolder: "new password",
         dataHandler: passwordInputUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
         error_message: passwordErrorMsgs[0],
     },
     {
-        placeHolder: 'repeat password',
+        placeHolder: "repeat password",
         dataHandler: passwordInputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
         error_message: passwordErrorMsgs[0],
     },
-]
+];
 
 function passwordInputUpDated_fn1(event: any) {
-    const input = event.target.value
-    password_input_properties[0].dataValue.value = input
+    const input = event.target.value;
+    password_input_properties[0].dataValue.value = input;
 }
 function passwordInputUpDated_fn2(event: any) {
-    const input = event.target.value
-    password_input_properties[1].dataValue.value = input
+    const input = event.target.value;
+    password_input_properties[1].dataValue.value = input;
 }
 
 async function validateUsernameIfExists(username: string) {
@@ -637,7 +618,7 @@ async function validateUsernameIfExists(username: string) {
                 input_properties[0].error_message = "Username already exists";
             } else if (does_username_exist.exists == false) {
                 input_properties[0].show_error.value = false;
-                input_properties[0].error_message = "Input required, Only letters are allowed";
+                input_properties[0].error_message = "Input required, Only letters allowed";
             }
         }
     } catch (error) {
@@ -646,38 +627,38 @@ async function validateUsernameIfExists(username: string) {
 }
 
 async function inputUpDated_fn1(event: any) {
-    const input = event.target.value
-    input_properties[0].dataValue.value = input
-    user_name.value = input
-    await validateUsernameIfExists(input)
+    const input = event.target.value;
+    input_properties[0].dataValue.value = input;
+    user_name.value = input;
+    await validateUsernameIfExists(input);
 }
 function inputUpDated_fn2(event: any) {
-    const input = event.target.value
-    input_properties[1].dataValue.value = input
-    first_name.value = input
+    const input = event.target.value;
+    input_properties[1].dataValue.value = input;
+    first_name.value = input;
 }
 function inputUpDated_fn3(event: any) {
-    const input = event.target.value
-    input_properties[2].dataValue.value = input
-    last_name.value = input
+    const input = event.target.value;
+    input_properties[2].dataValue.value = input;
+    last_name.value = input;
 }
 
 function validateLocation() {
     if (isEmpty(selected_location.value) == true) {
-        location_show_error.value = true
-        return false
+        location_show_error.value = true;
+        return false;
     }
     if (isEmpty(selected_location.value) == false) {
-        location_show_error.value = false
-        return true
+        location_show_error.value = false;
+        return true;
     }
 }
 
 async function updatePassword() {
     if (checkPasswordFieldsEmpty() == false) {
         if (ValidatePassword() == true) {
-            const new_password = password_input_properties[0].dataValue.value 
-            await UserService.updateUser(userId.value, { password: new_password});
+            const new_password = password_input_properties[0].dataValue.value;
+            await UserService.updateUser(userId.value, { password: new_password });
         }
     }
 }
@@ -689,15 +670,14 @@ async function getCurrentUserRoles() {
             const userRoles = user.roles.map((role) => role.role);
             userStore.setUserRoles(userRoles);
 
-            if (findUserRoleByName('Superuser,Superuser,') == true) {
+            if (findUserRoleByName("Superuser,Superuser,") == true) {
                 disableFacilitySelection.value = false;
             }
 
-            if (findUserRoleByName('Superuser,Superuser,') == false) {
+            if (findUserRoleByName("Superuser,Superuser,") == false) {
                 user_roles.value = findAndRemoveRoleSSU(user_roles.value);
             }
         }
-
     } catch (error) {
         console.error(error);
     }
@@ -709,10 +689,8 @@ function findUserRoleByName(name: string) {
 }
 
 function findAndRemoveRoleSSU(data: any[]): any[] {
-    const index = data.findIndex((role: any) => 
-        typeof role.name === 'string' && role.name.toLowerCase() === 'Superuser,Superuser,'.toLowerCase()
-    );
-    
+    const index = data.findIndex((role: any) => typeof role.name === "string" && role.name.toLowerCase() === "Superuser,Superuser,".toLowerCase());
+
     if (index !== -1) {
         data.splice(index, 1);
     }
@@ -721,21 +699,19 @@ function findAndRemoveRoleSSU(data: any[]): any[] {
 }
 
 async function updateUserVillages() {
-    UserService.updateuserVillages(userId.value, selectedVillageIds as any)
+    UserService.updateuserVillages(userId.value, selectedVillageIds as any);
 }
 
 function checkPasswordFieldsEmpty() {
-  return password_input_properties.slice(0, 2).every(prop =>
-    !prop.dataValue.value || prop.dataValue.value.trim() === ""
-  );
+    return password_input_properties.slice(0, 2).every((prop) => !prop.dataValue.value || prop.dataValue.value.trim() === "");
 }
 
 function ValidatePassword() {
-    const [password1, password2] = password_input_properties.map(prop => prop.dataValue.value);
+    const [password1, password2] = password_input_properties.map((prop) => prop.dataValue.value);
     const defaultErrorMsg = passwordErrorMsgs[0];
     const mismatchErrorMsg = passwordErrorMsgs[1];
 
-    password_input_properties.forEach(prop => {
+    password_input_properties.forEach((prop) => {
         prop.error_message = defaultErrorMsg;
         prop.show_error.value = false;
     });
@@ -746,7 +722,7 @@ function ValidatePassword() {
         return isEmpty;
     });
 
-    if (emptyPasswords.some(isEmpty => isEmpty)) {
+    if (emptyPasswords.some((isEmpty) => isEmpty)) {
         return false;
     }
 
@@ -756,12 +732,12 @@ function ValidatePassword() {
         return isValid;
     });
 
-    if (validPasswords.some(isValid => !isValid)) {
+    if (validPasswords.some((isValid) => !isValid)) {
         return false;
     }
 
     if (password1 !== password2) {
-        password_input_properties.forEach(prop => {
+        password_input_properties.forEach((prop) => {
             prop.error_message = mismatchErrorMsg;
             prop.show_error.value = true;
         });
@@ -772,31 +748,33 @@ function ValidatePassword() {
 }
 
 async function fillUserVillages() {
-    userId.value = props.user_id
-    const user_villages = await UserService.getUserVillages(userId.value)
+    userId.value = props.user_id;
+    const user_villages = await UserService.getUserVillages(userId.value);
     user_villages.villages.forEach((village: any, index: number) => {
-        setVillage(village.village_id as any, index)
-    })
+        setVillage(village.village_id as any, index);
+    });
 }
 
 async function setVillage(villageId: number, index: number) {
     const n_village = await LocationService.getVillage(villageId);
-    const arrayWithIds = [{
-        ...n_village,
-        assigned_id: index
-    }];
+    const arrayWithIds = [
+        {
+            ...n_village,
+            assigned_id: index,
+        },
+    ];
     villageList.value = villageList.value.concat(arrayWithIds);
     selectedVillageIds.push(n_village.village_id);
     selected_villages.value.push(arrayWithIds[0]);
-    traditionalAuthorities.value.push(n_village.traditional_authority)
+    traditionalAuthorities.value.push(n_village.traditional_authority);
 }
 
 async function setUserDistricts() {
     try {
-        const district = { name: selected_location.value.district }
-        selectedDistrictF(district)
+        const district = { name: selected_location.value.district };
+        selectedDistrictF(district);
     } catch (error) {
-        console.log('Error setting user districts:',);
+        console.log("Error setting user districts:");
     }
 }
 
@@ -805,16 +783,14 @@ async function setUserTAs() {
         selected_TAz.value = [];
         villageList.value = [];
         const uniqueTAsMap = new Map();
-        
+
         selected_villages.value.forEach((village: any, index: number) => {
-            const matchingTA = TAList.value.find(
-                (ta: any) => ta.traditional_authority_id === village.traditional_authority_id
-            );
+            const matchingTA = TAList.value.find((ta: any) => ta.traditional_authority_id === village.traditional_authority_id);
 
             if (matchingTA && !uniqueTAsMap.has(matchingTA.traditional_authority_id)) {
                 const TAWithId = {
                     ...matchingTA,
-                    assigned_id: index
+                    assigned_id: index,
                 };
                 uniqueTAsMap.set(matchingTA.traditional_authority_id, TAWithId);
             }
@@ -824,81 +800,79 @@ async function setUserTAs() {
         villageList.value = [...villageList.value, ...uniqueTAs];
         selected_TAz.value = uniqueTAs;
 
-        await Promise.all(
-            selected_TAz.value.map((TA: any) => findVillages(TA.district_id, false))
-        );
+        await Promise.all(selected_TAz.value.map((TA: any) => findVillages(TA.district_id, false)));
     } catch (error) {
-        console.error('Error in setUserTAs:', error);
-        throw new Error('Failed to set user TAs');
+        console.error("Error in setUserTAs:", error);
+        throw new Error("Failed to set user TAs");
     }
 }
 
 async function getUserData() {
-    userId.value = props.user_id
-    user_data.value = await UserService.getUserByID(props.user_id)
+    userId.value = props.user_id;
+    user_data.value = await UserService.getUserByID(props.user_id);
     if (user_data.value.location_id != null) {
-            const response = await LocationService.getFacility(user_data.value.location_id)
+        const response = await LocationService.getFacility(user_data.value.location_id);
         if (isEmpty(response) == false) {
-            selected_location.value = response
+            selected_location.value = response;
         }
     }
-    user_name.value = user_data.value.username
-    input_properties[0].dataValue.value = user_name.value
+    user_name.value = user_data.value.username;
+    input_properties[0].dataValue.value = user_name.value;
 
-    first_name.value =  userFirstname(user_data.value.person.names)
-    input_properties[1].dataValue.value = first_name.value
+    first_name.value = userFirstname(user_data.value.person.names);
+    input_properties[1].dataValue.value = first_name.value;
 
-    last_name.value = userLastname(user_data.value.person.names)
-    input_properties[2].dataValue.value = last_name.value
+    last_name.value = userLastname(user_data.value.person.names);
+    input_properties[2].dataValue.value = last_name.value;
 
-    selectGender(user_data.value.person)
-    fillUserRoles()
-    fillUserPrograms()
-    getAPICounterPart() 
-    getUserStatus()
+    selectGender(user_data.value.person);
+    fillUserRoles();
+    fillUserPrograms();
+    getAPICounterPart();
+    getUserStatus();
 }
 
 async function preSaveRoles() {
-    const selectedRoles: any[] = []
-    const selectedRoleNames: any[] = []
+    const selectedRoles: any[] = [];
+    const selectedRoleNames: any[] = [];
     user_roles.value.forEach((role: any) => {
         if (role.selected == true) {
-            selectedRoles.push(role)
+            selectedRoles.push(role);
         }
-    })
+    });
 
     selectedRoles.forEach((role: any) => {
-        selectedRoleNames.push(role.other.role)
-    })
-    saveRoles(selectedRoleNames)
+        selectedRoleNames.push(role.other.role);
+    });
+    saveRoles(selectedRoleNames);
 }
 
 async function updateUserDemographics() {
-  try {
-    const _areFieldsValid = areFieldsValid(input_properties);
-    const isLocationValid = validateLocation();
-    const arePasswordFieldsEmpty = checkPasswordFieldsEmpty();
+    try {
+        const _areFieldsValid = areFieldsValid(input_properties);
+        const isLocationValid = validateLocation();
+        const arePasswordFieldsEmpty = checkPasswordFieldsEmpty();
 
-    if (arePasswordFieldsEmpty) {
-      if (!_areFieldsValid || !isLocationValid) {
-        saveEvent(false);
-      } else {
-        saveEvent(true);
-        await updateUserDetails();
-      }
-    } else {
-      const isPasswordValid = ValidatePassword();
-      if (!_areFieldsValid || !isLocationValid || !isPasswordValid) {
-        saveEvent(false);
-      } else {
-        saveEvent(true);
-        await updateUserDetails();
-      }
+        if (arePasswordFieldsEmpty) {
+            if (!_areFieldsValid || !isLocationValid) {
+                saveEvent(false);
+            } else {
+                saveEvent(true);
+                await updateUserDetails();
+            }
+        } else {
+            const isPasswordValid = ValidatePassword();
+            if (!_areFieldsValid || !isLocationValid || !isPasswordValid) {
+                saveEvent(false);
+            } else {
+                saveEvent(true);
+                await updateUserDetails();
+            }
+        }
+    } catch (error) {
+        console.error("Error updating user demographics:", error);
+        await saveEvent(false);
     }
-  } catch (error) {
-    console.error('Error updating user demographics:', error);
-    await saveEvent(false);
-  }
 }
 
 async function updateUserDetails() {
@@ -908,206 +882,195 @@ async function updateUserDetails() {
             family_name: last_name.value,
             username: user_name.value,
             location_id: selected_location.value.code,
-            must_append_roles:false,
-        }
-        await UserService.updateUser(userId.value, payload)
+            must_append_roles: false,
+        };
+        await UserService.updateUser(userId.value, payload);
 
         const username_payload = {
             new_username: user_name.value,
-        }
+        };
 
         try {
-            const response = await UserService.updateusername(userId.value, username_payload)
+            const response = await UserService.updateusername(userId.value, username_payload);
             saveEvent(true);
-            toastSuccess("username updated successfully")
+            toastSuccess("username updated successfully");
         } catch (error) {
             saveEvent(true);
-            toastWarning("username update failed, already existing")
-            
+            toastWarning("username update failed, already existing");
         }
-    } catch (error) {
-        
-    }
+    } catch (error) {}
 }
 
 async function saveRoles(roleNames: any) {
     UserService.updateUser(userId.value, {
         must_append_roles: false,
-        roles: roleNames
-    })
+        roles: roleNames,
+    });
 }
 
 async function preSavePrograms() {
-    const selectedPrograms: any[] = []
-    const selectedProgramIds: any[] = []
+    const selectedPrograms: any[] = [];
+    const selectedProgramIds: any[] = [];
     user_programs.value.forEach((program: any) => {
         if (program.selected == true) {
-            selectedPrograms.push(program)
+            selectedPrograms.push(program);
         }
-    })
+    });
 
     selectedPrograms.forEach((program: any) => {
-        selectedProgramIds.push(program.other.program_id)
-    })
+        selectedProgramIds.push(program.other.program_id);
+    });
 
     if (selectedProgramIds.length > 0) {
-        savePrograms(selectedProgramIds)
+        savePrograms(selectedProgramIds);
     }
 }
 
 async function savePrograms(programIds: any) {
     UserService.updateUser(userId.value, {
-        programs: programIds
-    })
+        programs: programIds,
+    });
 }
 
 async function fillUserRoles() {
     user_roles.value.forEach((item: any) => {
         user_data.value.roles.forEach((userR: any) => {
             if (userR.uuid == item.other.uuid) {
-                item.selected = true
+                item.selected = true;
             }
-        })
-    })
+        });
+    });
 
-    checkIfSelectedIsHSA(user_roles.value)
-    await getCurrentUserRoles()    
+    checkIfSelectedIsHSA(user_roles.value);
+    await getCurrentUserRoles();
 }
 
 function getCurrentUser() {
     const user_store = useUserStore();
-    const current_user = user_store.getUser()
+    const current_user = user_store.getUser();
     current_user.roles.forEach((userR: any) => {
-            findSuperUserRole(userR)
-        })
+        findSuperUserRole(userR);
+    });
 }
 
 function findSuperUserRole(role: any) {
-    const superUserRoles = [
-        'Superuser',
-        'Superuser,Superuser,'
-    ]
-    superUserRoles.forEach((SUR: any) => {  
+    const superUserRoles = ["Superuser", "Superuser,Superuser,"];
+    superUserRoles.forEach((SUR: any) => {
         if (role.role.toLowerCase() == SUR.toLowerCase()) {
-            isSuperUser.value = true
+            isSuperUser.value = true;
         }
-    })
+    });
 }
 
 async function generatePropertiesList() {
-    const selectedPrograms = [] as any
+    const selectedPrograms = [] as any;
     user_programs.value.forEach((item: any) => {
         if (item.selected == true) {
-            selectedPrograms.push({item})
-        } 
-    })
+            selectedPrograms.push({ item });
+        }
+    });
     if (selectedPrograms.length > 0) {
-        show_user_programs.value = true
+        show_user_programs.value = true;
     }
-    return selectedPrograms
+    return selectedPrograms;
 }
 
 async function getAPICounterPart() {
-    const selectedPrograms = await generatePropertiesList()
-    selectedPrograms.forEach((item: any, index: number) => {
-        
-    })
+    const selectedPrograms = await generatePropertiesList();
+    selectedPrograms.forEach((item: any, index: number) => {});
 }
 
 function fillUserPrograms() {
     user_programs.value.forEach((item: any) => {
         user_data.value.programs.forEach((userR: any) => {
             if (userR.uuid == item.other.uuid) {
-                item.selected = true
+                item.selected = true;
             }
-        })
-    })
+        });
+    });
 }
 
 async function getUserRoles() {
-    user_roles.value = await UserService.getAllRoles()
-    const temp_array = [] as any
+    user_roles.value = await UserService.getAllRoles();
+    const temp_array = [] as any;
     user_roles.value.forEach((item: any) => {
-        temp_array.push(
-            {
-                name: item.role,
-                other: item
-            }
-        )
-    })
-    user_roles.value = temp_array
+        temp_array.push({
+            name: item.role,
+            other: item,
+        });
+    });
+    user_roles.value = temp_array;
 }
 
 async function getUserPrograms() {
-    user_programs.value = await ProgramService.getAllPrograms()
-    const temp_array = [] as any
+    user_programs.value = await ProgramService.getAllPrograms();
+    const temp_array = [] as any;
     user_programs.value.forEach((item: any) => {
-        temp_array.push(
-            {
-                name: item.name,
-                other: item,
-                selected: false,
-            }
-        )
-    })
-    user_programs.value = temp_array
+        temp_array.push({
+            name: item.name,
+            other: item,
+            selected: false,
+        });
+    });
+    user_programs.value = temp_array;
 }
 
 const list_picker_prperties = [
     {
         multi_Selection: true as any,
         show_list_label: true as any,
-        unqueId: 'qwerty_8_0' as any,
-        name_of_list: 'Roles' as any,
-        placeHolder: 'Search for a field' as any,
+        unqueId: "qwerty_8_0" as any,
+        name_of_list: "Roles" as any,
+        placeHolder: "Search for a field" as any,
         items: [],
         listUpdatedFN: listUpdated1,
-        listFilteredFN: ()=>{},
-        searchTextFN: ()=>{},
+        listFilteredFN: () => {},
+        searchTextFN: () => {},
         use_internal_filter: true as any,
         show_error: ref(false),
-        error_message: 'please select a User',
+        error_message: "please select a User",
         disabled: ref(false) as any,
     },
     {
         multi_Selection: true as any,
         show_list_label: true as any,
-        unqueId: 'qwerty_8_2' as any,
-        name_of_list: 'Programs' as any,
-        placeHolder: 'Search for programs' as any,
+        unqueId: "qwerty_8_2" as any,
+        name_of_list: "Programs" as any,
+        placeHolder: "Search for programs" as any,
         items: [],
         listUpdatedFN: listUpdated2,
-        listFilteredFN: ()=>{},
-        searchTextFN: ()=>{},
+        listFilteredFN: () => {},
+        searchTextFN: () => {},
         use_internal_filter: true as any,
         show_error: ref(false),
-        error_message: 'please select a Program',
+        error_message: "please select a Program",
         disabled: ref(false) as any,
-    }
-]
+    },
+];
 
 function listUpdated1(data: any) {
-    user_roles.value = data
-    checkIfSelectedIsHSA(user_roles.value)
+    user_roles.value = data;
+    checkIfSelectedIsHSA(user_roles.value);
 }
 
 function listUpdated2(data: any) {
-    user_programs.value = data
-    const j = []
+    user_programs.value = data;
+    const j = [];
     user_programs.value.forEach((item: any) => {
         if (item.selected == true) {
-            j.push(1)
+            j.push(1);
         }
-    })
+    });
     if (j.length > 0) {
-        show_user_programs.value = true
-    } if (j.length == 0) {
-        show_user_programs.value = false
+        show_user_programs.value = true;
+    }
+    if (j.length == 0) {
+        show_user_programs.value = false;
     }
 }
 
 function userFirstname(items: any) {
-    let _str_: string = '';
+    let _str_: string = "";
     const lastIndex = items.length - 1;
     if (lastIndex >= 0) {
         _str_ = items[lastIndex].given_name;
@@ -1115,9 +1078,8 @@ function userFirstname(items: any) {
     return _str_;
 }
 
-
 function userLastname(items: any) {
-    let _str_: string = '';
+    let _str_: string = "";
     const lastIndex = items.length - 1;
     if (lastIndex >= 0) {
         _str_ = items[lastIndex].family_name;
@@ -1126,36 +1088,34 @@ function userLastname(items: any) {
 }
 
 const emit = defineEmits<{
-    (e: "save", boolean_value: boolean): void
-}>()
+    (e: "save", boolean_value: boolean): void;
+}>();
 
 function saveEvent(boolean_value: any) {
-    emit("save", boolean_value)
+    emit("save", boolean_value);
 }
 
 function selectedDistrictF(selectedDistrict: any, clearFL = false) {
     if (clearFL == true) {
         selected_location.value = null;
-        selected_Districts.value = selectedDistrict
+        selected_Districts.value = selectedDistrict;
     }
-    selectedDistrict = [selectedDistrict]
-    selectedDistrictIds.length = 0
+    selectedDistrict = [selectedDistrict];
+    selectedDistrictIds.length = 0;
 
     const filteredDistricts = OLDDistrictsList.value.filter((district: any) => {
-        return selectedDistrict.some((selected: any) => 
-            selected.name.toLowerCase() === district.name.toLowerCase()
-        );
+        return selectedDistrict.some((selected: any) => selected.name.toLowerCase() === district.name.toLowerCase());
     });
 
     filteredDistricts.forEach((district: any) => {
-        selectedDistrictIds.push(district.district_id)
-    })
+        selectedDistrictIds.push(district.district_id);
+    });
 
-    filteredDistricts.forEach((district: any ) => {
-        fetchTraditionalAuthorities(district.district_id, '')
-    })
+    filteredDistricts.forEach((district: any) => {
+        fetchTraditionalAuthorities(district.district_id, "");
+    });
 
-    getDistrictFacilities(selectedDistrict)
+    getDistrictFacilities(selectedDistrict);
 }
 
 async function getDistrictFacilities(selectedDistrict: any) {
@@ -1171,14 +1131,14 @@ async function getDistrictFacilities(selectedDistrict: any) {
     }
 }
 
-async function fetchTraditionalAuthorities(district_id: any,name: string) {  
-    TAList.value = []           
-    var districtVillages = await LocationService.getTraditionalAuthorities(district_id,"")
+async function fetchTraditionalAuthorities(district_id: any, name: string) {
+    TAList.value = [];
+    var districtVillages = await LocationService.getTraditionalAuthorities(district_id, "");
     const arrayWithIds = districtVillages.map((item: any, index: any) => ({
         ...item,
-        assigned_id: index
+        assigned_id: index,
     }));
-    TAList.value = TAList.value.concat(arrayWithIds)
+    TAList.value = TAList.value.concat(arrayWithIds);
     // if (villageList.value.length > 0) {
     //     disableVillageSelection.value = false
     // }
@@ -1192,133 +1152,133 @@ async function getdistrictList() {
     }
 
     districtList.forEach((district: any) => {
-        selectedDistrictIds.push(district.district_id)
-    })
+        selectedDistrictIds.push(district.district_id);
+    });
 
     districtList.forEach((district: any) => {
-        fetchTraditionalAuthorities(district.district_id, '')
-    })
-    return districtList
+        fetchTraditionalAuthorities(district.district_id, "");
+    });
+    return districtList;
 }
 
 async function getFacilityDistricts() {
-    const data = await LocationService.getFacilityDistricts()
-    return data.districts
+    const data = await LocationService.getFacilityDistricts();
+    return data.districts;
 }
 
 function findVillages(district_id: any, clear_list = true) {
     disableVillageSelection.value = true;
     if (clear_list == true) {
-        selected_villages.value = []
+        selected_villages.value = [];
     }
-    fetchVillages(district_id, '')
+    fetchVillages(district_id, "");
 }
 
-async function fetchVillages(district_id: any,name: string) {   
-    villageList.value = []         
-    var districtVillages = await LocationService.getVillages(district_id,"")
+async function fetchVillages(district_id: any, name: string) {
+    villageList.value = [];
+    var districtVillages = await LocationService.getVillages(district_id, "");
     const arrayWithIds = districtVillages.map((item: any, index: any) => ({
         ...item,
-        assigned_id: index
+        assigned_id: index,
     }));
-    villageList.value = villageList.value.concat(arrayWithIds)
+    villageList.value = villageList.value.concat(arrayWithIds);
     if (villageList.value.length > 0) {
-        disableVillageSelection.value = false
+        disableVillageSelection.value = false;
     }
 }
 
 function selectedTA(selectedTAList: any) {
-    selectedTAIds.length = 0
-    selectedTAList.forEach((village: any ) => {
-        selectedTAIds.push(village.traditional_authority_id)
-    })
-   
-    selectedTAList.forEach((TA: any ) => {
-            findVillages(TA.district_id)
-        }
-    ) 
+    selectedTAIds.length = 0;
+    selectedTAList.forEach((village: any) => {
+        selectedTAIds.push(village.traditional_authority_id);
+    });
+
+    selectedTAList.forEach((TA: any) => {
+        findVillages(TA.district_id);
+    });
 }
 
 function selectedVillage(VillagesList: any) {
-    selectedVillageIds.length = 0
+    selectedVillageIds.length = 0;
     VillagesList.forEach((village: any) => {
-        selectedVillageIds.push(village.village_id)
-    })
+        selectedVillageIds.push(village.village_id);
+    });
 }
 
 function checkIfSelectedIsHSA(role_list: any) {
-    const HSA_ROLES = ['HSA', 'Health Surveillance']
-    village_show_error.value = false
-    let is_found = false
+    const HSA_ROLES = ["HSA", "Health Surveillance"];
+    village_show_error.value = false;
+    let is_found = false;
     role_list.forEach((item: any) => {
         if (item?.selected == true && HSA_ROLES.includes(item?.name)) {
-            HSA_found_for_disabling_button.value = false
-            is_found = true
+            HSA_found_for_disabling_button.value = false;
+            is_found = true;
         }
-    })
+    });
 
     if (is_found == false) {
-        village_show_error.value = false
-        HSA_found_for_disabling_button.value = true
+        village_show_error.value = false;
+        HSA_found_for_disabling_button.value = true;
     }
-    return is_found
+    return is_found;
 }
 
 function isSSelectionValid() {
-    let is_valid = false
+    let is_valid = false;
     if (isSSelection_properties[0].dataValue.value == undefined) {
-        isSSelection_properties[0].show_error.value = true
+        isSSelection_properties[0].show_error.value = true;
     }
     if (isSSelection_properties[0].dataValue.value != undefined) {
-        isSSelection_properties[0].show_error.value = false
-        is_valid = true
+        isSSelection_properties[0].show_error.value = false;
+        is_valid = true;
     }
-    return is_valid
+    return is_valid;
 }
 
 async function updateuserPersoninf() {
-    const data1 = getFieldsValuesObj(input_properties)
+    const data1 = getFieldsValuesObj(input_properties);
     const updatedData = {
         cell_phone_number: data1.phone_number,
         gender: getGenderCode(isSSelection_properties[0].dataValue.value),
-    } as any
+    } as any;
     const personService = new PersonService(updatedData);
     const data = await personService.update(user_data.value.person.person_id);
-    return data
+    return data;
 }
 
 function selectGender(person: any) {
-    let selected_opt = {} as any
+    let selected_opt = {} as any;
     isSSelection_properties[0].labels.value.forEach((label: string, index: number) => {
         if (label == getGenderCode(person.gender)) {
             selected_opt = {
                 label,
-                value: "option_"+index 
-            } as any
+                value: "option_" + index,
+            } as any;
         }
-    })
-    isSSelection_properties[0].selectedOption.value = selected_opt
+    });
+    isSSelection_properties[0].selectedOption.value = selected_opt;
 }
-
 </script>
 <style src="@vueform/toggle/themes/default.css"></style>
 <style scoped>
 .three-column-layout {
-  display: flex;
-  justify-content: space-between
+    display: flex;
+    justify-content: space-between;
 }
 
 .column {
-  flex: 1;
-  margin: 0 10px;
+    flex: 1;
+    margin: 0 10px;
 }
 
-.details, .values, .actions {
-  padding: 10px;
+.details,
+.values,
+.actions {
+    padding: 10px;
 }
 
 .actions button {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .detail-prop-c1 {

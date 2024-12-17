@@ -91,6 +91,7 @@
                         :inputValue="phone_number"
                         @update:inputValue="input_properties[3].dataHandler"
                     />
+                    <userPhoneInput/>
                     <div>
                         <ion-label v-if="input_properties[3].show_error.value" class="error-label">
                             {{ input_properties[3].error_message }}
@@ -359,6 +360,7 @@ import VueMultiselect from "vue-multiselect"
 import { LocationService } from "@/services/location_service"
 import { isEmpty } from "lodash"
 import { useUserStore } from "@/stores/userStore";
+import userPhoneInput from "./userPhoneInput.vue"
 import {
     addOutline,
     pencilOutline,
@@ -594,7 +596,6 @@ async function trigerSaveFn() {
             villages: selectedVillageIds,
             roles: selectedRoleNames,
             gender: getGenderCode(isSSelection_properties[0].dataValue.value),
-            // location_id: selected_location.value.location_id,
             location_id: selected_location.value.code,
         }
 
@@ -817,7 +818,7 @@ const input_properties = [
         dataHandler: inputUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
+        error_message: 'Input required, Only letters allowed',
     },
     {
         placeHolder: 'firstname',
@@ -825,7 +826,7 @@ const input_properties = [
         dataHandler: inputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
+        error_message: 'Input required, Only letters allowed',
     },
     {
         placeHolder: 'last name',
@@ -833,7 +834,7 @@ const input_properties = [
         dataHandler: inputUpDated_fn3,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
+        error_message: 'Input required, Only letters allowed',
     },
     {
         placeHolder: 'phone number',
@@ -957,7 +958,7 @@ async function validateUsernameIfExists(username: string) {
                 input_properties[0].error_message = "Username already exists";
             } else if (does_username_exist.exists == false) {
                 input_properties[0].show_error.value = false;
-                input_properties[0].error_message = "Input required, Only letters are allowed";
+                input_properties[0].error_message = "Input required, Only letters allowed";
             }
         }
     } catch (error) {
