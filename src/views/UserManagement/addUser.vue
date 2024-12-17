@@ -82,19 +82,10 @@
 
             <ion-row>
                 <ion-col>
-                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                    >Phone<span style="color: #b42318">*</span></ion-label
-                >
-                    <BasicInputField
-                        :placeholder="input_properties[3].placeHolder"
-                        :icon="phonePortraitOutline"
-                        :inputValue="phone_number"
-                        @update:inputValue="input_properties[3].dataHandler"
-                    />
                     <userPhoneInput @validateInput="userPhoneChange"/>
                     <div>
-                        <ion-label v-if="input_properties[3].show_error.value" class="error-label">
-                            {{ input_properties[3].error_message }}
+                        <ion-label v-if="phone_input_properties[0].show_error.value" class="error-label">
+                            {{ phone_input_properties[0].error_message }}
                         </ion-label>
                     </div>
                 </ion-col>
@@ -563,7 +554,19 @@ function findAndRemoveRoleSSU(data: any[]): any[] {
 }
 
 async function userPhoneChange(data: any) {
-    console.log(data)
+    if (data.is_valid == false) {
+        phone_input_properties[0].show_error.value = true
+        phone_number.value = data.phone
+        phone_input_properties[0].dataValue.value = data.phone
+        phone_input_properties[0].is_phone_valid.value = false
+    }
+
+    if (data.is_valid == true) {
+        phone_input_properties[0].show_error.value = false
+        phone_number.value = data.phone
+        phone_input_properties[0].dataValue.value = data.phone
+        phone_input_properties[0].is_phone_valid.value = true
+    }
 }
 
 async function FindLocation(text: any) {
@@ -585,10 +588,12 @@ async function trigerSaveFn() {
     const _validateDistricts = validateDistricts()
     const _validateTAz = validateTAz()
     const _validateVillages = validateVillages()
+    const _validate_user_phone = validateUserPhone()
 
     if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true 
         && _isRoleSelected_ == true && _isProgramSelected_ == true && _validateLocation == true
-        && _validateDistricts == true && _validateTAz == true && _validateVillages == true) {
+        && _validateDistricts == true && _validateTAz == true && _validateVillages == true
+        && _validate_user_phone == true) {
         const data1 = getFieldsValuesObj(input_properties)
         const payload = {
             family_name: data1.last_name,
@@ -601,6 +606,7 @@ async function trigerSaveFn() {
             roles: selectedRoleNames,
             gender: getGenderCode(isSSelection_properties[0].dataValue.value),
             location_id: selected_location.value.code,
+            phone: phone_input_properties[0].dataValue.value
         }
 
         try {
@@ -840,13 +846,27 @@ const input_properties = [
         show_error: ref(false),
         error_message: 'Input required, Only letters allowed',
     },
+]
+
+function validateUserPhone() {
+    if (phone_input_properties[0].is_phone_valid.value == false) {
+        phone_input_properties[0].show_error.value = true
+        return false
+    }
+    if (phone_input_properties[0].is_phone_valid.value == true) {
+        phone_input_properties[0].show_error.value = false
+        return true
+    }
+}
+
+const phone_input_properties = [
     {
         placeHolder: 'phone number',
         property_name: 'phone_number',
-        dataHandler: inputUpDated_fn4,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, valid input',
+        error_message: 'Input required, input is invalid',
+        is_phone_valid: ref(false)
     },
 ]
 
@@ -983,10 +1003,7 @@ function inputUpDated_fn3(event: any) {
     const input = event.target.value
     input_properties[2].dataValue.value = input
 }
-function inputUpDated_fn4(event: any) {
-    const input = event.target.value
-    input_properties[3].dataValue.value = input
-}
+
 function passwordInputUpDated_fn1(event: any) {
     const input = event.target.value
     password_input_properties[0].dataValue.value = input

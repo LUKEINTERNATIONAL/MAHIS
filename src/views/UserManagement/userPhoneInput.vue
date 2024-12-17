@@ -44,7 +44,7 @@ export default defineComponent({
     setup(props, { emit }) {
         const currentCountry = ref(null) as any
         const  phone_properties = ref({
-            inputHeader: "Phone number",
+            inputHeader: "Phone number *",
             icon: icons.phone,
             value: "",
             name: "phoneNumber",
@@ -63,30 +63,37 @@ export default defineComponent({
             })
         }
 
-        const valueChange = (event: any) => {
-            let phone_value_string = event.replace(/\D/g, '');
+        const valueChange = (event: string | any) => {
+            let phone_value_string = event
             phone_value_string = phone_value_string.replace(/^0+/, '');
+            
             if (phone_value_string.length > 10) {
                 phone_value_string = phone_value_string.slice(0, 10);
-                phone_properties.value.value = phone_value_string
+                phone_properties.value.value = phone_value_string;
+                emit_validation();
+                return;
+            }
+            
+            if (!/^\d+$/.test(phone_value_string)) {
+                phone_properties.value.value = '';
                 emit_validation();
                 return;
             }
             
             if (phone_value_string.length !== 9 && phone_value_string.length !== 10) {
-                phone_properties.value.value = phone_value_string
+                phone_properties.value.value = phone_value_string;
                 emit_validation();
                 return;
             }
-
-            phone_properties.value.value = phone_value_string
+            
+            phone_properties.value.value = phone_value_string;
             emit_validation(true, getPhone());
         }
 
         const getPhone = () => {
             if (currentCountry.value != null) {
                 const dialCode = currentCountry.value.dialCode
-                return '+'+dialCode+phone_properties.value.value
+                return '+'+dialCode+'-'+phone_properties.value.value
             } else {
                 return ''
             }
