@@ -1,3 +1,5 @@
+import workerData from "@/activate_worker";
+import { toRaw } from "vue";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
@@ -107,4 +109,10 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
 
     // Then sort and return the first item's specified value
     return filteredData.sort((a: any, b: any) => new Date(b.obs_datetime).getTime() - new Date(a.obs_datetime).getTime())[0]?.[value_type];
+}
+export async function saveOfflinePatientData(patientData: any) {
+    const plainPatientData = JSON.parse(JSON.stringify(patientData));
+    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", data: plainPatientData });
+    await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
+    await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
 }
