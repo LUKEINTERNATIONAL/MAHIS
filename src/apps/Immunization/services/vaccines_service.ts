@@ -66,13 +66,19 @@ export async function saveVaccineAdministeredDrugs() {
 }
 
 async function getOfflineVaccineSchedule(patient: any) {
-    const genericVaccineSchedule = await getGenericVaccineSchedule(patient.getGender());
+    
+    var vaccineSchedule = patient.patient.vaccineAdministration.vaccine_schedule;
 
-    const birthdateString = patient.getBirthdate();
-    const birthdate = new Date(birthdateString);
+    if (vaccineSchedule !== null && typeof vaccineSchedule !== "undefined") { 
+        const genericVaccineSchedule = await getGenericVaccineSchedule(patient.getGender());
 
-    const vaccineSchudule = await updateMilestoneStatus(birthdate, genericVaccineSchedule);
-    return vaccineSchudule;
+        const birthdateString = patient.getBirthdate();
+        const birthdate = new Date(birthdateString);
+
+        vaccineSchedule = await updateMilestoneStatus(birthdate, genericVaccineSchedule);
+    }
+
+    return vaccineSchedule;
 }
 
 async function getGenericVaccineSchedule(gender: string) {
