@@ -16,6 +16,7 @@ const initialVitals = [
                             required: true,
                             eventType: "input",
                             disabled: false,
+                            valueType: "number",
                             validationFunctionName: "vitalsSystolic",
                         },
                         {
@@ -27,6 +28,7 @@ const initialVitals = [
                             required: true,
                             eventType: "input",
                             disabled: false,
+                            valueType: "number",
                             validationFunctionName: "vitalsDiastolic",
                         },
                     ],
@@ -61,6 +63,7 @@ const initialVitals = [
                             name: "Temp",
                             eventType: "input",
                             validationFunctionName: "vitalsTemperature",
+                            valueType: "number",
                         },
                         {
                             inputHeader: "Pulse rate",
@@ -70,6 +73,7 @@ const initialVitals = [
                             name: "Pulse",
                             eventType: "input",
                             validationFunctionName: "vitalsPulseRate",
+                            valueType: "number",
                         },
                     ],
                 },
@@ -109,6 +113,7 @@ const initialVitals = [
                             name: "Respiratory rate",
                             eventType: "input",
                             validationFunctionName: "vitalsRespiratoryRate",
+                            valueType: "number",
                         },
                         {
                             inputHeader: "Oxygen saturation",
@@ -118,6 +123,7 @@ const initialVitals = [
                             name: "SP02",
                             eventType: "input",
                             validationFunctionName: "vitalsOxygenSaturation",
+                            valueType: "number",
                         },
                     ],
                 },
