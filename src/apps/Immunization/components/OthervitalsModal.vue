@@ -59,6 +59,9 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
+import { formatInputFiledData } from "@/services/formatServerData";
+import workerData from "@/activate_worker";
+import { saveOfflinePatientData } from "@/services/offline_service";
 
 export default defineComponent({
     mixins: [VitalsMixin],
@@ -97,24 +100,33 @@ export default defineComponent({
         this.updateVitalsStores();
     },
     async mounted() {
+        this.cleanVitalForm();
         this.vitalsData = this.vitals;
         await this.setTodayVitals();
-        this.updateVitalsStores();
         await this.validateRowData();
     },
     watch: {
         vitals: {
             handler() {
                 this.vitalsData = this.vitals;
-                this.updateVitalsStores();
             },
             deep: true,
+        },
+        $route: {
+            handler() {
+                this.cleanVitalForm();
+                this.vitalsData = this.vitals;
+            },
         },
     },
     setup() {
         return { checkmark, pulseOutline };
     },
     methods: {
+        cleanVitalForm() {
+            const vitals = useVitalsStore();
+            vitals.setVitals(vitals.getInitialVitals());
+        },
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
@@ -156,14 +168,14 @@ export default defineComponent({
         closeForm() {
             this.formOpen = false;
         },
-        saveVitals() {
-            const userID: any = Service.getUserID();
-            const vitalsService = new VitalsService(this.patient.patientID, userID);
-            const vitalsToSave = this.vitals;
+        async saveVitals() {
             modalController.dismiss();
-            vitalsService.onFinish(vitalsToSave).then(() => {
-                this.closeForm();
-            });
+            const newVitals = await formatInputFiledData(this.vitals);
+            if (newVitals.length > 0) {
+                let vitals = this.patient?.vitals;
+                vitals.unsaved = [...vitals.unsaved, ...newVitals];
+                await saveOfflinePatientData(this.patient);
+            }
         },
     },
 });
