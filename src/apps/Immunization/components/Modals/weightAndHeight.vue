@@ -78,7 +78,9 @@ import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
+import workerData from "@/activate_worker";
 import db from "@/db";
+import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -167,31 +169,16 @@ export default defineComponent({
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
             const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
             let height = null;
-            if (heightValue) height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
+            if (!this.checkUnderSixWeeks) height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
 
-            if (weight == null && height == null) {
-                let unSaveVitals = this.patient?.vitals;
-                unSaveVitals.unsaved = [
-                    ...unSaveVitals.unsaved,
-                    {
-                        concept_id: 5090,
-                        obs_datetime: HisDate.currentDate(),
-                        value_numeric: heightValue,
-                    },
-                    {
-                        concept_id: 5089,
-                        obs_datetime: HisDate.currentDate(),
-                        value_numeric: weightValue,
-                    },
-                ];
-                const encounter = await vitalsInstance.createEncounter();
-                if (!encounter) return toastWarning("Unable to create vitals encounter");
-                const data = await formatInputFiledData(this.vitalsWeightHeight, this.vitals_date);
-                await vitalsInstance.saveObservationList(data);
+            const newVitals = await formatInputFiledData(this.vitalsWeightHeight);
+            if (newVitals.length > 0 && weight == null && height == null) {
+                let vitals = this.patient?.vitals;
+                vitals.unsaved = [...vitals.unsaved, ...newVitals];
+                await saveOfflinePatientData(this.patient);
                 toastSuccess("Saved successful");
                 this.cleanInputFields();
-                this.vitalsWeightHeight[0].validationStatus = "success";
             } else {
                 toastWarning("Please complete the form");
             }
