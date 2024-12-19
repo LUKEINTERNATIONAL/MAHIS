@@ -152,6 +152,7 @@ import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useWorkerStore } from "@/stores/workerStore";
+import { getOfflineVaccineSchedule } from "@/apps/Immunization/services/vaccines_service";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -513,6 +514,8 @@ export default defineComponent({
                     },
                 ];
             }
+            const birthdate = this.personInformation[0].selectedData.birthdate;
+            const gender = this.personInformation[0].selectedData.gender;
             const offlineRecord: any = {
                 patientID: "",
                 ID: this.ddeId,
@@ -526,8 +529,8 @@ export default defineComponent({
                     relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
                 },
                 vitals: vitals,
+                vaccineSchedule: await getOfflineVaccineSchedule(gender, birthdate),
                 vaccineAdministration: [],
-                immunizationDispensations: [],
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",
