@@ -2257,4 +2257,44 @@ export default [
         concept_id: 11759,
         name: "Protected at birth",
     },
+    {
+        categories: [],
+        concept_id: 5090,
+        name: "height",
+    },
+    {
+        categories: [],
+        concept_id: 5089,
+        name: "weight",
+    },
+    {
+        categories: [],
+        concept_id: 5085,
+        name: "Systolic",
+    },
+    {
+        categories: [],
+        concept_id: 5086,
+        name: "Diastolic",
+    },
+    {
+        categories: [],
+        concept_id: 5088,
+        name: "Temp",
+    },
+    {
+        categories: [],
+        concept_id: 5087,
+        name: "Pulse",
+    },
+    {
+        categories: [],
+        concept_id: 5242,
+        name: "Respiratory rate",
+    },
+    {
+        categories: [],
+        concept_id: 5092,
+        name: "SP02",
+    },
 ];
