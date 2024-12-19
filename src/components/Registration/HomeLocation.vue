@@ -159,7 +159,7 @@ export default defineComponent({
             }
         },
         async setTA(obj: any) {
-            const targetData = this.getTAs(obj.district_id);
+            const targetData = await this.getTAs(obj.district_id);
             modifyFieldValue(this.homeLocation, "home_traditional_authority", "multiSelectData", targetData);
             modifyFieldValue(this.homeLocation, "home_traditional_authority", "displayNone", false);
         },

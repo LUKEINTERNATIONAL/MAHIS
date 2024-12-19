@@ -24,8 +24,8 @@ export default defineComponent({
             if (this.villageList == "") return null;
             return this.villageList?.filter((obj: any) => obj.traditional_authority_id === targetId);
         },
-        getTAs(targetId: any) {
-            return this.TAsList.filter((obj: any) => obj.district_id === targetId);
+        async getTAs(targetId: any) {
+            return await getOfflineRecords("TAs", { whereClause: { district_id: targetId } });
         },
         getDistricts(targetId: any) {
             return this.districtList.filter((obj: any) => obj.region_id === targetId);

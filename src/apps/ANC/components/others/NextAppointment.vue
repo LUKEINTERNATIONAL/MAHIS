@@ -131,13 +131,14 @@ import { SmsService } from "@/apps/Immunization/services/sms_service";
 import { toastWarning } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
-import { voidVaccineEncounter, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
+import { voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
 import { RelationshipService } from "@/services/relationship_service";
 import { PatientService } from "@/services/patient_service";
 import { AppointmentService } from "@/services/appointment_service";
 import BasicForm from "@/components/BasicForm.vue";
 
 const user = useDemographicsStore();
+const client: any = useDemographicsStore();
 const date = ref();
 const suggested_date = ref();
 const show_suggested_date = ref(false);
@@ -317,7 +318,7 @@ function findPreviouslyAdministeredVaccineSchedule(vaccine_schedule: any) {
 
 async function getFirstUpcomingVaccineMilestone(patientId: string): Promise<any | null> {
     try {
-        const data = await getVaccinesSchedule(patientId as any);
+        const data = client.vaccineSchedule;
         findPreviouslyAdministeredVaccineSchedule(data.vaccine_schedule);
         for (const milestone of data.vaccine_schedule) {
             if (milestone.milestone_status === "current") {
