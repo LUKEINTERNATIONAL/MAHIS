@@ -51,7 +51,7 @@ export async function getOfflineRecords<T = any>(
     } = {},
     pagination = false
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
-    const { currentPage = 1, itemsPerPage = 10, whereClause, sortBy, sortOrder = "asc" } = options;
+    const { currentPage = 1, itemsPerPage = 0, whereClause, sortBy, sortOrder = "asc" } = options;
 
     const db = await openDatabase(storeName);
     return new Promise((resolve, reject) => {
@@ -82,20 +82,20 @@ export async function getOfflineRecords<T = any>(
             const totalCount = filteredRecords.length;
 
             // Calculate start and end indices based on currentPage and itemsPerPage
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-
-            // Apply pagination
-            const paginatedRecords = filteredRecords.slice(startIndex, endIndex);
-
-            if (pagination) {
-                resolve({
-                    records: paginatedRecords,
-                    totalCount,
-                });
-            } else {
-                resolve(paginatedRecords);
+            if (itemsPerPage != 0) {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                // Apply pagination
+                const paginatedRecords = filteredRecords.slice(startIndex, endIndex);
+                if (pagination) {
+                    resolve({
+                        records: paginatedRecords,
+                        totalCount,
+                    });
+                }
             }
+
+            resolve(filteredRecords);
         };
 
         request.onerror = (event) => {
