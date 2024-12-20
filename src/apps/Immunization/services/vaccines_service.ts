@@ -12,36 +12,23 @@ import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { useUserStore } from "@/stores/userStore";
 import platform, { FileExportType } from "@/composables/usePlatform";
 import { exportMobile } from "@/utils/Export";
-import db from "@/db";
-import workerData from "@/activate_worker";
-import ApiClient, { ApiBusEvents } from "@/services/api_client";
+import { saveOfflinePatientData } from "@/services/offline_service";
 import { getOfflineRecords } from "@/services/offline_service";
 
-export async function saveVaccineAdministeredDrugs() {
+export async function saveVaccineAdministeredDrugs(patient: any) {
     const store = useAdministerVaccineStore();
-    const userId: any = Service.getUserID();
-    const programId: any = Service.getProgramID();
-    const patient = new PatientService();
-    const drugs = [] as any;
     if (!isEmpty(store.getAdministeredVaccines())) {
-        try {
-            const drugOrders = mapToOrders();
-            const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), "" as any);
-            const encounter = await prescriptionService.createEncounter();
-            if (!encounter) return toastWarning("Unable to create immunization encounter");
-            const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId);
-            await createObForEachDrugAdminstred(encounter);
-            if (!drugOrder) return toastWarning("Unable register vaccine!");
-            toastSuccess("Vaccine registred successfully");
-            store.setVaccineReload(!store.getVaccineReload());
-            if (drugOrder) {
-                store.setLastVaccineAdminstredOnschedule(drugOrder);
-            }
-        } catch (error: any) {
-            if (validateBatchString(error.errors) == true) {
-                toastWarning(error.errors);
-            }
+        const drugOrders = mapToOrders();
+        const obs = await createObForEachDrugAdminstred();
+        let vaccines = patient?.vaccineAdministration;
+        vaccines.orders = [...vaccines?.orders, ...drugOrders];
+        vaccines.obs = [...vaccines?.obs, ...obs];
+        store.setVaccineReload(!store.getVaccineReload());
+        if (vaccines.orders.length > 0) {
+            store.setLastVaccineAdminstredOnschedule(vaccines.orders);
         }
+        await saveOfflinePatientData(patient);
+        toastSuccess("Saved successful");
     }
 }
 
@@ -128,14 +115,14 @@ function mapToOrders(): any[] {
     });
 }
 
-async function createObForEachDrugAdminstred(encounter: any) {
+async function createObForEachDrugAdminstred() {
     const store = useAdministerVaccineStore();
-    store.getAdministeredVaccines().map(async (drug: any) => {
-        await ObservationService.saveObs(encounter.encounter_id, {
+    return store.getAdministeredVaccines().map(async (drug: any) => {
+        return {
             concept_id: 2876,
             value_text: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
-            obs_datetime: encounter.encounter_datetime,
-        });
+            obs_datetime: HisDate.currentDate(),
+        };
     });
 }
 
