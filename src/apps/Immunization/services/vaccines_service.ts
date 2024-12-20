@@ -117,13 +117,19 @@ function mapToOrders(): any[] {
 
 async function createObForEachDrugAdminstred() {
     const store = useAdministerVaccineStore();
-    return store.getAdministeredVaccines().map(async (drug: any) => {
-        return {
-            concept_id: 2876,
-            value_text: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
-            obs_datetime: HisDate.currentDate(),
-        };
-    });
+    const administeredVaccines = store.getAdministeredVaccines();
+
+    const observations = await Promise.all(
+        administeredVaccines.map(async (drug: any) => {
+            return {
+                concept_id: 2876,
+                value_text: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
+                obs_datetime: HisDate.currentDate(),
+            };
+        })
+    );
+
+    return observations;
 }
 
 function calculateExpireDate(startDate: string | Date, duration: any) {
