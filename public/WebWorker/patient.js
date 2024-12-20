@@ -58,7 +58,8 @@ const patientService = {
             encounter_datetime: DATE,
             provider_id: USERID,
         };
-        return ApiService.post("/encounters", data);
+        const encounter = ApiService.post("/encounters", data);
+        return encounter.encounter_id;
     },
     saveObs(data) {
         return ApiService.post("/observations", data);
@@ -82,6 +83,7 @@ const patientService = {
             await this.createGuardian(patientID, record),
             await this.saveBirthdayData(patientID, record),
             await this.saveVitalsData(patientID, record),
+            await this.saveVaccines(patientID, record),
         ]);
         return patientID;
     },
@@ -139,8 +141,7 @@ const patientService = {
         if (record.saveStatusBirthRegistration === "pending") {
             if (record.birthRegistration.length > 0) {
                 try {
-                    const encounter = await this.createEncounter(patientID, 5);
-                    const encounterID = encounter.encounter_id;
+                    const encounterID = await this.createEncounter(patientID, 5);
                     await this.saveObs({
                         encounter_id: encounterID,
                         observations: record.birthRegistration,
@@ -157,8 +158,7 @@ const patientService = {
     async saveVitalsData(patientID, record) {
         if (record.vitals.unsaved.length > 0) {
             try {
-                const encounter = await this.createEncounter(patientID, 6);
-                const encounterID = encounter.encounter_id;
+                const encounterID = await this.createEncounter(patientID, 6);
                 const obs = await this.saveObs({
                     encounter_id: encounterID,
                     observations: record.vitals.unsaved,
@@ -179,6 +179,13 @@ const patientService = {
             }
         }
     },
+    async saveVaccines(patientID, record) {
+        if (record?.vaccineAdministration?.orders?.length > 0) {
+            await this.createEncounter(patientID, 25);
+            await ApiService.post("/immunization/administer_vaccine", record.vaccineAdministration.orders);
+            await this.saveObs(record.vaccineAdministration.obs);
+        }
+    },
     async enrollProgram(patientId) {
         return await ApiService.post(`/patients/${patientId}/programs`, {
             program_id: PROGRAMID,
@@ -186,8 +193,7 @@ const patientService = {
         });
     },
     async createRegistrationEncounter(patientId) {
-        const encounter = await this.createEncounter(patientId, 5);
-        const encounterID = encounter.encounter_id;
+        const encounterID = await this.createEncounter(patientId, 5);
         await this.saveValueCodedObs("Type of patient", "New Patient", encounterID);
     },
     async updateSaveStatus(record, saveStatus) {
