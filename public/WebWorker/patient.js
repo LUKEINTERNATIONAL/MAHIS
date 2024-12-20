@@ -50,7 +50,7 @@ const patientService = {
         if (concepts.length >= 1) return concepts[0].concept_id;
         throw `Concept name ${conceptName} was not found or has a duplicates`;
     },
-    createEncounter(patientID, encounter_type_id) {
+    async createEncounter(patientID, encounter_type_id) {
         const data = {
             encounter_type_id: encounter_type_id,
             patient_id: patientID,
@@ -58,7 +58,8 @@ const patientService = {
             encounter_datetime: DATE,
             provider_id: USERID,
         };
-        const encounter = ApiService.post("/encounters", data);
+
+        const encounter = await ApiService.post("/encounters", data);
         return encounter.encounter_id;
     },
     saveObs(data) {
@@ -181,9 +182,18 @@ const patientService = {
     },
     async saveVaccines(patientID, record) {
         if (record?.vaccineAdministration?.orders?.length > 0) {
-            await this.createEncounter(patientID, 25);
-            await ApiService.post("/immunization/administer_vaccine", record.vaccineAdministration.orders);
-            await this.saveObs(record.vaccineAdministration.obs);
+            const encounterID = await this.createEncounter(patientID, 25);
+            const data = {
+                encounter_id: encounterID,
+                drug_orders: record.vaccineAdministration.orders,
+                program_id: PROGRAMID,
+            };
+            await ApiService.post("/immunization/administer_vaccine", data);
+
+            await this.saveObs({
+                encounter_id: encounterID,
+                observations: record.vaccineAdministration.obs,
+            });
         }
     },
     async enrollProgram(patientId) {
