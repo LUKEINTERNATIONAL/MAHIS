@@ -5,6 +5,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess } from "@/utils/Alerts";
 import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
+import { formatInputFiledData } from "@/services/buildingPatientRecord";
 
 export const useWorkerStore = defineStore("worker", () => {
     const workerApi = ref<any>(null);
@@ -64,7 +65,7 @@ export const useWorkerStore = defineStore("worker", () => {
             if (patientRecord) {
                 await setRecord(patientRecord);
             } else {
-                workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
+                await setRecord(await formatInputFiledData(item));
             }
         }
     }
