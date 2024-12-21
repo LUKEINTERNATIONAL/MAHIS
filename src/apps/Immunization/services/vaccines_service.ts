@@ -27,11 +27,20 @@ export async function saveVaccineAdministeredDrugs(patient: any) {
         if (vaccines.orders.length > 0) {
             store.setLastVaccineAdminstredOnschedule(vaccines.orders);
         }
+        updateVaccineStatus(patient, drugOrders[0]?.drug_name, "administered");
         await saveOfflinePatientData(patient);
         toastSuccess("Saved successful");
     }
 }
-
+function updateVaccineStatus(patient: any, drugName: any, newStatus: any) {
+    patient.vaccineSchedule.vaccine_schedule.forEach((visit: any) => {
+        visit.antigens.forEach((antigen: any) => {
+            if (antigen.drug_name === drugName) {
+                antigen.status = newStatus;
+            }
+        });
+    });
+}
 export async function getOfflineVaccineSchedule(gender: string, birthdate: string) {
     const genericVaccineSchedule = await getGenericVaccineSchedule(gender);
     return await updateMilestoneStatus(new Date(birthdate), genericVaccineSchedule);
@@ -98,9 +107,8 @@ async function updateMilestoneStatus(birthdate: Date, schedule: any[]) {
 function mapToOrders(): any[] {
     const store = useAdministerVaccineStore();
     return store.getAdministeredVaccines().map((drug: any) => {
-        const startDate = DrugPrescriptionForImmunizationService.getSessionDate();
-        const frequency = DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) || ({} as (typeof DRUG_FREQUENCIES)[0]);
         return {
+            drug_name: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
             drug_inventory_id: drug.drug_id,
             equivalent_daily_dose: 1,
             start_date: drug.date_administered,
@@ -171,8 +179,9 @@ function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
     return antigens.every((antigen: any) => antigen.status === "administered");
 }
 
-export async function voidVaccine(orderId: number, reason: string) {
-    return Service.void(`orders/${orderId}?reason=${JSON.stringify(reason)}`, { reason });
+export async function voidVaccine(patient: any, vaccine: any, reason: string) {
+    updateVaccineStatus(patient, vaccine.drug.drug_name, "pending");
+    // return Service.void(`orders/${orderId}?reason=${JSON.stringify(reason)}`, { reason });
 }
 
 export async function voidVaccineEncounter(encounterId: number, reason: string) {
