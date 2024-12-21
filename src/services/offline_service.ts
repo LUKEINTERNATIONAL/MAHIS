@@ -1,3 +1,5 @@
+import workerData from "@/activate_worker";
+import { toRaw } from "vue";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
@@ -41,18 +43,17 @@ function openDatabase(storeName: string = "defaultStore", keyPath: string = "id"
 export async function getOfflineRecords<T = any>(
     storeName: string,
     options: {
-        startIndex?: number;
-        endIndex?: number;
+        currentPage?: number;
+        itemsPerPage?: number;
         whereClause?: Partial<T>;
         sortBy?: keyof T;
         sortOrder?: "asc" | "desc";
     } = {},
     pagination = false
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
-    const { startIndex = 0, endIndex, whereClause, sortBy, sortOrder = "asc" } = options;
+    const { currentPage = 1, itemsPerPage = 0, whereClause, sortBy, sortOrder = "asc" } = options;
 
     const db = await openDatabase(storeName);
-
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([storeName], "readonly");
         const objectStore = transaction.objectStore(storeName);
@@ -71,7 +72,6 @@ export async function getOfflineRecords<T = any>(
                 filteredRecords.sort((a, b) => {
                     const valueA = a[sortBy];
                     const valueB = b[sortBy];
-
                     if (valueA < valueB) return sortOrder === "asc" ? -1 : 1;
                     if (valueA > valueB) return sortOrder === "asc" ? 1 : -1;
                     return 0;
@@ -81,17 +81,21 @@ export async function getOfflineRecords<T = any>(
             // Calculate total count before pagination
             const totalCount = filteredRecords.length;
 
-            // Apply pagination
-            const paginatedRecords = endIndex !== undefined ? filteredRecords.slice(startIndex, endIndex + 1) : filteredRecords.slice(startIndex);
-
-            if (pagination) {
-                resolve({
-                    records: paginatedRecords,
-                    totalCount,
-                });
-            } else {
-                resolve(paginatedRecords);
+            // Calculate start and end indices based on currentPage and itemsPerPage
+            if (itemsPerPage != 0) {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                // Apply pagination
+                const paginatedRecords = filteredRecords.slice(startIndex, endIndex);
+                if (pagination) {
+                    resolve({
+                        records: paginatedRecords,
+                        totalCount,
+                    });
+                }
             }
+
+            resolve(filteredRecords);
         };
 
         request.onerror = (event) => {
@@ -105,4 +109,10 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
 
     // Then sort and return the first item's specified value
     return filteredData.sort((a: any, b: any) => new Date(b.obs_datetime).getTime() - new Date(a.obs_datetime).getTime())[0]?.[value_type];
+}
+export async function saveOfflinePatientData(patientData: any) {
+    const plainPatientData = JSON.parse(JSON.stringify(patientData));
+    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", data: plainPatientData });
+    await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
+    await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
 }

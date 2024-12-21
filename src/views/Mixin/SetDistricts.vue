@@ -11,18 +11,21 @@ export default defineComponent({
         locations: [] as any,
     }),
     async mounted() {
-        this.districtList = await getOfflineRecords("districts");
-        this.countriesList = await getOfflineRecords("countries");
-        this.TAsList = await getOfflineRecords("TAs");
-        this.villageList = await getOfflineRecords("villages");
+        await this.getLocationData();
     },
     methods: {
+        async getLocationData() {
+            this.districtList = await getOfflineRecords("districts");
+            this.countriesList = await getOfflineRecords("countries");
+            this.TAsList = await getOfflineRecords("TAs");
+            this.villageList = await getOfflineRecords("villages");
+        },
         async getVillages(targetId: any) {
             if (this.villageList == "") return null;
             return this.villageList?.filter((obj: any) => obj.traditional_authority_id === targetId);
         },
-        getTAs(targetId: any) {
-            return this.TAsList.filter((obj: any) => obj.district_id === targetId);
+        async getTAs(targetId: any) {
+            return await getOfflineRecords("TAs", { whereClause: { district_id: targetId } });
         },
         getDistricts(targetId: any) {
             return this.districtList.filter((obj: any) => obj.region_id === targetId);

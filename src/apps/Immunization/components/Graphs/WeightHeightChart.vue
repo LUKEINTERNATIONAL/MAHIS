@@ -192,17 +192,10 @@ export default defineComponent({
         },
         async setValues() {
             this.dataset = [];
-            if (this.patient?.vitals?.unsaved?.length > 0) {
-                this.currentHeight = await getOfflineFirstObsValue(
-                    [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
-                    "value_numeric",
-                    5090
-                );
-                this.currentWeight = await getOfflineFirstObsValue(
-                    [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
-                    "value_numeric",
-                    5089
-                );
+            const vitals = [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved];
+            if (vitals?.length > 0) {
+                this.currentHeight = await getOfflineFirstObsValue(vitals, "value_numeric", 5090);
+                this.currentWeight = await getOfflineFirstObsValue(vitals, "value_numeric", 5089);
             }
         },
         async displayWeightGraph() {

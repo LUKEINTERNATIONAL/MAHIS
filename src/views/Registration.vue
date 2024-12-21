@@ -147,12 +147,12 @@ import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import { UserService } from "@/services/user_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useWorkerStore } from "@/stores/workerStore";
+import { getOfflineVaccineSchedule } from "@/apps/Immunization/services/vaccines_service";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -284,6 +284,10 @@ export default defineComponent({
                 this.currentStep = "Personal Information";
                 // await await resetPatientData();
                 if (data.name == "registration") resetDemographics();
+                await this.getLocationData();
+                modifyFieldValue(this.country, "country", "multiSelectData", this.countriesList);
+                modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
+                modifyFieldValue(this.homeLocation, "home_district", "multiSelectData", this.districtList);
             },
             deep: true,
         },
@@ -444,7 +448,7 @@ export default defineComponent({
         },
         async createPatient() {
             const ddeIds: any = await getOfflineRecords("dde").then((data: any) => data?.[0]);
-            if (ddeIds.ids.length > 0) {
+            if (ddeIds?.ids.length > 0) {
                 this.ddeId = ddeIds.ids[0].npid;
 
                 const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
@@ -510,6 +514,8 @@ export default defineComponent({
                     },
                 ];
             }
+            const birthdate = this.personInformation[0].selectedData.birthdate;
+            const gender = this.personInformation[0].selectedData.gender;
             const offlineRecord: any = {
                 patientID: "",
                 ID: this.ddeId,
@@ -523,8 +529,8 @@ export default defineComponent({
                     relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
                 },
                 vitals: vitals,
+                vaccineSchedule: await getOfflineVaccineSchedule(gender, birthdate),
                 vaccineAdministration: [],
-                immunizationDispensations: [],
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",
@@ -585,11 +591,10 @@ export default defineComponent({
         },
         async setURLs() {
             await resetPatientData();
-            if (this.apiStatus) await UserService.setProgramUserActions();
             this.isLoading = false;
             this.disableSaveBtn = false;
-            if (this.programID() == 32) {
-                this.workerStore.route = this.NCDUserActions.url;
+            if (this.programID() == 32 && this.apiStatus) {
+                this.workerStore.route = "";
             } else if (this.programID()) {
                 this.workerStore.route = "/patientProfile";
             }

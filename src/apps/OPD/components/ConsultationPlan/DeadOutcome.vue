@@ -281,7 +281,6 @@ const temP_AA = ref(true as any);
 const manner_of_death_Selection_value = ref();
 const how_did_it_occur_Selection_value = ref();
 
-
 onMounted(async () => {
     checkPatient();
 });
@@ -366,7 +365,7 @@ const note_properties = [
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false) as any,
-        error_message: "Input required, Only letters are allowed",
+        error_message: "Input required, Only letters allowed",
         type: "text",
         skip_validation: false,
     },
@@ -376,7 +375,7 @@ const note_properties = [
         dataHandler: notesUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: "Input required, Only letters are allowed",
+        error_message: "Input required, Only letters allowed",
         type: "text",
         skip_validation: false,
     },
@@ -386,7 +385,7 @@ const note_properties = [
         dataHandler: notesUpDated_fn3,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: "Input required, Only letters are allowed",
+        error_message: "Input required, Only letters allowed",
         type: "text",
         skip_validation: false,
     },
@@ -396,7 +395,7 @@ const note_properties = [
         dataHandler: notesUpDated_fn4,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: "Input required, Only letters are allowed",
+        error_message: "Input required, Only letters allowed",
         type: "text",
         skip_validation: false,
     },
@@ -416,7 +415,7 @@ const note_properties = [
         dataHandler: notesUpDated_fn6,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: "Input required, Only letters are allowed",
+        error_message: "Input required, Only letters allowed",
         dissabled: temP_AA.value,
         type: "text",
         skip_validation: true,
@@ -441,8 +440,8 @@ const dynamic_button_properties = [
 ];
 
 const mannerOfDeath = ref([
-    { id: 1, name: "Natural" , selected: false},
-    { id: 2, name: "Accident",  selected: false },
+    { id: 1, name: "Natural", selected: false },
+    { id: 2, name: "Accident", selected: false },
     { id: 3, name: "Homicide", selected: false },
     { id: 4, name: "Suicide", selected: false },
     { id: 5, name: "Pending investigation", selected: false },
@@ -578,17 +577,15 @@ function notesUpDated_fn6(event: any) {
 }
 
 function listUpdated1(data: any) {
-
     //TODO: please come back to this
     //deselect all
-    mannerOfDeath.value.forEach((item:any)=>item.selected=false);
+    mannerOfDeath.value.forEach((item: any) => (item.selected = false));
 
-   const foundItem= mannerOfDeath.value.find((item:any)=> item.id==data.id);
+    const foundItem = mannerOfDeath.value.find((item: any) => item.id == data.id);
 
+    list_picker_prperties[1].disabled.value = data.name == "Accident" ? false : true;
 
-    list_picker_prperties[1].disabled.value = data.name=="Accident" ? false : true;
-
-    foundItem.selected =true
+    foundItem.selected = true;
 }
 
 function resetSelectionForCausesOfDeath() {
@@ -599,10 +596,9 @@ function resetSelectionForCausesOfDeath() {
 
 function listUpdated2(data: any) {
     console.log("listUpdated", data);
-    causesOfDeath.value.forEach((item:any)=>item.selected=false);
-    const foundItem= causesOfDeath.value.find((item:any)=> item.id==data.id);
-    foundItem.selected=true
-
+    causesOfDeath.value.forEach((item: any) => (item.selected = false));
+    const foundItem = causesOfDeath.value.find((item: any) => item.id == data.id);
+    foundItem.selected = true;
 
     // if (data.id == 4) {
     //     temP_AA.value = false;
@@ -641,21 +637,17 @@ function validateForm() {
 }
 
 function isItemSeleted() {
+    const selectedMannerOfDeath = mannerOfDeath.value.filter((item: any) => item.selected);
 
-    const selectedMannerOfDeath= mannerOfDeath.value.filter((item:any)=>item.selected);
- 
-    if(selectedMannerOfDeath.length==0){
-        list_picker_prperties[0].show_error.value=true
+    if (selectedMannerOfDeath.length == 0) {
+        list_picker_prperties[0].show_error.value = true;
     } else {
- list_picker_prperties[0].show_error.value=false
-        if(selectedMannerOfDeath[0].name=="Accident"){
-         const selectedCauseOfDeath= causesOfDeath.value.filter((item:any)=>item.selected);
-         list_picker_prperties[1].show_error.value= selectedCauseOfDeath.length==0?true:false
-         
+        list_picker_prperties[0].show_error.value = false;
+        if (selectedMannerOfDeath[0].name == "Accident") {
+            const selectedCauseOfDeath = causesOfDeath.value.filter((item: any) => item.selected);
+            list_picker_prperties[1].show_error.value = selectedCauseOfDeath.length == 0 ? true : false;
         }
     }
-
-
 
     // const temp_data_v = [];
     // propoerties_item.items.forEach((item: any) => {

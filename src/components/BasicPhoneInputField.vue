@@ -150,6 +150,7 @@ export default defineComponent({
         handleInput(event: any) {
             //if (this.popOverData?.data) this.setEvent(event);
             this.$emit("update:inputValue", event);
+            this.$emit("update:phone", this.phone)
         },
         handleBlur(event: any) {
             this.$emit("update:inputValue", event);

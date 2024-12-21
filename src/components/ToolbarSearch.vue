@@ -162,7 +162,6 @@ import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
-import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
@@ -461,7 +460,7 @@ export default defineComponent({
             const userPrograms: any = JSON.parse(userProgramsData);
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
             const roles: any = roleData ? roleData : [];
-            await UserService.setProgramUserActions();
+
             if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
@@ -476,8 +475,8 @@ export default defineComponent({
                 if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
                     useWorkerStore().route = "OPDvitals";
                 }
-            } else if (this.programID() == 32) {
-                useWorkerStore().route = this.NCDUserActions.url;
+            } else if (this.programID() == 32 && this.apiStatus) {
+                useWorkerStore().route = "";
             }
         },
         getPhone(item: any) {
