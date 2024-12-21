@@ -31,6 +31,8 @@ import { IonContent, IonRow, IonItem, IonList, IonRadio, IonRadioGroup, modalCon
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { voidVaccine, voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { mapState } from "pinia";
 import _ from "lodash";
 export default defineComponent({
     components: {
@@ -62,7 +64,9 @@ export default defineComponent({
             selectedOption: {} as any,
         };
     },
-    computed: {},
+    computed: {
+        ...mapState(useDemographicsStore, ["patient"]),
+    },
     async mounted() {},
     props: {
         // customSchedule: {
@@ -81,9 +85,7 @@ export default defineComponent({
         dismiss() {
             try {
                 modalController.dismiss();
-            } catch (error) {
-                
-            }
+            } catch (error) {}
         },
         checkIfSelected() {
             if (_.has(this.selectedOption, "name") == true) {
@@ -98,7 +100,7 @@ export default defineComponent({
                 try {
                     const store = useAdministerVaccineStore();
                     const AdministrdVaccine = store.getVaccineToBeVoided();
-                    await voidVaccine(AdministrdVaccine.drug.order_id, this.selectedOption.name);
+                    await voidVaccine(this.patient, AdministrdVaccine, this.selectedOption.name);
                     toastSuccess("Vaccine was successfully voided!");
                     store.setVaccineReload(!store.getVaccineReload());
                     modalController.dismiss({ voided: true });
