@@ -43,6 +43,7 @@ export async function formatInputFiledData(record: any) {
         vaccineAdministration: {
             orders: [],
             obs: [],
+            voided: [],
         },
         saveStatusPersonInformation: "complete",
         saveStatusGuardianInformation: "complete",
