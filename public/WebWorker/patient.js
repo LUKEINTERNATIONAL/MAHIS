@@ -85,6 +85,7 @@ const patientService = {
             await this.saveBirthdayData(patientID, record),
             await this.saveVitalsData(patientID, record),
             await this.saveVaccines(patientID, record),
+            await this.voidVaccine(patientID, record),
         ]);
         return patientID;
     },
@@ -194,6 +195,24 @@ const patientService = {
                 encounter_id: encounterID,
                 observations: record.vaccineAdministration.obs,
             });
+            record.vaccineAdministration.orders = [];
+            record.vaccineAdministration.obs = [];
+            DatabaseManager.updateRecord("patientRecords", { ID: record.ID }, record);
+        }
+    },
+    async voidVaccine(patientID, record) {
+        const data = record.vaccineAdministration.voided;
+        console.log("🚀 ~ voidVaccine ~ data:", data);
+        if (data?.length > 0) {
+            await Promise.all(
+                data?.map(async (item) => {
+                    return await ApiService.remove(`orders/${item.order_id}?reason=${JSON.stringify(item.reason)}`, {
+                        reason: item.reason,
+                    });
+                })
+            );
+            record.vaccineAdministration.voided = [];
+            DatabaseManager.updateRecord("patientRecords", { ID: record.ID }, record);
         }
     },
     async enrollProgram(patientId) {
