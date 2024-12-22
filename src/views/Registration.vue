@@ -533,6 +533,7 @@ export default defineComponent({
                 vaccineAdministration: {
                     orders: [],
                     obs: [],
+                    voided: [],
                 },
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
