@@ -106,7 +106,7 @@ self.onmessage = async (event) => {
                 break;
             case "OVERRIDE_OBJECT_STORE":
                 try {
-                    await DatabaseManager.overRideRecord(payload.storeName, payload.data);
+                    await DatabaseManager.overRideCollection(payload.storeName, payload.data);
                     console.log("OVERRIDE_OBJECT_STORE ~ payload:", payload.storeName);
                 } catch (error) {
                     console.log("OVERRIDE_OBJECT_STORE ~ error:", error);
@@ -121,15 +121,15 @@ self.onmessage = async (event) => {
                 }
                 break;
             case "SYNC_PATIENT_RECORD":
-                try {
-                    self.postMessage("");
-                    await patientService.savePatientRecord();
-                    await syncPatientDataService.getPatientData();
-                    console.log("SYNC_PATIENT_RECORD ~ storeName:", type);
-                    self.postMessage(payload.msg);
-                } catch (error) {
-                    console.log("SYNC_PATIENT_RECORD ~ error:", error);
-                }
+                // try {
+                self.postMessage("");
+                await patientService.savePatientRecord();
+                await syncPatientDataService.getPatientData();
+                self.postMessage({ payload: payload.data, msg: "Done Syncing" });
+                console.log("SYNC_PATIENT_RECORD ~ storeName:", type);
+                // } catch (error) {
+                //     console.log("SYNC_PATIENT_RECORD ~ error:", error);
+                // }
                 break;
             case "SAVE_PATIENT_RECORD":
                 try {
