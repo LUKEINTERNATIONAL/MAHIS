@@ -1,5 +1,6 @@
 import workerData from "@/activate_worker";
 import { toRaw } from "vue";
+import { useWorkerStore } from "@/stores/workerStore";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
@@ -114,5 +115,5 @@ export async function saveOfflinePatientData(patientData: any) {
     const plainPatientData = JSON.parse(JSON.stringify(patientData));
     await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", data: plainPatientData });
     await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
-    await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
+    useWorkerStore().postWorkerData("SYNC_PATIENT_RECORD", { msg: "Done Syncing", data: plainPatientData });
 }
