@@ -1,5 +1,5 @@
 import { Service } from "@/services/service";
-export async function formatInputFiledData(record: any) {
+export async function buildPatientRecord(record: any) {
     if (!record?.person) return "";
     return {
         patientID: record.patient_id,
