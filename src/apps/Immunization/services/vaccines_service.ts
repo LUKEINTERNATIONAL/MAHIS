@@ -22,6 +22,7 @@ export async function saveVaccineAdministeredDrugs(patient: any) {
         const obs = await createObForEachDrugAdminstred();
         let vaccines = patient?.vaccineAdministration;
         vaccines.orders = [...vaccines?.orders, ...drugOrders];
+        vaccines.voided = vaccines.voided.filter((drug: any) => drug.drug_name !== drugOrders[0]?.drug_name);
         vaccines.obs = [...vaccines?.obs, ...obs];
         store.setVaccineReload(!store.getVaccineReload());
         if (vaccines.orders.length > 0) {
@@ -180,8 +181,16 @@ function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
 }
 
 export async function voidVaccine(patient: any, vaccine: any, reason: string) {
+    let vaccines = patient?.vaccineAdministration;
+    const drugExists = vaccines.orders.some((drug: any) => drug.drug_name === vaccine.drug.drug_name);
+    if (drugExists) {
+        vaccines.orders = vaccines.orders.filter((drug: any) => drug.drug_name !== vaccine.drug.drug_name);
+        vaccines.obs = vaccines.obs.filter((drug: any) => drug.value_text !== vaccine.drug.drug_name);
+    } else {
+        vaccines.voided = [...vaccines?.voided, { reason: reason, order_id: vaccine.drug.order_id, drug_name: vaccine.drug.drug_name }];
+    }
     updateVaccineStatus(patient, vaccine.drug.drug_name, "pending");
-    // return Service.void(`orders/${orderId}?reason=${JSON.stringify(reason)}`, { reason });
+    await saveOfflinePatientData(patient);
 }
 
 export async function voidVaccineEncounter(encounterId: number, reason: string) {
