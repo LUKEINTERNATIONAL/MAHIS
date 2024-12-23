@@ -197,22 +197,27 @@ const patientService = {
             });
             record.vaccineAdministration.orders = [];
             record.vaccineAdministration.obs = [];
-            DatabaseManager.updateRecord("patientRecords", { ID: record.ID }, record);
+            DatabaseManager.overRideRecordRecord("patientRecords", record, { ID: record.ID });
         }
     },
     async voidVaccine(patientID, record) {
         const data = record.vaccineAdministration.voided;
-        console.log("🚀 ~ voidVaccine ~ data:", data);
         if (data?.length > 0) {
             await Promise.all(
                 data?.map(async (item) => {
-                    return await ApiService.remove(`orders/${item.order_id}?reason=${JSON.stringify(item.reason)}`, {
-                        reason: item.reason,
-                    });
+                    try {
+                        if (item?.order_id)
+                            await ApiService.remove(`orders/${item.order_id}?reason=${item.reason}`, {
+                                reason: item.reason,
+                            });
+                    } catch (error) {
+                        console.log(error);
+                    }
                 })
             );
+
             record.vaccineAdministration.voided = [];
-            DatabaseManager.updateRecord("patientRecords", { ID: record.ID }, record);
+            DatabaseManager.overRideRecordRecord("patientRecords", record, { ID: record.ID });
         }
     },
     async enrollProgram(patientId) {
