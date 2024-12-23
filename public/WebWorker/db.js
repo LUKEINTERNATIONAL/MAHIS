@@ -37,8 +37,11 @@ const DatabaseManager = {
             };
         });
     },
-
-    async overRideRecord(storeName, data) {
+    async overRideRecordRecord(storeName, data, whereClause) {
+        if (data) this.deleteRecord(storeName, whereClause);
+        if (data) this.addData(storeName, data);
+    },
+    async overRideCollection(storeName, data) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
                 reject(new Error("Database not initialized. Call openDatabase() first."));
