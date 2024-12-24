@@ -13,6 +13,7 @@
         :inputWidth="'100%'"
         :inputValue="phone_properties.value"
         :eventType="'input'"
+        :p_country="currentCountryObj"
         @update:phone="valueChange($event)"
         @countryChanged="countryChanged($event)"
         :popOverData="phone_properties.popOverData"
@@ -23,7 +24,7 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted, watch } from "vue";
 import BasicPhoneInputField from "@/components/BasicPhoneInputField.vue";
 import { icons } from "@/utils/svg";
 import Validation from "@/validations/StandardValidations";
@@ -41,9 +42,18 @@ export default defineComponent({
         IonRow,
         BasicPhoneInputField
     },
+    props: {
+        userPhone: {
+            type: String,
+            default: ''
+        }
+    },
     setup(props, { emit }) {
-        const currentCountry = ref(null) as any
-        const  phone_properties = ref({
+        const currentCountry = ref(null) as any;
+        const currentCountryObj = ref([{ dialCode: "265", iso2: "MW", name: "Malawi" }]) as any;
+        const dialCode = ref('')
+        const phoneNumber = ref('')
+        const phone_properties = ref({
             inputHeader: "Phone number *",
             icon: icons.phone,
             value: "",
@@ -53,7 +63,13 @@ export default defineComponent({
                 filterData: false,
                 data: [],
             },
-        })
+        });
+
+        watch(() => props.userPhone, (newValue) => {
+            if (newValue !== undefined) {
+                setUserPhone();
+            }
+        });
 
         const emit_validation = (valid = false, phone_value = null as any) => {
             emit("validateInput", {
@@ -61,7 +77,7 @@ export default defineComponent({
                 er_message: "Phone number must be exactly 9 or 10 digits",
                 phone: phone_value,
             })
-        }
+        };
 
         const valueChange = (event: string | any) => {
             let phone_value_string = event
@@ -109,10 +125,42 @@ export default defineComponent({
             emit("countryChanged", {c});
         }
 
+        const setUserPhone = () => {
+            if (props.userPhone) {
+                try {
+                    const [dCode, pNumber] = props.userPhone.split('-')
+                    
+                    dialCode.value = dCode
+                    phoneNumber.value = pNumber
+                    
+                    console.log("Dial Code:", dialCode.value)
+                    console.log("Phone Number:", phoneNumber.value)
+
+                    setCountryCode()
+                } catch (error) {
+                    console.error("Error parsing phone number:", error)
+                }
+            }
+        }
+
+        const setCountryCode = async () => {
+            const country = await Validation.validateDialCode(dialCode.value)
+            if (country != null) {
+                currentCountryObj.value = country
+                console.log(country)
+            }
+        }
+
+
+        onMounted(async () => {
+            setUserPhone()
+        });
+
         return {
             phone_properties,
             countryChanged,
             valueChange,
+            currentCountryObj,
     };
   },
     data() {
@@ -131,9 +179,7 @@ export default defineComponent({
     watch: {
 
     },
-    async mounted() {
-        
-    },
+    async mounted() {},
     methods: {
 
     },

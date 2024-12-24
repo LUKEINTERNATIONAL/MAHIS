@@ -13,9 +13,10 @@
             :placeholder="placeholder"
             :type="inputType"
             :disabled="disabled"
-            :preferredCountries="['mw']"
-            :defaultCountry="'mw'"
-            :inputOptions="{ showDialCode: false, placeholder: 'Enter a phone number' }"
+            :preferredCountries="[country?.[0]?.iso2 || 'MW']"
+            :defaultCountry="country?.[0]?.iso2 || 'MW'"
+            :initialCountry="country?.[0]?.iso2 || 'MW'"
+            :inputOptions="{ showDialCode: true, placeholder: 'Enter a phone number' }"
             :dropdownOptions="{
                 showDialCodeInSelection: true,
                 showSearchBox: true,
@@ -69,9 +70,20 @@ export default defineComponent({
             country: [{ dialCode: "265", iso2: "MW", name: "Malawi" }] as any,
         };
     },
-    watch: {},
+    watch: {
+        p_country: {
+            immediate: true,
+            async handler(data) {
+                this.country = [data];
+            },
+            deep: true,
+        },
+    },
 
     mounted() {
+        if (this.p_country?.[0]?.iso2) {
+            this.country = this.p_country;
+        }
         this.phone = this.inputValue || "";
     },
 
@@ -133,6 +145,10 @@ export default defineComponent({
                 name: "provide name",
                 show: false,
             },
+        },
+        p_country: {
+            type: Array,
+            default: () => [{ dialCode: "265", iso2: "MW", name: "Malawi" }],
         },
     },
     methods: {
