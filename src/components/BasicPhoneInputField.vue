@@ -26,6 +26,7 @@
             }"
             mode="international"
             :autoFormat="false"
+            :key="counter"
         >
         </vue-tel-input>
     </div>
@@ -41,11 +42,11 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonIcon, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
-import { defineComponent, watch } from "vue";
+import { defineComponent, watch, ref, getCurrentInstance } from "vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import { caretDownSharp } from "ionicons/icons";
 import { VueTelInput } from "vue-tel-input";
-import { size } from "lodash";
+import { assign, size } from "lodash";
 import "vue-tel-input/vue-tel-input.css";
 export default defineComponent({
     name: "HisFormElement",
@@ -69,22 +70,6 @@ export default defineComponent({
             showAsterisk: false,
             country: [{ dialCode: "265", iso2: "MW", name: "Malawi" }] as any,
         };
-    },
-    watch: {
-        p_country: {
-            immediate: true,
-            async handler(data) {
-                this.country = [data];
-            },
-            deep: true,
-        },
-    },
-
-    mounted() {
-        if (this.p_country?.[0]?.iso2) {
-            this.country = this.p_country;
-        }
-        this.phone = this.inputValue || "";
     },
 
     props: {
@@ -193,15 +178,34 @@ export default defineComponent({
             this.showAsterisk = false;
             return str;
         },
+        assignCountry(country: any) {
+            this.country = [country];
+        },
     },
     setup(props, { emit }) {
+        const instance = getCurrentInstance();
+        const counter = ref(0);
+        const forceReRender = () => {
+            counter.value++;
+        };
+
         watch(
             () => props.inputValue,
             (newValue, oldValue) => {
                 emit("update:passedinputValue", props.inputValue);
             }
         );
-        return { caretDownSharp };
+
+        watch(() => props.p_country, (newValue) => {
+            if (newValue !== undefined) {
+                instance?.proxy?.assignCountry(newValue);
+                forceReRender();
+            }
+        });
+        return {
+            caretDownSharp,
+            counter,
+        };
     },
 });
 </script>
