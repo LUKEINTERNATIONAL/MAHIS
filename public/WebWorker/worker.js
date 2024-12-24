@@ -11,7 +11,9 @@ importScripts(
     "dde.js",
     "generics.js",
     "generic_vaccine_schedule.js",
-    "stock.js"
+    "stock.js",
+    "concept_name.js",
+    "concept_set.js"
 );
 
 let APIURL = "";
@@ -40,7 +42,8 @@ self.onmessage = async (event) => {
             case "SET_OFFLINE_LOCATION":
                 try {
                     await LocationService.setOfflineLocation();
-
+                    await conceptSetService.setConceptSet();
+                    await conceptNameService.setConceptName();
                     console.log("SET_OFFLINE_LOCATION ~ storeName:", type);
                 } catch (error) {
                     console.log("SET_OFFLINE_LOCATION ~ error:", error);
@@ -86,14 +89,6 @@ self.onmessage = async (event) => {
                     console.log("DELETE_RECORD ~ storeName:", type);
                 } catch (error) {
                     console.log("DELETE_RECORD ~ error:", error);
-                }
-                break;
-            case "DELETE_OBJECT_STORE":
-                try {
-                    await DatabaseManager.deleteObjectStore(payload.storeName);
-                    console.log("DELETE_OBJECT_STORE ~ storeName:", type);
-                } catch (error) {
-                    console.log("DELETE_OBJECT_STORE ~ error:", error);
                 }
                 break;
             case "ADD_OBJECT_STORE":
