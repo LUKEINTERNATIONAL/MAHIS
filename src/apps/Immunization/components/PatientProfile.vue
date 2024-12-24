@@ -186,6 +186,11 @@
                         <ion-label>Update demographics</ion-label>
                     </ion-item>
                 </ion-accordion>
+                <ion-accordion value="first" toggle-icon="" @click="openFollowModal()">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Follow up visits</ion-label>
+                    </ion-item>
+                </ion-accordion>
                 <ion-accordion value="second" toggle-icon="" @click="printVisitSummary()">
                     <ion-item slot="header" color="light">
                         <ion-label>Print visit summary</ion-label>
@@ -388,7 +393,7 @@ export default defineComponent({
                 if (this.patient.patientID) {
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
-                    if (!this.patient.active) await this.openFollowModal();
+                    // if (!this.patient.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
                 }
@@ -453,8 +458,10 @@ export default defineComponent({
         async openFollowModal() {
             if (this.patient?.patientID) {
                 this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.patient.patientID);
-                const dataToPass = { protectedStatus: this.protectedStatus };
-                if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
+                const dataToPass = { protectedStatus: this.protectedStatus, lastVaccinesGiven: this.lastVaccinesGiven };
+                console.log("🚀 ~ openFollowModal ~ this.lastVaccine:", this.lastVaccine);
+                console.log("🚀 ~ openFollowModal ~ this.lastVaccinesGiven:", this.lastVaccinesGiven);
+                if (this.lastVaccinesGiven.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
             }
         },
         openAdministerVaccineModal() {
