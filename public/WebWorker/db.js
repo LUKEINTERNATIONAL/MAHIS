@@ -27,6 +27,8 @@ const DatabaseManager = {
                     "generics",
                     "stock",
                     "genericVaccineSchedule",
+                    "conceptNames",
+                    "conceptSets",
                 ];
 
                 objectStores.forEach((storeName) => {
@@ -290,34 +292,23 @@ const DatabaseManager = {
             }
         });
     },
-    deleteObjectStore(storeName) {
+    async emptyCollection(storeName) {
         return new Promise((resolve, reject) => {
-            if (!db) {
+            if (!this.db) {
                 reject(new Error("Database not initialized. Call openDatabase() first."));
                 return;
             }
 
-            if (!DatabaseManager.objectStoreNames.contains(storeName)) {
-                reject(new Error(`Object store "${storeName}" does not exist.`));
-                return;
-            }
+            const transaction = this.db.transaction([storeName], "readwrite");
+            const objectStore = transaction.objectStore(storeName);
 
-            const version = DatabaseManager.version + 1;
-            DatabaseManager.close();
+            const clearRequest = objectStore.clear();
 
-            const request = indexedDB.open("MaHis", version);
-
-            request.onerror = (event) => {
-                reject("Database error: " + event.target.error);
+            clearRequest.onerror = (event) => {
+                reject(new Error(`Failed to empty collection: ${event.target.error}`));
             };
 
-            request.onupgradeneeded = (event) => {
-                const database = event.target.result;
-                database.deleteObjectStore(storeName);
-            };
-
-            request.onsuccess = (event) => {
-                db = event.target.result;
+            clearRequest.onsuccess = () => {
                 resolve();
             };
         });
