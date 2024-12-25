@@ -69,7 +69,7 @@ function MultValidations(fieldName: string, value: any): null | any {
         if (minMaxError !== null) {
             return minMaxError;
         }
-    } else if (fieldName === "Temp") {
+    } else if (fieldName === "Temperature") {
         const requiredError: any | null = Validation.required(value);
         if (requiredError !== null) {
             return requiredError;
