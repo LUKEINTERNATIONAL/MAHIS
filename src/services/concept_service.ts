@@ -29,13 +29,27 @@ export class ConceptService extends Service {
     }
 
     static async getConceptSet(conceptName: string, filter = "") {
-        const conceptId = await this.getConceptID(conceptName);
-        const concepts = super.getJson("concept_set", {
-            id: conceptId,
-            name: filter,
-        });
+        const concepts: any = await getOfflineRecords("conceptSets", { whereClause: { concept_set_name: conceptName } });
+        let conceptData: any = [];
+        let filterObj = {
+            inClause: { concept_id: concepts[0].member_ids },
+            likeClause: {},
+        };
+        if (filter)
+            filterObj.likeClause = {
+                name: `%${filter}%`,
+            };
+        conceptData = await getOfflineRecords("conceptNames", filterObj);
+        if (conceptData) return conceptData;
+        else {
+            const conceptId = await this.getConceptID(conceptName);
+            const concepts = super.getJson("concept_set", {
+                id: conceptId,
+                name: filter,
+            });
 
-        if (concepts) return concepts;
+            if (concepts) return concepts;
+        }
     }
 
     static async getConceptName(conceptId: number) {
