@@ -103,7 +103,7 @@ export default defineComponent({
             console.log("+++++ lets see", vital);
         },
         async setTodayVitals() {
-            const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+            const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temperature", "Pulse", "SAO2", "Respiratory rate"];
             const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
             const mandatoryDone = [] as any;
             const promises = array.map(async (item: any) => {
