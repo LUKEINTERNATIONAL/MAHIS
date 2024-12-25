@@ -63,7 +63,6 @@
 
             <ion-row>
                 <ion-col>
-                    <BasicInputField :placeholder="'phone number'" :icon="phonePortraitOutline" :inputValue="''" @update:inputValue="" />
                     <userPhoneInput @validateInput="userPhoneChange" :user-phone="selectedPhoneNumber"/>
                     <div>
                         <ion-label v-if="phone_input_properties[0].show_error.value" class="error-label">
@@ -492,7 +491,7 @@ function setSelectedDistrict() {
             const filteredDistricts = selectedLocation
                 ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
                 : [];
-                
+
             selected_Districts.value = filteredDistricts[0];
         }
     } catch (error) {}
@@ -1249,9 +1248,8 @@ function isSSelectionValid() {
 }
 
 async function updateuserPersoninf() {
-    const data1 = getFieldsValuesObj(input_properties);
     const updatedData = {
-        cell_phone_number: data1.phone_number,
+        cell_phone_number: phone_input_properties[0].dataValue.value,
         gender: getGenderCode(isSSelection_properties[0].dataValue.value),
     } as any;
     const personService = new PersonService(updatedData);
