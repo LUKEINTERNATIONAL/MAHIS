@@ -65,7 +65,13 @@ export async function getOfflineRecords<T = any>(
 
             // Apply where clause filtering if provided
             const filteredRecords = whereClause
-                ? allRecords.filter((record) => Object.entries(whereClause).every(([key, value]) => record[key as keyof T] === value))
+                ? allRecords.filter((record) =>
+                      Object.entries(whereClause).every(([key, value]) =>
+                          typeof value === "string"
+                              ? String(record[key as keyof T]).toLowerCase() === value.toLowerCase()
+                              : record[key as keyof T] === value
+                      )
+                  )
                 : allRecords;
 
             // Sort records if sortBy is provided
