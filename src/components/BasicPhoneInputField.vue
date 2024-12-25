@@ -178,8 +178,9 @@ export default defineComponent({
             this.showAsterisk = false;
             return str;
         },
-        assignCountry(country: any) {
+        assignCountryAndPhone(country: any, phone: any) {
             this.country = [country];
+            this.phone   =  phone;
         },
     },
     setup(props, { emit }) {
@@ -198,7 +199,7 @@ export default defineComponent({
 
         watch(() => props.p_country, (newValue) => {
             if (newValue !== undefined) {
-                instance?.proxy?.assignCountry(newValue);
+                instance?.proxy?.assignCountryAndPhone(newValue, props.inputValue);
                 forceReRender();
             }
         });

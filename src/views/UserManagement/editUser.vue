@@ -492,8 +492,7 @@ function setSelectedDistrict() {
             const filteredDistricts = selectedLocation
                 ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
                 : [];
-
-            console.log(filteredDistricts);
+                
             selected_Districts.value = filteredDistricts[0];
         }
     } catch (error) {}

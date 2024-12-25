@@ -125,32 +125,27 @@ export default defineComponent({
             emit("countryChanged", {c});
         }
 
-        const setUserPhone = () => {
+        const setUserPhone = async () => {
             if (props.userPhone) {
                 try {
                     const [dCode, pNumber] = props.userPhone.split('-')
-                    
                     dialCode.value = dCode
                     phoneNumber.value = pNumber
-                    
-                    console.log("Dial Code:", dialCode.value)
-                    console.log("Phone Number:", phoneNumber.value)
 
-                    setCountryCode()
+                    await setCountryCodeAndPhone()
                 } catch (error) {
                     console.error("Error parsing phone number:", error)
                 }
             }
         }
 
-        const setCountryCode = async () => {
+        const setCountryCodeAndPhone = async () => {
             const country = await Validation.validateDialCode(dialCode.value)
             if (country != null) {
+                phone_properties.value.value = phoneNumber.value
                 currentCountryObj.value = country
-                console.log(country)
             }
         }
-
 
         onMounted(async () => {
             setUserPhone()
