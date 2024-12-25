@@ -47,12 +47,18 @@ export async function getOfflineRecords<T = any>(
         currentPage?: number;
         itemsPerPage?: number;
         whereClause?: Partial<T>;
+        likeClause?: {
+            [K in keyof Partial<T>]?: string;
+        };
+        inClause?: {
+            [K in keyof Partial<T>]?: any[];
+        };
         sortBy?: keyof T;
         sortOrder?: "asc" | "desc";
     } = {},
     pagination = false
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
-    const { currentPage = 1, itemsPerPage = 0, whereClause, sortBy, sortOrder = "asc" } = options;
+    const { currentPage = 1, itemsPerPage = 0, whereClause, likeClause, inClause, sortBy, sortOrder = "asc" } = options;
 
     const db = await openDatabase(storeName);
     return new Promise((resolve, reject) => {
@@ -64,7 +70,7 @@ export async function getOfflineRecords<T = any>(
             let allRecords = (event.target as IDBRequest).result as T[];
 
             // Apply where clause filtering if provided
-            const filteredRecords = whereClause
+            let filteredRecords = whereClause
                 ? allRecords.filter((record) =>
                       Object.entries(whereClause).every(([key, value]) =>
                           typeof value === "string"
@@ -73,6 +79,34 @@ export async function getOfflineRecords<T = any>(
                       )
                   )
                 : allRecords;
+
+            // Apply LIKE clause filtering if provided
+            if (likeClause) {
+                filteredRecords = filteredRecords.filter((record) =>
+                    Object.entries(likeClause).every(([key, pattern]: [any, any]) => {
+                        if (typeof pattern !== "string") {
+                            return false;
+                        }
+                        const recordValue = String(record[key as keyof T]).toLowerCase();
+                        // Convert the LIKE pattern to a regex pattern
+                        const regexPattern = pattern.toLowerCase().replace(/%/g, ".*").replace(/_/g, ".");
+                        const regex = new RegExp(`^${regexPattern}$`);
+                        return regex.test(recordValue);
+                    })
+                );
+            }
+
+            // Apply IN clause filtering if provided
+            if (inClause) {
+                filteredRecords = filteredRecords.filter((record) =>
+                    Object.entries(inClause).every(([key, values]: [any, any]) => {
+                        const recordValue = record[key as keyof T];
+                        return values.some((value: any) =>
+                            typeof value === "string" ? String(recordValue).toLowerCase() === value.toLowerCase() : recordValue === value
+                        );
+                    })
+                );
+            }
 
             // Sort records if sortBy is provided
             if (sortBy) {
