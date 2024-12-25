@@ -42,14 +42,20 @@ self.onmessage = async (event) => {
             case "SET_OFFLINE_LOCATION":
                 try {
                     await LocationService.setOfflineLocation();
-                    await conceptSetService.setConceptSet();
-                    await conceptNameService.setConceptName();
                     console.log("SET_OFFLINE_LOCATION ~ storeName:", type);
                 } catch (error) {
                     console.log("SET_OFFLINE_LOCATION ~ error:", error);
                 }
                 break;
-
+            case "SYNC_CONCEPTS":
+                try {
+                    await conceptSetService.setConceptSet();
+                    await conceptNameService.setConceptName();
+                    console.log("SYNC_CONCEPTS ~ storeName:", type);
+                } catch (error) {
+                    console.log("SYNC_CONCEPTS ~ error:", error);
+                }
+                break;
             case "GET_OFFLINE_LOCATION":
                 try {
                     const result = await DatabaseManager.getOfflineData("location");
