@@ -1,5 +1,6 @@
 import { Service } from "./service";
 import ConceptNameDictionary from "@/Data/ConceptNameDictionary";
+import { getOfflineRecords } from "@/services/offline_service";
 
 export class ConceptService extends Service {
     constructor() {
@@ -53,12 +54,8 @@ export class ConceptService extends Service {
         }
     }
 
-    static getCachedConceptID(conceptName: string, strictMode = false) {
-        const concepts = ConceptNameDictionary.filter((item) => {
-            if (!strictMode) return item.name.match(new RegExp(conceptName, "i"));
-
-            return item.name.toLowerCase() === conceptName.toLowerCase();
-        });
+    static async getCachedConceptID(conceptName: string, strictMode = false) {
+        const concepts = await getOfflineRecords("conceptNames", { whereClause: { name: conceptName } });
         return this.resolveConcept(concepts, conceptName);
     }
 
@@ -73,12 +70,9 @@ export class ConceptService extends Service {
         if (concept) return concept.concept_names[0].name;
     }
 
-    static getCachedConceptName(conceptId: number) {
-        const concepts = ConceptNameDictionary.filter((item) => {
-            return item.concept_id === conceptId;
-        });
-
-        if (concepts.length >= 1) return concepts[0].name;
+    static async getCachedConceptName(conceptId: number) {
+        const concepts: any = await getOfflineRecords("conceptNames", { whereClause: { concept_id: conceptId } });
+        if (concepts && concepts.length >= 1) return concepts[0].name;
     }
 
     private static resolveConcept(concepts: any, conceptName: string) {
