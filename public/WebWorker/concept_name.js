@@ -1,13 +1,13 @@
 const conceptNameService = {
     async setConceptName() {
         const conceptNameData = await DatabaseManager.getOfflineData("conceptNames");
-        if (conceptNameData && conceptNameData.length == TOTALS.total_concept_names) {
+        if (conceptNameData && conceptNameData?.length == TOTALS.total_concept_names) {
             return conceptNameData;
         }
-        const totalPages = TOTALS.total_concept_names / 500;
+        const totalPages = Math.ceil(TOTALS.total_concept_names / 500);
         allRecords = [];
         for (let i = 1; i <= totalPages; i++) {
-            const conceptName = await ApiService.getData("/concepts", {
+            const conceptName = await ApiService.getData("/concept_names", {
                 page_size: 500,
                 page: i,
             });
