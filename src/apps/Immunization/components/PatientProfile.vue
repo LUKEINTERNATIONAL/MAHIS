@@ -459,8 +459,6 @@ export default defineComponent({
             if (this.patient?.patientID) {
                 this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.patient.patientID);
                 const dataToPass = { protectedStatus: this.protectedStatus, lastVaccinesGiven: this.lastVaccinesGiven };
-                console.log("🚀 ~ openFollowModal ~ this.lastVaccine:", this.lastVaccine);
-                console.log("🚀 ~ openFollowModal ~ this.lastVaccinesGiven:", this.lastVaccinesGiven);
                 if (this.lastVaccinesGiven.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
             }
         },
