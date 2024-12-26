@@ -72,23 +72,28 @@ export async function getOfflineRecords<T = any>(
             // Apply where clause filtering if provided
             let filteredRecords = whereClause
                 ? allRecords.filter((record) =>
-                      Object.entries(whereClause).every(([key, value]) =>
-                          typeof value === "string"
-                              ? String(record[key as keyof T]).toLowerCase() === value.toLowerCase()
-                              : record[key as keyof T] === value
-                      )
+                      Object.entries(whereClause).every(([path, value]) => {
+                          const recordValue = path.includes(".")
+                              ? path.split(".").reduce((obj: any, key) => obj?.[key], record)
+                              : (record as any)[path];
+
+                          return typeof value === "string" ? String(recordValue).toLowerCase() === value.toLowerCase() : recordValue === value;
+                      })
                   )
                 : allRecords;
 
             // Apply LIKE clause filtering if provided
             if (likeClause) {
                 filteredRecords = filteredRecords.filter((record) =>
-                    Object.entries(likeClause).every(([key, pattern]: [any, any]) => {
-                        if (typeof pattern !== "string") {
-                            return false;
-                        }
-                        const recordValue = String(record[key as keyof T]).toLowerCase();
-                        // Convert the LIKE pattern to a regex pattern
+                    Object.entries(likeClause).every(([path, pattern]) => {
+                        if (typeof pattern !== "string") return false;
+
+                        // Handle both nested and non-nested paths
+                        const value = path.includes(".") ? path.split(".").reduce((obj: any, key) => obj?.[key], record) : (record as any)[path];
+
+                        if (!value) return false;
+
+                        const recordValue = String(value).toLowerCase();
                         const regexPattern = pattern.toLowerCase().replace(/%/g, ".*").replace(/_/g, ".");
                         const regex = new RegExp(`^${regexPattern}$`);
                         return regex.test(recordValue);
@@ -99,8 +104,11 @@ export async function getOfflineRecords<T = any>(
             // Apply IN clause filtering if provided
             if (inClause) {
                 filteredRecords = filteredRecords.filter((record) =>
-                    Object.entries(inClause).every(([key, values]: [any, any]) => {
-                        const recordValue = record[key as keyof T];
+                    Object.entries(inClause).every(([path, values]: any) => {
+                        const recordValue = path.includes(".")
+                            ? path.split(".").reduce((obj: any, key: any) => obj?.[key], record)
+                            : (record as any)[path];
+
                         return values.some((value: any) =>
                             typeof value === "string" ? String(recordValue).toLowerCase() === value.toLowerCase() : recordValue === value
                         );
