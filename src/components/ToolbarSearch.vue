@@ -188,6 +188,7 @@ import { getUserLocation } from "@/services/userService";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import dates from "@/utils/Date";
 import workerData from "@/activate_worker";
+import { getOfflineRecords } from "@/services/offline_service";
 export default defineComponent({
     name: "ToolbarSearch",
     mixins: [DeviceDetection, SetPersonInformation],
@@ -220,7 +221,6 @@ export default defineComponent({
             popoverOpen: false,
             event: null,
             patients: [] as any,
-            offlinePatients: [] as any,
             offlineFilteredPatients: [] as any,
             showPopover: true,
             page: 1,
@@ -315,7 +315,6 @@ export default defineComponent({
     },
     async mounted() {
         this.ddeInstance = new PatientDemographicsExchangeService();
-        this.offlinePatients = await db.collection("patientRecords").get();
     },
     methods: {
         async nav(url: any) {
@@ -500,16 +499,26 @@ export default defineComponent({
         previousPage() {
             this.page--;
         },
-        searchOfflinePatients(searchCriteria: any) {
-            return this.offlinePatients.filter((patient: any) => {
-                const personInfo = patient.personInformation;
-
-                return (
-                    (!searchCriteria.given_name || personInfo.given_name.toLowerCase().includes(searchCriteria.given_name.toLowerCase())) &&
-                    (!searchCriteria.family_name || personInfo.family_name.toLowerCase().includes(searchCriteria.family_name.toLowerCase())) &&
-                    (!searchCriteria.gender || personInfo.gender === searchCriteria.gender)
-                );
+        async searchOfflinePatients(searchCriteria: { given_name?: string; family_name?: string; gender?: string }) {
+            const idData: any = await getOfflineRecords("patientRecords", {
+                whereClause: { ID: searchCriteria.given_name },
             });
+            if (idData.length > 0) return idData;
+
+            const likeClause: Record<string, string> = {};
+            const fields: any = {
+                given_name: "personInformation.given_name",
+                family_name: "personInformation.family_name",
+                gender: "personInformation.gender",
+            };
+
+            Object.entries(searchCriteria).forEach(([key, value]: any) => {
+                if (value && fields[key]) {
+                    likeClause[fields[key]] = `${value}%`;
+                }
+            });
+
+            return await getOfflineRecords("patientRecords", { likeClause });
         },
         async handleSearchResults(patient: Promise<Patient | Patient[]>) {
             let results: Patient[] | Patient = [];
