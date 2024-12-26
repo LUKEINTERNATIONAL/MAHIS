@@ -102,6 +102,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        patient: {
+            async handler() {
+                await this.loadVaccineSchedule();
+            },
+            deep: true,
+        },
         vaccine_schArray: {
             handler() {
                 this.reloadVaccines();
@@ -113,7 +119,7 @@ export default defineComponent({
             createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
         },
         async loadVaccineSchedule() {
-            this.setAppointmentDate();
+            await this.setAppointmentDate();
             const data__ = this.patient.vaccineSchedule;
             const vaccineScheduleStore = useAdministerVaccineStore();
 
