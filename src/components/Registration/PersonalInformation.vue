@@ -104,16 +104,16 @@ export default defineComponent({
     methods: {
         setData() {
             if (this.editable) {
-                modifyFieldValue(this.personInformation, "firstname", "value", this.patient.person.names[0].given_name);
-                modifyFieldValue(this.personInformation, "middleName", "value", this.patient.person.names[0].middle_name);
-                modifyFieldValue(this.personInformation, "lastname", "value", this.patient.person.names[0].family_name);
-                modifyFieldValue(this.personInformation, "birthdate", "value", this.patient.person.birthdate);
-                modifyRadioValue(this.personInformation, "gender", "selectedValue", this.patient.person.gender);
+                modifyFieldValue(this.personInformation, "firstname", "value", this.patient?.personInformation?.given_name);
+                modifyFieldValue(this.personInformation, "middleName", "value", this.patient.personInformation.middle_name);
+                modifyFieldValue(this.personInformation, "lastname", "value", this.patient.personInformation.family_name);
+                modifyFieldValue(this.personInformation, "birthdate", "value", this.patient.personInformation.birthdate);
+                modifyRadioValue(this.personInformation, "gender", "selectedValue", this.patient.personInformation.gender);
                 modifyFieldValue(this.personInformation, "phoneNumber", "value", this.getPhoneNumber());
             }
         },
         getPhoneNumber() {
-            let attribute = this.patient.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number");
+            let attribute = this.patient.personInformation.cell_phone_number;
             if (attribute) {
                 if (attribute.value.includes("+")) {
                     if (this.selectedCountry.dialCode) {
