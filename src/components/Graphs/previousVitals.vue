@@ -136,21 +136,19 @@ export default defineComponent({
         };
     },
     async mounted() {
-        await this.updateData();
-        this.setWeight();
-        this.iconBg.graph = "iconBg";
+        await this.updateGraphData();
     },
     watch: {
         patient: {
             async handler() {
-                await this.updateData();
+                await this.updateGraphData();
             },
             deep: true,
         },
         vitalsWeightHeight: {
             async handler() {
                 if (this.vitalsWeightHeight[0].validationStatus == "success") {
-                    await this.updateData();
+                    await this.updateGraphData();
                 }
             },
             deep: true,
@@ -166,6 +164,11 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        async updateGraphData() {
+            await this.updateData();
+            this.setWeight();
+            this.iconBg.graph = "iconBg";
+        },
         dismiss() {
             modalController.dismiss();
         },
