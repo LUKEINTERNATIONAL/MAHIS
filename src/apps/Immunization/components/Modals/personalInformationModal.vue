@@ -169,9 +169,6 @@ export default defineComponent({
         return { notificationsOutline, personCircleOutline, createOutline, clipboardOutline, calendarOutline };
     },
     methods: {
-        getAttributes(item: any, name: any) {
-            return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;
-        },
         handleCancel() {
             modalController.dismiss();
         },

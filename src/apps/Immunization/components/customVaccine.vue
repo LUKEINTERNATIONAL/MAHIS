@@ -51,9 +51,10 @@ import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { PatientService } from "@/services/patient_service";
 import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdminstredVaccine.vue";
-import { StockService } from '@/services/stock_service';
+import { StockService } from "@/services/stock_service";
 import alert from "@/apps/Immunization/components/Modals/alert.vue";
 import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
+import { getOfflineRecords } from "@/services/offline_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -102,16 +103,16 @@ export default defineComponent({
         let isModalOpening = false;
         const cleanupModal = () => {
             isModalOpening = false;
-            const modalElement = document.querySelector('.pr_o');
+            const modalElement = document.querySelector(".pr_o");
             if (modalElement) {
                 modalElement.remove();
             }
-        }
+        };
 
         return {
             isModalOpening,
-            cleanupModal
-        }
+            cleanupModal,
+        };
     },
     methods: {
         getColorForVaccine(vaccine: any) {
@@ -156,44 +157,45 @@ export default defineComponent({
             }
         },
         async openAdministerVaccineModal(data: any) {
-            const modalElement = document.querySelector('.pr_o');
+            const modalElement = document.querySelector(".pr_o");
             if (this.isModalOpening || modalElement) {
-                console.log('Modal already open or opening, current state:', { 
-                    isModalOpening: this.isModalOpening, 
-                    modalExists: !!modalElement 
+                console.log("Modal already open or opening, current state:", {
+                    isModalOpening: this.isModalOpening,
+                    modalExists: !!modalElement,
                 });
                 return;
             }
 
             try {
-                    this.isModalOpening = true;
+                this.isModalOpening = true;
 
-                    const store = useAdministerVaccineStore();
-                    store.setCurrentSelectedDrug(data);
+                const store = useAdministerVaccineStore();
+                store.setCurrentSelectedDrug(data);
 
-                    const stockService = new StockService();
-                    const drugBatches = await stockService.getDrugBatches(data.drug_id);
-                    store.setLotNumberData(drugBatches);
+                const stockService = new StockService();
+                const drugBatches: any = await getOfflineRecords("stock", { whereClause: { drug_id: data.drug_id } });
+                // await stockService.getDrugBatches(data.drug_id);
+                store.setLotNumberData(drugBatches);
 
-                    if (!this.checkIfAdminstredAndAskToVoid()) {
-                        if (drugBatches.length === 0) {
-                            if (!checkDrugName(data)) {
-                                createModal(alert, { class: "otherVitalsModal pr_o" });
-                            } else {
-                                createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
-                            }
+                if (!this.checkIfAdminstredAndAskToVoid()) {
+                    if (drugBatches.length === 0) {
+                        if (!checkDrugName(data)) {
+                            createModal(alert, { class: "otherVitalsModal pr_o" });
                         } else {
                             createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
                         }
+                    } else {
+                        createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
                     }
-                } catch (error) {
-                    console.error('Error opening modal:', error);
-                    throw error;
-                } finally {
-                    this.isModalOpening = false;
-                    console.log('Modal open process completed');
                 }
-            },
+            } catch (error) {
+                console.error("Error opening modal:", error);
+                throw error;
+            } finally {
+                this.isModalOpening = false;
+                console.log("Modal open process completed");
+            }
+        },
         disableVaccine(vaccine: any) {
             if (vaccine.status != null && vaccine.status == "administered") {
                 return false;
@@ -213,17 +215,17 @@ export default defineComponent({
         },
         checkIfAdminstredAndAskToVoid() {
             const store = useAdministerVaccineStore();
-            const vaccine_to_void = store.getCurrentSelectedDrug()
-            if(vaccine_to_void.drug.status == 'administered') {
-                store.setVaccineToBeVoided(vaccine_to_void)
-                createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+            const vaccine_to_void = store.getCurrentSelectedDrug();
+            if (vaccine_to_void.drug.status == "administered") {
+                store.setVaccineToBeVoided(vaccine_to_void);
+                createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false);
                 // const data = await createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
                 // if(data?.voided == true) {
                 //     // this.dismiss()
                 // }
-                return true
+                return true;
             }
-            return false
+            return false;
         },
     },
 });
@@ -500,13 +502,13 @@ export default defineComponent({
     align-items: center;
 }
 .administerVac {
-  height: 58px;
-  min-width: 160px;
-  max-width: 100%; 
-  width: auto; 
-  margin: 7px;
-  white-space: nowrap; 
-  overflow: hidden;
-  text-overflow: ellipsis; 
+    height: 58px;
+    min-width: 160px;
+    max-width: 100%;
+    width: auto;
+    margin: 7px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

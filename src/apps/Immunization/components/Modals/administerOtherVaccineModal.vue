@@ -137,6 +137,7 @@ import lotNumberList from "./lotNumberList.vue";
 import alert from "@/apps/Immunization/components/Modals/alert.vue";
 import { StockService } from "@/services/stock_service";
 import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     components: {
@@ -193,6 +194,7 @@ export default defineComponent({
     computed: {
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber", "vaccineSchedule"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     async mounted() {
         this.vaccineSchedule.vaccine_schedule.forEach((vaccine: any) => {
@@ -324,7 +326,7 @@ export default defineComponent({
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
-            saveVaccineAdministeredDrugs();
+            saveVaccineAdministeredDrugs(this.patient);
             store.setTempScannedBatchNumber(null);
             this.dismiss();
         },

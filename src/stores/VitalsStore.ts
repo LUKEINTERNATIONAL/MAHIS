@@ -210,7 +210,7 @@ const initialVitals = [
                             unit: "C",
                             icon: icons.temprature,
                             value: "",
-                            name: "Temp",
+                            name: "Temperature",
                             eventType: "input",
                         },
                         {
@@ -307,7 +307,7 @@ const initialVitals = [
                             unit: "%",
                             icon: icons.oxgenStaturation,
                             value: "",
-                            name: "SP02",
+                            name: "SAO2",
                             eventType: "input",
                         },
                     ],

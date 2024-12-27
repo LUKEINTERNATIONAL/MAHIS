@@ -1572,7 +1572,7 @@ export default [
     {
         categories: [],
         concept_id: 5092,
-        name: "SP02",
+        name: "SAO2",
     },
     {
         categories: [],
@@ -1582,7 +1582,7 @@ export default [
     {
         categories: [],
         concept_id: 5088,
-        name: "Temp",
+        name: "Temperature",
     },
     {
         categories: [],
@@ -2280,7 +2280,7 @@ export default [
     {
         categories: [],
         concept_id: 5088,
-        name: "Temp",
+        name: "Temperature",
     },
     {
         categories: [],
@@ -2295,6 +2295,6 @@ export default [
     {
         categories: [],
         concept_id: 5092,
-        name: "SP02",
+        name: "SAO2",
     },
 ];

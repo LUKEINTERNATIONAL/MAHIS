@@ -38,7 +38,7 @@ function isFloatingPointNumber(val: any): null | string[] {
 
 function isMWPhoneNumber(val: any) {
     //Regex source: https://gist.github.com/kwalter94/1861f1f0fa192382a75a445ad70f07ec
-    if (val.includes("+265")) {
+    if (val?.includes("+265")) {
         val = val.replace(/\s+/g, "");
         const validation = /^(\+?265|0)(((8[89]|9[89])\d{7})|(1\d{6})|(2\d{8})|(31\d{8}))$/;
         return !isEmpty(val) && !val.match(validation) ? "Not a valid phone number" : null;

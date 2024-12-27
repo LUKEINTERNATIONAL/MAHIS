@@ -530,7 +530,11 @@ export default defineComponent({
                 },
                 vitals: vitals,
                 vaccineSchedule: await getOfflineVaccineSchedule(gender, birthdate),
-                vaccineAdministration: [],
+                vaccineAdministration: {
+                    orders: [],
+                    obs: [],
+                    voided: [],
+                },
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",

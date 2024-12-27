@@ -148,6 +148,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
 
     setup() {
@@ -231,7 +232,7 @@ export default defineComponent({
             const input = event.target.value;
             this.batchNumber = input || this.tempScannedBatchNumber?.text || "";
         },
-        ActionTriggered(selectedOption: any) {
+        async ActionTriggered(selectedOption: any) {
             const dta = {
                 batch_number: selectedOption.lotNumber,
                 date_administered: this.selected_date_,
@@ -240,7 +241,7 @@ export default defineComponent({
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
-            saveVaccineAdministeredDrugs();
+            await saveVaccineAdministeredDrugs(this.patient);
             store.setTempScannedBatchNumber(null);
             this.dismiss();
         },
