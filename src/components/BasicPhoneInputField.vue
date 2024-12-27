@@ -13,9 +13,10 @@
             :placeholder="placeholder"
             :type="inputType"
             :disabled="disabled"
-            :preferredCountries="['mw']"
-            :defaultCountry="'mw'"
-            :inputOptions="{ showDialCode: false, placeholder: 'Enter a phone number' }"
+            :preferredCountries="[country?.[0]?.iso2 || 'MW']"
+            :defaultCountry="country?.[0]?.iso2 || 'MW'"
+            :initialCountry="country?.[0]?.iso2 || 'MW'"
+            :inputOptions="{ showDialCode: true, placeholder: 'Enter a phone number' }"
             :dropdownOptions="{
                 showDialCodeInSelection: true,
                 showSearchBox: true,
@@ -25,6 +26,7 @@
             }"
             mode="international"
             :autoFormat="false"
+            :key="counter"
         >
         </vue-tel-input>
     </div>
@@ -40,11 +42,11 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonIcon, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
-import { defineComponent, watch } from "vue";
+import { defineComponent, watch, ref, getCurrentInstance } from "vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import { caretDownSharp } from "ionicons/icons";
 import { VueTelInput } from "vue-tel-input";
-import { size } from "lodash";
+import { assign, size } from "lodash";
 import "vue-tel-input/vue-tel-input.css";
 export default defineComponent({
     name: "HisFormElement",
@@ -68,11 +70,6 @@ export default defineComponent({
             showAsterisk: false,
             country: [{ dialCode: "265", iso2: "MW", name: "Malawi" }] as any,
         };
-    },
-    watch: {},
-
-    mounted() {
-        this.phone = this.inputValue || "";
     },
 
     props: {
@@ -134,6 +131,10 @@ export default defineComponent({
                 show: false,
             },
         },
+        p_country: {
+            type: Array,
+            default: () => [{ dialCode: "265", iso2: "MW", name: "Malawi" }],
+        },
     },
     methods: {
         handleCountryChanged(country: any) {
@@ -177,15 +178,35 @@ export default defineComponent({
             this.showAsterisk = false;
             return str;
         },
+        assignCountryAndPhone(country: any, phone: any) {
+            this.country = [country];
+            this.phone   =  phone;
+        },
     },
     setup(props, { emit }) {
+        const instance = getCurrentInstance();
+        const counter = ref(0);
+        const forceReRender = () => {
+            counter.value++;
+        };
+
         watch(
             () => props.inputValue,
             (newValue, oldValue) => {
                 emit("update:passedinputValue", props.inputValue);
             }
         );
-        return { caretDownSharp };
+
+        watch(() => props.p_country, (newValue) => {
+            if (newValue !== undefined) {
+                instance?.proxy?.assignCountryAndPhone(newValue, props.inputValue);
+                forceReRender();
+            }
+        });
+        return {
+            caretDownSharp,
+            counter,
+        };
     },
 });
 </script>

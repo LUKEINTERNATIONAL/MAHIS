@@ -179,6 +179,24 @@ async function validateMobilePhone(val: any, countryData: any) {
     }
 }
 
+async function validateDialCode(code: string) {
+    try {
+        const response = await fetch(`${import.meta.env.BASE_URL}countryphones.json`);   
+        const data = await response.json();
+        const country = data.countries.find((c: { dialCode: string }) => c.dialCode === code);
+
+        if (!country) {
+            console.log("Country not found");
+            return null;
+        }
+
+        return country;
+
+    } catch (error) {
+        return `Error fetching or processing data(countryphones): ${error}`;
+    }
+}
+
 function formatToExample(value: string, exampleNumber: string): string {
     const digits = value.replace(/\s+/g, "");
     let digitIndex = 0;
@@ -276,4 +294,5 @@ export default {
     isDate,
     isNameWithSlush,
     validateMobilePhone,
+    validateDialCode,
 } as any;
