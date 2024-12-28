@@ -490,10 +490,11 @@ export default defineComponent({
                     });
                 }
                 if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
-                    await this.saveWomenStatus();
-                    await this.savePresentingComplaints();
-                    await this.savePastMedicalHistory();
                     await this.saveConsciousness();
+                    await this.savePresentingComplaints();
+                    await this.saveWomenStatus();
+                    await this.savePastMedicalHistory();
+                    await this.saveAllergies();
                     await this.savePhysicalExam();
                     resetOPDPatientData();
                 } else {
@@ -571,6 +572,15 @@ export default defineComponent({
                 const diagnosisInstance = new Diagnosis();
                 diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
             }
+        },
+       async saveAllergies(){
+          const userID: any = Service.getUserID();
+          const patientID = this.patient.patientID;
+          const treatmentInstance = new Treatment();
+          if (!isEmpty(this.selectedMedicalAllergiesList)) {
+            const allergies = this.mapToAllergies();
+            treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+          }
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
