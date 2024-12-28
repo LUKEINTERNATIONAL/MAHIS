@@ -9,6 +9,7 @@ import ManageAppointMentsTemplate from "../views/ManageAppointMentsTemplate.vue"
 import Scan from "../components/Registration/ScanRegistration.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
+import locationsManagement from "@/views/LocationsManagement.vue";
 import clinicalDaysTemplate from "@/views/ClinicalDays/clinicalDaysTemplate.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
@@ -39,6 +40,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/stockManagement",
         name: "stockManagement",
         component: stockManagement,
+    },
+    {
+        path: "/locationsManagement",
+        name: "locationsManagement",
+        component: locationsManagement,
     },
     {
         path: "/OfflineRecords",
