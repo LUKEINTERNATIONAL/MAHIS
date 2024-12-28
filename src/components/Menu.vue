@@ -8,50 +8,49 @@
         <ion-content style="--background: #fff">
             <ion-accordion-group expand="inset" style="margin-inline: unset; margin-top: unset">
                 <ion-accordion-group>
-                <ion-accordion value="1" @click="navigationMenu('home')" toggle-icon="">
-                    <ion-item slot="header" color="light">
-                    <ion-icon :icon="homeOutline" slot="start"></ion-icon>
-                    <ion-label class="header lft-drpm">Home</ion-label>
-                    </ion-item>
-                </ion-accordion>
-                
-                <ion-accordion value="2" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
-                    <ion-item slot="header" color="light">
-                    <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
-                    <ion-label class="header lft-drpm">Schedule Immunization</ion-label>
-                    </ion-item>
-                </ion-accordion>
-                
-                <ion-accordion value="3" @click="navigationMenu('manageAppointMents')" toggle-icon="">
-                    <ion-item slot="header" color="light">
-                    <ion-icon :icon="listOutline" slot="start"></ion-icon>
-                    <ion-label class="header lft-drpm">Manage Appointments</ion-label>
-                    </ion-item>
-                </ion-accordion>
-                
-                <ion-accordion value="4" @click="navigationMenu('stockManagement')" toggle-icon="">
-                    <ion-item slot="header" color="light">
-                    <ion-icon :icon="cubeOutline" slot="start"></ion-icon>
-                    <ion-label class="header lft-drpm">Inventory Management</ion-label>
-                    </ion-item>
-                </ion-accordion>
-                
-                <ion-accordion value="5" @click="navigationMenu('OfflineRecords')" toggle-icon="">
-                    <ion-item slot="header" color="light">
-                    <ion-icon :icon="documentOutline" slot="start"></ion-icon>
-                    <ion-label class="header lft-drpm">Manage Offline Records</ion-label>
-                    </ion-item>
-                </ion-accordion>
-                
-                <ion-accordion value="6" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
-                    <ion-item slot="header" color="light">
-                    <ion-icon :icon="peopleOutline" slot="start"></ion-icon>
-                    <ion-label class="header lft-drpm">De-Duplication</ion-label>
-                    </ion-item>
-                </ion-accordion>
+                    <ion-accordion value="1" @click="navigationMenu('home')" toggle-icon="">
+                        <ion-item slot="header" color="light">
+                            <ion-icon :icon="homeOutline" slot="start"></ion-icon>
+                            <ion-label class="header lft-drpm">Home</ion-label>
+                        </ion-item>
+                    </ion-accordion>
 
-                <ion-accordion></ion-accordion>
-    
+                    <ion-accordion value="2" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
+                        <ion-item slot="header" color="light">
+                            <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
+                            <ion-label class="header lft-drpm">Schedule Immunization</ion-label>
+                        </ion-item>
+                    </ion-accordion>
+
+                    <ion-accordion value="3" @click="navigationMenu('manageAppointMents')" toggle-icon="">
+                        <ion-item slot="header" color="light">
+                            <ion-icon :icon="listOutline" slot="start"></ion-icon>
+                            <ion-label class="header lft-drpm">Manage Appointments</ion-label>
+                        </ion-item>
+                    </ion-accordion>
+
+                    <ion-accordion value="4" @click="navigationMenu('stockManagement')" toggle-icon="">
+                        <ion-item slot="header" color="light">
+                            <ion-icon :icon="cubeOutline" slot="start"></ion-icon>
+                            <ion-label class="header lft-drpm">Inventory Management</ion-label>
+                        </ion-item>
+                    </ion-accordion>
+
+                    <ion-accordion value="5" @click="navigationMenu('OfflineRecords')" toggle-icon="">
+                        <ion-item slot="header" color="light">
+                            <ion-icon :icon="documentOutline" slot="start"></ion-icon>
+                            <ion-label class="header lft-drpm">Manage Offline Records</ion-label>
+                        </ion-item>
+                    </ion-accordion>
+
+                    <ion-accordion value="6" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
+                        <ion-item slot="header" color="light">
+                            <ion-icon :icon="peopleOutline" slot="start"></ion-icon>
+                            <ion-label class="header lft-drpm">De-Duplication</ion-label>
+                        </ion-item>
+                    </ion-accordion>
+
+                    <ion-accordion></ion-accordion>
                 </ion-accordion-group>
                 <ion-accordion value="6">
                     <ion-item slot="header" color="light">
@@ -169,6 +168,9 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
+                            <ion-item button @click="navigationMenu('locationsManagement')">
+                                <ion-label class="header">Location Management</ion-label>
+                            </ion-item>
                             <ion-item button @click="navigationMenu('users')">
                                 <ion-label class="header">User Management</ion-label>
                             </ion-item>
