@@ -55,8 +55,7 @@ export async function getOfflineRecords<T = any>(
         };
         sortBy?: keyof T;
         sortOrder?: "asc" | "desc";
-    } = {},
-    pagination = false
+    } = {}
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
     const { currentPage = 1, itemsPerPage = 0, whereClause, likeClause, inClause, sortBy, sortOrder = "asc" } = options;
 
@@ -136,12 +135,10 @@ export async function getOfflineRecords<T = any>(
                 const endIndex = startIndex + itemsPerPage;
                 // Apply pagination
                 const paginatedRecords = filteredRecords.slice(startIndex, endIndex);
-                if (pagination) {
-                    resolve({
-                        records: paginatedRecords,
-                        totalCount,
-                    });
-                }
+                resolve({
+                    records: paginatedRecords,
+                    totalCount,
+                });
             }
 
             resolve(filteredRecords);
