@@ -8,11 +8,24 @@
         <ion-content>
             <div class="container">
                 <h4 style="width: 100%; text-align: center; font-weight: 700">TA Management</h4>
-
+                <div style="display: flex; justify-content: space-between">
+                    <div style="width: 50%"><basic-form :contentData="districtInputField" @update:inputValue="setDistrict"></basic-form></div>
+                    <div style="margin-top: 25px">
+                        <DynamicButton
+                            style="height: 45px"
+                            name=" Add TA"
+                            size="small"
+                            iconSlot="start"
+                            :icon="icons.plusWhite"
+                            @click="createTAModal()"
+                        />
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <DataTable ref="dataTableRef" :options="options" class="display nowrap" width="100%">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>TA</th>
                                 <th>District</th>
                                 <th>Villages</th>
@@ -41,6 +54,9 @@ import HisDate from "@/utils/Date";
 import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
 import ManageVillageModal from "@/components/Modal/ManageVillageModal.vue";
+import DynamicButton from "@/components/DynamicButton.vue";
+import BasicForm from "@/components/BasicForm.vue";
+import { icons } from "@/utils/svg";
 
 // Store initialization
 const stockStore = useStockStore();
@@ -53,7 +69,32 @@ const isLoading = ref(false);
 const selectedButton = ref("all");
 const startDate = ref(HisDate.currentDate());
 const endDate = ref(HisDate.currentDate());
+const selectedDistrictId = ref("" as any);
+const districtInputField = ref([] as any);
+const formatTableData = async (records: any[]) => {
+    return Promise.all(
+        records.map(async (item: any) => {
+            const district: any = await getOfflineRecords("districts", {
+                whereClause: { district_id: item.district_id },
+            });
+            return {
+                ta_id: item.traditional_authority_id,
+                name: item.name,
+                district: district[0].name,
+                villages: `<button class="btn btn-sm btn-primary view-btn" data-id='${JSON.stringify(item)}'>View</button>`,
+                actions: `
+                    <button class="btn btn-sm btn-primary edit-btn" data-id='${JSON.stringify(item)}'>Edit</button>
+                    <button class="btn btn-sm btn-danger delete-btn" data-id='${JSON.stringify(item)}'>Delete</button>
+                `,
+            };
+        })
+    );
+};
 
+const reloadTableData = (reloadPagination: boolean = true) => {
+    const table = (dataTableRef.value as any).dt; // Access the DataTable instance
+    table.ajax.reload(null, reloadPagination); // Reload data and maintain the current pagination state
+};
 // DataTable options
 const options = ref({
     responsive: true,
@@ -69,26 +110,11 @@ const options = ref({
             let filter: any = {
                 currentPage: currentPage,
                 itemsPerPage: data.length,
-                likeClause: "",
+                likeClause: data.search?.value ? { name: "%" + data.search?.value + "%" } : "",
+                whereClause: selectedDistrictId.value ? { district_id: selectedDistrictId.value } : "",
             };
-            if (data.search?.value) {
-                filter.likeClause = { name: "%" + data.search?.value + "%" || "" };
-            }
             const response: any = await getOfflineRecords("TAs", filter);
-            const formattedData = await Promise.all(
-                response.records.map(async (item: any) => {
-                    const district: any = await getOfflineRecords("districts", { whereClause: { district_id: item.district_id } });
-                    return {
-                        name: item.name,
-                        district: district[0].name,
-                        villages: `<button class="btn btn-sm btn-primary view-btn" data-id='${JSON.stringify(item)}'>View</button>`,
-                        actions: `
-                            <button class="btn btn-sm btn-primary edit-btn" data-id='${JSON.stringify(item)}'>Edit</button>
-                            <button class="btn btn-sm btn-danger delete-btn" data-id='${JSON.stringify(item)}'>Delete</button>
-                        `,
-                    };
-                })
-            );
+            const formattedData = await formatTableData(response.records);
 
             callback({
                 draw: data.draw,
@@ -109,7 +135,7 @@ const options = ref({
             isLoading.value = false;
         }
     },
-    columns: [{ data: "name" }, { data: "district" }, { data: "villages" }, { data: "actions" }],
+    columns: [{ data: "ta_id" }, { data: "name" }, { data: "district" }, { data: "villages" }, { data: "actions" }],
     language: {
         processing: "Loading...",
         emptyTable: "No data available",
@@ -126,6 +152,11 @@ const options = ref({
 const handleEdit = async (data: any) => {
     openModal(JSON.parse(data));
 };
+const createTAModal = async () => {};
+const setDistrict = async (data: any) => {
+    selectedDistrictId.value = data?.value?.district_id;
+    reloadTableData();
+};
 
 const handleDelete = async (id: any) => {
     console.log(`Deleting item with id: ${id}`);
@@ -136,8 +167,8 @@ const openModal = async (taData: any) => {
     const data: any = await createModal(ManageVillageModal, { class: "fullScreenModal" }, true, { taData: taData });
 
     if (data === "dismiss") {
-        const table = (dataTableRef.value as any).dt;
-        table.ajax.reload();
+        // Instead of reloading the entire table, just update the current data
+        reloadTableData(false);
     }
 };
 
@@ -181,7 +212,35 @@ const setupEventHandlers = () => {
 };
 
 // Lifecycle hooks
-onMounted(() => {
+onMounted(async () => {
+    districtInputField.value = [
+        {
+            selectedData: [],
+            isFinishBtn: false,
+            data: {
+                rowData: [
+                    {
+                        colData: [
+                            {
+                                inputHeader: "Filter by districts",
+                                popOver: true,
+                                icon: icons.search,
+                                value: "",
+                                name: "filter_district",
+                                eventType: "input",
+                                alertsErrorMassage: "",
+                                isSingleSelect: true,
+                                trackBy: "district_id",
+                                multiSelectData: await getOfflineRecords("districts"),
+                                id: "",
+                                idName: "district_id",
+                            },
+                        ],
+                    },
+                ],
+            },
+        },
+    ];
     DataTable.use(DataTablesCore);
     nextTick(() => {
         setupEventHandlers();
