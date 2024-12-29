@@ -43,6 +43,13 @@
                         </ion-item>
                     </ion-accordion>
 
+                    <ion-accordion value="5" @click="navigationMenu('locationsManagement')" toggle-icon="">
+                        <ion-item slot="header" color="light">
+                            <ion-icon :icon="documentOutline" slot="start"></ion-icon>
+                            <ion-label class="header lft-drpm">Location Management</ion-label>
+                        </ion-item>
+                    </ion-accordion>
+
                     <ion-accordion value="6" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
                         <ion-item slot="header" color="light">
                             <ion-icon :icon="peopleOutline" slot="start"></ion-icon>
@@ -168,9 +175,7 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
-                            <ion-item button @click="navigationMenu('locationsManagement')">
-                                <ion-label class="header">Location Management</ion-label>
-                            </ion-item>
+
                             <ion-item button @click="navigationMenu('users')">
                                 <ion-label class="header">User Management</ion-label>
                             </ion-item>
