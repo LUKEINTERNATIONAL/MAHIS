@@ -4,10 +4,12 @@
             <ion-spinner name="bubbles"></ion-spinner>
             <div class="loading-text">Please wait...</div>
         </div>
-        <ion-content>
+        <ion-header style="display: flex; justify-content: space-between">
+            <ion-title class="modalTitle">Village Management</ion-title>
+            <ion-icon @click="dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="icons.cancel"></ion-icon>
+        </ion-header>
+        <ion-content style="--background: #fff">
             <div class="container">
-                <h4 style="width: 100%; text-align: center; font-weight: 700">Village Management</h4>
-
                 <div class="table-responsive">
                     <DataTable ref="dataTableRef" :options="options" class="display nowrap" width="100%">
                         <thead>
@@ -26,7 +28,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
-import { IonContent, IonPage } from "@ionic/vue";
+import { IonContent, IonPage, modalController } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
@@ -37,6 +39,7 @@ import { toastWarning } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
+import { icons } from "@/utils/svg";
 
 // Store initialization
 const stockStore = useStockStore();
@@ -124,7 +127,9 @@ const options = ref({
 const handleEdit = async (data: any) => {
     openModal(JSON.parse(data));
 };
-
+function dismiss() {
+    modalController.dismiss("dismiss");
+}
 const handleDelete = async (id: any) => {
     console.log(`Deleting item with id: ${id}`);
     // Implement delete logic here
