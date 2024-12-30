@@ -9,7 +9,9 @@
             <div class="container">
                 <h4 style="width: 100%; text-align: center; font-weight: 700">TA Management</h4>
                 <div style="display: flex; justify-content: space-between">
-                    <div style="width: 50%"><basic-form :contentData="districtInputField" @update:inputValue="setDistrict"></basic-form></div>
+                    <div style="width: 50%; max-width: 350px">
+                        <basic-form :contentData="districtInputField" @update:inputValue="setDistrict"></basic-form>
+                    </div>
                     <div style="margin-top: 25px">
                         <DynamicButton
                             style="height: 45px"
@@ -49,13 +51,14 @@ import DataTablesCore from "datatables.net";
 import DataTablesResponsive from "datatables.net-responsive";
 import { getOfflineRecords } from "@/services/offline_service";
 import { createModal } from "@/utils/Alerts";
-import { toastWarning } from "@/utils/Alerts";
+import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
 import ManageVillageModal from "@/components/Modal/ManageVillageModal.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import BasicForm from "@/components/BasicForm.vue";
+import { Service } from "@/services/service";
 import { icons } from "@/utils/svg";
 
 // Store initialization
@@ -77,11 +80,12 @@ const formatTableData = async (records: any[]) => {
             const district: any = await getOfflineRecords("districts", {
                 whereClause: { district_id: item.district_id },
             });
+            const response: any = await getOfflineRecords("villages", { whereClause: { traditional_authority_id: item.traditional_authority_id } });
             return {
                 ta_id: item.traditional_authority_id,
                 name: item.name,
                 district: district[0].name,
-                villages: `<button class="btn btn-sm btn-primary view-btn" data-id='${JSON.stringify(item)}'>View</button>`,
+                villages: `<button class="btn btn-sm btn-primary view-btn" data-id='${JSON.stringify(item)}'> View ${response.length}   </button>`,
                 actions: `
                     <button class="btn btn-sm btn-primary edit-btn" data-id='${JSON.stringify(item)}'>Edit</button>
                     <button class="btn btn-sm btn-danger delete-btn" data-id='${JSON.stringify(item)}'>Delete</button>
@@ -171,7 +175,17 @@ const openModal = async (taData: any) => {
         reloadTableData(false);
     }
 };
-
+const openDeletePopover = async (taData: any, e: any) => {
+    console.log("🚀 ~ openDeletePopover ~ taData:", taData);
+    const data = JSON.parse(taData);
+    const deleteConfirmed = await popoverConfirmation(`Do you want to delete TA ${data.name} ?`, e);
+    if (deleteConfirmed) {
+        deleteDiagnosis(data);
+    }
+};
+const deleteDiagnosis = async (taData: any) => {
+    Service.delete(`traditional_authorities/${taData.traditional_authority_id}`, { id: taData.traditional_authority_id });
+};
 // Watchers
 watch(
     () => stockStore.stock,
@@ -202,7 +216,7 @@ const setupEventHandlers = () => {
 
     table.on("click", ".delete-btn", (e: Event) => {
         const id = (e.target as HTMLElement).getAttribute("data-id");
-        if (id) handleDelete(id);
+        if (id) openDeletePopover(id, e);
     });
 
     table.on("click", ".view-btn", (e: Event) => {
