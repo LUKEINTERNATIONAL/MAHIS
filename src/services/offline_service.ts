@@ -158,7 +158,7 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
 }
 export async function saveOfflinePatientData(patientData: any) {
     const plainPatientData = JSON.parse(JSON.stringify(patientData));
-    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", data: plainPatientData });
+    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
     await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
     useWorkerStore().postWorkerData("SYNC_PATIENT_RECORD", { msg: "Done Syncing", data: plainPatientData });
 }
