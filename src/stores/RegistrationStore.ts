@@ -691,6 +691,34 @@ const initialCountry = [
 ] as any;
 const initialAddTA = [
     {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "District*",
+                            icon: icons.search,
+                            value: "",
+                            name: "current_district",
+                            setName: "currentLocation",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
+                            id: "",
+                            idName: "district_id",
+                            validationFunctionName: "required",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
         data: {
             rowData: [
                 {
@@ -729,6 +757,24 @@ const initialAddTA = [
     },
 ] as any;
 const initialAddVillage = [
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "TA*",
+                            value: "",
+                            name: "TA",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
     {
         data: {
             rowData: [
