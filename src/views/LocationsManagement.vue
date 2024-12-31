@@ -185,8 +185,13 @@ const openDeletePopover = async (taData: any, e: any) => {
 };
 const deleteDiagnosis = async (taData: any) => {
     const res = await Service.delete(`traditional_authorities/${taData.traditional_authority_id}`, { id: taData.traditional_authority_id });
-    if (res?.message == "Traditional Authority and associated villages successfully deleted")
+    if (res?.message == "Traditional Authority and associated villages successfully deleted") {
         await workerData.postData("DELETE_RECORD", { storeName: "TAs", whereClause: { traditional_authority_id: taData.traditional_authority_id } });
+        await workerData.postData("DELETE_RECORD", {
+            storeName: "villages",
+            whereClause: { traditional_authority_id: taData.traditional_authority_id },
+        });
+    }
     reloadTableData(false);
 };
 // Watchers
