@@ -10,6 +10,16 @@
         </ion-header>
         <ion-content style="--background: #fff">
             <div class="container">
+                <div style="margin-top: 25px">
+                    <DynamicButton
+                        style="height: 45px"
+                        name=" Add Village"
+                        size="small"
+                        iconSlot="start"
+                        :icon="icons.plusWhite"
+                        @click="addVillageModal()"
+                    />
+                </div>
                 <div class="table-responsive">
                     <DataTable ref="dataTableRef" :options="options" class="display nowrap" width="100%">
                         <thead>
@@ -40,6 +50,8 @@ import HisDate from "@/utils/Date";
 import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
 import { icons } from "@/utils/svg";
+import DynamicButton from "@/components/DynamicButton.vue";
+import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
 
 // Store initialization
 const stockStore = useStockStore();
@@ -134,7 +146,9 @@ const handleDelete = async (id: any) => {
     console.log(`Deleting item with id: ${id}`);
     // Implement delete logic here
 };
-
+const addVillageModal = () => {
+    createModal(AddVillage, { class: "otherVitalsModal" });
+};
 const openModal = async (clientData: any) => {
     // const data: any = await createModal(OfflineMoreDetailsModal, { class: "fullScreenModal" }, true, { clientData: clientData });
     // if (data === "dismiss") {
