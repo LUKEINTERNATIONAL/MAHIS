@@ -55,8 +55,7 @@ export async function getOfflineRecords<T = any>(
         };
         sortBy?: keyof T;
         sortOrder?: "asc" | "desc";
-    } = {},
-    pagination = false
+    } = {}
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
     const { currentPage = 1, itemsPerPage = 0, whereClause, likeClause, inClause, sortBy, sortOrder = "asc" } = options;
 
@@ -136,12 +135,10 @@ export async function getOfflineRecords<T = any>(
                 const endIndex = startIndex + itemsPerPage;
                 // Apply pagination
                 const paginatedRecords = filteredRecords.slice(startIndex, endIndex);
-                if (pagination) {
-                    resolve({
-                        records: paginatedRecords,
-                        totalCount,
-                    });
-                }
+                resolve({
+                    records: paginatedRecords,
+                    totalCount,
+                });
             }
 
             resolve(filteredRecords);
@@ -161,7 +158,7 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
 }
 export async function saveOfflinePatientData(patientData: any) {
     const plainPatientData = JSON.parse(JSON.stringify(patientData));
-    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", data: plainPatientData });
+    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
     await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
     useWorkerStore().postWorkerData("SYNC_PATIENT_RECORD", { msg: "Done Syncing", data: plainPatientData });
 }
