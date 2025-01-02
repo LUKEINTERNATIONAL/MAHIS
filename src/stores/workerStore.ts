@@ -5,6 +5,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess } from "@/utils/Alerts";
 import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
+import { buildPatientRecord } from "@/services/buildingPatientRecord";
 
 export const useWorkerStore = defineStore("worker", () => {
     const workerApi = ref<any>(null);
@@ -22,13 +23,17 @@ export const useWorkerStore = defineStore("worker", () => {
                 doneLoading.value = true;
                 await setRecord(newValue?.data?.payload);
             }
-
-            if (newValue?.data?.msg === "saved successfully") {
+            if (newValue?.data?.msg === "saved successfully" || newValue?.data?.msg === "Done Syncing") {
                 patientID.value = newValue?.data?.payload?.ID;
                 if (patientID.value) {
+                    if (newValue?.data?.msg === "Done Syncing") {
+                        route.value = "";
+                        toastSuccess("Syncing of records was successful");
+                    } else {
+                        toastSuccess("Saved on server successfully");
+                    }
                     workerData.postData("RESET");
-                    toastSuccess("Saved on server successfully");
-                    const offlinePatientData = await getOfflinePatientData();
+                    const offlinePatientData = await getOfflinePatientData(patientID.value);
                     await setRecord(offlinePatientData);
                 }
             }
@@ -60,11 +65,11 @@ export const useWorkerStore = defineStore("worker", () => {
             await setRecord(item);
         } else {
             patientID.value = getPatientIdentifier(item, 3);
-            const patientRecord: any = await getOfflinePatientData();
+            const patientRecord: any = await getOfflinePatientData(patientID.value);
             if (patientRecord) {
                 await setRecord(patientRecord);
             } else {
-                workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
+                await setRecord(await buildPatientRecord(item));
             }
         }
     }
@@ -78,10 +83,10 @@ export const useWorkerStore = defineStore("worker", () => {
             return "";
         }
     }
-    async function getOfflinePatientData() {
-        if (patientID.value) {
+    async function getOfflinePatientData(patientID: any) {
+        if (patientID) {
             const { getOfflineRecords } = await import("@/services/offline_service");
-            return await getOfflineRecords("patientRecords", { whereClause: { ID: await patientID.value } }).then((data: any) => data?.[0]);
+            return await getOfflineRecords("patientRecords", { whereClause: { ID: await patientID } }).then((data: any) => data?.[0]);
         }
         return null;
     }
@@ -104,5 +109,6 @@ export const useWorkerStore = defineStore("worker", () => {
         postWorkerData,
         setRouter,
         setPatientRecord,
+        getOfflinePatientData,
     };
 });

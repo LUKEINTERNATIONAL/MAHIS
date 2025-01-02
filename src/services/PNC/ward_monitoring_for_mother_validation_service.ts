@@ -6,7 +6,7 @@ export function validateField(data: any, fieldName: string, value: any) {
         "Systolic blood pressure": () => MultValidations(fieldName, value),
         "Diastolic blood pressure": () => MultValidations(fieldName, value),
         Pulse: () => MultValidations(fieldName, value),
-        Temp: () => MultValidations(fieldName, value),
+        Temperature: () => MultValidations(fieldName, value),
         "Respiratory rate": () => MultValidations(fieldName, value),
     };
     const isValid = validationRules[fieldName]?.() == null;
@@ -69,7 +69,7 @@ function MultValidations(fieldName: string, value: any): null | any {
         if (minMaxError !== null) {
             return minMaxError;
         }
-    } else if (fieldName === "Temp") {
+    } else if (fieldName === "Temperature") {
         const requiredError: any | null = Validation.required(value);
         if (requiredError !== null) {
             return requiredError;

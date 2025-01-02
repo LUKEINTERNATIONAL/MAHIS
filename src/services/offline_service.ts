@@ -1,5 +1,6 @@
 import workerData from "@/activate_worker";
 import { toRaw } from "vue";
+import { useWorkerStore } from "@/stores/workerStore";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
@@ -46,12 +47,17 @@ export async function getOfflineRecords<T = any>(
         currentPage?: number;
         itemsPerPage?: number;
         whereClause?: Partial<T>;
+        likeClause?: {
+            [K in keyof Partial<T>]?: string;
+        };
+        inClause?: {
+            [K in keyof Partial<T>]?: any[];
+        };
         sortBy?: keyof T;
         sortOrder?: "asc" | "desc";
-    } = {},
-    pagination = false
+    } = {}
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
-    const { currentPage = 1, itemsPerPage = 0, whereClause, sortBy, sortOrder = "asc" } = options;
+    const { currentPage = 1, itemsPerPage = 0, whereClause, likeClause, inClause, sortBy, sortOrder = "asc" } = options;
 
     const db = await openDatabase(storeName);
     return new Promise((resolve, reject) => {
@@ -63,9 +69,51 @@ export async function getOfflineRecords<T = any>(
             let allRecords = (event.target as IDBRequest).result as T[];
 
             // Apply where clause filtering if provided
-            const filteredRecords = whereClause
-                ? allRecords.filter((record) => Object.entries(whereClause).every(([key, value]) => record[key as keyof T] === value))
+            let filteredRecords = whereClause
+                ? allRecords.filter((record) =>
+                      Object.entries(whereClause).every(([path, value]) => {
+                          const recordValue = path.includes(".")
+                              ? path.split(".").reduce((obj: any, key) => obj?.[key], record)
+                              : (record as any)[path];
+
+                          return typeof value === "string" ? String(recordValue).toLowerCase() === value.toLowerCase() : recordValue === value;
+                      })
+                  )
                 : allRecords;
+
+            // Apply LIKE clause filtering if provided
+            if (likeClause) {
+                filteredRecords = filteredRecords.filter((record) =>
+                    Object.entries(likeClause).every(([path, pattern]) => {
+                        if (typeof pattern !== "string") return false;
+
+                        // Handle both nested and non-nested paths
+                        const value = path.includes(".") ? path.split(".").reduce((obj: any, key) => obj?.[key], record) : (record as any)[path];
+
+                        if (!value) return false;
+
+                        const recordValue = String(value).toLowerCase();
+                        const regexPattern = pattern.toLowerCase().replace(/%/g, ".*").replace(/_/g, ".");
+                        const regex = new RegExp(`^${regexPattern}$`);
+                        return regex.test(recordValue);
+                    })
+                );
+            }
+
+            // Apply IN clause filtering if provided
+            if (inClause) {
+                filteredRecords = filteredRecords.filter((record) =>
+                    Object.entries(inClause).every(([path, values]: any) => {
+                        const recordValue = path.includes(".")
+                            ? path.split(".").reduce((obj: any, key: any) => obj?.[key], record)
+                            : (record as any)[path];
+
+                        return values.some((value: any) =>
+                            typeof value === "string" ? String(recordValue).toLowerCase() === value.toLowerCase() : recordValue === value
+                        );
+                    })
+                );
+            }
 
             // Sort records if sortBy is provided
             if (sortBy) {
@@ -87,12 +135,10 @@ export async function getOfflineRecords<T = any>(
                 const endIndex = startIndex + itemsPerPage;
                 // Apply pagination
                 const paginatedRecords = filteredRecords.slice(startIndex, endIndex);
-                if (pagination) {
-                    resolve({
-                        records: paginatedRecords,
-                        totalCount,
-                    });
-                }
+                resolve({
+                    records: paginatedRecords,
+                    totalCount,
+                });
             }
 
             resolve(filteredRecords);
@@ -112,7 +158,7 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
 }
 export async function saveOfflinePatientData(patientData: any) {
     const plainPatientData = JSON.parse(JSON.stringify(patientData));
-    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", data: plainPatientData });
+    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
     await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
-    await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
+    useWorkerStore().postWorkerData("SYNC_PATIENT_RECORD", { msg: "Done Syncing", data: plainPatientData });
 }

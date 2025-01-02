@@ -205,10 +205,10 @@ export default defineComponent({
             const weight = getFieldValue(this.vitals, "Weight", "value");
             const systolic = getFieldValue(this.vitals, "Systolic", "value");
             const diastolic = getFieldValue(this.vitals, "Diastolic", "value");
-            const temp = getFieldValue(this.vitals, "Temp", "value");
+            const temp = getFieldValue(this.vitals, "Temperature", "value");
             const pulse = getFieldValue(this.vitals, "Pulse", "value");
             const respiratoryRate = getFieldValue(this.vitals, "Respiratory rate", "value");
-            const SP02 = getFieldValue(this.vitals, "SP02", "value");
+            const SAO2 = getFieldValue(this.vitals, "SAO2", "value");
 
             await this.setBMI(height, weight);
             await this.updateBP(systolic, diastolic);
@@ -222,8 +222,8 @@ export default defineComponent({
             const respiratoryStatus = this.getRespiratoryRateStatus(respiratoryRate);
             this.updateRate("respiratory", respiratoryRate, "BMP", respiratoryStatus, 6);
 
-            const oxygenStatus = this.getOxygenSaturationStatus(SP02);
-            this.updateRate("oxygen", SP02, "%", oxygenStatus, 6);
+            const oxygenStatus = this.getOxygenSaturationStatus(SAO2);
+            this.updateRate("oxygen", SAO2, "%", oxygenStatus, 6);
         },
     },
 });

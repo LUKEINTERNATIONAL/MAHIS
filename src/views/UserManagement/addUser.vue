@@ -223,8 +223,6 @@
         </ion-col>
     </ion-row>
 
-
-
     <ion-row>
         <ion-col size="12" size-md="6">
             <ion-row>

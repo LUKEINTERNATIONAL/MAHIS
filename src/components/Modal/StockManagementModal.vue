@@ -474,15 +474,11 @@ export default defineComponent({
             this.isLoading = true;
             await workerData.postData("SYNC_STOCK_RECORD");
             try {
-                this.reportData = await getOfflineRecords(
-                    "stock",
-                    {
-                        whereClause: { drug_legacy_name: this.data.drug_legacy_name },
-                        currentPage: this.currentPage,
-                        itemsPerPage: 4,
-                    },
-                    true
-                );
+                this.reportData = await getOfflineRecords("stock", {
+                    whereClause: { drug_legacy_name: this.data.drug_legacy_name },
+                    currentPage: this.currentPage,
+                    itemsPerPage: 4,
+                });
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {

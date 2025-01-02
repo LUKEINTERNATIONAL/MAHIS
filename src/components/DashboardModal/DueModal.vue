@@ -148,6 +148,7 @@ import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 export default defineComponent({
     components: {
         IonContent,
@@ -216,6 +217,7 @@ export default defineComponent({
     computed: {
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     async mounted() {
         this.isLoading = true;
@@ -422,7 +424,7 @@ export default defineComponent({
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
-            saveVaccineAdministeredDrugs();
+            saveVaccineAdministeredDrugs(this.patient);
             this.dismiss();
             store.setTempScannedBatchNumber(null);
         },
