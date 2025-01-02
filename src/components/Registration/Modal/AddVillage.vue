@@ -108,11 +108,7 @@ export default defineComponent({
         async saveData() {
             const villageValue = getFieldValue(this.addVillage, "Village", "value");
             if (Validation.isNames(villageValue) == null) {
-                const address = await LocationService.createAddress(
-                    this.validationData.address_type,
-                    this.validationData.addresses_name,
-                    this.validationData.parent_location
-                );
+                const address = await LocationService.createAddress({});
                 if (address) {
                     toastSuccess(`${this.validationData.address_type} added successfully`);
                     return true;
