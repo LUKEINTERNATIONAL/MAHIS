@@ -55,6 +55,7 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { LocationService } from "@/services/location_service";
 import Validation from "@/validations/StandardValidations";
 import { isPlainObject, isEmpty } from "lodash";
+import workerData from "@/activate_worker";
 
 export default defineComponent({
     name: "AddTA",
@@ -110,6 +111,12 @@ export default defineComponent({
                     this.validationData.parent_location
                 );
                 if (address) {
+                    if (this.validationData.address_type == "Village") {
+                        await workerData.postData("ADD_OBJECT_STORE", { storeName: "villages", data: address });
+                    }
+                    if (this.validationData.address_type == "TA") {
+                        await workerData.postData("ADD_OBJECT_STORE", { storeName: "TAs", data: address });
+                    }
                     toastSuccess(`${this.validationData.address_type} added successfully`);
                     return true;
                 } else {
