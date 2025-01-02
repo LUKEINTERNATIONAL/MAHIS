@@ -19,7 +19,7 @@
                             size="small"
                             iconSlot="start"
                             :icon="icons.plusWhite"
-                            @click="createTAModal()"
+                            @click="addTAModal()"
                         />
                     </div>
                 </div>
@@ -61,6 +61,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import { icons } from "@/utils/svg";
 import workerData from "@/activate_worker";
+import AddTA from "@/components/Registration/Modal/AddTA.vue";
 
 // Store initialization
 const stockStore = useStockStore();
@@ -157,7 +158,6 @@ const options = ref({
 const handleEdit = async (data: any) => {
     openModal(JSON.parse(data));
 };
-const createTAModal = async () => {};
 const setDistrict = async (data: any) => {
     selectedDistrictId.value = data?.value?.district_id;
     reloadTableData();
@@ -192,6 +192,10 @@ const deleteDiagnosis = async (taData: any) => {
             whereClause: { traditional_authority_id: taData.traditional_authority_id },
         });
     }
+    reloadTableData(false);
+};
+const addTAModal = async () => {
+    await createModal(AddTA, { class: "otherVitalsModal" });
     reloadTableData(false);
 };
 // Watchers
