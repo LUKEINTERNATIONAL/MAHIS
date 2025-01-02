@@ -423,15 +423,6 @@ const initialHomeLocation = [
                             validationFunctionName: "required",
                         },
                     ],
-                    btns: [
-                        {
-                            name: "TA",
-                            fill: "clear",
-                            btn_col_size: 2.1,
-                            showName: false,
-                            icon: icons.plus,
-                        },
-                    ],
                 },
             ],
         },
@@ -456,15 +447,6 @@ const initialHomeLocation = [
                             idName: "traditional_authority_id",
                             displayNone: true,
                             validationFunctionName: "required",
-                        },
-                    ],
-                    btns: [
-                        {
-                            name: "Village",
-                            fill: "clear",
-                            btn_col_size: 2.1,
-                            showName: false,
-                            icon: icons.plus,
                         },
                     ],
                 },
@@ -524,15 +506,6 @@ const initialCurrentLocation = [
                             validationFunctionName: "required",
                         },
                     ],
-                    btns: [
-                        {
-                            name: "TA",
-                            fill: "clear",
-                            btn_col_size: 2.1,
-                            showName: false,
-                            icon: icons.plus,
-                        },
-                    ],
                 },
             ],
         },
@@ -558,15 +531,6 @@ const initialCurrentLocation = [
                             idName: "village_id",
                             displayNone: true,
                             validationFunctionName: "required",
-                        },
-                    ],
-                    btns: [
-                        {
-                            name: "Village",
-                            fill: "clear",
-                            btn_col_size: 2.1,
-                            showName: false,
-                            icon: icons.plus,
                         },
                     ],
                 },
