@@ -62,6 +62,7 @@ import { Service } from "@/services/service";
 import { icons } from "@/utils/svg";
 import workerData from "@/activate_worker";
 import AddTA from "@/components/Registration/Modal/AddTA.vue";
+import UpdateTA from "@/components/Registration/Modal/UpdateTA.vue";
 
 // Store initialization
 const stockStore = useStockStore();
@@ -155,35 +156,26 @@ const options = ref({
 });
 
 // Methods
-const handleEdit = async (data: any) => {
-    openModal(JSON.parse(data));
+const viewVillagesModal = async (taData: any) => {
+    const data: any = await createModal(ManageVillageModal, { class: "fullScreenModal" }, true, { taData: taData });
+    if (data === "dismiss") {
+        // Instead of reloading the entire table, just update the current data
+        reloadTableData(false);
+    }
 };
 const setDistrict = async (data: any) => {
     selectedDistrictId.value = data?.value?.district_id;
     reloadTableData();
 };
 
-const handleDelete = async (id: any) => {
-    console.log(`Deleting item with id: ${id}`);
-    // Implement delete logic here
-};
-
-const openModal = async (taData: any) => {
-    const data: any = await createModal(ManageVillageModal, { class: "fullScreenModal" }, true, { taData: taData });
-
-    if (data === "dismiss") {
-        // Instead of reloading the entire table, just update the current data
-        reloadTableData(false);
-    }
-};
 const openDeletePopover = async (taData: any, e: any) => {
     const data = JSON.parse(taData);
     const deleteConfirmed = await popoverConfirmation(`Do you want to delete TA ${data.name} ?`, e);
     if (deleteConfirmed) {
-        deleteDiagnosis(data);
+        deleteTA(data);
     }
 };
-const deleteDiagnosis = async (taData: any) => {
+const deleteTA = async (taData: any) => {
     const res = await Service.delete(`traditional_authorities/${taData.traditional_authority_id}`, { id: taData.traditional_authority_id });
     if (res?.message == "Traditional Authority and associated villages successfully deleted") {
         await workerData.postData("DELETE_RECORD", { storeName: "TAs", whereClause: { traditional_authority_id: taData.traditional_authority_id } });
@@ -196,6 +188,10 @@ const deleteDiagnosis = async (taData: any) => {
 };
 const addTAModal = async () => {
     await createModal(AddTA, { class: "otherVitalsModal" });
+    reloadTableData(false);
+};
+const updateTAModal = async (taData: any) => {
+    await createModal(UpdateTA, { class: "otherVitalsModal" }, true, { taData: taData });
     reloadTableData(false);
 };
 // Watchers
@@ -222,8 +218,8 @@ const setupEventHandlers = () => {
     const table = (dataTableRef.value as any).dt;
 
     table.on("click", ".edit-btn", (e: Event) => {
-        const id = (e.target as HTMLElement).getAttribute("data-id");
-        if (id) handleEdit(id);
+        const data = (e.target as HTMLElement).getAttribute("data-id");
+        if (data) updateTAModal(JSON.parse(data));
     });
 
     table.on("click", ".delete-btn", (e: Event) => {
@@ -232,8 +228,8 @@ const setupEventHandlers = () => {
     });
 
     table.on("click", ".view-btn", (e: Event) => {
-        const id = (e.target as HTMLElement).getAttribute("data-id");
-        if (id) handleEdit(id);
+        const data = (e.target as HTMLElement).getAttribute("data-id");
+        if (data) viewVillagesModal(JSON.parse(data));
     });
 };
 
