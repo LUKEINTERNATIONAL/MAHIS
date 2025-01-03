@@ -654,45 +654,6 @@ const initialCountry = [
     },
 ] as any;
 
-const initialAddVillage = [
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "TA*",
-                            value: "",
-                            name: "TA",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Village*",
-                            value: "",
-                            name: "Village",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            validate: false,
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-] as any;
 const initialGuardianInformation = [
     {
         selectedData: {},
@@ -830,7 +791,6 @@ export const useRegistrationStore = defineStore("registrationStore", {
         currentLocation: [...initialCurrentLocation],
         country: [...initialCountry],
         guardianInformation: [...initialGuardianInformation],
-        addVillage: [...initialAddVillage],
     }),
     actions: {
         setPersonalInformation(data: any) {
