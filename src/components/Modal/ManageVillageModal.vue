@@ -146,8 +146,14 @@ const handleDelete = async (id: any) => {
     console.log(`Deleting item with id: ${id}`);
     // Implement delete logic here
 };
-const addVillageModal = () => {
-    createModal(AddVillage, { class: "otherVitalsModal" });
+const reloadTableData = (reloadPagination: boolean = true) => {
+    const table = (dataTableRef.value as any).dt; // Access the DataTable instance
+    table.ajax.reload(null, reloadPagination); // Reload data and maintain the current pagination state
+};
+const addVillageModal = async () => {
+    const ta_data = JSON.parse(JSON.stringify(props.taData));
+    await createModal(AddVillage, { class: "otherVitalsModal" }, true, { taData: ta_data });
+    reloadTableData(false);
 };
 const openModal = async (clientData: any) => {
     // const data: any = await createModal(OfflineMoreDetailsModal, { class: "fullScreenModal" }, true, { clientData: clientData });
