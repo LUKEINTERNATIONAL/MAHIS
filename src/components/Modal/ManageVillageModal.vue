@@ -45,13 +45,15 @@ import DataTablesCore from "datatables.net";
 import DataTablesResponsive from "datatables.net-responsive";
 import { getOfflineRecords } from "@/services/offline_service";
 import { createModal } from "@/utils/Alerts";
-import { toastWarning } from "@/utils/Alerts";
+import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
 import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
+import workerData from "@/activate_worker";
+import { Service } from "@/services/service";
 
 // Store initialization
 const stockStore = useStockStore();
@@ -155,6 +157,19 @@ const addVillageModal = async () => {
     await createModal(AddVillage, { class: "otherVitalsModal" }, true, { taData: ta_data });
     reloadTableData(false);
 };
+const openDeletePopover = async (villageData: any, e: any) => {
+    const deleteConfirmed = await popoverConfirmation(`Do you want to delete village ${villageData.name} ?`, e);
+    if (deleteConfirmed) {
+        deleteTA(villageData);
+    }
+};
+const deleteTA = async (villageData: any) => {
+    const res = await Service.delete(`villages/${villageData.village_id}`, { id: villageData.village_id });
+    if (res?.message == "Village successfully deleted") {
+        await workerData.postData("DELETE_RECORD", { storeName: "villages", whereClause: { village_id: villageData.village_id } });
+    }
+    reloadTableData(false);
+};
 const openModal = async (clientData: any) => {
     // const data: any = await createModal(OfflineMoreDetailsModal, { class: "fullScreenModal" }, true, { clientData: clientData });
     // if (data === "dismiss") {
@@ -187,18 +202,13 @@ const setupEventHandlers = () => {
     const table = (dataTableRef.value as any).dt;
 
     table.on("click", ".edit-btn", (e: Event) => {
-        const id = (e.target as HTMLElement).getAttribute("data-id");
-        if (id) handleEdit(id);
+        const data = (e.target as HTMLElement).getAttribute("data-id");
+        if (data) handleEdit(JSON.parse(data));
     });
 
     table.on("click", ".delete-btn", (e: Event) => {
-        const id = (e.target as HTMLElement).getAttribute("data-id");
-        if (id) handleDelete(id);
-    });
-
-    table.on("click", ".view-btn", (e: Event) => {
-        const id = (e.target as HTMLElement).getAttribute("data-id");
-        if (id) handleEdit(id);
+        const data = (e.target as HTMLElement).getAttribute("data-id");
+        if (data) openDeletePopover(JSON.parse(data), e);
     });
 };
 
