@@ -89,8 +89,8 @@ export default defineComponent({
         Pulse() {
             return getFieldValue(this.vitals, "Pulse", "value");
         },
-        Temp() {
-            return getFieldValue(this.vitals, "Temp", "value");
+        Temperature() {
+            return getFieldValue(this.vitals, "Temperature", "value");
         },
         "Respiratory rate"() {
             return getFieldValue(this.vitals, "Respiratory rate", "value");

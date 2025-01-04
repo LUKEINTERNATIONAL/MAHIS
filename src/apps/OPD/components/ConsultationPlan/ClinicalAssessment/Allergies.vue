@@ -80,7 +80,7 @@ const list_picker_prperties = [
 ];
 const addingCustomAllergy = ref(false);
 onMounted(async () => {
-    //
+  // allergyStore.clearSelectedMedicalAllergiesList();
 });
 
 watch(
@@ -89,6 +89,9 @@ watch(
         allergyStore.clearSelectedMedicalAllergiesList();
     }
 );
+function resetAllergies() {
+  allergyStore.clearSelectedMedicalAllergiesList();
+}
 
 function listUpdated1(data: any) {
     data.forEach((item: any) => {

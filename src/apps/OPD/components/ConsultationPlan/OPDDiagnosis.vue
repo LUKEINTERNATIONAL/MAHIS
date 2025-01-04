@@ -3,8 +3,11 @@
     <DashBox :status="no_item" :content="'No Diagnosis added'" />
 
     <span v-if="display_item">
-      <div style="font-weight: 700; margin-left:2.5%">Diagnosis list</div>
+<!--      <div style="font-weight: 700; margin-left:2.5%">Diagnosis list</div>-->
             <list :listData="OPDdiagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
+            <div v-if="primaryDiagnosisExists" style="color: red; margin-top: 10px;">
+  In order to update the diagnosis list, please remove/delete the primary diagnosis only and then re-add or change it along with the secondary and differential diagnoses.
+  </div>
     </span>
     <ion-row v-if="search_item">
       <basic-form
@@ -12,6 +15,7 @@
           :contentData="OPDdiagnosis"
           @update:selected="handleInputData"
           @update:inputValue="handleInputData"
+          :disabled="primaryDiagnosisExists"
           @clicked:button="addNewRow"
           @search-change="getDiagnosis"
       >
@@ -100,6 +104,9 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
+    primaryDiagnosisExists() {
+      return this.OPDdiagnosis[0].selectedData.some((diagnosis: any) => diagnosis.data.concept_id === 6542);
+    },
     primaryInputField() {
       return this.OPDdiagnosis[0].data.rowData[0].colData;
     },
@@ -344,6 +351,7 @@ export default defineComponent({
       } else if (!this.search_item) {
         this.no_item = true;
       }
+      this.addItemButton = !this.primaryDiagnosisExists;
     },
   },
 });

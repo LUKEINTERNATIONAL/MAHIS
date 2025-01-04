@@ -54,12 +54,13 @@ import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/a
 import { createModal } from "@/utils/Alerts";
 import { mapState } from "pinia";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
-import { getVaccinesSchedule, checkIfLastVaccineAdministered } from "@/apps/Immunization/services/vaccines_service";
+import { checkIfLastVaccineAdministered } from "@/apps/Immunization/services/vaccines_service";
 import { icons } from "@/utils/svg";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 import { concat } from "lodash";
 import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service";
 import HisDate from "@/utils/Date";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     name: "xxxComponent",
@@ -89,12 +90,19 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useAdministerVaccineStore, ["vaccineReload"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     async mounted() {
         await this.loadVaccineSchedule();
     },
     watch: {
         vaccineReload: {
+            async handler() {
+                await this.loadVaccineSchedule();
+            },
+            deep: true,
+        },
+        patient: {
             async handler() {
                 await this.loadVaccineSchedule();
             },
@@ -111,8 +119,8 @@ export default defineComponent({
             createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
         },
         async loadVaccineSchedule() {
-            this.setAppointmentDate();
-            const data__ = await getVaccinesSchedule();
+            await this.setAppointmentDate();
+            const data__ = this.patient.vaccineSchedule;
             const vaccineScheduleStore = useAdministerVaccineStore();
 
             vaccineScheduleStore.setVaccineSchedule(data__);

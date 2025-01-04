@@ -3,7 +3,7 @@ import { ConceptService } from '@/services/concept_service';
 
 export class ConsciousnessService extends AppEncounterService {
     constructor(patientID: number, providerID: number) {
-        super(patientID, 122, providerID)
+        super(patientID, 141, providerID)
     }
 
     //   static async getComplaintsList(complaintType: string, filter = '') {

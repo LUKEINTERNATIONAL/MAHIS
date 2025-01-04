@@ -122,5 +122,5 @@ export const usePresentingComplaintsStore = defineStore("PresentingComplaintsSto
             return [...data];
         },
     },
-    // persist: true,
+    persist: true,
 });

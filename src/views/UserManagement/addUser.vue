@@ -82,18 +82,10 @@
 
             <ion-row>
                 <ion-col>
-                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                    >Phone<span style="color: #b42318">*</span></ion-label
-                >
-                    <BasicInputField
-                        :placeholder="input_properties[3].placeHolder"
-                        :icon="phonePortraitOutline"
-                        :inputValue="phone_number"
-                        @update:inputValue="input_properties[3].dataHandler"
-                    />
+                    <userPhoneInput @validateInput="userPhoneChange"/>
                     <div>
-                        <ion-label v-if="input_properties[3].show_error.value" class="error-label">
-                            {{ input_properties[3].error_message }}
+                        <ion-label v-if="phone_input_properties[0].show_error.value" class="error-label">
+                            {{ phone_input_properties[0].error_message }}
                         </ion-label>
                     </div>
                 </ion-col>
@@ -231,8 +223,6 @@
         </ion-col>
     </ion-row>
 
-
-
     <ion-row>
         <ion-col size="12" size-md="6">
             <ion-row>
@@ -359,6 +349,7 @@ import VueMultiselect from "vue-multiselect"
 import { LocationService } from "@/services/location_service"
 import { isEmpty } from "lodash"
 import { useUserStore } from "@/stores/userStore";
+import userPhoneInput from "./userPhoneInput.vue"
 import {
     addOutline,
     pencilOutline,
@@ -560,6 +551,22 @@ function findAndRemoveRoleSSU(data: any[]): any[] {
     return data;
 }
 
+async function userPhoneChange(data: any) {
+    if (data.is_valid == false) {
+        phone_input_properties[0].show_error.value = true
+        phone_number.value = data.phone
+        phone_input_properties[0].dataValue.value = data.phone
+        phone_input_properties[0].is_phone_valid.value = false
+    }
+
+    if (data.is_valid == true) {
+        phone_input_properties[0].show_error.value = false
+        phone_number.value = data.phone
+        phone_input_properties[0].dataValue.value = data.phone
+        phone_input_properties[0].is_phone_valid.value = true
+    }
+}
+
 async function FindLocation(text: any) {
     let srch_text
     if (isEmpty(text) == true) {
@@ -579,10 +586,12 @@ async function trigerSaveFn() {
     const _validateDistricts = validateDistricts()
     const _validateTAz = validateTAz()
     const _validateVillages = validateVillages()
+    const _validate_user_phone = validateUserPhone()
 
     if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true 
         && _isRoleSelected_ == true && _isProgramSelected_ == true && _validateLocation == true
-        && _validateDistricts == true && _validateTAz == true && _validateVillages == true) {
+        && _validateDistricts == true && _validateTAz == true && _validateVillages == true
+        && _validate_user_phone == true) {
         const data1 = getFieldsValuesObj(input_properties)
         const payload = {
             family_name: data1.last_name,
@@ -594,8 +603,8 @@ async function trigerSaveFn() {
             villages: selectedVillageIds,
             roles: selectedRoleNames,
             gender: getGenderCode(isSSelection_properties[0].dataValue.value),
-            // location_id: selected_location.value.location_id,
             location_id: selected_location.value.code,
+            phone: phone_input_properties[0].dataValue.value
         }
 
         try {
@@ -607,7 +616,7 @@ async function trigerSaveFn() {
         } catch (error) {
             //console.error(error)
             saveEvent('')
-            toastDanger(error as string, 8000)
+            toastDanger(error as string, 2000)
         }
     }
 }
@@ -817,7 +826,7 @@ const input_properties = [
         dataHandler: inputUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
+        error_message: 'Input required, Only letters allowed',
     },
     {
         placeHolder: 'firstname',
@@ -825,7 +834,7 @@ const input_properties = [
         dataHandler: inputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
+        error_message: 'Input required, Only letters allowed',
     },
     {
         placeHolder: 'last name',
@@ -833,15 +842,29 @@ const input_properties = [
         dataHandler: inputUpDated_fn3,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
+        error_message: 'Input required, Only letters allowed',
     },
+]
+
+function validateUserPhone() {
+    if (phone_input_properties[0].is_phone_valid.value == false) {
+        phone_input_properties[0].show_error.value = true
+        return false
+    }
+    if (phone_input_properties[0].is_phone_valid.value == true) {
+        phone_input_properties[0].show_error.value = false
+        return true
+    }
+}
+
+const phone_input_properties = [
     {
         placeHolder: 'phone number',
         property_name: 'phone_number',
-        dataHandler: inputUpDated_fn4,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'Input required, valid input',
+        error_message: 'Input required, input is invalid',
+        is_phone_valid: ref(false)
     },
 ]
 
@@ -957,7 +980,7 @@ async function validateUsernameIfExists(username: string) {
                 input_properties[0].error_message = "Username already exists";
             } else if (does_username_exist.exists == false) {
                 input_properties[0].show_error.value = false;
-                input_properties[0].error_message = "Input required, Only letters are allowed";
+                input_properties[0].error_message = "Input required, Only letters allowed";
             }
         }
     } catch (error) {
@@ -978,10 +1001,7 @@ function inputUpDated_fn3(event: any) {
     const input = event.target.value
     input_properties[2].dataValue.value = input
 }
-function inputUpDated_fn4(event: any) {
-    const input = event.target.value
-    input_properties[3].dataValue.value = input
-}
+
 function passwordInputUpDated_fn1(event: any) {
     const input = event.target.value
     password_input_properties[0].dataValue.value = input

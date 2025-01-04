@@ -12,82 +12,51 @@ import { EIRreportsStore } from "@/apps/Immunization/stores/EIRreportsStore";
 import { useUserStore } from "@/stores/userStore";
 import platform, { FileExportType } from "@/composables/usePlatform";
 import { exportMobile } from "@/utils/Export";
-import db from "@/db";
-import workerData from "@/activate_worker";
-import ApiClient, { ApiBusEvents } from "@/services/api_client";
+import { saveOfflinePatientData } from "@/services/offline_service";
 import { getOfflineRecords } from "@/services/offline_service";
 
-export async function getVaccinesSchedule(patientID = null) {
-    const patient = new PatientService();
-    const id = patientID !== null ? patientID : patient.getID();
-
-    try {
-        const apiStatus: any = await ApiClient.healthCheck();
-
-        // Check if apiStatus is defined and has the 'ok' property
-        if (apiStatus && apiStatus.ok) {
-            const data = await Service.getJson("eir/schedule", { patient_id: id });
-            return data;
-        } else {
-            const data = await getOfflineVaccineSchedule(patient);
-            return data;
-        }
-    } catch (error) {
-        console.error("Error during health check:", error);
-    }
-}
-
-export async function saveVaccineAdministeredDrugs() {
+export async function saveVaccineAdministeredDrugs(patient: any) {
     const store = useAdministerVaccineStore();
-    const userId: any = Service.getUserID();
-    const programId: any = Service.getProgramID();
-    const patient = new PatientService();
-    const drugs = [] as any;
     if (!isEmpty(store.getAdministeredVaccines())) {
-        try {
-            const drugOrders = mapToOrders();
-            const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), "" as any);
-            const encounter = await prescriptionService.createEncounter();
-            if (!encounter) return toastWarning("Unable to create immunization encounter");
-            const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId);
-            await createObForEachDrugAdminstred(encounter);
-            if (!drugOrder) return toastWarning("Unable register vaccine!");
-            toastSuccess("Vaccine registred successfully");
-            store.setVaccineReload(!store.getVaccineReload());
-            if (drugOrder) {
-                store.setLastVaccineAdminstredOnschedule(drugOrder);
-            }
-        } catch (error: any) {
-            if (validateBatchString(error.errors) == true) {
-                toastWarning(error.errors);
-            }
+        const drugOrders = mapToOrders();
+        const obs = await createObForEachDrugAdminstred();
+        let vaccines = patient?.vaccineAdministration;
+        vaccines.orders = [...vaccines?.orders, ...drugOrders];
+        vaccines.voided = vaccines.voided.filter((drug: any) => drug.drug_name !== drugOrders[0]?.drug_name);
+        vaccines.obs = [...vaccines?.obs, ...obs];
+        store.setVaccineReload(!store.getVaccineReload());
+        if (vaccines.orders.length > 0) {
+            store.setLastVaccineAdminstredOnschedule(vaccines.orders);
         }
+        updateVaccineStatus(patient, drugOrders[0]?.drug_name, "administered");
+        await saveOfflinePatientData(patient);
+        toastSuccess("Saved successful");
     }
 }
-
-async function getOfflineVaccineSchedule(patient: any) {
-    const genericVaccineSchedule = await getGenericVaccineSchedule(patient.getGender());
-
-    const birthdateString = patient.getBirthdate();
-    const birthdate = new Date(birthdateString);
-
-    const vaccineSchudule = await updateMilestoneStatus(birthdate, genericVaccineSchedule);
-    return vaccineSchudule;
+function updateVaccineStatus(patient: any, drugName: any, newStatus: any) {
+    patient.vaccineSchedule.vaccine_schedule.forEach((visit: any) => {
+        visit.antigens.forEach((antigen: any) => {
+            if (antigen.drug_name === drugName) {
+                antigen.status = newStatus;
+            }
+        });
+    });
+}
+export async function getOfflineVaccineSchedule(gender: string, birthdate: string) {
+    const genericVaccineSchedule = await getGenericVaccineSchedule(gender);
+    return await updateMilestoneStatus(new Date(birthdate), genericVaccineSchedule);
 }
 
 async function getGenericVaccineSchedule(gender: string) {
     try {
         const genericVaccineSchedule: any = await getOfflineRecords("genericVaccineSchedule");
-
-        await workerData.terminate();
-
         if (gender == "M") {
             return genericVaccineSchedule[0].genericVaccineSchedule.male_schedule;
         } else if (gender == "F") {
             return genericVaccineSchedule[0].genericVaccineSchedule.female_schedule;
         }
     } catch (error) {
-        console.error("Error fetching documents or terminating worker:", error);
+        console.error("Error getting offline generic vaccine schedule", error);
         return [];
     }
 }
@@ -139,9 +108,8 @@ async function updateMilestoneStatus(birthdate: Date, schedule: any[]) {
 function mapToOrders(): any[] {
     const store = useAdministerVaccineStore();
     return store.getAdministeredVaccines().map((drug: any) => {
-        const startDate = DrugPrescriptionForImmunizationService.getSessionDate();
-        const frequency = DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) || ({} as (typeof DRUG_FREQUENCIES)[0]);
         return {
+            drug_name: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
             drug_inventory_id: drug.drug_id,
             equivalent_daily_dose: 1,
             start_date: drug.date_administered,
@@ -156,15 +124,21 @@ function mapToOrders(): any[] {
     });
 }
 
-async function createObForEachDrugAdminstred(encounter: any) {
+async function createObForEachDrugAdminstred() {
     const store = useAdministerVaccineStore();
-    store.getAdministeredVaccines().map(async (drug: any) => {
-        await ObservationService.saveObs(encounter.encounter_id, {
-            concept_id: 2876,
-            value_text: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
-            obs_datetime: encounter.encounter_datetime,
-        });
-    });
+    const administeredVaccines = store.getAdministeredVaccines();
+
+    const observations = await Promise.all(
+        administeredVaccines.map(async (drug: any) => {
+            return {
+                concept_id: 2876,
+                value_text: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
+                obs_datetime: HisDate.currentDate(),
+            };
+        })
+    );
+
+    return observations;
 }
 
 function calculateExpireDate(startDate: string | Date, duration: any) {
@@ -206,8 +180,17 @@ function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
     return antigens.every((antigen: any) => antigen.status === "administered");
 }
 
-export async function voidVaccine(orderId: number, reason: string) {
-    return Service.void(`orders/${orderId}?reason=${JSON.stringify(reason)}`, { reason });
+export async function voidVaccine(patient: any, vaccine: any, reason: string) {
+    let vaccines = patient?.vaccineAdministration;
+    const drugExists = vaccines.orders.some((drug: any) => drug.drug_name === vaccine.drug.drug_name);
+    if (drugExists) {
+        vaccines.orders = vaccines.orders.filter((drug: any) => drug.drug_name !== vaccine.drug.drug_name);
+        vaccines.obs = vaccines.obs.filter((drug: any) => drug.value_text !== vaccine.drug.drug_name);
+    } else {
+        vaccines.voided = [...vaccines?.voided, { reason: reason, order_id: vaccine.drug.order_id, drug_name: vaccine.drug.drug_name }];
+    }
+    updateVaccineStatus(patient, vaccine.drug.drug_name, "pending");
+    await saveOfflinePatientData(patient);
 }
 
 export async function voidVaccineEncounter(encounterId: number, reason: string) {

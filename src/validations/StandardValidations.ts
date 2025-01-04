@@ -38,7 +38,7 @@ function isFloatingPointNumber(val: any): null | string[] {
 
 function isMWPhoneNumber(val: any) {
     //Regex source: https://gist.github.com/kwalter94/1861f1f0fa192382a75a445ad70f07ec
-    if (val.includes("+265")) {
+    if (val?.includes("+265")) {
         val = val.replace(/\s+/g, "");
         const validation = /^(\+?265|0)(((8[89]|9[89])\d{7})|(1\d{6})|(2\d{8})|(31\d{8}))$/;
         return !isEmpty(val) && !val.match(validation) ? "Not a valid phone number" : null;
@@ -179,6 +179,24 @@ async function validateMobilePhone(val: any, countryData: any) {
     }
 }
 
+async function validateDialCode(code: string) {
+    try {
+        const response = await fetch(`${import.meta.env.BASE_URL}countryphones.json`);   
+        const data = await response.json();
+        const country = data.countries.find((c: { dialCode: string }) => c.dialCode === code);
+
+        if (!country) {
+            console.log("Country not found");
+            return null;
+        }
+
+        return country;
+
+    } catch (error) {
+        return `Error fetching or processing data(countryphones): ${error}`;
+    }
+}
+
 function formatToExample(value: string, exampleNumber: string): string {
     const digits = value.replace(/\s+/g, "");
     let digitIndex = 0;
@@ -276,4 +294,5 @@ export default {
     isDate,
     isNameWithSlush,
     validateMobilePhone,
+    validateDialCode,
 } as any;

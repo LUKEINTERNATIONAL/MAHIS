@@ -31,7 +31,7 @@ const initialPregnancy = [
     radioBtnContent: {
       header: {
         title: "Breastfeeding?",
-        name: "Is patient breast feeding",
+        name: "Is patient breast feeding?",
         selectedValue: "",
       },
       data: [

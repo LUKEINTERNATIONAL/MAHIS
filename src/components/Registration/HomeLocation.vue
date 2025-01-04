@@ -88,15 +88,20 @@ export default defineComponent({
     methods: {
         setData() {
             if (this.editable) {
-                modifyFieldValue(this.homeLocation, "home_district", "value", { name: this.patient.person?.addresses[0]?.address2, concept_id: "" });
+                modifyFieldValue(this.homeLocation, "home_district", "value", {
+                    name: this.patient.personInformation?.home_district,
+                    concept_id: "",
+                });
                 modifyFieldValue(this.homeLocation, "home_traditional_authority", "value", {
-                    name: this.patient.person?.addresses[0]?.county_district,
+                    name: this.patient.personInformation?.home_traditional_authority,
                     concept_id: "",
                 });
+                modifyFieldValue(this.homeLocation, "home_traditional_authority", "displayNone", false);
                 modifyFieldValue(this.homeLocation, "home_village", "value", {
-                    name: this.patient.person?.addresses[0]?.neighborhood_cell,
+                    name: this.patient.personInformation?.home_village,
                     concept_id: "",
                 });
+                modifyFieldValue(this.homeLocation, "home_village", "displayNone", false);
             }
         },
         setSameAsCurrent() {
@@ -159,7 +164,7 @@ export default defineComponent({
             }
         },
         async setTA(obj: any) {
-            const targetData = this.getTAs(obj.district_id);
+            const targetData = await this.getTAs(obj.district_id);
             modifyFieldValue(this.homeLocation, "home_traditional_authority", "multiSelectData", targetData);
             modifyFieldValue(this.homeLocation, "home_traditional_authority", "displayNone", false);
         },

@@ -175,7 +175,6 @@ export default defineComponent({
         async getSaveFunction() {
             const userID: any = Service.getUserID();
             const userRoles = Service.getUserRoles();
-            console.log("Lets the name of the user: ", userRoles);
             this.isLoading = true;
 
             try {
@@ -185,13 +184,15 @@ export default defineComponent({
                         await resetOPDPatientData();
 
                         const location = await getUserLocation();
-                        const locationId = location ? location.location_id : null;
+                        const locationId = location ? location.code : null;
                         if (userRoles.includes("Nurse")) {
                             await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                            this.$router.push("patientProfile");
+                          toastSuccess("Vitals have been saved!");
+                          this.$router.push("patientProfile");
                         } else {
                             await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                            this.$router.push("OPDConsultationPlan");
+                            toastSuccess("Vitals have been saved!");
+                          this.$router.push("OPDConsultationPlan");
                         }
                     } else {
                         await this.validaterowData();
@@ -199,13 +200,15 @@ export default defineComponent({
                     }
                 } else {
                     const location = await getUserLocation();
-                    const locationId = location ? location.location_id : null;
+                    const locationId = location ? location.code : null;
                     if (userRoles.includes("Nurse")) {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                        this.$router.push("patientProfile");
+                      toastSuccess("Vitals have been saved!");
+                      this.$router.push("patientProfile");
                     } else {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
-                        this.$router.push("OPDConsultationPlan");
+                      toastSuccess("Vitals have been saved!");
+                      this.$router.push("OPDConsultationPlan");
                     }
                 }
             } catch (error) {

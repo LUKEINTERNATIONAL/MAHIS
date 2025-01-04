@@ -48,14 +48,14 @@
                                 <div style="display: flex; justify-content: space-between">
                                     <DynamicButton
                                         name="Activate visit"
-                                        v-if="!checkedIn && activeProgramID == 14"
+                                        v-if="activateVisitButtonVisible"
                                         @click="toggleCheckInModal()"
                                         fill="clear"
                                         iconSlot="start"
                                         :icon="closeCircleOutline"
                                     />
                                     <DynamicButton
-                                        v-if="checkedIn && activeProgramID == 14"
+                                        v-if="deactivateVisitButtonVisible"
                                         name="Deactivate visit"
                                         @click="toggleCheckOutModal()"
                                         fill="clear"
@@ -171,7 +171,7 @@
                                 <ion-row>
                                     <ion-col class="vitalsValue">{{ vitals["Weight"] }} <span class="vitalsUnits">kg</span></ion-col>
                                     <ion-col class="vitalsValue">{{ vitals["Height"] }} <span class="vitalsUnits">cm</span></ion-col>
-                                    <ion-col class="vitalsValue">{{ vitals["Temp"] }} <span class="vitalsUnits">&deg;C</span></ion-col>
+                                    <ion-col class="vitalsValue">{{ vitals["Temperature"] }} <span class="vitalsUnits">&deg;C</span></ion-col>
                                     <ion-col class="vitalsValue">0 <span class="vitalsUnits">mg/dL</span></ion-col>
                                     <ion-col class="vitalsValue">{{ vitals["Pulse"] }} <span class="vitalsUnits">bpm </span></ion-col>
                                     <ion-col class="vitalsValue"
@@ -461,6 +461,12 @@ export default defineComponent({
         pregnancyPlanned() {
             return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy planned");
         },
+        activateVisitButtonVisible() {
+            return !this.checkedIn && this.activeProgramID == 14;
+        },
+        deactivateVisitButtonVisible() {
+            return this.checkedIn && this.activeProgramID == 14;
+        },
     },
     async mounted() {
         this.checkAge();
@@ -476,6 +482,7 @@ export default defineComponent({
             async handler(btn: any) {
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
+                this.updateCheckInStatus();
                 // await this.handleProgramClick(btn);
             },
             deep: true,
@@ -569,6 +576,10 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
+        async updateCheckInStatus() {
+            const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
+            this.checkedIn = !!visit.length;
+        },
         closeCheckInModal() {
             this.checkInModalOpen = false;
         },
@@ -584,7 +595,7 @@ export default defineComponent({
         async handleCheckInYes() {
             try {
                 const location = await getUserLocation();
-                const locationId = location ? location.location_id : null;
+                const locationId = location ? location.code : null;
                 if (!locationId) {
                     toastDanger("Location ID could not be found. Please check your settings.");
                     return;
@@ -615,10 +626,10 @@ export default defineComponent({
         async checkPatientIFCheckedIn() {
             try {
                 const result = await PatientOpdList.getCheckInStatus(this.patient.patientID);
-
-                if (Boolean(result)) {
-                    this.checkedIn = true;
-                }
+                this.checkedIn = result.length > 0;
+                // if (Boolean(result)) {
+                //     this.checkedIn = true;
+                // }
             } catch (e) {
                 console.log({ e });
             }
@@ -732,7 +743,7 @@ export default defineComponent({
             return btn.actionName;
         },
         async updateData() {
-            const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+            const array = ["Height", "Weight", "Systolic", "Diastolic", "Temperature", "Pulse", "SAO2", "Respiratory rate"];
             // An array to store all promises
             const promises = array.map(async (item) => {
                 const dd = await ObservationService.getFirstValueNumber(this.patient.patientID, item);

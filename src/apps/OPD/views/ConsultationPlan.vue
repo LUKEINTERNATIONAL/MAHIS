@@ -19,9 +19,14 @@
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
                 :hasPatientsWaitingList="hasPatientsWaitingForLab"
+                :specialButtonLabel="'Save and end visit'"
+                :specialButtonFn="saveData"
+                :userRole="userRole"
+
             />
         </ion-content>
-        <div v-if="(userRole === 'Clinician' || userRole === 'Superuser') && showAlert" class="pause-alert">
+<!--      <OPDFooter @finishBtn="saveData()" />-->
+      <div v-if="(userRole === 'Clinician' || userRole === 'Superuser') && showAlert" class="pause-alert">
             Consultation for this patient is paused due to lab orders.
         </div>
     </ion-page>
@@ -108,6 +113,7 @@ import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import { PatientService } from "@/services/patient_service";
 import { EncounterService } from "@/services/encounter_service";
 import { ConceptService } from "@/services/concept_service";
+import OPDFooter from "@/apps/OPD/components/OPDFooter.vue";
 
 export default defineComponent({
     name: "ConsultationPlan",
@@ -135,6 +141,7 @@ export default defineComponent({
         IonModal,
         Stepper,
         BasicFooter,
+        OPDFooter,
     },
     data() {
         return {
@@ -148,6 +155,8 @@ export default defineComponent({
             isLoading: false,
             patients: [] as any,
             showAlert: false,
+          checkedIn: false as Boolean,
+
         };
     },
     props: {
@@ -186,7 +195,6 @@ export default defineComponent({
             this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.patient.patientID);
             this.showAlert = this.hasPatientsWaitingForLab;
             if (this.showAlert) {
-                // Automatically hide the alert after 15 seconds
                 setTimeout(() => {
                     this.showAlert = false;
                 }, 15000);
@@ -233,7 +241,7 @@ export default defineComponent({
         },
     },
     setup() {
-        const presentingComplaints = ref<string[]>([]);
+        const presentingComplaintsValue = ref<string[]>([]);
 
         async function loadSavedEncounters(patientVisitDate: any) {
             const patient = new PatientService();
@@ -244,9 +252,9 @@ export default defineComponent({
         async function setPresentingComplainsEncounters(data: any) {
             const observations = data.find((encounter: any) => encounter.type.name === "PRESENTING COMPLAINTS")?.observations;
             if (observations) {
-                presentingComplaints.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
+              presentingComplaintsValue.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
             } else {
-                presentingComplaints.value = [];
+              presentingComplaintsValue.value = [];
             }
         }
 
@@ -271,41 +279,43 @@ export default defineComponent({
         };
         mounted();
         return {
-            presentingComplaints,
-            loadSavedEncounters,
+          presentingComplaintsValue,
+          loadSavedEncounters,
             chevronBackOutline,
             checkmark,
         };
     },
 
     methods: {
+        endConsultation(){
+
+        },
         getSaveFunction(index: any) {
             const disableNextButton = this.userRole !== "Lab" && this.hasPatientsWaitingForLab && index >= 1;
 
             if (index < this.StepperData.length - 1) {
                 switch (index) {
                     case 0:
-                        if (this.presentingComplaints.length === 0) {
+                        if (this.presentingComplaintsValue.length === 0) {
                             return this.saveClinicalAssessment;
                         } else {
                             return () => Promise.resolve();
                         }
                     case 1:
-                        return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
+                        return disableNextButton ? () => Promise.resolve() : this.saveInvestigations;
                     case 2:
                         return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
                     case 3:
-                        return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
-                    case 4:
                         return disableNextButton ? () => Promise.resolve() : this.saveTreatmentPlan;
                     default:
                         return () => Promise.resolve();
                 }
             } else {
                 return async () => {
-                    await this.saveOutComeStatus();
+                    // await this.saveTreatmentPlan();
+                    // await this.saveOutComeStatus();
                     const location = await getUserLocation();
-                    const locationId = location ? location.location_id : null;
+                    const locationId = location ? location.code : null;
 
                     if (!locationId) {
                         toastDanger("Location ID could not be found. Please check your settings.");
@@ -315,25 +325,24 @@ export default defineComponent({
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "DISPENSATION", locationId);
                         await usePatientList().refresh(locationId);
                         this.$router.push("home");
-                        toastSuccess("Patient has finished consultation!");
+                         toastSuccess("Patient has finished consultation!");
                     } else {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
                         await usePatientList().refresh(locationId);
                         this.$router.push("home");
-                        toastSuccess("Lab results submitted!");
+                        toastSuccess("Lab results submitted. Patient can return to consultation");
                     }
                 };
             }
         },
         async fetchPatientLabStageData() {
             const location = await getUserLocation();
-            const locationId = location ? location.location_id : null;
+            const locationId = location ? location.code : null;
 
             if (locationId) {
                 const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
                 if (this.patient.patientID) {
                     this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.patient.patientID);
-                    console.log("Patients waiting for lab updated:", this.hasPatientsWaitingForLab);
                 }
             }
         },
@@ -489,47 +498,24 @@ export default defineComponent({
                     resetOPDPatientData();
                 } else {
                     toastWarning("Patient complaints are required");
+                    return;
                 }
             } catch (error) {
-                console.error("Error in saveData: ", error);
             } finally {
                 this.isLoading = false;
             }
         },
         async saveData() {
-            this.isLoading = true;
-            try {
-                const obs = await ObservationService.getAll(this.patient.patientID, "Presenting complaint");
-                let filteredArray = [];
-                if (obs) {
-                    filteredArray = obs.filter((obj: any) => {
-                        return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
-                    });
-                }
-                if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
-                    await this.saveDiagnosis();
-                    await this.saveTreatmentPlan();
-                    await this.saveOutComeStatus();
-                    await this.saveWomenStatus();
-                    await this.savePresentingComplaints();
-                    await this.savePastMedicalHistory();
-                    await this.saveConsciousness();
-                    await this.savePhysicalExam();
-                    resetOPDPatientData();
-
-                    if (this.userRole == "Lab") {
-                        this.$router.push("home");
-                    } else {
-                        this.$router.push("patientProfile");
-                    }
-                } else {
-                    toastWarning("Patient complaints are required");
-                }
-            } catch (error) {
-                console.error("Error in saveData: ", error);
-            } finally {
-                this.isLoading = false;
-            }
+          try {
+            const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
+            await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
+            const location = await getUserLocation();
+            const locationId = location ? location.code : null;
+            await usePatientList().refresh(locationId);
+            this.checkedIn = false;
+           await toastSuccess("Finished and visit closed");
+          } catch (e) {}
+          this.$router.push("/home");
         },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
@@ -654,6 +640,9 @@ export default defineComponent({
                 }
             }
         },
+      saveInvestigations(){
+
+      },
         openModal() {
             createModal(SaveProgressModal);
         },

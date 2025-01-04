@@ -12,20 +12,24 @@ const initialVitals = [
                             unit: "mmHg",
                             icon: icons.systolicPressure,
                             value: "",
-                            name: "Systolic blood pressure",
+                            name: "Systolic",
                             required: true,
                             eventType: "input",
                             disabled: false,
+                            valueType: "number",
+                            validationFunctionName: "vitalsSystolic",
                         },
                         {
                             inputHeader: "Diastolic pressure",
                             unit: "mmHg",
                             icon: icons.diastolicPressure,
                             value: "",
-                            name: "Diastolic blood pressure",
+                            name: "Diastolic",
                             required: true,
                             eventType: "input",
                             disabled: false,
+                            valueType: "number",
+                            validationFunctionName: "vitalsDiastolic",
                         },
                     ],
                 },
@@ -38,7 +42,7 @@ const initialVitals = [
                 icon: "",
                 textColor: "",
                 value: "",
-                name: "",
+                name: "bp",
                 index: "",
             },
         ],
@@ -56,8 +60,10 @@ const initialVitals = [
                             unit: "C",
                             icon: icons.temprature,
                             value: "",
-                            name: "Temp",
+                            name: "Temperature",
                             eventType: "input",
+                            validationFunctionName: "vitalsTemperature",
+                            valueType: "number",
                         },
                         {
                             inputHeader: "Pulse rate",
@@ -66,9 +72,37 @@ const initialVitals = [
                             value: "",
                             name: "Pulse",
                             eventType: "input",
+                            validationFunctionName: "vitalsPulseRate",
+                            valueType: "number",
                         },
                     ],
                 },
+            ],
+        },
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "temp",
+                index: "",
+            },
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "pulse",
+                index: "",
+            },
+        ],
+    },
+    {
+        data: {
+            rowData: [
                 {
                     colData: [
                         {
@@ -76,24 +110,45 @@ const initialVitals = [
                             unit: "BMP",
                             icon: icons.respiratory,
                             value: "",
-                            name: "Respiratory",
+                            name: "Respiratory rate",
                             eventType: "input",
+                            validationFunctionName: "vitalsRespiratoryRate",
+                            valueType: "number",
                         },
                         {
                             inputHeader: "Oxygen saturation",
                             unit: "%",
                             icon: icons.oxgenStaturation,
                             value: "",
-                            name: "SP02",
+                            name: "SAO2",
                             eventType: "input",
+                            validationFunctionName: "vitalsOxygenSaturation",
+                            valueType: "number",
                         },
                     ],
                 },
             ],
         },
-        previousView: {
-            name: "vitals",
-        },
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "respiratory",
+                index: "",
+            },
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "oxygen",
+                index: "",
+            },
+        ],
     },
 ] as any;
 export const useVitalsStore = defineStore("immunizationVitalsStore", {
@@ -104,9 +159,10 @@ export const useVitalsStore = defineStore("immunizationVitalsStore", {
         setVitals(data: any) {
             this.vitals = data;
         },
-        getInitialSocialHistory() {
+        getInitialVitals() {
             const data = _.cloneDeep(initialVitals);
             return [...data];
         },
     },
+    persist: true,
 });

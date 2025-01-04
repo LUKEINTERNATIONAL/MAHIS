@@ -3,6 +3,9 @@ import { ref, watch, toRaw } from "vue";
 import workerData from "@/activate_worker";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess } from "@/utils/Alerts";
+import { UserService } from "@/services/user_service";
+import { Service } from "@/services/service";
+import { buildPatientRecord } from "@/services/buildingPatientRecord";
 
 export const useWorkerStore = defineStore("worker", () => {
     const workerApi = ref<any>(null);
@@ -18,16 +21,20 @@ export const useWorkerStore = defineStore("worker", () => {
             if (newValue?.data?.msg === "done building patient record") {
                 workerData.postData("RESET");
                 doneLoading.value = true;
-                setRecord(newValue?.data?.payload);
+                await setRecord(newValue?.data?.payload);
             }
-
-            if (newValue?.data?.msg === "saved successfully") {
+            if (newValue?.data?.msg === "saved successfully" || newValue?.data?.msg === "Done Syncing") {
                 patientID.value = newValue?.data?.payload?.ID;
                 if (patientID.value) {
+                    if (newValue?.data?.msg === "Done Syncing") {
+                        route.value = "";
+                        toastSuccess("Syncing of records was successful");
+                    } else {
+                        toastSuccess("Saved on server successfully");
+                    }
                     workerData.postData("RESET");
-                    toastSuccess("Saved on server successfully");
-                    const offlinePatientData = await getOfflinePatientData();
-                    setRecord(offlinePatientData);
+                    const offlinePatientData = await getOfflinePatientData(patientID.value);
+                    await setRecord(offlinePatientData);
                 }
             }
         },
@@ -37,27 +44,32 @@ export const useWorkerStore = defineStore("worker", () => {
         }
     );
 
-    function setRecord(item: any) {
+    async function setRecord(item: any) {
         const demographicsStore = useDemographicsStore();
-
         demographicsStore.setPatient(item);
         if (route.value && router) {
             router.push(route.value);
+        } else if (programID() == 32) {
+            const actions = await UserService.setProgramUserActions();
+            router.push(actions?.url);
         }
     }
     function setRouter(routerInstance: any) {
         router = routerInstance;
     }
+    function programID() {
+        return Service.getProgramID();
+    }
     async function setPatientRecord(item: any) {
         if (item?.ID) {
-            setRecord(item);
+            await setRecord(item);
         } else {
             patientID.value = getPatientIdentifier(item, 3);
-            const patientRecord: any = await getOfflinePatientData();
+            const patientRecord: any = await getOfflinePatientData(patientID.value);
             if (patientRecord) {
-                setRecord(patientRecord);
+                await setRecord(patientRecord);
             } else {
-                workerData.postData("BUILD_PATIENT_RECORD", { data: toRaw(item) });
+                await setRecord(await buildPatientRecord(item));
             }
         }
     }
@@ -71,10 +83,10 @@ export const useWorkerStore = defineStore("worker", () => {
             return "";
         }
     }
-    async function getOfflinePatientData() {
-        if (patientID.value) {
+    async function getOfflinePatientData(patientID: any) {
+        if (patientID) {
             const { getOfflineRecords } = await import("@/services/offline_service");
-            return await getOfflineRecords("patientRecords", { whereClause: { ID: await patientID.value } }).then((data: any) => data?.[0]);
+            return await getOfflineRecords("patientRecords", { whereClause: { ID: await patientID } }).then((data: any) => data?.[0]);
         }
         return null;
     }
@@ -97,5 +109,6 @@ export const useWorkerStore = defineStore("worker", () => {
         postWorkerData,
         setRouter,
         setPatientRecord,
+        getOfflinePatientData,
     };
 });

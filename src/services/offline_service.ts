@@ -1,3 +1,6 @@
+import workerData from "@/activate_worker";
+import { toRaw } from "vue";
+import { useWorkerStore } from "@/stores/workerStore";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
@@ -41,18 +44,22 @@ function openDatabase(storeName: string = "defaultStore", keyPath: string = "id"
 export async function getOfflineRecords<T = any>(
     storeName: string,
     options: {
-        startIndex?: number;
-        endIndex?: number;
+        currentPage?: number;
+        itemsPerPage?: number;
         whereClause?: Partial<T>;
+        likeClause?: {
+            [K in keyof Partial<T>]?: string;
+        };
+        inClause?: {
+            [K in keyof Partial<T>]?: any[];
+        };
         sortBy?: keyof T;
         sortOrder?: "asc" | "desc";
-    } = {},
-    pagination = false
+    } = {}
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
-    const { startIndex = 0, endIndex, whereClause, sortBy, sortOrder = "asc" } = options;
+    const { currentPage = 1, itemsPerPage = 0, whereClause, likeClause, inClause, sortBy, sortOrder = "asc" } = options;
 
     const db = await openDatabase(storeName);
-
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([storeName], "readonly");
         const objectStore = transaction.objectStore(storeName);
@@ -62,16 +69,57 @@ export async function getOfflineRecords<T = any>(
             let allRecords = (event.target as IDBRequest).result as T[];
 
             // Apply where clause filtering if provided
-            const filteredRecords = whereClause
-                ? allRecords.filter((record) => Object.entries(whereClause).every(([key, value]) => record[key as keyof T] === value))
+            let filteredRecords = whereClause
+                ? allRecords.filter((record) =>
+                      Object.entries(whereClause).every(([path, value]) => {
+                          const recordValue = path.includes(".")
+                              ? path.split(".").reduce((obj: any, key) => obj?.[key], record)
+                              : (record as any)[path];
+
+                          return typeof value === "string" ? String(recordValue).toLowerCase() === value.toLowerCase() : recordValue === value;
+                      })
+                  )
                 : allRecords;
+
+            // Apply LIKE clause filtering if provided
+            if (likeClause) {
+                filteredRecords = filteredRecords.filter((record) =>
+                    Object.entries(likeClause).every(([path, pattern]) => {
+                        if (typeof pattern !== "string") return false;
+
+                        // Handle both nested and non-nested paths
+                        const value = path.includes(".") ? path.split(".").reduce((obj: any, key) => obj?.[key], record) : (record as any)[path];
+
+                        if (!value) return false;
+
+                        const recordValue = String(value).toLowerCase();
+                        const regexPattern = pattern.toLowerCase().replace(/%/g, ".*").replace(/_/g, ".");
+                        const regex = new RegExp(`^${regexPattern}$`);
+                        return regex.test(recordValue);
+                    })
+                );
+            }
+
+            // Apply IN clause filtering if provided
+            if (inClause) {
+                filteredRecords = filteredRecords.filter((record) =>
+                    Object.entries(inClause).every(([path, values]: any) => {
+                        const recordValue = path.includes(".")
+                            ? path.split(".").reduce((obj: any, key: any) => obj?.[key], record)
+                            : (record as any)[path];
+
+                        return values.some((value: any) =>
+                            typeof value === "string" ? String(recordValue).toLowerCase() === value.toLowerCase() : recordValue === value
+                        );
+                    })
+                );
+            }
 
             // Sort records if sortBy is provided
             if (sortBy) {
                 filteredRecords.sort((a, b) => {
                     const valueA = a[sortBy];
                     const valueB = b[sortBy];
-
                     if (valueA < valueB) return sortOrder === "asc" ? -1 : 1;
                     if (valueA > valueB) return sortOrder === "asc" ? 1 : -1;
                     return 0;
@@ -81,17 +129,19 @@ export async function getOfflineRecords<T = any>(
             // Calculate total count before pagination
             const totalCount = filteredRecords.length;
 
-            // Apply pagination
-            const paginatedRecords = endIndex !== undefined ? filteredRecords.slice(startIndex, endIndex + 1) : filteredRecords.slice(startIndex);
-
-            if (pagination) {
+            // Calculate start and end indices based on currentPage and itemsPerPage
+            if (itemsPerPage != 0) {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                // Apply pagination
+                const paginatedRecords = filteredRecords.slice(startIndex, endIndex);
                 resolve({
                     records: paginatedRecords,
                     totalCount,
                 });
-            } else {
-                resolve(paginatedRecords);
             }
+
+            resolve(filteredRecords);
         };
 
         request.onerror = (event) => {
@@ -105,4 +155,10 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
 
     // Then sort and return the first item's specified value
     return filteredData.sort((a: any, b: any) => new Date(b.obs_datetime).getTime() - new Date(a.obs_datetime).getTime())[0]?.[value_type];
+}
+export async function saveOfflinePatientData(patientData: any) {
+    const plainPatientData = JSON.parse(JSON.stringify(patientData));
+    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
+    await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
+    useWorkerStore().postWorkerData("SYNC_PATIENT_RECORD", { msg: "Done Syncing", data: plainPatientData });
 }

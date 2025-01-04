@@ -74,7 +74,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "closePopoover", ObjectsArray: any): void
-    (e: "updated", ObjectsArray: any): void
+    (e: "save", ObjectsArray: any): void
 }>()
 
 function saveAction() {
@@ -83,7 +83,7 @@ function saveAction() {
 
 function isFormValid(data: any) {
     if (data == true) {
-        emit("updated", data)
+        emit("save", data)
         closeModal()
     }
     if (data == false) {

@@ -208,7 +208,7 @@ export default defineComponent({
         },
         async fetchPatientLabStageData() {
             const location = await getUserLocation();
-            const locationId = location ? location.location_id : null;
+            const locationId = location ? location.code : null;
 
             if (locationId) {
                 const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
@@ -220,7 +220,7 @@ export default defineComponent({
         },
         async handleSendToLabYes() {
             const location = await getUserLocation();
-            const locationId = location ? location.location_id : null;
+            const locationId = location ? location.code : null;
             if (!locationId) {
                 toastDanger("Location ID could not be found. Please check your settings.");
                 return;
@@ -555,5 +555,6 @@ export default defineComponent({
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     width: 100%;
+  white-space: nowrap;
 }
 </style>

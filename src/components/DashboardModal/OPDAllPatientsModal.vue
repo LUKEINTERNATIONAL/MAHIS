@@ -146,7 +146,7 @@ export default defineComponent({
         this.isLoading = true;
         try {
             const location = await getUserLocation();
-            const locationId = location ? location.location_id : null;
+            const locationId = location ? location.code : null;
             const visitsToday = await PatientOpdList.getAllPatientsVisitsToday();
             const filteredVisits = visitsToday.filter((visit: any) => visit.location_id === locationId);
             this.patients = await Promise.all(

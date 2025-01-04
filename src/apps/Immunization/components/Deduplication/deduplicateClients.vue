@@ -200,7 +200,7 @@ export default defineComponent({
       try {
         const store = EIRreportsStore();
         store.setNavigationPayload('Client De-Duplication', true, false, '/', 'home', '');
-        const duplicateClients = await PatientService.getCachedClientProfileDuplicates(currentPage.value, itemsPerPage.value);
+        const duplicateClients = await PatientService.getCachedClientProfileDuplicates(currentPage.value, itemsPer_Page.value);
         clients.value = duplicateClients.results.map((client: any[]) => client[0]);
         totalCount.value = duplicateClients.count;
         filteredClients.value = clients.value;
