@@ -7,58 +7,53 @@
         </ion-header>
         <ion-content style="--background: #fff">
             <ion-accordion-group expand="inset" style="margin-inline: unset; margin-top: unset">
-                <ion-accordion-group>
-                    <ion-accordion value="1" @click="navigationMenu('home')" toggle-icon="">
-                        <ion-item slot="header" color="light">
-                            <ion-icon :icon="homeOutline" slot="start"></ion-icon>
-                            <ion-label class="header lft-drpm">Home</ion-label>
-                        </ion-item>
-                    </ion-accordion>
+                <ion-accordion value="1" @click="navigationMenu('home')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-icon :icon="homeOutline" slot="start"></ion-icon>
+                        <ion-label class="header lft-drpm">Home</ion-label>
+                    </ion-item>
+                </ion-accordion>
 
-                    <ion-accordion value="2" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
-                        <ion-item slot="header" color="light">
-                            <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
-                            <ion-label class="header lft-drpm">Schedule Immunization</ion-label>
-                        </ion-item>
-                    </ion-accordion>
+                <ion-accordion value="2" @click="navigationMenu('scheduleImmunization')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
+                        <ion-label class="header lft-drpm">Schedule Immunization</ion-label>
+                    </ion-item>
+                </ion-accordion>
 
-                    <ion-accordion value="3" @click="navigationMenu('manageAppointMents')" toggle-icon="">
-                        <ion-item slot="header" color="light">
-                            <ion-icon :icon="listOutline" slot="start"></ion-icon>
-                            <ion-label class="header lft-drpm">Manage Appointments</ion-label>
-                        </ion-item>
-                    </ion-accordion>
+                <ion-accordion value="3" @click="navigationMenu('manageAppointMents')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-icon :icon="listOutline" slot="start"></ion-icon>
+                        <ion-label class="header lft-drpm">Manage Appointments</ion-label>
+                    </ion-item>
+                </ion-accordion>
 
-                    <ion-accordion value="4" @click="navigationMenu('stockManagement')" toggle-icon="">
-                        <ion-item slot="header" color="light">
-                            <ion-icon :icon="cubeOutline" slot="start"></ion-icon>
-                            <ion-label class="header lft-drpm">Inventory Management</ion-label>
-                        </ion-item>
-                    </ion-accordion>
+                <ion-accordion value="4" @click="navigationMenu('stockManagement')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-icon :icon="cubeOutline" slot="start"></ion-icon>
+                        <ion-label class="header lft-drpm">Inventory Management</ion-label>
+                    </ion-item>
+                </ion-accordion>
 
-                    <ion-accordion value="5" @click="navigationMenu('OfflineRecords')" toggle-icon="">
-                        <ion-item slot="header" color="light">
-                            <ion-icon :icon="documentOutline" slot="start"></ion-icon>
-                            <ion-label class="header lft-drpm">Manage Offline Records</ion-label>
-                        </ion-item>
-                    </ion-accordion>
-
-                    <ion-accordion value="6" @click="navigationMenu('locationsManagement')" toggle-icon="">
-                        <ion-item slot="header" color="light">
-                            <ion-icon :icon="documentOutline" slot="start"></ion-icon>
-                            <ion-label class="header lft-drpm">Location Management</ion-label>
-                        </ion-item>
-                    </ion-accordion>
-
-                    <ion-accordion value="7" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
-                        <ion-item slot="header" color="light">
-                            <ion-icon :icon="peopleOutline" slot="start"></ion-icon>
-                            <ion-label class="header lft-drpm">De-Duplication</ion-label>
-                        </ion-item>
-                    </ion-accordion>
-
-                    <ion-accordion></ion-accordion>
-                </ion-accordion-group>
+                <ion-accordion value="5" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-icon :icon="peopleOutline" slot="start"></ion-icon>
+                        <ion-label class="header lft-drpm">De-Duplication</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="6" v-if="isSuperuser" style="border-radius: 0px">
+                    <ion-item slot="header" color="light">
+                        <ion-icon :icon="documentOutline" slot="start"></ion-icon>
+                        <ion-label class="header lft-drpm">Manage Records</ion-label>
+                    </ion-item>
+                    <div class="content" slot="content">
+                        <ion-list>
+                            <ion-item @click="navigationMenu('locationsManagement')" class="list-content">Location Management</ion-item>
+                            <ion-item @click="navigationMenu('OfflineRecords')" class="list-content">Client Management</ion-item>
+                            <ion-item @click="navigationMenu('syncingManagement')" class="list-content">Syncing Management</ion-item>
+                        </ion-list>
+                    </div>
+                </ion-accordion>
                 <ion-accordion value="8">
                     <ion-item slot="header" color="light">
                         <ion-icon :icon="barChartOutline" slot="start"></ion-icon>
