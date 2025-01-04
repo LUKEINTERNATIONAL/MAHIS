@@ -46,6 +46,10 @@
             v-if="show_referred_options"
             @data-saved="dataSavedTrigFn"
         />
+      <DischargedHome
+          v-if="show_discharged_options"
+          @data-saved="dataSavedTrigFn"
+      />
 
         <deadOutcome
             v-if="show_dead_options"
@@ -99,6 +103,7 @@ import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
 import ListPicker from "@/components/ListPicker.vue"
 import AdmittedforShortStayOutcomef from "../ConsultationPlan/AdmittedforShortStayOutcome.vue"
 import ReferredOutCome from '../ConsultationPlan/ReferredOutCome.vue'
+import DischargedHome from "@/apps/OPD/components/ConsultationPlan/DischargedHome.vue";
 
 const initialMsg = ref("No outcome created yet");
 const show_error_msg_for_ref_type = ref(false);
@@ -117,6 +122,7 @@ const EditEvnt = ref(false);
 const show_dead_options = ref(false)
 const show_admitted_options = ref(false)
 const show_referred_options = ref(false)
+const show_discharged_options = ref(false)
 
 const editItem = ref()
 
@@ -130,7 +136,9 @@ const referralType = ref([
         selected: false,
     },
     {
-        name: "Discharged Home"
+        name: "Discharged Home",
+        selected: false,
+
     },
     {
         name: "Death",
@@ -225,6 +233,12 @@ async function checkRefType(clear_inputs: boolean = true) {
     else {
         show_referred_options.value = false
     }
+  if (ref_type == referralType.value[2].name) {
+    show_discharged_options.value = true
+  }
+  else {
+    show_discharged_options.value = false
+  }
 
     if (ref_type == referralType.value[3].name) {
         show_dead_options.value = true
@@ -238,6 +252,7 @@ function dataSavedTrigFn() {
     show_dead_options.value = false
     show_admitted_options.value = false
     show_referred_options.value = false
+    show_discharged_options.value = false
     resetSelection()
 }
 </script>

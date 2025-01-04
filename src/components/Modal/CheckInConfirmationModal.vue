@@ -8,40 +8,32 @@
         </ion-buttons>
     <ion-content>
       <div v-if="isCheckInPrompt" style="display:flex;">
-        <DynamicButton
-            expand="block"
-            @click="onYes()"
-            name="Create visit"
-            :style="`flex:1`"
-        />
-        <DynamicButton
-            expand="block"
-            @click="onNo()"
-            :style="`flex:1`"
-            name="View profile"
-            fill="clear"
-        />
+        <ion-footer collapse="fade" class="ion-no-border">
+          <ion-row>
+            <ion-col>
+              <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="onYes"> Create visit </ion-button>
+            </ion-col>
+            <ion-col>
+              <DynamicButton name="View profile" @click="onNo()" fill="solid" style="float: right; margin: 2%; width: 130px" />
+            </ion-col>
+          </ion-row>
+        </ion-footer>
       </div>
       <div v-else style="display:flex;">
-        <DynamicButton
-            expand="block"
-            @click="onYes()"
-            name="Yes"
-            :style="`flex:1`"
-        />
-        <DynamicButton
-            expand="block"
-            @click="onNo()"
-            :style="`flex:1`"
-            name="No"
-            fill="clear"
-        />
+        <ion-footer collapse="fade" class="ion-no-border">
+          <ion-row>
+            <ion-col>
+              <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="onNo">No</ion-button>
+            </ion-col>
+            <ion-col>
+              <DynamicButton name="Yes" @click="onYes()" fill="solid" style="float: right; margin: 2%; width: 130px" />
+            </ion-col>
+          </ion-row>
+        </ion-footer>
       </div>
     </ion-content>
   </ion-modal>
 </template>
-
-
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import {
@@ -52,7 +44,7 @@ import {
   IonButtons,
   IonButton,
   IonContent,
-  IonIcon
+  IonIcon, IonFooter, IonRow, IonCol
 } from '@ionic/vue';
 import { closeOutline } from 'ionicons/icons';
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -60,6 +52,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 export default defineComponent({
   name: 'CheckInConfirmationModal',
   components: {
+    IonCol, IonRow, IonFooter,
     DynamicButton,
     IonModal,
     IonHeader,
@@ -140,5 +133,8 @@ ion-content {
   /* flex-direction: column; */
   /* border: black solid 8px; */
 
+}
+ion-footer {
+  --ion-toolbar-background: #fff;
 }
 </style>

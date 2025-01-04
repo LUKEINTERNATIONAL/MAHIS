@@ -242,10 +242,11 @@ export default defineComponent({
         async handleAbscond(patient: any) {
             try {
                 const location = await getUserLocation();
-                const locationId = location ? location.id : null;
+                const locationId = location ? location.code : null;
                 await PatientOpdList.checkOutPatient(patient.visit_id, dates.todayDateFormatted());
                 this.patients = this.patients.filter((p: any) => p.patient_id !== patient.patient_id);
                 toastSuccess("Patient absconded successfully.");
+               await usePatientList().refresh(locationId);
             } catch (e) {
                 console.error("Error absconding patient:", e);
                 toastDanger("Failed to abscond patient.");

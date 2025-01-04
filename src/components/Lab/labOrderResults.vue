@@ -8,9 +8,11 @@
     />
     <DashBox v-if="listResults.length < 1 && listOrders.length < 1" :content="'No Investigations added '" />
     <div class="modal_wrapper" v-if="listResults.length > 1">
-        <div style="font-weight: 700">Lab Results</div>
-        <div style="--background: #fff" class="scrollable-container">
-            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"> </list>
+        <div style="font-weight: 1000">Lab Results</div>
+        <div style="--background: #fff">
+<!--            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"> </list>-->
+          <LabTestsHistory />
+
         </div>
         <div style="margin-top: 5px" v-if="listResults.length <= 4 && listSeeMoreResults.length >= 4">
             <DynamicButton @click="seeOrderStatus('more')" name="Show More Lab Results" fill="clear" iconSlot="icon-only" />
@@ -90,11 +92,13 @@ import dates from "@/utils/Date";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
+import LabTestsHistory from "@/components/DashboardSegments/LabTestsHistory.vue";
 
 export default defineComponent({
     name: "Menu",
     mixins: [SetPrograms],
     components: {
+      LabTestsHistory,
         CheckInConfirmationModal,
         IonContent,
         IonHeader,
