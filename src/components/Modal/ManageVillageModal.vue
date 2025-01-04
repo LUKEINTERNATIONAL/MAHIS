@@ -54,6 +54,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
 import workerData from "@/activate_worker";
 import { Service } from "@/services/service";
+import UpdateVillage from "@/components/Registration/Modal/UpdateVillage.vue";
 
 // Store initialization
 const stockStore = useStockStore();
@@ -154,7 +155,7 @@ const reloadTableData = (reloadPagination: boolean = true) => {
 };
 const addVillageModal = async () => {
     const ta_data = JSON.parse(JSON.stringify(props.taData));
-    await createModal(AddVillage, { class: "otherVitalsModal" }, true, { taData: ta_data });
+    await createModal(AddVillage, { class: "fullScreenModal" }, true, { taData: ta_data });
     reloadTableData(false);
 };
 const openDeletePopover = async (villageData: any, e: any) => {
@@ -196,14 +197,17 @@ watch(
     },
     { deep: true }
 );
-
+const updateVillageModal = async (villageData: any) => {
+    await createModal(UpdateVillage, { class: "fullScreenModal" }, true, { villageData: villageData });
+    reloadTableData(false);
+};
 // Event handlers setup
 const setupEventHandlers = () => {
     const table = (dataTableRef.value as any).dt;
 
     table.on("click", ".edit-btn", (e: Event) => {
         const data = (e.target as HTMLElement).getAttribute("data-id");
-        if (data) handleEdit(JSON.parse(data));
+        if (data) updateVillageModal(JSON.parse(data));
     });
 
     table.on("click", ".delete-btn", (e: Event) => {
