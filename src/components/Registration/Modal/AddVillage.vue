@@ -133,6 +133,8 @@ ion-footer {
 .modal_wrapper {
     padding: 0px 10px;
     background: #fff;
+    margin: 0 auto;
+    width: 60%;
 }
 
 .OtherVitalsTitle {
