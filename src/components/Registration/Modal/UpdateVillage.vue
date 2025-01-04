@@ -1,12 +1,12 @@
 <template>
     <div class="pim-cls-1 modal_wrapper">
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle" style="color: #1f2221d4; font-size: 16px">Add Village</div>
+            <div class="OtherVitalsTitle" style="color: #1f2221d4; font-size: 16px">Add TA</div>
         </div>
         <div>
             <div class="center text_12">
                 <ion-row>
-                    <BasicForm :contentData="villageForm" />
+                    <BasicForm :contentData="village_form" />
                 </ion-row>
             </div>
         </div>
@@ -14,72 +14,53 @@
         <div class="btnContent">
             <div class="saveBtn">
                 <ion-button class="btnText" color="danger" fill="solid" @click="dismiss()" style="margin-right: 8px"> Cancel </ion-button>
-                <ion-button class="btnText" fill="solid" @click="saveVillage"> Save </ion-button>
+                <ion-button class="btnText" fill="solid" @click="updateTA"> Save </ion-button>
             </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
-import {
-    IonContent,
-    IonButton,
-    IonModal,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonCol,
-    IonAvatar,
-    IonImg,
-    IonLabel,
-    IonPage,
-    IonFooter,
-    modalController,
-} from "@ionic/vue";
-import DynamicButton from "@/components/DynamicButton.vue";
-import { createOutline } from "ionicons/icons";
+import { modalController } from "@ionic/vue";
 import BasicForm from "@/components/BasicForm.vue";
-import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
-import DatePicker from "@/components/DatePicker.vue";
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
-import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
-import { VitalsService } from "@/services/vitals_service";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { Service } from "@/services/service";
-import HisDate from "@/utils/Date";
-import { BMIService } from "@/services/bmi_service";
+import { modifyFieldValue, getFieldValue } from "@/services/data_helpers";
 import { icons } from "@/utils/svg";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
-import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
-import { defineComponent } from "vue";
-import { mapState } from "pinia";
-import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
-import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { LocationService } from "@/services/location_service";
-import Validation from "@/validations/StandardValidations";
-import { isPlainObject, isEmpty } from "lodash";
-import { validateInputFiledData } from "@/services/group_validation";
 import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
+import { validateInputFiledData } from "@/services/group_validation";
+import { ref, onMounted } from "vue";
+import { Service } from "@/services/service";
 
-onMounted(async () => {});
-
-const props: any = defineProps({
-    taData: Object,
+onMounted(async () => {
+    await setData();
 });
+const props: any = defineProps({
+    villageData: Object,
+});
+const setData = async () => {
+    modifyFieldValue(village_form.value, "Village", "value", props.villageData.name);
+};
 const dismiss = () => {
     modalController.dismiss();
 };
-const saveVillage = async () => {
-    if (await validateInputFiledData(villageForm.value)) {
-        const villageValue = getFieldValue(villageForm.value, "Village", "value").split(",");
-        const address = await LocationService.createAddress({
-            address_type: "Village",
-            addresses: villageValue,
-            parent_location: props.taData.traditional_authority_id,
+const updateTA = async () => {
+    if (await validateInputFiledData(village_form.value)) {
+        const VillageValue = getFieldValue(village_form.value, "Village", "value");
+
+        const address = await Service.putJson(`villages/${props.villageData.village_id}`, {
+            id: props.villageData.village_id,
+            name: VillageValue,
+            ta_id: props.villageData.traditional_authority_id,
         });
+
         if (address) {
-            Promise.all(address.village_data.map((item: any) => workerData.postData("ADD_OBJECT_STORE", { storeName: "villages", data: item })));
-            toastSuccess(`Location added successfully`);
+            await workerData.postData("UPDATE_RECORD", {
+                storeName: "villages",
+                data: address.data,
+                whereClause: { village_id: props.villageData.village_id },
+            });
+            toastSuccess(`Village updated successfully`);
         }
         dismiss();
     } else {
@@ -87,7 +68,7 @@ const saveVillage = async () => {
     }
 };
 
-const villageForm = ref([
+const village_form = ref([
     {
         data: {
             rowData: [

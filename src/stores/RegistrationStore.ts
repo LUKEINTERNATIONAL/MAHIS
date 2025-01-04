@@ -423,15 +423,6 @@ const initialHomeLocation = [
                             validationFunctionName: "required",
                         },
                     ],
-                    btns: [
-                        {
-                            name: "TA",
-                            fill: "clear",
-                            btn_col_size: 2.1,
-                            showName: false,
-                            icon: icons.plus,
-                        },
-                    ],
                 },
             ],
         },
@@ -456,15 +447,6 @@ const initialHomeLocation = [
                             idName: "traditional_authority_id",
                             displayNone: true,
                             validationFunctionName: "required",
-                        },
-                    ],
-                    btns: [
-                        {
-                            name: "Village",
-                            fill: "clear",
-                            btn_col_size: 2.1,
-                            showName: false,
-                            icon: icons.plus,
                         },
                     ],
                 },
@@ -524,15 +506,6 @@ const initialCurrentLocation = [
                             validationFunctionName: "required",
                         },
                     ],
-                    btns: [
-                        {
-                            name: "TA",
-                            fill: "clear",
-                            btn_col_size: 2.1,
-                            showName: false,
-                            icon: icons.plus,
-                        },
-                    ],
                 },
             ],
         },
@@ -558,15 +531,6 @@ const initialCurrentLocation = [
                             idName: "village_id",
                             displayNone: true,
                             validationFunctionName: "required",
-                        },
-                    ],
-                    btns: [
-                        {
-                            name: "Village",
-                            fill: "clear",
-                            btn_col_size: 2.1,
-                            showName: false,
-                            icon: icons.plus,
                         },
                     ],
                 },
@@ -689,66 +653,7 @@ const initialCountry = [
         },
     },
 ] as any;
-const initialAddTA = [
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "TA*",
-                            value: "",
-                            name: "TA",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Village*",
-                            value: "",
-                            name: "Village",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            validate: false,
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-] as any;
-const initialAddVillage = [
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Village*",
-                            value: "",
-                            name: "Village",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            validate: false,
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-] as any;
+
 const initialGuardianInformation = [
     {
         selectedData: {},
@@ -886,8 +791,6 @@ export const useRegistrationStore = defineStore("registrationStore", {
         currentLocation: [...initialCurrentLocation],
         country: [...initialCountry],
         guardianInformation: [...initialGuardianInformation],
-        addTA: [...initialAddTA],
-        addVillage: [...initialAddVillage],
     }),
     actions: {
         setPersonalInformation(data: any) {

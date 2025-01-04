@@ -190,7 +190,7 @@ export default defineComponent({
             this.workerApi = workerData.workerApi;
             await workerData.postData("SET_OFFLINE_PROGRAMS");
         },
-        async getPrograms() {
+        getPrograms() {
             if (this.programList && Object.keys(this.programList).length > 0) {
                 this.programList.sort((a: any, b: any) => a.name.localeCompare(b.name));
                 this.multiSelectData = this.programList;

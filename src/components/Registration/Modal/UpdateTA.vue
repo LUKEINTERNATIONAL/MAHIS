@@ -14,7 +14,7 @@
         <div class="btnContent">
             <div class="saveBtn">
                 <ion-button class="btnText" color="danger" fill="solid" @click="dismiss()" style="margin-right: 8px"> Cancel </ion-button>
-                <ion-button class="btnText" fill="solid" @click="saveData"> Save </ion-button>
+                <ion-button class="btnText" fill="solid" @click="updateTA"> Save </ion-button>
             </div>
         </div>
     </div>
@@ -30,33 +30,41 @@ import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
 import { validateInputFiledData } from "@/services/group_validation";
 import { ref, onMounted } from "vue";
+import { Service } from "@/services/service";
 
 onMounted(async () => {
-    await setDistrict();
+    await setData();
 });
-
-const setDistrict = async () => {
+const props: any = defineProps({
+    taData: Object,
+});
+const setData = async () => {
+    const district_data: any = await getOfflineRecords("districts", { whereClause: { district_id: props.taData.district_id } });
     modifyFieldValue(TA_form.value, "TA_district", "multiSelectData", await getOfflineRecords("districts"));
+    modifyFieldValue(TA_form.value, "TA_district", "value", district_data[0]);
+    modifyFieldValue(TA_form.value, "TA", "value", props.taData.name);
 };
 const dismiss = () => {
     modalController.dismiss();
 };
-const saveData = async () => {
+const updateTA = async () => {
     if (await validateInputFiledData(TA_form.value)) {
         const TAValue = getFieldValue(TA_form.value, "TA", "value");
-        const villageValue = getFieldValue(TA_form.value, "Village", "value").split(",");
         const district_id = getFieldValue(TA_form.value, "TA_district", "value").district_id;
 
-        const address = await LocationService.createAddress({
-            address_type: "Village",
-            addresses: villageValue,
-            parent_location: district_id,
-            ta_name: TAValue,
+        const address = await Service.putJson(`traditional_authorities/${props.taData.traditional_authority_id}`, {
+            id: props.taData.traditional_authority_id,
+            name: TAValue,
+            district_id: district_id,
         });
+
         if (address) {
-            await workerData.postData("ADD_OBJECT_STORE", { storeName: "TAs", data: address.ta_data });
-            Promise.all(address.village_data.map((item: any) => workerData.postData("ADD_OBJECT_STORE", { storeName: "villages", data: item })));
-            toastSuccess(`Location added successfully`);
+            await workerData.postData("UPDATE_RECORD", {
+                storeName: "TAs",
+                data: address.data,
+                whereClause: { traditional_authority_id: props.taData.traditional_authority_id },
+            });
+            toastSuccess(`TA updated successfully`);
         }
         dismiss();
     } else {
@@ -104,25 +112,6 @@ const TA_form = ref([
                             name: "TA",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            validationFunctionName: "required",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Village*",
-                            value: "",
-                            name: "Village",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            validate: false,
                             validationFunctionName: "required",
                         },
                     ],

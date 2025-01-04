@@ -10,6 +10,16 @@
         </ion-header>
         <ion-content style="--background: #fff">
             <div class="container">
+                <div style="margin-top: 25px">
+                    <DynamicButton
+                        style="height: 45px"
+                        name=" Add Village"
+                        size="small"
+                        iconSlot="start"
+                        :icon="icons.plusWhite"
+                        @click="addVillageModal()"
+                    />
+                </div>
                 <div class="table-responsive">
                     <DataTable ref="dataTableRef" :options="options" class="display nowrap" width="100%">
                         <thead>
@@ -35,11 +45,16 @@ import DataTablesCore from "datatables.net";
 import DataTablesResponsive from "datatables.net-responsive";
 import { getOfflineRecords } from "@/services/offline_service";
 import { createModal } from "@/utils/Alerts";
-import { toastWarning } from "@/utils/Alerts";
+import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import { useStockStore } from "@/stores/StockStore";
 import { useStartEndDate } from "@/stores/StartEndDate";
 import { icons } from "@/utils/svg";
+import DynamicButton from "@/components/DynamicButton.vue";
+import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
+import workerData from "@/activate_worker";
+import { Service } from "@/services/service";
+import UpdateVillage from "@/components/Registration/Modal/UpdateVillage.vue";
 
 // Store initialization
 const stockStore = useStockStore();
@@ -134,7 +149,28 @@ const handleDelete = async (id: any) => {
     console.log(`Deleting item with id: ${id}`);
     // Implement delete logic here
 };
-
+const reloadTableData = (reloadPagination: boolean = true) => {
+    const table = (dataTableRef.value as any).dt; // Access the DataTable instance
+    table.ajax.reload(null, reloadPagination); // Reload data and maintain the current pagination state
+};
+const addVillageModal = async () => {
+    const ta_data = JSON.parse(JSON.stringify(props.taData));
+    await createModal(AddVillage, { class: "fullScreenModal" }, true, { taData: ta_data });
+    reloadTableData(false);
+};
+const openDeletePopover = async (villageData: any, e: any) => {
+    const deleteConfirmed = await popoverConfirmation(`Do you want to delete village ${villageData.name} ?`, e);
+    if (deleteConfirmed) {
+        deleteTA(villageData);
+    }
+};
+const deleteTA = async (villageData: any) => {
+    const res = await Service.delete(`villages/${villageData.village_id}`, { id: villageData.village_id });
+    if (res?.message == "Village successfully deleted") {
+        await workerData.postData("DELETE_RECORD", { storeName: "villages", whereClause: { village_id: villageData.village_id } });
+    }
+    reloadTableData(false);
+};
 const openModal = async (clientData: any) => {
     // const data: any = await createModal(OfflineMoreDetailsModal, { class: "fullScreenModal" }, true, { clientData: clientData });
     // if (data === "dismiss") {
@@ -161,24 +197,22 @@ watch(
     },
     { deep: true }
 );
-
+const updateVillageModal = async (villageData: any) => {
+    await createModal(UpdateVillage, { class: "fullScreenModal" }, true, { villageData: villageData });
+    reloadTableData(false);
+};
 // Event handlers setup
 const setupEventHandlers = () => {
     const table = (dataTableRef.value as any).dt;
 
     table.on("click", ".edit-btn", (e: Event) => {
-        const id = (e.target as HTMLElement).getAttribute("data-id");
-        if (id) handleEdit(id);
+        const data = (e.target as HTMLElement).getAttribute("data-id");
+        if (data) updateVillageModal(JSON.parse(data));
     });
 
     table.on("click", ".delete-btn", (e: Event) => {
-        const id = (e.target as HTMLElement).getAttribute("data-id");
-        if (id) handleDelete(id);
-    });
-
-    table.on("click", ".view-btn", (e: Event) => {
-        const id = (e.target as HTMLElement).getAttribute("data-id");
-        if (id) handleEdit(id);
+        const data = (e.target as HTMLElement).getAttribute("data-id");
+        if (data) openDeletePopover(JSON.parse(data), e);
     });
 };
 

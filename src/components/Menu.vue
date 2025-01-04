@@ -43,14 +43,14 @@
                         </ion-item>
                     </ion-accordion>
 
-                    <ion-accordion value="5" @click="navigationMenu('locationsManagement')" toggle-icon="">
+                    <ion-accordion value="6" @click="navigationMenu('locationsManagement')" toggle-icon="">
                         <ion-item slot="header" color="light">
                             <ion-icon :icon="documentOutline" slot="start"></ion-icon>
                             <ion-label class="header lft-drpm">Location Management</ion-label>
                         </ion-item>
                     </ion-accordion>
 
-                    <ion-accordion value="6" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
+                    <ion-accordion value="7" @click="navigationMenu('Deduplicateclients')" toggle-icon="">
                         <ion-item slot="header" color="light">
                             <ion-icon :icon="peopleOutline" slot="start"></ion-icon>
                             <ion-label class="header lft-drpm">De-Duplication</ion-label>
@@ -59,7 +59,7 @@
 
                     <ion-accordion></ion-accordion>
                 </ion-accordion-group>
-                <ion-accordion value="6">
+                <ion-accordion value="8">
                     <ion-item slot="header" color="light">
                         <ion-icon :icon="barChartOutline" slot="start"></ion-icon>
                         <ion-label class="header lft-drpm">Reports</ion-label>
@@ -149,7 +149,7 @@
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
-                <ion-accordion value="7" v-if="isSuperuser" style="border-radius: 0px">
+                <ion-accordion value="9" v-if="isSuperuser" style="border-radius: 0px">
                     <ion-item slot="header" color="light">
                         <ion-icon :icon="settingsOutline" slot="start"></ion-icon>
                         <ion-label class="header lft-drpm">Settings</ion-label>
