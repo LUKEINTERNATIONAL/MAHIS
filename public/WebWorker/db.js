@@ -92,7 +92,7 @@ const DatabaseManager = {
             };
 
             transaction.oncomplete = () => {
-                console.log("Transaction completed successfully");
+                console.log("");
             };
         });
     },
