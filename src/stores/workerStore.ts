@@ -6,13 +6,15 @@ import { toastSuccess } from "@/utils/Alerts";
 import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { buildPatientRecord } from "@/services/buildingPatientRecord";
+import { useWorkerStatus } from "@/composables/useWorkerStatus";
 
 export const useWorkerStore = defineStore("worker", () => {
-    const workerApi = ref<any>(null);
+    // const workerApi = ref<any>(null);
     const doneLoading = ref(false);
     const route = ref("");
     let patientID: any = ref("");
     let router: any = null;
+    const { syncRegistrationMetaData, workerApi } = useWorkerStatus();
 
     workerApi.value = workerData.workerApi;
     watch(
@@ -21,10 +23,11 @@ export const useWorkerStore = defineStore("worker", () => {
             if (newValue?.data?.msg === "done building patient record") {
                 workerData.postData("RESET");
                 doneLoading.value = true;
+                await syncRegistrationMetaData();
                 await setRecord(newValue?.data?.payload);
             }
             if (newValue?.data?.msg === "saved successfully" || newValue?.data?.msg === "Done Syncing") {
-                patientID.value = newValue?.data?.payload?.ID;
+                patientID.value = newValue?.data?.ID;
                 if (patientID.value) {
                     if (newValue?.data?.msg === "Done Syncing") {
                         route.value = "";
@@ -34,6 +37,7 @@ export const useWorkerStore = defineStore("worker", () => {
                     }
                     workerData.postData("RESET");
                     const offlinePatientData = await getOfflinePatientData(patientID.value);
+                    await syncRegistrationMetaData();
                     await setRecord(offlinePatientData);
                 }
             }
@@ -96,7 +100,9 @@ export const useWorkerStore = defineStore("worker", () => {
         workerApi.value = data;
     }
 
-    function postWorkerData(action: string, payload?: any) {
+    async function postWorkerData(action: string, payload?: any) {
+        await workerData.terminate();
+        workerApi.value = workerData.workerApi;
         workerData.postData(action, payload);
     }
 
