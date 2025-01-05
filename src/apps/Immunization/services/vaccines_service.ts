@@ -14,6 +14,7 @@ import platform, { FileExportType } from "@/composables/usePlatform";
 import { exportMobile } from "@/utils/Export";
 import { saveOfflinePatientData } from "@/services/offline_service";
 import { getOfflineRecords } from "@/services/offline_service";
+import { useStatusStore } from "@/stores/StatusStore";
 
 export async function saveVaccineAdministeredDrugs(patient: any) {
     const store = useAdministerVaccineStore();
@@ -49,18 +50,27 @@ export async function getOfflineVaccineSchedule(gender: string, birthdate: strin
 
 async function getGenericVaccineSchedule(gender: string) {
     try {
-        const genericVaccineSchedule: any = await getOfflineRecords("genericVaccineSchedule");
-        if (gender == "M") {
-            return genericVaccineSchedule[0].genericVaccineSchedule.male_schedule;
-        } else if (gender == "F") {
-            return genericVaccineSchedule[0].genericVaccineSchedule.female_schedule;
+        let genericVaccineSchedule: any = "";
+        if (useStatusStore().apiStatus && useStatusStore().registrationMetaDataStatus()) {
+            genericVaccineSchedule = await getOfflineRecords("genericVaccineSchedule");
+            if (gender == "M") {
+                return genericVaccineSchedule[0].genericVaccineSchedule.male_schedule;
+            } else if (gender == "F") {
+                return genericVaccineSchedule[0].genericVaccineSchedule.female_schedule;
+            }
+        } else {
+            genericVaccineSchedule = await Service.getJson("eir/schedule/generic", { paginate: false });
+            if (gender == "M") {
+                return genericVaccineSchedule.male_schedule;
+            } else if (gender == "F") {
+                return genericVaccineSchedule.female_schedule;
+            }
         }
     } catch (error) {
         console.error("Error getting offline generic vaccine schedule", error);
         return [];
     }
 }
-
 async function updateMilestoneStatus(birthdate: Date, schedule: any[]) {
     const today = new Date();
 
