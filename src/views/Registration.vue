@@ -448,8 +448,8 @@ export default defineComponent({
         },
         async createPatient() {
             const ddeIds: any = await getOfflineRecords("dde").then((data: any) => data?.[0]);
-            if (ddeIds?.ids.length > 0) {
-                this.ddeId = ddeIds.ids[0].npid;
+            if (ddeIds?.ids?.length > 0 || this.apiStatus) {
+                this.ddeId = ddeIds?.ids[0]?.npid || "";
 
                 const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
                 const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
@@ -480,9 +480,11 @@ export default defineComponent({
                     if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
 
                     const offlinePatientData = await this.createOfflineRecord();
+                    if (ddeIds?.ids?.length > 0) {
+                        ddeIds.ids = ddeIds.ids.slice(1);
+                        await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: ddeIds });
+                    }
 
-                    ddeIds.ids = ddeIds.ids.slice(1);
-                    await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: ddeIds });
                     await this.setURLs();
                     if (this.apiStatus) {
                         await workerData.postData("SYNC_DDE");
