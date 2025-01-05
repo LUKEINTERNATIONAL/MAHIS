@@ -6,6 +6,7 @@ import { RelationsService } from "@/services/relations_service";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { getOfflineRecords } from "@/services/offline_service";
+import { useStatusStore } from "@/stores/StatusStore";
 
 export default defineComponent({
     data: () => ({
@@ -17,6 +18,7 @@ export default defineComponent({
     computed: {
         ...mapState(useRegistrationStore, ["guardianInformation", "personInformation"]),
         ...mapState(useDemographicsStore, ["patient"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
         gender() {
             return getRadioSelectedValue(this.personInformation, "gender") || this.patient?.personInformation?.gender;
         },
@@ -31,11 +33,16 @@ export default defineComponent({
         },
     },
     methods: {
+        metaDataRegSyncStatus() {
+            return useStatusStore().registrationMetaDataStatus();
+        },
         async getRelationships() {
             if (this.gender) {
                 this.relationshipsData = await getOfflineRecords("relationship");
+                if (this.apiStatus && !this.metaDataRegSyncStatus()) {
+                    this.relationshipsData = await RelationsService.getRelations();
+                }
                 this.filterRelationships();
-
                 this.relationships = this.filteredRelationships
                     .map((r: any) => {
                         return [
