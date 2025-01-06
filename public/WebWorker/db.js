@@ -91,9 +91,7 @@ const DatabaseManager = {
                 reject(new Error(`Transaction failed: ${event.target.error}`));
             };
 
-            transaction.oncomplete = () => {
-                console.log("");
-            };
+            transaction.oncomplete = () => {};
         });
     },
     upsertSingleRecord(storeName, data) {
