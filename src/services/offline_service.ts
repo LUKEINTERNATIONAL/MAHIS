@@ -1,6 +1,8 @@
 import workerData from "@/activate_worker";
 import { toRaw } from "vue";
 import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useStatusStore } from "@/stores/StatusStore";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
@@ -162,5 +164,9 @@ export async function saveOfflinePatientData(patientData: any) {
     await workerStore.terminate();
     await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
     await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
-    await workerData.postData("SAVE_PATIENT_RECORD", { data: plainPatientData });
+    if (useStatusStore().apiStatus) await workerData.postData("SAVE_PATIENT_RECORD", { data: plainPatientData });
+    else {
+        const demographicsStore = useDemographicsStore();
+        demographicsStore.setPatient(plainPatientData);
+    }
 }
