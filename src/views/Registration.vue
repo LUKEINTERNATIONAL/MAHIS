@@ -478,7 +478,7 @@ export default defineComponent({
                     }
 
                     if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-
+                    await this.workerStore.terminate();
                     const offlinePatientData = await this.createOfflineRecord();
                     if (ddeIds?.ids?.length > 0) {
                         ddeIds.ids = ddeIds.ids.slice(1);
@@ -488,7 +488,7 @@ export default defineComponent({
                     await this.setURLs();
                     if (this.apiStatus) {
                         await workerData.postData("SYNC_DDE");
-                        this.workerStore.postWorkerData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
+                        await this.workerStore.postWorkerData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
                         // workerData.postData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
                         // this.savePatientRecord(offlinePatientData);
                     } else {
