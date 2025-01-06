@@ -114,7 +114,7 @@ const patientService = {
                 console.error("Failed to save person information", error);
             }
         }
-        return record.patientID;
+        return { patientID: record.patientID, ID: record.ID };
     },
     async create_patient_identifiers(newID, type, patientID) {
         await ApiService.post("patient_identifiers", {
@@ -171,6 +171,7 @@ const patientService = {
                 });
                 if (obs?.length > 0) {
                     const vitals = record.vitals;
+                    vitals.saved = [...record.vitals.unsaved, ...record.vitals.saved];
                     vitals.unsaved = [];
                     await DatabaseManager.updateRecord(
                         "patientRecords",
