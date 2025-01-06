@@ -577,8 +577,10 @@ export default defineComponent({
             modalController.dismiss();
         },
         async updateCheckInStatus() {
-            const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
-            this.checkedIn = !!visit.length;
+            try {
+                const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
+                this.checkedIn = !!visit.length;
+            } catch (error) {}
         },
         closeCheckInModal() {
             this.checkInModalOpen = false;
@@ -728,7 +730,7 @@ export default defineComponent({
 
             console.log({ programs });
 
-            this.enrolledPrograms = programs.map((p: any) => ({
+            this.enrolledPrograms = programs?.map((p: any) => ({
                 name: p.program.name,
                 id: p.program_id,
             }));
