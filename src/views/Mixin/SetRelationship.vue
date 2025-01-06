@@ -33,13 +33,10 @@ export default defineComponent({
         },
     },
     methods: {
-        metaDataRegSyncStatus() {
-            return useStatusStore().registrationMetaDataStatus();
-        },
         async getRelationships() {
             if (this.gender) {
                 this.relationshipsData = await getOfflineRecords("relationship");
-                if (this.apiStatus && !this.metaDataRegSyncStatus()) {
+                if (this.apiStatus && this.relationshipsData.length != useStatusStore().offlineRelationshipStatus?.total) {
                     this.relationshipsData = await RelationsService.getRelations();
                 }
                 this.filterRelationships();
