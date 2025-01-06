@@ -202,6 +202,7 @@ const patientService = {
             });
             record.vaccineAdministration.orders = [];
             record.vaccineAdministration.obs = [];
+            record.vaccineSchedule = await syncPatientDataService.getVaccineAdministration(patientID);
             DatabaseManager.overRideRecordRecord("patientRecords", record, { ID: record.ID });
         }
     },
@@ -222,6 +223,7 @@ const patientService = {
             );
 
             record.vaccineAdministration.voided = [];
+            record.vaccineSchedule = await syncPatientDataService.getVaccineAdministration(patientID);
             DatabaseManager.overRideRecordRecord("patientRecords", record, { ID: record.ID });
         }
     },
