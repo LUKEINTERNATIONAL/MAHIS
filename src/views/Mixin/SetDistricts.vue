@@ -9,8 +9,6 @@ export default defineComponent({
     data: () => ({
         districtList: [] as any,
         countriesList: [] as any,
-        TAsList: [] as any,
-        villageList: [] as any,
         locations: [] as any,
     }),
     async mounted() {
@@ -23,35 +21,25 @@ export default defineComponent({
         async getLocationData() {
             this.districtList = await getOfflineRecords("districts");
             this.countriesList = await getOfflineRecords("countries");
-            this.TAsList = await getOfflineRecords("TAs");
-            this.villageList = await getOfflineRecords("villages");
-
-            if (this.apiStatus && !this.metaDataRegSyncStatus()) {
-                this.countriesList = await LocationService.getDistricts(4);
-
-                let districtList = [];
+            if (this.apiStatus && this.districtList.length != useStatusStore().offlineDistrictStatus?.total) {
                 for (let i of [1, 2, 3]) {
                     const districts = await LocationService.getDistricts(i);
-                    districtList.push(...districts);
+                    this.districtList.push(...districts);
                 }
-                this.districtList = districtList;
             }
-        },
-        metaDataRegSyncStatus() {
-            return useStatusStore().registrationMetaDataStatus();
+            if (this.apiStatus && this.countriesList.length != useStatusStore().offlineCountriesStatus?.total) {
+                this.countriesList = await LocationService.getDistricts(4);
+            }
         },
         async getVillages(targetId: any) {
-            if (this.apiStatus && !this.metaDataRegSyncStatus()) {
-                return await LocationService.getVillages(targetId);
-            }
-            if (this.villageList == "") return null;
-            return this.villageList?.filter((obj: any) => obj.traditional_authority_id === targetId);
+            const offlineVillage: any = await getOfflineRecords("villages", { whereClause: { traditional_authority_id: targetId } });
+            if (offlineVillage.length > 0) return offlineVillage;
+            if (this.apiStatus) return await LocationService.getVillages(targetId);
         },
         async getTAs(targetId: any) {
-            if (this.apiStatus && !this.metaDataRegSyncStatus()) {
-                return await LocationService.getTraditionalAuthorities(targetId);
-            }
-            return await getOfflineRecords("TAs", { whereClause: { district_id: targetId } });
+            const offlineTA: any = await getOfflineRecords("TAs", { whereClause: { district_id: targetId } });
+            if (offlineTA.length > 0) return offlineTA;
+            if (this.apiStatus) return await LocationService.getTraditionalAuthorities(targetId);
         },
         getDistricts(targetId: any) {
             return this.districtList.filter((obj: any) => obj.region_id === targetId);
