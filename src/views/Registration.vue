@@ -489,9 +489,13 @@ export default defineComponent({
                     if (this.apiStatus) {
                         await workerData.postData("SYNC_DDE");
                         await this.workerStore.postWorkerData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
-                        if (this.programID() == 33) this.$router.push("/patientProfile");
+                        if (this.programID() == 33 && ddeIds?.ids?.length > 0) {
+                            this.workerStore.route = "";
+                            await this.workerStore.setPatientRecord(offlinePatientData);
+                            this.$router.push("/patientProfile");
+                        }
                     } else {
-                        this.workerStore.setPatientRecord(offlinePatientData);
+                        await this.workerStore.setPatientRecord(offlinePatientData);
                     }
                 } else {
                     toastWarning("Please complete all required fields");
@@ -598,7 +602,7 @@ export default defineComponent({
             await resetPatientData();
             this.isLoading = false;
             this.disableSaveBtn = false;
-            if ((this.programID() == 32 || this.programID() == 33) && this.apiStatus) {
+            if (this.programID() == 32 && this.apiStatus) {
                 this.workerStore.route = "";
             } else if (this.programID()) {
                 this.workerStore.route = "/patientProfile";
