@@ -395,7 +395,6 @@ export default defineComponent({
                     this.updateGraph = JSON.parse(JSON.stringify(this.patient));
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
-                    // if (!this.patient.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
                 }
