@@ -62,15 +62,19 @@ export class ConceptService extends Service {
 
     static getConceptID(conceptName: string, strictMode = true) {
         try {
-            return this.getCachedConceptID(conceptName, strictMode);
+            const concepts: any = this.getCachedConceptID(conceptName, strictMode);
+            if (concepts.length > 0) {
+                return this.resolveConcept(concepts, conceptName);
+            } else {
+                return this.getConceptIDFromApi(conceptName);
+            }
         } catch (e) {
-            return this.getConceptIDFromApi(conceptName);
+            console.log(e);
         }
     }
 
     static async getCachedConceptID(conceptName: string, strictMode = false) {
-        const concepts = await getOfflineRecords("conceptNames", { whereClause: { name: conceptName } });
-        return this.resolveConcept(concepts, conceptName);
+        return await getOfflineRecords("conceptNames", { whereClause: { name: conceptName } });
     }
 
     static async getConceptIDFromApi(name: string) {
