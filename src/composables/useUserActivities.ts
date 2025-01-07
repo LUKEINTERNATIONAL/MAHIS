@@ -22,7 +22,7 @@ export function useUserActivities() {
                 property: activities,
             });
 
-            return userData.property_value ? userData.property_value.split(",") : [];
+            return userData?.property_value ? userData?.property_value?.split(",") : [];
         } catch (error) {
             console.error("Error fetching user activities:", error);
             return [];

@@ -1,4 +1,5 @@
 import { ConceptService } from "@/services/concept_service";
+import HisDate from "@/utils/Date";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -66,7 +67,7 @@ export async function formatGroupRadioButtonData(data: any, date: any = ConceptS
 
     return (await Promise.all(buildObjPromises)).filter((obj) => obj !== null);
 }
-export async function formatInputFiledData(data: any, obs_datetime: any = ConceptService.getSessionDate(), childData = "") {
+export async function formatInputFiledData(data: any, obs_datetime: any = HisDate.getCurrentDateTimeWithOffset(), childData = "") {
     const buildObjPromises = data.map(async (item: any) => {
         if (!item?.data?.rowData) return [];
 

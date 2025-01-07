@@ -95,27 +95,19 @@ export default defineComponent({
             await this.updateData();
         },
         processObservations() {
-            try {
-                let result: any = [];
-                let allDates: any = "";
-                if (this.weight && this.height)
-                    allDates = new Set([...this.weight?.map((w: any) => w.obs_datetime), ...this.height?.map((h: any) => h?.obs_datetime)]);
-                else if (this.weight) allDates = new Set([...this.weight?.map((w: any) => w.obs_datetime)]);
-                else if (this.height) allDates = new Set([...this.height?.map((h: any) => h?.obs_datetime)]);
+            if (!this.weight && !this.height) return [];
 
-                allDates?.forEach((datetime: any) => {
-                    let weightObs = this.weight?.find((w: any) => w.obs_datetime === datetime);
-                    let heightObs = this.height?.find((h: any) => h.obs_datetime === datetime);
+            const allDates = new Set([...(this.weight?.map((w: any) => w.obs_datetime) || []), ...(this.height?.map((h) => h.obs_datetime) || [])]);
 
-                    result.push({
-                        ids: { weightObsId: weightObs?.obs_id, heightObsId: heightObs?.obs_id },
-                        obs_datetime: datetime,
-                        weight: weightObs ? weightObs?.value_numeric : null,
-                        height: heightObs ? heightObs?.value_numeric : null,
-                    });
-                });
-                return result;
-            } catch (error) {}
+            return Array.from(allDates).map((datetime) => ({
+                ids: {
+                    weightObsId: this.weight?.find((w: any) => w.obs_datetime === datetime)?.obs_id,
+                    heightObsId: this.height?.find((h: any) => h.obs_datetime === datetime)?.obs_id,
+                },
+                obs_datetime: datetime,
+                weight: this.weight?.find((w: any) => w.obs_datetime === datetime)?.value_numeric ?? null,
+                height: this.height?.find((h: any) => h.obs_datetime === datetime)?.value_numeric ?? null,
+            }));
         },
         async updateData() {
             try {

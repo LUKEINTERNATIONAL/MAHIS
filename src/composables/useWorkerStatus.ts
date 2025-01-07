@@ -30,11 +30,12 @@ export function useWorkerStatus() {
         }
     };
     const syncRegistrationMetaData = async () => {
+        await workerData.terminate();
+        workerApi.value = workerData.workerApi;
         await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
         await workerData.postData("SET_OFFLINE_LOCATION");
     };
     const syncOtherMetaData = async () => {
-        console.log("done");
         await workerData.postData("SYNC_DDE");
         await workerData.postData("SYNC_CONCEPTS");
         await workerData.postData("SYNC_STOCK_RECORD");
@@ -48,7 +49,9 @@ export function useWorkerStatus() {
             if (workerApi.value?.data?.payload) {
                 setWorkerStatus();
                 if (statusStore.registrationMetaDataStatus()) {
-                    if (workerApi.value?.data?.payload?.total_village) await syncOtherMetaData();
+                    if (workerApi.value?.data?.payload?.total_village) {
+                        await syncOtherMetaData();
+                    }
                 }
             }
         },
