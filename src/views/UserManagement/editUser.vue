@@ -63,10 +63,12 @@
 
             <ion-row>
                 <ion-col>
-                    <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
-                        >Phone<span style="color: #b42318">*</span></ion-label
-                    >
-                    <BasicInputField :placeholder="'phone number'" :icon="phonePortraitOutline" :inputValue="''" @update:inputValue="" />
+                    <userPhoneInput @validateInput="userPhoneChange" :user-phone="selectedPhoneNumber"/>
+                    <div>
+                        <ion-label v-if="phone_input_properties[0].show_error.value" class="error-label">
+                            {{ phone_input_properties[0].error_message }}
+                        </ion-label>
+                    </div>
                 </ion-col>
             </ion-row>
 
@@ -367,6 +369,7 @@ import Toggle from "@vueform/toggle";
 import ListPicker from "../../components/ListPicker.vue";
 import sselectionList from "@/components/SselectionList.vue";
 import userActivities from "./userActivities.vue";
+import userPhoneInput from "./userPhoneInput.vue"
 import VueMultiselect from "vue-multiselect";
 import { LocationService } from "@/services/location_service";
 import { isEmpty } from "lodash";
@@ -431,6 +434,7 @@ const selectedVillageIds: any[] = [];
 const traditionalAuthorities = ref([]) as any;
 const userStore = useUserStore();
 const disableFacilitySelection = ref(true);
+const selectedPhoneNumber = ref()
 
 const props = defineProps<{
     toggle: true;
@@ -488,7 +492,6 @@ function setSelectedDistrict() {
                 ? districtList.value.filter((district: any) => district.name === selectedLocation.district)
                 : [];
 
-            console.log(filteredDistricts);
             selected_Districts.value = filteredDistricts[0];
         }
     } catch (error) {}
@@ -825,11 +828,20 @@ async function getUserData() {
     last_name.value = userLastname(user_data.value.person.names);
     input_properties[2].dataValue.value = last_name.value;
 
+    handleUserPersonAttributes(user_data.value.person.person_attributes);
     selectGender(user_data.value.person);
     fillUserRoles();
     fillUserPrograms();
     getAPICounterPart();
     getUserStatus();
+}
+
+function handleUserPersonAttributes(person_attributes: any) {
+    person_attributes.forEach((attribute: any) => {
+        if (attribute.person_attribute_type_id == 12) {
+            selectedPhoneNumber.value = attribute.value;
+        }
+    });
 }
 
 async function preSaveRoles() {
@@ -1236,9 +1248,8 @@ function isSSelectionValid() {
 }
 
 async function updateuserPersoninf() {
-    const data1 = getFieldsValuesObj(input_properties);
     const updatedData = {
-        cell_phone_number: data1.phone_number,
+        cell_phone_number: phone_input_properties[0].dataValue.value,
         gender: getGenderCode(isSSelection_properties[0].dataValue.value),
     } as any;
     const personService = new PersonService(updatedData);
@@ -1258,6 +1269,34 @@ function selectGender(person: any) {
     });
     isSSelection_properties[0].selectedOption.value = selected_opt;
 }
+
+const phone_input_properties = [
+    {
+        placeHolder: 'phone number',
+        property_name: 'phone_number',
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, input is invalid',
+        is_phone_valid: ref(false)
+    },
+]
+
+async function userPhoneChange(data: any) {
+    if (data.is_valid == false) {
+        phone_input_properties[0].show_error.value = true
+        selectedPhoneNumber.value = data.phone
+        phone_input_properties[0].dataValue.value = data.phone
+        phone_input_properties[0].is_phone_valid.value = false
+    }
+
+    if (data.is_valid == true) {
+        phone_input_properties[0].show_error.value = false
+        selectedPhoneNumber.value = data.phone
+        phone_input_properties[0].dataValue.value = data.phone
+        phone_input_properties[0].is_phone_valid.value = true
+    }
+}
+
 </script>
 <style src="@vueform/toggle/themes/default.css"></style>
 <style scoped>

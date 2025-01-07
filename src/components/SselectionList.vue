@@ -46,7 +46,6 @@ watch(
 watch(
     () => props.selectedOpt,
     async (newValue) => {
-        console.log(newValue)
         selectedOption.value = newValue
     }
 )

@@ -407,6 +407,11 @@ export default defineComponent({
         async setListData() {
             this.orders = await OrderService.getOrders(this.patient.patientID);
             const tableData: any = this.generateListItems(this.orders, "order");
+          tableData.sort((a:any, b:any) => {
+            const dateA = new Date(a[3]); // Access the order date from the array
+            const dateB = new Date(b[3]);
+            return dateB.getTime() - dateA.getTime(); // Sort in descending order
+          });
             const predefineTests = [
                 [
                     "FBS",
