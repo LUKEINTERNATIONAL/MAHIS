@@ -50,15 +50,14 @@ export async function getOfflineVaccineSchedule(gender: string, birthdate: strin
 
 async function getGenericVaccineSchedule(gender: string) {
     try {
-        let genericVaccineSchedule: any = "";
-        if (useStatusStore().apiStatus && useStatusStore().registrationMetaDataStatus()) {
-            genericVaccineSchedule = await getOfflineRecords("genericVaccineSchedule");
+        let genericVaccineSchedule: any = await getOfflineRecords("genericVaccineSchedule");
+        if (genericVaccineSchedule.length > 0) {
             if (gender == "M") {
                 return genericVaccineSchedule[0].genericVaccineSchedule.male_schedule;
             } else if (gender == "F") {
                 return genericVaccineSchedule[0].genericVaccineSchedule.female_schedule;
             }
-        } else {
+        } else if (useStatusStore().apiStatus) {
             genericVaccineSchedule = await Service.getJson("eir/schedule/generic", { paginate: false });
             if (gender == "M") {
                 return genericVaccineSchedule.male_schedule;
