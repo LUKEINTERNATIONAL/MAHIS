@@ -60,9 +60,9 @@ export class ConceptService extends Service {
         return this.getConceptNameFromApi(conceptId);
     }
 
-    static getConceptID(conceptName: string, strictMode = true) {
+    static async getConceptID(conceptName: string, strictMode = true) {
         try {
-            const concepts: any = this.getCachedConceptID(conceptName, strictMode);
+            const concepts: any = await this.getCachedConceptID(conceptName, strictMode);
             if (concepts.length > 0) {
                 return this.resolveConcept(concepts, conceptName);
             } else {
