@@ -39,7 +39,7 @@
                 :title="enrollModalTitle"
             />
 
-            <PatientProfile v-if="activeProgramID == 33" />
+            <PatientProfile :updateData="patient" v-if="activeProgramID == 33" />
             <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
                 <ion-row class="content_width">
                     <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
@@ -205,7 +205,7 @@
                         <div v-if="segmentContent == 'Patient Charts'">
                             <div style="display: flex; margin-top: 10px">
                                 <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
-                                    <WeightHeightChart />
+                                    <WeightHeightChart :updateGraph="updateGraph" />
                                 </div>
                                 <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px">
                                     <BloodPressure />
@@ -447,6 +447,7 @@ export default defineComponent({
             programToEnroll: 0,
             enrollModalTitle: "",
             programBtn: [],
+            updateGraph: {},
         };
     },
     computed: {
@@ -483,6 +484,7 @@ export default defineComponent({
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
                 this.updateCheckInStatus();
+                this.updateGraph = JSON.parse(JSON.stringify(this.patient));
                 // await this.handleProgramClick(btn);
             },
             deep: true,
