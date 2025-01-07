@@ -33,12 +33,12 @@ export function useWorkerStatus() {
         await workerData.terminate();
         workerApi.value = workerData.workerApi;
         await workerData.postData("SYNC_DDE");
+        await workerData.postData("SYNC_CONCEPTS");
         await workerData.postData("SET_GENERIC_VACCINE_SCHEDULE");
         await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
         await workerData.postData("SET_OFFLINE_LOCATION");
     };
     const syncOtherMetaData = async () => {
-        await workerData.postData("SYNC_CONCEPTS");
         await workerData.postData("SYNC_STOCK_RECORD");
         await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
     };
