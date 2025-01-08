@@ -74,14 +74,7 @@ const LocationService = {
         try {
             const allVillage = [];
             let page = 1;
-            let pageSize = 500;
-            const villagesData = await DatabaseManager.getOfflineData("villages");
-            if (villagesData && villagesData.length > 0) {
-                page = parseInt(villagesData.length) / 500;
-                page = parseInt(page);
-                allVillage.push(...villagesData);
-            }
-
+            let pageSize = 1000;
             while (true) {
                 const newVillages = await ApiService.getData("/villages", { page, page_size: pageSize });
                 if (newVillages.length > 0) {

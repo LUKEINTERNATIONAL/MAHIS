@@ -75,7 +75,7 @@
         </div>
         <div class="graphSection">
             <div>
-                <WeightHeightChart :checkUnderSixWeeks="checkUnderSixWeeks" :showHeightWeight="true" v-if="isChild()" />
+                <WeightHeightChart :checkUnderSixWeeks="checkUnderSixWeeks" :updateGraph="updateGraph" :showHeightWeight="true" v-if="isChild()" />
                 <PreviousVitals v-if="!isChild()" />
             </div>
 
@@ -343,6 +343,7 @@ export default defineComponent({
             wizardData: [] as any,
             StepperData: [] as any,
             isOpen: false,
+            updateGraph: {},
             iconsContent: icons,
             current_milestone: "" as string,
             checkUnderSixWeeks: false,
@@ -390,10 +391,10 @@ export default defineComponent({
         },
         patient: {
             async handler() {
-                if (this.patient.patientID) {
+                if (this.patient) {
+                    this.updateGraph = JSON.parse(JSON.stringify(this.patient));
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
-                    // if (!this.patient.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
                 }
@@ -409,20 +410,22 @@ export default defineComponent({
             this.selectedStatus = status;
         },
         async programEnrollment() {
-            this.program = new PatientProgramService(this.patient.patientID);
-            const checkEnrollment = await this.program.getProgramCurrentStates();
-            if (!checkEnrollment) {
-                try {
-                    await this.program.enrollProgram();
-                    await this.program.setStateId(7);
-                } catch (error) {
-                    await this.program.setStateId(7);
-                }
-                await this.program.updateState();
+            if (this.patient.patientID) {
+                this.program = new PatientProgramService(this.patient.patientID);
+                const checkEnrollment = await this.program.getProgramCurrentStates();
+                if (!checkEnrollment) {
+                    try {
+                        await this.program.enrollProgram();
+                        await this.program.setStateId(7);
+                    } catch (error) {
+                        await this.program.setStateId(7);
+                    }
+                    await this.program.updateState();
 
-                this.selectedStatus = 7;
-            } else {
-                this.selectedStatus = checkEnrollment.state;
+                    this.selectedStatus = 7;
+                } else {
+                    this.selectedStatus = checkEnrollment.state;
+                }
             }
         },
         async updateState(state: any) {

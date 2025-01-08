@@ -26,20 +26,11 @@ export class LocationService extends Service {
         const params = {
             city_village: cityVillage,
         };
-        return this.getJson('locations', params);
+        return this.getJson("locations", params);
     }
 
-    static createAddress(type: string, name: string, parentLocation: number) {
-        console.log({
-            address_type: type,
-            addresses_name: name,
-            parent_location: parentLocation,
-        });
-        return this.postJson("addresses", {
-            address_type: type,
-            addresses_name: name,
-            parent_location: parentLocation,
-        });
+    static createAddress(params: object) {
+        return this.postJson("addresses", params);
     }
 
     static getLabs(params = {} as Record<string, string | number>) {

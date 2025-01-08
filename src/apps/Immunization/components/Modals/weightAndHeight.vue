@@ -177,7 +177,7 @@ export default defineComponent({
                 let vitals = this.patient?.vitals;
                 vitals.unsaved = [...vitals.unsaved, ...newVitals];
                 await saveOfflinePatientData(this.patient);
-                toastSuccess("Saved successful");
+                toastSuccess("Vitals saved successful");
                 this.cleanInputFields();
             } else {
                 toastWarning("Please complete the form");

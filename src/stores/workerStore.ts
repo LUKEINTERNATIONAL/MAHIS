@@ -24,7 +24,7 @@ export const useWorkerStore = defineStore("worker", () => {
                 await setRecord(newValue?.data?.payload);
             }
             if (newValue?.data?.msg === "saved successfully" || newValue?.data?.msg === "Done Syncing") {
-                patientID.value = newValue?.data?.payload?.ID;
+                patientID.value = newValue?.data?.ID;
                 if (patientID.value) {
                     if (newValue?.data?.msg === "Done Syncing") {
                         route.value = "";
@@ -91,21 +91,20 @@ export const useWorkerStore = defineStore("worker", () => {
         return null;
     }
 
-    function updateWorkerApi(data: any) {
-        workerData.workerApi = data;
-        workerApi.value = data;
-    }
-
-    function postWorkerData(action: string, payload?: any) {
+    async function postWorkerData(action: string, payload?: any) {
+        workerApi.value = workerData.workerApi;
         workerData.postData(action, payload);
     }
-
+    async function terminate() {
+        await workerData.terminate();
+        workerApi.value = workerData.workerApi;
+    }
     return {
         workerApi,
         doneLoading,
         patientID,
         route,
-        updateWorkerApi,
+        terminate,
         postWorkerData,
         setRouter,
         setPatientRecord,

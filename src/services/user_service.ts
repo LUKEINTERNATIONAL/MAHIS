@@ -149,10 +149,10 @@ export class UserService extends Service {
                     const demographicsInstance = useDemographicsStore();
                     const demographics = demographicsInstance.getPatient();
                     const orders = await OrderService.getOrders(demographics.patient_id);
-                    const filteredArray = await orders.filter((obj: any) => {
+                    const filteredArray = await orders?.filter((obj: any) => {
                         return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
                     });
-                    if (filteredArray.length > 0) {
+                    if (filteredArray?.length > 0) {
                         item.url = "OPDConsultationPlan";
                         item.actionName = "+ Continue OPD consultation";
                     } else {
@@ -226,9 +226,11 @@ export class UserService extends Service {
     }
     static async setNCDNumber() {
         const j = await ProgramService.getNextSuggestedNCDNumber();
-        const NCDNumber = useEnrollementStore();
-        modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
-        modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
+        if (j) {
+            const NCDNumber = useEnrollementStore();
+            modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
+            modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
+        }
     }
     static async setProgramUserActions() {
         const actions = await this.setNCDValue();

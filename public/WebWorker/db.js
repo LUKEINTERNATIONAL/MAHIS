@@ -2,7 +2,7 @@ const DatabaseManager = {
     db: null,
     async openDatabase() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open("MaHis", 1);
+            const request = indexedDB.open("MaHis", 4);
 
             request.onerror = (event) => {
                 reject("Database error: " + event.target.error);
@@ -30,7 +30,9 @@ const DatabaseManager = {
                     "conceptNames",
                     "conceptSets",
                 ];
-
+                for (const storeName of Array.from(database.objectStoreNames)) {
+                    database.deleteObjectStore(storeName);
+                }
                 objectStores.forEach((storeName) => {
                     if (!database.objectStoreNames.contains(storeName)) {
                         database.createObjectStore(storeName, { keyPath: "id", autoIncrement: true });
@@ -62,17 +64,28 @@ const DatabaseManager = {
 
             clearRequest.onsuccess = () => {
                 // After clearing, add the new data
-                const addPromises = data.map((item) => {
-                    return new Promise((resolve, reject) => {
-                        const addRequest = objectStore.add(item);
-                        addRequest.onerror = (event) => reject(event.target.error);
-                        addRequest.onsuccess = () => resolve();
+                if (data.length > 0) {
+                    const addPromises = data.map((item) => {
+                        return new Promise((resolve, reject) => {
+                            const addRequest = objectStore.add(item);
+                            addRequest.onerror = (event) => reject(event.target.error);
+                            addRequest.onsuccess = () => resolve();
+                        });
                     });
-                });
 
-                Promise.all(addPromises)
-                    .then(() => resolve())
-                    .catch((error) => reject(new Error(`Add operation failed: ${error}`)));
+                    Promise.all(addPromises)
+                        .then(() => resolve())
+                        .catch((error) => reject(new Error(`Add operation failed: ${error}`)));
+                } else {
+                    const addRequest = objectStore.add(data);
+                    addRequest.onerror = (event) => {
+                        reject(event.target.error);
+                    };
+
+                    addRequest.onsuccess = () => {
+                        resolve();
+                    };
+                }
             };
 
             // Handle transaction errors
@@ -80,9 +93,7 @@ const DatabaseManager = {
                 reject(new Error(`Transaction failed: ${event.target.error}`));
             };
 
-            transaction.oncomplete = () => {
-                console.log("Transaction completed successfully");
-            };
+            transaction.oncomplete = () => {};
         });
     },
     upsertSingleRecord(storeName, data) {

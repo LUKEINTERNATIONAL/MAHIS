@@ -56,14 +56,6 @@ self.onmessage = async (event) => {
                     console.log("SYNC_CONCEPTS ~ error:", error);
                 }
                 break;
-            case "GET_OFFLINE_LOCATION":
-                try {
-                    const result = await DatabaseManager.getOfflineData("location");
-                    console.log("GET_OFFLINE_LOCATION ~ result:", result);
-                } catch (error) {
-                    console.log("GET_OFFLINE_LOCATION ~ error:", error);
-                }
-                break;
             case "SET_OFFLINE_PROGRAMS":
                 try {
                     self.postMessage({ payload: await programService.setOfflinePrograms() });
@@ -86,7 +78,7 @@ self.onmessage = async (event) => {
 
                     console.log("SET_OFFLINE_LOCATION ~ storeName:", type);
                 } catch (error) {
-                    console.log("GET_OFFLINE_LOCATION ~ error:", error);
+                    console.log("SET_OFFLINE_LOCATION ~ error:", error);
                 }
                 break;
             case "DELETE_RECORD":
@@ -135,9 +127,9 @@ self.onmessage = async (event) => {
             case "SAVE_PATIENT_RECORD":
                 try {
                     self.postMessage("");
-                    await patientService.saveDemographicsRecord(payload.data);
+                    const ID = await patientService.saveDemographicsRecord(payload.data);
                     console.log("SAVE_PATIENT_RECORD ~ storeName:", type);
-                    self.postMessage({ payload: payload.data, msg: "saved successfully" });
+                    self.postMessage({ ID, msg: "saved successfully" });
                 } catch (error) {
                     console.log("SAVE_PATIENT_RECORD ~ error:", error);
                 }
