@@ -26,7 +26,7 @@ import { modifyFieldValue, getFieldValue } from "@/services/data_helpers";
 import { icons } from "@/utils/svg";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { LocationService } from "@/services/location_service";
-import workerData from "@/activate_worker";
+import { useWorkerStore } from "@/stores/workerStore";
 import { getOfflineRecords } from "@/services/offline_service";
 import { validateInputFiledData } from "@/services/group_validation";
 import { ref, onMounted } from "vue";
@@ -59,7 +59,7 @@ const updateTA = async () => {
         });
 
         if (address) {
-            await workerData.postData("UPDATE_RECORD", {
+            useWorkerStore().postData("UPDATE_RECORD", {
                 storeName: "TAs",
                 data: address.data,
                 whereClause: { traditional_authority_id: props.taData.traditional_authority_id },

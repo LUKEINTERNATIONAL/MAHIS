@@ -26,7 +26,7 @@ import { modifyFieldValue, getFieldValue } from "@/services/data_helpers";
 import { icons } from "@/utils/svg";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { LocationService } from "@/services/location_service";
-import workerData from "@/activate_worker";
+import { useWorkerStore } from "@/stores/workerStore";
 import { getOfflineRecords } from "@/services/offline_service";
 import { validateInputFiledData } from "@/services/group_validation";
 import { ref, onMounted } from "vue";
@@ -54,8 +54,10 @@ const saveData = async () => {
             ta_name: TAValue,
         });
         if (address) {
-            await workerData.postData("ADD_OBJECT_STORE", { storeName: "TAs", data: address.ta_data });
-            Promise.all(address.village_data.map((item: any) => workerData.postData("ADD_OBJECT_STORE", { storeName: "villages", data: item })));
+            useWorkerStore().postData("ADD_OBJECT_STORE", { storeName: "TAs", data: address.ta_data });
+            Promise.all(
+                address.village_data.map((item: any) => useWorkerStore().postData("ADD_OBJECT_STORE", { storeName: "villages", data: item }))
+            );
             toastSuccess(`Location added successfully`);
         }
         dismiss();
