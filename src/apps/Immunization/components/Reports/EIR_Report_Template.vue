@@ -81,6 +81,7 @@ import PersonCardComponent from "@/apps/Immunization/components/Modals/PersonCar
 import { createModal } from "@/utils/Alerts";
 import { PatientService } from "@/services/patient_service";
 import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 export default defineComponent({
     name: "TableComponent",
     components: { IonContent, IonPage, IonFab, IonFabButton, NavigationMenu, IonRow, IonCol, PersonCardComponent },
@@ -175,8 +176,8 @@ export default defineComponent({
             patientData.patient_identifiers.forEach(async (indnt: any) => {
                 if (indnt.identifier_type == 3) {
                     const patientData2 = await PatientService.findByNpid(indnt.identifier);
-                    useWorkerStore().route = "patientProfile";
-                    useWorkerStore().setPatientRecord(patientData2[0]);
+                    await useDemographicsStore().setPatientRecord(patientData2[0]);
+                    this.$router.push("patientProfile");
                 }
             });
         },

@@ -278,7 +278,7 @@ export default defineComponent({
         },
         async updatePatientDemographics() {
             const item = await PatientService.findByID(this.patient.patientID);
-            useWorkerStore().setPatientRecord(item);
+            useDemographicsStore().setPatientRecord(item);
         },
         patientIdentifier(item: any) {
             // return item

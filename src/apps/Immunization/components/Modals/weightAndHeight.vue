@@ -78,8 +78,6 @@ import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
-import workerData from "@/activate_worker";
-import db from "@/db";
 import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
     name: "Home",

@@ -45,6 +45,7 @@ import { PatientService } from "@/services/patient_service";
 import { createModal } from "@/utils/Alerts";
 import PersonCardComponent from "@/apps/Immunization/components/Modals/PersonCardComponent.vue";
 import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 interface Category {
     cases: Case[];
 }
@@ -78,6 +79,7 @@ export default defineComponent({
     data() {
         const personsDemoData = ref([]) as any;
         return {
+            route: "",
             vaccines: [] as any,
             categories: [
                 {
@@ -210,8 +212,8 @@ export default defineComponent({
         async openPatientProfile(client_id: any) {
             this.personsDemoData.value.forEach(async (person: any) => {
                 if (person[0].patient_id == client_id) {
-                    useWorkerStore().route = "patientProfile";
-                    useWorkerStore().setPatientRecord(person[0]);
+                    await useDemographicsStore().setPatientRecord(person[0]);
+                    this.$router.push("patientProfile");
                     return;
                 }
             });
