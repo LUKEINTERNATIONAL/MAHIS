@@ -67,24 +67,17 @@ import { IonContent, IonPage, IonButton } from "@ionic/vue";
 import { onMounted, ref } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import { useWorkerStatus } from "@/composables/useWorkerStatus";
-import workerData from "@/activate_worker";
-const {
-    workerApi,
-    offlineVillageStatus,
-    offlineCountriesStatus,
-    offlineDistrictStatus,
-    offlineTAsStatus,
-    offlineRelationshipStatus,
-    syncRegistrationMetaData,
-} = useWorkerStatus();
+import { useStatusStore } from "@/stores/StatusStore";
+import { storeToRefs } from "pinia";
 const isLoading = ref(false) as any;
+
+const statusStore = useStatusStore();
+const { offlineVillageStatus, offlineCountriesStatus, offlineDistrictStatus, offlineTAsStatus, offlineRelationshipStatus } = storeToRefs(statusStore);
 onMounted(async () => {
-    await syncRegistrationMetaData();
+    // await syncRegistrationMetaData();
 });
 const reloadData = async () => {
-    await workerData.terminate();
-    workerApi.value = workerData.workerApi;
-    await syncRegistrationMetaData();
+    // await syncRegistrationMetaData();
 };
 const fractionToPercentage = (numerator: any, denominator: any) => {
     if (denominator === 0) {
