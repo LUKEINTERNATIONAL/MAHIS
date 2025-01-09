@@ -187,8 +187,8 @@ import { PatientOpdList } from "@/services/patient_opd_list";
 import { getUserLocation } from "@/services/userService";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import dates from "@/utils/Date";
-import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
+import { UserService } from "@/services/user_service";
 export default defineComponent({
     name: "ToolbarSearch",
     mixins: [DeviceDetection, SetPersonInformation],
@@ -216,6 +216,7 @@ export default defineComponent({
     },
     data() {
         return {
+            route: "",
             iconContent: icons,
             ddeInstance: {} as any,
             popoverOpen: false,
@@ -439,11 +440,11 @@ export default defineComponent({
             }
         },
         async setPatientData(url: any, item: any) {
-            useWorkerStore().route = url;
+            this.route = url;
             this.popoverOpen = false;
             this.searchValue = "";
+            await useDemographicsStore().setPatientRecord(item);
             await this.openNewPage();
-            await useWorkerStore().setPatientRecord(item);
         },
         async openNewPage() {
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
@@ -464,19 +465,22 @@ export default defineComponent({
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 if (this.programID() == 32) {
-                    useWorkerStore().route = "NCDDispensations";
+                    this.route = "NCDDispensations";
                 } else {
-                    useWorkerStore().route = "dispensation";
+                    this.route = "dispensation";
                 }
             } else if (roles.some((role: any) => role.role === "Lab")) {
-                useWorkerStore().route = "OPDConsultationPlan";
+                this.route = "OPDConsultationPlan";
             } else if (userPrograms?.length == 1) {
                 if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
-                    useWorkerStore().route = "OPDvitals";
+                    this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32 && this.apiStatus) {
-                useWorkerStore().route = "";
+                const actions: any = await UserService.setProgramUserActions();
+                router.push(actions?.url);
             }
+
+            this.$router.push(this.route);
         },
         getPhone(item: any) {
             return item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value;
@@ -726,6 +730,7 @@ export default defineComponent({
             this.checkInModalOpen = !this.checkInModalOpen;
         },
         async openCheckInModal(item: any) {
+            console.log("🚀 ~ openCheckInModal ~ item:", item);
             if (this.programs?.program?.applicationName == "OPD Program") {
                 try {
                     const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
@@ -743,7 +748,7 @@ export default defineComponent({
                     return;
                 }
             }
-            this.setPatientData("patientProfile", item);
+            this.setPatientData("/patientProfile", item);
         },
     },
 });
