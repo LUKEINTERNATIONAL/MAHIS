@@ -2,7 +2,7 @@ const DatabaseManager = {
     db: null,
     async openDatabase() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open("MaHis", 4);
+            const request = indexedDB.open("MaHis", 5);
 
             request.onerror = (event) => {
                 reject("Database error: " + event.target.error);
@@ -29,6 +29,7 @@ const DatabaseManager = {
                     "genericVaccineSchedule",
                     "conceptNames",
                     "conceptSets",
+                    "bookedAppointments",
                 ];
                 for (const storeName of Array.from(database.objectStoreNames)) {
                     database.deleteObjectStore(storeName);
@@ -353,7 +354,7 @@ const DatabaseManager = {
                 });
 
                 if (matchingRecords.length === 0) {
-                    reject(new Error("No matching records found"));
+                    reject(new Error("No matching records found", storeName));
                     return;
                 }
 
