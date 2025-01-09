@@ -129,16 +129,44 @@ const patientService = {
     },
     async createGuardian(patientID, record) {
         if (record.saveStatusGuardianInformation === "pending") {
-            if (record.guardianInformation.given_name && record.guardianInformation.family_name && record.otherPersonInformation.relationshipID) {
+            if (
+                record.guardianInformation.unsaved.given_name &&
+                record.guardianInformation.unsaved.family_name &&
+                record.otherPersonInformation.relationshipID
+            ) {
                 try {
-                    const data = await this.createPerson(record.guardianInformation);
+                    const data = await this.createPerson(record.guardianInformation.unsaved);
                     const guardianID = data.person_id;
+                    console.log("🚀 ~ createGuardian ~ guardianID:", record.guardianInformation.unsaved);
                     await this.createRelation(patientID, guardianID, record.otherPersonInformation.relationshipID);
+                    if (data) {
+                        const guardianInformation = record.guardianInformation;
+                        guardianInformation.saved = [...record.guardianInformation.unsaved, ...record.guardianInformation.saved];
+                        guardianInformation.unsaved = [];
+                        await DatabaseManager.updateRecord(
+                            "patientRecords",
+                            { ID: record.ID },
+                            {
+                                guardianInformation: guardianInformation,
+                            }
+                        );
+                    }
                     await this.updateSaveStatus(record, { saveStatusGuardianInformation: "complete" });
                 } catch (error) {
-                    console.error("Failed to save guardian information");
+                    console.error("Failed to save guardian information", error);
                 }
             } else {
+                console.log("🚀 ~ createGuardian ~ record?.guardianInformation?.unsaved:", record?.guardianInformation?.unsaved);
+                if (record?.guardianInformation?.unsaved > 0) {
+                    // record?.guardianInformation?.unsaved = [];
+                    // await DatabaseManager.updateRecord(
+                    //     "patientRecords",
+                    //     { ID: record.ID },
+                    //     {
+                    //         guardianInformation: record.guardianInformation,
+                    //     }
+                    // );
+                }
                 await this.updateSaveStatus(record, { saveStatusGuardianInformation: "Not recorded" });
             }
         }
@@ -170,9 +198,10 @@ const patientService = {
                     observations: record.vitals.unsaved,
                 });
                 if (obs?.length > 0) {
-                    const vitals = record.vitals;
-                    vitals.saved = [...record.vitals.unsaved, ...record.vitals.saved];
+                    const vitals = record?.vitals;
+                    vitals.saved = [...record?.vitals?.unsaved, ...record?.vitals?.saved];
                     vitals.unsaved = [];
+                    console.log("🚀 ~ saveVitalsData ~ vitals:", vitals);
                     await DatabaseManager.updateRecord(
                         "patientRecords",
                         { ID: record.ID },
@@ -182,7 +211,7 @@ const patientService = {
                     );
                 }
             } catch (error) {
-                console.error("Failed to save vitals information");
+                console.error("Failed to save vitals information", error);
             }
         }
     },
