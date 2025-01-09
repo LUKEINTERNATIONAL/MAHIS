@@ -28,7 +28,7 @@ import Screentimeout from "@/composables/Screentimeout";
 import useFacility from "./composables/useFacility";
 import { useStatusStore } from "@/stores/StatusStore";
 import { storeToRefs } from "pinia";
-import workerData from "@/activate_worker";
+import { useWorkerStore } from "@/stores/workerStore";
 
 export default defineComponent({
     name: "App",
@@ -42,6 +42,7 @@ export default defineComponent({
     },
     setup() {
         const status = useStatusStore();
+        const workerStore = useWorkerStore();
         const apiOk = ref(true);
         const route = useRoute();
         const notConfigPage = ref(true);
@@ -60,7 +61,7 @@ export default defineComponent({
         Screentimeout.initiateSystemIdleMonitor();
 
         if (typeof auth.getAppConf("promptFullScreenDialog") === "boolean") {
-            checkFullScreen.value = auth.getAppConf("promptFullScreenDialog");
+            // checkFullScreen.value = auth.getAppConf("promptFullScreenDialog");
         }
 
         nprogress.configure({
@@ -92,7 +93,7 @@ export default defineComponent({
                 // });
                 // if (confirm) location.reload();
                 toastSuccess("Connection restored");
-                await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
+                workerStore.postData("SYNC_ALL_DATA");
             }
             if (res && res.status === 401 && route.name != "Login") {
                 router.push("/login");
