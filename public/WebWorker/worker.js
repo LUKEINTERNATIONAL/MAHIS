@@ -39,6 +39,23 @@ self.onmessage = async (event) => {
     await DatabaseManager.openDatabase();
     try {
         switch (type) {
+            case "SYNC_ALL_DATA":
+                try {
+                    await ddeService.setDDEIds();
+                    await stockService.setStock();
+                    await conceptNameService.setConceptName();
+                    await conceptSetService.setConceptSet();
+                    await relationshipsService.setOfflineRelationship();
+                    await genericsService.setOfflineGenericVaccineSchedule();
+                    await LocationService.setOfflineLocation();
+                    await patientService.savePatientRecord();
+                    await syncPatientDataService.getPatientData();
+                    self.postMessage("Done syncing all data");
+                    console.log("SYNC_ALL_DATA ~ storeName:", type);
+                } catch (error) {
+                    console.log("SYNC_ALL_DATA ~ error:", error);
+                }
+                break;
             case "SET_OFFLINE_LOCATION":
                 try {
                     await LocationService.setOfflineLocation();
@@ -114,15 +131,15 @@ self.onmessage = async (event) => {
                 }
                 break;
             case "SYNC_PATIENT_RECORD":
-                // try {
-                self.postMessage("");
-                await patientService.savePatientRecord();
-                await syncPatientDataService.getPatientData();
-                self.postMessage({ payload: payload.data, msg: "Done Syncing" });
-                console.log("SYNC_PATIENT_RECORD ~ storeName:", type);
-                // } catch (error) {
-                //     console.log("SYNC_PATIENT_RECORD ~ error:", error);
-                // }
+                try {
+                    self.postMessage("");
+                    await patientService.savePatientRecord();
+                    const data = await syncPatientDataService.getPatientData();
+                    self.postMessage({ payload: payload?.data, msg: "Done Syncing" });
+                    console.log("SYNC_PATIENT_RECORD ~ storeName:", type);
+                } catch (error) {
+                    console.log("SYNC_PATIENT_RECORD ~ error:", error);
+                }
                 break;
             case "SAVE_PATIENT_RECORD":
                 try {
