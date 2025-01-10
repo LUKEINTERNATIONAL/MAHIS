@@ -54,6 +54,11 @@ const syncPatientDataService = {
             };
         }
     },
+    async findSaveByID(id) {
+        const record = await ApiService.getData(`/patients/${id}`);
+        const patientData = await this.buildPatientData(record);
+        await this.saveSyncedPatientRecord(patientData);
+    },
     async saveSyncedPatientRecord(data) {
         if (data) DatabaseManager.deleteRecord("patientRecords", { patientID: data.patientID });
         if (data) DatabaseManager.addData("patientRecords", data);
