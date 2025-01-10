@@ -277,15 +277,17 @@ export default defineComponent({
             else {
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                useWorkerStore().setPatientRecord(await PatientService.findByID(this.patient.patientID));
+                useDemographicsStore().setPatientRecord(await PatientService.findByID(this.patient.patientID));
                 await this.saveEnrollment();
                 await resetNCDPatientData();
                 await UserService.setProgramUserActions();
+                let url = "";
                 if (this.NCDActivities.length == 0) {
-                    useWorkerStore().route = "patientProfile";
+                    url = "patientProfile";
                 } else {
-                    useWorkerStore().route = "consultationPlan";
+                    url = "consultationPlan";
                 }
+                this.$router.push(url);
             }
         },
         openModal() {

@@ -257,7 +257,7 @@ export default defineComponent({
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
-            useWorkerStore().setPatientRecord(patientData);
+            await useDemographicsStore().setPatientRecord(patientData);
             this.$router.push("patientProfile");
         },
         processData() {
