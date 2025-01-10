@@ -15,6 +15,7 @@ interface WorkerState {
     workerApi: any;
     workerData: any;
     lastUpdate: Date | null;
+    isSyncing: boolean;
 }
 
 export const useWorkerStore = defineStore("worker", {
@@ -28,6 +29,7 @@ export const useWorkerStore = defineStore("worker", {
         workerApi: null,
         workerData: null,
         lastUpdate: null,
+        isSyncing: false,
     }),
 
     actions: {
@@ -38,6 +40,9 @@ export const useWorkerStore = defineStore("worker", {
                 // Set up message watcher
                 watch(data, (newData) => {
                     if (newData) {
+                        if (newData == "Done syncing all data") {
+                            this.isSyncing = false;
+                        }
                         this.updateFromWorker(newData);
                     }
                 });
@@ -98,18 +103,22 @@ export const useWorkerStore = defineStore("worker", {
             if (!this.workerApi) {
                 this.initWorker();
             }
-
-            await this.updateSettings();
-            return this.workerApi.post({
-                type,
-                url: this.url,
-                apiKey: this.apiKey,
-                userId: this.userId,
-                programId: this.programId,
-                totals: this.totals,
-                date: this.date,
-                payload,
-            });
+            if (!this.isSyncing || type != "SYNC_ALL_DATA") {
+                this.isSyncing = true;
+                await this.updateSettings();
+                return this.workerApi.post({
+                    type,
+                    url: this.url,
+                    apiKey: this.apiKey,
+                    userId: this.userId,
+                    programId: this.programId,
+                    totals: this.totals,
+                    date: this.date,
+                    payload,
+                });
+            } else {
+                console.log("Worker is already syncing");
+            }
         },
 
         terminate() {
