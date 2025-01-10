@@ -88,7 +88,7 @@ const patientService = {
             await this.saveVaccines(patientID, record),
             await this.voidVaccine(patientID, record),
         ]);
-        return data.ID;
+        return { ID: data.ID, patientID };
     },
     async validateID({ nationalID, birthID }) {
         return (await this.validateNationalID(nationalID)) && (await this.validateBirthID(birthID));
@@ -137,36 +137,12 @@ const patientService = {
                 try {
                     const data = await this.createPerson(record.guardianInformation.unsaved);
                     const guardianID = data.person_id;
-                    console.log("🚀 ~ createGuardian ~ guardianID:", record.guardianInformation.unsaved);
                     await this.createRelation(patientID, guardianID, record.otherPersonInformation.relationshipID);
-                    if (data) {
-                        const guardianInformation = record.guardianInformation;
-                        guardianInformation.saved = [...record.guardianInformation.unsaved, ...record.guardianInformation.saved];
-                        guardianInformation.unsaved = [];
-                        await DatabaseManager.updateRecord(
-                            "patientRecords",
-                            { ID: record.ID },
-                            {
-                                guardianInformation: guardianInformation,
-                            }
-                        );
-                    }
                     await this.updateSaveStatus(record, { saveStatusGuardianInformation: "complete" });
                 } catch (error) {
                     console.error("Failed to save guardian information", error);
                 }
             } else {
-                console.log("🚀 ~ createGuardian ~ record?.guardianInformation?.unsaved:", record?.guardianInformation?.unsaved);
-                if (record?.guardianInformation?.unsaved > 0) {
-                    // record?.guardianInformation?.unsaved = [];
-                    // await DatabaseManager.updateRecord(
-                    //     "patientRecords",
-                    //     { ID: record.ID },
-                    //     {
-                    //         guardianInformation: record.guardianInformation,
-                    //     }
-                    // );
-                }
                 await this.updateSaveStatus(record, { saveStatusGuardianInformation: "Not recorded" });
             }
         }
@@ -197,19 +173,6 @@ const patientService = {
                     encounter_id: encounterID,
                     observations: record.vitals.unsaved,
                 });
-                if (obs?.length > 0) {
-                    const vitals = record?.vitals;
-                    vitals.saved = [...record?.vitals?.unsaved, ...record?.vitals?.saved];
-                    vitals.unsaved = [];
-                    console.log("🚀 ~ saveVitalsData ~ vitals:", vitals);
-                    await DatabaseManager.updateRecord(
-                        "patientRecords",
-                        { ID: record.ID },
-                        {
-                            vitals: vitals,
-                        }
-                    );
-                }
             } catch (error) {
                 console.error("Failed to save vitals information", error);
             }
@@ -229,10 +192,6 @@ const patientService = {
                 encounter_id: encounterID,
                 observations: record.vaccineAdministration.obs,
             });
-            record.vaccineAdministration.orders = [];
-            record.vaccineAdministration.obs = [];
-            record.vaccineSchedule = await syncPatientDataService.getVaccineAdministration(patientID);
-            DatabaseManager.overRideRecordRecord("patientRecords", record, { ID: record.ID });
         }
     },
     async voidVaccine(patientID, record) {
@@ -250,10 +209,6 @@ const patientService = {
                     }
                 })
             );
-
-            record.vaccineAdministration.voided = [];
-            record.vaccineSchedule = await syncPatientDataService.getVaccineAdministration(patientID);
-            DatabaseManager.overRideRecordRecord("patientRecords", record, { ID: record.ID });
         }
     },
     async enrollProgram(patientId) {
