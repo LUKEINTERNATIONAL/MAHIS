@@ -153,6 +153,7 @@ import { useStatusStore } from "@/stores/StatusStore";
 import { useWorkerStore } from "@/stores/workerStore";
 import { getOfflineVaccineSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { RegistrationService } from "@/services/registration_service";
+import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -491,9 +492,7 @@ export default defineComponent({
                         this.workerStore.postData("SYNC_ALL_DATA");
                         await this.setURLs();
                     } else if (ddeIds?.ids?.length > 0) {
-                        this.workerStore.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: patientData });
-                        console.log("🚀 ~ createPatient ~ patientData:", patientData);
-                        await useDemographicsStore().setPatientRecord(patientData);
+                        await saveOfflinePatientData(patientData);
                         this.$router.push("/patientProfile");
                     } else {
                         toastDanger("DDE IDs are not available. Please connect to the server to sync the IDs.");
