@@ -730,7 +730,6 @@ export default defineComponent({
             this.checkInModalOpen = !this.checkInModalOpen;
         },
         async openCheckInModal(item: any) {
-            console.log("🚀 ~ openCheckInModal ~ item:", item);
             if (this.programs?.program?.applicationName == "OPD Program") {
                 try {
                     const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
