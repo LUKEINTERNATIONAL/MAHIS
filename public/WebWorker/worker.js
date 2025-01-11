@@ -118,7 +118,7 @@ self.onmessage = async (event) => {
                     const { ID, patientID } = await patientService.saveDemographicsRecord(payload.data);
                     await syncPatientDataService.findSaveByID(patientID);
                     console.log("SAVE_PATIENT_RECORD ~ storeName:", type);
-                    self.postMessage({ ID, msg: "saved successfully" });
+                    self.postMessage({ ID, msg: "Patient record saved successfully" });
                 } catch (error) {
                     console.log("SAVE_PATIENT_RECORD ~ error:", error);
                 }
