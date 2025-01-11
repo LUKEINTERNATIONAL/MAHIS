@@ -65,7 +65,7 @@
                                 :searchable="true"
                                 @search-change="$emit('search-change', $event)"
                                 track-by="program_id"
-                                :options="offlinePrograms || sortPrograms(workerData?.payload) || []"
+                                :options="sortPrograms(workerData?.payload) || []"
                             />
                         </span>
 
@@ -122,12 +122,11 @@ const router = useRouter();
 const route = useRoute();
 
 const store = useWorkerStore();
-const { workerData, lastUpdate } = storeToRefs(store);
+const { workerData, lastUpdate }: any = storeToRefs(store);
 
 // Methods
 const setPrograms = async () => {
-    offlinePrograms.value = await getOfflineRecords("programs", { sortBy: "name" });
-    if (offlinePrograms.value.length == 0) await useWorkerStore().postData("SET_OFFLINE_PROGRAMS");
+    await useWorkerStore().postData("SET_OFFLINE_PROGRAMS");
 };
 
 const sortPrograms = (data: any) => {
