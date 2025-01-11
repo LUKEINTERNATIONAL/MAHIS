@@ -15,28 +15,31 @@ const DatabaseManager = {
 
             request.onupgradeneeded = (event) => {
                 const database = event.target.result;
-                const objectStores = [
-                    "relationship",
-                    "districts",
-                    "TAs",
-                    "villages",
-                    "countries",
-                    "programs",
-                    "patientRecords",
-                    "dde",
-                    "generics",
-                    "stock",
-                    "genericVaccineSchedule",
-                    "conceptNames",
-                    "conceptSets",
-                    "bookedAppointments",
-                ];
+
+                const objectStores = {
+                    relationship: { keyPath: "relationship_type_id", autoIncrement: true },
+                    districts: { keyPath: "district_id", autoIncrement: true },
+                    TAs: { keyPath: "traditional_authority_id", autoIncrement: true },
+                    villages: { keyPath: "village_id", autoIncrement: true },
+                    countries: { keyPath: "district_id", autoIncrement: true },
+                    programs: { keyPath: "program_id", autoIncrement: true },
+                    patientRecords: { keyPath: "ID", autoIncrement: true },
+                    dde: { keyPath: "id", autoIncrement: true },
+                    generics: { keyPath: "id", autoIncrement: true },
+                    stock: { keyPath: "id", autoIncrement: true },
+                    genericVaccineSchedule: { keyPath: "id", autoIncrement: true },
+                    conceptNames: { keyPath: "id", autoIncrement: true },
+                    conceptSets: { keyPath: "id", autoIncrement: true },
+                    bookedAppointments: { keyPath: "id", autoIncrement: true },
+                };
+
                 for (const storeName of Array.from(database.objectStoreNames)) {
                     database.deleteObjectStore(storeName);
                 }
-                objectStores.forEach((storeName) => {
+
+                Object.entries(objectStores).forEach(([storeName, options]) => {
                     if (!database.objectStoreNames.contains(storeName)) {
-                        database.createObjectStore(storeName, { keyPath: "id", autoIncrement: true });
+                        database.createObjectStore(storeName, options);
                     }
                 });
             };
@@ -144,8 +147,8 @@ const DatabaseManager = {
             const objectStore = transaction.objectStore(storeName);
 
             const request = objectStore.add(data);
-
             request.onerror = (event) => {
+                console.log("🚀 ~ addData ~ storeName:", storeName, data);
                 const error = event.target.error;
                 reject(new Error(`Error adding data: ${error?.name} - ${error?.message}`));
             };
