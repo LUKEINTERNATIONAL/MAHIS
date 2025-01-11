@@ -69,15 +69,18 @@ import Toolbar from "@/components/Toolbar.vue";
 import { useWorkerStatus } from "@/composables/useWorkerStatus";
 import { useStatusStore } from "@/stores/StatusStore";
 import { storeToRefs } from "pinia";
-const isLoading = ref(false) as any;
+import { useWorkerStore } from "@/stores/workerStore";
 
+const workerStore = useWorkerStore();
+const isLoading = ref(false) as any;
 const statusStore = useStatusStore();
 const { offlineVillageStatus, offlineCountriesStatus, offlineDistrictStatus, offlineTAsStatus, offlineRelationshipStatus } = storeToRefs(statusStore);
 onMounted(async () => {
     // await syncRegistrationMetaData();
 });
 const reloadData = async () => {
-    // await syncRegistrationMetaData();
+    workerStore.terminate();
+    workerStore.postData("SYNC_ALL_DATA");
 };
 const fractionToPercentage = (numerator: any, denominator: any) => {
     if (denominator === 0) {
