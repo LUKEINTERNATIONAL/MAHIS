@@ -86,6 +86,8 @@ const patientService = {
             await this.saveBirthdayData(patientID, record),
             await this.saveVitalsData(patientID, record),
             await this.saveVaccines(patientID, record),
+            await this.saveAppointments(patientID, record),
+            await this.sendSMS(patientID, record),
             await this.voidVaccine(patientID, record),
         ]);
         return { ID: data.ID, patientID };
@@ -130,12 +132,12 @@ const patientService = {
     async createGuardian(patientID, record) {
         if (record.saveStatusGuardianInformation === "pending") {
             if (
-                record.guardianInformation.unsaved.given_name &&
-                record.guardianInformation.unsaved.family_name &&
+                record.guardianInformation.unsaved[0].given_name &&
+                record.guardianInformation.unsaved[0].family_name &&
                 record.otherPersonInformation.relationshipID
             ) {
                 try {
-                    const data = await this.createPerson(record.guardianInformation.unsaved);
+                    const data = await this.createPerson(record.guardianInformation.unsaved[0]);
                     const guardianID = data.person_id;
                     await this.createRelation(patientID, guardianID, record.otherPersonInformation.relationshipID);
                     await this.updateSaveStatus(record, { saveStatusGuardianInformation: "complete" });
@@ -191,6 +193,23 @@ const patientService = {
             await this.saveObs({
                 encounter_id: encounterID,
                 observations: record.vaccineAdministration.obs,
+            });
+        }
+    },
+    async saveAppointments(patientID, record) {
+        if (record?.appointments?.unsaved?.length > 0) {
+            const encounterID = await this.createEncounter(patientID, 7);
+            const data = await this.saveObs({
+                encounter_id: encounterID,
+                observations: record?.appointments?.unsaved,
+            });
+        }
+    },
+    async sendSMS(patientID, record) {
+        if (record?.sms?.appointment_date) {
+            await ApiService.post("send_sms", {
+                person_id: patientID,
+                appointment_date: record.sms.appointment_date,
             });
         }
     },
