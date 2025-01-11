@@ -7,17 +7,12 @@ export const useDemographicsStore = defineStore("demographicStore", {
         patient: {} as any,
     }),
     actions: {
-        setPatient(data: any) {
+        async setRecord(data: any) {
             this.patient = data;
         },
         getPatient() {
             return this.patient;
         },
-        async setRecord(item: any) {
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient(item);
-        },
-
         async setPatientRecord(item: any) {
             if (item?.ID) {
                 const data = await this.getOfflinePatientData(item?.ID);
