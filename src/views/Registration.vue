@@ -492,7 +492,10 @@ export default defineComponent({
                         this.workerStore.postData("SYNC_ALL_DATA");
                         await this.setURLs();
                     } else if (ddeIds?.ids?.length > 0) {
-                        await saveOfflinePatientData(patientData);
+                        const demographicsStore = useDemographicsStore();
+                        demographicsStore.setRecord(patientData);
+                        await this.workerStore.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: patientData });
+                        this.isLoading = false;
                         this.$router.push("/patientProfile");
                     } else {
                         toastDanger("DDE IDs are not available. Please connect to the server to sync the IDs.");
@@ -542,6 +545,10 @@ export default defineComponent({
                     orders: [],
                     obs: [],
                     voided: [],
+                },
+                appointments: {
+                    saved: [],
+                    unsaved: [],
                 },
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
