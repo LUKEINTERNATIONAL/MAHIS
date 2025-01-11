@@ -68,6 +68,7 @@ watch(
 onMounted(async () => {
     try {
         isLoading.value = true;
+        workerStore.terminate();
         await resetDemographics();
         await useGlobalPropertyStore().loadGlobalProperty();
     } catch (error) {
