@@ -439,14 +439,8 @@ export default defineComponent({
                 });
             }
         },
+
         async setPatientData(url: any, item: any) {
-            this.route = url;
-            this.popoverOpen = false;
-            this.searchValue = "";
-            await useDemographicsStore().setPatientRecord(item);
-            await this.openNewPage();
-        },
-        async openNewPage() {
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
                 await resetNCDPatientData();
             } else if (Service.getProgramID() == 14) {
@@ -479,7 +473,10 @@ export default defineComponent({
                 const actions: any = await UserService.setProgramUserActions();
                 router.push(actions?.url);
             }
-
+            this.route = url;
+            this.popoverOpen = false;
+            this.searchValue = "";
+            await useDemographicsStore().setPatientRecord(item);
             this.$router.push(this.route);
         },
         getPhone(item: any) {
