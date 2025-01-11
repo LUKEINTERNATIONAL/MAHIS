@@ -16,7 +16,8 @@ import { saveOfflinePatientData } from "@/services/offline_service";
 import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
 
-export async function saveVaccineAdministeredDrugs(patient: any) {
+export async function saveVaccineAdministeredDrugs(patientData: any) {
+    const patient = JSON.parse(JSON.stringify(patientData));
     const store = useAdministerVaccineStore();
     if (!isEmpty(store.getAdministeredVaccines())) {
         const drugOrders = mapToOrders();
@@ -32,6 +33,7 @@ export async function saveVaccineAdministeredDrugs(patient: any) {
         updateVaccineStatus(patient, drugOrders[0]?.drug_name, "administered");
         await saveOfflinePatientData(patient);
         toastSuccess("Saved successful");
+        await checkIfLastVaccineAdministered();
     }
 }
 function updateVaccineStatus(patient: any, drugName: any, newStatus: any) {
@@ -157,7 +159,7 @@ function calculateExpireDate(startDate: string | Date, duration: any) {
 }
 
 function openNextVaccineAppoinment() {
-    createModal(nextAppointMent, { class: "otherVitalsModal" }, false);
+    createModal(nextAppointMent, { class: "otherVitalsModal", id: "nextAppointment" }, false);
 }
 
 function validateBatchString(input: any) {
@@ -189,7 +191,8 @@ function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
     return antigens.every((antigen: any) => antigen.status === "administered");
 }
 
-export async function voidVaccine(patient: any, vaccine: any, reason: string) {
+export async function voidVaccine(patientData: any, vaccine: any, reason: string) {
+    const patient = JSON.parse(JSON.stringify(patientData));
     let vaccines = patient?.vaccineAdministration;
     const drugExists = vaccines.orders.some((drug: any) => drug.drug_name === vaccine.drug.drug_name);
     if (drugExists) {
