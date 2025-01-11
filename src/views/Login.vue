@@ -126,6 +126,7 @@ const { workerData, lastUpdate }: any = storeToRefs(store);
 
 // Methods
 const setPrograms = async () => {
+    store.terminate();
     await useWorkerStore().postData("SET_OFFLINE_PROGRAMS");
 };
 
