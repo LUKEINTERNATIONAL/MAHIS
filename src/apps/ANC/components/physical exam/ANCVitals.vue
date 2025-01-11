@@ -306,7 +306,6 @@ export default defineComponent({
                     this.patient?.personInformation?.gender,
                     HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
-                console.log("🚀 ~ setBMI ~ this.BMI:", this.BMI);
                 this.updateBMI();
             }
         },
