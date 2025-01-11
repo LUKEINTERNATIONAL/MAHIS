@@ -60,7 +60,7 @@ const syncPatientDataService = {
         await this.saveSyncedPatientRecord(patientData);
     },
     async saveSyncedPatientRecord(data) {
-        if (data) DatabaseManager.deleteRecord("patientRecords", { patientID: data.patientID });
+        if (data) DatabaseManager.deleteRecord("patientRecords", { ID: data.ID });
         if (data) DatabaseManager.addData("patientRecords", data);
     },
     async buildPatientData(record) {
@@ -111,6 +111,10 @@ const syncPatientDataService = {
                 orders: [],
                 obs: [],
                 voided: [],
+            },
+            appointments: {
+                saved: [],
+                unsaved: [],
             },
             saveStatusPersonInformation: "complete",
             saveStatusGuardianInformation: "complete",
