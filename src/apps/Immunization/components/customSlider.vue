@@ -125,7 +125,6 @@ export default defineComponent({
 
             vaccineScheduleStore.setVaccineSchedule(data__);
             vaccineScheduleStore.setLastVaccinesGiven([]);
-            checkIfLastVaccineAdministered();
 
             this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();
