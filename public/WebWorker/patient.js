@@ -187,13 +187,14 @@ const patientService = {
                 encounter_id: encounterID,
                 drug_orders: record.vaccineAdministration.orders,
                 program_id: PROGRAMID,
+                observations: record.vaccineAdministration.obs,
             };
             await ApiService.post("/immunization/administer_vaccine", data);
 
-            await this.saveObs({
-                encounter_id: encounterID,
-                observations: record.vaccineAdministration.obs,
-            });
+            // await this.saveObs({
+            //     encounter_id: encounterID,
+            //     observations: record.vaccineAdministration.obs,
+            // });
         }
     },
     async saveAppointments(patientID, record) {
