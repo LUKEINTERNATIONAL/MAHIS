@@ -93,6 +93,7 @@ export default defineComponent({
                 // });
                 // if (confirm) location.reload();
                 toastSuccess("Connection restored");
+                workerStore.terminate();
                 workerStore.postData("SYNC_ALL_DATA");
             }
             if (res && res.status === 401 && route.name != "Login") {
