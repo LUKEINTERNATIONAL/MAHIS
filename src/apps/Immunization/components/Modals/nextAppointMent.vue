@@ -175,8 +175,9 @@ async function smspost(appointmentDate: any) {
         // if (configsSms.value) {
         const modal = await createModal(smsConfirmation, { class: "nationalIDModal" });
         if (modal == "send-SMS") {
-            client.patient.sms = { appointment_date: appointmentDate };
-            await saveOfflinePatientData(client.patient);
+            const plainPatientData = JSON.parse(JSON.stringify(client.patient));
+            plainPatientData.sms = { appointment_date: appointmentDate };
+            await saveOfflinePatientData(plainPatientData);
         }
         // } else {
         // await SmsService.appointment(appointmentDetails[0], appointmentDetails[1]);
