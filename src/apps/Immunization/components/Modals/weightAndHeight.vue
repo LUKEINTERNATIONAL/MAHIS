@@ -172,9 +172,10 @@ export default defineComponent({
 
             const newVitals = await formatInputFiledData(this.vitalsWeightHeight);
             if (newVitals.length > 0 && weight == null && height == null) {
-                let vitals = this.patient?.vitals;
+                const patientData = JSON.parse(JSON.stringify(this.patient));
+                let vitals = patientData?.vitals;
                 vitals.unsaved = [...vitals.unsaved, ...newVitals];
-                await saveOfflinePatientData(this.patient);
+                await saveOfflinePatientData(patientData);
                 toastSuccess("Vitals saved successful");
                 this.cleanInputFields();
             } else {
