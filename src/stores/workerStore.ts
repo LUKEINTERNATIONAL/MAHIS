@@ -4,6 +4,8 @@ import { useWebWorker } from "@vueuse/core";
 import { Service } from "@/services/service";
 import { watch } from "vue";
 import { useWorkerStatus } from "@/composables/useWorkerStatus";
+import { getOfflineRecords } from "@/services/offline_service";
+import { useDemographicsStore } from "./DemographicStore";
 
 interface WorkerState {
     url: string;
@@ -38,10 +40,15 @@ export const useWorkerStore = defineStore("worker", {
                 const { data, post, terminate } = useWebWorker(`${import.meta.env.BASE_URL}WebWorker/worker.js`);
 
                 // Set up message watcher
-                watch(data, (newData) => {
+                watch(data, async (newData) => {
                     if (newData) {
                         if (newData == "Done syncing all data") {
                             this.isSyncing = false;
+                        }
+                        if (newData.msg == "Patient record saved successfully") {
+                            const demographicsStore = useDemographicsStore();
+                            const patientData: any = await getOfflineRecords("patientRecords", { whereClause: { ID: demographicsStore.patient.ID } });
+                            demographicsStore.setRecord(patientData[0]);
                         }
                         this.updateFromWorker(newData);
                     }
