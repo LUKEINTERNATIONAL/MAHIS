@@ -281,7 +281,6 @@ export default defineComponent({
             if (this.patient.patientID) {
                 const date = getFieldValue(this.outcome, "Date of death", "value") || HisDate.currentDate();
                 const serious = await this.formatCheckBoxData(this.serious, HisDate.currentDate(), this.lastVaccinesGiven);
-                console.log("🚀 ~ saveVaccineAdverseEffects ~ this.lastVaccinesGiven):", this.lastVaccinesGiven);
                 const outcome = await this.formatRadioButtonData(this.outcome, date, this.lastVaccinesGiven);
                 const vaccineAdverseEffects = await this.formatCheckBoxData(
                     this.vaccineAdverseEffects,
