@@ -167,7 +167,7 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: localStorage.getItem("locationID") })) {
                 this.reportData = data.message;
-                console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
+                console.log("DASHBOARD DATA", this.reportData);
                 this.totalStats = [
                     {
                         name: "Total vaccinated this year",
