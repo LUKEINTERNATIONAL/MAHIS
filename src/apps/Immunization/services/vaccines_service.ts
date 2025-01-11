@@ -33,7 +33,7 @@ export async function saveVaccineAdministeredDrugs(patientData: any) {
         updateVaccineStatus(patient, drugOrders[0]?.drug_name, "administered");
         await saveOfflinePatientData(patient);
         toastSuccess("Saved successful");
-        await checkIfLastVaccineAdministered();
+        await checkIfLastVaccineAdministered(patient);
     }
 }
 function updateVaccineStatus(patient: any, drugName: any, newStatus: any) {
@@ -170,11 +170,11 @@ function validateBatchString(input: any) {
     return true;
 }
 
-export async function checkIfLastVaccineAdministered() {
+export async function checkIfLastVaccineAdministered(patient: any) {
     const store = useAdministerVaccineStore();
     const lastVaccineAdminstredOnschedule = store.getLastVaccineAdminstredOnschedule();
     if (lastVaccineAdminstredOnschedule.length > 0) {
-        store.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
+        patient?.vaccineSchedule?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
             if (checkIfAllVaccinesAdministeredOnSchedule(vaccineSchudule.antigens) == true) {
                 vaccineSchudule.antigens.forEach((antigen: any) => {
                     if (antigen.drug_id == lastVaccineAdminstredOnschedule[0].drug_inventory_id) {
