@@ -80,7 +80,7 @@ export default defineComponent({
         }
     },
     watch: {
-        updateGraph: {
+        patient: {
             async handler() {
                 if (this.patient?.vitals) {
                     await this.updateData();
@@ -153,9 +153,6 @@ export default defineComponent({
         },
         checkUnderSixWeeks: {
             default: false,
-        },
-        updateGraph: {
-            default: {},
         },
     },
     setup() {
