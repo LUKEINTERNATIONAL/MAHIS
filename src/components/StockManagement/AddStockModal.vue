@@ -61,7 +61,7 @@ import { PatientRegistrationService } from "@/services/patient_registration_serv
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { StockService } from "@/services/stock_service";
 import { DrugService } from "@/services/drug_service";
-import workerData from "@/activate_worker";
+import { useWorkerStore } from "@/stores/workerStore";
 
 export default defineComponent({
     components: {
@@ -143,7 +143,7 @@ export default defineComponent({
             } else {
                 await this.createBatch();
             }
-            await workerData.postData("SYNC_STOCK_RECORD");
+            useWorkerStore().postData("SYNC_STOCK_RECORD");
         },
         async createBatch() {
             if (validateInputFiledData(this.stock)) {

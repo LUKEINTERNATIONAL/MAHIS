@@ -186,7 +186,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
-import workerData from "@/activate_worker";
+import { useWorkerStore } from "@/stores/workerStore";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -472,7 +472,7 @@ export default defineComponent({
         },
         async buildTableData(page = 1) {
             this.isLoading = true;
-            await workerData.postData("SYNC_STOCK_RECORD");
+            useWorkerStore().postData("SYNC_STOCK_RECORD");
             try {
                 this.reportData = await getOfflineRecords("stock", {
                     whereClause: { drug_legacy_name: this.data.drug_legacy_name },

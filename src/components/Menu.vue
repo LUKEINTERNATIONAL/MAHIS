@@ -50,7 +50,6 @@
                         <ion-list>
                             <ion-item @click="navigationMenu('locationsManagement')" class="list-content">Location Management</ion-item>
                             <ion-item @click="navigationMenu('OfflineRecords')" class="list-content">Client Management</ion-item>
-                            <ion-item @click="navigationMenu('syncingManagement')" class="list-content">Syncing Management</ion-item>
                         </ion-list>
                     </div>
                 </ion-accordion>

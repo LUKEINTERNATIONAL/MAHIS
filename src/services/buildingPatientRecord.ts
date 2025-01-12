@@ -1,5 +1,7 @@
 import { Service } from "@/services/service";
+import { RelationshipService } from "@/services/relationship_service";
 export async function buildPatientRecord(record: any) {
+    console.log("🚀 ~ buildPatientRecord ~ record:", record);
     if (!record?.person) return "";
     return {
         patientID: record.patient_id,
@@ -28,7 +30,10 @@ export async function buildPatientRecord(record: any) {
             religion: "",
             education_level: getAttribute(record, "EDUCATION LEVEL"),
         },
-        guardianInformation: "",
+        guardianInformation: {
+            saved: await getGuardianData(record.patient_id),
+            unsaved: [],
+        },
         birthRegistration: await getBirthRegistration(record.patient_id),
         otherPersonInformation: {
             nationalID: "",
@@ -45,6 +50,10 @@ export async function buildPatientRecord(record: any) {
             obs: [],
             voided: [],
         },
+        appointments: {
+            saved: [],
+            unsaved: [],
+        },
         saveStatusPersonInformation: "complete",
         saveStatusGuardianInformation: "complete",
         saveStatusBirthRegistration: "complete",
@@ -52,7 +61,57 @@ export async function buildPatientRecord(record: any) {
         creator: "",
     };
 }
+async function getGuardianData(patientId: any) {
+    const guardianData = await RelationshipService.getRelationships(patientId);
+    return transformPersonData(guardianData);
+}
+function transformPersonData(jsonData: any) {
+    // Ensure we have data
+    if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
+        return [];
+    }
+    return jsonData.map((record) => {
+        const person = record.relation;
+        const name = person.names[0];
+        const address = person.addresses[0];
 
+        // Helper function to safely get person attribute value
+        const getAttributeValue = (attributes: any, attributeName: any) => {
+            const attribute = attributes.find((attr: any) => attr.type.name === attributeName);
+            return attribute ? attribute.value : "";
+        };
+
+        return {
+            given_name: name?.given_name || "",
+            middle_name: name?.middle_name || "",
+            family_name: name?.family_name || "",
+            gender: person?.gender || "",
+            birthdate: person?.birthdate || "",
+            birthdate_estimated: person?.birthdate_estimated?.toString() || "",
+
+            home_region: address?.region || "",
+            home_district: address?.county_district || "",
+            home_traditional_authority: address?.township_division || "",
+            home_village: address?.city_village || "",
+
+            current_region: address?.region || "",
+            current_district: address?.county_district || "",
+            current_traditional_authority: address?.township_division || "",
+            current_village: address?.city_village || "",
+
+            landmark: getAttributeValue(person?.person_attributes, "Landmark Or Plot Number"),
+            cell_phone_number: getAttributeValue(person?.person_attributes, "Cell Phone Number"),
+            national_id: "",
+
+            relationship_id: record?.relationship_id?.toString() || "",
+            relationship_type: {
+                a_is_to_b: record?.type?.a_is_to_b || "",
+                b_is_to_a: record?.type?.b_is_to_a || "",
+                relationship_type_id: record?.type?.relationship_type_id?.toString() || "",
+            },
+        };
+    });
+}
 function patientIdentifier(identifiers: any, identifier_type_id: any) {
     if (identifiers) {
         return identifiers.patient_identifiers

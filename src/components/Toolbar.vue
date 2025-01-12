@@ -53,6 +53,10 @@
                                 <ion-icon :icon="personCircleOutline" slot="start"></ion-icon>
                                 <span class="rght-drpm">{{ user_name }}</span>
                             </ion-item>
+                            <ion-item :button="true" @click="openSyncModal()" style="cursor: pointer">
+                                <ion-icon :icon="documentOutline" slot="start"></ion-icon>
+                                <span class="rght-drpm">Syncing status</span>
+                            </ion-item>
                             <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer">
                                 <ion-icon :icon="logOutOutline" slot="start"></ion-icon>
                                 <span class="rght-drpm">Logout</span>
@@ -100,7 +104,7 @@ import {
     IonSearchbar,
     IonPopover,
 } from "@ionic/vue";
-import { notificationsOutline, personCircleOutline, logOutOutline } from "ionicons/icons";
+import { notificationsOutline, personCircleOutline, logOutOutline, documentOutline } from "ionicons/icons";
 import { defineComponent, ref } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
@@ -114,6 +118,8 @@ import TruncateText from "@/components/TruncateText.vue";
 import { useUserStore } from "@/stores/userStore";
 import { icons } from "@/utils/svg";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import { createModal } from "@/utils/Alerts";
+import SyncingStatusModal from "./Modal/SyncingStatusModal.vue";
 export default defineComponent({
     mixins: [ScreenSizeMixin],
     name: "Toolbar",
@@ -135,7 +141,7 @@ export default defineComponent({
         TruncateText,
     },
     data() {
-        const user_name = ref()
+        const user_name = ref();
         return {
             popoverOpen: false,
             iconsContent: icons,
@@ -156,7 +162,7 @@ export default defineComponent({
         },
         user_ID: {
             handler() {
-                this.assignUserName()
+                this.assignUserName();
             },
             deep: true,
         },
@@ -168,13 +174,16 @@ export default defineComponent({
     },
     mounted() {
         this.updateData();
-        this.assignUserName()
+        this.assignUserName();
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
-        return { notificationsOutline, personCircleOutline, facilityName, logOutOutline };
+        return { notificationsOutline, personCircleOutline, documentOutline, facilityName, logOutOutline };
     },
     methods: {
+        openSyncModal() {
+            createModal(SyncingStatusModal);
+        },
         updateData() {
             this.programName = Service.getProgramName();
         },
@@ -193,12 +202,12 @@ export default defineComponent({
         },
         getUserName() {
             const store = useUserStore();
-            const user = store.getUser()
-            return user.username
+            const user = store.getUser();
+            return user.username;
         },
         assignUserName() {
             this.user_name = this.getUserName();
-        }
+        },
     },
 });
 </script>

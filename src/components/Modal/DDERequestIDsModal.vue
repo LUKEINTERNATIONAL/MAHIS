@@ -58,7 +58,6 @@ import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts"
 import { icons } from "@/utils/svg";
 import { text } from "ionicons/icons";
 import { Relationship } from "../../interfaces/relationship";
-import workerData from "@/activate_worker";
 import { useStatusStore } from "@/stores/StatusStore";
 import {
     medkit,
@@ -126,9 +125,7 @@ export default defineComponent({
         },
     },
     methods: {
-        async getData() {
-            this.workerApi = workerData.workerApi;
-        },
+        async getData() {},
         saveDetails() {},
         handleCancel() {
             modalController.dismiss();

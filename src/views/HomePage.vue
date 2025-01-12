@@ -43,27 +43,24 @@ import PNCDashboard from "@/apps/PNC/components/PNCDashboard.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import workerData from "@/activate_worker";
 import { useProgram } from "@/composables/useProgram";
 import { useUserActivities } from "@/composables/useUserActivities";
 import { useUserRole } from "@/composables/useUserRole";
-import { useWorkerStatus } from "@/composables/useWorkerStatus";
 
+import { useWorkerStore } from "@/stores/workerStore";
 const isLoading = ref(true);
 const route = useRoute();
+const workerStore = useWorkerStore();
 useUserActivities();
 useUserRole();
 const { setProgram, programState } = useProgram();
-const { syncRegistrationMetaData, workerApi } = useWorkerStatus();
 watch(
     () => route.name,
     async (newRoute) => {
         if (newRoute === "Home") {
             await resetDemographics();
+            workerStore.postData("SYNC_ALL_DATA");
         }
-        await workerData.terminate();
-        workerApi.value = workerData.workerApi;
-        await syncRegistrationMetaData();
     },
     { immediate: true, deep: true }
 );
@@ -71,7 +68,7 @@ watch(
 onMounted(async () => {
     try {
         isLoading.value = true;
-        // await syncRegistrationMetaData();
+        workerStore.terminate();
         await resetDemographics();
         await useGlobalPropertyStore().loadGlobalProperty();
     } catch (error) {

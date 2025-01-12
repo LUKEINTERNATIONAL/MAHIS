@@ -60,7 +60,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import { icons } from "@/utils/svg";
-import workerData from "@/activate_worker";
+import { useWorkerStore } from "@/stores/workerStore";
 import AddTA from "@/components/Registration/Modal/AddTA.vue";
 import UpdateTA from "@/components/Registration/Modal/UpdateTA.vue";
 
@@ -178,8 +178,8 @@ const openDeletePopover = async (taData: any, e: any) => {
 const deleteTA = async (taData: any) => {
     const res = await Service.delete(`traditional_authorities/${taData.traditional_authority_id}`, { id: taData.traditional_authority_id });
     if (res?.message == "Traditional Authority and associated villages successfully deleted") {
-        await workerData.postData("DELETE_RECORD", { storeName: "TAs", whereClause: { traditional_authority_id: taData.traditional_authority_id } });
-        await workerData.postData("DELETE_RECORD", {
+        useWorkerStore().postData("DELETE_RECORD", { storeName: "TAs", whereClause: { traditional_authority_id: taData.traditional_authority_id } });
+        useWorkerStore().postData("DELETE_RECORD", {
             storeName: "villages",
             whereClause: { traditional_authority_id: taData.traditional_authority_id },
         });

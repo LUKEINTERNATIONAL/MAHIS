@@ -148,7 +148,6 @@ export class AuthService {
     checkUserPrograms(selectedProgram: any) {
         const accessPrograms: any = localStorage.getItem("userPrograms");
         const programs = JSON.parse(accessPrograms);
-        console.log("🚀 ~ AuthService ~ checkUserPrograms ~ programs:", programs);
         if (programs) return programs.some((program: any) => program.name === selectedProgram);
         else toastDanger("No user programs");
     }

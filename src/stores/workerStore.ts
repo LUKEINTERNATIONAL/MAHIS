@@ -1,113 +1,139 @@
+// stores/workerStore.ts
 import { defineStore } from "pinia";
-import { ref, watch, toRaw } from "vue";
-import workerData from "@/activate_worker";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { toastSuccess } from "@/utils/Alerts";
-import { UserService } from "@/services/user_service";
+import { useWebWorker } from "@vueuse/core";
 import { Service } from "@/services/service";
-import { buildPatientRecord } from "@/services/buildingPatientRecord";
+import { watch } from "vue";
+import { useWorkerStatus } from "@/composables/useWorkerStatus";
+import { getOfflineRecords } from "@/services/offline_service";
+import { useDemographicsStore } from "./DemographicStore";
 
-export const useWorkerStore = defineStore("worker", () => {
-    const workerApi = ref<any>(null);
-    const doneLoading = ref(false);
-    const route = ref("");
-    let patientID: any = ref("");
-    let router: any = null;
+interface WorkerState {
+    url: string;
+    apiKey: string | null;
+    userId: string | null;
+    programId: string | null;
+    date: string | null;
+    totals: string | null;
+    workerApi: any;
+    workerData: any;
+    lastUpdate: Date | null;
+    isSyncing: boolean;
+}
 
-    workerApi.value = workerData.workerApi;
-    watch(
-        () => workerApi.value,
-        async (newValue) => {
-            if (newValue?.data?.msg === "done building patient record") {
-                workerData.postData("RESET");
-                doneLoading.value = true;
-                await setRecord(newValue?.data?.payload);
-            }
-            if (newValue?.data?.msg === "saved successfully" || newValue?.data?.msg === "Done Syncing") {
-                patientID.value = newValue?.data?.ID;
-                if (patientID.value) {
-                    if (newValue?.data?.msg === "Done Syncing") {
-                        route.value = "";
-                        toastSuccess("Syncing of records was successful");
-                    } else {
-                        toastSuccess("Saved on server successfully");
+export const useWorkerStore = defineStore("worker", {
+    state: (): WorkerState => ({
+        url: "",
+        apiKey: null,
+        userId: null,
+        programId: null,
+        date: null,
+        totals: null,
+        workerApi: null,
+        workerData: null,
+        lastUpdate: null,
+        isSyncing: false,
+    }),
+
+    actions: {
+        initWorker() {
+            if (!this.workerApi) {
+                const { data, post, terminate } = useWebWorker(`${import.meta.env.BASE_URL}WebWorker/worker.js`);
+
+                // Set up message watcher
+                watch(data, async (newData) => {
+                    if (newData) {
+                        if (newData == "Done syncing all data") {
+                            this.isSyncing = false;
+                        }
+                        if (newData.msg == "Patient record saved successfully") {
+                            const demographicsStore = useDemographicsStore();
+                            const patientData: any = await getOfflineRecords("patientRecords", { whereClause: { ID: demographicsStore.patient.ID } });
+                            demographicsStore.setRecord(patientData[0]);
+                        }
+                        this.updateFromWorker(newData);
                     }
-                    workerData.postData("RESET");
-                    const offlinePatientData = await getOfflinePatientData(patientID.value);
-                    await setRecord(offlinePatientData);
+                });
+
+                this.workerApi = { data, post, terminate };
+            }
+            return this.workerApi;
+        },
+
+        async updateFromWorker(data: any) {
+            const { setWorkerStatus } = useWorkerStatus();
+            await setWorkerStatus(data);
+            this.workerData = data;
+            this.lastUpdate = new Date();
+        },
+
+        async updateSettings() {
+            // Build API URL
+            const protocol = localStorage.getItem("apiProtocol") || "http";
+            const apiUrl = localStorage.getItem("apiURL") || "";
+            const port = localStorage.getItem("apiPort") || "";
+            this.url = `${protocol}://${apiUrl}${port ? ":" + port : ""}/api/v1/`;
+
+            // Get authentication and user data
+            this.apiKey = localStorage.getItem("apiKey");
+            this.userId = localStorage.getItem("userID");
+            this.date = localStorage.getItem("sessionDate");
+
+            // Get totals
+            try {
+                const totals = await Service.getJson("/totals", { paginate: false });
+                if (totals) {
+                    localStorage.setItem("totals", JSON.stringify(totals));
+                    this.totals = JSON.stringify(totals);
+                } else {
+                    throw new Error("Unable to get totals");
                 }
+            } catch (error) {
+                this.totals = localStorage.getItem("totals");
+            }
+
+            // Get program ID
+            try {
+                const programStr = localStorage.getItem("app");
+                if (programStr) {
+                    const program = JSON.parse(programStr);
+                    this.programId = program?.programID || null;
+                } else {
+                    this.programId = null;
+                }
+            } catch (error) {
+                console.error("Error parsing program data:", error);
+                this.programId = null;
             }
         },
-        {
-            deep: true,
-            immediate: true,
-        }
-    );
 
-    async function setRecord(item: any) {
-        const demographicsStore = useDemographicsStore();
-        demographicsStore.setPatient(item);
-        if (route.value && router) {
-            router.push(route.value);
-        } else if (programID() == 32) {
-            const actions = await UserService.setProgramUserActions();
-            router.push(actions?.url);
-        }
-    }
-    function setRouter(routerInstance: any) {
-        router = routerInstance;
-    }
-    function programID() {
-        return Service.getProgramID();
-    }
-    async function setPatientRecord(item: any) {
-        if (item?.ID) {
-            await setRecord(item);
-        } else {
-            patientID.value = getPatientIdentifier(item, 3);
-            const patientRecord: any = await getOfflinePatientData(patientID.value);
-            if (patientRecord) {
-                await setRecord(patientRecord);
-            } else {
-                await setRecord(await buildPatientRecord(item));
+        async postData(type: string, payload: any = "") {
+            if (!this.workerApi) {
+                this.initWorker();
             }
-        }
-    }
-    async function getPatientIdentifier(identifiers: any, id: any) {
-        if (identifiers) {
-            return identifiers.patient_identifiers
-                .filter((identifier: any) => identifier.identifier_type === id)
-                .map((identifier: any) => identifier.identifier)
-                .join(", ");
-        } else {
-            return "";
-        }
-    }
-    async function getOfflinePatientData(patientID: any) {
-        if (patientID) {
-            const { getOfflineRecords } = await import("@/services/offline_service");
-            return await getOfflineRecords("patientRecords", { whereClause: { ID: await patientID } }).then((data: any) => data?.[0]);
-        }
-        return null;
-    }
+            if (!this.isSyncing || type != "SYNC_ALL_DATA") {
+                if (type == "SYNC_ALL_DATA") this.isSyncing = true;
+                await this.updateSettings();
+                return this.workerApi.post({
+                    type,
+                    url: this.url,
+                    apiKey: this.apiKey,
+                    userId: this.userId,
+                    programId: this.programId,
+                    totals: this.totals,
+                    date: this.date,
+                    payload,
+                });
+            } else {
+                console.log("Worker is already syncing");
+            }
+        },
 
-    async function postWorkerData(action: string, payload?: any) {
-        workerApi.value = workerData.workerApi;
-        workerData.postData(action, payload);
-    }
-    async function terminate() {
-        await workerData.terminate();
-        workerApi.value = workerData.workerApi;
-    }
-    return {
-        workerApi,
-        doneLoading,
-        patientID,
-        route,
-        terminate,
-        postWorkerData,
-        setRouter,
-        setPatientRecord,
-        getOfflinePatientData,
-    };
+        terminate() {
+            if (this.workerApi) {
+                this.workerApi.terminate();
+                this.workerApi = null;
+                this.$reset();
+            }
+        },
+    },
 });

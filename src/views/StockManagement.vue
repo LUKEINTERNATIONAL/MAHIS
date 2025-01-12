@@ -106,6 +106,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
+import { useWorkerStore } from "@/stores/workerStore";
 import {
     medkit,
     chevronBackOutline,
@@ -182,6 +183,7 @@ export default defineComponent({
             selectedButton: "all",
             isLoading: false,
             combinedBatches: [] as any,
+            stockData: [] as any,
         };
     },
     setup() {
@@ -205,6 +207,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useStockStore, ["stock"]),
+        ...mapState(useWorkerStore, ["workerData"]),
         ...mapState(useSearchName, ["searchName"]),
         ...mapState(useStatusStore, ["apiStatus"]),
     },
@@ -278,6 +281,7 @@ export default defineComponent({
             }
         },
         async buildTableData(page = 1) {
+            useWorkerStore().postData("SYNC_STOCK_RECORD");
             this.isLoading = true;
             try {
                 const stock: any = await getOfflineRecords("stock");

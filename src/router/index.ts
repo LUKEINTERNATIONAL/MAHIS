@@ -3,7 +3,6 @@ import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import stockManagement from "../views/StockManagement.vue";
 import OfflineRecords from "../views/OfflineRecords.vue";
-import syncingManagement from "../views/syncingManagement.vue";
 import scheduleImmunization from "../views/ScheduleImmunizationSessions.vue";
 import manageAppointMents from "../views/ManageAppointMents.vue";
 import ManageAppointMentsTemplate from "../views/ManageAppointMentsTemplate.vue";
@@ -51,11 +50,6 @@ const routes: Array<RouteRecordRaw> = [
         path: "/OfflineRecords",
         name: "OfflineRecords",
         component: OfflineRecords,
-    },
-    {
-        path: "/syncingManagement",
-        name: "syncingManagement",
-        component: syncingManagement,
     },
     {
         path: "/setDDE",
