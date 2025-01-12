@@ -218,15 +218,21 @@ export default defineComponent({
             },
             deep: true,
         },
-        $route: {
+        workerData: {
             async handler() {
                 await this.buildTableData();
             },
             deep: true,
         },
+        $route: {
+            async handler() {
+                await this.updateBuildStockData();
+            },
+            deep: true,
+        },
     },
     async mounted() {
-        await this.buildTableData();
+        await this.updateBuildStockData();
     },
     methods: {
         combineDrugBatches(batches: DrugBatch[]): CombinedDrugBatch[] {
@@ -280,12 +286,15 @@ export default defineComponent({
                 await this.buildTableData();
             }
         },
-        async buildTableData(page = 1) {
+        async updateBuildStockData() {
             useWorkerStore().postData("SYNC_STOCK_RECORD");
+            this.buildTableData();
+        },
+        async buildTableData(page = 1) {
             this.isLoading = true;
             try {
-                const stock: any = await getOfflineRecords("stock");
-                this.reportData = this.paginateArray(this.combineDrugBatches(stock), this.currentPage);
+                this.stockData = await getOfflineRecords("stock");
+                this.reportData = this.paginateArray(this.combineDrugBatches(this.stockData), this.currentPage);
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
