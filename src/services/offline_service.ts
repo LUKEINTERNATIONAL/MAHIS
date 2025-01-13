@@ -161,9 +161,7 @@ export async function saveOfflinePatientData(patientData: any) {
     const workerStore = useWorkerStore();
     await workerStore.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
     await workerStore.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
+    const demographicsStore = useDemographicsStore();
+    demographicsStore.setRecord(plainPatientData);
     if (useStatusStore().apiStatus && !workerStore.isSyncing) await workerStore.postData("SAVE_PATIENT_RECORD", { data: plainPatientData });
-    else {
-        const demographicsStore = useDemographicsStore();
-        demographicsStore.setRecord(plainPatientData);
-    }
 }
