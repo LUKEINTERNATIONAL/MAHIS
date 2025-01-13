@@ -218,15 +218,9 @@ export default defineComponent({
             },
             deep: true,
         },
-        workerData: {
-            async handler() {
-                if (this.$route.name == "StockManagement") await this.buildTableData();
-            },
-            deep: true,
-        },
         $route: {
             async handler(data) {
-                if (data.name == "StockManagement") await this.updateBuildStockData();
+                if (data.name == "stockManagement") await this.updateBuildStockData();
             },
             deep: true,
         },
@@ -293,8 +287,22 @@ export default defineComponent({
         async buildTableData(page = 1) {
             this.isLoading = true;
             try {
-                this.stockData = await getOfflineRecords("stock");
-                this.reportData = this.paginateArray(this.combineDrugBatches(this.stockData), this.currentPage);
+                if (this.apiStatus) {
+                    const stockService = new StockService();
+                    this.reportData = {
+                        items: await stockService.getItems({
+                            start_date: "2000-01-01",
+                            end_date: this.endDate,
+                            drug_name: this.filter,
+                            page: page,
+                            page_size: 4,
+                            display_details: "true",
+                        }),
+                    };
+                } else {
+                    this.stockData = await getOfflineRecords("stock");
+                    this.reportData = this.paginateArray(this.combineDrugBatches(this.stockData), this.currentPage);
+                }
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
