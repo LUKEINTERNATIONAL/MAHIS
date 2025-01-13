@@ -45,8 +45,8 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
-                        v-if="combinedBatches?.length > 0"
-                        :total-items="combinedBatches?.length"
+                        v-if="totalPages > 0"
+                        :total-items="totalPages"
                         :items-per-page="4"
                         :max-pages-shown="2"
                         v-model="currentPage"
@@ -184,6 +184,7 @@ export default defineComponent({
             isLoading: false,
             combinedBatches: [] as any,
             stockData: [] as any,
+            totalPages: 0 as any,
         };
     },
     setup() {
@@ -299,9 +300,11 @@ export default defineComponent({
                             display_details: "true",
                         }),
                     };
+                    if (this.reportData?.items) this.totalPages = this.reportData?.items[0]?.total_count;
                 } else {
                     this.stockData = await getOfflineRecords("stock");
                     this.reportData = this.paginateArray(this.combineDrugBatches(this.stockData), this.currentPage);
+                    this.totalPages = this.combinedBatches?.length;
                 }
             } catch (error) {
                 toastWarning("An error occurred while loading data.");

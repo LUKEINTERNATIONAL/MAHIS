@@ -90,8 +90,8 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
-                        v-if="reportData.totalCount"
-                        :total-items="reportData.totalCount"
+                        v-if="totalPages > 0"
+                        :total-items="totalPages"
                         :items-per-page="4"
                         :max-pages-shown="2"
                         v-model="currentPage"
@@ -260,6 +260,7 @@ export default defineComponent({
             event: null as any,
             stockService: {} as any,
             disabled: false,
+            totalPages: 0 as any,
         };
     },
     setup() {
@@ -485,12 +486,14 @@ export default defineComponent({
                             page_size: 4,
                         }),
                     };
+                    if (this.reportData?.records) this.totalPages = this.reportData?.records[0]?.total_count;
                 } else {
                     this.reportData = await getOfflineRecords("stock", {
                         whereClause: { drug_legacy_name: this.data.drug_legacy_name },
                         currentPage: this.currentPage,
                         itemsPerPage: 4,
                     });
+                    this.totalPages = this.reportData.totalCount;
                 }
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
