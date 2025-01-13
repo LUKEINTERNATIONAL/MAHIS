@@ -46,9 +46,9 @@ export const useWorkerStore = defineStore("worker", {
                             this.isSyncing = false;
                         }
                         if (newData.msg == "Patient record saved successfully") {
-                            const demographicsStore = useDemographicsStore();
-                            const patientData: any = await getOfflineRecords("patientRecords", { whereClause: { ID: demographicsStore.patient.ID } });
-                            demographicsStore.setRecord(patientData[0]);
+                            // const demographicsStore = useDemographicsStore();
+                            // const patientData: any = await getOfflineRecords("patientRecords", { whereClause: { ID: demographicsStore.patient.ID } });
+                            // demographicsStore.setRecord(patientData[0]);
                         }
                         this.updateFromWorker(newData);
                     }
