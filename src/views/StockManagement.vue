@@ -1,5 +1,5 @@
 <template>
-    <ion-page :class="{ loading: isLoading }">
+    <ion-page :class="{ loading: isLoading }" :keep-alive="false">
         <!-- Spinner -->
         <div v-if="isLoading" class="spinner-overlay">
             <ion-spinner name="bubbles"></ion-spinner>
@@ -220,13 +220,13 @@ export default defineComponent({
         },
         workerData: {
             async handler() {
-                await this.buildTableData();
+                if (this.$route.name == "StockManagement") await this.buildTableData();
             },
             deep: true,
         },
         $route: {
-            async handler() {
-                await this.updateBuildStockData();
+            async handler(data) {
+                if (data.name == "StockManagement") await this.updateBuildStockData();
             },
             deep: true,
         },
