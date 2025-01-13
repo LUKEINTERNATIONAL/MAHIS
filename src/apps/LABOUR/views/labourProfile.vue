@@ -277,14 +277,6 @@ export default defineComponent({
         },
 
         async saveData() {
-            // const store = useObstreticHistoryStore();
-            // const isFormValid = await store.validate();
-            // if (!isFormValid) {
-            //     toastDanger("The form has errors");
-            //     return;
-            // }
-            // await this.saveProfile();
-            // await await resetPatientData();
             this.saveLabourProfile();
             await await resetPatientData();
         },
