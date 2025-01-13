@@ -1,12 +1,12 @@
 <template>
     <ion-page :class="{ loading: isLoading }">
         <ion-header style="display: flex; justify-content: space-between">
-            <ion-title class="modalTitle">Follow up visits</ion-title>
+            <ion-title class="modalTitle">Loading Offline Records</ion-title>
             <ion-icon @click="modalController.dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="icons.cancel"></ion-icon>
         </ion-header>
         <ion-content>
             <div class="" style="display: block">
-                <div class="title">Loading Offline Records</div>
+                <div class="title"></div>
                 <div class="container">
                     <ion-button style="width: 100px; margin-bottom: 10px" @click="reloadData">Reload</ion-button>
                     <div class="sub_title">
