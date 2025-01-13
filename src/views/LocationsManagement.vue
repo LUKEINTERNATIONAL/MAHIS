@@ -206,9 +206,11 @@ watch(
 
 watch(
     () => route,
-    async () => {
-        const table = (dataTableRef.value as any).dt;
-        table?.ajax.reload();
+    async (data) => {
+        if (data.name == "LocationsManagement") {
+            const table = (dataTableRef.value as any).dt;
+            table?.ajax.reload();
+        }
     },
     { deep: true }
 );
