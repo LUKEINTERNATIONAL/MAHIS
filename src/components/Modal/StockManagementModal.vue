@@ -474,11 +474,24 @@ export default defineComponent({
             this.isLoading = true;
             useWorkerStore().postData("SYNC_STOCK_RECORD");
             try {
-                this.reportData = await getOfflineRecords("stock", {
-                    whereClause: { drug_legacy_name: this.data.drug_legacy_name },
-                    currentPage: this.currentPage,
-                    itemsPerPage: 4,
-                });
+                if (this.apiStatus) {
+                    const stockService = new StockService();
+                    this.reportData = {
+                        records: await stockService.getItems({
+                            start_date: "2000-01-01",
+                            end_date: this.endDate,
+                            drug_name: this.data.drug_legacy_name,
+                            page: page,
+                            page_size: 4,
+                        }),
+                    };
+                } else {
+                    this.reportData = await getOfflineRecords("stock", {
+                        whereClause: { drug_legacy_name: this.data.drug_legacy_name },
+                        currentPage: this.currentPage,
+                        itemsPerPage: 4,
+                    });
+                }
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
