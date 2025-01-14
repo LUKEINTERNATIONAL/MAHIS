@@ -17,6 +17,9 @@ export function useWorkerStatus() {
         if (workerData?.payload?.total_TAs) {
             statusStore.setOfflineTAsStatus(workerData.payload);
         }
+        if (workerData?.serverPatientsCount) {
+            statusStore.setOfflinePatientsStatus(workerData);
+        }
     };
 
     return {
