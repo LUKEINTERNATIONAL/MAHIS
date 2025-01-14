@@ -2,13 +2,8 @@ import { defineStore } from 'pinia'
 
 export const useOutcomeStore = defineStore('outcome', {
     state: () => ({
-        dispositions: [
-            // name:
-            // type:
-            // date:
-            // reason:
-            // dataItem:
-        ] as any,
+        dispositions: [] as any,
+        editingOutcome:null,
     }),
     actions:{
         addOutcomeData(data: any, index: any) {

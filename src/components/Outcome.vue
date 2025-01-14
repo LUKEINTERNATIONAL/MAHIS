@@ -33,7 +33,7 @@
                     <div>
                         <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ refTypErrMsg }}</ion-label>
                     </div>
-                </ion-col>  
+                </ion-col>
             </ion-row>
         </div>
 
@@ -42,11 +42,15 @@
             @data-saved="dataSavedTrigFn"
         />
 
-        <ReferredOutCome 
+        <ReferredOutCome
             v-if="show_referred_options"
             @data-saved="dataSavedTrigFn"
         />
+      <DischargedHome
+          v-if="show_discharged_options"
+          @data-saved="dataSavedTrigFn"
 
+      />
         <deadOutcome
             v-if="show_dead_options"
             @data-saved="dataSavedTrigFn"
@@ -99,6 +103,7 @@ import deadOutcome from "@/apps/OPD/components/ConsultationPlan/DeadOutcome.vue"
 import ListPicker from "@/components/ListPicker.vue"
 import AdmittedforShortStayOutcome from "@/apps/OPD/components/ConsultationPlan/AdmittedforShortStayOutcome.vue"
 import ReferredOutCome from '@/apps/OPD/components/ConsultationPlan/ReferredOutCome.vue'
+import DischargedHome from "@/apps/OPD/components/ConsultationPlan/DischargedHome.vue";
 
 const initialMsg = ref("No outcome created yet");
 const show_error_msg_for_ref_type = ref(false);
@@ -117,8 +122,9 @@ const EditEvnt = ref(false);
 const show_dead_options = ref(false)
 const show_admitted_options = ref(false)
 const show_referred_options = ref(false)
-
-const editItem = ref()
+const show_discharged_options = ref(false)
+const editIndex = ref<number | null>(null);
+const dischargeDate = ref<any>(null);
 
 const referralType = ref([
     {
@@ -130,7 +136,9 @@ const referralType = ref([
         selected: false,
     },
     {
-        name: "Discharged Home"
+        name: "Discharged Home",
+        selected: false,
+
     },
     {
         name: "Death",
@@ -184,6 +192,26 @@ watch(
     }
 )
 
+function editItem(index: number) {
+  editIndex.value = index;
+  const itemToEdit = dispositions.value[index];
+  const itemData = { ...itemToEdit };
+  removeItem(index);
+  if (itemData.type === 'Discharged Home') {
+    show_discharged_options.value = true;
+    dischargeDate.value = itemData.date;
+  }
+  if (itemData.type === 'Referred out') {
+    show_referred_options.value = true;
+  }
+  if (itemData.type === 'Admitted for short stay') {
+    show_admitted_options.value = true;
+  }
+  if (itemData.type === 'Death') {
+    show_dead_options.value = true;
+  }
+}
+
 function resetSelection() {
     referralType.value.forEach((item: any) =>{
         item.selected = false
@@ -208,27 +236,34 @@ function removeItem(index: number) {
 async function checkRefType(clear_inputs: boolean = true) {
     const tempRefType = refType.value;
 
-    
+
     refType.value = tempRefType;
     const ref_type = refType.value;
 
     if (ref_type == referralType.value[0].name) {
         show_admitted_options.value = true
-    } 
+    }
     else {
         show_admitted_options.value = false
     }
 
     if (ref_type == referralType.value[1].name) {
         show_referred_options.value = true
-    } 
+    }
     else {
         show_referred_options.value = false
     }
+  if (ref_type == referralType.value[2].name) {
+    show_discharged_options.value = true
+
+  }
+  else {
+    show_discharged_options.value = false
+  }
 
     if (ref_type == referralType.value[3].name) {
         show_dead_options.value = true
-    } 
+    }
     else {
         show_dead_options.value = false
     }
@@ -237,6 +272,7 @@ async function checkRefType(clear_inputs: boolean = true) {
 function dataSavedTrigFn() {
     show_dead_options.value = false
     show_admitted_options.value = false
+    show_discharged_options.value = false
     show_referred_options.value = false
     resetSelection()
 }
