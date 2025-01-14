@@ -184,8 +184,10 @@ const loginIcon = () => {
 const facilityB = async () => {
     const store = useUserStore();
     const data = await getUserFacility();
-    store.setUserFacilityName(data.name);
-    store.setFacilityLocation(data);
+    if (data) {
+        store.setUserFacilityName(data.name);
+        store.setFacilityLocation(data);
+    }
     store.setCurrentUserProgram(program.value);
 };
 
