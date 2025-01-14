@@ -132,7 +132,7 @@ const setPrograms = async () => {
 
 const sortPrograms = (data: any) => {
     if (data && data.length > 0) {
-        data.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        data.sort((a: any, b: any) => a?.name.localeCompare(b?.name));
         return data;
     }
 };
