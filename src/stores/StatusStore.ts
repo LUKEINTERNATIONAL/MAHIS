@@ -9,6 +9,7 @@ export const useStatusStore = defineStore("statusStore", {
             offlineCountriesStatus: {} as any,
             offlineTAsStatus: {} as any,
             offlineRelationshipStatus: {} as any,
+            offlinePatientsStatus: {} as any,
         };
     },
     actions: {
@@ -29,6 +30,9 @@ export const useStatusStore = defineStore("statusStore", {
         },
         setOfflineRelationshipStatus(data: any) {
             this.offlineRelationshipStatus = data;
+        },
+        setOfflinePatientsStatus(data: any) {
+            this.offlinePatientsStatus = data;
         },
         registrationMetaDataStatus() {
             if (
