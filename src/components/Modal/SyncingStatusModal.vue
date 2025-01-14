@@ -55,6 +55,18 @@
                         active-color="#fff"
                         color="rgb(107, 199, 107)"
                     ></k-progress>
+                    <div class="sub_title">
+                        Patients
+                        <span class="count">
+                            ({{ offlinePatientsStatus?.offlinePatientsCount }}/{{ offlinePatientsStatus?.serverPatientsCount }})</span
+                        >
+                    </div>
+                    <k-progress
+                        :percent="fractionToPercentage(offlinePatientsStatus?.offlinePatientsCount, offlinePatientsStatus?.serverPatientsCount)"
+                        :active="!offlinePatientsStatus?.offlinePatientsCount == offlinePatientsStatus?.serverPatientsCount"
+                        active-color="#fff"
+                        color="rgb(107, 199, 107)"
+                    ></k-progress>
                 </div>
             </div>
         </ion-content>
@@ -73,7 +85,8 @@ import { icons } from "@/utils/svg";
 const workerStore = useWorkerStore();
 const isLoading = ref(false) as any;
 const statusStore = useStatusStore();
-const { offlineVillageStatus, offlineCountriesStatus, offlineDistrictStatus, offlineTAsStatus, offlineRelationshipStatus } = storeToRefs(statusStore);
+const { offlineVillageStatus, offlineCountriesStatus, offlineDistrictStatus, offlineTAsStatus, offlineRelationshipStatus, offlinePatientsStatus } =
+    storeToRefs(statusStore);
 onMounted(async () => {
     // await syncRegistrationMetaData();
 });
