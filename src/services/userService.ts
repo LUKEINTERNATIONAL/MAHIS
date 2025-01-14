@@ -13,10 +13,12 @@ export async function getUserLocation() {
 }
 
 export async function getUserFacility() {
-    const userId: any = Service.getUserID();
-    const user_data = await UserService.getUserByID(userId);
-    if (user_data.location_id != null) {
-        const response = await LocationService.getFacility(user_data.location_id);
-        return response;
-    }
+    try {
+        const userId: any = Service.getUserID();
+        const user_data = await UserService.getUserByID(userId);
+        if (user_data.location_id != null) {
+            const response = await LocationService.getFacility(user_data.location_id);
+            return response;
+        }
+    } catch (error) {}
 }
