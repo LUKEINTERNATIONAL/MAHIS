@@ -78,8 +78,6 @@ import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
-import workerData from "@/activate_worker";
-import db from "@/db";
 import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
     name: "Home",
@@ -174,9 +172,10 @@ export default defineComponent({
 
             const newVitals = await formatInputFiledData(this.vitalsWeightHeight);
             if (newVitals.length > 0 && weight == null && height == null) {
-                let vitals = this.patient?.vitals;
+                const patientData = JSON.parse(JSON.stringify(this.patient));
+                let vitals = patientData?.vitals;
                 vitals.unsaved = [...vitals.unsaved, ...newVitals];
-                await saveOfflinePatientData(this.patient);
+                await saveOfflinePatientData(patientData);
                 toastSuccess("Vitals saved successful");
                 this.cleanInputFields();
             } else {

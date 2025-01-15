@@ -48,7 +48,6 @@ export function useUserActivities() {
     watch(
         () => route.path,
         async () => {
-            console.log("🚀 ~ useUserActivities ~ route:", route);
             await updateActivities();
         },
         { immediate: true, deep: true }

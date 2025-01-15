@@ -58,7 +58,7 @@ import { LocationService } from "@/services/location_service";
 import Validation from "@/validations/StandardValidations";
 import { isPlainObject, isEmpty } from "lodash";
 import { validateInputFiledData } from "@/services/group_validation";
-import workerData from "@/activate_worker";
+import { useWorkerStore } from "@/stores/workerStore";
 import { getOfflineRecords } from "@/services/offline_service";
 
 onMounted(async () => {});
@@ -78,7 +78,9 @@ const saveVillage = async () => {
             parent_location: props.taData.traditional_authority_id,
         });
         if (address) {
-            Promise.all(address.village_data.map((item: any) => workerData.postData("ADD_OBJECT_STORE", { storeName: "villages", data: item })));
+            Promise.all(
+                address.village_data.map((item: any) => useWorkerStore().postData("ADD_OBJECT_STORE", { storeName: "villages", data: item }))
+            );
             toastSuccess(`Location added successfully`);
         }
         dismiss();

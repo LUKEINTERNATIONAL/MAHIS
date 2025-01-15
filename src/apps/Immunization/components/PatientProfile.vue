@@ -75,7 +75,7 @@
         </div>
         <div class="graphSection">
             <div>
-                <WeightHeightChart :checkUnderSixWeeks="checkUnderSixWeeks" :updateGraph="updateGraph" :showHeightWeight="true" v-if="isChild()" />
+                <WeightHeightChart :checkUnderSixWeeks="checkUnderSixWeeks" :showHeightWeight="true" v-if="isChild()" />
                 <PreviousVitals v-if="!isChild()" />
             </div>
 
@@ -343,7 +343,6 @@ export default defineComponent({
             wizardData: [] as any,
             StepperData: [] as any,
             isOpen: false,
-            updateGraph: {},
             iconsContent: icons,
             current_milestone: "" as string,
             checkUnderSixWeeks: false,
@@ -392,7 +391,6 @@ export default defineComponent({
         patient: {
             async handler() {
                 if (this.patient) {
-                    this.updateGraph = JSON.parse(JSON.stringify(this.patient));
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
                     this.checkAge();

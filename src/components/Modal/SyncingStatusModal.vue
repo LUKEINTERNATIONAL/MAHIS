@@ -1,14 +1,12 @@
 <template>
     <ion-page :class="{ loading: isLoading }">
-        <!-- Spinner -->
-        <div v-if="isLoading" class="spinner-overlay">
-            <ion-spinner name="bubbles"></ion-spinner>
-            <div class="loading-text">Please wait...</div>
-        </div>
-        <Toolbar />
+        <ion-header style="display: flex; justify-content: space-between">
+            <ion-title class="modalTitle">Loading Offline Records</ion-title>
+            <ion-icon @click="modalController.dismiss()" style="padding-top: 10px; padding-right: 10px" :icon="icons.cancel"></ion-icon>
+        </ion-header>
         <ion-content>
             <div class="" style="display: block">
-                <div class="title">Loading Offline Records</div>
+                <div class="title"></div>
                 <div class="container">
                     <ion-button style="width: 100px; margin-bottom: 10px" @click="reloadData">Reload</ion-button>
                     <div class="sub_title">
@@ -57,35 +55,46 @@
                         active-color="#fff"
                         color="rgb(107, 199, 107)"
                     ></k-progress>
+                    <div class="sub_title">
+                        Patients
+                        <span class="count">
+                            ({{ offlinePatientsStatus?.offlinePatientsCount }}/{{ offlinePatientsStatus?.serverPatientsCount }})</span
+                        >
+                    </div>
+                    <k-progress
+                        :percent="fractionToPercentage(offlinePatientsStatus?.offlinePatientsCount, offlinePatientsStatus?.serverPatientsCount)"
+                        :active="!offlinePatientsStatus?.offlinePatientsCount == offlinePatientsStatus?.serverPatientsCount"
+                        active-color="#fff"
+                        color="rgb(107, 199, 107)"
+                    ></k-progress>
                 </div>
             </div>
         </ion-content>
     </ion-page>
 </template>
 <script setup lang="ts">
-import { IonContent, IonPage, IonButton } from "@ionic/vue";
+import { IonContent, IonPage, IonButton, modalController } from "@ionic/vue";
 import { onMounted, ref } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import { useWorkerStatus } from "@/composables/useWorkerStatus";
-import workerData from "@/activate_worker";
-const {
-    workerApi,
-    offlineVillageStatus,
-    offlineCountriesStatus,
-    offlineDistrictStatus,
-    offlineTAsStatus,
-    offlineRelationshipStatus,
-    syncRegistrationMetaData,
-} = useWorkerStatus();
+import { useStatusStore } from "@/stores/StatusStore";
+import { storeToRefs } from "pinia";
+import { useWorkerStore } from "@/stores/workerStore";
+import { icons } from "@/utils/svg";
+
+const workerStore = useWorkerStore();
 const isLoading = ref(false) as any;
+const statusStore = useStatusStore();
+const { offlineVillageStatus, offlineCountriesStatus, offlineDistrictStatus, offlineTAsStatus, offlineRelationshipStatus, offlinePatientsStatus } =
+    storeToRefs(statusStore);
 onMounted(async () => {
-    await syncRegistrationMetaData();
+    // await syncRegistrationMetaData();
 });
 const reloadData = async () => {
-    await workerData.terminate();
-    workerApi.value = workerData.workerApi;
-    await syncRegistrationMetaData();
+    workerStore.terminate();
+    workerStore.postData("SYNC_ALL_DATA");
 };
+
 const fractionToPercentage = (numerator: any, denominator: any) => {
     if (denominator === 0) {
         return 0;

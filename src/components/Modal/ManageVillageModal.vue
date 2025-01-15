@@ -52,12 +52,13 @@ import { useStartEndDate } from "@/stores/StartEndDate";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
 import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
-import workerData from "@/activate_worker";
 import { Service } from "@/services/service";
 import UpdateVillage from "@/components/Registration/Modal/UpdateVillage.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 
 // Store initialization
 const stockStore = useStockStore();
+const workerStore = useWorkerStore();
 const startEndDateStore = useStartEndDate();
 const route = useRoute();
 
@@ -167,7 +168,7 @@ const openDeletePopover = async (villageData: any, e: any) => {
 const deleteTA = async (villageData: any) => {
     const res = await Service.delete(`villages/${villageData.village_id}`, { id: villageData.village_id });
     if (res?.message == "Village successfully deleted") {
-        await workerData.postData("DELETE_RECORD", { storeName: "villages", whereClause: { village_id: villageData.village_id } });
+        await workerStore.postData("DELETE_RECORD", { storeName: "villages", whereClause: { village_id: villageData.village_id } });
     }
     reloadTableData(false);
 };

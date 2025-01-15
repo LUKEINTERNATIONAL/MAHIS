@@ -1,12 +1,12 @@
 {
   "name": "MaHIS",
   "private": true,
-  "version": "1.0.4-Alpha",
+  "version": "1.0.4-beta-3",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc && vite build",
-    "android:test": "vite build --mode test && cp -r dist/* android/app/src/main/assets/public",
+    "android:test": "vite build --mode test && rm -rf android/app/src/main/assets/public/* && cp -r dist/* android/app/src/main/assets/public",
     "android": "ionic cap build android",
     "build:test": "vite build --mode test",
     "build:development": "vite build --mode development",

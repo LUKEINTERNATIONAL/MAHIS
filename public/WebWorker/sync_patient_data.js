@@ -1,40 +1,73 @@
 const syncPatientDataService = {
-    async getOfflineSavedPatientIds() {
-        const patientRecords = await DatabaseManager.getOfflineData("patientRecords");
-        const ids = [];
-        if (patientRecords) {
-            await Promise.all(
-                patientRecords?.map(async (record) => {
-                    ids.push(record.ID);
-                })
-            );
-        }
-
-        return ids;
-    },
     async getPatientData() {
-        const date = await previousSyncService.getPreviousSyncDate();
-        let previous_sync_date = date;
-        // if (date) {
-        //     const originalDate = new Date(date);
-        //     const previousDate = new Date(originalDate);
-        //     previousDate.setDate(originalDate.getDate() - 1);
-        //     previous_sync_date = previousDate.toISOString().slice(0, 19) + previousDate.toISOString().slice(23);
-        // }
-        const patients_sync_data = await ApiService.post("/sync/patients_ids", {
+        try {
+            // Get the previous sync date
+            let previous_sync_date = await previousSyncService.getPreviousSyncDate();
+            let patients_sync_data = await this.getPatientIds(previous_sync_date);
+            if (patients_sync_data.not_synced_ids) {
+                const patientCount = await DatabaseManager.getOfflineData("patientRecords").then((data) => data?.length);
+                if (patientCount != patients_sync_data.server_patient_count) {
+                    await DatabaseManager.emptyCollection("patientRecords");
+                    self.postMessage({
+                        syncedCount: patients_sync_data.not_synced_ids.length,
+                        lastSyncDate: patients_sync_data.latest_encounter_datetime,
+                        offlinePatientsCount: 0,
+                        serverPatientsCount: patients_sync_data.server_patient_count,
+                    });
+                    patients_sync_data = await this.getPatientIds("");
+                }
+                // Sync all patient records in parallel
+
+                await Promise.all(
+                    patients_sync_data.not_synced_ids.map(async (id) => {
+                        try {
+                            const record = await ApiService.getData(`/patients/${id}`);
+                            const patientData = await this.buildPatientData(record);
+                            await this.saveSyncedPatientRecord(patientData, patients_sync_data);
+                        } catch (error) {
+                            console.error(`Failed to sync patient ID ${id}:`, error);
+                            // You might want to add the failed ID to a retry queue
+                            throw error; // Re-throw to mark this promise as failed
+                        }
+                    })
+                );
+                // Update the sync timestamp only if all operations succeeded
+                await previousSyncService.setPreviousSyncDate(patients_sync_data.latest_encounter_datetime);
+            }
+        } catch (error) {
+            console.error("Error in getPatientData:", error);
+            return {
+                success: false,
+                error: error.message,
+                lastAttemptDate: new Date().toISOString(),
+            };
+        }
+    },
+    async getPatientIds(previous_sync_date) {
+        // Get IDs of patients that need syncing
+        return await ApiService.post("/sync/patients_ids", {
             previous_sync_date: previous_sync_date,
         });
-        await Promise.all(
-            patients_sync_data.not_synced_ids.map(async (id) => {
-                const record = await ApiService.getData(`/patients/${id}`);
-                await this.saveSyncedPatientRecord(await this.buildPatientData(record));
-            })
-        );
-        await previousSyncService.setPreviousSyncDate(patients_sync_data.latest_encounter_datetime);
     },
-    async saveSyncedPatientRecord(data) {
-        if (data) DatabaseManager.deleteRecord("patientRecords", { patientID: data.patientID });
-        if (data) DatabaseManager.addData("patientRecords", data);
+    async findSaveByID(id) {
+        const record = await ApiService.getData(`/patients/${id}`);
+        const patientData = await this.buildPatientData(record);
+        // await this.saveSyncedPatientRecord(patientData);
+    },
+    async saveSyncedPatientRecord(data, patients_sync_data = "") {
+        if (data) {
+            await DatabaseManager.deleteRecord("patientRecords", { patientID: data.patientID });
+            await DatabaseManager.addData("patientRecords", data);
+            if (patients_sync_data) {
+                const patientCount = await DatabaseManager.getOfflineData("patientRecords").then((data) => data.length);
+                self.postMessage({
+                    syncedCount: patients_sync_data.not_synced_ids.length,
+                    lastSyncDate: patients_sync_data.latest_encounter_datetime,
+                    offlinePatientsCount: patientCount,
+                    serverPatientsCount: patients_sync_data.server_patient_count,
+                });
+            }
+        }
     },
     async buildPatientData(record) {
         if (!record?.person) return "";
@@ -65,7 +98,10 @@ const syncPatientDataService = {
                 religion: "",
                 education_level: this.getAttribute(record, "EDUCATION LEVEL"),
             },
-            guardianInformation: "",
+            guardianInformation: {
+                saved: await this.getGuardianData(record.patient_id),
+                unsaved: [],
+            },
             birthRegistration: await this.getBirthRegistration(record.patient_id),
             otherPersonInformation: {
                 nationalID: "",
@@ -81,6 +117,10 @@ const syncPatientDataService = {
                 orders: [],
                 obs: [],
                 voided: [],
+            },
+            appointments: {
+                saved: [],
+                unsaved: [],
             },
             saveStatusPersonInformation: "complete",
             saveStatusGuardianInformation: "complete",
@@ -102,40 +142,107 @@ const syncPatientDataService = {
     getAttribute(item, name) {
         return item.person.person_attributes.find((attribute) => attribute.type.name === name)?.value;
     },
+    async getGuardianData(patientId) {
+        try {
+            const data = await ApiService.getData(`/people/${patientId}/relationships`);
+            return this.transformPersonData(data);
+        } catch (error) {
+            return [];
+        }
+    },
+    transformPersonData(jsonData) {
+        // Ensure we have data
+        if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
+            return [];
+        }
+        return jsonData.map((record) => {
+            const person = record.relation;
+            const name = person.names[0];
+            const address = person.addresses[0];
+
+            // Helper function to safely get person attribute value
+            const getAttributeValue = (attributes, attributeName) => {
+                const attribute = attributes.find((attr) => attr.type.name === attributeName);
+                return attribute ? attribute.value : "";
+            };
+
+            return {
+                given_name: name?.given_name || "",
+                middle_name: name?.middle_name || "",
+                family_name: name?.family_name || "",
+                gender: person?.gender || "",
+                birthdate: person?.birthdate || "",
+                birthdate_estimated: person?.birthdate_estimated?.toString() || "",
+
+                home_region: address?.region || "",
+                home_district: address?.county_district || "",
+                home_traditional_authority: address?.township_division || "",
+                home_village: address?.city_village || "",
+
+                current_region: address?.region || "",
+                current_district: address?.county_district || "",
+                current_traditional_authority: address?.township_division || "",
+                current_village: address?.city_village || "",
+
+                landmark: getAttributeValue(person?.person_attributes, "Landmark Or Plot Number"),
+                cell_phone_number: getAttributeValue(person?.person_attributes, "Cell Phone Number"),
+                national_id: "",
+
+                relationship_id: record?.relationship_id?.toString() || "",
+                relationship_type: {
+                    a_is_to_b: record?.type?.a_is_to_b || "",
+                    b_is_to_a: record?.type?.b_is_to_a || "",
+                    relationship_type_id: record?.type?.relationship_type_id?.toString() || "",
+                },
+            };
+        });
+    },
     async getVitals(patientId) {
-        const encounters = await ApiService.getData("/encounters", {
-            encounter_type_id: 6,
-            patient_id: patientId,
-            paginate: false,
-        });
-        return encounters.flatMap((encounter) => {
-            return encounter.observations
-                .filter((observation) => [5089, 5088, 5087, 5086, 5085, 5090, 5092, 5242, 2137].includes(observation.concept_id))
-                .map((observation) => ({
-                    concept_id: observation.concept_id,
-                    obs_datetime: observation.obs_datetime,
-                    value_numeric: observation.value_numeric,
-                    obs_id: observation.obs_id,
-                }));
-        });
+        try {
+            const encounters = await ApiService.getData("/encounters", {
+                encounter_type_id: 6,
+                patient_id: patientId,
+                paginate: false,
+            });
+            return encounters.flatMap((encounter) => {
+                return encounter.observations
+                    .filter((observation) => [5089, 5088, 5087, 5086, 5085, 5090, 5092, 5242, 2137].includes(observation.concept_id))
+                    .map((observation) => ({
+                        concept_id: observation.concept_id,
+                        obs_datetime: observation.obs_datetime,
+                        value_numeric: observation.value_numeric,
+                        obs_id: observation.obs_id,
+                    }));
+            });
+        } catch (error) {
+            return [];
+        }
     },
     async getVaccineAdministration(patientID) {
-        return await ApiService.getData("eir/schedule", { patient_id: patientID });
+        try {
+            return await ApiService.getData("eir/schedule", { patient_id: patientID });
+        } catch (error) {
+            return [];
+        }
     },
     async getBirthRegistration(patientId) {
-        const encounters = await ApiService.getData("/encounters", {
-            encounter_type_id: 5,
-            patient_id: patientId,
-            paginate: false,
-        });
-        return encounters.flatMap((encounter) => {
-            return encounter.observations
-                .filter((observation) => [11764, 11759, 3753].includes(observation.concept_id))
-                .map((observation) => ({
-                    concept_id: observation.concept_id,
-                    obs_datetime: observation.obs_datetime,
-                    value_text: observation.value_text,
-                }));
-        });
+        try {
+            const encounters = await ApiService.getData("/encounters", {
+                encounter_type_id: 5,
+                patient_id: patientId,
+                paginate: false,
+            });
+            return encounters.flatMap((encounter) => {
+                return encounter.observations
+                    .filter((observation) => [11764, 11759, 3753].includes(observation.concept_id))
+                    .map((observation) => ({
+                        concept_id: observation.concept_id,
+                        obs_datetime: observation.obs_datetime,
+                        value_text: observation.value_text,
+                    }));
+            });
+        } catch (error) {
+            return [];
+        }
     },
 };
