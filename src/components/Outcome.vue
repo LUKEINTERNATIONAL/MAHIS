@@ -10,30 +10,30 @@
             <span class="dash_box">{{ initialMsg }}</span>
         </ion-row>
 
-        <!-- <ion-row class="spc_btwn" v-if="showAddItemButton">
-            <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
-        </ion-row> -->
-
-        <div v-if="showAddItemButton" class="aro-cls-1">
+        <div style="margin-top: 100px;" v-if="showAddItemButton">
             <ion-row>
-                <ion-col style="margin: -20px; margin-left: 0px;">
-                    <ListPicker
-                        :multiSelection="list_picker_prperties[0].multi_Selection"
-                        :show_label="list_picker_prperties[0].show_list_label"
-                        :uniqueId="list_picker_prperties[0].unqueId"
-                        :name_of_list="list_picker_prperties[0].name_of_list"
-                        :choose_place_holder="list_picker_prperties[0].placeHolder"
-                        :items_-list="list_picker_prperties[0].items"
-                        :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                        :disabled="list_picker_prperties[0].disabled.value"
-                        @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                        @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                    />
+                <VueMultiselect
+                    v-model="selected_referral_type"
+                    @update:model-value="selectedReferralType($event)"
+                    :multiple="false"
+                    :taggable="false"
+                    :hide-selected="true"
+                    :close-on-select="true"
+                    openDirection="top"
+                    tag-placeholder="Find and a referral type"
+                    placeholder="Find and a referral type"
+                    selectLabel=""
+                    label="name"
+                    :searchable="true"
+                    :disabled="disableFacilitySelection"
+                    @search-change="($event)=>{}"
+                    track-by="name"
+                    :options="referralType"
+                />
 
-                    <div>
-                        <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ refTypErrMsg }}</ion-label>
-                    </div>
-                </ion-col>
+                <div>
+                    <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ 'please select a type' }}</ion-label>
+                </div>
             </ion-row>
         </div>
 
@@ -46,11 +46,12 @@
             v-if="show_referred_options"
             @data-saved="dataSavedTrigFn"
         />
-      <DischargedHome
-          v-if="show_discharged_options"
-          @data-saved="dataSavedTrigFn"
 
-      />
+        <DischargedHome
+            v-if="show_discharged_options"
+            @data-saved="dataSavedTrigFn"
+        />
+
         <deadOutcome
             v-if="show_dead_options"
             @data-saved="dataSavedTrigFn"
@@ -104,10 +105,10 @@ import ListPicker from "@/components/ListPicker.vue"
 import AdmittedforShortStayOutcome from "@/apps/OPD/components/ConsultationPlan/AdmittedforShortStayOutcome.vue"
 import ReferredOutCome from '@/apps/OPD/components/ConsultationPlan/ReferredOutCome.vue'
 import DischargedHome from "@/apps/OPD/components/ConsultationPlan/DischargedHome.vue";
+import VueMultiselect from "vue-multiselect";
 
 const initialMsg = ref("No outcome created yet");
 const show_error_msg_for_ref_type = ref(false);
-const refTypErrMsg = ref("please select a type");
 const btnName1 = ref("Add new outcome");
 const btnFill = "clear";
 let event: null = null;
@@ -125,6 +126,7 @@ const show_referred_options = ref(false)
 const show_discharged_options = ref(false)
 const editItem =ref();
 const dischargeDate = ref<any>(null);
+const selected_referral_type = ref()
 
 const referralType = ref([
     {
@@ -146,25 +148,9 @@ const referralType = ref([
     }
 ] as any)
 
-const list_picker_prperties = [
-    {
-        multi_Selection: false as any,
-        show_list_label: true as any,
-        unqueId: 'qwerty2' as any,
-        name_of_list: 'Add new outcome' as any,
-        placeHolder: 'Choose one' as any,
-        items: referralType.value,
-        listUpdatedFN: listUpdated1,
-        listFilteredFN: ()=>{},
-        use_internal_filter: true as any,
-        disabled: ref(false) as any,
-    }
-]
-
-function listUpdated1(data: any) {
-    referralType.value = data
+function listUpdated(data: any) {
     referralType.value.forEach((item: any) => {
-        if (item.selected == true) {
+        if (data.selected == true && data.name == item.name) {
             refType.value = item.name
         }
     })
@@ -216,7 +202,6 @@ function removeItem(index: number) {
 async function checkRefType(clear_inputs: boolean = true) {
     const tempRefType = refType.value;
 
-
     refType.value = tempRefType;
     const ref_type = refType.value;
 
@@ -255,6 +240,15 @@ function dataSavedTrigFn() {
     show_discharged_options.value = false
     show_referred_options.value = false
     resetSelection()
+}
+
+const selectedReferralType = (data: any) => {
+    referralType.value.forEach((item: any) => {
+        item.selected = false 
+    })
+    selected_referral_type.value = data;
+    selected_referral_type.value.selected = true;
+    listUpdated(selected_referral_type.value)
 }
 </script>
 
