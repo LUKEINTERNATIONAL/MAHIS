@@ -62,13 +62,8 @@ const editIndex = ref(NaN)
 const FacilityData = ref([] as any)
 const store = useOutcomeStore()
 let temp_data_v: any[] = []
-const props = defineProps({ existingData: Object });
-
 
 onMounted(async () => {
-  if (props.existingData) {
-    date_properties[0].dataValue.value = props.existingData.date;
-  }
     findWardName('')
 })
 

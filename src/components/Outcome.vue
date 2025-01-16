@@ -123,7 +123,7 @@ const show_dead_options = ref(false)
 const show_admitted_options = ref(false)
 const show_referred_options = ref(false)
 const show_discharged_options = ref(false)
-const editIndex = ref<number | null>(null);
+const editItem =ref();
 const dischargeDate = ref<any>(null);
 
 const referralType = ref([
@@ -191,26 +191,6 @@ watch(
         checkForDispositions()
     }
 )
-
-function editItem(index: number) {
-  editIndex.value = index;
-  const itemToEdit = dispositions.value[index];
-  const itemData = { ...itemToEdit };
-  removeItem(index);
-  if (itemData.type === 'Discharged Home') {
-    show_discharged_options.value = true;
-    dischargeDate.value = itemData.date;
-  }
-  if (itemData.type === 'Referred out') {
-    show_referred_options.value = true;
-  }
-  if (itemData.type === 'Admitted for short stay') {
-    show_admitted_options.value = true;
-  }
-  if (itemData.type === 'Death') {
-    show_dead_options.value = true;
-  }
-}
 
 function resetSelection() {
     referralType.value.forEach((item: any) =>{
