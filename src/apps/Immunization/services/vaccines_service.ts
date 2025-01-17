@@ -30,17 +30,18 @@ export async function saveVaccineAdministeredDrugs(patientData: any) {
         if (vaccines.orders.length > 0) {
             store.setLastVaccineAdminstredOnschedule(vaccines.orders);
         }
-        updateVaccineStatus(patient, drugOrders[0]?.drug_name, "administered");
+        updateVaccineStatus(patient, drugOrders[0]?.drug_name, "administered", obs[0]?.obs_datetime);
         await saveOfflinePatientData(patient);
         toastSuccess("Saved successful");
         await checkIfLastVaccineAdministered(patient);
     }
 }
-function updateVaccineStatus(patient: any, drugName: any, newStatus: any) {
+function updateVaccineStatus(patient: any, drugName: any, newStatus: any, date: any) {
     patient.vaccineSchedule.vaccine_schedule.forEach((visit: any) => {
         visit.antigens.forEach((antigen: any) => {
             if (antigen.drug_name === drugName) {
                 antigen.status = newStatus;
+                antigen.date_administered = date;
             }
         });
     });
@@ -144,7 +145,7 @@ async function createObForEachDrugAdminstred() {
             return {
                 concept_id: 2876,
                 value_text: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
-                obs_datetime: HisDate.currentDate(),
+                obs_datetime: drug.date_administered,
             };
         })
     );
@@ -201,7 +202,7 @@ export async function voidVaccine(patientData: any, vaccine: any, reason: string
     } else {
         vaccines.voided = [...vaccines?.voided, { reason: reason, order_id: vaccine.drug.order_id, drug_name: vaccine.drug.drug_name }];
     }
-    updateVaccineStatus(patient, vaccine.drug.drug_name, "pending");
+    updateVaccineStatus(patient, vaccine.drug.drug_name, "pending", "");
     await saveOfflinePatientData(patient);
 }
 
