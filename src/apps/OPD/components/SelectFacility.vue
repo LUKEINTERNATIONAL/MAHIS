@@ -129,7 +129,7 @@ async function getdistrictList() {
     districtList.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id);
     });
-    
+
     return districtList;
 }
 
@@ -140,6 +140,18 @@ async function getFacilityDistricts() {
 
 function selectedLocation(data: any) {
     selected_location.value = data;
+    facilitySelected({
+        selected_district_ids: selectedDistrictIds,
+        selected_location: selected_location.value,
+    });
+}
+
+const emit = defineEmits<{
+    (e: "facilitySelected", data_obj: any): void;
+}>();
+
+function facilitySelected(value: any) {
+    emit("facilitySelected", value);
 }
 
 </script>
