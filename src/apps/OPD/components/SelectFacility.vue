@@ -9,8 +9,8 @@
                     :hide-selected="true"
                     :close-on-select="true"
                     openDirection="bottom"
-                    tag-placeholder="Find and select District(s)"
-                    placeholder="Find and select District(s)"
+                    tag-placeholder="Find and select District"
+                    placeholder="Find and select District"
                     selectLabel=""
                     label="name"
                     :searchable="true"
@@ -38,8 +38,8 @@
                         :hide-selected="true"
                         :close-on-select="true"
                         openDirection="bottom"
-                        tag-placeholder="Find and select facility name"
-                        placeholder="Find and select facility name"
+                        tag-placeholder="Find and select facility"
+                        placeholder="Find and select facility"
                         selectLabel=""
                         label="name"
                         :searchable="true"
@@ -68,11 +68,6 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
-import {
-    addOutline,
-    pencilOutline,
-    removeOutline
-} from "ionicons/icons";
 import { LocationService } from "@/services/location_service";
 import VueMultiselect from "vue-multiselect";
 
@@ -103,10 +98,6 @@ function selectedDistrictF(selectedDistrict: any, clearFL = false) {
         selectedDistrictIds.push(district.district_id);
     });
 
-    filteredDistricts.forEach((district: any) => {
-        fetchTraditionalAuthorities(district.district_id, "");
-    });
-
     getDistrictFacilities(selectedDistrict);
 }
 
@@ -121,19 +112,6 @@ async function getDistrictFacilities(selectedDistrict: any) {
             console.error(`Error fetching facilities for district ${district.name}:`, error);
         }
     }
-}
-
-async function fetchTraditionalAuthorities(district_id: any, name: string) {
-    TAList.value = [];
-    var districtVillages = await LocationService.getTraditionalAuthorities(district_id, "");
-    const arrayWithIds = districtVillages.map((item: any, index: any) => ({
-        ...item,
-        assigned_id: index,
-    }));
-    TAList.value = TAList.value.concat(arrayWithIds);
-    // if (villageList.value.length > 0) {
-    //     disableVillageSelection.value = false
-    // }
 }
 
 onMounted(async () => {
@@ -151,10 +129,7 @@ async function getdistrictList() {
     districtList.forEach((district: any) => {
         selectedDistrictIds.push(district.district_id);
     });
-
-    districtList.forEach((district: any) => {
-        fetchTraditionalAuthorities(district.district_id, "");
-    });
+    
     return districtList;
 }
 
