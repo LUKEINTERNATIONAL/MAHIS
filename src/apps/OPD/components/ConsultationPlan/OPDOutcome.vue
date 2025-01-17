@@ -5,7 +5,6 @@
                 <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="dispositions" />
             </ion-col>
         </ion-row>
-
         <ion-row v-if="showEmptyMsg">
             <span class="dash_box">{{ initialMsg }}</span>
         </ion-row>
@@ -16,7 +15,7 @@
 
         <div v-if="showAddItemButton">
             <ion-row>
-                
+
                 <ion-col>
                     <ListPicker
                         :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -33,7 +32,7 @@
                     <div>
                         <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ refTypErrMsg }}</ion-label>
                     </div>
-                </ion-col>  
+                </ion-col>
             </ion-row>
         </div>
 
@@ -42,7 +41,7 @@
             @data-saved="dataSavedTrigFn"
         />
 
-        <ReferredOutCome 
+        <ReferredOutCome
             v-if="show_referred_options"
             @data-saved="dataSavedTrigFn"
         />
@@ -103,7 +102,7 @@ import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
 import ListPicker from "@/components/ListPicker.vue"
 import AdmittedforShortStayOutcomef from "../ConsultationPlan/AdmittedforShortStayOutcome.vue"
 import ReferredOutCome from '../ConsultationPlan/ReferredOutCome.vue'
-import DischargedHome from "@/apps/OPD/components/ConsultationPlan/DischargedHome.vue";
+import DischargedHome from "../ConsultationPlan/DischargedHome.vue";
 
 const initialMsg = ref("No outcome created yet");
 const show_error_msg_for_ref_type = ref(false);
@@ -215,26 +214,31 @@ function removeItem(index: number) {
 
 async function checkRefType(clear_inputs: boolean = true) {
     const tempRefType = refType.value;
+    console.log(tempRefType)
 
-    
+
     refType.value = tempRefType;
     const ref_type = refType.value;
 
     if (ref_type == referralType.value[0].name) {
         show_admitted_options.value = true
-    } 
+    }
     else {
         show_admitted_options.value = false
     }
 
     if (ref_type == referralType.value[1].name) {
         show_referred_options.value = true
-    } 
+      console.log('show_discharged_options is set to true');
+
+    }
     else {
         show_referred_options.value = false
     }
   if (ref_type == referralType.value[2].name) {
     show_discharged_options.value = true
+    console.log('show_discharged_options is set to true');
+
   }
   else {
     show_discharged_options.value = false
@@ -242,7 +246,7 @@ async function checkRefType(clear_inputs: boolean = true) {
 
     if (ref_type == referralType.value[3].name) {
         show_dead_options.value = true
-    } 
+    }
     else {
         show_dead_options.value = false
     }

@@ -1,25 +1,7 @@
 <template>
     <ion-list>
         <ion-row>
-            <ion-col class="lsp-cls-1">
-                <ListPicker
-                    :multiSelection="list_picker_prperties[0].multi_Selection"
-                    :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
-                    :name_of_list="list_picker_prperties[0].name_of_list"
-                    :choose_place_holder="list_picker_prperties[0].placeHolder"
-                    :items_-list="list_picker_prperties[0].items"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[0].disabled.value"
-                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                    @item-search-text="list_picker_prperties[0].searchTextFN"
-                />
-
-                <div style="margin-bottom: 15px;">
-                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">{{ list_picker_prperties[0].error_message }}</ion-label>
-                </div>
-            </ion-col>
+            <SelectFacility @facility-selected="facilitySelected"/>
         </ion-row>
 
         <ion-row>
@@ -107,6 +89,7 @@ import TimePicker from "@/components/TimePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { LocationService } from "@/services/location_service"
 import DynamicButton from "@/components/DynamicButton.vue"
+import SelectFacility from "@/apps/OPD/components/SelectFacility.vue"
 import { isEmpty } from "lodash"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
@@ -154,24 +137,6 @@ function notesUpDated_fn1(event: any) {
     const reason = event.target.value
     note_properties[0].dataValue.value = reason
 }
-
-const list_picker_prperties = [
-    {
-        multi_Selection: false as any,
-        show_list_label: true as any,
-        unqueId: 'qwerty4' as any,
-        name_of_list: 'Choose Facility' as any,
-        placeHolder: 'Choose one' as any,
-        items: FacilityData.value,
-        listUpdatedFN: listUpdated1,
-        listFilteredFN: ()=>{},
-        searchTextFN: findWardName,
-        use_internal_filter: true as any,
-        show_error: ref(false),
-        error_message: 'please select a Facility',
-        disabled: ref(false) as any,
-    }
-]
 
 const time_properties = [
     {
@@ -249,12 +214,18 @@ function validateFacility() {
             temp_data_v.push(item)
         }
     })
+
+
     if (temp_data_v.length > 0) {
-        list_picker_prperties[0].show_error.value = false 
+        // list_picker_prperties[0].show_error.value = false 
     } else {
-        list_picker_prperties[0].show_error.value = true
-        console.log( list_picker_prperties[0].show_error)
+        // list_picker_prperties[0].show_error.value = true
+        // console.log( list_picker_prperties[0].show_error)
     }
+}
+
+const facilitySelected = (data: any) => {
+    console.log( data)
 }
 
 function saveDataToStores() {

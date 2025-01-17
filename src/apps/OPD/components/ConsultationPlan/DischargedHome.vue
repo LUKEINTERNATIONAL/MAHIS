@@ -1,28 +1,6 @@
 <template>
     <ion-list>
         <ion-row>
-            <ion-col class="lsp-cls-1">
-                <ListPicker
-                    :multiSelection="list_picker_prperties[0].multi_Selection"
-                    :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
-                    :name_of_list="list_picker_prperties[0].name_of_list"
-                    :choose_place_holder="list_picker_prperties[0].placeHolder"
-                    :items_-list="list_picker_prperties[0].items"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[0].disabled.value"
-                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                    @item-search-text="list_picker_prperties[0].searchTextFN"
-                />
-
-                <div style="margin-bottom: 15px;">
-                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">{{ list_picker_prperties[0].error_message }}</ion-label>
-                </div>
-            </ion-col>
-        </ion-row>
-
-        <ion-row>
             <ion-col>
                 <div>
                     <DatePicker
@@ -36,53 +14,23 @@
                 </div>
             </ion-col>
         </ion-row>
+      <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
+        <dynamic-button
+            v-if="dynamic_button_properties[0].addItemButton"
+            :name="dynamic_button_properties[0].name"
+            :fill="dynamic_button_properties[0].btnFill"
+            :icon="addOutline"
+            @clicked:btn="dynamic_button_properties[0].fn"
+        />
 
-        <ion-row>
-            <ion-col>
-                <div>
-                    <TimePicker
-                    :place_holder="time_properties[0].placeHolder"
-                    @time-up-dated="time_properties[0].dataHandler"
-                />
-
-                <div>
-                    <ion-label v-if="time_properties[0].show_error.value" class="error-label">{{ time_properties[0].error_message }}</ion-label>
-                </div>
-                </div>
-            </ion-col>
-        </ion-row>
-
-        <ion-row>
-            <ion-col>
-                <BasicInputField
-                    :placeholder="note_properties[0].placeHolder"
-                    :icon="pencilOutline"
-                    :inputValue="note_properties[0].dataValue.value"
-                    @update:inputValue="note_properties[0].dataHandler"
-                />
-
-                <div>
-                    <ion-label v-if="note_properties[0].show_error.value" class="error-label">{{ note_properties[0].error_message }}</ion-label>
-                </div>
-            </ion-col>
-        </ion-row>
-
-        <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
-            <dynamic-button
-                v-if="dynamic_button_properties[0].addItemButton"
-                :name="dynamic_button_properties[0].name"
-                :fill="dynamic_button_properties[0].btnFill"
-                :icon="addOutline" @clicked:btn="dynamic_button_properties[0].fn"
-            />
-
-            <dynamic-button
-                v-if="dynamic_button_properties[1].addItemButton"
-                :name="dynamic_button_properties[1].name"
-                :fill="dynamic_button_properties[1].btnFill"
-                :icon="removeOutline"
-                @clicked:btn="dynamic_button_properties[1].fn"
-            />
-        </ion-row>
+        <dynamic-button
+            v-if="dynamic_button_properties[1].addItemButton"
+            :name="dynamic_button_properties[1].name"
+            :fill="dynamic_button_properties[1].btnFill"
+            :icon="removeOutline"
+            @clicked:btn="dynamic_button_properties[1].fn"
+        />
+      </ion-row>
     </ion-list>
 </template>
 
@@ -111,7 +59,6 @@ import { isEmpty } from "lodash"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 const editIndex = ref(NaN)
-
 const FacilityData = ref([] as any)
 const store = useOutcomeStore()
 let temp_data_v: any[] = []
@@ -206,15 +153,12 @@ function listUpdated1(data: any) {
 }
 
 function validateForm() {
-    validateFacility()
-    validateNotes()
-    validateDate()
-    validateTime()
-    if (date_properties[0].show_error.value == false && time_properties[0].show_error.value == false && note_properties[0].show_error.value == false && list_picker_prperties[0].show_error.value == false) {
-        saveDataToStores()
-    } else {
-        toastWarning("Please enter correct data values", 4000)
-    }
+  validateDate();
+  if (!date_properties[0].show_error.value) {
+    saveDataToStores();
+  } else {
+    toastWarning("Please enter a valid date", 4000);
+  }
 }
 
 function validateNotes() {
@@ -236,7 +180,7 @@ function validateDate() {
 function validateTime() {
     console.log(time_properties[0].dataValue.value)
     if (time_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
-        time_properties[0].show_error.value = true 
+        time_properties[0].show_error.value = true
     } else {
         time_properties[0].show_error.value = false
     }
@@ -258,18 +202,13 @@ function validateFacility() {
 }
 
 function saveDataToStores() {
-    const referralData = {
-        name: temp_data_v[0].name,
-        type: 'Referred out',
-        date: date_properties[0].dataValue,
-        time: time_properties[0].dataValue,
-        reason: note_properties[0].dataValue,
-        other: temp_data_v[0].other
-        // dataItem: refDataItem.value,
-    }
+  const dischargeData = {
+    type: 'Discharged Home',
+    date: date_properties[0].dataValue,
+  };
 
-    store.addOutcomeData(referralData, editIndex.value)
-    dataSaved({"dataSaved": false})
+  store.addOutcomeData(dischargeData, editIndex.value);
+  dataSaved({"dataSaved": false});
 }
 
 function cancelE() {
