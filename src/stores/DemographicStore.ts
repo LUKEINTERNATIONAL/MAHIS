@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { getOfflineRecords } from "@/services/offline_service";
-import { buildPatientRecord } from "@/services/buildingPatientRecord";
+import { Service } from "@/services/service";
 
 export const useDemographicsStore = defineStore("demographicStore", {
     state: () => ({
@@ -25,7 +25,7 @@ export const useDemographicsStore = defineStore("demographicStore", {
                 if (patientRecord) {
                     await this.setRecord(patientRecord);
                 } else {
-                    await this.setRecord(await buildPatientRecord(item));
+                    await this.setRecord(await Service.getJson(`/patients/${item.patient_id}/get_patient_record`));
                 }
             }
         },
