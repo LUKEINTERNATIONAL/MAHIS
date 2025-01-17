@@ -23,6 +23,10 @@
         </ion-row>
 
         <ion-row>
+            <SelectFacility/>
+        </ion-row>
+
+        <ion-row>
             <ion-col>
                 <div>
                     <DatePicker
@@ -107,6 +111,7 @@ import TimePicker from "@/components/TimePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { LocationService } from "@/services/location_service"
 import DynamicButton from "@/components/DynamicButton.vue"
+import SelectFacility from "@/apps/OPD/components/SelectFacility.vue"
 import { isEmpty } from "lodash"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
