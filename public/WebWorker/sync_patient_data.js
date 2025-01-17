@@ -1,9 +1,22 @@
 const BATCH_SIZE = 50; // Increased batch size for better performance
 
 const syncPatientDataService = {
+    async syncAllData() {
+        await Promise.all([
+            ddeService.setDDEIds(),
+            stockService.setStock(),
+            conceptNameService.setConceptName(),
+            conceptSetService.setConceptSet(),
+            relationshipsService.setOfflineRelationship(),
+            genericsService.setOfflineGenericVaccineSchedule(),
+            LocationService.setOfflineLocation(),
+            patientService.savePatientRecord(),
+            this.getPatientData(),
+        ]);
+    },
     async getPatientData() {
         try {
-            const previousSyncDate = await previousSyncService.getPreviousSyncDate();
+            let previousSyncDate = await previousSyncService.getPreviousSyncDate();
             let patientsData = await this.getPatientIds(previousSyncDate);
 
             if (!patientsData?.sync_patients) {
@@ -14,6 +27,7 @@ const syncPatientDataService = {
             const needsReset = await this.checkIfResetNeeded(patientsData);
             if (needsReset) {
                 await this.handleDataReset();
+                previousSyncDate = "";
                 patientsData = await this.getPatientIds("");
             }
 
