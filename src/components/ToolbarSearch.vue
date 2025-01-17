@@ -471,7 +471,7 @@ export default defineComponent({
                 }
             } else if (this.programID() == 32 && this.apiStatus) {
                 const actions: any = await UserService.setProgramUserActions();
-                router.push(actions?.url);
+                router.push("/patientProfile");
             }
             this.route = url;
             this.popoverOpen = false;
