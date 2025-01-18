@@ -79,8 +79,29 @@ const district_show_error = ref(false);
 const selectedDistrictIds: any[] = [];
 const disableFacilitySelection = ref(false);
 const OLDDistrictsList = ref([] as any);
-const TAList = ref([] as any);
 const districtList = ref([] as any);
+
+const props = defineProps<{
+    show_error: false;
+}>();
+
+onMounted(async () => {
+    OLDDistrictsList.value = await getdistrictList();
+    districtList.value = await getFacilityDistricts();
+});
+
+watch(
+    () => props.show_error,
+    async (newValue) => {
+        changeErrValues();
+    }
+);
+
+const changeErrValues = () => {
+    location_show_error.value = props.show_error;
+    district_show_error.value = props.show_error;
+};      
+
 
 function selectedDistrictF(selectedDistrict: any, clearFL = false) {
     if (clearFL == true) {
@@ -112,12 +133,12 @@ async function getDistrictFacilities(selectedDistrict: any) {
             console.error(`Error fetching facilities for district ${district.name}:`, error);
         }
     }
-}
 
-onMounted(async () => {
-    OLDDistrictsList.value = await getdistrictList();
-    districtList.value = await getFacilityDistricts();
-});
+        facilitySelected({
+            selected_district_ids: selectedDistrictIds,
+            selected_location: null,
+        });
+}
 
 async function getdistrictList() {
     const districtList = [];
@@ -161,9 +182,11 @@ function facilitySelected(value: any) {
         background: #fecdca;
         color: #b42318;
         text-transform: none;
-        padding: 6%;
+        padding: 5%;
+        padding-top: 2%;
+        padding-bottom: 2%;
         border-radius: 10px;
-        margin-top: 7px;
+        margin-top: 4px;
         display: flex;
         text-align: center;
     }
