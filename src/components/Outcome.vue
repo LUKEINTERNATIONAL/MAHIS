@@ -2,7 +2,7 @@
     <ion-list>
         <ion-row>
             <ion-col>
-                <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="dispositions" />
+                <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="dispositions"  />
             </ion-col>
         </ion-row>
 
@@ -49,6 +49,7 @@
         <ReferredOutCome
             v-if="show_referred_options"
             @data-saved="dataSavedTrigFn"
+            :selected_referral_data="selected_referral_type_data"
         />
 
         <DischargedHome
@@ -121,8 +122,8 @@ const show_dead_options = ref(false)
 const show_admitted_options = ref(false)
 const show_referred_options = ref(false)
 const show_discharged_options = ref(false)
-const editItem =ref();
 const selected_referral_type = ref()
+const selected_referral_type_data = ref(null)
 
 const referralType = ref([
     {
@@ -146,7 +147,7 @@ const referralType = ref([
 
 function listUpdated(data: any) {
     referralType.value.forEach((item: any) => {
-        if (data.selected == true && data.name == item.name) {
+        if (data.selected == true && (data.name == item.name || data.type == item.name)) {
             refType.value = item.name
         }
     })
@@ -193,6 +194,13 @@ function checkForDispositions() {
 
 function removeItem(index: number) {
     dispositions.value.splice(index, 1);
+}
+
+const editItem = (data: any) => {
+    // dispositions.value.splice(data.index, 1);
+    console.log(data.item)
+    listUpdated(data.item)
+    selected_referral_type_data.value = data.item
 }
 
 async function checkRefType(clear_inputs: boolean = true) {

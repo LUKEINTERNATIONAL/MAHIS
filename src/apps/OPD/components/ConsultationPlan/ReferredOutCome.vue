@@ -97,11 +97,27 @@ const editIndex = ref(NaN)
 
 const FacilityData = ref(null) as any
 const store = useOutcomeStore()
-const show_location_error= ref(false) as any
+const show_location_error = ref(false) as any
+
+const props = defineProps<{
+    selected_referral_data: null;
+}>();
 
 onMounted(async () => {
-    // findWardName('')
+     console.log("init: ", props.selected_referral_data)
 })
+
+watch(
+    () => props.selected_referral_data,
+    async (newValue) => {
+        console.log("init: ", props.selected_referral_data)
+         
+        if (props.selected_referral_data != null) {
+            console.log("init: ", props.selected_referral_data)
+        }
+    }
+);
+
 
 const note_properties = [
     {
@@ -215,6 +231,7 @@ const saveDataToStores = () => {
     const referralInfo = {
         name: FacilityData.value.name,
         type: 'Referred out',
+        selected: true,
         date: date_properties[0].dataValue,
         time: time_properties[0].dataValue,
         reason: note_properties[0].dataValue,

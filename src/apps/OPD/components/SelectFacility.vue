@@ -83,6 +83,8 @@ const districtList = ref([] as any);
 
 const props = defineProps<{
     show_error: false;
+    selected_district_ids: [];
+    selected_location: null;
 }>();
 
 onMounted(async () => {

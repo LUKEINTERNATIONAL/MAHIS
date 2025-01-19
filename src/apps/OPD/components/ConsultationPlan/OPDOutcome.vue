@@ -123,8 +123,6 @@ const show_admitted_options = ref(false)
 const show_referred_options = ref(false)
 const show_discharged_options = ref(false)
 
-const editItem = ref()
-
 const referralType = ref([
     {
         name: "Admitted for short stay",
@@ -210,6 +208,10 @@ function checkForDispositions() {
 
 function removeItem(index: number) {
     dispositions.value.splice(index, 1);
+}
+
+const editItem = (data: any) => {
+    // dispositions.value.splice(data.index, 1);
 }
 
 async function checkRefType(clear_inputs: boolean = true) {
