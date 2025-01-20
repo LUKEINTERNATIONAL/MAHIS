@@ -1,7 +1,7 @@
 <template>
     <ion-list>
         <ion-row>
-            <SelectFacility :show_error="show_location_error" @facility-selected="facilitySelected"/>
+            <SelectFacility :show_error="show_location_error" @facility-selected="facilitySelected" :selected_district_ids="selectedDistrictIds" :selected_location="selected_location"/>
         </ion-row>
 
         <ion-row>
@@ -98,26 +98,41 @@ const editIndex = ref(NaN)
 const FacilityData = ref(null) as any
 const store = useOutcomeStore()
 const show_location_error = ref(false) as any
+const selectedDistrictIds = ref([]) as any
+const selected_location = ref({}) as any
 
-const props = defineProps<{
-    selected_referral_data: null;
-}>();
+interface Props {
+  selected_referral_data: any
+}
 
-onMounted(async () => {
-     console.log("init: ", props.selected_referral_data)
-})
+const props = defineProps<Props>()
 
 watch(
-    () => props.selected_referral_data,
-    async (newValue) => {
-        console.log("init: ", props.selected_referral_data)
-         
-        if (props.selected_referral_data != null) {
-            console.log("init: ", props.selected_referral_data)
-        }
-    }
-);
+  () => props.selected_referral_data,
+  (newValue) => {
+    if (!newValue) return;
+    
+    // Access the underlying values using toRaw if needed
+    const districtIds = Array.isArray(newValue.selected_district_ids) 
+      ? [...newValue.selected_district_ids]
+      : [];
+      
+    const location = newValue.selected_location 
+      ? { ...newValue.selected_location }
+      : null;
+    
+    selectedDistrictIds.value = districtIds;
+    selected_location.value = location;
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 
+onMounted(() => {
+  console.log("init: ", props.selected_referral_data)
+})
 
 const note_properties = [
     {

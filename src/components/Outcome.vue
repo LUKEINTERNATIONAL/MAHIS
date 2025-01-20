@@ -182,7 +182,6 @@ function resetSelection() {
     refType.value = ''
 }
 
-
 function checkForDispositions() {
     if (dispositions.value.length > 0) {
         showEmptyMsg.value = false;
@@ -191,7 +190,6 @@ function checkForDispositions() {
     }
 }
 
-
 function removeItem(index: number) {
     dispositions.value.splice(index, 1);
 }
@@ -199,8 +197,9 @@ function removeItem(index: number) {
 const editItem = (data: any) => {
     // dispositions.value.splice(data.index, 1);
     console.log(data.item)
+    
     listUpdated(data.item)
-    selected_referral_type_data.value = data.item
+    selected_referral_type_data.value = data.item.other.location_data
 }
 
 async function checkRefType(clear_inputs: boolean = true) {

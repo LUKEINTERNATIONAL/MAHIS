@@ -71,21 +71,79 @@ import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { LocationService } from "@/services/location_service";
 import VueMultiselect from "vue-multiselect";
 
-const location_show_error = ref(false);
-const locationData = ref([]) as any;
-const selected_location = ref();
-const selected_Districts = ref([]) as any;
-const district_show_error = ref(false);
-const selectedDistrictIds: any[] = [];
-const disableFacilitySelection = ref(false);
-const OLDDistrictsList = ref([] as any);
-const districtList = ref([] as any);
+// Refs
+const location_show_error = ref(false)
+const locationData = ref<any[]>([])
+const selected_location = ref<Location | null>(null)
+const selected_Districts = ref<any[]>([])
+const district_show_error = ref(false)
+const selectedDistrictIds = ref<any[]>([])
+const disableFacilitySelection = ref(false)
+const OLDDistrictsList = ref<any[]>([])
+const districtList = ref<any[]>([])
 
-const props = defineProps<{
-    show_error: false;
-    selected_district_ids: [];
-    selected_location: null;
-}>();
+interface Props {
+  show_error: boolean;
+  selected_district_ids: any[];
+  selected_location: Location | null;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  show_error: false,
+  selected_district_ids: () => [],
+  selected_location: null
+})
+
+watch(
+  () => props.selected_district_ids,
+    async (newValue: any) => {
+        const [oldDistricts, facilityDistricts] = await Promise.all([
+            getdistrictList(),
+            getFacilityDistricts()
+        ])
+
+        OLDDistrictsList.value = oldDistricts
+        districtList.value = facilityDistricts
+
+        selectedDistrictIds.value = []
+        if (Array.isArray(newValue)) {
+            selectedDistrictIds.value = [...newValue]
+
+            districtList.value.forEach((district: any) => {
+                selectedDistrictIds.value.forEach((districtId: any) => {
+                    if (district.id === districtId) {
+                        selected_Districts.value =district
+                    }
+                })
+            });
+        }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
+
+watch(
+  () => props.selected_location,
+    async (newValue: any) => {
+        const [oldDistricts, facilityDistricts] = await Promise.all([
+            getdistrictList(),
+            getFacilityDistricts()
+        ])
+
+        OLDDistrictsList.value = oldDistricts
+        districtList.value = facilityDistricts
+    
+        if (newValue) {
+            selected_location.value = newValue
+        }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 
 onMounted(async () => {
     OLDDistrictsList.value = await getdistrictList();
@@ -111,14 +169,14 @@ function selectedDistrictF(selectedDistrict: any, clearFL = false) {
         selected_Districts.value = selectedDistrict;
     }
     selectedDistrict = [selectedDistrict];
-    selectedDistrictIds.length = 0;
+    selectedDistrictIds.value.length = 0;
 
     const filteredDistricts = OLDDistrictsList.value.filter((district: any) => {
         return selectedDistrict.some((selected: any) => selected.name.toLowerCase() === district.name.toLowerCase());
     });
 
     filteredDistricts.forEach((district: any) => {
-        selectedDistrictIds.push(district.district_id);
+        selectedDistrictIds.value.push(district.district_id);
     });
 
     getDistrictFacilities(selectedDistrict);
@@ -136,10 +194,10 @@ async function getDistrictFacilities(selectedDistrict: any) {
         }
     }
 
-        facilitySelected({
-            selected_district_ids: selectedDistrictIds,
-            selected_location: null,
-        });
+    facilitySelected({
+        selected_district_ids: selectedDistrictIds.value,
+        selected_location: null,
+    });
 }
 
 async function getdistrictList() {
@@ -150,7 +208,7 @@ async function getdistrictList() {
     }
 
     districtList.forEach((district: any) => {
-        selectedDistrictIds.push(district.district_id);
+        selectedDistrictIds.value.push(district.district_id);
     });
 
     return districtList;
@@ -164,7 +222,7 @@ async function getFacilityDistricts() {
 function selectedLocation(data: any) {
     selected_location.value = data;
     facilitySelected({
-        selected_district_ids: selectedDistrictIds,
+        selected_district_ids: selectedDistrictIds.value,
         selected_location: selected_location.value,
     });
 }
