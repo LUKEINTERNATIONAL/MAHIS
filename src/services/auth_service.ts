@@ -60,7 +60,7 @@ export class AuthService {
 
     async login(password: string) {
         try {
-            const response = useStatusStore().apiStatus ? await this.requestLogin(password) : "";
+            const response = await this.requestLogin(password);
             if (response) {
                 const {
                     authorization: { token, user, expiry_time },
@@ -129,6 +129,7 @@ export class AuthService {
 
         // Set session data from stored info
         this.token = offlineLoginInfo.token;
+        localStorage.setItem("apiKey", this.token);
         // You might want to set other properties like roles, programs, etc. here
         // if you decide to store them for offline use
 
