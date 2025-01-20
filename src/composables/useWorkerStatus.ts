@@ -20,6 +20,7 @@ export function useWorkerStatus() {
         if (workerData?.serverPatientsCount) {
             statusStore.setOfflinePatientsStatus(workerData);
         }
+        statusStore.checkMetaDataStatus();
     };
 
     return {
