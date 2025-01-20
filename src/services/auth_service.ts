@@ -5,6 +5,7 @@ import PACK_CONF from "../../package.json";
 import { useUserStore } from "@/stores/userStore";
 import * as CryptoJS from "crypto-js";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
+import { useStatusStore } from "@/stores/StatusStore";
 export class InvalidAPIVersionError extends Error {
     message: string;
     constructor(version: string) {
@@ -59,7 +60,7 @@ export class AuthService {
 
     async login(password: string) {
         try {
-            const response = await this.requestLogin(password);
+            const response = useStatusStore().apiStatus ? await this.requestLogin(password) : "";
             if (response) {
                 const {
                     authorization: { token, user, expiry_time },
