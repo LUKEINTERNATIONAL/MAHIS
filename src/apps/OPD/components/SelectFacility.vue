@@ -71,16 +71,16 @@ import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { LocationService } from "@/services/location_service";
 import VueMultiselect from "vue-multiselect";
 
-// Refs
 const location_show_error = ref(false)
 const locationData = ref<any[]>([])
 const selected_location = ref<Location | null>(null)
-const selected_Districts = ref<any[]>([])
+const selected_Districts = ref<any[]>([]) as any
 const district_show_error = ref(false)
 const selectedDistrictIds = ref<any[]>([])
 const disableFacilitySelection = ref(false)
 const OLDDistrictsList = ref<any[]>([])
 const districtList = ref<any[]>([])
+const selectedDistrict_id = ref() as any //temp should be replavced in near future
 
 interface Props {
   show_error: boolean;
@@ -97,27 +97,29 @@ const props = withDefaults(defineProps<Props>(), {
 watch(
   () => props.selected_district_ids,
     async (newValue: any) => {
-        const [oldDistricts, facilityDistricts] = await Promise.all([
-            getdistrictList(),
-            getFacilityDistricts()
-        ])
+        try {
+            const [oldDistricts, facilityDistricts] = await Promise.all([
+                getdistrictList(),
+                getFacilityDistricts()
+            ])
 
-        OLDDistrictsList.value = oldDistricts
-        districtList.value = facilityDistricts
-
-        selectedDistrictIds.value = []
-        if (Array.isArray(newValue)) {
-            selectedDistrictIds.value = [...newValue]
-
-            districtList.value.forEach((district: any) => {
-                selectedDistrictIds.value.forEach((districtId: any) => {
-                    if (district.id === districtId) {
-                        selected_Districts.value =district
-                    }
-                })
-            });
+            OLDDistrictsList.value = oldDistricts
+            districtList.value = facilityDistricts
+            
+            if (Array.isArray(newValue)) {
+                const ids_array = [...newValue]
+                districtList.value.forEach((district: any) => {
+                    ids_array.forEach((districtId: any) => {
+                        if (district.id == districtId) {
+                            selected_Districts.value = district
+                        }
+                    })
+                });
+            }
+        } catch (error) {
+            
         }
-  },
+    },
   {
     immediate: true,
     deep: true
@@ -127,16 +129,20 @@ watch(
 watch(
   () => props.selected_location,
     async (newValue: any) => {
-        const [oldDistricts, facilityDistricts] = await Promise.all([
-            getdistrictList(),
-            getFacilityDistricts()
-        ])
+        try {
+            const [oldDistricts, facilityDistricts] = await Promise.all([
+                getdistrictList(),
+                getFacilityDistricts()
+            ])
 
-        OLDDistrictsList.value = oldDistricts
-        districtList.value = facilityDistricts
-    
-        if (newValue) {
-            selected_location.value = newValue
+            OLDDistrictsList.value = oldDistricts
+            districtList.value = facilityDistricts
+        
+            if (newValue) {
+                selected_location.value = newValue
+            }
+        } catch (error) {
+            
         }
   },
   {
@@ -194,8 +200,9 @@ async function getDistrictFacilities(selectedDistrict: any) {
         }
     }
 
+    selectedDistrict_id.value = selectedDistrict[0].id;
     facilitySelected({
-        selected_district_ids: selectedDistrictIds.value,
+        selected_district_ids: selectedDistrict_id.value,
         selected_location: null,
     });
 }
@@ -222,7 +229,7 @@ async function getFacilityDistricts() {
 function selectedLocation(data: any) {
     selected_location.value = data;
     facilitySelected({
-        selected_district_ids: selectedDistrictIds.value,
+        selected_district_ids: [selectedDistrict_id.value],
         selected_location: selected_location.value,
     });
 }
