@@ -20,6 +20,13 @@
                     <ToolbarSearch />
                 </div>
                 <div class="notifaction_person" slot="end">
+                    <ion-buttons style="cursor: pointer; margin-right: 15px" slot="end" class="iconFont">
+                        <img v-if="apiStatus && !isSyncingDone" src="/public/gif/syncing.gif" height="30" alt="" />
+                        <img v-if="isSyncingDone" src="/public/images/synced.png" height="30" alt="" />
+                        <img v-if="!apiStatus && !isSyncingDone" src="/public/images/unsynced.png" height="30" alt="" />
+                        <!-- <ion-icon :icon="notificationsOutline"></ion-icon> -->
+                        <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
+                    </ion-buttons>
                     <ion-buttons
                         v-if="apiStatus"
                         style="cursor: pointer; margin-right: 15px; color: #74ff15"
@@ -38,10 +45,7 @@
                     >
                         <ion-icon :icon="iconsContent.WifiOff"></ion-icon>
                     </ion-buttons>
-                    <ion-buttons style="cursor: pointer; margin-right: 5px" slot="end" class="iconFont">
-                        <ion-icon :icon="notificationsOutline"></ion-icon>
-                        <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
-                    </ion-buttons>
+
                     <ion-buttons style="cursor: pointer" slot="end" @click="openPopover($event)" class="iconFont" id="popover-button">
                         <ion-icon :icon="personCircleOutline"></ion-icon>
                     </ion-buttons>
@@ -120,6 +124,7 @@ import { icons } from "@/utils/svg";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { createModal } from "@/utils/Alerts";
 import SyncingStatusModal from "./Modal/SyncingStatusModal.vue";
+import img from "../utils/Img";
 export default defineComponent({
     mixins: [ScreenSizeMixin],
     name: "Toolbar",
@@ -169,7 +174,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useProgramStore, ["programs"]),
-        ...mapState(useStatusStore, ["apiStatus"]),
+        ...mapState(useStatusStore, ["apiStatus", "isSyncingDone"]),
         ...mapState(useUserStore, ["userFacilityName", "user_ID"]),
     },
     mounted() {
