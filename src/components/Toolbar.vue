@@ -8,11 +8,11 @@
                         <div style="font-size: 16px">
                             <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                         </div>
-                        <div>
-                            <small class="facility-name" style="font-size: 68%">
-                                {{ userFacilityName }}
-                            </small>
-                            <small style="font-size: 68%"> | {{ sessionDate }} </small>
+                        <div :style="screenWidth <= 500 && userFacilityName.length > 25 ? 'display: block' : 'display: flex'">
+                            <div class="facility-name" style="font-size: 68%">{{ userFacilityName }}</div>
+                            <div style="font-size: 68%">
+                                <span v-if="screenWidth > 500 && userFacilityName.length > 25" style="margin-left: 5px">|</span> {{ sessionDate }}
+                            </div>
                         </div>
                     </div>
                 </ion-title>
@@ -20,6 +20,13 @@
                     <ToolbarSearch />
                 </div>
                 <div class="notifaction_person" slot="end">
+                    <ion-buttons style="cursor: pointer; margin-right: 15px; width: 20px" slot="end" class="iconFont">
+                        <img v-if="apiStatus && !isSyncingDone" src="/public/gif/syncing.gif" height="30" alt="" />
+                        <img v-if="isSyncingDone" src="/public/images/synced.png" height="30" alt="" />
+                        <img v-if="!apiStatus && !isSyncingDone" src="/public/images/unsynced.png" height="30" alt="" />
+                        <!-- <ion-icon :icon="notificationsOutline"></ion-icon> -->
+                        <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
+                    </ion-buttons>
                     <ion-buttons
                         v-if="apiStatus"
                         style="cursor: pointer; margin-right: 15px; color: #74ff15"
@@ -38,10 +45,7 @@
                     >
                         <ion-icon :icon="iconsContent.WifiOff"></ion-icon>
                     </ion-buttons>
-                    <ion-buttons style="cursor: pointer; margin-right: 5px" slot="end" class="iconFont">
-                        <ion-icon :icon="notificationsOutline"></ion-icon>
-                        <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
-                    </ion-buttons>
+
                     <ion-buttons style="cursor: pointer" slot="end" @click="openPopover($event)" class="iconFont" id="popover-button">
                         <ion-icon :icon="personCircleOutline"></ion-icon>
                     </ion-buttons>
@@ -49,8 +53,18 @@
                 <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
                     <ion-content>
                         <ion-list>
-                            <ion-item :button="true" :detail="false" @click="showUserProfile()" style="cursor: pointer">Profile</ion-item>
-                            <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer">Logout</ion-item>
+                            <ion-item :button="true" :detail="false" @click="showUserProfile()" style="cursor: pointer">
+                                <ion-icon :icon="personCircleOutline" slot="start"></ion-icon>
+                                <span class="rght-drpm">{{ user_name }}</span>
+                            </ion-item>
+                            <ion-item :button="true" @click="openSyncModal()" style="cursor: pointer">
+                                <ion-icon :icon="documentOutline" slot="start"></ion-icon>
+                                <span class="rght-drpm">Syncing status</span>
+                            </ion-item>
+                            <ion-item :button="true" :detail="false" @click="logout()" style="cursor: pointer">
+                                <ion-icon :icon="logOutOutline" slot="start"></ion-icon>
+                                <span class="rght-drpm">Logout</span>
+                            </ion-item>
                         </ion-list>
                     </ion-content>
                 </ion-popover>
@@ -94,8 +108,8 @@ import {
     IonSearchbar,
     IonPopover,
 } from "@ionic/vue";
-import { notificationsOutline, personCircleOutline } from "ionicons/icons";
-import { defineComponent } from "vue";
+import { notificationsOutline, personCircleOutline, logOutOutline, documentOutline } from "ionicons/icons";
+import { defineComponent, ref } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
@@ -108,6 +122,9 @@ import TruncateText from "@/components/TruncateText.vue";
 import { useUserStore } from "@/stores/userStore";
 import { icons } from "@/utils/svg";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import { createModal } from "@/utils/Alerts";
+import SyncingStatusModal from "./Modal/SyncingStatusModal.vue";
+import img from "../utils/Img";
 export default defineComponent({
     mixins: [ScreenSizeMixin],
     name: "Toolbar",
@@ -129,6 +146,7 @@ export default defineComponent({
         TruncateText,
     },
     data() {
+        const user_name = ref();
         return {
             popoverOpen: false,
             iconsContent: icons,
@@ -137,6 +155,7 @@ export default defineComponent({
             programName: "",
             showUserProfileModal: false,
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
+            user_name,
         };
     },
     watch: {
@@ -146,20 +165,34 @@ export default defineComponent({
             },
             deep: true,
         },
+        user_ID: {
+            handler() {
+                this.assignUserName();
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useProgramStore, ["programs"]),
-        ...mapState(useStatusStore, ["apiStatus"]),
-        ...mapState(useUserStore, ["userFacilityName"]),
+        ...mapState(useStatusStore, ["apiStatus", "isSyncingDone"]),
+        ...mapState(useUserStore, ["userFacilityName", "user_ID"]),
     },
     mounted() {
         this.updateData();
+        this.assignUserName();
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
-        return { notificationsOutline, personCircleOutline, facilityName };
+        return { notificationsOutline, personCircleOutline, documentOutline, facilityName, logOutOutline };
     },
     methods: {
+        logout() {
+            localStorage.setItem("apiKey", "");
+            this.nav("/login");
+        },
+        openSyncModal() {
+            createModal(SyncingStatusModal);
+        },
         updateData() {
             this.programName = Service.getProgramName();
         },
@@ -176,6 +209,14 @@ export default defineComponent({
         modalClosed() {
             this.showUserProfileModal = false;
         },
+        getUserName() {
+            const store = useUserStore();
+            const user = store.getUser();
+            return user.username;
+        },
+        assignUserName() {
+            this.user_name = this.getUserName();
+        },
     },
 });
 </script>
@@ -189,6 +230,10 @@ export default defineComponent({
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.rght-drpm {
+    margin-left: 10px;
 }
 
 #container strong {

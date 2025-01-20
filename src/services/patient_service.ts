@@ -15,17 +15,11 @@ import dayjs from "dayjs";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export class PatientService extends Service {
-    patient: Patient;
-    constructor();
-    constructor(patient: Patient);
-    constructor(patient?: Patient) {
+    patient: any;
+    constructor() {
         super();
-        if (patient) {
-            this.patient = patient;
-        } else {
-            const demographicsStore = useDemographicsStore();
-            this.patient = demographicsStore.getPatient();
-        }
+        const demographicsStore = useDemographicsStore();
+        this.patient = demographicsStore.getPatient();
     }
 
     public static mergePatients(payload: any) {
@@ -103,15 +97,8 @@ export class PatientService extends Service {
         return PatientIdentifierService.create(this.getID(), 31, ncdNumber);
     }
 
-    updateARVNumber(newARVNumber: string) {
-        const patientIdentifierId = this.getIdentifiers().find((i) => i.type.name === "ARV Number")?.patient_identifier_id || "";
-        return PatientService.reassignMRNumber(patientIdentifierId, {
-            identifier: newARVNumber,
-        });
-    }
     updateNCDNumber(newNCDNumber: string) {
-        const patientIdentifierId = this.getIdentifiers().find((i) => i.type.name === "NCD Number")?.patient_identifier_id || "";
-        return PatientService.reassignMRNumber(patientIdentifierId, {
+        return PatientService.reassignMRNumber(this.patient.NcdID, {
             identifier: newNCDNumber,
         });
     }
@@ -270,7 +257,7 @@ export class PatientService extends Service {
     }
 
     getID() {
-        return this.patient.patient_id;
+        return this.patient.patientID;
     }
 
     getPatientInfoString() {
@@ -283,11 +270,11 @@ export class PatientService extends Service {
     }
 
     getGender() {
-        return this.patient.person.gender;
+        return this.patient?.personInformation?.gender;
     }
 
     getAge() {
-        return dayjs(Service.getSessionDate()).diff(this.patient.person.birthdate, "years");
+        return dayjs(Service.getSessionDate()).diff(this.patient?.personInformation?.birthdate, "years");
     }
 
     getAgeInMonths() {
@@ -295,15 +282,15 @@ export class PatientService extends Service {
     }
 
     getBirthdate() {
-        return this.patient.person.birthdate;
+        return this.patient?.personInformation?.birthdate;
     }
 
     getGivenName() {
-        return this.patient.person.names[0].given_name;
+        return this.patient?.personInformation?.given_name;
     }
 
     getFamilyName() {
-        return this.patient.person.names[0].family_name;
+        return this.patient?.personInformation?.family_name;
     }
 
     private normaliseName(name: string) {
@@ -316,7 +303,7 @@ export class PatientService extends Service {
 
     getFullName() {
         try {
-            const name = this.patient.person.names[0];
+            const name = this.patient.personInformation;
             const firstName = name.given_name;
             const lastName = name.family_name;
             const middleName = name.middle_name;
@@ -328,59 +315,23 @@ export class PatientService extends Service {
     }
 
     getDocID() {
-        const id = this.findIdentifierByType("DDE person document ID");
-        return id.match(/unknown/i) ? null : id;
+        return this.patient.DocID;
     }
 
     getNationalID() {
-        return this.findIdentifierByType("National id");
+        return this.patient.ID;
     }
 
     getMWNationalID() {
-        return this.findIdentifierByType("Malawi National ID");
+        return "";
     }
 
     getArvNumber() {
-        return this.findIdentifierByType("ARV Number");
+        return "";
     }
 
     getNcdNumber() {
-        return this.findIdentifierByType("NCD Number");
-    }
-
-    hasActiveFilingNumber() {
-        return this.hasIdentifierType("Filing number");
-    }
-
-    hasDormantFilingNumber() {
-        return this.hasIdentifierType("Archived filing number");
-    }
-
-    private hasIdentifierType(identifierType: string) {
-        const id = find(this.patient.patient_identifiers, {
-            type: {
-                name: identifierType,
-            },
-        });
-        return id ? true : false;
-    }
-
-    getFilingNumber() {
-        const finder = this.patient.patient_identifiers.filter(
-            (i: any) => i.type.name === "Filing number" || i.type.name === "Archived filing number"
-        );
-        return !isEmpty(finder) ? finder[0].identifier : "N/A";
-    }
-
-    private findIdentifierByType(type: string) {
-        return this.patient.patient_identifiers
-            .filter((i: any) => i.type.name === type)
-            .sort((a: any, b: any) => (a["date_created"] < b["date_created"] ? 1 : 0))
-            .reduce((defaultID, curID) => (defaultID === "Unknown" ? curID.identifier : defaultID), "Unknown");
-    }
-
-    getIdentifiers() {
-        return this.patient.patient_identifiers;
+        return this.patient.NcdID;
     }
 
     getHomeDistrict() {
@@ -404,23 +355,15 @@ export class PatientService extends Service {
     }
 
     getClosestLandmark() {
-        return this.getAttribute(19);
+        return this.patient?.personInformation?.landmark;
     }
 
     getOccupation() {
-        return this.getAttribute(13);
+        return this.patient?.personInformation?.occupation;
     }
 
     getPhoneNumber() {
-        return this.getAttribute(12); //get phone number
-    }
-
-    getAttribute(personAttributeTypeID: number) {
-        return getPersonAttribute(this.patient.person.person_attributes, personAttributeTypeID);
-    }
-
-    getPatientIdentifier(patientIdentifierTypeID: number) {
-        return getPatientIdentifier(this.patient.patient_identifiers, patientIdentifierTypeID);
+        return this.patient?.personInformation?.cell_phone_number;
     }
 
     patientIsComplete() {
@@ -438,16 +381,21 @@ export class PatientService extends Service {
             currentTA: "",
             currentVillage: "",
         };
-        if (this.patient.person.addresses.length > 0) {
-            const addresses = this.patient.person.addresses[0];
+        if (this.patient.personInformation) {
+            const addresses = this.patient.personInformation;
 
-            addressOBJ.ancestryDistrict = addresses.address2;
-            addressOBJ.ancestryTA = addresses.county_district;
-            addressOBJ.ancestryVillage = addresses.neighborhood_cell;
-            addressOBJ.currentDistrict = addresses.state_province;
-            addressOBJ.currentTA = addresses.township_division;
-            addressOBJ.currentVillage = addresses.city_village;
+            addressOBJ.ancestryDistrict = addresses.home_district;
+            addressOBJ.ancestryTA = addresses.home_traditional_authority;
+            addressOBJ.ancestryVillage = addresses.home_village;
+            addressOBJ.currentDistrict = addresses.current_district;
+            addressOBJ.currentTA = addresses.current_traditional_authority;
+            addressOBJ.currentVillage = addresses.current_village;
         }
         return addressOBJ;
+    }
+
+    public static async getCachedClientProfileDuplicates(page = 1, pageSize = 10) {
+        const res = await Service.getJson(`/dde/patients/matches?page=${page}&page_size=${pageSize}`);
+        return res;
     }
 }

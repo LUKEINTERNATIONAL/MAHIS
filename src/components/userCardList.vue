@@ -69,12 +69,19 @@
     </ion-grid>
   </div>
 
-  <ion-footer collapse="fade">
+  <editUserModal 
+    :is_open="isPopooverOpen" 
+    :user_id="user_id" 
+    @close-popoover="softModalClosed"
+    @save="modalClosed" 
+  />
+
+  <!-- Footer -->
+  <ion-footer class="sticky-footer">
     <ion-row>
-      <ion-col style="flex: none; max-width: 100%">
+      <ion-col size="12" style="max-width: 100%;">
         <bottomNavBar
           v-if="showNavBar"
-          style="margin-left: 20px; margin-right: 20px;"
           :totalItems="filteredUsers.length"
           :currentPage="pagination.page"
           :itemsPerPage="pagination.itemsPerPage"
@@ -83,12 +90,6 @@
       </ion-col>
     </ion-row>
   </ion-footer>
-
-  <editUserModal 
-    :is_open="isPopooverOpen" 
-    :user_id="user_id" 
-    @close-popoover="modalClosed" 
-  />
 </template>
 
 <script lang="ts">
@@ -159,7 +160,7 @@ export default defineComponent({
       required: true,
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const isPopooverOpen = ref(false);
     const pagination = reactive({
       page: 1,
@@ -193,6 +194,11 @@ export default defineComponent({
       pagination.itemsPerPage = itemsPerPage;
     };
 
+
+    function reload(data: any) {
+      emit("reload", data)
+    }
+
     watch(() => props.users, (newUsers) => {
       isLoading.value = false;
       if (newUsers.length === 0) {
@@ -207,7 +213,7 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      console.log('Component mounted. Initial users:', props.users);
+      // 
     });
 
     const openUserProfile = (userId: string) => {
@@ -217,7 +223,13 @@ export default defineComponent({
 
     const modalClosed = () => {
       isPopooverOpen.value = false;
+      reload(isPopooverOpen.value)
     };
+
+    const softModalClosed = () => {
+      isPopooverOpen.value = false;
+    };
+
 
     return {
       filteredUsers,
@@ -234,6 +246,7 @@ export default defineComponent({
       user_id,
       isPopooverOpen,
       modalClosed,
+      softModalClosed,
     };
   },
 });
@@ -241,14 +254,14 @@ export default defineComponent({
 
 <style scoped>
 .container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
 }
 
 .dynamic-grid {
-  max-height: calc(69vh - 1px);
+  flex: 1;
+  max-height: calc(69.8vh - 1px);
   overflow: auto;
 }
 
@@ -262,6 +275,7 @@ ion-card {
   min-width: 250px;
   width: 37%;
   margin-right: auto;
+  margin-top: 10px;
 }
 
 ion-card-content {
@@ -337,5 +351,16 @@ ion-list {
     margin-right: auto;
     margin-left: 10px;
   }
+}
+
+.sticky-footer {
+  margin-top: auto;
+  position: relative;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+ion-footer {
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 </style>

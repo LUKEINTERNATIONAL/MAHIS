@@ -10,10 +10,11 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
             <ion-spinner v-if="isLoading" name="lines"></ion-spinner>
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -40,7 +41,6 @@ import {
     modalController,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
-
 
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -90,9 +90,9 @@ import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "Home",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
-      BasicFooter,
+    mixins: [SetUserRole, SetEncounter],
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -120,42 +120,21 @@ export default defineComponent({
         return {
             wizardData: [
                 {
-                    title: "Confirm pregnancy",
-                    class: "common_step",
-                    checked: false,
-                    disabled: false,
-                    number: 1,
-                    last_step: "",
-                },
-                {
                     title: "Reason for visit",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
-                    number: 2,
+                    number: 1,
                     last_step: "last_step",
                 },
-                // {
-                //   'title': 'Reason for visit',
-                //   'class': 'common_step',
-                //   'checked':'',
-                //   'icon': false,
-                //   'disabled':false,
-                //   'number': 3,
-                //   'last_step': ''
-                // },
             ],
             StepperData: [
-                {
-                    title: "Confirm pregnancy",
-                    component: "ConfirmPregnancy",
-                    value: "1",
-                },
+
                 {
                     title: "Reason for visit",
                     component: "ReasonForVisit",
-                    value: "2",
+                    value: "1",
                 },
                 // {
                 //   title: 'Reason for visit',
@@ -169,7 +148,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(usePregnancyStore, ["pregnancy"]),
         ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
         ...mapState(usePastMedicalHistoryStore, ["pastMedicalHistory"]),
@@ -185,14 +164,15 @@ export default defineComponent({
         reasonVisitFacility() {
             return getRadioSelectedValue(this.ReasonForVisit, "Reason for visit");
         },
-        //dangerSigns(){return getCheckboxSelectedValue(this.ReasonForVisit,'Central cyanosis')},//,'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",
         pregnancyConfirmed() {
             return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy confirmed");
         },
         pregnancyPlanned() {
             return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy planned");
         },
-        // referWoman(){return getRadioSelectedValue(this.ReasonForVisit,'Action for danger signs')},
+      dangerSigns() {
+        return getCheckboxSelectedValue(this.DangerSigns, "Danger signs");
+      },
     },
 
     async mounted() {
@@ -257,6 +237,7 @@ export default defineComponent({
             //   this.wizardData[4].checked = false;
             // }
         },
+        getSaveFunction() {},
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data[0] || item?.data;
@@ -271,39 +252,36 @@ export default defineComponent({
                     break;
                 }
             }
-            //return isChecked
-            // return isChecked && fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
 
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
         async saveData() {
-             this.saveQuickCheck();
-            resetPatientData();
+            this.saveQuickCheck();
+            await resetPatientData();
         },
-      async saveQuickCheck() {
-        const fields: any = ["pregnancyPlanned", "pregnancyConfirmed", "reasonVisitFacility"];
+        async saveQuickCheck() {
+            const fields: any = ["reasonVisitFacility",];
 
-        if (await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy, fields)) {
-          if (this.ConfirmPregnancy && this.ReasonForVisit) {
-            const userID: any = Service.getUserID();
-            const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
-            const encounter = await quickCheck.createEncounter();
-            if (!encounter) return toastWarning("Unable to create quick check encounter");
-            const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());
-            if (!patientStatus) return toastWarning("Unable to create quick check details!");
-            toastSuccess("Quick check details have been created");
-            if (getRadioSelectedValue(this.ReasonForVisit, "Intervention on danger signs")== "Yes") {
-              this.$router.push("/ancReferral");
+            if (await this.validationRules(this.ReasonForVisit, fields)) {
+                if ( this.ReasonForVisit) {
+                    const userID: any = Service.getUserID();
+                    const quickCheck = new ConfirmPregnancyService(this.patient.patientID, userID);
+                    const encounter = await quickCheck.createEncounter();
+                    if (!encounter) return toastWarning("Unable to create quick check encounter");
+                    const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());
+                    if (!patientStatus) return toastWarning("Unable to create quick check details!");
+                    toastSuccess("Quick check details have been created");
+                    if (getRadioSelectedValue(this.ReasonForVisit, "Intervention on danger signs") == "Yes") {
+                        this.$router.push("/ancReferral");
+                    } else {
+                        this.$router.push("contact");
+                    }
+                }
             } else {
-              this.$router.push("contact");
+                 toastWarning("Please complete all required fields");
             }
-          }
-        } else {
-          await toastWarning("Please complete all required fields");
-        }
-        console.log("=============>>>",await this.buildQuickCheck());
-
-      },
+            console.log("=============>>>", await this.buildQuickCheck());
+        },
 
         openModal() {
             createModal(SaveProgressModal);

@@ -37,7 +37,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     data() {
         return {
@@ -66,9 +66,10 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     async mounted() {
-        const obsP = await ObservationService.getAll(this.demographics.patient_id, "Primary diagnosis");
-        const obsS = await ObservationService.getAll(this.demographics.patient_id, "Secondary diagnosis");
-        const obs = [...(obsP || []), ...(obsS || [])];
+        const obsP = await ObservationService.getAll(this.patient.patientID, "Primary diagnosis");
+        const obsS = await ObservationService.getAll(this.patient.patientID, "Secondary diagnosis");
+        const obsD = await ObservationService.getAll(this.patient.patientID, "Attempted/ Differential diagnosis");
+        const obs = [...(obsP || []), ...(obsS || []), ...(obsD || [])];
         const diagnosis = !isEmpty(obs)
             ? Promise.all(
                   obs.map(async (ob: any) => {

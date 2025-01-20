@@ -153,7 +153,7 @@ export default {
 
                 if (!ok) return;
 
-                const address = await LocationService.createAddress(BtnName, field.filter, f[formParentAddressRef].value);
+                const address = "";
                 if (address) {
                     // Hack to force the list to reload the list with new data
                     field.filter = field.filter.toUpperCase();

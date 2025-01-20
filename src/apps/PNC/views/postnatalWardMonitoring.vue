@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -59,9 +60,9 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "postnatalWardMonitoring",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
-      BasicFooter,
+    mixins: [SetUserRole, SetEncounter],
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -115,7 +116,7 @@ export default defineComponent({
         });
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(usePostnatalWardStayStore, ["dangerSigns", "vitals", "otherExams"]),
     },
     mounted() {
@@ -153,6 +154,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -162,13 +164,13 @@ export default defineComponent({
         async saveData() {
             await this.saveWardMonitoring();
             toastSuccess("Postnatal ward stay data saved successfully");
-            resetPatientData();
+            await resetPatientData();
             this.$router.push("home");
         },
         async saveWardMonitoring() {
             if (this.dangerSigns.length > 0 && this.vitals.length > 0 && this.otherExams.length > 0) {
                 const userID: any = Service.getUserID();
-                const wardMonitoring = new PostnatalWardStayService(this.demographics.patient_id, userID);
+                const wardMonitoring = new PostnatalWardStayService(this.patient.patientID, userID);
                 const encounter = await wardMonitoring.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient postnatal ward stay encounter");
                 const patientStatus = await wardMonitoring.saveObservationList(await this.buildWardStayMonitoring());

@@ -10,17 +10,27 @@ export class LocationService extends Service {
         return this.getJson(`locations/${locationID}`);
     }
 
-    static createAddress(type: string, name: string, parentLocation: number) {
-        console.log({
-            address_type: type,
-            addresses_name: name,
-            parent_location: parentLocation,
-        });
-        return this.postJson("addresses", {
-            address_type: type,
-            addresses_name: name,
-            parent_location: parentLocation,
-        });
+    static getFacility(facilityID: number) {
+        return this.getJson(`facilities/${facilityID}`);
+    }
+
+    static getFacilityDistricts() {
+        return this.getJson(`facilities/districts`);
+    }
+
+    static getDistrictFacilities(districtName: string) {
+        return super.getJson(`/facilities?district_name=${districtName}`);
+    }
+
+    static getCityVillages(cityVillage: string) {
+        const params = {
+            city_village: cityVillage,
+        };
+        return this.getJson("locations", params);
+    }
+
+    static createAddress(params: object) {
+        return this.postJson("addresses", params);
     }
 
     static getLabs(params = {} as Record<string, string | number>) {
@@ -48,6 +58,10 @@ export class LocationService extends Service {
         return await super.getJson("/villages", { traditional_authority_id: traditionalAuthorityID, name, page_size: 1000 });
     }
 
+    static async getVillage(villageID: number) {
+        return await super.getJson(`/villages/${villageID}`);
+    }
+
     static async getTraditionalAuthorities(villageID: number, name = "") {
         return await super.getJson("/traditional_authorities", { district_id: villageID, name, page_size: 1000 });
     }
@@ -56,8 +70,8 @@ export class LocationService extends Service {
         return await super.getJson("/districts", { paginate: false });
     }
 
-    static async getAllVillages() {
-        return await super.getJson("/villages", { paginate: false });
+    static async getAllVillages(page = 1, page_size = 10) {
+        return await super.getJson("/villages", { page: page, page_size: page_size });
     }
 
     static async getAllTraditionalAuthorities() {

@@ -3,20 +3,20 @@
         <ion-col>
             <div style="display: flex; padding: 0.3em;">
                 <ion-label
-                    style="width: 260px; color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Drug
+                    style="width: 260px; color: #00190E; font-weight: 550; line-height: 14px; line-height: 21px;">Drug
                     Name</ion-label>
             </div>
         </ion-col>
         <ion-col>
             <div style="display: flex; padding: 0.3em;">
                 <ion-label
-                    style="width: 260px; color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Frequency</ion-label>
+                    style="width: 260px; color: #00190E; font-weight: 550; line-height: 14px; line-height: 21px;">Frequency</ion-label>
             </div>
         </ion-col>
         <ion-col>
             <div style="display: flex; padding: 0.3em;">
                 <ion-label
-                    style="width: 260px; color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Quantity
+                    style="width: 260px; color: #00190E; font-weight: 550; line-height: 14px; line-height: 21px;">Quantity
                     Dispensed</ion-label>
             </div>
         </ion-col>
@@ -30,11 +30,11 @@
                     labelPlacement="end" :checked=true>
                     <div style="display: flex; padding: 0.3em;">
                         <ion-label :id="asignLblID(index)"
-                            style="width: 260px; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{
+                            style="width: 260px; color: #00190E; font-weight: 400; line-height: 14px; line-height: 21px;">{{
         item.drugName }}</ion-label>
                         <div class="padding"></div>
                         <ion-label
-                            style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">
+                            style="color: #636363; font-weight: 400; line-height: 14px; line-height: 21px;">
                             {{ item.frequency }} /{{ " for" }} {{ item.duration }} days
                         </ion-label>
                     </div>
@@ -42,11 +42,11 @@
                 <div v-if="!withCheckboxs">
                     <div @click="$emit('click', $event)" style="display: flex; padding: 0.3em; ">
                         <ion-label :id="asignLblID(index)"
-                            style="width: 260px; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{
+                            style="width: 260px; color: #00190E; font-weight: 400; line-height: 14px; line-height: 21px;">{{
         item.drugName }}</ion-label>
                         <ion-label class="padding"></ion-label>
                         <ion-label
-                            style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">
+                            style="color: #636363; font-weight: 400;line-height: 14px; line-height: 21px;">
                             {{ item.frequency }} /{{ " for" }} {{ item.duration }} days
                         </ion-label>
                     </div>
@@ -91,6 +91,7 @@
 <script setup lang="ts">
 
 import { ref } from "vue"
+import SelectionPopover from "@/components/SelectionPopover.vue";
 
 const popoverOpen = ref(false);
 const frequency = ref("");
@@ -112,7 +113,6 @@ function openPopover(e: any) {
 
 </script>
 <script lang="ts">
-import SelectionPopover from "@/components/SelectionPopover.vue";
 import { IonItem, IonCol, IonLabel } from '@ionic/vue'
 import { defineComponent } from 'vue'
 import { createModal, popoverConfirmation, alertConfirmation } from '../../../utils/Alerts'

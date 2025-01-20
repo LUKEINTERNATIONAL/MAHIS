@@ -164,6 +164,7 @@ export default defineComponent({
     },
     props: {
         protectedStatus: String,
+        lastVaccinesGiven: Array,
     },
     watch: {
         personInformation: {
@@ -174,7 +175,7 @@ export default defineComponent({
         },
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useFollowUpStoreStore, [
             "changeGuardianInfo",
             "vaccineAdverseEffects",
@@ -201,29 +202,39 @@ export default defineComponent({
         },
     },
     async mounted() {
-        const followUp = useFollowUpStoreStore();
-        this.initialSeriousData = followUp.getInitialSerious();
-        this.initialFirstDecisionData = followUp.getInitialFirstDecision();
-        this.initialOutcomeData = followUp.getInitialOutcome();
-        const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
-
-        modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
-        modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
-        modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
-        modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
-        modifyFieldValue(this.changeGuardianInfo, "guardianPhoneNumber", "value", this.setAttribute("Cell Phone Number", guardianData[0]?.relation));
-        modifyFieldValue(this.changeGuardianInfo, "relationship", "value", {
-            id: guardianData[0]?.type.relationship_type_id,
-            name: guardianData[0]?.type.b_is_to_a,
-        });
-        await this.setRelationShip();
-        this.resetData();
-        await this.getVaccineAdverseEffects();
+        await this.setupData();
     },
     setup() {
         return { checkmark, pulseOutline };
     },
     methods: {
+        async setupData() {
+            const followUp = useFollowUpStoreStore();
+            this.initialSeriousData = followUp.getInitialSerious();
+            this.initialFirstDecisionData = followUp.getInitialFirstDecision();
+            this.initialOutcomeData = followUp.getInitialOutcome();
+            const guardianData = await RelationshipService.getRelationships(this.patient.patientID);
+            if (guardianData?.length > 0) {
+                modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
+                modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+                modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+                modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+                modifyFieldValue(
+                    this.changeGuardianInfo,
+                    "guardianPhoneNumber",
+                    "value",
+                    this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
+                );
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "value", {
+                    id: guardianData[0]?.type.relationship_type_id,
+                    name: guardianData[0]?.type.b_is_to_a,
+                });
+                await this.setRelationShip();
+            }
+
+            this.resetData();
+            // await this.getVaccineAdverseEffects();
+        },
         async setRelationShip() {
             if (this.gender) {
                 await this.getRelationships();
@@ -251,37 +262,13 @@ export default defineComponent({
                 await guardian.registerGuardian(data);
                 const guardianID = guardian.getPersonID();
                 const selectedID = getFieldValue(this.changeGuardianInfo, "relationship", "value").id;
-                if (selectedID) await RelationsService.createRelation(this.demographics.patient_id, guardianID, selectedID);
+                if (selectedID) await RelationsService.createRelation(this.patient.patientID, guardianID, selectedID);
                 toastSuccess("Guarding information save successfully", 3000);
                 return true;
             } else {
                 toastWarning("Guarding Information not save", 3000);
                 return false;
             }
-        },
-
-        async getVaccineAdverseEffects() {
-            const vaccineEffect = await ConceptService.getConceptSet("Vaccine adverse effects");
-            const Seriousness = await ConceptService.getConceptSet("Seriousness of adverse effects");
-            const outcome = await ConceptService.getConceptSet("Adverse effects outcome");
-            modifyCheckboxData(
-                this.vaccineAdverseEffects,
-                "checkboxBtnContent",
-                "Vaccine adverse effects",
-                this.buildCheckboxData(vaccineEffect, 12)
-            );
-            modifyCheckboxData(this.serious, "checkboxBtnContent", "Seriousness of adverse effects", this.buildCheckboxData(Seriousness, ""));
-            modifyCheckboxData(this.outcome, "radioBtnContent", "Adverse effects outcome", this.buildCheckboxData(outcome, ""));
-        },
-        buildCheckboxData(data: any, colSize: any) {
-            return data.map((item: any) => {
-                return {
-                    name: item.name == "Patient died" ? "Died" : item.name == "Cured - TB" ? "Recovered" : item.name,
-                    value: item.name,
-                    colSize: colSize,
-                    checked: false,
-                };
-            });
         },
         async saveData() {
             const guardianCreated = await this.createGuardian();
@@ -291,12 +278,15 @@ export default defineComponent({
             }
         },
         async saveVaccineAdverseEffects() {
-            if (this.demographics.patient_id) {
-                const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+            if (this.patient.patientID) {
                 const date = getFieldValue(this.outcome, "Date of death", "value") || HisDate.currentDate();
-                const serious = await formatCheckBoxData(this.serious, HisDate.currentDate(), lastVaccine);
-                const outcome = await formatRadioButtonData(this.outcome, date, lastVaccine);
-                const vaccineAdverseEffects = await formatCheckBoxData(this.vaccineAdverseEffects, HisDate.currentDate(), lastVaccine);
+                const serious = await this.formatCheckBoxData(this.serious, HisDate.currentDate(), this.lastVaccinesGiven);
+                const outcome = await this.formatRadioButtonData(this.outcome, date, this.lastVaccinesGiven);
+                const vaccineAdverseEffects = await this.formatCheckBoxData(
+                    this.vaccineAdverseEffects,
+                    HisDate.currentDate(),
+                    this.lastVaccinesGiven
+                );
                 const investigationDate = getFieldValue(this.firstDecision, "Investigation needed", "value");
                 let investigationNeeded: any = [];
                 if (investigationDate) {
@@ -312,10 +302,11 @@ export default defineComponent({
 
                 const userID: any = Service.getUserID();
                 if (vaccineAdverseEffects.length > 0) {
-                    const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
-                    await registration.createEncounter();
-                    await registration.saveObservationList(result);
-                    toastSuccess("Vaccine adverse effects saved success", 1500);
+                    console.log("🚀 ~ saveVaccineAdverseEffects ~ result:", result);
+                    // const registration = new AppEncounterService(this.patient.patientID, 203, userID);
+                    // await registration.createEncounter();
+                    // await registration.saveObservationList(result);
+                    // toastSuccess("Vaccine adverse effects saved success", 1500);
                     return true;
                 } else {
                     toastWarning("Vaccine adverse effects not saved", 1500);
@@ -323,10 +314,110 @@ export default defineComponent({
                 }
             }
         },
+        async formatCheckBoxData(data: any[], obs_datetime: any = ConceptService.getSessionDate(), childData: any) {
+            // Handle empty or invalid input
+            if (!Array.isArray(data)) {
+                return [];
+            }
+
+            // Process each item in the data array
+            const buildObjPromises = await Promise.all(
+                data.map(async (item) => {
+                    // Skip if item or required data is missing
+                    if (!item?.checkboxBtnContent?.data?.length) {
+                        return [];
+                    }
+
+                    // Process checkbox data
+                    const checkboxPromises = item.checkboxBtnContent.data.map(async (checkboxData: any) => {
+                        // Skip if not checked or should be ignored
+                        if (!checkboxData?.checked || checkboxData?.buildConceptIgnore) {
+                            return null;
+                        }
+
+                        try {
+                            const value_coded = await ConceptService.getConceptID(checkboxData.value, true);
+                            const concept_id = await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true);
+                            const date = getFieldValue(data, checkboxData.name + " date", "value");
+                            obs_datetime = date || obs_datetime;
+                            // Skip if required IDs couldn't be retrieved
+                            if (!value_coded || !concept_id) {
+                                return null;
+                            }
+
+                            // Build base object
+                            const baseObj = {
+                                concept_id,
+                                value_coded,
+                                obs_datetime,
+                            };
+
+                            // Add child data if present
+                            if (childData.length > 0) {
+                                const childNames = childData.map((child: any) => ({
+                                    concept_id: value_coded,
+                                    value_coded: child.drug_id,
+                                    obs_datetime,
+                                }));
+
+                                return {
+                                    ...baseObj,
+                                    child: childNames,
+                                };
+                            }
+
+                            return baseObj;
+                        } catch (error) {
+                            console.error("Error processing checkbox data:", error);
+                            return null;
+                        }
+                    });
+
+                    return (await Promise.all(checkboxPromises)).filter(Boolean);
+                })
+            );
+
+            // Flatten the array and remove any remaining null values
+            return buildObjPromises.flat().filter(Boolean);
+        },
+        async formatRadioButtonData(data: any, date: any = ConceptService.getSessionDate(), childData: any) {
+            const buildObjPromises: Promise<any>[] = data.map(async (item: any) => {
+                if (item && item.radioBtnContent && item.radioBtnContent.header && item.radioBtnContent.header.selectedValue) {
+                    const value_coded = await ConceptService.getConceptID(item.radioBtnContent.header.selectedValue, true);
+                    const concept_id = await ConceptService.getConceptID(item.radioBtnContent.header.name, true);
+                    const obs_datetime = date || ConceptService.getSessionDate();
+                    const childNames = childData.map((item: any) => {
+                        return {
+                            concept_id: value_coded,
+                            value_coded: item.drug_id,
+                            obs_datetime: obs_datetime,
+                        };
+                    });
+                    if (childData) {
+                        return {
+                            concept_id,
+                            value_coded,
+                            obs_datetime,
+                            child: childNames,
+                        };
+                    } else {
+                        return {
+                            concept_id,
+                            value_coded,
+                            obs_datetime,
+                        };
+                    }
+                } else {
+                    return null;
+                }
+            });
+
+            return (await Promise.all(buildObjPromises)).filter((obj) => obj !== null);
+        },
 
         async guardianData() {
             return {
-                person_id: this.demographics.patient_id,
+                person_id: this.patient.patientID,
                 given_name: this.guardianFirstname,
                 family_name: this.guardianLastname,
                 middle_name: this.guardianMiddleName,
@@ -347,11 +438,8 @@ export default defineComponent({
                 national_id: getFieldValue(this.changeGuardianInfo, "guardianNationalID", "value"),
             };
         },
-        handleInputData(event: any) {
-            // if (event.name == "SeriousCheck") {
-            //     if(displayNext)
-            // }
-            console.log("🚀 ~ handleInputData ~ event:", event);
+        async handleInputData(event: any) {
+            // if (event.selectedValue == "yes" && event.title == "Serious") await this.getSeriousAdverseEffects();
         },
 
         dismiss() {

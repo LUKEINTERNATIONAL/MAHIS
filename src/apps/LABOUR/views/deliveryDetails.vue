@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -59,9 +60,9 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "deliveryDetails",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
-      BasicFooter,
+    mixins: [SetUserRole, SetEncounter],
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -124,7 +125,7 @@ export default defineComponent({
     },
     watch: {},
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useThirdStageOfLabourStore, ["placentaExamination"]),
         ...mapState(useSecondStageOfLabourStore, ["secondStageDetails", "newbornComplications", "obstetricComplications"]),
     },
@@ -168,6 +169,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -177,7 +179,7 @@ export default defineComponent({
         async saveData() {
             await this.saveSecondStageLabour();
             toastSuccess("Delivery details data saved successfully");
-            resetPatientData();
+            await resetPatientData();
             this.$router.push("/labour/labourHome");
         },
         async saveSecondStageLabour() {
@@ -188,7 +190,7 @@ export default defineComponent({
                 this.obstetricComplications.length > 0
             ) {
                 const userID: any = Service.getUserID();
-                const secondStageDelivery = new SecondStageDeliveryService(this.demographics.patient_id, userID);
+                const secondStageDelivery = new SecondStageDeliveryService(this.patient.patientID, userID);
                 const encounter = await secondStageDelivery.createEncounter();
                 if (!encounter) return toastWarning("Unable to create Second stage and Third stage of labour encounter");
                 const patientStatus = await secondStageDelivery.saveObservationList(await this.buildSecondStageOfLabour());

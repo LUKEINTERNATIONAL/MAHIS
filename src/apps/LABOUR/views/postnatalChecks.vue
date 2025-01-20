@@ -11,6 +11,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -63,10 +64,10 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "postnatalChecks",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
+    mixins: [SetUserRole, SetEncounter],
+    components: {
         IonContent,
-      BasicFooter,
+        BasicFooter,
         IonHeader,
         IonMenuButton,
         IonPage,
@@ -128,7 +129,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useImmediatePostnatalChecksForChildStore, ["examsAfterDeliveryForChild"]),
         ...mapState(useImmediatePostnatalChecksForMotherStore, ["examsAfterDelivery"]),
     },
@@ -167,6 +168,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -181,14 +183,14 @@ export default defineComponent({
         async saveData() {
             await this.savePostnatalChecks();
             toastSuccess("Immediate postnatal checks data saved successfully");
-            resetPatientData();
+            await resetPatientData();
             // this.$router.push("labourHome");
         },
 
         async savePostnatalChecks() {
             if (this.examsAfterDeliveryForChild.length > 0 && this.examsAfterDelivery.length > 0) {
                 const userID: any = Service.getUserID();
-                const examsAfterDelivery = new ImmediatePostnatalChecksForChildService(this.demographics.patient_id, userID);
+                const examsAfterDelivery = new ImmediatePostnatalChecksForChildService(this.patient.patientID, userID);
                 const encounter = await examsAfterDelivery.createEncounter();
                 if (!encounter) return toastWarning("Unable to create immediate checks for mother and child encounter");
                 const patientStatus = await examsAfterDelivery.saveObservationList(await this.buildPostnatalChecks());

@@ -67,7 +67,7 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabResultsStore, ["labResults"]),
     },
     mounted() {
@@ -81,7 +81,7 @@ export default defineComponent({
             modalController.dismiss();
         },
         async saveLabOrder() {
-            const patientLabResultService = new PatientLabOrderService(this.demographics.patient_id);
+            const patientLabResultService = new PatientLabOrderService(this.patient.patientID);
             patientLabResultService.setTestID(this.labResults[0].id);
             patientLabResultService.setResultDate(HisDate.currentDate());
             await patientLabResultService.createEncounter();
@@ -105,10 +105,10 @@ export default defineComponent({
             console.log("🚀 ~ buildResults ~ measures:", measures);
             return measures;
         },
-        nav(url: any, action: any) {
+        async nav(url: any, action: any) {
             const demographicsStore = useLabResultsStore();
             if (action == "not_save") {
-                resetPatientData();
+                await resetPatientData();
                 demographicsStore.setLabResults(false);
             } else {
                 demographicsStore.setLabResults(true);

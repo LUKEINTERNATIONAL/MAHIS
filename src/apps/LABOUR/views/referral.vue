@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -65,10 +66,10 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "referral",
-  mixins: [SetUserRole, SetEncounter],
+    mixins: [SetUserRole, SetEncounter],
 
-  components: {
-      BasicFooter,
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -116,7 +117,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabourReferralStore, ["labourReferral"]),
     },
     mounted() {
@@ -154,21 +155,22 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
                 return item?.data;
             });
         },
-        saveData() {
+        async saveData() {
             this.saveReferal();
             toastSuccess("Patient referral saved successfully");
-            resetPatientData();
+            await resetPatientData();
         },
         async saveReferal() {
             if (this.labourReferral.length > 0) {
                 const userID: any = Service.getUserID();
-                const Referal = new ReferralService(this.demographics.patient_id, userID);
+                const Referal = new ReferralService(this.patient.patientID, userID);
                 const encounter = await Referal.createEncounter();
                 if (!encounter) return toastWarning("Unable to create Referal encounter");
                 const patientStatus = await Referal.saveObservationList(await this.buildReferal());

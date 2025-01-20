@@ -1,5 +1,5 @@
 <template>
-    <ion-searchbar  @ionInput="handleInput" placeholder="Search client  clinical No." class="searchField"></ion-searchbar>
+    <ion-searchbar @ionInput="handleInput" placeholder="Search client  clinical No." class="searchField"></ion-searchbar>
     <ion-popover
         :is-open="popoverOpen"
         :event="event"
@@ -7,7 +7,7 @@
         :keyboard-close="false"
         :show-backdrop="false"
         :dismiss-on-select="true"
-    >no
+        >no
         <ion-content class="search_card">
             <ion-row class="search_header">
                 <ion-col>MNH no.</ion-col>
@@ -59,7 +59,7 @@ import DynButton from "@/components/DynamicButton.vue";
 import { createModal } from "@/utils/Alerts";
 import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
-
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
     name: "Home",
     components: {
@@ -116,17 +116,9 @@ export default defineComponent({
             if (ids >= 0) return item.patient_identifiers[ids].identifier;
             else return "";
         },
-        openNewPage(url: any, item: any) {
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setDemographics({
-                name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
-                mrn: this.patientIdentifier(item),
-                birthdate: item.person.birthdate,
-                category: "",
-                gender: item.person.gender,
-                patient_id: item.patient_id,
-            });
-            resetPatientData();
+        async openNewPage(url: any, item: any) {
+            await useDemographicsStore().setPatientRecord(item);
+            await resetPatientData();
             this.$router.push(url);
         },
 

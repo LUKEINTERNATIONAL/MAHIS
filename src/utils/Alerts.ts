@@ -92,11 +92,11 @@ export async function infoAlert(message: string, header = "Information") {
 }
 
 export async function createModal(
-    modalComponent: any, 
-    options: any = {}, 
-    BACKDROPDISMISS = true, 
+    modalComponent: any,
+    options: any = {},
+    BACKDROPDISMISS = true,
     props = {},
-    eventHandlers: {[key: string]: (event: CustomEvent<any>) => void} = {}
+    eventHandlers: { [key: string]: (event: CustomEvent<any>) => void } = {}
 ) {
     const modal = await modalController.create({
         component: modalComponent,
@@ -119,13 +119,13 @@ export async function createModal(
     const { data } = await modal.onDidDismiss();
     return data;
 }
-export function createPopover(massege: any, e: any, btns = [] as Array<NavBtnInterface>) {
+export function createPopover(massege: any, e: any, options: any, btns = [] as Array<NavBtnInterface>) {
     return popoverController.create({
         component: ConfimationSheet,
         backdropDismiss: false,
         event: e,
         cssClass: "delete-popover",
-        showBackdrop: false,
+        showBackdrop: options?.showBackdrop || false,
         side: "bottom",
         reference: "event",
         alignment: "center",
@@ -136,14 +136,14 @@ export function createPopover(massege: any, e: any, btns = [] as Array<NavBtnInt
         },
     });
 }
-export async function popoverConfirmation(massege: string, e: any, options = {} as AlertConfirmationOtions) {
-    const popover = await createPopover(massege, e, [
+export async function popoverConfirmation(massege: string, e: any, options = {} as any) {
+    const popover = await createPopover(massege, e, options, [
         {
             name: options.confirmBtnLabel || "Delete",
             size: "small",
             slot: "start",
             color: "danger",
-            icon: icons.delete,
+            icon: options.icon || options.icon == "" ? "" : icons.delete,
             visible: true,
             role: "Delete",
             onClick: ({ role }: any) => popoverController.dismiss(role),

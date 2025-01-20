@@ -1,6 +1,5 @@
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
-import { getWebsockerURL } from "@/utils/GeneralUti";
 export class WebSocketService {
     private socket: WebSocket | null = null;
     private channel: string = "ImmunizationReportChannel";
@@ -15,21 +14,21 @@ export class WebSocketService {
     private async init() {
         const apiURL = localStorage.getItem("apiURL");
         const apiPort = localStorage.getItem("apiPort");
+        const websocketProtocol = localStorage.getItem("websocketProtocol");
 
         this.location_id = localStorage.getItem("locationID");
-
-        if (apiURL && apiPort) {
-            const websocketURL = getWebsockerURL();
+        try {
             const url =
-                websocketURL && websocketURL !== "undefined" && websocketURL.trim().length > 0
-                    ? `ws://${websocketURL}`
-                    : `ws://${apiURL}:${apiPort}/cable`;
+                import.meta.env.MODE === "development"
+                    ? `${websocketProtocol}://${apiURL}:${apiPort}/cable`
+                    : `${websocketProtocol}://${apiURL}/api/v1/cable`;
 
             this.socket = new WebSocket(url);
             this.socket.onopen = this.onOpen;
             this.socket.onclose = this.onClose;
             this.socket.onerror = this.onError;
-        } else {
+        } catch (error) {
+            console.error(error);
             console.error("WebSocket not initialized: apiURL or apiPort is missing in localStorage.");
         }
     }

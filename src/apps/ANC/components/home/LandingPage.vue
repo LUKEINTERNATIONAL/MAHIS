@@ -1,7 +1,12 @@
 <template>
   <ion-grid class="ion-grid">
-    <ion-row class="ion-justify-content-center">
-      <ion-col v-for="(card, index) in cardsData" :key="index" size-xs="6" size-sm="6" size-md="6" size-lg="6" size-xl="6">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-col v-for="(card, index) in cardsData" :key="index"
+               size-xs="6"
+               size-sm="6"
+               size-md="4"
+               size-lg="4"
+               size-xl="4">
         <ion-card color="secondary" class="card" @click="navigateTo(card.path)">
           <ion-card-header>
             <ion-card-title class="ion-title" style="color:#0f5132">{{ card.title }}</ion-card-title>
@@ -54,9 +59,12 @@ export default defineComponent({
 <style scoped>
 .card {
   width: 264px;
-  margin: 10px;
+  margin: 5px;
   transition: transform 0.3s ease;
-
+}
+.ion-grid {
+  padding-left: 15%;
+  padding-right: 14%;
 }
 
 .card:hover {
@@ -78,6 +86,10 @@ ion-card-title {
 
   ion-card-title {
     font-size: 14px;
+  }
+  .ion-grid {
+    padding-left: 5%;
+    padding-right: 5%;
   }
 
 

@@ -1,5 +1,5 @@
 <template>
-    <v-select label="label" :options="options.options" v-model="selectedOption"></v-select>
+    <v-select label="label" :options="options.options" calculate-position="'top'" v-model="selectedOption"/>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
@@ -15,6 +15,7 @@ const placeholder = ref('MF')
 
 const props = defineProps<{
     labels: any,
+    selectedOpt: any,
 }>()
 
 const emit = defineEmits<{
@@ -32,12 +33,20 @@ const options = ref({
 
 onMounted(async () => {
     populateOptions()
+    selectedOption.value = props.selectedOpt
 })
 
 watch(
     () => props.labels,
     async (newValue) => {
         populateOptions()
+    }
+)
+
+watch(
+    () => props.selectedOpt,
+    async (newValue) => {
+        selectedOption.value = newValue
     }
 )
 
@@ -63,16 +72,16 @@ function populateOptions() {
     --vs-border-color: #664cc3;
 
     --vs-dropdown-bg: #282c34;
-    --vs-dropdown-color: #cc99cd;
-    --vs-dropdown-option-color: #cc99cd;
+    --vs-dropdown-color:  #282c34;
+    --vs-dropdown-option-color:  #282c34;
 
     --vs-selected-bg: #664cc3;
     --vs-selected-color: #eeeeee;
 
-    --vs-search-input-color: #eeeeee;
+    --vs-search-input-color:  #282c34;
 
     --vs-dropdown-option--active-bg: #664cc3;
-    --vs-dropdown-option--active-color: #eeeeee;
+    --vs-dropdown-option--active-color:#282c34;
     }
 
     .vs__clear {
@@ -80,9 +89,9 @@ function populateOptions() {
     }
 
     .v-select, .v-select * {
-        /* font-size: 25px; */
-        
-        background-color: inherit;
+        font-size: 24px;
+        background-color: #ffffff;
+        color:  #282c34;
     }
     
 </style>

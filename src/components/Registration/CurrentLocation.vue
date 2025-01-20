@@ -51,7 +51,7 @@ export default defineComponent({
     computed: {
         ...mapState(useRegistrationStore, ["homeLocation"]),
         ...mapState(useRegistrationStore, ["currentLocation"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         current_district() {
             return getFieldValue(this.currentLocation, "current_district", "value")?.name;
         },
@@ -93,26 +93,25 @@ export default defineComponent({
     methods: {
         setData() {
             if (this.editable) {
-                modifyFieldValue(this.currentLocation, "current_village", "value", {
-                    name: this.patient.person?.addresses[0]?.city_village,
-                    district_id: "",
-                });
                 modifyFieldValue(this.currentLocation, "current_district", "value", {
-                    name: this.patient.person?.addresses[0]?.state_province,
+                    name: this.patient.personInformation.current_district,
                     traditional_authority_id: "",
                 });
                 modifyFieldValue(this.currentLocation, "current_traditional_authority", "value", {
-                    name: this.patient.person?.addresses[0]?.township_division,
+                    name: this.patient.personInformation.current_traditional_authority,
                     village_id: "",
                 });
+                modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", false);
+                modifyFieldValue(this.currentLocation, "current_village", "value", {
+                    name: this.patient.personInformation.current_village,
+                    district_id: "",
+                });
+                modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);
                 modifyFieldValue(this.currentLocation, "closestLandmark", "value", {
                     id: "",
-                    name: this.getAttributes(this.patient, "Landmark Or Plot Number"),
+                    name: this.patient.personInformation.landmark,
                 });
             }
-        },
-        getAttributes(item: any, name: any) {
-            return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;
         },
         async buildCards() {
             this.cardData = {
@@ -173,7 +172,7 @@ export default defineComponent({
         },
 
         async setTA(obj: any) {
-            const targetData = this.getTAs(obj.district_id);
+            const targetData: any = await this.getTAs(obj.district_id);
             if (targetData.length > 0) {
                 modifyFieldValue(this.currentLocation, "current_traditional_authority", "multiSelectData", targetData);
                 modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", false);
@@ -183,8 +182,7 @@ export default defineComponent({
             }
         },
         async setVillage(obj: any) {
-            // const targetData = await this.getVillages(obj.traditional_authority_id);
-            const targetData = await LocationService.getVillages(obj.traditional_authority_id);
+            const targetData = await this.getVillages(obj.traditional_authority_id);
             if (targetData.length > 0) {
                 modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
                 modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);

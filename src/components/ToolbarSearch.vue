@@ -5,7 +5,7 @@
         :onYes="handleCheckInYes"
         :onNo="handleCheckInNo"
         :isOpen="checkInModalOpen"
-        :title="`Do you want to check in the patient?`"
+        :title="`Do you want to create visit or view profile?`"
     />
 
     <div style="display: flex; width: 100%; justify-content: center">
@@ -13,7 +13,7 @@
             style="color: #000; width: 70%"
             @ionInput="handleInput"
             fill="outline"
-            :value="searchValue"
+            v-model="searchValue"
             placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
             class="searchField"
         >
@@ -75,7 +75,7 @@
                 class="search_result clickable-row"
                 v-for="(item, index) in offlineFilteredPatients"
                 :key="index"
-                @click="setOfflineDemo(item)"
+                @click="setPatientData('/patientProfile', item)"
             >
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                     item.personInformation.given_name + " " + item.personInformation.family_name
@@ -148,7 +148,7 @@ import {
     IonInput,
     isPlatform,
 } from "@ionic/vue";
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, toRaw } from "vue";
 import { PatientService } from "@/services/patient_service";
 import { checkmark, add, camera, search } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -162,12 +162,11 @@ import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
-import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
 import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useWorkerStore } from "@/stores/workerStore";
 import DeviceDetection from "@/views/Mixin/DeviceDetection.vue";
 import { scannedData, extractDetails } from "@/services/national_id";
 import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
@@ -183,12 +182,16 @@ import SetPersonInformation from "@/views/Mixin/SetPersonInformation.vue";
 import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useProgramStore } from "@/stores/ProgramStore";
+import router from "@/router";
 import { PatientOpdList } from "@/services/patient_opd_list";
-import dates from "@/utils/Date"
-
+import { getUserLocation } from "@/services/userService";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import dates from "@/utils/Date";
+import { getOfflineRecords } from "@/services/offline_service";
+import { UserService } from "@/services/user_service";
 export default defineComponent({
     name: "ToolbarSearch",
-    mixins: [SetDemographics, DeviceDetection, SetPersonInformation],
+    mixins: [DeviceDetection, SetPersonInformation],
     components: {
         IonContent,
         IonHeader,
@@ -213,12 +216,12 @@ export default defineComponent({
     },
     data() {
         return {
+            route: "",
             iconContent: icons,
             ddeInstance: {} as any,
             popoverOpen: false,
             event: null,
             patients: [] as any,
-            offlinePatients: [] as any,
             offlineFilteredPatients: [] as any,
             showPopover: true,
             page: 1,
@@ -239,6 +242,7 @@ export default defineComponent({
                 npidHasOverFiveDuplicates: false as boolean,
                 userRoles: [] as string[],
                 scannedNpid: "" as string,
+                url: "" as any,
                 currentNpid: "" as string,
                 hasInvalidNpid: false as boolean,
                 enrolledInProgram: false as boolean,
@@ -297,6 +301,12 @@ export default defineComponent({
         searchText() {
             this.page = 1;
         },
+        $router: {
+            handler() {
+                this.searchValue = "";
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
@@ -306,28 +316,26 @@ export default defineComponent({
     },
     async mounted() {
         this.ddeInstance = new PatientDemographicsExchangeService();
-        this.offlinePatients = await db.collection("patientRecords").get();
     },
     methods: {
-        nav(url: any) {
-            resetPatientData();
+        async nav(url: any) {
+            await resetPatientData();
             this.$router.push(url);
         },
         async scanCode() {
             const dataScanned: any = await scannedData();
             const dataExtracted: any = await extractDetails(dataScanned);
-            if (await this.searchByNpid(dataScanned + "$")) {
-                this.searchValue = dataScanned;
+            if (await this.searchByNpid(dataScanned)) {
                 return;
             } else if (dataExtracted && (await this.searchByMWNationalID(dataExtracted?.idNumber))) {
-                this.searchValue = dataScanned?.idNumber;
                 return;
             } else if (dataExtracted) {
                 await this.setPersonInformation(dataExtracted);
                 this.$router.push("/registration/manual");
                 return;
+            } else {
+                toastWarning("Invalid Scan");
             }
-            this.searchValue = dataScanned;
         },
         programID() {
             return Service.getProgramID();
@@ -383,19 +391,17 @@ export default defineComponent({
             };
         },
         async searchByNpid(searchText: any) {
-            if (/.+\$$/i.test(`${searchText}`)) {
-                searchText = `${searchText || ""}`.replace(/\$/gi, "");
-                const idData = await PatientService.findByNpid(searchText as any);
-                if (idData && idData.length > 0) {
-                    this.patients.push(...idData);
-                    if (this.patients.length == 1) {
-                        this.openNewPage("patientProfile", this.patients[0]);
-                        this.popoverOpen = false;
-                    }
-                    return true;
-                } else {
-                    return false;
+            const idData = await PatientService.findByNpid(searchText as any);
+            if (idData && idData.length > 0) {
+                this.patients = [];
+                this.patients.push(...idData);
+                if (this.patients.length == 1) {
+                    this.setPatientData("patientProfile", this.patients[0]);
+                    this.popoverOpen = false;
                 }
+                return true;
+            } else {
+                return false;
             }
         },
         async searchByOtherIds(searchText: any) {
@@ -403,11 +409,11 @@ export default defineComponent({
                 const IDs: any = await this.setID(searchText);
                 if (Service.getProgramID() == 1) {
                     const artData = await PatientService.findByOtherID(4, IDs["ARVNumber"]);
-                    if (artData.length > 0) this.patients.push(...artData);
+                    if (artData.length > 0) this.patients = artData;
                 }
                 if (Service.getProgramID() == 32) {
                     const ncdData = await PatientService.findByOtherID(31, IDs["NCDNumber"]);
-                    if (ncdData.length > 0) this.patients.push(...ncdData);
+                    if (ncdData.length > 0) this.patients = ncdData;
                 }
             }
         },
@@ -417,7 +423,7 @@ export default defineComponent({
                 if (nationalID && nationalID.length > 0) {
                     this.patients = [];
                     this.patients.push(...nationalID);
-                    this.openNewPage("patientProfile", this.patients[0]);
+                    this.setPatientData("patientProfile", this.patients[0]);
                     return true;
                 } else return false;
             }
@@ -433,57 +439,45 @@ export default defineComponent({
                 });
             }
         },
-        patientIdentifier(identifiers: any) {
-            return identifiers.patient_identifiers
-                .filter((identifier: any) => identifier.identifier_type === 3)
-                .map((identifier: any) => identifier.identifier)
-                .join(", ");
-        },
-        setOfflineDemo(data: any) {
-            this.popoverOpen = false;
-            resetPatientData();
-            this.setOfflineDemographics(data);
-            let url = "/patientProfile";
-            this.$router.push(url);
-        },
-        async openNewPage(url: any, item: any) {
-            this.popoverOpen = false;
-            this.setDemographics(item);
+
+        async setPatientData(url: any, item: any) {
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
-                resetNCDPatientData();
+                await resetNCDPatientData();
             } else if (Service.getProgramID() == 14) {
                 resetOPDPatientData();
             }
-            resetPatientData();
+            await resetPatientData();
 
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
             const userProgramsData: any = localStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
-
             const roles: any = roleData ? roleData : [];
-            UserService.setProgramUserActions();
 
             if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
-                this.$router.push("dispensation");
-            } else if (roles.some((role: any) => role.role === "Lab")) {
-                this.$router.push("OPDConsultationPlan");
-            } else if (userPrograms?.length == 1) {
-                let NCDUserAction: any = "";
-                if (this.NCDUserActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.NCDUserActions;
-                if (NCDUserAction && userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "NCD PROGRAM")) {
-                    this.$router.push(NCDUserAction.url);
-                } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
-                    this.$router.push("OPDvitals");
+                if (this.programID() == 32) {
+                    this.route = "NCDDispensations";
                 } else {
-                    this.$router.push(url);
+                    this.route = "dispensation";
                 }
-            } else {
-                this.$router.push(url);
+            } else if (roles.some((role: any) => role.role === "Lab")) {
+                this.route = "OPDConsultationPlan";
+            } else if (userPrograms?.length == 1) {
+                if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
+                    this.route = "OPDvitals";
+                }
+            } else if (this.programID() == 32 && this.apiStatus) {
+                const actions: any = await UserService.setProgramUserActions();
+                router.push("/patientProfile");
             }
+            this.route = url;
+            this.popoverOpen = false;
+            this.searchValue = "";
+            await useDemographicsStore().setPatientRecord(item);
+            this.$router.push(this.route);
         },
         getPhone(item: any) {
             return item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value;
@@ -492,9 +486,9 @@ export default defineComponent({
             this.event = e;
             this.popoverOpen = true;
         },
-        openCheckPaitentNationalIDModal() {
+        async openCheckPaitentNationalIDModal() {
             this.popoverOpen = false;
-            resetPatientData();
+            await resetPatientData();
             createModal(CheckPatientNationalID, { class: "nationalIDModal" });
         },
         onDismiss() {
@@ -506,16 +500,26 @@ export default defineComponent({
         previousPage() {
             this.page--;
         },
-        searchOfflinePatients(searchCriteria: any) {
-            return this.offlinePatients.filter((patient: any) => {
-                const personInfo = patient.personInformation;
-
-                return (
-                    (!searchCriteria.given_name || personInfo.given_name.toLowerCase().includes(searchCriteria.given_name.toLowerCase())) &&
-                    (!searchCriteria.family_name || personInfo.family_name.toLowerCase().includes(searchCriteria.family_name.toLowerCase())) &&
-                    (!searchCriteria.gender || personInfo.gender === searchCriteria.gender)
-                );
+        async searchOfflinePatients(searchCriteria: { given_name?: string; family_name?: string; gender?: string }) {
+            const idData: any = await getOfflineRecords("patientRecords", {
+                whereClause: { ID: searchCriteria.given_name },
             });
+            if (idData.length > 0) return idData;
+
+            const likeClause: Record<string, string> = {};
+            const fields: any = {
+                given_name: "personInformation.given_name",
+                family_name: "personInformation.family_name",
+                gender: "personInformation.gender",
+            };
+
+            Object.entries(searchCriteria).forEach(([key, value]: any) => {
+                if (value && fields[key]) {
+                    likeClause[fields[key]] = `${value}%`;
+                }
+            });
+
+            return await getOfflineRecords("patientRecords", { likeClause });
         },
         async handleSearchResults(patient: Promise<Patient | Patient[]>) {
             let results: Patient[] | Patient = [];
@@ -683,35 +687,64 @@ export default defineComponent({
             this.checkInModalOpen = false;
         },
         handleCheckInNo() {
-            this.openNewPage("patientProfile", this.selectedPatient);
+            this.setPatientData("patientProfile", this.selectedPatient);
             this.toggleCheckInModal();
         },
         async handleCheckInYes() {
-            try{
-                await PatientOpdList.checkInPatient(this.selectedPatient.patient_id, dates.todayDateFormatted());
-                await PatientOpdList.addPatientToStage(this.selectedPatient.patient_id,dates.todayDateFormatted(),"VITALS")
-                this.openNewPage("patientProfile", this.selectedPatient);
-            } catch(e){
+            try {
+                const location = await getUserLocation();
+                const locationId = location ? location.code : null;
+                if (!locationId) {
+                    toastDanger("Location ID could not be found. Please check your settings.");
+                    return;
+                }
+                const stages: Array<"VITALS" | "CONSULTATION" | "DISPENSATION"> = ["VITALS", "CONSULTATION", "DISPENSATION", locationId];
+                let isAlreadyCheckedIn = false;
+                for (const stage of stages) {
+                    const patientList = (await PatientOpdList.getPatientList(stage, locationId)) as Array<{ patient_id: string }>;
+                    if (patientList.some((patient) => patient.patientID === this.selectedPatient.patient_id)) {
+                        isAlreadyCheckedIn = true;
+                        break;
+                    }
+                }
 
+                if (isAlreadyCheckedIn) {
+                    toastDanger("Failed, the patient's visit is already active");
+                    return;
+                }
+                await PatientOpdList.checkInPatient(this.selectedPatient.patient_id, dates.todayDateFormatted(), locationId);
+                await PatientOpdList.addPatientToStage(this.selectedPatient.patient_id, dates.todayDateFormatted(), "VITALS", locationId);
+                await usePatientList().refresh(locationId);
+                await this.setPatientData("home", this.selectedPatient);
+                this.closeCheckInModal();
+                toastSuccess("Patient's visit is now active, check on the waiting list of vitals");
+            } catch (e) {
+                console.error("Error during patient check-in process:", e);
+                toastDanger("An error occurred while attempting to check in the patient. Please try again.");
             }
         },
         toggleCheckInModal() {
             this.checkInModalOpen = !this.checkInModalOpen;
         },
         async openCheckInModal(item: any) {
-
             if (this.programs?.program?.applicationName == "OPD Program") {
-                try{
-                    const checkInStatus= await PatientOpdList.getCheckInStatus(item.patient_id);
-                    this.openNewPage("patientProfile", item);
-                } catch(e){
-
+                try {
+                    const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
+                    if (checkInStatus.length > 0) {
+                        this.setPatientData("patientProfile", item);
+                        return;
+                    }
                     this.checkInModalOpen = true;
                     this.selectedPatient = item;
+
+                    return;
+                } catch (e) {
+                    this.checkInModalOpen = true;
+                    this.selectedPatient = item;
+                    return;
                 }
-                return;
             }
-            this.openNewPage("patientProfile", item);
+            this.setPatientData("/patientProfile", item);
         },
     },
 });

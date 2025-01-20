@@ -1,5 +1,6 @@
 import { Service } from "./service";
 import ConceptNameDictionary from "@/Data/ConceptNameDictionary";
+import { getOfflineRecords } from "@/services/offline_service";
 
 export class ConceptService extends Service {
     constructor() {
@@ -28,13 +29,27 @@ export class ConceptService extends Service {
     }
 
     static async getConceptSet(conceptName: string, filter = "") {
-        const conceptId = await this.getConceptID(conceptName);
-        const concepts = super.getJson("concept_set", {
-            id: conceptId,
-            name: filter,
-        });
+        const concepts: any = await getOfflineRecords("conceptSets", { whereClause: { concept_set_name: conceptName } });
+        let conceptData: any = [];
+        let filterObj = {
+            inClause: { concept_id: concepts[0].member_ids },
+            likeClause: {},
+        };
+        if (filter)
+            filterObj.likeClause = {
+                name: `%${filter}%`,
+            };
+        conceptData = await getOfflineRecords("conceptNames", filterObj);
+        if (conceptData) return conceptData;
+        else {
+            const conceptId = await this.getConceptID(conceptName);
+            const concepts = super.getJson("concept_set", {
+                id: conceptId,
+                name: filter,
+            });
 
-        if (concepts) return concepts;
+            if (concepts) return concepts;
+        }
     }
 
     static async getConceptName(conceptId: number) {
@@ -45,21 +60,21 @@ export class ConceptService extends Service {
         return this.getConceptNameFromApi(conceptId);
     }
 
-    static getConceptID(conceptName: string, strictMode = true) {
+    static async getConceptID(conceptName: string, strictMode = true) {
         try {
-            return this.getCachedConceptID(conceptName, strictMode);
+            const concepts: any = await this.getCachedConceptID(conceptName, strictMode);
+            if (concepts.length > 0) {
+                return this.resolveConcept(concepts, conceptName);
+            } else {
+                return this.getConceptIDFromApi(conceptName);
+            }
         } catch (e) {
-            return this.getConceptIDFromApi(conceptName);
+            console.log(e);
         }
     }
 
-    static getCachedConceptID(conceptName: string, strictMode = false) {
-        const concepts = ConceptNameDictionary.filter((item) => {
-            if (!strictMode) return item.name.match(new RegExp(conceptName, "i"));
-
-            return item.name.toLowerCase() === conceptName.toLowerCase();
-        });
-        return this.resolveConcept(concepts, conceptName);
+    static async getCachedConceptID(conceptName: string, strictMode = false) {
+        return await getOfflineRecords("conceptNames", { whereClause: { name: conceptName } });
     }
 
     static async getConceptIDFromApi(name: string) {
@@ -73,22 +88,13 @@ export class ConceptService extends Service {
         if (concept) return concept.concept_names[0].name;
     }
 
-    static getCachedConceptName(conceptId: number) {
-        const concepts = ConceptNameDictionary.filter((item) => {
-            return item.concept_id === conceptId;
-        });
-
-        if (concepts.length >= 1) return concepts[0].name;
+    static async getCachedConceptName(conceptId: number) {
+        const concepts: any = await getOfflineRecords("conceptNames", { whereClause: { concept_id: conceptId } });
+        if (concepts && concepts.length >= 1) return concepts[0].name;
     }
 
     private static resolveConcept(concepts: any, conceptName: string) {
-        if (concepts.length > 0) return concepts[0].concept_id;
-
-        // if(concepts.length==0)
-        //     console.log(conceptName)
-
-       throw `Concept name ${conceptName} was not found or has a duplicates`;
+        if (concepts.length >= 1) return concepts[0].concept_id;
+        throw `Concept name ${conceptName} was not found or has a duplicates`;
     }
 }
-
-

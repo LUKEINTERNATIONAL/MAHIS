@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -58,10 +59,10 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "postnatalBabyStatus",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
+    mixins: [SetUserRole, SetEncounter],
+    components: {
         IonContent,
-      BasicFooter,
+        BasicFooter,
         IonHeader,
         IonMenuButton,
         IonPage,
@@ -114,7 +115,7 @@ export default defineComponent({
         });
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useBabyStatusStore, ["babyStatusDetails"]),
     },
     mounted() {
@@ -152,6 +153,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -160,13 +162,13 @@ export default defineComponent({
         },
         async saveData() {
             await this.saveBabyMonitoring();
-            resetPatientData();
+            await resetPatientData();
             this.$router.push("home");
         },
         async saveBabyMonitoring() {
             if (this.babyStatusDetails.length > 0) {
                 const userID: any = Service.getUserID();
-                const babyStatusDetails = new BabyMonitoringService(this.demographics.patient_id, userID);
+                const babyStatusDetails = new BabyMonitoringService(this.patient.patientID, userID);
                 const encounter = await babyStatusDetails.createEncounter();
                 if (!encounter) return toastWarning("Unable to create baby monitoring details encounter");
                 const patientStatus = await babyStatusDetails.saveObservationList(await this.buildBabyMonitoring());

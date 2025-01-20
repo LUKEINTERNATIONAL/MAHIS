@@ -1,145 +1,175 @@
 <template>
-    <ion-list style="margin-left: 10px;">
-        
-        <ion-label>Allergies (Medication, Healthcare items, Environment and Food)</ion-label>
-        <ion-row>
-            <ion-item lines="none" class="medicalAl">
-            <ion-row>
-            <div v-for="(item, index) in selectedAllergiesList" :key="index">
-                <ion-button v-if="item.selected" @click="selectAl(item)" class="medicalAlBtn">
-                    {{ item.name }}
-                    <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
-                </ion-button>
-            </div>
+    <ion-card>
+        <ion-card-header>
+            <ion-label class="header-container">
+                <ion-icon :icon="alertCircleOutline" class="allergy-icon"></ion-icon>
+                <span style="font-size: 16px; font-weight: 600"> Allergies (Medication, Healthcare items, Environment and Food) </span>
+            </ion-label>
+        </ion-card-header>
+        <ion-card-content>
+            <ListPicker
+                :multiSelection="list_picker_prperties[0].multi_Selection"
+                :show_label="list_picker_prperties[0].show_list_label"
+                :uniqueId="list_picker_prperties[0].unqueId"
+                :name_of_list="list_picker_prperties[0].name_of_list"
+                :choose_place_holder="list_picker_prperties[0].placeHolder"
+                :items_-list="allergiesList"
+                :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                :disabled="list_picker_prperties[0].disabled.value"
+                @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                @item-search-text="list_picker_prperties[0].searchTextFN"
+            />
 
-            <div>
-                <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn" @click="setFocus">
-                    <ion-icon :icon="addOutline"></ion-icon>
-                </ion-button>
-                <ion-popover
-                    class="popover-al"
-                    :show-backdrop="false"
-                    trigger="click-trigger"
-                    trigger-action="click"
-                    @didPresent="dissmissDrugAddField"
-                >
-                    <ion-content color="light" class="ion-padding content-al">
-                        <ion-label>Choose the allergy:</ion-label>
-                        <ion-input ref="input" v-model="drugName" @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
-                        <ion-list class="list-al">
-                            <div class="item-al" v-for="(item, index) in allergiesList" @click="selectAl(item)" :key="index">
-                                <ion-label style="display: flex; justify-content: space-between">
-                                    {{ item.name }}
-                                    <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
-                                </ion-label>
-                            </div>
-                        </ion-list>
-                    </ion-content>
-                </ion-popover>
+            <div v-if="showOtherInput" class="custom-allergy-container">
+                <ion-input v-model="allergyToAdd" placeholder="Please specify the allergy" fill="outline" class="custom-input"></ion-input>
+                <ion-button @click="addCustomAllergy(allergyToAdd)" class="addCustomAllergyBtn"> Add Allergy </ion-button>
             </div>
-            </ion-row>
-            </ion-item>
-        </ion-row>
-    </ion-list>
+        </ion-card-content>
+    </ion-card>
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
     watch: {},
     name: "AllergiesComponent",
-})
+});
 </script>
 
 <script setup lang="ts">
-import { icons } from "@/utils/svg"
-import {
-    IonContent,
-    IonHeader,
-    IonCol,
-    IonItem,
-    IonList,
-    IonButton,
-    IonMenu,
-    IonTitle,
-    IonToolbar,
-    IonInput,
-    IonDatetime,
-    IonLabel,
-    IonTextarea,
-    IonAccordion,
-    IonAccordionGroup,
-    AccordionGroupCustomEvent,
-} from "@ionic/vue"
-import {
-    checkmark,
-    pulseOutline,
-    addOutline,
-    closeOutline,
-    checkmarkOutline,
-    filter,
-    chevronDownOutline,
-    chevronUpOutline,
-    codeSlashOutline,
-} from "ionicons/icons"
+import { IonButton, IonLabel, IonCard, IonCardContent, IonCardHeader, IonIcon, IonInput } from "@ionic/vue";
+import { alertCircleOutline } from "ionicons/icons";
 import { useAllegyStore, searchHealthcareEquipmentAllergies, concatenateArrays } from "@/apps/OPD/stores/AllergyStore";
-import { ConceptService } from "@/services/concept_service"
-import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { ConceptService } from "@/services/concept_service";
+import { ref, watch, computed, onMounted } from "vue";
 import { ConceptName } from "@/interfaces/conceptName";
+import ListPicker from "../../../../../components/ListPicker.vue";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
-const store = useAllegyStore()
-const selectedAllergiesList = computed(() => store.selectedMedicalAllergiesList)
-const input = ref()
-const drugName = ref("")
-const allergiesList = computed(() => store.medicalAllergiesList)
+const allergyStore = useAllegyStore();
+const DemographicsStore = useDemographicsStore();
+const selectedAllergiesList = computed(() => allergyStore.selectedMedicalAllergiesList) as any;
+const demographics = computed(() => DemographicsStore.patient) as any;
+const allergiesList = computed(() => allergyStore.medicalAllergiesList);
+const uniqueId = ref(generateUniqueId(8, "item-"));
 
+const allergyToAdd = ref();
+const showOtherInput = ref(false);
+
+const filteredAllergiesList = computed(() => {
+    return allergiesList.value;
+});
+
+const list_picker_prperties = [
+    {
+        multi_Selection: true as any,
+        show_list_label: true as any,
+        unqueId: uniqueId.value as any,
+        name_of_list: "Add/Remove allergies" as any,
+        placeHolder: "Search for an allergy" as any,
+        items: [],
+        listUpdatedFN: listUpdated1,
+        listFilteredFN: () => {},
+        searchTextFN: FindAllegicDrugName,
+        use_internal_filter: true as any,
+        show_error: ref(false),
+        error_message: "please select a User",
+        disabled: ref(false) as any,
+    },
+];
+const addingCustomAllergy = ref(false);
 onMounted(async () => {
-    // 
-})
+  // allergyStore.clearSelectedMedicalAllergiesList();
+});
 
-
-function selectAl(item: any) {
-    console.log("selectAl: ", !item.selected)
-    item.selected = !item.selected
-    const AllergyStore = store
-    AllergyStore.setSelectedMedicalAllergiesList(item)
-    //saveStateValuesState()
+watch(
+    () => demographics.value,
+    async (newValue) => {
+        allergyStore.clearSelectedMedicalAllergiesList();
+    }
+);
+function resetAllergies() {
+  allergyStore.clearSelectedMedicalAllergiesList();
 }
 
-function setFocus() {
-    input.value.$el.setFocus();
+function listUpdated1(data: any) {
+    data.forEach((item: any) => {
+        if (item.selected == true && item.name === "Other") {
+            showOtherInput.value = item.name === "Other";
+        }
+        allergyStore.setSelectedMedicalAllergiesList(item);
+    });
+    setCommonAllergiesList();
 }
-
-function dissmissDrugAddField(): void {
-    // search_item.value = false;
-    // display_item.value = true;
-    // addItemButton.value = true;
-}
-
-function saveStateValuesState() {
-    const allergyStore = store
-    allergyStore.setMedicalAllergiesList(allergiesList);
-}
-
 async function FindAllegicDrugName(text: any) {
-    const searchText = text.target.value;
-    const page = 1,
-        limit = 10;
+    const searchText = text;
     const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);
-    // const drugs: ConceptName[] = await DrugService.getOPDDrugs({
-    // "name": searchText,
-    // "page": page,
-    // "selected": false as any,
-    // "page_size": limit,
-    // })
     drugs.map((drug) => ({
         label: drug.name,
         value: drug.name,
         other: drug,
     }));
-    const allergyStore = store
-    const temp_data_1 = searchHealthcareEquipmentAllergies(searchText)
-    const temp_data_2 = concatenateArrays(temp_data_1, drugs as any)
-    allergyStore.setMedicalAllergiesList(temp_data_2)
+
+    const temp_data_1 = searchHealthcareEquipmentAllergies(searchText);
+    const temp_data_2 = concatenateArrays(temp_data_1, drugs as any);
+    allergyStore.setMedicalAllergiesList(temp_data_2);
+    setCommonAllergiesList();
+}
+
+function setCommonAllergiesList() {
+    const temp_data_2 = allergiesList.value;
+    selectedAllergiesList.value.forEach((selected_alle: any) => {
+        let found = false;
+        temp_data_2.forEach((alle_dat_itm: any, index: number) => {
+            if (alle_dat_itm.concept_id == selected_alle.concept_id && selected_alle.selected === true) {
+                temp_data_2[index] = selected_alle;
+                found = true;
+            }
+        });
+        if (!found && selected_alle.selected === true) {
+            temp_data_2.push(selected_alle);
+        }
+    });
+    const op_ = temp_data_2.filter(
+        (item: any, index: any, self: any) => index === self.findIndex((t: { concept_id: any }) => t.concept_id === item.concept_id)
+    );
+    allergyStore.setMedicalAllergiesList(op_);
+}
+
+function generateUniqueId(length = 8, prefix = "") {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = prefix;
+
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    result += `-${Date.now()}`;
+    return result;
+}
+async function addCustomAllergy(allergyName: string) {
+    try {
+        const customAllergy = allergyName.trim();
+        if (customAllergy) {
+            const newAllergy = {
+                name: customAllergy,
+                selected: true,
+            };
+
+            allergyStore.setMedicalAllergiesList([...allergiesList.value, newAllergy]);
+            allergyStore.setSelectedMedicalAllergiesList(newAllergy);
+
+            showOtherInput.value = false;
+            addingCustomAllergy.value = true;
+            allergyToAdd.value = "";
+
+            const Other = allergyStore.findSelectedAllergyByName("Other");
+            allergyStore.removeSelectedAllergy(Other);
+        }
+    } catch (error) {
+        console.error(error);
+    }
 }
 </script>
 
@@ -269,4 +299,26 @@ ion-list.list-al {
 .notes_p {
     margin: 4%;
 }
+.custom-allergy-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.custom-input {
+    max-width: 300px;
+    width: 100%;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.allergy-icon {
+    font-size: 24px;
+    color: #b42318;
+}
+
+/* Rest of the styles remain the same */
 </style>

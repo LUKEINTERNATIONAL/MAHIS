@@ -1,5 +1,11 @@
 <template>
-    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData" @countryChanged="handleCountryChange"></basic-card>
+    <basic-card
+        :content="cardData"
+        :editable="editable"
+        @update:selected="handleInputData"
+        @update:inputValue="handleInputData"
+        @countryChanged="handleCountryChange"
+    ></basic-card>
 </template>
 
 <script lang="ts">
@@ -19,6 +25,7 @@ import { validateField } from "@/services/validation_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
 import { RelationshipService } from "@/services/relationship_service";
 import { Service } from "@/services/service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 export default defineComponent({
     name: "Menu",
     mixins: [Relationship],
@@ -51,6 +58,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        patient: {
+            handler() {
+                this.setData();
+            },
+            deep: true,
+        },
     },
     data() {
         return {
@@ -62,6 +75,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useRegistrationStore, ["guardianInformation", "personInformation"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         gender() {
             return getRadioSelectedValue(this.personInformation, "gender");
         },
@@ -99,7 +113,7 @@ export default defineComponent({
                 modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient *");
             }
             if (this.editable) {
-                const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
+                const guardianData = await RelationshipService.getRelationships(this.patient.patientID);
                 modifyFieldValue(
                     this.guardianInformation,
                     "guardianNationalID",
@@ -113,7 +127,7 @@ export default defineComponent({
                     this.guardianInformation,
                     "guardianPhoneNumber",
                     "value",
-                    this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
+                    await this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
                 );
                 modifyFieldValue(this.guardianInformation, "relationship", "value", {
                     id: guardianData[0]?.type.relationship_type_id,
@@ -122,11 +136,35 @@ export default defineComponent({
                 await this.setRelationShip();
             }
         },
-        setAttribute(name: string | undefined, data: any) {
+        async updateGuardianPhone() {},
+        async setAttribute(name: string | undefined, data: any) {
             if (!data || Object.keys(data).length === 0) return;
             let str = data.person_attributes.find((x: any) => x.type.name == name);
-            if (str == undefined) return;
-            else return str.value;
+            if (str == undefined) {
+                return;
+            } else {
+                let data = str.value;
+                if (data) {
+                    return await this.getPhoneNumber(str.value);
+                }
+
+                return data;
+            }
+        },
+        async getPhoneNumber(phone: any) {
+            if (phone) {
+                if (phone.includes("+")) {
+                    if (this.selectedCountry.dialCode) {
+                        return phone.split(this.selectedCountry.dialCode)[1];
+                    } else {
+                        return phone.split("265")[1];
+                    }
+                } else if (phone.startsWith("08") || phone.startsWith("09")) {
+                    return phone.substring(1);
+                } else {
+                    return phone;
+                }
+            }
         },
         async setRelationShip() {
             if (this.gender) {
@@ -180,23 +218,22 @@ export default defineComponent({
         },
         async handleInputData(event: any) {
             if (event.name == "guardianPhoneNumber") {
-                const phone = `+${this.selectedCountry.dialCode}${event.value}`
-                const message = await Validation.validateMobilePhone(phone,this.selectedCountry);
+                const phone = `+${this.selectedCountry.dialCode}${event.value}`;
+                const message = await Validation.validateMobilePhone(phone, this.selectedCountry);
                 this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = null;
-                if(!message.includes("+")){
+                if (!message.includes("+")) {
                     this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = message;
-                }  
-                else{
+                } else {
                     modifyFieldValue(this.guardianInformation, "guardianPhoneNumber", "value", phone);
                 }
-                return true 
+                return true;
             }
             this.validationRules(event);
             this.buildGuardianInformation();
-
         },
         async handleCountryChange(country: any) {
-            this.selectedCountry = country.event
+            this.selectedCountry = country.event;
+            this.guardianInformation[4].data.rowData[0].colData[0].alertsErrorMassage = "";
         },
     },
 });

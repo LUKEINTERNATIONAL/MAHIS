@@ -1,26 +1,39 @@
 <template>
-  <ion-modal  :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
-   <ion-content>
-      <ion-title style="color:black">{{title}}</ion-title>
-      <div style="display:flex;">
-        <DynamicButton
-            expand="block"
-            @click="onYes()"
-            name="Yes"
-            :style="`flex:1`"
-        />
-        <DynamicButton
-            expand="block"
-            @click="onNo()"
-            :style="`flex:1`"
-            name="No"
-            fill="clear"
-        />
+  <ion-modal :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
+        <ion-buttons slot="start" >
+          <ion-title style="color: #0c0c0c">{{ title }}</ion-title>
+          <ion-button @click="closeModal">
+            <ion-icon slot="icon-only" :icon="closeOutline()" style="color: #b02a37"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+    <ion-content>
+      <div v-if="isCheckInPrompt" style="display:flex;">
+        <ion-footer collapse="fade" class="ion-no-border">
+          <ion-row>
+            <ion-col>
+              <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="onYes"> Create visit </ion-button>
+            </ion-col>
+            <ion-col>
+              <DynamicButton name="View profile" @click="onNo()" fill="solid" style="float: right; margin: 2%; width: 130px" />
+            </ion-col>
+          </ion-row>
+        </ion-footer>
+      </div>
+      <div v-else style="display:flex;">
+        <ion-footer collapse="fade" class="ion-no-border">
+          <ion-row>
+            <ion-col>
+              <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="onNo">No</ion-button>
+            </ion-col>
+            <ion-col>
+              <DynamicButton name="Yes" @click="onYes()" fill="solid" style="float: right; margin: 2%; width: 130px" />
+            </ion-col>
+          </ion-row>
+        </ion-footer>
       </div>
     </ion-content>
   </ion-modal>
 </template>
-
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import {
@@ -31,7 +44,7 @@ import {
   IonButtons,
   IonButton,
   IonContent,
-  IonIcon
+  IonIcon, IonFooter, IonRow, IonCol
 } from '@ionic/vue';
 import { closeOutline } from 'ionicons/icons';
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -39,6 +52,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 export default defineComponent({
   name: 'CheckInConfirmationModal',
   components: {
+    IonCol, IonRow, IonFooter,
     DynamicButton,
     IonModal,
     IonHeader,
@@ -75,7 +89,13 @@ export default defineComponent({
         required: true
     }
   },
+  computed: {
+    isCheckInPrompt() {
+      return this.title === "Do you want to create visit or view profile?";
+    }
+  },
   methods: {
+
     closeOutline() {
       return closeOutline;
     },
@@ -94,8 +114,8 @@ export default defineComponent({
 ion-modal {
   --background: rgba(0, 0, 0, 0.9);
   --width: 90%;
-  --height: 10%;
-  --max-width: 500px;
+  --height: 20%;
+  --max-width: 550px;
   --max-height: 100px;
 }
 
@@ -113,5 +133,8 @@ ion-content {
   /* flex-direction: column; */
   /* border: black solid 8px; */
 
+}
+ion-footer {
+  --ion-toolbar-background: #fff;
 }
 </style>

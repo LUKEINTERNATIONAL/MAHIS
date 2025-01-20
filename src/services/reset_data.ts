@@ -36,7 +36,7 @@ import { useMedicalFollowUpStore } from "@/apps/ANC/store/symptomsFollowUp/medic
 import { usePersistentBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/persistentBehaviourStore";
 import { useWomenBehaviourStore } from "@/apps/ANC/store/symptomsFollowUp/womenBehaviourStore";
 import { useMedicStore } from "@/apps/ANC/store/symptomsFollowUp/MedicStore";
-import {usePreventativeCounsellingStore} from "@/apps/ANC/store/counselling/preventativeCounsellingStore";
+import { usePreventativeCounsellingStore } from "@/apps/ANC/store/counselling/preventativeCounsellingStore";
 import { useDewormingStore } from "@/apps/ANC/store/dewormingStore";
 import { useImmunizationStore } from "@/apps/ANC/store/immunizationStore";
 //import { useIntimatePartnerStore } from "@/apps/ANC/store/intimatePartnerStore";
@@ -46,7 +46,7 @@ import { useTBScreeningStore } from "@/apps/ANC/store/TBScreeningStore";
 import { useUrineTestStore } from "@/apps/ANC/store/UrineTestStore";
 import { useLabourObstreticHistoryStore } from "@/apps/LABOUR/stores/obstetric details/obstetric";
 import { useLabourDetailsStore } from "@/apps/LABOUR/stores/obstetric details/labour";
-import { useLabourQuickCheckStore } from "@/apps/LABOUR/stores/physical exam/quickCheck";
+import { useLabourQuickCheckStore } from "@/apps/LABOUR/stores/physical exam/labourQuickCheck";
 import { useLabourPhysicalExamStore } from "@/apps/LABOUR/stores/physical exam/physicalExamination";
 import { usefirstVaginalExaminationStore } from "@/apps/LABOUR/stores/physical exam/firstVaginalExamination";
 import { usePelvicAssessmentStore } from "@/apps/LABOUR/stores/physical exam/pelvicAssessment";
@@ -76,7 +76,7 @@ export async function resetPatientData() {
     const medications = useMedicationsStore();
     const treatmentPlan = useTreatmentPlanStore();
     const diagnosis = useDiagnosisStore();
-    const enrollement = useEnrollementStore();
+    const enrollment = useEnrollementStore();
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
     const weightHeightVitals = useWeightHeightVitalsStore();
@@ -92,7 +92,7 @@ export async function resetPatientData() {
     const ANCdietCounselling = useDietCounsellingStore();
     const ANCphysCounselling = usePhysiologicalCounselingStore();
     const heads = useHeadssAssessmentStore();
-   
+
     const ANCfatalAssment = useFetalAssessment();
     const ANCfatalPres = useFetalPresentationStore();
     const ANCpresSigns = usePresentingSigns();
@@ -148,20 +148,21 @@ export async function resetPatientData() {
     registration.setHomeLocation(registration.getInitialHomeLocation());
     registration.setCurrentLocation(registration.getInitialCurrentLocation());
     registration.setGuardianInformation(registration.getInitialGuardianInformation());
+    registration.setCountry(registration.getInitialCountry());
     weightHeightVitals.setVitals(weightHeightVitals.getInitialVitals());
 
-    enrollement.setDiagnosis(enrollement.getInitialEnrollmentDiagnosis());
-    enrollement.setPatientHistory(enrollement.getInitialPatientHistory());
-    enrollement.setSubstance(enrollement.getInitialSubstance());
-    enrollement.setPatientHistory(enrollement.getInitialFamilyHistory());
-    enrollement.setNCDNumber(enrollement.getInitialNCDNumber());
-    enrollement.setPatientHistoryHIV(enrollement.getInitialPatientHistoryHIV());
+    enrollment.setDiagnosis(enrollment.getInitialEnrollmentDiagnosis());
+    enrollment.setPatientHistory(enrollment.getInitialPatientHistory());
+    enrollment.setSubstance(enrollment.getInitialSubstance());
+    enrollment.setFamilyHistory(enrollment.getInitialFamilyHistory());
+    enrollment.setNCDNumber(enrollment.getInitialNCDNumber());
+    enrollment.setPatientType(enrollment.getInitialPatientType());
+    enrollment.setPatientHistoryHIV(enrollment.getInitialPatientHistoryHIV());
     investigations.$reset();
     outcome.$reset();
     medications.$reset();
     treatmentPlan.$reset();
     diagnosis.$reset();
-    enrollement.$reset();
     nextAppointment.$reset();
 
     ANCobstreticHistory.$reset();
@@ -175,7 +176,7 @@ export async function resetPatientData() {
     ANCwomanBehavior.$reset();
     ANCphysCounselling.$reset();
     heads.$reset();
-   
+
     ANCfatalAssment.$reset();
     ANCfatalPres.$reset();
     ANCpresSigns.$reset();

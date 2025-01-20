@@ -1,170 +1,360 @@
 <template>
+    <div v-if="isSaving" class="spinner-overlay">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <div class="loading-text">Please wait...</div>
+    </div>
     <ion-header>
         <ion-toolbar>
-        <ion-title class="modalTitle">Create Immunization Session Schedule</ion-title>
-        </ion-toolbar>  
+            <ion-title class="modalTitle">Create Immunization Session Schedule</ion-title>
+            <ion-button fill="clear" slot="end" @click="dismiss()">
+                <ion-icon :icon="close" color="white" />
+            </ion-button>
+        </ion-toolbar>
     </ion-header>
     <ion-loading v-show="isSaving" trigger="open-loading" message="Saving, please wait..."> </ion-loading>
     <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
-        <div style="padding-bottom: 200px">
-            <basic-form :contentData="immunizationSessions" @search-change="getAssignees"></basic-form>
+        <div>
+            <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Session name</label>
+            <ion-input clear fill="outline" placeholder="Enter the session name" v-model="sessionName"></ion-input>
+            <div v-if="sessionNameError" class="alerts_error">{{ sessionNameError }}</div>
+        </div>
+        <div style="margin-top: 20px;">
+            <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Repeat type</label>
+            <VueMultiselect :hide-selected="false" :close-on-select="true" :openDirection="'bottom'"
+                :prevent-autofocus="true" :options="repeatTypes.map((value) => value.name)" v-model="selectedRepeatType"
+                :searchable="false" :show-labels="false" placeholder="Select repeat type" />
+            <div v-if="repeatTypeError" class="alerts_error">{{ repeatTypeError }}</div>
+        </div>
+        <div style="margin-top: 20px;" v-if="showNumberOfDays">
+            <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Number of {{ formattedRepeatText
+                }}</label>
+            <ion-input v-model="numberOfDays" clear fill="outline" :placeholder="numberOfDaysPlaceholder"></ion-input>
+            <div v-if="numberOfDaysError" class="alerts_error">{{ numberOfDaysError }}</div>
+        </div>
+        <div style="margin-top: 20px;">
+            <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Start & End Date</label>
+            <VueDatePicker required position="left" placeholder="select start & end date"
+                :range="isRangeOrSingle" :ui="{ input: 'datepicker' }"
+                format="dd/MM/yyyy" v-model="dateRange" :min-date="new Date()">
+                <template #trigger>
+                    <ion-input clear fill="outline" placeholder="select start & end date"
+                        :value="`${formattedDateRange}`">
+                        <ion-icon slot="start" v-bind:icon="calendar"></ion-icon>
+                    </ion-input>
+                </template>
+            </VueDatePicker>
+            <div v-if="dateRangeError" class="alerts_error">{{ dateRangeError }}</div>
+        </div>
+        <div style="margin-top: 20px;">
+            <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Session type</label>
+            <VueMultiselect :hide-selected="false" :close-on-select="true" :openDirection="'bottom'"
+                :prevent-autofocus="true" :options="sessionTypes.map((value) => value.name)"
+                v-model="selectedSessionType" :searchable="false" :show-labels="false"
+                placeholder="Select session type" />
+            <div v-if="sessionTypeError" class="alerts_error">{{ sessionTypeError }}</div>
+        </div>
+        <div style="margin-top: 20px;">
+            <label style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Assignees</label>
+            <VueMultiselect :hide-selected="false" :close-on-select="true" :openDirection="'bottom'"
+                :prevent-autofocus="true" :options="assigneesHolder.map((user: User) => user.username)"
+                v-model="selectedAssignees" :searchable="false" :show-labels="false" placeholder="Select assignees" />
+            <div v-if="assigneesError" class="alerts_error">{{ assigneesError }}</div>
         </div>
     </ion-content>
-    <ion-footer collapse="fade" class="ion-no-border">
+    <ion-footer collapse="fade">
         <ion-row>
             <ion-col>
-                <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="dismiss()"> Cancel </ion-button>
+                <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="dismiss()"> Cancel
+                </ion-button>
             </ion-col>
             <ion-col>
-                <DynamicButton @click="createImmunizationSessionSchedule()" name="Save changes" fill="solid" style="float: right; margin: 2%; width: 130px" />
+                <DynamicButton @click="createImmunizationSessionSchedule()" name="Save changes" fill="solid"
+                    style="float: right; margin: 2%; width: 130px" />
             </ion-col>
         </ion-row>
     </ion-footer>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
     IonContent,
     IonHeader,
-    IonItem,
-    IonList,
     IonTitle,
     IonToolbar,
-    IonMenu,
-    menuController,
     IonInput,
     modalController,
     IonFooter,
-    IonLoading
+    IonLoading,
+    IonIcon,
+    IonButton
 } from "@ionic/vue";
-import { defineComponent, PropType } from "vue";
-import { checkmark, pulseOutline } from "ionicons/icons";
-import { useDemographicsStore } from "@/stores/DemographicStore";
+import { calendar, close } from "ionicons/icons";
+import { computed, onMounted, ref, watch } from "vue";
 import { useImmunizationSessionsStore } from "@/stores/ScheduleImmunizationSession";
-import { mapState } from "pinia";
 import { toastWarning, toastSuccess } from "@/utils/Alerts";
-import BasicInputField from "@/components/BasicInputField.vue";
-import BasicForm from "@/components/BasicForm.vue";
-import PreviousVitals from "@/components/Graphs/previousVitals.vue";
-import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
-import {
-    getFieldValue,
-    modifyFieldValue,
-} from "@/services/data_helpers";
 import DynamicButton from "@/components/DynamicButton.vue";
-import { validateInputFiledData } from "@/services/group_validation";
 import { UserService } from "@/services/user_service";
 import { SessionScheduleService } from "@/services/session_schedule_service";
-import { SessionSchedule, User } from "@/types";
-import { RouteLocationRaw } from "vue-router";
-import { 
-    IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR, 
-    IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS 
+import { RepeatType, User } from "@/types";
+import VueMultiselect from "vue-multiselect";
+
+import {
+    IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR,
+    IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS
 } from "@/utils/Constants";
+import { differenceInDays, format } from "date-fns";
+import { useImmunizationSessionFieldsValidator } from "./validator";
 
-export default defineComponent({
-    components: {
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        IonInput,
-        BasicInputField,
-        BasicForm,
-        PreviousVitals,
-        customDatePicker,
-        DynamicButton,
-        IonFooter,
-        IonLoading,
+const immunizationSessionsStore = useImmunizationSessionsStore();
+const isSaving = ref<boolean>(false);
+const dateRange = ref<Date[] | string>();
+const formatDate = (date: Date | string) => format(new Date(date), "MM/dd/yyyy");
+const repeatTypes = ref<Record<string, string>[]>([{
+    id: "1",
+    name: "Never",
+},
+{
+    id: "2",
+    name: "Daily",
+},
+{
+    id: "3",
+    name: "Weekly",
+},
+{
+    id: "4",
+    name: "Monthly",
+}]);
+const selectedRepeatType = ref<string>("");
+const sessionTypes = ref<Record<string, string>[]>([
+    {
+        id: "1",
+        name: "Static",
     },
-    computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useImmunizationSessionsStore, ["immunizationSessions"]),
+    {
+        id: "2",
+        name: "Outreach",
     },
-    data() {
-        return{
-            isSaving: false as boolean
-        }
-    },
-    props:{
-        data: {
-            type: Object as PropType<Record<string, unknown>>,
-            default: () => ({}),
-        },
-    },
-    async mounted() {
-        this.resetData();
-        const objectIsEmpty = typeof this.data == "object" && this.isObjectEmpty(this.data);
-        if (!objectIsEmpty){
-            this.modifyFieldValue();
-        }
-        await this.getAssignees();
-    },
-    setup() {
-        return { checkmark, pulseOutline };
-    },
-    methods: {
-        isObjectEmpty(obj: object): boolean {
-            return Object.keys(obj).length === 0 && obj.constructor === Object;
-        },
-        modifyFieldValue(): void {
-            modifyFieldValue(this.immunizationSessions, "assignees", "value", {id: this.data.user_id, username: this.data.username });
-        },
-        async createImmunizationSessionSchedule(): Promise<void>{
-            if (validateInputFiledData(this.immunizationSessions)) {
-                this.isSaving = true;
-                const immunizationSessionStore = useImmunizationSessionsStore();
-                const assignees = getFieldValue(this.immunizationSessions, "assignees","value").map((assignee: User) => assignee.user_id)
-                const data: SessionSchedule = {
-                        session_name: getFieldValue(this.immunizationSessions,"batch", "value"),
-                        start_date: getFieldValue(this.immunizationSessions, "start date", "value"),
-                        end_date: getFieldValue(this.immunizationSessions, "end date", "value"),
-                        session_type: getFieldValue(this.immunizationSessions, "product name", "value").name,
-                        repeat: getFieldValue(this.immunizationSessions, "repeat", "value" ).name,
-                        target: getFieldValue(this.immunizationSessions, "target", "value"),
-                        assignees: assignees,
-                    }
+]);
+const selectedSessionType = ref<string>("");
+const showNumberOfDays = ref<boolean>(false);
+const numberOfDays = ref<number>(1);
+const assigneesHolder = ref<User[]>([]);
+const sessionName = ref<string>("");
+const selectedAssignees = ref<string[]>([]);
+const sessionNameError = ref<string>("");
+const dateRangeError = ref<string>("");
+const repeatTypeError = ref<string>("");
+const numberOfDaysError = ref<string>("");
+const sessionTypeError = ref<string>("");
+const assigneesError = ref<string>("");
 
-                const sessionSchedule = new SessionScheduleService();
-                await sessionSchedule.create(data);
-                data ? toastSuccess(IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS) : toastWarning(IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR);
-                this.isSaving = false;
-                immunizationSessionStore.resetFieldValues();
-                modalController.dismiss("dismiss");
-            } else {
-                toastWarning("Please make sure to fill all required fields");
-                this.isSaving = false;
-            }
-        },
-        navigationMenu(url: RouteLocationRaw): void {
-            menuController.close();
-            this.$router.push(url);
-        },
-        resetData(): void {
-            useImmunizationSessionsStore().$reset();
-        },
-        async getAssignees(_filter: any = ""): Promise<void> {
-            const assignees = await UserService.getUsersByRole({
-                role: "Health Surveillance"
-            });
-            const modifiedAssignees = assignees.map((assignee: any) => {
-                return {
-                    ...assignee,
-                    name: assignee.username,
-                    id: assignee.user_id
-                };
-            });
-            modifyFieldValue(this.immunizationSessions, "assignees", "multiSelectData", modifiedAssignees);
-        },
-        dismiss(): void {
-            modalController.dismiss();
-        },
+const isRangeOrSingle = computed((): boolean => {
+    if(selectedRepeatType.value === null) return true
+    if(selectedRepeatType.value.toLowerCase() === "daily") return false
+    return true;
+});
+
+const formattedDateRange = computed((): string => {
+  if (!dateRange.value) return ''
+  if (Array.isArray(dateRange.value)) {
+    const [start, end] = dateRange.value
+    if (!start && !end) return ''
+    if (!start || !end) return formatDate(start || end)
+    return `${formatDate(start)} - ${formatDate(end)}`
+  }
+  return formatDate(dateRange.value)
+});
+
+const startDate = computed((): string => {
+    if (Array.isArray(dateRange.value) && dateRange.value !== undefined) {
+        return formatDate(dateRange.value[0]);
+    }
+
+    if (!Array.isArray(dateRange.value) && dateRange.value !== undefined) {
+        return dateRange.value !== undefined ? formatDate(String(dateRange.value)) : "";
+    }
+
+    return "";
+});
+
+const endDate = computed((): string => {
+    if (Array.isArray(dateRange.value)) {
+        return formatDate(dateRange.value[1]);
+    }
+
+    if (!Array.isArray(dateRange.value)) {
+        return dateRange.value !== undefined ? formatDate(String(dateRange.value)) : "";
+    }
+
+    return "";
+});
+
+const formattedRepeatText = computed((): string => {
+    const repeatMap: Record<RepeatType, string> = {
+        "Never": "Never",
+        "Daily": "days",
+        "Weekly": "weeks",
+        "Monthly": "months",
+    };
+    return repeatMap[selectedRepeatType.value as RepeatType] || "";
+});
+
+const numberOfDaysPlaceholder = computed((): string => {
+    return `Enter number of ${formattedRepeatText.value}`;
+});
+
+const createImmunizationSessionSchedule = async (): Promise<void> => {
+    const validationResult = useImmunizationSessionFieldsValidator(
+        sessionName.value,
+        dateRange.value as Date[] || String,
+        selectedRepeatType.value,
+        numberOfDays.value,
+        selectedSessionType.value,
+        selectedAssignees.value
+    );
+    if (validationResult.isValid) {
+        isSaving.value = true;
+        const assignees = assigneesHolder.value
+            .filter((user: User) => selectedAssignees.value.includes(user.username))
+            .map((user: User) => user.id);
+
+        const data: any = {
+            session_name: sessionName.value,
+            start_date: format(new Date(startDate.value), "yyyy-MM-dd"),
+            end_date: format(new Date(endDate.value), "yyyy-MM-dd"),
+            session_type: selectedSessionType.value,
+            repeat: selectedRepeatType.value,
+            assignees: assignees,
+            frequency: numberOfDays.value
+        };
+
+        const sessionSchedule = new SessionScheduleService();
+        await sessionSchedule.create(data);
+        data ? toastSuccess(IMMUNIZATION_SESSION_SCHEDULE_CREATE_SUCCESS) : toastWarning(IMMUNIZATION_SESSION_SCHEDULE_CREATE_ERROR);
+        isSaving.value = false;
+        immunizationSessionsStore.resetFieldValues();
+        modalController.dismiss("dismiss");
+    } else {
+        handleValidationErrors(validationResult.errors);
+        toastWarning("Please make sure to fill all required fields");
+        isSaving.value = false;
+    }
+};
+
+const handleValidationErrors = (errors: { field: string, message: string }[]): void => {
+    const errorFieldsMap: { [key: string]: any } = {
+        sessionName: sessionNameError,
+        dateRange: dateRangeError,
+        repeatType: repeatTypeError,
+        numberOfDays: numberOfDaysError,
+        sessionType: sessionTypeError,
+        assignees: assigneesError,
+    };
+    Object.keys(errorFieldsMap).forEach(field => {
+        errorFieldsMap[field].value = '';
+    });
+    errors.forEach((error) => {
+        if (errorFieldsMap[error.field]) {
+            errorFieldsMap[error.field].value = error.message;
+        }
+    });
+};
+
+const getAssignees = async (_filter: any = ""): Promise<void> => {
+    const assignees = await UserService.getUsersByRole({
+        role: "Health Surveillance"
+    });
+    const modifiedAssignees = assignees.map((assignee: any) => ({
+        ...assignee,
+        name: assignee.username,
+        id: assignee.user_id
+    }));
+    assigneesHolder.value = modifiedAssignees;
+};
+
+const dismiss = (): void => {
+    modalController.dismiss({ update: true });
+};
+
+watch(selectedRepeatType, (newType: string, oldType: string) => {
+  if (newType === oldType) return;
+  const actions: { [key: string]: () => void } = {
+    null: () => {
+      showNumberOfDays.value = false;
     },
+    Never: () => {
+      showNumberOfDays.value = false;
+    },
+    Daily: () => {
+      showNumberOfDays.value = true;
+      numberOfDays.value = 1;
+      dateRange.value = "";
+    },
+    Weekly: () => {
+      showNumberOfDays.value = true;
+      numberOfDays.value = 1;
+      if (!Array.isArray(dateRange.value)) {
+        dateRange.value = [];
+      }
+    },
+    Monthly: () => {
+      showNumberOfDays.value = true;
+      numberOfDays.value = 1;
+      if (!Array.isArray(dateRange.value)) {
+        dateRange.value = [];
+      }
+    },
+    default: () => {
+      showNumberOfDays.value = true;
+      numberOfDays.value = 1;
+    }
+  };
+  (actions[newType] || actions.default)();
+});
+
+watch([sessionName, dateRange, selectedRepeatType, numberOfDays, selectedSessionType, selectedAssignees], () => {
+    const validationResult = useImmunizationSessionFieldsValidator(
+        sessionName.value,
+        dateRange.value as Date[] || String,
+        selectedRepeatType.value,
+        numberOfDays.value,
+        selectedSessionType.value,
+        selectedAssignees.value
+    );
+    handleValidationErrors(validationResult.errors);
+});
+
+const warnWeeklyRepeatType = () => {
+    toastWarning("Weekly repeat type is not available for more than 7 days");
+    dateRange.value = undefined
+}
+
+watch(dateRange, (newDateRange) => {
+    if (!Array.isArray(newDateRange) || newDateRange.length !== 2) return;
+
+    const [startDate, endDate] = newDateRange;
+    const daysDifference = differenceInDays(endDate, startDate);
+
+    if(selectedRepeatType.value === "Weekly" && daysDifference > 7) {
+        warnWeeklyRepeatType();
+    }
+});
+
+onMounted(async (): Promise<void> => {
+    await getAssignees();
 });
 </script>
 
 <style scoped>
+.alerts_error {
+    margin-top: 2px;
+    color: #b42318;
+    display: flex;
+    font-size: 15px;
+    overflow: hidden;
+    overflow: auto;
+    padding: 5px;
+    border-radius: 3px;
+}
 </style>

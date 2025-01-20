@@ -13,12 +13,20 @@
             :placeholder="placeholder"
             :type="inputType"
             :disabled="disabled"
-            :preferredCountries="['mw']"
-            :defaultCountry="'mw'"
-            :inputOptions="{ showDialCode: false,placeholder: 'Enter a phone number'}"
-            :dropdownOptions="{ showDialCodeInSelection: true, showSearchBox: true, showFlags:true,showDialCodeInList: true, searchBoxPlaceholder: 'Search here...'}"
-            mode="international" 
-            :autoFormat="false"  
+            :preferredCountries="[country?.[0]?.iso2 || 'MW']"
+            :defaultCountry="country?.[0]?.iso2 || 'MW'"
+            :initialCountry="country?.[0]?.iso2 || 'MW'"
+            :inputOptions="{ showDialCode: true, placeholder: 'Enter a phone number' }"
+            :dropdownOptions="{
+                showDialCodeInSelection: true,
+                showSearchBox: true,
+                showFlags: true,
+                showDialCodeInList: true,
+                searchBoxPlaceholder: 'Search here...',
+            }"
+            mode="international"
+            :autoFormat="false"
+            :key="counter"
         >
         </vue-tel-input>
     </div>
@@ -34,13 +42,12 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonIcon, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
-import { defineComponent, watch } from "vue";
+import { defineComponent, watch, ref, getCurrentInstance } from "vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import { caretDownSharp } from "ionicons/icons";
 import { VueTelInput } from "vue-tel-input";
-import { size } from "lodash";
+import { assign, size } from "lodash";
 import "vue-tel-input/vue-tel-input.css";
-import { getElement } from "ionicons/dist/types/stencil-public-runtime";
 export default defineComponent({
     name: "HisFormElement",
     components: {
@@ -56,16 +63,13 @@ export default defineComponent({
             displayList: [] as any,
             popoverOpen: false,
             event: "" as any,
-            phone: this.inputValue || "" as any,
+            phone: this.inputValue || ("" as any),
             options: {} as any,
             selectedText: "" as any,
             filteredData: [] as any,
             showAsterisk: false,
-            country: [{"dialCode": "265","iso2": "MW","name": "Malawi"}] as any
+            country: [{ dialCode: "265", iso2: "MW", name: "Malawi" }] as any,
         };
-    },
-    mounted() {
-        this.phone = this.inputValue;
     },
 
     props: {
@@ -127,11 +131,15 @@ export default defineComponent({
                 show: false,
             },
         },
+        p_country: {
+            type: Array,
+            default: () => [{ dialCode: "265", iso2: "MW", name: "Malawi" }],
+        },
     },
     methods: {
         handleCountryChanged(country: any) {
-            this.country = country
-            this.$emit("countryChanged", this.country);   
+            this.country = country;
+            this.$emit("countryChanged", this.country);
         },
         handleClick(event: any) {
             // if (this.popOverData?.data) this.setEvent(event);
@@ -143,6 +151,7 @@ export default defineComponent({
         handleInput(event: any) {
             //if (this.popOverData?.data) this.setEvent(event);
             this.$emit("update:inputValue", event);
+            this.$emit("update:phone", this.phone)
         },
         handleBlur(event: any) {
             this.$emit("update:inputValue", event);
@@ -169,15 +178,35 @@ export default defineComponent({
             this.showAsterisk = false;
             return str;
         },
+        assignCountryAndPhone(country: any, phone: any) {
+            this.country = [country];
+            this.phone   =  phone;
+        },
     },
     setup(props, { emit }) {
+        const instance = getCurrentInstance();
+        const counter = ref(0);
+        const forceReRender = () => {
+            counter.value++;
+        };
+
         watch(
             () => props.inputValue,
             (newValue, oldValue) => {
                 emit("update:passedinputValue", props.inputValue);
             }
         );
-        return { caretDownSharp };
+
+        watch(() => props.p_country, (newValue) => {
+            if (newValue !== undefined) {
+                instance?.proxy?.assignCountryAndPhone(newValue, props.inputValue);
+                forceReRender();
+            }
+        });
+        return {
+            caretDownSharp,
+            counter,
+        };
     },
 });
 </script>
@@ -196,6 +225,6 @@ h6 {
     --background: #fff;
 }
 .custom >>> .vti__input {
-  background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }
 </style>

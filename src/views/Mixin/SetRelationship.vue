@@ -5,7 +5,8 @@ import { mapState } from "pinia";
 import { RelationsService } from "@/services/relations_service";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { getOfflineRelationship } from "@/services/set_relationships";
+import { getOfflineRecords } from "@/services/offline_service";
+import { useStatusStore } from "@/stores/StatusStore";
 
 export default defineComponent({
     data: () => ({
@@ -16,9 +17,10 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useRegistrationStore, ["guardianInformation", "personInformation"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
         gender() {
-            return getRadioSelectedValue(this.personInformation, "gender") || this.demographics.gender;
+            return getRadioSelectedValue(this.personInformation, "gender") || this.patient?.personInformation?.gender;
         },
     },
     watch: {
@@ -33,9 +35,11 @@ export default defineComponent({
     methods: {
         async getRelationships() {
             if (this.gender) {
-                this.relationshipsData = await getOfflineRelationship();
+                this.relationshipsData = await getOfflineRecords("relationship");
+                if (this.apiStatus && this.relationshipsData.length != useStatusStore().offlineRelationshipStatus?.total) {
+                    this.relationshipsData = await RelationsService.getRelations();
+                }
                 this.filterRelationships();
-
                 this.relationships = this.filteredRelationships
                     .map((r: any) => {
                         return [
@@ -63,15 +67,16 @@ export default defineComponent({
                 "TB Patient",
                 "treatment suporter",
             ];
-
-            this.filteredRelationships = this.relationshipsData.filter((relationship: any) => {
-                if (this.gender === "M") {
-                    return maleRelationships.includes(relationship.a_is_to_b) || commonRelationships.includes(relationship.a_is_to_b);
-                } else if (this.gender === "F") {
-                    return femaleRelationships.includes(relationship.a_is_to_b) || commonRelationships.includes(relationship.a_is_to_b);
-                }
-                return false;
-            });
+            if (this.relationshipsData?.length > 0) {
+                this.filteredRelationships = this.relationshipsData.filter((relationship: any) => {
+                    if (this.gender === "M") {
+                        return maleRelationships.includes(relationship.a_is_to_b) || commonRelationships.includes(relationship.a_is_to_b);
+                    } else if (this.gender === "F") {
+                        return femaleRelationships.includes(relationship.a_is_to_b) || commonRelationships.includes(relationship.a_is_to_b);
+                    }
+                    return false;
+                });
+            }
         },
     },
 });

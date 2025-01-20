@@ -13,7 +13,10 @@
                     style="background: #ddeedd; border-radius: 8px; color: #636363"
                 >
                     <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine)"></ion-icon>
-                    {{ checkVaccineName(vaccine.drug_name) }}
+                    <div class="button-content">
+                        <div style="margin-top: 20px">{{ checkVaccineName(vaccine.drug_name) }}</div>
+                        <div>{{ covertToDate(vaccine.date_administered) }}</div>
+                    </div>
                     <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine)"></ion-icon>
                 </ion-button>
             </ion-col>
@@ -51,10 +54,11 @@ import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { PatientService } from "@/services/patient_service";
 import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdminstredVaccine.vue";
-import { StockService } from '@/services/stock_service';
+import { StockService } from "@/services/stock_service";
 import alert from "@/apps/Immunization/components/Modals/alert.vue";
 import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
-import { mapState } from "pinia";
+import { getOfflineRecords } from "@/services/offline_service";
+import HisDate from "@/utils/Date";
 export default defineComponent({
     name: "Home",
     components: {
@@ -100,9 +104,24 @@ export default defineComponent({
     },
     watch: {},
     setup() {
-        return {}
+        let isModalOpening = false;
+        const cleanupModal = () => {
+            isModalOpening = false;
+            const modalElement = document.querySelector(".pr_o");
+            if (modalElement) {
+                modalElement.remove();
+            }
+        };
+
+        return {
+            isModalOpening,
+            cleanupModal,
+        };
     },
     methods: {
+        covertToDate(date: any) {
+            return HisDate.toStandardHisDisplayFormat(date);
+        },
         getColorForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return "success";
@@ -145,28 +164,43 @@ export default defineComponent({
             }
         },
         async openAdministerVaccineModal(data: any) {
-            const store = useAdministerVaccineStore();
-            store.setCurrentSelectedDrug(data)
-            const stockService = new StockService();
-            const data_ = await stockService.getDrugBatches(data.drug_id)
-            store.setLotNumberData(data_)
-
-            if(data_.length == 0) {
-                if (this.checkIfAdminstredAndAskToVoid() == false) {
-                    if(checkDrugName(data) == false) {
-                        createModal(alert, { class: "otherVitalsModal" })
-                    }
-
-                    if (checkDrugName(data) == true) {
-                        createModal(administerVaccineModal, { class: "otherVitalsModal" });
-                    } 
-                }
+            const modalElement = document.querySelector(".pr_o");
+            if (this.isModalOpening || modalElement) {
+                console.log("Modal already open or opening, current state:", {
+                    isModalOpening: this.isModalOpening,
+                    modalExists: !!modalElement,
+                });
+                return;
             }
 
-            if(data_.length > 0) {
-                if (this.checkIfAdminstredAndAskToVoid() == false) {
-                    createModal(administerVaccineModal, { class: "otherVitalsModal" });
+            try {
+                this.isModalOpening = true;
+
+                const store = useAdministerVaccineStore();
+                store.setCurrentSelectedDrug(data);
+
+                const stockService = new StockService();
+                const drugBatches: any = await getOfflineRecords("stock", { whereClause: { drug_id: data.drug_id } });
+                // await stockService.getDrugBatches(data.drug_id);
+                store.setLotNumberData(drugBatches);
+
+                if (!this.checkIfAdminstredAndAskToVoid()) {
+                    if (drugBatches.length === 0) {
+                        if (!checkDrugName(data)) {
+                            createModal(alert, { class: "otherVitalsModal pr_o" });
+                        } else {
+                            createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
+                        }
+                    } else {
+                        createModal(administerVaccineModal, { class: "otherVitalsModal pr_o" });
+                    }
                 }
+            } catch (error) {
+                console.error("Error opening modal:", error);
+                throw error;
+            } finally {
+                this.isModalOpening = false;
+                console.log("Modal open process completed");
             }
         },
         disableVaccine(vaccine: any) {
@@ -188,22 +222,29 @@ export default defineComponent({
         },
         checkIfAdminstredAndAskToVoid() {
             const store = useAdministerVaccineStore();
-            const vaccine_to_void = store.getCurrentSelectedDrug()
-            if(vaccine_to_void.drug.status == 'administered') {
-                store.setVaccineToBeVoided(vaccine_to_void)
-                createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+            const vaccine_to_void = store.getCurrentSelectedDrug();
+            if (vaccine_to_void.drug.status == "administered") {
+                store.setVaccineToBeVoided(vaccine_to_void);
+                createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false);
                 // const data = await createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
                 // if(data?.voided == true) {
                 //     // this.dismiss()
                 // }
-                return true
+                return true;
             }
-            return false
+            return false;
         },
     },
 });
 </script>
 <style scoped>
+.administerVac .button-content {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    text-align: center; /* Center-align text */
+    width: 100%; /* Full button width */
+    gap: 15px; /* Space between items (adjust value as needed) */
+}
 .demographics {
     box-sizing: border-box;
     width: 95vw;
@@ -475,13 +516,13 @@ export default defineComponent({
     align-items: center;
 }
 .administerVac {
-  height: 58px;
-  min-width: 160px;
-  max-width: 100%; 
-  width: auto; 
-  margin: 7px;
-  white-space: nowrap; 
-  overflow: hidden;
-  text-overflow: ellipsis; 
+    height: 78px;
+    min-width: 160px;
+    max-width: 100%;
+    width: auto;
+    margin: 7px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

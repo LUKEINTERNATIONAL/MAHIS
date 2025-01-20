@@ -796,6 +796,34 @@ const initialFamilyHistory = [
         },
     },
 ];
+const initialPatientType = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+
+        radioBtnContent: {
+            header: {
+                title: "Patient Type",
+                name: "Visit type",
+                selectedValue: "",
+            },
+            data: [
+                {
+                    name: "New",
+                    value: "New patient",
+                },
+                {
+                    name: "External consultation",
+                    value: "External consultation",
+                },
+                {
+                    name: "Transferred in",
+                    value: "Patient transferred in",
+                },
+            ],
+        },
+    },
+];
 const initialNCDNumber = [
     {
         selectedData: [],
@@ -825,6 +853,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
         patientHistoryHIV: [...patientHistoryHIV],
         patientHistory: [...patientHistory],
         familyHistory: [...initialFamilyHistory],
+        patientType: [...initialPatientType],
         NCDNumber: [...initialNCDNumber],
     }),
     actions: {
@@ -844,6 +873,10 @@ export const useEnrollementStore = defineStore("enrollementStore", {
             const data = _.cloneDeep(initialFamilyHistory);
             return [...data];
         },
+        getInitialPatientType() {
+            const data = _.cloneDeep(initialPatientType);
+            return [...data];
+        },
         getInitialNCDNumber() {
             const data = _.cloneDeep(initialNCDNumber);
             return [...data];
@@ -854,6 +887,9 @@ export const useEnrollementStore = defineStore("enrollementStore", {
         },
         setSubstance(data: any) {
             this.substance = data;
+        },
+        setPatientType(data: any) {
+            this.patientType = data;
         },
         setDiagnosis(data: any) {
             this.enrollmentDiagnosis = data;

@@ -10,21 +10,18 @@ export const usePatientList = defineStore('counter', {
         patientsWaitingForVitals:[],
         patientsWaitingForConsultation:[],
         patientsWaitingForDispensation:[],
+        patientsWaitingForLab:[],
         counter:0
       };
     },
     actions: {
-     async refresh(){
+         async refresh(locationId: number){
         try {
-            this.patientsWaitingForVitals = await PatientOpdList.getPatientList("VITALS");
-            
-            this.patientsWaitingForConsultation = await PatientOpdList.getPatientList(
-              "CONSULTATION"
-            );
-            this.patientsWaitingForDispensation = await PatientOpdList.getPatientList(
-              "DISPENSATION"
-            );
-            
+            const vitalsList = await PatientOpdList.getPatientList("VITALS", locationId);
+            this.patientsWaitingForVitals = vitalsList;
+            this.patientsWaitingForConsultation = await PatientOpdList.getPatientList("CONSULTATION",locationId);
+            this.patientsWaitingForLab = await PatientOpdList.getPatientList("LAB",locationId);
+            this.patientsWaitingForDispensation = await PatientOpdList.getPatientList("DISPENSATION", locationId);
             this.counter++;
     
           } catch (e) {}

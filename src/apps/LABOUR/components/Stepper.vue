@@ -83,7 +83,7 @@ import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
 import LabourVitals from "@/apps/LABOUR/components/repeatable things/LabourVitals.vue";
 import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
-import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
+import QuickCheck from "@/apps/LABOUR/components/physical exam/LabourQuickCheck.vue";
 import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
 import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
 import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
@@ -95,6 +95,12 @@ import Obstetric from "./obstetric details/Obstetric.vue";
 import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
 import ImmidiatePostnatalChecksForChild from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
 import ImmidiatePostnatalChecksForMother from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
+LabourAllergies;
+LabourPastSurgeries;
+LabourChronicHealthConditions;
+LabourVaccineHistory;
+LabourMedications;
+LabourObstetricHistory;
 
 export default defineComponent({
     name: "Home",

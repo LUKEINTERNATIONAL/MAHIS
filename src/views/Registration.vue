@@ -39,12 +39,13 @@
                         <PersonalInformation />
                     </div>
                     <div class="flex-item">
-                        <CurrentLocation />
-                        <SocialHistory v-if="checkUnderFourteen" />
-                        <BirthRegistration v-if="checkUnderNine" />
+                        <Country />
+                        <CurrentLocation v-if="regSelectedCountry == 'Malawi'" />
+                        <HomeLocation v-if="regSelectedCountry == 'Malawi'" />
                     </div>
                     <div class="flex-item">
-                        <HomeLocation />
+                        <SocialHistory v-if="checkUnderFourteen" />
+                        <BirthRegistration v-if="checkUnderNine" />
                         <GuardianInformation />
                     </div>
                 </div>
@@ -56,8 +57,9 @@
                 </div>
                 <div v-if="currentStep == 'Location'">
                     <div style="justify-content: center">
-                        <div><CurrentLocation /></div>
-                        <div><HomeLocation /></div>
+                        <div><Country /></div>
+                        <div v-if="regSelectedCountry == 'Malawi'"><CurrentLocation /></div>
+                        <div v-if="regSelectedCountry == 'Malawi'"><HomeLocation /></div>
                     </div>
                 </div>
                 <div v-if="currentStep == 'Social History'">
@@ -74,7 +76,7 @@
         </div>
         <ion-footer v-if="registrationDisplayType == 'list' || screenWidth <= 991">
             <div class="footer position_content">
-                <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="nav('/home')" />
+                <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="cancel($event)" />
                 <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
                 <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
                     <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ active: currentStep === 'Personal Information' }">
@@ -116,6 +118,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import PersonalInformation from "@/components/Registration/PersonalInformation.vue";
 import GuardianInformation from "@/components/Registration/GuardianInformation.vue";
 import HomeLocation from "@/components/Registration/HomeLocation.vue";
+import Country from "@/components/Registration/Country.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
@@ -126,7 +129,7 @@ import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { resetPatientData } from "@/services/reset_data";
 import { validateField } from "@/services/validation_service";
-import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { toastSuccess, toastWarning, popoverConfirmation, toastDanger } from "@/utils/Alerts";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
@@ -136,7 +139,6 @@ import { formatInputFiledData } from "@/services/formatServerData";
 import { validateInputFiledData } from "@/services/group_validation";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { resetDemographics } from "@/services/reset_data";
-import { savePatientRecord } from "@/services/save_records";
 import Districts from "@/views/Mixin/SetDistricts.vue";
 import PersonMatchView from "@/components/PersonMatchView.vue";
 import { createModal } from "@/utils/Alerts";
@@ -145,9 +147,15 @@ import db from "@/db";
 import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { getOfflineRecords } from "@/services/offline_service";
+import { useStatusStore } from "@/stores/StatusStore";
+import { useWorkerStore } from "@/stores/workerStore";
+import { getOfflineVaccineSchedule } from "@/apps/Immunization/services/vaccines_service";
+import { RegistrationService } from "@/services/registration_service";
+import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
-    mixins: [ScreenSizeMixin, Districts, SetDemographics],
+    mixins: [ScreenSizeMixin, Districts],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -161,12 +169,14 @@ export default defineComponent({
         PersonalInformation,
         GuardianInformation,
         CurrentLocation,
+        Country,
         HomeLocation,
         SocialHistory,
         BirthRegistration,
     },
     data() {
         return {
+            ddeId: null as any,
             iconListStatus: "active_icon",
             deduplicationData: "active_icon",
             iconGridStatus: "inactive_icon",
@@ -182,18 +192,24 @@ export default defineComponent({
             checkUnderSixWeeks: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             disableSaveBtn: false,
+            workerStore: useWorkerStore() as any,
         };
     },
     props: ["registrationType"],
     computed: {
+        ...mapState(useGeneralStore, ["NCDUserActions", "regSelectedCountry"]),
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
-        ...mapState(useRegistrationStore, ["personInformation"]),
-        ...mapState(useRegistrationStore, ["socialHistory"]),
-        ...mapState(useRegistrationStore, ["homeLocation"]),
-        ...mapState(useRegistrationStore, ["currentLocation"]),
-        ...mapState(useRegistrationStore, ["guardianInformation"]),
+        ...mapState(useRegistrationStore, [
+            "personInformation",
+            "socialHistory",
+            "currentLocation",
+            "homeLocation",
+            "guardianInformation",
+            "country",
+        ]),
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
         ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
         nationalID() {
             return getFieldValue(this.personInformation, "nationalID", "value");
         },
@@ -205,6 +221,9 @@ export default defineComponent({
         },
         lastname() {
             return getFieldValue(this.personInformation, "lastname", "value");
+        },
+        phoneNumber() {
+            return getFieldValue(this.personInformation, "phoneNumber", "value");
         },
         gender() {
             return getRadioSelectedValue(this.personInformation, "gender");
@@ -264,8 +283,12 @@ export default defineComponent({
         $route: {
             async handler(data) {
                 this.currentStep = "Personal Information";
-                // await resetPatientData();
+                // await await resetPatientData();
                 if (data.name == "registration") resetDemographics();
+                await this.getLocationData();
+                modifyFieldValue(this.country, "country", "multiSelectData", this.countriesList);
+                modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
+                modifyFieldValue(this.homeLocation, "home_district", "multiSelectData", this.districtList);
             },
             deep: true,
         },
@@ -274,6 +297,16 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        async cancel(event: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to cancel registration?`, "", {
+                confirmBtnLabel: "Yes",
+                icon: "",
+                showBackdrop: true,
+            });
+            if (deleteConfirmed) {
+                this.nav("/home");
+            }
+        },
         programID() {
             return Service.getProgramID();
         },
@@ -321,12 +354,41 @@ export default defineComponent({
         nav(url: any) {
             this.$router.push(url);
         },
-        nextStep() {
-            if (this.checkUnderFourteen) this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
+        async nextStep() {
+            if (this.checkUnderFourteen || this.checkUnderFive)
+                this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex < this.steps.length - 1) {
-                this.currentStep = this.steps[currentIndex + 1];
+                if (this.currentStep === "Personal Information") {
+                    const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
+                    if (await this.validations(this.personInformation, fields)) {
+                        this.currentStep = this.steps[currentIndex + 1];
+                    } else {
+                        toastWarning("Please fill fileds correctly before you proceed!");
+                    }
+                } else if (this.currentStep === "Location") {
+                    const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
+                    if (
+                        ((await this.validations(this.currentLocation, currentFields)) && (await validateInputFiledData(this.homeLocation))) ||
+                        this.regSelectedCountry != "Malawi"
+                    ) {
+                        this.currentStep = this.steps[currentIndex + 1];
+                    } else {
+                        toastWarning("Please fill fileds correctly before you proceed!");
+                    }
+                } else if (this.currentStep === "Social History") {
+                    if (this.checkUnderFive || this.checkUnderOne) {
+                        if (await validateInputFiledData(this.birthRegistration)) {
+                            this.currentStep = this.steps[currentIndex + 1];
+                        } else {
+                            toastWarning("Please fill fileds correctly before you proceed!");
+                        }
+                    } else {
+                        this.currentStep = this.steps[currentIndex + 1];
+                    }
+                }
+                //this.currentStep = this.steps[currentIndex + 1];
             }
         },
         previousStep() {
@@ -337,7 +399,8 @@ export default defineComponent({
         },
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
-            this.openNewPage(patientData);
+            await useDemographicsStore().setPatientRecord(patientData);
+            this.setURLs();
         },
 
         validateGaudiarnInfo() {
@@ -349,93 +412,152 @@ export default defineComponent({
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
-        async possibleDuplicates() {
-            const ddeInstance = new PatientDemographicsExchangeService();
-            this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
-            if (this.deduplicationData.length > 0) {
-                const response: any = await createModal(PersonMatchView, { class: "fullScreenModal" }, true, {
-                    to_be_registered: toRaw(this.personInformation[0].selectedData),
-                    deduplicationData: this.deduplicationData,
-                });
-                if (response != "dismiss" && response != "back") {
-                    const result = await ddeInstance.importPatient(response?.person?.id);
-                    await this.findPatient(result.patient_id);
+        async validateLocation() {
+            if (this.regSelectedCountry == "Malawi") {
+                if ((await validateInputFiledData(this.homeLocation)) && (await validateInputFiledData(this.currentLocation))) {
                     return true;
-                } else if (response == "back") {
-                    return true;
+                } else {
+                    return false;
                 }
-                return false;
             } else {
+                return true;
+            }
+        },
+        async possibleDuplicates() {
+            try {
+                const ddeInstance = new PatientDemographicsExchangeService();
+                this.deduplicationData = await ddeInstance.checkPotentialDuplicates(toRaw(this.personInformation[0].selectedData));
+                if (this.deduplicationData.length > 0) {
+                    const response: any = await createModal(PersonMatchView, { class: "fullScreenModal" }, true, {
+                        to_be_registered: toRaw(this.personInformation[0].selectedData),
+                        deduplicationData: this.deduplicationData,
+                    });
+                    if (response != "dismiss" && response != "back") {
+                        const result = await ddeInstance.importPatient(response?.person?.id);
+                        await this.findPatient(result.patient_id);
+                        return true;
+                    } else if (response == "back") {
+                        return true;
+                    }
+                    return false;
+                } else {
+                    return false;
+                }
+            } catch (error) {
                 return false;
             }
         },
         async createPatient() {
-            const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
-            const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
-            await this.buildPersonalInformation();
-            const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
-            const isOtherSelected = selectedLandmark?.name === "Other";
+            const ddeIds: any = await getOfflineRecords("dde").then((data: any) => data?.[0]);
+            if (ddeIds?.ids?.length > 0 || this.apiStatus) {
+                this.ddeId = ddeIds?.ids[0]?.npid || "";
 
-            if (isOtherSelected) {
-                currentFields.push("Other (specify)");
-            }
-            if (
-                (await this.validations(this.personInformation, fields)) &&
-                (await this.validations(this.currentLocation, currentFields)) &&
-                (await validateInputFiledData(this.homeLocation)) &&
-                (await this.validateBirthData()) &&
-                this.validateGaudiarnInfo()
-            ) {
-                this.disableSaveBtn = true;
-                this.isLoading = true;
+                const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
+                const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
+                const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
+                const isOtherSelected = selectedLandmark?.name === "Other";
 
-                if (this.globalPropertyStore.dde_enabled) {
-                    if (await this.possibleDuplicates()) {
-                        this.disableSaveBtn = false;
-                        this.isLoading = false;
-                        return;
-                    }
+                if (isOtherSelected) {
+                    currentFields.push("Other (specify)");
                 }
+                if (
+                    (await this.validations(this.personInformation, fields)) &&
+                    (await this.validateLocation()) &&
+                    (await this.validateBirthData()) &&
+                    this.validateGaudiarnInfo()
+                ) {
+                    await this.buildPersonalInformation();
+                    this.disableSaveBtn = true;
+                    this.isLoading = true;
 
-                if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
-                const offlinePatientID = Date.now();
-                await this.createOfflineRecord(offlinePatientID);
-                await savePatientRecord();
-                toastSuccess("Successfully Created Patient");
-                await db
-                    .collection("patientRecords")
-                    .doc({ offlinePatientID: offlinePatientID })
-                    .get()
-                    .then(async (document: any) => {
-                        if (document.serverPatientID) {
-                            this.openNewPage(document.patientData);
-                        } else {
-                            await this.setOfflineData(document);
+                    if (this.globalPropertyStore.dde_enabled === "true" && this.apiStatus) {
+                        if (await this.possibleDuplicates()) {
+                            this.disableSaveBtn = false;
+                            this.isLoading = false;
+                            return;
                         }
-                    });
+                    }
+
+                    if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
+                    const patientData = await this.buildPatientRecord();
+                    if (ddeIds?.ids?.length > 0) {
+                        ddeIds.ids = ddeIds.ids.slice(1);
+                        this.workerStore.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: ddeIds });
+                    }
+
+                    if ((this.apiStatus && this.programID() != 33) || (this.apiStatus && ddeIds?.ids?.length == 0)) {
+                        this.workerStore.postData("SYNC_DDE");
+                        const result = await new RegistrationService().saveDemographicsRecord(patientData);
+                        await useDemographicsStore().setPatientRecord(result);
+                        this.workerStore.postData("SYNC_ALL_DATA");
+                        await this.setURLs();
+                    } else if (ddeIds?.ids?.length > 0) {
+                        const demographicsStore = useDemographicsStore();
+                        demographicsStore.setRecord(patientData);
+                        await this.workerStore.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: patientData });
+                        this.isLoading = false;
+                        this.$router.push("/patientProfile");
+                    } else {
+                        toastDanger("DDE IDs are not available. Please connect to the server to sync the IDs.");
+                    }
+                } else {
+                    toastWarning("Please complete all required fields");
+                }
             } else {
-                toastWarning("Please complete all required fields");
+                toastDanger("DDE IDs are not available. Please connect to the server to sync the IDs.");
             }
         },
-        async createOfflineRecord(offlinePatientID: any) {
-            await db.collection("patientRecords").add({
-                offlinePatientID: offlinePatientID,
-                serverPatientID: "",
-                patientData: "",
+        async buildPatientRecord() {
+            const Weight = getFieldValue(this.birthRegistration, "Weight", "value");
+            let vitals: any = {
+                saved: [],
+                unsaved: [],
+            };
+            if (Weight) {
+                vitals.unsaved = [
+                    {
+                        concept_id: 5089,
+                        obs_datetime: HisDate.currentDate(),
+                        value_numeric: Weight,
+                    },
+                ];
+            }
+            const birthdate = this.personInformation[0].selectedData.birthdate;
+            const gender = this.personInformation[0].selectedData.gender;
+            const offlineRecord: any = {
+                patientID: "",
+                ID: this.ddeId,
+                NcdID: "",
                 personInformation: toRaw(this.personInformation[0].selectedData),
-                guardianInformation: toRaw(this.guardianInformation[0].selectedData),
+                guardianInformation: {
+                    saved: [],
+                    unsaved: [toRaw(this.guardianInformation[0].selectedData)],
+                },
                 birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
                 otherPersonInformation: {
                     nationalID: this.validatedNationalID(),
                     birthID: this.validatedBirthID(),
                     relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
                 },
+                vitals: vitals,
+                vaccineSchedule: await getOfflineVaccineSchedule(gender, birthdate),
+                vaccineAdministration: {
+                    orders: [],
+                    obs: [],
+                    voided: [],
+                },
+                appointments: {
+                    saved: [],
+                    unsaved: [],
+                },
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",
+                saveStatusVitals: "pending",
                 date_created: "",
                 creator: "",
-            });
+            };
+            return offlineRecord;
         },
         checkWeightForAge(age: any, weight: any) {
             let isValid = false;
@@ -484,20 +606,16 @@ export default defineComponent({
                 return this.birthID;
             } else return "";
         },
-        async setOfflineData(item: any) {
+        async setURLs() {
             await resetPatientData();
-            this.setOfflineDemographics(item);
             this.isLoading = false;
-            let url = "/patientProfile";
             this.disableSaveBtn = false;
-            this.$router.push(url);
-        },
-        async openNewPage(item: any) {
-            await resetPatientData();
-            this.setDemographics(item);
-            this.isLoading = false;
-            let url = "/patientProfile";
-            this.disableSaveBtn = false;
+            let url = "";
+            if (this.programID() == 32 && this.apiStatus) {
+                url = "/consultationPlan";
+            } else {
+                url = "/patientProfile";
+            }
             this.$router.push(url);
         },
         patientIdentifier(item: any) {
@@ -517,7 +635,9 @@ export default defineComponent({
                 gender: this.gender,
                 birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
                 birthdate_estimated: "false",
-                home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
+                home_region:
+                    (await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name)) ||
+                    (await this.getRegion(getFieldValue(this.country, "country", "value")?.name)),
                 home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
                 home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
                 home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
@@ -525,6 +645,7 @@ export default defineComponent({
                 current_district: this.current_district,
                 current_traditional_authority: this.current_traditional_authority,
                 current_village: this.current_village,
+                country: getFieldValue(this.country, "country", "value")?.name,
                 landmark: landmark,
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),

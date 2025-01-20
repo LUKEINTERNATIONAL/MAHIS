@@ -10,6 +10,7 @@
                 :StepperData="StepperData"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -60,9 +61,9 @@ import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 export default defineComponent({
     name: "postnatalDetails",
-  mixins: [SetUserRole, SetEncounter],
-  components: {
-      BasicFooter,
+    mixins: [SetUserRole, SetEncounter],
+    components: {
+        BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -157,7 +158,7 @@ export default defineComponent({
         });
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useObstetricDetailsStore, ["obstetricDetails"]),
         ...mapState(useDeliveryDetailsStore, ["deliveryDetails"]),
         ...mapState(useHIVStatusAndTreatmentStore, ["hivStatusAndTreatment"]),
@@ -212,6 +213,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = false;
             //   }
         },
+        getSaveFunction() {},
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
                 delete item?.display;
@@ -221,14 +223,14 @@ export default defineComponent({
         async saveData() {
             await this.savePostnatalDetails();
             //toastSuccess("Postnatal details data saved successfully")
-            resetPatientData();
+            await resetPatientData();
             this.$router.push("home");
         },
 
         async savePostnatalDetails() {
             if (this.obstetricDetails.length > 0 && this.deliveryDetails.length > 0 && this.hivStatusAndTreatment.length > 0) {
                 const userID: any = Service.getUserID();
-                const postnatalDetails = new PostnatalDetailsService(this.demographics.patient_id, userID);
+                const postnatalDetails = new PostnatalDetailsService(this.patient.patientID, userID);
                 const encounter = await postnatalDetails.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient postnatal details  encounter");
                 const patientStatus = await postnatalDetails.saveObservationList(await this.buildPostnatalDetails());

@@ -1,65 +1,70 @@
 <template>
     <ion-row>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Level of consciousness</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <LevelOfConsciousness />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Presenting complaints</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <PresentingComplaints />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-        <ion-accordion-group ref="accordionGroup" class="previousView" v-if="checkPatient()">
-            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Pregnancy and breastfeeding status</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <PregnancyBreastfeeding />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Past medical history</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <PastMedicalHistory />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Allergies</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <Allergies />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Physical examination</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <PhysicalExamination />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
+        <div v-if="presentingComplaints && presentingComplaints.length > 0" style="width: 100%">
+            <VisitHistory />
+        </div>
+        <div style="width: 100%" v-else>
+            <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Level of consciousness</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <LevelOfConsciousness />
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
+            <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Presenting complaints</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <PresentingComplaints />
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
+            <ion-accordion-group ref="accordionGroup" class="previousView" v-if="checkPatient()">
+                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Pregnancy and breastfeeding status</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <PregnancyBreastfeeding />
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
+            <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Past medical history</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <PastMedicalHistory />
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
+            <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Allergies</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <Allergies />
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
+            <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Physical examination</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <PhysicalExamination />
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
+        </div>
     </ion-row>
 </template>
 
@@ -79,6 +84,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import labOrderResults from "@/components/Lab/labOrderResults.vue";
+import { EncounterService } from "@/services/encounter_service";
 import { LabOrder } from "@/services/lab_order";
 import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue";
 import LevelOfConsciousness from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/LevelOfConsciousness.vue";
@@ -86,6 +92,7 @@ import PastMedicalHistory from "@/apps/OPD/components/ConsultationPlan/ClinicalA
 import PhysicalExamination from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PhysicalExamination.vue";
 import PregnancyBreastfeeding from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PregnancyBreastfeeding.vue";
 import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
+import VisitHistory from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/VisitHistory.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import {
     modifyCheckboxInputField,
@@ -123,6 +130,7 @@ export default defineComponent({
         PhysicalExamination,
         PregnancyBreastfeeding,
         PresentingComplaints,
+        VisitHistory,
     },
     data() {
         return {
@@ -152,185 +160,64 @@ export default defineComponent({
         };
     },
     setup() {
-        return { checkmark, pulseOutline };
+        const presentingComplaints = ref<string[]>([]);
+
+        async function loadSavedEncounters(patientVisitDate: any) {
+            const patient = new PatientService();
+            const encounters = await EncounterService.getEncounters(patient.getID(), { date: patientVisitDate });
+            await setPresentingComplainsEncounters(encounters);
+        }
+
+        async function setPresentingComplainsEncounters(data: any) {
+            const observations = data.find((encounter: any) => encounter.type.name === "PRESENTING COMPLAINTS")?.observations;
+            if (observations) {
+                presentingComplaints.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
+            } else {
+                presentingComplaints.value = [];
+            }
+        }
+
+        function filterObs(observations: any, conceptName: string) {
+            return observations?.filter((obs: any) => obs.concept.concept_names.some((name: any) => name.name === conceptName));
+        }
+
+        async function getConceptValues(filteredObservations: any, type: string) {
+            if (filteredObservations) {
+                return Promise.all(
+                    filteredObservations.map(async (item: any) => {
+                        return await ConceptService.getConceptName(item.value_coded);
+                    })
+                );
+            }
+            return [];
+        }
+
+        const mounted = async () => {
+            const todayDate = new Date().toISOString().split("T")[0];
+            await loadSavedEncounters(todayDate);
+        };
+        mounted();
+        return {
+            presentingComplaints,
+            loadSavedEncounters,
+        };
     },
     computed: {
-        ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDemographicsStore, ["demographics"]),
-        inputFields() {
-            return this.investigations[0].data.rowData[0].colData;
-        },
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     watch: {
-        investigations: {
-            handler() {
-                this.setDashedBox();
-            },
-            deep: true,
+      presentingComplaints: {
+        handler(newValue) {
+
         },
+        deep: true
+      }
     },
-    async mounted() {
-        this.updateInvestigationsStores();
-        this.setDashedBox();
-        this.orders = await OrderService.getOrders(this.demographics.patient_id);
-        this.labOrders = await OrderService.getTestTypes();
-    },
+
     methods: {
         checkPatient() {
             const patient = new PatientService();
             return patient.isChildBearing();
-        },
-        updateInvestigationsStores() {
-            const investigationsStore = useInvestigationStore();
-            investigationsStore.setInvestigations(this.investigations);
-        },
-        displayInputFields() {
-            this.testResult = "";
-            this.selectedText = "";
-            this.no_item = false;
-            this.addItemButton = false;
-            this.search_item = true;
-        },
-        async validateRowData() {
-            const firstCol = this.investigations[0].data.rowData[0].colData[0];
-            const secondCol = this.investigations[0].data.rowData[0].colData[1];
-
-            firstCol.alertsErrorMassage = false;
-            firstCol.alertsErrorMassage = "";
-            secondCol.alertsErrorMassage = false;
-            secondCol.alertsErrorMassage = "";
-
-            secondCol.disabled = false;
-
-            const testValue = this.inputFields[0].value;
-            const specimenValue = this.inputFields[1].value;
-
-            this.test = await this.filterTest(testValue);
-            this.filteredSpecimen = await this.filterSpecimen(specimenValue);
-
-            const testMatches = testValue && this.test[0]?.name === testValue;
-            const specimenMatches = specimenValue && this.filteredSpecimen[0]?.name === specimenValue;
-
-            if (testValue) {
-                if (testMatches) {
-                    this.specimen = await OrderService.getSpecimens(firstCol.value);
-                    if (this.specimen.length == 1) {
-                        secondCol.value = this.specimen[0].name;
-                        secondCol.disabled = true;
-                    }
-                    secondCol.popOverData.data = this.specimen;
-                } else {
-                    secondCol.value = "";
-                    this.search_item = true;
-                    firstCol.alertsErrorMassage = true;
-                    firstCol.alertsErrorMassage = "Please select test from the list";
-                }
-            } else {
-                secondCol.value = "";
-            }
-
-            if (specimenValue && !specimenMatches && !secondCol.disabled) {
-                secondCol.alertsErrorMassage = true;
-                secondCol.alertsErrorMassage = "Please select specimen from the list";
-            }
-
-            return testMatches && (specimenMatches || secondCol.disabled);
-        },
-        async addNewRow() {
-            if (await this.validateRowData()) {
-                this.saveTest();
-                this.investigations[0].data.rowData[0].colData[0].value = "";
-                this.investigations[0].data.rowData[0].colData[1].value = "";
-                this.search_item = false;
-                this.display_item = true;
-                this.addItemButton = true;
-            }
-            this.investigations[0].data.rowData[0].colData[0].popOverData.data = [];
-        },
-        async saveTest() {
-            const investigationInstance = new LabOrder();
-            await investigationInstance.postActivities(this.demographics.patient_id, [
-                {
-                    concept_id: this.test[0].concept_id,
-                    name: this.inputFields[0].value,
-                    specimen: this.inputFields[1].value,
-                    reason: "Routine",
-                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value),
-                },
-            ]);
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
-        },
-        buildResults() {
-            const modifier = this.inputFields[1].value.charAt(0);
-            const result = parseInt(this.inputFields[1].value.substring(1));
-            const measures = {
-                indicator: {
-                    concept_id: 679,
-                },
-                value: result,
-                value_modifier: modifier,
-                value_type: "numeric",
-            };
-        },
-        async handleInputData(col: any) {
-            if (col.inputHeader == "Test") {
-                this.popoverOpen = true;
-                this.testData = await this.filterTest(col.value);
-                this.investigations[0].data.rowData[0].colData[0].popOverData.data = this.testData;
-            }
-            this.validateRowData();
-        },
-
-        async filterTest(name: any) {
-            return await this.labOrders.filter((item: any) => item.name.toLowerCase().includes(name.toLowerCase()));
-        },
-        async filterSpecimen(name: any) {
-            if (this.specimen[0]?.name && name) {
-                return await this.specimen.filter((item: any) => item?.name.toLowerCase().includes(name.toLowerCase()));
-            } else {
-                return [];
-            }
-        },
-        setTest(value: any) {
-            this.selectedText = value.name;
-            if (this.inputFields[0].inputHeader == "Test") {
-                this.investigations[0].data.rowData[0].colData[0].value = value.name;
-            } else {
-                this.investigations[0].data.rowData[0].colData[1].value = value.name;
-            }
-            this.updateInvestigationsStores();
-        },
-        async openDeletePopover(e: any) {
-            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e[1]} ?`, e[0]);
-            if (deleteConfirmed) {
-                this.deleteTest(e[1]);
-            }
-        },
-        deleteTest(test: any) {
-            this.investigations[0].selectedData = this.investigations[0].selectedData.filter((item: any) => item.display[0] !== test);
-            this.updateInvestigationsStores();
-        },
-        editTest(test: any) {
-            this.deleteTest(test[0]);
-            this.selectedText = test[0];
-            this.investigations[0].data.rowData[0].colData[0].value = test[0];
-            this.investigations[0].data.rowData[0].colData[1].value = test[1];
-            this.addItemButton = false;
-            this.search_item = true;
-            this.updateInvestigationsStores();
-        },
-        setDashedBox() {
-            if (this.inputFields[0].value || this.inputFields[1].value) {
-                this.addItemButton = false;
-                this.search_item = true;
-                this.no_item = false;
-            }
-            if (this.investigations[0].selectedData.length > 0) {
-                this.display_item = true;
-                this.no_item = false;
-            } else if (!this.search_item) {
-                this.no_item = true;
-            }
         },
     },
 });

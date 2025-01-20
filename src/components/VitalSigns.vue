@@ -92,13 +92,13 @@ export default defineComponent({
         },
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
         await this.setTodayVitals();
         const userID: any = Service.getUserID();
-        this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+        this.vitalsInstance = new VitalsService(this.patient.patientID, userID);
         await this.validaterowData("onload");
     },
     setup() {
@@ -106,12 +106,12 @@ export default defineComponent({
     },
     methods: {
         async setTodayVitals() {
-            const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+            const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temperature", "Pulse", "SAO2", "Respiratory rate"];
             const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
             const mandatoryDone = [] as any;
-          const age = HisDate.getAgeInYears(this.demographics?.birthdate);
-          const promises = array.map(async (item: any) => {
-                const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
+            const age = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
+            const promises = array.map(async (item: any) => {
+                const firstDate = await ObservationService.getFirstObsDatetime(this.patient.patientID, item);
                 if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
                     if (item == "Weight") {
                         modifyCheckboxValue(this.vitals, "Height And Weight Not Done", "displayNone", true);
@@ -126,7 +126,7 @@ export default defineComponent({
                         this.vitals,
                         item,
                         "value",
-                        await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
+                        await ObservationService.getFirstValueNumber(this.patient.patientID, item, HisDate.currentDate())
                     );
                     modifyFieldValue(this.vitals, item, "disabled", true);
                     mandatoryDone.push("true");
@@ -135,10 +135,10 @@ export default defineComponent({
                 } else {
                     modifyFieldValue(this.vitals, item, "value", "");
                 }
-              if (item === "Respiratory rate" && age <= 5) {
-                modifyFieldValue(this.vitals, item, "required", true);
-                modifyFieldValue(this.vitals, item, "inputHeader", "Respiratory rate*");
-              }
+                if (item === "Respiratory rate" && age <= 5) {
+                    modifyFieldValue(this.vitals, item, "required", true);
+                    modifyFieldValue(this.vitals, item, "inputHeader", "Respiratory rate*");
+                }
             });
 
             await Promise.all(promises);
@@ -205,6 +205,19 @@ export default defineComponent({
                 modifyFieldValue(this.vitals, "Pulse", "disabled", false);
                 modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate*");
                 modifyFieldValue(this.vitals, "Pulse", "value", "");
+                this.validationStatus.bloodPressure = true;
+            }
+            if (inputData?.col?.name == "Respiratory rate Not Done" && inputData.col.checked) {
+                modifyCheckboxInputField(this.vitals, "Respiratory rate Reason", "displayNone", false);
+                modifyFieldValue(this.vitals, "Respiratory rate", "disabled", true);
+                modifyFieldValue(this.vitals, "Respiratory rate", "inputHeader", "Respiratory rate");
+                modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
+                this.validationStatus.bloodPressure = false;
+            } else if (inputData?.col?.name == "Respiratory rate Not Done") {
+                modifyCheckboxInputField(this.vitals, "Respiratory rate Reason", "displayNone", true);
+                modifyFieldValue(this.vitals, "Respiratory rate", "disabled", false);
+                modifyFieldValue(this.vitals, "Respiratory rate", "inputHeader", "Respiratory rate*");
+                modifyFieldValue(this.vitals, "Respiratory rate", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
         },
@@ -305,12 +318,12 @@ export default defineComponent({
             this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate && weight && height) {
+            if (this.patient?.personInformation?.gender && this.patient?.personInformation?.birthdate && weight && height) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
                 console.log("🚀 ~ setBMI ~ this.BMI:", this.BMI);
                 this.updateBMI();

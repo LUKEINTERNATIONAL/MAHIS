@@ -39,24 +39,7 @@ const initialStockDiscard = [
                             name: "reason",
                             validationFunctionName: "required",
                             trackBy: "id",
-                            multiSelectData: [
-                                {
-                                    id: 1,
-                                    name: "VVM stage > 2",
-                                },
-                                {
-                                    id: 2,
-                                    name: "Frozen",
-                                },
-                                {
-                                    id: 3,
-                                    name: "Damage",
-                                },
-                                {
-                                    id: 4,
-                                    name: "Wastage",
-                                },
-                            ],
+                            multiSelectData: [],
                             eventType: "input",
                             required: true,
                             alertsErrorMassage: "",

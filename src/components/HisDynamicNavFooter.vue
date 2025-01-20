@@ -9,7 +9,7 @@
             :color="btn.color"
             :fill="btn.fill"
             :class="btn.styleClass"
-            :size="btn.size"
+            style="padding: 10px"
         >
             <ion-icon v-if="btn.icon" :icon="btn.icon"></ion-icon>
             {{ btn.name }}
@@ -74,7 +74,7 @@ export default defineComponent({
 </script>
 <style>
 ._buttons {
-    padding: 0px 25px;
+    padding: 0px 5px;
     text-transform: none;
 }
 </style>

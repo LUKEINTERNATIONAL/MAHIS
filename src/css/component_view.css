@@ -19,12 +19,91 @@
     text-align: center;
 }
 
+.fw-vertical .fw-body-list {
+    background: #fff;
+    border-radius: 8px;
+    margin-left: 10px;
+    padding: 20px;
+    font-size: 0.875rem;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+    height: 450px;
+    line-height: 50px;
+}
+.form-wizard-vue .fw-body-list > li > .fw-list-wrapper {
+    color: #636363;
+    font-size: 16px;
+    flex-direction: unset;
+    gap: 20px;
+}
+.fw-vertical .fw-body-list li .fw-list-progress {
+    width: 1.5px;
+    height: 22px;
+    top: 42px;
+    left: 32px;
+}
+
+.fw-vertical .fw-body {
+    border-radius: 5px;
+    font-size: 0.875rem;
+    height: 84vh;
+    overflow: scroll;
+}
+.fw-vertical .fw-body-content {
+    padding: unset;
+}
+.fw-vertical {
+    gap: 5vw;
+}
+.fw-vertical .fw-body-list li {
+    display: unset;
+    padding: 20px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+.form-wizard-vue .fw-body-list li .fw-list-wrapper-icon {
+    width: 25px;
+    height: 25px;
+    border: 1.5px solid;
+    color: #b4b4b4;
+    background: unset;
+}
+i {
+    font-style: unset;
+}
+.form-wizard-vue .fw-body-list li,
+.form-wizard-vue .fw-body-list .fw-list-wrapper {
+    flex-grow: 0.09;
+}
+.form-wizard-vue .fw-step-active,
+.fw-footer-right .fw-btn {
+    background: var(--ion-color-primary) !important;
+    border: 1.5px solid var(--ion-color-primary) !important;
+}
+.fw-footer-left .fw-btn {
+    background: #ccc !important;
+}
+.form-wizard-vue .fw-step-checked {
+    border: 1.5px solid var(--ion-color-primary) !important;
+}
+.fw-vertical .fw-body-list li .fw-list-progress-active {
+    background: var(--ion-color-primary);
+}
+.fw-vertical .fw-footer {
+    bottom: 0;
+    position: sticky;
+    background: var(--ion-background-color, #fff);
+    z-index: 3;
+}
+.pi {
+    font-weight: 700;
+    font-size: 14px;
+}
 @media (max-width: 1350px) {
     .wizard_content {
         margin-left: 0px !important;
     }
     .large-modal {
-        --width: 60vw !important;
+        --width: 98%;
     }
 }
 @media (max-width: 991px) {
@@ -55,7 +134,7 @@
         display: inline;
     }
     .large-modal {
-        --width: 80vw !important;
+        --width: 98%
     }
     ion-popover[mobilePopover] {
         --offset-x: 47%;

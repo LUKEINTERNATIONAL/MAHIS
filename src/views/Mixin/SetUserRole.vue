@@ -15,13 +15,13 @@ export default defineComponent({
               const programName=Service.getProgramName();
               if (this.userRole == "Lab" && programID==14) {
                     this.userRoleSettings = {
-                        url: "patientProfile",
-                        btnName: "Back to profile",
+                        url: "home",
+                        btnName: "Back to home",
                         stepperTitle: "Laboratory",
                     };
                 }
 
-              if(programID==14){
+              if(programID==14 && this.userRole!='Lab'){
                     this.userRoleSettings = {
                         url: "OPDvitals",
                         btnName: "Back to vitals",

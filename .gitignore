@@ -24,6 +24,7 @@ npm-debug.log*
 /.versions
 /.vscode/*
 !/.vscode/extensions.json
+!/.vscode/settings.json
 /coverage
 /dist
 /node_modules
@@ -33,4 +34,3 @@ npm-debug.log*
 package-lock.json
 public/config.json
 stats.html
-android/app/build.gradle

@@ -9,12 +9,14 @@ import ManageAppointMentsTemplate from "../views/ManageAppointMentsTemplate.vue"
 import Scan from "../components/Registration/ScanRegistration.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
-import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
+import locationsManagement from "@/views/LocationsManagement.vue";
+import clinicalDaysTemplate from "@/views/ClinicalDays/clinicalDaysTemplate.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
 import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
 import setDDE from "@/views/Configurations/setDDE.vue";
+import SetSitePrefix from "@/views/Configurations/SetSitePrefix.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
@@ -40,6 +42,11 @@ const routes: Array<RouteRecordRaw> = [
         component: stockManagement,
     },
     {
+        path: "/locationsManagement",
+        name: "locationsManagement",
+        component: locationsManagement,
+    },
+    {
         path: "/OfflineRecords",
         name: "OfflineRecords",
         component: OfflineRecords,
@@ -48,6 +55,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/setDDE",
         name: "setDDE",
         component: setDDE,
+    },
+    {
+        path: "/setSitePrefix",
+        name: "setSitePrefix",
+        component: SetSitePrefix,
     },
     {
         path: "/scheduleImmunization",
@@ -98,7 +110,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/clinicaldays",
         name: "clinicaldays",
-        component: clinicaldays,
+        component: clinicalDaysTemplate,
     },
     {
         path: "/registration/scan",
@@ -129,7 +141,7 @@ router.beforeEach((to, from, next) => {
     modalController.getTop().then((v) => (v ? modalController.dismiss() : null));
     alertController.getTop().then((v) => (v ? alertController.dismiss() : null));
     toastController.getTop().then((v) => (v ? toastController.dismiss() : null));
-    const whitelistedUri = ["/login", "/settings/host"];
+    const whitelistedUri = ["/login", "/settings/host", "/privacypolicy"];
     if (!localStorage.getItem("apiKey") && !whitelistedUri.includes(to.path)) {
         next("/login");
     }

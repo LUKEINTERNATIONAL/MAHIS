@@ -221,7 +221,7 @@ const initialVitals = [
                             unit: "C",
                             icon: icons.temprature,
                             value: "",
-                            name: "Temp",
+                            name: "Temperature",
                             eventType: "input",
                         },
                         {
@@ -318,7 +318,7 @@ const initialVitals = [
                             unit: "%",
                             icon: icons.oxgenStaturation,
                             value: "",
-                            name: "SP02",
+                            name: "SAO2",
                             eventType: "input",
                         },
                     ],
@@ -338,13 +338,13 @@ const initialVitals = [
         ],
     },
 ] as any;
-export const useVitalsStore = defineStore("vitalsStore", {
+export const useANCVitalsStore = defineStore("vitalsStore", {
     state: () => ({
-        vitals: [...initialVitals] as any,
+        ANCVitals: [...initialVitals] as any,
     }),
     actions: {
         setVitals(data: any) {
-            this.vitals = data;
+            this.ANCVitals = data;
         },
         getInitialVitals() {
             const data = _.cloneDeep(initialVitals);

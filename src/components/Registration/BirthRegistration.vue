@@ -115,7 +115,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
@@ -180,9 +180,9 @@ export default defineComponent({
             //     const patient = new PatientService();
             //     patient.createNcdNumber(formattedNCDNumber);
             //     const demographicsStore = useDemographicsStore();
-            //     demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
+            //     demographicsStore.setPatient(await PatientService.findByID(this.patient.patientID));
             //     generalStore.setSaveProgressStatus("");
-            //     resetPatientData();
+            //     await resetPatientData();
             //     if (this.activities.length == 0) {
             //         this.$router.push("patientProfile");
             //     } else {
@@ -232,7 +232,7 @@ export default defineComponent({
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
+                diagnosisInstance.onSubmit(this.patient.patientID, userID, data);
             }
         },
         buildCards() {
@@ -252,7 +252,28 @@ export default defineComponent({
             enrollmentStore.setBirthRegistration(this.birthRegistration);
         },
         async handleInputData(event: any) {
-            console.log(event.al);
+            if (event.inputHeader == "How many doses of Tdv did the mother receive?*") {
+                if (event.value) {
+                    if (event.value.name == "Unknown") {
+                        modifyFieldValue(this.birthRegistration, "Protected at birth", "value", {
+                            concept_id: 1067,
+                            name: "Don't know",
+                        });
+                    } else if (event.value.name == "0-2 doses, less than two weeks before delivery") {
+                        modifyFieldValue(this.birthRegistration, "Protected at birth", "value", {
+                            concept_id: 1066,
+                            name: "No",
+                        });
+                    } else if (event.value.name == "2-5 doses more than two weeks of delivery") {
+                        modifyFieldValue(this.birthRegistration, "Protected at birth", "value", {
+                            concept_id: 1065,
+                            name: "Yes",
+                        });
+                    }
+                } else {
+                    modifyFieldValue(this.birthRegistration, "Protected at birth", "value", "");
+                }
+            }
         },
     },
 });

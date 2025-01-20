@@ -54,12 +54,13 @@ import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/a
 import { createModal } from "@/utils/Alerts";
 import { mapState } from "pinia";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
-import { getVaccinesSchedule, checkIfLastVaccineAdministered } from "@/apps/Immunization/services/vaccines_service";
+import { checkIfLastVaccineAdministered } from "@/apps/Immunization/services/vaccines_service";
 import { icons } from "@/utils/svg";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 import { concat } from "lodash";
 import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service";
 import HisDate from "@/utils/Date";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     name: "xxxComponent",
@@ -89,14 +90,21 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useAdministerVaccineStore, ["vaccineReload"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     async mounted() {
-        this.loadVaccineSchedule();
+        await this.loadVaccineSchedule();
     },
     watch: {
         vaccineReload: {
-            handler() {
-                this.loadVaccineSchedule();
+            async handler() {
+                await this.loadVaccineSchedule();
+            },
+            deep: true,
+        },
+        patient: {
+            async handler() {
+                await this.loadVaccineSchedule();
             },
             deep: true,
         },
@@ -111,13 +119,12 @@ export default defineComponent({
             createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
         },
         async loadVaccineSchedule() {
-            this.setAppointmentDate()
-            const data__ = await getVaccinesSchedule();
+            await this.setAppointmentDate();
+            const data__ = this.patient.vaccineSchedule;
             const vaccineScheduleStore = useAdministerVaccineStore();
 
             vaccineScheduleStore.setVaccineSchedule(data__);
             vaccineScheduleStore.setLastVaccinesGiven([]);
-            checkIfLastVaccineAdministered();
 
             this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();
@@ -126,7 +133,7 @@ export default defineComponent({
 
             vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
                 this.findMissingVaccines(vaccineSchudule);
-                
+
                 this.findPreviouslyAdministeredVaccineSchedule(vaccineSchudule);
                 this.handleSchedule(vaccineSchudule);
                 const obj = { visit: vaccineSchudule.visit, age: vaccineSchudule.age };
@@ -243,16 +250,15 @@ export default defineComponent({
             }
         },
         findPreviouslyAdministeredVaccineSchedule(milestone: any) {
-            const vaccinesPreviouslyAdministered = [] as any
+            const vaccinesPreviouslyAdministered = [] as any;
             milestone.antigens.forEach((vaccine: any) => {
-                    if (vaccine.status == "administered") {
-                        vaccinesPreviouslyAdministered.push(vaccine)
-                    }
-
-                })
+                if (vaccine.status == "administered") {
+                    vaccinesPreviouslyAdministered.push(vaccine);
+                }
+            });
             if (vaccinesPreviouslyAdministered.length > 0) {
-                const vaccineScheduleStore = useAdministerVaccineStore()
-                vaccineScheduleStore.setLastVaccinesGiven(vaccinesPreviouslyAdministered)
+                const vaccineScheduleStore = useAdministerVaccineStore();
+                vaccineScheduleStore.setLastVaccinesGiven(vaccinesPreviouslyAdministered);
             }
         },
         reloadVaccines() {
@@ -265,8 +271,7 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             const appointment_service = new Appointment();
             const data = await appointment_service.getNextAppointment();
-            const appointmentDate = data.next_appointment_date ? data.next_appointment_date : ''
-            store.setNextAppointMentDate(appointmentDate)
+            data?.next_appointment_date ? store.setNextAppointMentDate(data.next_appointment_date) : "";
         },
     },
 });

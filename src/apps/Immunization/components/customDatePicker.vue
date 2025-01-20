@@ -57,7 +57,8 @@
       (e: "dateChange", ObjectsArray: any): void
   }>()
 
-  function dateChange() {
+function dateChange() {
+  
     const clientBODYear = getYearFromDateString(patient.getBirthdate() as any)
     const clientBODMonth = removeLeadingZero(getMonthFromDateString(patient.getBirthdate() as any))
     const clientBODDay = removeLeadingZero(getDayFromDateString(patient.getBirthdate() as any))
@@ -65,33 +66,34 @@
     const pickerYear = pickerInstance.getDate().getFullYear()
     const pickerMonth = pickerInstance.getDate().getMonth() + 1
     const pickerDay = pickerInstance.getDate().getDate()
+
     if (pickerYear <= sessionYear) {
-      if (parseInt(pickerYear) == parseInt(clientBODYear)) {
-        if (parseInt(pickerMonth) < parseInt(clientBODMonth)) {
-          const corrected_date = pickerInstance.getDate()
-          corrected_date.setMonth(parseInt(clientBODMonth) - 1)
-          pickerInstance.setDate(corrected_date)
+        if (parseInt(pickerYear) == parseInt(clientBODYear)) {
+            if (parseInt(pickerMonth) < parseInt(clientBODMonth)) {
+                const corrected_date = pickerInstance.getDate()
+                corrected_date.setMonth(parseInt(clientBODMonth) - 1)
+                pickerInstance.setDate(corrected_date)
+            }
+            if (parseInt(pickerMonth) === parseInt(clientBODMonth) && 
+                parseInt(pickerDay) < parseInt(clientBODDay)) {
+                const corrected_date = pickerInstance.getDate()
+                corrected_date.setDate(parseInt(clientBODDay))
+                pickerInstance.setDate(corrected_date)
+            }
         }
-        if (parseInt(pickerDay) <= parseInt(clientBODDay)) {
-          const corrected_date = pickerInstance.getDate()
-          corrected_date.setDate(parseInt(clientBODDay) + 1)
-          pickerInstance.setDate(corrected_date)
+        if (parseInt(pickerYear) < parseInt(clientBODYear)) {
+            const corrected_date = pickerInstance.getDate()
+            corrected_date.setFullYear(sessionYear)
+            pickerInstance.setDate(corrected_date)
         }
-      }
-      if ( parseInt(pickerYear) < parseInt(clientBODYear)) {
+        const sessionDate = new Date(Service.getSessionDate());
+        if (pickerInstance.getDate() > sessionDate) {
+            pickerInstance.setDate(sessionDate)
+        }
+    } else {
         const corrected_date = pickerInstance.getDate()
         corrected_date.setFullYear(sessionYear)
         pickerInstance.setDate(corrected_date)
-      }
-      const sessionDate = new Date(Service.getSessionDate());
-      if (pickerInstance.getDate() > sessionDate) {
-        pickerInstance.setDate(sessionDate)
-      }
-    }
-     else {
-      const corrected_date = pickerInstance.getDate()
-      corrected_date.setFullYear(sessionYear)
-      pickerInstance.setDate(corrected_date)
     }
     emit("dateChange", pickerInstance.getDate())
   }

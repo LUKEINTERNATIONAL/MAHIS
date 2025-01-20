@@ -17,12 +17,12 @@ const initialPregnancy = [
         {
           name: "Yes",
           value: "Yes",
-          colSize: 2,
+          colSize: 3,
         },
         {
           name: "No",
           value: "No",
-          colSize: 2,
+          colSize: 3,
         },
       ],
     },
@@ -31,19 +31,19 @@ const initialPregnancy = [
     radioBtnContent: {
       header: {
         title: "Breastfeeding?",
-        name: "Is patient breast feeding",
+        name: "Is patient breast feeding?",
         selectedValue: "",
       },
       data: [
         {
           name: "Yes",
           value: "Yes",
-          colSize: 2,
+          colSize: 3,
         },
         {
           name: "No",
           value: "No",
-          colSize: 2,
+          colSize: 3,
         },
       ],
     },

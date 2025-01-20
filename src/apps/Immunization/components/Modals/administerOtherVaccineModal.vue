@@ -11,7 +11,7 @@
             </ion-col>
         </ion-row>
 
-        <div style="margin-top: 30px;">
+        <div style="margin-top: 30px">
             <ion-row>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Vaccine name<span style="color: #b42318">*</span></ion-label
@@ -39,13 +39,13 @@
             </div>
         </div>
 
-        <ion-row v-show="show_select_batach">
+        <ion-row v-show="show_select_batch">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                 >Batch numbers<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
 
-        <div v-show="show_select_batach">
+        <div v-show="show_select_batch">
             <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
@@ -61,7 +61,7 @@
                     {{ batch_number_error_message }}
                 </ion-label>
             </div> -->
-            <lotNumberList :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
+            <lotNumberList :action="childAction" :retro="showPD" ref="childComponentRef" @actionTriggered="ActionTriggered" :key="comp_key" />
         </div>
 
         <customDatePicker v-if="showPD" />
@@ -85,14 +85,10 @@
             <div class="saveBtn" v-if="!showDateBtns">
                 <ion-row class="ion-justify-content-between">
                     <ion-col size="auto">
-                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
-                        Cancel
-                        </ion-button>
+                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px"> Cancel </ion-button>
                     </ion-col>
                     <ion-col size="auto">
-                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px">
-                        Save
-                        </ion-button>
+                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px"> Save </ion-button>
                     </ion-col>
                 </ion-row>
             </div>
@@ -130,17 +126,18 @@ import { Service } from "@/services/service";
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
-import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
+import { saveVaccineAdministeredDrugs } from "@/apps/Immunization/services/vaccines_service";
 import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import VueMultiselect from "vue-multiselect";
 import { isEmpty } from "lodash";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-import lotNumberList from "./lotNumberList.vue"
-import alert from "@/apps/Immunization/components/Modals/alert.vue"
-import { StockService } from '@/services/stock_service'
+import lotNumberList from "./lotNumberList.vue";
+import alert from "@/apps/Immunization/components/Modals/alert.vue";
+import { StockService } from "@/services/stock_service";
 import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     components: {
@@ -163,46 +160,16 @@ export default defineComponent({
         lotNumberList,
     },
     data() {
+        const comp_key = ref(0);
+        const antigens = ref([] as any);
         return {
             iconsContent: icons,
             showPD: false as boolean,
             batchNumber: "" as any,
             vaccineName: "" as string,
             currentDrugOb: {} as any,
-            otherVaccinesList: [
-                {
-                    concept_id: 11592,
-                    drug_id: 1287,
-                    drug_name: "OPV3",
-                    status: "administered",
-                    date_administered: "01/Jun/2024 08:40:01",
-                    vaccine_batch_number: null,
-                },
-                {
-                    concept_id: 11592,
-                    drug_id: 1290,
-                    drug_name: "Pentavalent 3",
-                    status: "administered",
-                    date_administered: "31/May/2024 15:16:03",
-                    vaccine_batch_number: null,
-                },
-                {
-                    concept_id: 11592,
-                    drug_id: 1293,
-                    drug_name: "PCV3",
-                    status: "administered",
-                    date_administered: "01/Jun/2024 08:40:17",
-                    vaccine_batch_number: null,
-                },
-                {
-                    concept_id: 11592,
-                    drug_id: 1301,
-                    drug_name: "Albendazole (200mg tablet) 1",
-                    status: "administered",
-                    date_administered: "31/May/2024 15:33:44",
-                    vaccine_batch_number: null,
-                },
-            ] as any,
+            comp_key,
+            otherVaccinesList: antigens,
             is_batch_number_valid: false as boolean,
             vaccineDate: "" as any,
             is_vaccine_name_valid: false as boolean,
@@ -218,16 +185,22 @@ export default defineComponent({
                 },
             },
             showDateBtns: true as boolean,
-            selected_date_: '',
-            show_select_batach: false,
+            selected_date_: "",
+            show_select_batch: false,
             skip_validation: false,
+            antigens,
         };
     },
     computed: {
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
-        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
+        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber", "vaccineSchedule"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
-    async mounted() {},
+    async mounted() {
+        this.vaccineSchedule.vaccine_schedule.forEach((vaccine: any) => {
+            this.antigens.push(...vaccine.antigens);
+        });
+    },
     watch: {
         batchNumber: {
             handler() {
@@ -300,27 +273,32 @@ export default defineComponent({
         },
         updateVaccineName(data: any) {
             this.currentDrugOb = data;
-            this.pullLotNumbersForVaccine(this.currentDrugOb)
+            console.log(this.currentDrugOb);
+            const store = useAdministerVaccineStore();
+            store.setCurrentSelectedDrug(data);
+            this.pullLotNumbersForVaccine(this.currentDrugOb);
         },
         async pullLotNumbersForVaccine(data: any) {
+            this.show_select_batch = false;
             const store = useAdministerVaccineStore();
             const stockService = new StockService();
-            const data_ = await stockService.getDrugBatches(data.drug_id)
-            store.setLotNumberData(data_)
+            const data_ = await stockService.getDrugBatches(data.drug_id);
+            store.setLotNumberData(data_);
 
-            if(data_.length == 0) {
-                if(checkDrugName(data) == false) {
+            if (data_.length == 0) {
+                if (checkDrugName(data) == false) {
                     createModal(alert, { class: "otherVitalsModal" });
                 }
 
                 if (checkDrugName(data) == true) {
-                    this.show_select_batach = false;
+                    this.show_select_batch = false;
                     this.skip_validation = true;
-                } 
+                }
             }
 
             if (data_.length > 0) {
-                this.show_select_batach = true
+                this.comp_key = this.comp_key + 1;
+                this.show_select_batch = true;
             }
         },
         isAlphaNumeric(text: string) {
@@ -344,23 +322,23 @@ export default defineComponent({
                 batch_number: selectedOption.lotNumber,
                 date_administered: this.selected_date_,
                 drug_id: this.currentDrugOb.drug_id,
-                drug_: this.currentDrugOb
+                drug_: this.currentDrugOb,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
-            saveVaccineAdministeredDrugs();
+            saveVaccineAdministeredDrugs(this.patient);
             store.setTempScannedBatchNumber(null);
             this.dismiss();
         },
         saveDta(date_: any) {
             if (this.validateVaccineName() == true) {
-                this.selected_date_ = date_
-                this.triggerChildAction()
+                this.selected_date_ = date_;
+                this.triggerChildAction();
 
-                if (this.show_select_batach == false) {
+                if (this.show_select_batch == false) {
                     if (this.skip_validation == false) {
-                        toastDanger("Please Update Stock for Selected Vaccine")
-                    } 
+                        toastDanger("Please Update Stock for Selected Vaccine");
+                    }
                 }
             }
             // this.validateBatchNumber();
@@ -384,9 +362,7 @@ export default defineComponent({
             // this.dismiss();
             // store.setTempScannedBatchNumber(null);
         },
-        childAction() {
-           
-        },
+        childAction() {},
     },
 });
 </script>

@@ -19,12 +19,12 @@ const initialPhysicalExam = [
                 {
                     name: "Yes",
                     value: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2.0",
+                    colSize: "3",
                 },
             ],
         },
@@ -74,12 +74,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -199,12 +199,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -325,12 +325,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -443,12 +443,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -560,12 +560,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -686,12 +686,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -848,12 +848,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -930,12 +930,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -1057,12 +1057,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -1210,12 +1210,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -1374,12 +1374,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -1499,12 +1499,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },
@@ -1796,12 +1796,12 @@ const initialPhysicalExam = [
                 {
                     value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    colSize: "3",
                 },
                 {
                     value: "No",
                     name: "No",
-                    colSize: "2",
+                    colSize: "3",
                 },
             ],
         },

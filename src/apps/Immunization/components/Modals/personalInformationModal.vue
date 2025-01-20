@@ -113,7 +113,7 @@ import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
-
+import { useWorkerStore } from "@/stores/workerStore";
 export default defineComponent({
     name: "Home",
     username: "",
@@ -156,11 +156,11 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useFollowUpStoreStore, ["changeGuardianInfo", "vaccineAdverseEffects", "protectedAtBirth"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useRegistrationStore, ["personInformation", "socialHistory", "homeLocation", "currentLocation", "guardianInformation"]),
     },
     watch: {
-        demographics: {
+        patient: {
             handler() {},
             immediate: true,
         },
@@ -169,9 +169,6 @@ export default defineComponent({
         return { notificationsOutline, personCircleOutline, createOutline, clipboardOutline, calendarOutline };
     },
     methods: {
-        getAttributes(item: any, name: any) {
-            return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;
-        },
         handleCancel() {
             modalController.dismiss();
         },
@@ -209,7 +206,7 @@ export default defineComponent({
         },
         async updateDemographics() {
             const updatedData = {
-                person_id: this.demographics.patient_id,
+                person_id: this.patient.patientID,
                 given_name: getFieldValue(this.personInformation, "firstname", "value"),
                 family_name: getFieldValue(this.personInformation, "lastname", "value"),
                 middle_name: getFieldValue(this.personInformation, "middleName", "value"),
@@ -233,7 +230,7 @@ export default defineComponent({
                 facility_name: "",
                 patient_type: "",
             };
-            await this.updatePerson(this.demographics.patient_id, updatedData);
+            await this.updatePerson(this.patient.patientID, updatedData);
         },
         async updateGuardian() {
             let guardianDetails: any = {
@@ -260,18 +257,18 @@ export default defineComponent({
                 national_id: "",
             };
 
-            let data = await RelationshipService.getRelationships(this.demographics.patient_id);
+            let data = await RelationshipService.getRelationships(this.patient.patientID);
             const selectedID = getFieldValue(this.guardianInformation, "relationship", "value")?.id;
             if (selectedID) {
                 if (data.length > 0) {
-                    const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
-                    await RelationsService.amendRelation(this.demographics.patient_id, data[0].person_b, data[0].relationship_id, selectedID);
+                    const guardianData = await RelationshipService.getRelationships(this.patient.patientID);
+                    await RelationsService.amendRelation(this.patient.patientID, data[0].person_b, data[0].relationship_id, selectedID);
                     await this.updatePerson(guardianData[0]?.person_b, guardianDetails);
                 } else {
                     const guardian: any = new PatientRegistrationService();
                     await guardian.registerGuardian(guardianDetails);
                     const guardianID = guardian.getPersonID();
-                    await RelationsService.createRelation(this.demographics.patient_id, guardianID, selectedID);
+                    await RelationsService.createRelation(this.patient.patientID, guardianID, selectedID);
                 }
             }
         },
@@ -280,31 +277,8 @@ export default defineComponent({
             const data = await personService.update(personID);
         },
         async updatePatientDemographics() {
-            const item = await PatientService.findByID(this.demographics.patient_id);
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient(item);
-            let fullName = "";
-            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
-            } else {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
-            }
-            demographicsStore.setDemographics({
-                active: true,
-                name: fullName,
-                mrn: this.patientIdentifier(item),
-                birthdate: item.person.birthdate,
-                category: "",
-                gender: item.person.gender,
-                patient_id: item.patient_id,
-                address:
-                    item?.person?.addresses[0]?.state_province +
-                    "," +
-                    item?.person?.addresses[0]?.township_division +
-                    "," +
-                    item?.person?.addresses[0]?.city_village,
-                phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
-            });
+            const item = await PatientService.findByID(this.patient.patientID);
+            useDemographicsStore().setPatientRecord(item);
         },
         patientIdentifier(item: any) {
             // return item

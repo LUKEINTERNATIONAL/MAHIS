@@ -64,7 +64,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useRegistrationStore, ["socialHistory"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     props: {
         editable: {
@@ -79,14 +79,11 @@ export default defineComponent({
     methods: {
         setData() {
             if (this.editable) {
-                modifyFieldValue(this.socialHistory, "religion", "value", { id: "", name: this.getAttributes(this.patient, "Religion") });
-                modifyRadioValue(this.socialHistory, "occupation", "selectedValue", this.getAttributes(this.patient, "Occupation"));
-                modifyRadioValue(this.socialHistory, "maritalStatus", "selectedValue", this.getAttributes(this.patient, "Civil Status"));
-                modifyRadioValue(this.socialHistory, "highestLevelOfEducation", "selectedValue", this.getAttributes(this.patient, "EDUCATION LEVEL"));
+                modifyFieldValue(this.socialHistory, "religion", "value", { id: "", name: this.patient.personInformation.education_level });
+                modifyRadioValue(this.socialHistory, "occupation", "selectedValue", this.patient.personInformation.occupation);
+                modifyRadioValue(this.socialHistory, "maritalStatus", "selectedValue", this.patient.personInformation.marital_status);
+                modifyRadioValue(this.socialHistory, "highestLevelOfEducation", "selectedValue", this.patient.personInformation.education_level);
             }
-        },
-        getAttributes(item: any, name: any) {
-            return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;
         },
         buildCards() {
             this.cardData = {

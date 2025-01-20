@@ -3,8 +3,15 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepper-title="HEADSS Assessment" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" :backUrl="userRoleSettings.url"
-                     :backBtn="userRoleSettings.btnName" />
+            <Stepper
+                stepper-title="HEADSS Assessment"
+                :wizardData="wizardData"
+                @updateStatus="markWizard"
+                :StepperData="StepperData"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+            />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
     </ion-page>
@@ -39,9 +46,9 @@ import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 
 export default defineComponent({
     name: "treatment",
-  mixins: [SetUserRole, SetEncounter],
+    mixins: [SetUserRole, SetEncounter],
 
-  components: {
+    components: {
         BasicFooter,
         IonContent,
         IonHeader,
@@ -93,7 +100,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useHeadssAssessmentStore, ["headssAssesment"]),
         "Who does the client live with"() {
             return getRadioSelectedValue(this.headssAssesment, "Who does the client live with");
@@ -102,9 +109,10 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
-        saveData() {
+        getSaveFunction() {},
+        async saveData() {
             this.saveHeadssAssesment();
-            resetPatientData();
+            await resetPatientData();
         },
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
@@ -114,7 +122,7 @@ export default defineComponent({
             if (await this.validations(this.headssAssesment, fields)) {
                 if (this.headssAssesment.length > 0) {
                     const userID: any = Service.getUserID();
-                    const headssAssesment = new HeadssAssessmentService(this.demographics.patient_id, userID);
+                    const headssAssesment = new HeadssAssessmentService(this.patient.patientID, userID);
                     const encounter = await headssAssesment.createEncounter();
                     if (!encounter) return toastWarning("Unable to create patient HEADSS assessment encounter");
                     const patientStatus = await headssAssesment.saveObservationList(await this.buildHeadssAssesment());

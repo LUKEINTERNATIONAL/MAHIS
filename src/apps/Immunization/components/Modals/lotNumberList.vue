@@ -75,27 +75,31 @@ export default defineComponent({
             }   
         },
         async loadCurrentSelectedDrug() {
-            const store = useAdministerVaccineStore();
-            const currentDrug = store.getCurrentSelectedDrug();
-            await this.formBatchList(currentDrug.drug.drug_id)
+            try {
+                const store = useAdministerVaccineStore();
+                const currentDrug = store.getCurrentSelectedDrug();
+                await this.formBatchList(currentDrug.drug.drug_id);   
+            } catch (error) {
+                
+            }
         },
         async formBatchList(drugId: number) {
             try {
-                const store = useAdministerVaccineStore()
-                const data = store.getLotNumberData()
+                const store = useAdministerVaccineStore();
+                const data = store.getLotNumberData();
 
                 if(data.length == 0) {
                     this.$emit('emptyList', '');
                 }
 
                 data.forEach((drug: any) => {
-                    const listItem = { 
+                    const listItem = {
                         id: drug.id,
                         lotNumber: drug.batch_number,
-                    }
-                    this.lotNumbers.push(listItem)
+                    };
+                    this.lotNumbers.push(listItem);
                 })
-                this.checkToShow()
+                this.checkToShow();
             } catch (error) {
                 
             }
@@ -103,30 +107,29 @@ export default defineComponent({
         addUnkownLotNumberOption() {
             const store = useAdministerVaccineStore();
             const currentDrug = store.getCurrentSelectedDrug();
-            console.log(currentDrug.drug)
             this.lotNumbers.push({
                 id: currentDrug.drug.drug_id,
                 lotNumber: 'Unknown',
-            })
+            });
         },
         checkToShow() {
             if (this.$props.retro == true) {
-                    this.addUnkownLotNumberOption()
+                this.addUnkownLotNumberOption();
             }
-            this.checkDrugNameInt()
+            this.checkDrugNameInt();
         },
         checkDrugNameInt() {
             const store = useAdministerVaccineStore();
             const currentDrug = store.getCurrentSelectedDrug();
             if (checkDrugName(currentDrug.drug) == true) {
-                this.lotNumbers = []
+                this.lotNumbers = [];
                 this.lotNumbers.push({
                     id: currentDrug.drug.drug_id,
                     lotNumber: 'Unknown',
-                })
-                return true
+                });
+                return true;
             } else {
-                return false
+                return false;
             }
         },
     },

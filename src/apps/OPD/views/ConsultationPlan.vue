@@ -1,25 +1,34 @@
 <template>
     <ion-page>
-      <!-- Spinner -->
-      <div v-if="isLoading" class="spinner-overlay">
-        <ion-spinner name="bubbles"></ion-spinner>
-        <div class="loading-text">Please wait...</div>
-      </div>
+        <!-- Spinner -->
+        <div v-if="isLoading" class="spinner-overlay">
+            <ion-spinner name="bubbles"></ion-spinner>
+            <div class="loading-text">Please wait...</div>
+        </div>
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
+
             <Stepper
                 :stepperTitle="userRoleSettings.stepperTitle"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
                 :openStepper="openStepper"
                 :backUrl="userRoleSettings.url"
                 :backBtn="userRoleSettings.btnName"
+                :getSaveFunction="getSaveFunction"
+                :hasPatientsWaitingList="hasPatientsWaitingForLab"
+                :specialButtonLabel="'Save and end visit'"
+                :specialButtonFn="saveData"
+                :userRole="userRole"
+
             />
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" v-if="userRole != 'Lab'" />
+<!--      <OPDFooter @finishBtn="saveData()" />-->
+      <div v-if="(userRole === 'Clinician' || userRole === 'Superuser') && showAlert" class="pause-alert">
+            Consultation for this patient is paused due to lab orders.
+        </div>
     </ion-page>
 </template>
 
@@ -50,7 +59,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
+import { createModal, toastDanger } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "../stores/OpdVitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -71,7 +80,7 @@ import { usePastMedicalHistoryStore } from "@/apps/OPD/stores/PastMedicalHistory
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
@@ -98,10 +107,16 @@ import {
     modifyCheckboxValue,
 } from "@/services/data_helpers";
 import { PatientOpdList } from "@/services/patient_opd_list";
-import dates from "@/utils/Date"
+import dates from "@/utils/Date";
+import { getUserLocation } from "@/services/userService";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import { PatientService } from "@/services/patient_service";
+import { EncounterService } from "@/services/encounter_service";
+import { ConceptService } from "@/services/concept_service";
+import OPDFooter from "@/apps/OPD/components/OPDFooter.vue";
 
 export default defineComponent({
-    name: "Home",
+    name: "ConsultationPlan",
     mixins: [SetUserRole, SetEncounter],
     components: {
         IonContent,
@@ -126,6 +141,7 @@ export default defineComponent({
         IonModal,
         Stepper,
         BasicFooter,
+        OPDFooter,
     },
     data() {
         return {
@@ -134,13 +150,22 @@ export default defineComponent({
             wizardData: [] as any,
             StepperData: [] as any,
             isOpen: false,
+            hasPatientsWaitingForLab: false,
             iconsContent: icons,
             isLoading: false,
+            patients: [] as any,
+            showAlert: false,
+          checkedIn: false as Boolean,
 
         };
     },
+    props: {
+        list: {
+            default: "" as any,
+        },
+    },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(usePregnancyStore, ["pregnancy"]),
         ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
         ...mapState(usePastMedicalHistoryStore, ["pastMedicalHistory"]),
@@ -151,18 +176,30 @@ export default defineComponent({
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useLevelOfConsciousnessStore, ["adult", "minor"]),
         ...mapState(useGeneralStore, ["OPDActivities"]),
+        ...mapState(usePatientList, [
+            "patientsWaitingForVitals",
+            "patientsWaitingForConsultation",
+            "patientsWaitingForLab",
+            "patientsWaitingForDispensation",
+            "counter",
+        ]),
     },
-    async created() {
-        await this.getData();
-    },
+    async created() {},
     async mounted() {
-        // if (this.activities.length == 0) {
-        //     this.$router.push("patientProfile");
-        // }
-
+        await this.getData();
+        await this.fetchPatientLabStageData();
         this.markWizard();
     },
     watch: {
+        patientsWaitingForLab(newValue) {
+            this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.patient.patientID);
+            this.showAlert = this.hasPatientsWaitingForLab;
+            if (this.showAlert) {
+                setTimeout(() => {
+                    this.showAlert = false;
+                }, 15000);
+            }
+        },
         vitals: {
             handler() {
                 this.markWizard();
@@ -173,6 +210,8 @@ export default defineComponent({
             async handler() {
                 await this.getData();
                 this.markWizard();
+                this.fetchPatientLabStageData();
+                this.hasPatientsWaitingForLab = false;
             },
             deep: true,
         },
@@ -194,66 +233,188 @@ export default defineComponent({
                 this.markWizard();
             },
         },
+        hasPatientsWaitingForLab: {
+            immediate: true,
+            handler(newValue) {
+                console.log("Updated lab waiting status:", newValue);
+            },
+        },
     },
     setup() {
-        return { chevronBackOutline, checkmark };
+        const presentingComplaintsValue = ref<string[]>([]);
+
+        async function loadSavedEncounters(patientVisitDate: any) {
+            const patient = new PatientService();
+            const encounters = await EncounterService.getEncounters(patient.getID(), { date: patientVisitDate });
+            await setPresentingComplainsEncounters(encounters);
+        }
+
+        async function setPresentingComplainsEncounters(data: any) {
+            const observations = data.find((encounter: any) => encounter.type.name === "PRESENTING COMPLAINTS")?.observations;
+            if (observations) {
+              presentingComplaintsValue.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
+            } else {
+              presentingComplaintsValue.value = [];
+            }
+        }
+
+        function filterObs(observations: any, conceptName: string) {
+            return observations?.filter((obs: any) => obs.concept.concept_names.some((name: any) => name.name === conceptName));
+        }
+
+        async function getConceptValues(filteredObservations: any, type: string) {
+            if (filteredObservations) {
+                return Promise.all(
+                    filteredObservations.map(async (item: any) => {
+                        return await ConceptService.getConceptName(item.value_coded);
+                    })
+                );
+            }
+            return [];
+        }
+
+        const mounted = async () => {
+            const todayDate = new Date().toISOString().split("T")[0];
+            await loadSavedEncounters(todayDate);
+        };
+        mounted();
+        return {
+          presentingComplaintsValue,
+          loadSavedEncounters,
+            chevronBackOutline,
+            checkmark,
+        };
     },
 
     methods: {
+        endConsultation(){
+
+        },
+        getSaveFunction(index: any) {
+            const disableNextButton = this.userRole !== "Lab" && this.hasPatientsWaitingForLab && index >= 1;
+
+            if (index < this.StepperData.length - 1) {
+                switch (index) {
+                    case 0:
+                        if (this.presentingComplaintsValue.length === 0) {
+                            return this.saveClinicalAssessment;
+                        } else {
+                            return () => Promise.resolve();
+                        }
+                    case 1:
+                        return disableNextButton ? () => Promise.resolve() : this.saveInvestigations;
+                    case 2:
+                        return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
+                    case 3:
+                        return disableNextButton ? () => Promise.resolve() : this.saveTreatmentPlan;
+                    default:
+                        return () => Promise.resolve();
+                }
+            } else {
+                return async () => {
+                    // await this.saveTreatmentPlan();
+                    // await this.saveOutComeStatus();
+                    const location = await getUserLocation();
+                    const locationId = location ? location.code : null;
+
+                    if (!locationId) {
+                        toastDanger("Location ID could not be found. Please check your settings.");
+                        return;
+                    }
+                    if (this.userRole !== "Lab") {
+                        await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "DISPENSATION", locationId);
+                        await usePatientList().refresh(locationId);
+                        this.$router.push("home");
+                         toastSuccess("Patient has finished consultation!");
+                    } else {
+                        await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
+                        await usePatientList().refresh(locationId);
+                        this.$router.push("home");
+                        toastSuccess("Lab results submitted. Patient can return to consultation");
+                    }
+                };
+            }
+        },
+        async fetchPatientLabStageData() {
+            const location = await getUserLocation();
+            const locationId = location ? location.code : null;
+
+            if (locationId) {
+                const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);
+                if (this.patient.patientID) {
+                    this.hasPatientsWaitingForLab = LabPatients.some((p: any) => p.patient_id === this.patient.patientID);
+                }
+            }
+        },
+        setList() {
+            const listMapping: Record<string, any[]> = {
+                VITALS: this.patientsWaitingForVitals,
+                CONSULTATION: this.patientsWaitingForConsultation,
+                LAB: this.patientsWaitingForLab,
+                DISPENSATION: this.patientsWaitingForDispensation,
+            };
+
+            this.patients = listMapping[this.list] || [];
+        },
+
         async getData() {
-            this.wizardData = [];
-            this.StepperData = [];
-            const { name } = await WorkflowService.nextTask(this.demographics.patient_id);
-            console.log("🚀 ~ getData ~ name:", name);
+            try {
+                this.wizardData = [];
+                this.StepperData = [];
+                const { name } = await WorkflowService.nextTask(this.patient.patientID);
+                console.log("🚀 ~ getData ~ name:", name);
 
-            // const steps = ["Clinical Assessment", "Investigations", "Diagnosis", "Treatment Plan", "Outcome"];
-            for (let i = 0; i < this.OPDActivities.length; i++) {
-                let wizardClass = "common_step";
-                if (name == "PRESENTING COMPLAINTS" && this.OPDActivities[i] == "Clinical Assessment") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                if (name == "LAB RESULTS" && this.OPDActivities[i] == "Investigations") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                if (name == "OUTPATIENT DIAGNOSIS" && this.OPDActivities[i] == "Diagnosis") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                if (name == "PRESCRIPTION" && this.OPDActivities[i] == "Treatment Plan") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                if (name == "PATIENT OUTCOME" && this.OPDActivities[i] == "Outcome") {
-                    this.openStepper = i + 1;
-                    wizardClass = "open_step common_step";
-                }
-                let title = this.OPDActivities[i];
-                let componentName = this.OPDActivities[i];
-                if (this.OPDActivities[i] == "Diagnosis") {
-                    componentName = "OPDDiagnosis";
-                }
-                if (this.OPDActivities[i] == "Treatment Plan") {
-                    componentName = "OPDTreatmentPlan";
-                }
+                // const steps = ["Clinical Assessment", "Investigations", "Diagnosis", "Treatment Plan", "Outcome"];
+                for (let i = 0; i < this.OPDActivities.length; i++) {
+                    let wizardClass = "common_step";
+                    if (name == "PRESENTING COMPLAINTS" && this.OPDActivities[i] == "Clinical Assessment") {
+                        this.openStepper = i + 1;
+                        wizardClass = "open_step common_step";
+                    }
+                    if (name == "LAB RESULTS" && this.OPDActivities[i] == "Investigations") {
+                        this.openStepper = i + 1;
+                        wizardClass = "open_step common_step";
+                    }
+                    if (name == "OUTPATIENT DIAGNOSIS" && this.OPDActivities[i] == "Diagnosis") {
+                        this.openStepper = i + 1;
+                        wizardClass = "open_step common_step";
+                    }
+                    if (name == "PRESCRIPTION" && this.OPDActivities[i] == "Treatment Plan") {
+                        this.openStepper = i + 1;
+                        wizardClass = "open_step common_step";
+                    }
+                    if (name == "PATIENT OUTCOME" && this.OPDActivities[i] == "Outcome") {
+                        this.openStepper = i + 1;
+                        wizardClass = "open_step common_step";
+                    }
+                    let title = this.OPDActivities[i];
+                    let componentName = this.OPDActivities[i];
+                    if (this.OPDActivities[i] == "Diagnosis") {
+                        componentName = "OPDDiagnosis";
+                    }
+                    if (this.OPDActivities[i] == "Treatment Plan") {
+                        componentName = "OPDTreatmentPlan";
+                    }
 
-                const number = i + 1;
+                    const number = i + 1;
 
-                this.wizardData.push({
-                    title,
-                    class: wizardClass,
-                    checked: i === 0 ? false : "",
-                    disabled: false,
-                    number,
-                    last_step: i === this.OPDActivities.length - 1 ? "last_step" : "",
-                });
+                    this.wizardData.push({
+                        title,
+                        class: wizardClass,
+                        checked: i === 0 ? false : "",
+                        disabled: false,
+                        number,
+                        last_step: i === this.OPDActivities.length - 1 ? "last_step" : "",
+                    });
 
-                this.StepperData.push({
-                    title,
-                    component: componentName.replace(/\s+/g, ""),
-                    value: number.toString(),
-                });
+                    this.StepperData.push({
+                        title,
+                        component: componentName.replace(/\s+/g, ""),
+                        value: number.toString(),
+                    });
+                }
+            } catch (error) {
+                console.error(error);
             }
         },
 
@@ -318,48 +479,50 @@ export default defineComponent({
                 return item?.data[0] || item?.data;
             });
         },
-      async saveData() {
-        this.isLoading = true;
-        try {
-          const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
-          let filteredArray = [];
-          if (obs) {
-            filteredArray = obs.filter((obj:any) => {
-              return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
-            });
-          }
-          if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
-            await PatientOpdList.addPatientToStage(this.demographics.patient_id,dates.todayDateFormatted(),"DISPENSATION");
-            await this.saveDiagnosis();
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
-            await this.saveWomenStatus();
-            await this.savePresentingComplaints();
-            await this.savePastMedicalHistory();
-            await this.saveConsciousness();
-            await this.savePhysicalExam();
-            resetOPDPatientData();
-
-            
-            if (this.userRole == "Lab") {
-              this.$router.push("home");
-            } else {
-              this.$router.push("patientProfile");
+        async saveClinicalAssessment() {
+            this.isLoading = true;
+            try {
+                const obs = await ObservationService.getAll(this.patient.patientID, "Presenting complaint");
+                let filteredArray = [];
+                if (obs) {
+                    filteredArray = obs.filter((obj: any) => {
+                        return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+                    });
+                }
+                if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+                    await this.saveConsciousness();
+                    await this.savePresentingComplaints();
+                    await this.saveWomenStatus();
+                    await this.savePastMedicalHistory();
+                    await this.saveAllergies();
+                    await this.savePhysicalExam();
+                    resetOPDPatientData();
+                } else {
+                    toastWarning("Patient complaints are required");
+                    return;
+                }
+            } catch (error) {
+            } finally {
+                this.isLoading = false;
             }
-          } else {
-            toastWarning("Patient complaints are required");
-          }
-        } catch (error) {
-          console.error("Error in saveData: ", error);
-        } finally {
-          this.isLoading = false;
-        }
-      },
+        },
+        async saveData() {
+          try {
+            const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
+            await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
+            const location = await getUserLocation();
+            const locationId = location ? location.code : null;
+            await usePatientList().refresh(locationId);
+            this.checkedIn = false;
+           await toastSuccess("Finished and visit closed");
+          } catch (e) {}
+          this.$router.push("/home");
+        },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
             const userID: any = Service.getUserID();
             if (pastMedicalHistoryData.length > 0) {
-                const pastMedicalHistory = new PastMedicalHistory(this.demographics.patient_id, userID);
+                const pastMedicalHistory = new PastMedicalHistory(this.patient.patientID, userID);
                 const encounter = await pastMedicalHistory.createEncounter();
                 if (!encounter) return toastWarning("Unable to create past medical history encounter");
                 const savingStatus = await pastMedicalHistory.saveObservationList(pastMedicalHistoryData);
@@ -370,7 +533,7 @@ export default defineComponent({
         async savePresentingComplaints() {
             if (this.presentingComplaints[0].selectedData.length > 0) {
                 const userID: any = Service.getUserID();
-                const PatientComplaints = new PatientComplaintsService(this.demographics.patient_id, userID);
+                const PatientComplaints = new PatientComplaintsService(this.patient.patientID, userID);
                 const encounter = await PatientComplaints.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient complaints encounter");
                 const patientStatus = await PatientComplaints.saveObservationList(this.getFormatedData(this.presentingComplaints[0].selectedData));
@@ -383,7 +546,7 @@ export default defineComponent({
             const data = await this.buildPhysicalExamination();
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
-                const PhysicalExam = new PhysicalExamService(this.demographics.patient_id, userID);
+                const PhysicalExam = new PhysicalExamService(this.patient.patientID, userID);
                 const encounter = await PhysicalExam.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient physical examination encounter");
                 const patientStatus = await PhysicalExam.saveObservationList(data);
@@ -395,7 +558,7 @@ export default defineComponent({
             const womenStatus = await formatRadioButtonData(this.pregnancy);
             if (womenStatus.length > 0) {
                 const userID: any = Service.getUserID();
-                const patientPregnancy = new PatientGeneralConsultationService(this.demographics.patient_id, userID);
+                const patientPregnancy = new PatientGeneralConsultationService(this.patient.patientID, userID);
                 const encounter = await patientPregnancy.createEncounter();
                 if (!encounter) return toastWarning("Unable to create pregnant Status encounter");
                 const patientStatus = await patientPregnancy.saveObservationList(womenStatus);
@@ -407,12 +570,21 @@ export default defineComponent({
             if (this.OPDdiagnosis[0].selectedData.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
+                diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
             }
+        },
+       async saveAllergies(){
+          const userID: any = Service.getUserID();
+          const patientID = this.patient.patientID;
+          const treatmentInstance = new Treatment();
+          if (!isEmpty(this.selectedMedicalAllergiesList)) {
+            const allergies = this.mapToAllergies();
+            treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+          }
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
             const treatmentInstance = new Treatment();
 
             if (!isEmpty(this.selectedMedicalAllergiesList)) {
@@ -467,17 +639,20 @@ export default defineComponent({
         },
 
         async saveOutComeStatus() {
-            // const userID: any = Service.getUserID()
-            // const patientID = this.demographics.patient_id
-            // if (!isEmpty(this.dispositions)) {
-            //     for (let key in this.dispositions) {
-            //         if (this.dispositions[key].type == 'Admit') {
-            //             console.log(this.dispositions[key])
-            //         } else {
-            //         }
-            //     }
-            // }
+            const userID: any = Service.getUserID();
+            const patientID = this.patient.patientID;
+            if (!isEmpty(this.dispositions)) {
+                for (let key in this.dispositions) {
+                    if (this.dispositions[key].type == "Admit") {
+                        console.log(this.dispositions[key]);
+                    } else {
+                    }
+                }
+            }
         },
+      saveInvestigations(){
+
+      },
         openModal() {
             createModal(SaveProgressModal);
         },
@@ -522,11 +697,11 @@ export default defineComponent({
             const data = await formatRadioButtonData(this.adult);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
-                const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
+                const consciousness = new ConsciousnessService(this.patient.patientID, userID);
                 const encounter = await consciousness.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient complaints encounter");
 
-                const patientAge = HisDate.getAgeInYears(this.demographics.birthdate);
+                const patientAge = HisDate.getAgeInYears(this.patient.personInformation.birthdate);
 
                 let data;
 
@@ -551,30 +726,39 @@ export default defineComponent({
 
 <style scoped>
 .spinner-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.5);
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 9999;
 }
 
 ion-spinner {
-  width: 80px;
-  height: 80px;
+    width: 80px;
+    height: 80px;
 }
 
 .loading-text {
-  margin-top: 20px;
-  font-size: 18px;
-  color: #333;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+}
+.pause-alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    margin-bottom: 1px;
+    text-align: center;
 }
 
 .loading {
-  pointer-events: none;
+    pointer-events: none;
 }
 </style>

@@ -73,10 +73,13 @@ const initialPresentingComplaint = [
                 backgroundColor: "",
                 status: "",
                 icon: "",
+                colSize:"",
                 textColor: "",
                 value: "",
                 name: "",
                 index: "",
+                justify:"",
+                alignText:""
             },
         ],
     },

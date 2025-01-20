@@ -1,5 +1,5 @@
 <template>
-    <ion-page :class="{ loading: isLoading }">
+    <ion-page :class="{ loading: isLoading }" :keep-alive="false">
         <!-- Spinner -->
         <div v-if="isLoading" class="spinner-overlay">
             <ion-spinner name="bubbles"></ion-spinner>
@@ -13,7 +13,7 @@
                     <basic-form :contentData="searchName" @update:inputValue="handleInputData"></basic-form>
                 </div>
                 <div class="drug_container">
-                    <div class="drug_content" v-for="(item, index) in reportData" :key="index">
+                    <div class="drug_content" v-for="(item, index) in reportData?.items" :key="index">
                         <ion-row class="search_header">
                             <ion-col class="">
                                 <span style="font-weight: 700; font-size: 16px; color: #939393">{{ item.drug_legacy_name }}</span>
@@ -45,7 +45,8 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
-                        :total-items="reportData[0]?.total_count"
+                        v-if="totalPages > 0"
+                        :total-items="totalPages"
                         :items-per-page="4"
                         :max-pages-shown="2"
                         v-model="currentPage"
@@ -53,7 +54,7 @@
                     />
                 </div>
             </div>
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')">
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end" @click="openAddStockModal('')" v-if="apiStatus">
                 <ion-fab-button color="primary"> <ion-icon :icon="add"></ion-icon> </ion-fab-button>
             </ion-fab>
         </ion-content>
@@ -103,6 +104,9 @@ import { useSearchName } from "@/stores/SearchName";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import { getOfflineRecords } from "@/services/offline_service";
+import { useStatusStore } from "@/stores/StatusStore";
+import { useWorkerStore } from "@/stores/workerStore";
 import {
     medkit,
     chevronBackOutline,
@@ -117,6 +121,27 @@ import {
     add,
     person,
 } from "ionicons/icons";
+interface DrugBatch {
+    id: number;
+    pharmacy_batch_id: number;
+    drug_id: number;
+    delivered_quantity: number;
+    current_quantity: number;
+    delivery_date: string;
+    expiry_date: string;
+    drug_legacy_name: string;
+    doses_wasted: number;
+    dispensed_quantity: number;
+}
+
+interface CombinedDrugBatch {
+    drug_legacy_name: string;
+    delivered_quantity: number;
+    current_quantity: number;
+    dispensed_quantity: number;
+    doses_wasted: number;
+}
+
 export default defineComponent({
     name: "StockManagement",
     mixins: [SetUser],
@@ -157,6 +182,9 @@ export default defineComponent({
             } as any,
             selectedButton: "all",
             isLoading: false,
+            combinedBatches: [] as any,
+            stockData: [] as any,
+            totalPages: 0 as any,
         };
     },
     setup() {
@@ -180,7 +208,9 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useStockStore, ["stock"]),
+        ...mapState(useWorkerStore, ["workerData"]),
         ...mapState(useSearchName, ["searchName"]),
+        ...mapState(useStatusStore, ["apiStatus"]),
     },
     watch: {
         stock: {
@@ -190,16 +220,43 @@ export default defineComponent({
             deep: true,
         },
         $route: {
-            async handler() {
-                await this.buildTableData();
+            async handler(data) {
+                if (data.name == "stockManagement") await this.updateBuildStockData();
             },
             deep: true,
         },
     },
     async mounted() {
-        await this.buildTableData();
+        await this.updateBuildStockData();
     },
     methods: {
+        combineDrugBatches(batches: DrugBatch[]): CombinedDrugBatch[] {
+            // Group batches by drug_legacy_name
+            const groupedBatches = batches.reduce<Record<string, DrugBatch[]>>((acc, batch) => {
+                const key = batch.drug_legacy_name;
+                if (!acc[key]) {
+                    acc[key] = [];
+                }
+                acc[key].push(batch);
+                return acc;
+            }, {});
+
+            // Combine batches with the same drug_legacy_name
+            this.combinedBatches = Object.keys(groupedBatches).map<CombinedDrugBatch>((key) => {
+                const batchGroup = groupedBatches[key];
+
+                return {
+                    drug_legacy_name: key,
+                    delivered_quantity: batchGroup.reduce((sum, batch) => sum + batch.delivered_quantity, 0),
+                    current_quantity: batchGroup.reduce((sum, batch) => sum + batch.current_quantity, 0),
+                    dispensed_quantity: batchGroup.reduce((sum, batch) => sum + batch.dispensed_quantity, 0),
+                    doses_wasted: batchGroup.reduce((sum, batch) => sum + batch.doses_wasted, 0),
+                };
+            });
+
+            return this.combinedBatches;
+        },
+
         async onClickHandler(page: any) {
             await this.buildTableData(page);
         },
@@ -224,23 +281,59 @@ export default defineComponent({
                 await this.buildTableData();
             }
         },
+        async updateBuildStockData() {
+            useWorkerStore().postData("SYNC_STOCK_RECORD");
+            this.buildTableData();
+        },
         async buildTableData(page = 1) {
             this.isLoading = true;
             try {
-                const stockService = new StockService();
-                this.reportData = await stockService.getItems({
-                    start_date: "2000-01-01",
-                    end_date: this.endDate,
-                    drug_name: this.filter,
-                    page: page,
-                    page_size: 4,
-                    display_details: "true",
-                });
+                if (this.apiStatus) {
+                    const stockService = new StockService();
+                    this.reportData = {
+                        items: await stockService.getItems({
+                            start_date: "2000-01-01",
+                            end_date: this.endDate,
+                            drug_name: this.filter,
+                            page: page,
+                            page_size: 4,
+                            display_details: "true",
+                        }),
+                    };
+                    if (this.reportData?.items) this.totalPages = this.reportData?.items[0]?.total_count;
+                } else {
+                    this.stockData = await getOfflineRecords("stock");
+                    this.reportData = this.paginateArray(this.combineDrugBatches(this.stockData), this.currentPage);
+                    this.totalPages = this.combinedBatches?.length;
+                }
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {
                 this.isLoading = false;
             }
+        },
+        paginateArray(data: any, currentPage: any) {
+            // Validate inputs
+            if (!Array.isArray(data)) {
+                throw new Error("Input must be an array");
+            }
+
+            // Ensure currentPage is a positive number, defaulting to 1 if invalid
+            const page = Math.max(1, Number(currentPage) || 1);
+
+            // Calculate the start and end indices for slicing
+            const startIndex = (page - 1) * 4;
+            const endIndex = startIndex + 4;
+
+            // Slice the array to get the four items for the current page
+            const paginatedItems = data.slice(startIndex, endIndex);
+
+            return {
+                currentPage: page,
+                totalPages: Math.ceil(data.length / 4),
+                totalItems: data.length,
+                items: paginatedItems,
+            };
         },
         async selectButton(button: any) {
             this.selectedButton = button;

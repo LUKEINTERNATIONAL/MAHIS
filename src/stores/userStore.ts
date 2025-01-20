@@ -4,11 +4,13 @@ import { getUserLocation } from "@/services/userService"
 export const useUserStore = defineStore("userStore", {
     state: () => ({
         user: {} as any,
-        user_ID: '',
+        user_ID: "",
         showUserProfileEdit: false as boolean,
-        userFacilityName: '',
+        userFacilityName: "",
         currentUserProgram: {} as any,
         currentProgramId: 0 as number,
+        facilityLocation: {} as any,
+        userRoles: [] as any,
     }),
     actions: {
         setUser(data: any): void {
@@ -16,24 +18,36 @@ export const useUserStore = defineStore("userStore", {
             this.user_ID = data.user_id;
         },
         getUser(): any {
-            return this.user
+            return this.user;
         },
         setShowUserProfileEdit(value: boolean) {
             this.showUserProfileEdit = value;
         },
         getShowUserProfileEdit(): boolean {
-            return this.showUserProfileEdit
+            return this.showUserProfileEdit;
         },
         setUserFacilityName(name: string) {
-            this.userFacilityName = name
+            this.userFacilityName = name;
+        },
+        setFacilityLocation(data: any) {
+            this.facilityLocation = data;
+        },
+        getfacilityLocation() {
+            return this.facilityLocation;
         },
         getUserId() {
-            return this.user_ID
+            return this.user_ID;
         },
         setCurrentUserProgram(programData: any) {
-            this.currentUserProgram = programData
-            this.currentProgramId = programData.program_id
-        }
+            this.currentUserProgram = programData;
+            this.currentProgramId = programData.program_id;
+        },
+        setUserRoles(data: any) {
+            this.userRoles = data;
+        },
+        getUserRoles() {
+            return this.userRoles;
+        },
     },
     persist: true,
 });

@@ -134,7 +134,7 @@ import { Service } from "@/services/service";
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
-import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
+import { saveVaccineAdministeredDrugs } from "@/apps/Immunization/services/vaccines_service";
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import VueMultiselect from "vue-multiselect";
@@ -147,10 +147,9 @@ import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
-import SetDemographics from "@/views/Mixin/SetDemographics.vue";
-
+import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 export default defineComponent({
-    mixins: [SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -214,13 +213,21 @@ export default defineComponent({
         title: {
             default: [] as any,
         },
+        dashBoardData: {
+            default: "" as any,
+        },
     },
     computed: {
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
+        ...mapState(useDemographicsStore, ["patient"]),
     },
     async mounted() {
         this.isLoading = true;
+        if (!this.dashBoardData) {
+            this.isLoading = false;
+            return [];
+        }
         this.data = await getVaccinesData();
 
         this.tableData = this.processData();
@@ -257,11 +264,12 @@ export default defineComponent({
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
-            this.setDemographics(patientData);
+            await useDemographicsStore().setPatientRecord(patientData);
             this.$router.push("patientProfile");
         },
         processData() {
-            const data = this.data.map((item: any) => {
+            // if (!this.dashBoardData) return [];
+            const data = this.data?.map((item: any) => {
                 if (item.name == "missed_immunizations") {
                     this.clientDetails = []; //Ressetting client details
                     this.villageList = ["All"]; //Ressetting client details
@@ -424,7 +432,7 @@ export default defineComponent({
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
-            saveVaccineAdministeredDrugs();
+            saveVaccineAdministeredDrugs(this.patient);
             this.dismiss();
             store.setTempScannedBatchNumber(null);
         },

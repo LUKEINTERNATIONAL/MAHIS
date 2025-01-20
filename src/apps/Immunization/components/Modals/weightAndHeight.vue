@@ -78,7 +78,7 @@ import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
-import db from "@/db";
+import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -104,11 +104,11 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 this.checkAge();
             },
@@ -120,8 +120,9 @@ export default defineComponent({
     setup() {},
     methods: {
         checkAge() {
-            if (!isEmpty(this.demographics.birthdate)) {
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics.birthdate) < 42 ? true : false;
+            if (!isEmpty(this.patient?.personInformation?.birthdate)) {
+                this.checkUnderSixWeeks =
+                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
                 this.controlHeight();
             }
         },
@@ -129,28 +130,28 @@ export default defineComponent({
             this.$router.push(url);
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics.birthdate);
+            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
         },
         controlHeight() {
             if (this.checkUnderSixWeeks) {
-                modifyFieldValue(this.vitalsWeightHeight, "height", "inputHeader", "Height");
-                modifyFieldValue(this.vitalsWeightHeight, "height", "inputDisplayNone", true);
+                modifyFieldValue(this.vitalsWeightHeight, "Height (cm)", "inputHeader", "Height");
+                modifyFieldValue(this.vitalsWeightHeight, "Height (cm)", "inputDisplayNone", true);
             } else {
-                modifyFieldValue(this.vitalsWeightHeight, "height", "inputDisplayNone", false);
+                modifyFieldValue(this.vitalsWeightHeight, "Height (cm)", "inputDisplayNone", false);
             }
         },
         async validaterowData(event: any) {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            const vitalsInstance = new VitalsService(this.patient.patientID, userID);
 
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
-            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "Height (cm)", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (height && heightValue) {
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", height.flat(Infinity)[0]);
+                modifyFieldValue(this.vitalsWeightHeight, "Height (cm)", "alertsErrorMassage", height.flat(Infinity)[0]);
             } else {
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", "");
+                modifyFieldValue(this.vitalsWeightHeight, "Height (cm)", "alertsErrorMassage", "");
             }
 
             if (weight && weightValue) {
@@ -162,47 +163,40 @@ export default defineComponent({
         },
         async saveVitals() {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            const vitalsInstance = new VitalsService(this.patient.patientID, userID);
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
-            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "Height (cm)", "value");
             let height = null;
-            if (heightValue) height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
+            if (!this.checkUnderSixWeeks) height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
-            db.collection("patientRecords")
-                .doc({ patientID: 1721822809464 })
-                .update({
-                    vitals: {
-                        weight: weightValue,
-                        height: heightValue,
-                    },
-                });
-            if (weight == null && height == null) {
-                const encounter = await vitalsInstance.createEncounter();
-                if (!encounter) return toastWarning("Unable to create vitals encounter");
-                const data = await formatInputFiledData(this.vitalsWeightHeight, this.vitals_date);
-                await vitalsInstance.saveObservationList(data);
-                toastSuccess("Saved successful");
+
+            const newVitals = await formatInputFiledData(this.vitalsWeightHeight);
+            if (newVitals.length > 0 && weight == null && height == null) {
+                const patientData = JSON.parse(JSON.stringify(this.patient));
+                let vitals = patientData?.vitals;
+                vitals.unsaved = [...vitals.unsaved, ...newVitals];
+                await saveOfflinePatientData(patientData);
+                toastSuccess("Vitals saved successful");
                 this.cleanInputFields();
-                this.vitalsWeightHeight[0].validationStatus = "success";
             } else {
                 toastWarning("Please complete the form");
             }
         },
         cleanInputFields() {
             modifyFieldValue(this.vitalsWeightHeight, "weight", "value", "");
-            modifyFieldValue(this.vitalsWeightHeight, "height", "value", "");
+            modifyFieldValue(this.vitalsWeightHeight, "Height (cm)", "value", "");
             this.dismiss();
         },
         dismiss() {
             modalController.dismiss();
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.patient?.personInformation?.gender && this.patient?.personInformation?.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();

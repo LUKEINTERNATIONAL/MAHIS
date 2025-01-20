@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, toRaw } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { ref } from "vue";
 import { icons } from "@/utils/svg";
@@ -60,7 +60,7 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
     data() {
@@ -95,39 +95,50 @@ export default defineComponent({
             await this.updateData();
         },
         processObservations() {
-            try {
-                let result: any = [];
-                let weightData = this.weight?.filter((item: any) => item.concept.concept_id === 5089);
-                let heightData = this.height?.filter((item: any) => item.concept.concept_id === 5090);
-                let allDates: any = "";
-                if (weightData && heightData)
-                    allDates = new Set([...weightData?.map((w: any) => w.obs_datetime), ...heightData?.map((h: any) => h?.obs_datetime)]);
-                else if (weightData) allDates = new Set([...weightData?.map((w: any) => w.obs_datetime)]);
-                else if (heightData) allDates = new Set([...heightData?.map((h: any) => h?.obs_datetime)]);
+            if (!this.weight && !this.height) return [];
 
-                allDates?.forEach((datetime: any) => {
-                    let weightObs = weightData?.find((w: any) => w.obs_datetime === datetime);
-                    let heightObs = heightData?.find((h: any) => h.obs_datetime === datetime);
+            const allDates = new Set([...(this.weight?.map((w: any) => w.obs_datetime) || []), ...(this.height?.map((h) => h.obs_datetime) || [])]);
 
-                    result.push({
-                        ids: { weightObsId: weightObs?.obs_id, heightObsId: heightObs?.obs_id },
-                        obs_datetime: datetime,
-                        weight: weightObs ? weightObs?.value_numeric : null,
-                        height: heightObs ? heightObs?.value_numeric : null,
-                    });
-                });
-                return result;
-            } catch (error) {
-                
-            }
-
+            return Array.from(allDates).map((datetime) => ({
+                ids: {
+                    weightObsId: this.weight?.find((w: any) => w.obs_datetime === datetime)?.obs_id,
+                    heightObsId: this.height?.find((h: any) => h.obs_datetime === datetime)?.obs_id,
+                },
+                obs_datetime: datetime,
+                weight: this.weight?.find((w: any) => w.obs_datetime === datetime)?.value_numeric ?? null,
+                height: this.height?.find((h: any) => h.obs_datetime === datetime)?.value_numeric ?? null,
+            }));
         },
         async updateData() {
-            this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
-            this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
+            try {
+                if (this.patient) {
+                    const combineArrays = [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved];
+                    this.weight = this.formatData(combineArrays, 5089);
+                    this.height = this.formatData(combineArrays, 5090);
+                } else {
+                    throw "No offline record found";
+                }
+            } catch (error) {
+                try {
+                    const height = await ObservationService.getAll(this.patient.patientID, "Height");
+                    const weight = await ObservationService.getAll(this.patient.patientID, "weight");
+                    this.weight = this.formatData(weight, 5089);
+                    this.height = this.formatData(height, 5090);
+                } catch (error) {}
+            }
+
             this.setListData(this.processObservations());
             this.$emit("click:weight", "");
-            console.log("🚀 ~ updateData ~  this.weight:", this.weight);
+        },
+        formatData(data: any, concept_id: any) {
+            return data
+                .filter((w: any) => w.concept_id == concept_id)
+                .map((w: any) => ({
+                    concept_id: concept_id,
+                    obs_datetime: w.obs_datetime,
+                    value_numeric: w.value_numeric,
+                    obs_id: w.obs_id,
+                }));
         },
         dismiss() {
             modalController.dismiss();
@@ -173,12 +184,12 @@ export default defineComponent({
                         class: "col_background",
                         display: [HisDate.toStandardHisDisplayFormat(item.obs_datetime), item.height, item.weight],
                         btn: ["void"],
-                        name: `height: ${item.height} and weight: ${item.weight} captured on ${HisDate.toStandardHisDisplayFormat(item.obs_datetime)} `,
+                        name: `height: ${item.height} and weight: ${item.weight} captured on ${HisDate.toStandardHisDisplayFormat(
+                            item.obs_datetime
+                        )} `,
                     });
                 });
-            } catch (error) {
-                
-            }
+            } catch (error) {}
         },
     },
 });

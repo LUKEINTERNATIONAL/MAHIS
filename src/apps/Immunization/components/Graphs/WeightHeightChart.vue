@@ -53,7 +53,7 @@ import WeightForAgeGirls from "@/Data/WeightForAgeGirls";
 import HeightForAgeGirls from "@/Data/HeightForAgeGirls";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 import ListHeightWeight from "@/views/Mixin/ListHeightWeight.vue";
-
+import { getOfflineFirstObsValue } from "@/services/offline_service";
 export default defineComponent({
     mixins: [ListHeightWeight],
     name: "Menu",
@@ -69,20 +69,24 @@ export default defineComponent({
     },
 
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
     async mounted() {
-        await this.updateData();
-        await this.changeGraph("weight");
-        await this.displayWeightGraph();
+        if (this.patient?.vitals) {
+            await this.updateData();
+            await this.changeGraph("weight");
+            await this.displayWeightGraph();
+        }
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
-                await this.updateData();
-                await this.changeGraph("weight");
-                await this.displayWeightGraph();
+                if (this.patient?.vitals) {
+                    await this.updateData();
+                    await this.changeGraph("weight");
+                    await this.displayWeightGraph();
+                }
             },
             deep: true,
         },
@@ -171,7 +175,6 @@ export default defineComponent({
         },
         async changeGraph(name: any) {
             this.propsContent.list = this.list;
-            console.log("🚀 ~ changeGraph ~ this.propsContent.list:", this.propsContent.list);
             this.activeGraph = name;
             this.setActive(name);
             this.propsContent.weight = this.weight;
@@ -189,14 +192,17 @@ export default defineComponent({
         },
         async setValues() {
             this.dataset = [];
-            this.currentHeight = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Height", "value_numeric");
-            this.currentWeight = await ObservationService.getFirstObsValue(this.demographics.patient_id, "weight", "value_numeric");
+            const vitals = [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved];
+            if (vitals?.length > 0) {
+                this.currentHeight = await getOfflineFirstObsValue(vitals, "value_numeric", 5090);
+                this.currentWeight = await getOfflineFirstObsValue(vitals, "value_numeric", 5089);
+            }
         },
         async displayWeightGraph() {
             this.stepSize = 3;
             if (this.weight) {
                 this.valueNumericArray = this.weight?.map((item: any) => {
-                    return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
+                    return { x: HisDate.getAgeInFloatYears(this.patient?.personInformation?.birthdate, item.obs_datetime), y: item.value_numeric };
                 });
                 await this.calculateWeightZScore();
             }
@@ -205,16 +211,20 @@ export default defineComponent({
             this.stepSize = 5;
             if (this.height) {
                 this.valueNumericArray = this.height.map((item: any) => {
-                    return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
+                    return { x: HisDate.getAgeInFloatYears(this.patient?.personInformation?.birthdate, item.obs_datetime), y: item.value_numeric };
                 });
                 await this.calculateHeightZScore();
             }
         },
         async calculateHeightZScore() {
             this.setValues();
-            const obs_datetime = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Height", "obs_datetime");
-            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.demographics?.birthdate);
-            const gender = this.demographics.gender;
+            const obs_datetime: any = await getOfflineFirstObsValue(
+                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
+                "obs_datetime",
+                5090
+            );
+            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
+            const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Height";
             let params;
             if (gender === "M") {
@@ -233,9 +243,13 @@ export default defineComponent({
         },
         async calculateWeightZScore() {
             await this.setValues();
-            const obs_datetime = await ObservationService.getFirstObsValue(this.demographics.patient_id, "weight", "obs_datetime");
-            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.demographics?.birthdate);
-            const gender = this.demographics.gender;
+            const obs_datetime: any = await getOfflineFirstObsValue(
+                [...this.patient?.vitals?.saved, ...this.patient?.vitals?.unsaved],
+                "obs_datetime",
+                5089
+            );
+            const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.patient?.personInformation?.birthdate);
+            const gender = this.patient?.personInformation?.gender;
             this.YTitle = "Weight";
             let params;
             if (gender === "M") {
@@ -648,6 +662,20 @@ export default defineComponent({
         },
     },
 });
+[
+    {
+        concept_id: 5089,
+        obs_datetime: "2024-11-03T07:09:51.000+02:00",
+        value_numeric: 12,
+        obs_id: 515,
+    },
+    {
+        concept_id: 5088,
+        obs_datetime: "2024-10-28T19:19:16.000+02:00",
+        value_numeric: 34,
+        obs_id: 353,
+    },
+];
 </script>
 
 <style scoped>

@@ -5,6 +5,7 @@ import PACK_CONF from "../../package.json";
 import { useUserStore } from "@/stores/userStore";
 import * as CryptoJS from "crypto-js";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
+import { useStatusStore } from "@/stores/StatusStore";
 export class InvalidAPIVersionError extends Error {
     message: string;
     constructor(version: string) {
@@ -53,6 +54,7 @@ export class AuthService {
     }
 
     async loadConfig() {
+        localStorage.setItem(AuthVariable.CORE_VERSION, this.getHeadVersion());
         return ApiClient.getFileConfig();
     }
 
@@ -127,6 +129,7 @@ export class AuthService {
 
         // Set session data from stored info
         this.token = offlineLoginInfo.token;
+        localStorage.setItem("apiKey", this.token);
         // You might want to set other properties like roles, programs, etc. here
         // if you decide to store them for offline use
 
@@ -147,7 +150,6 @@ export class AuthService {
     checkUserPrograms(selectedProgram: any) {
         const accessPrograms: any = localStorage.getItem("userPrograms");
         const programs = JSON.parse(accessPrograms);
-        console.log("🚀 ~ AuthService ~ checkUserPrograms ~ programs:", programs);
         if (programs) return programs.some((program: any) => program.name === selectedProgram);
         else toastDanger("No user programs");
     }
@@ -231,22 +233,22 @@ export class AuthService {
     }
 
     versionLockingIsEnabled() {
-        const val = this.getAppConf("enableVersionLocking");
+        // const val = this.getAppConf("enableVersionLocking");
         // Version locking is enabled by default if no config isset
-        return typeof val === "boolean" ? val : true;
+        // return typeof val === "boolean" ? val : true;
     }
 
     getAppConf(confKey: "promptFullScreenDialog" | "showUpdateNotifications" | "enableVersionLocking" | "dataCaching") {
-        const conf: any = localStorage.getItem("appConf");
-        if (conf) {
-            try {
-                const confObj = JSON.parse(conf);
-                return confObj[confKey];
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        return null;
+        // const conf: any = localStorage.getItem("appConf");
+        // if (conf) {
+        //     try {
+        //         const confObj = JSON.parse(conf);
+        //         return confObj[confKey];
+        //     } catch (e) {
+        //         console.error(e);
+        //     }
+        // }
+        // return null;
     }
 
     async getApiVersion(): Promise<string> {

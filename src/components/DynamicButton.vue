@@ -14,7 +14,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { IonButton } from "@ionic/vue";
-export default defineComponent({
+export default defineComponent( {
     created() {
         // this.$emit('onFooterInstance', this)
     },

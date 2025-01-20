@@ -17,10 +17,9 @@
             </ion-col>
             <ion-col offset="0.1" size="7">
                 <div class="visitData">
-
                     <!-- anc info -->
-                     <div v-if="Object.values(pregnancy).every((value) => value !== '')">
-                            <div style="max-width: 1000px">
+                    <div v-if="Object.values(pregnancy).every((value) => value !== '')">
+                        <div style="max-width: 1000px">
                             <div class="heading">ANC PROFILE DATA</div>
                             <div>
                                 <ion-row>
@@ -30,12 +29,12 @@
                                     <ion-col class="contentTitle">PREGNANCY COMPLICATIONS</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col>{{pregnancy.Gravida}}</ion-col>
-                                    <ion-col>{{pregnancy.Stillbirths}}</ion-col>
-                                    <ion-col>{{pregnancy['Abortions/Miscarriages']}}</ion-col> 
-                                    <ion-col>{{pregnancy.test}}</ion-col> 
+                                    <ion-col>{{ pregnancy.Gravida }}</ion-col>
+                                    <ion-col>{{ pregnancy.Stillbirths }}</ion-col>
+                                    <ion-col>{{ pregnancy["Abortions/Miscarriages"] }}</ion-col>
+                                    <ion-col>{{ pregnancy.test }}</ion-col>
                                 </ion-row>
-                                <br/>
+                                <br />
                                 <ion-row>
                                     <ion-col class="contentTitle">PAST SURGERIES</ion-col>
                                     <ion-col class="contentTitle">OTHER SURGERIES</ion-col>
@@ -43,12 +42,12 @@
                                     <ion-col class="contentTitle">CHRONIC CONDITIONS</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col>{{pregnancy.surgeries}}</ion-col>
-                                    <ion-col>{{pregnancy['Other notes']}}</ion-col>
-                                    <ion-col>{{pregnancy.allergies}}</ion-col>
-                                    <ion-col>{{pregnancy.chronic}}</ion-col> 
+                                    <ion-col>{{ pregnancy.surgeries }}</ion-col>
+                                    <ion-col>{{ pregnancy["Other notes"] }}</ion-col>
+                                    <ion-col>{{ pregnancy.allergies }}</ion-col>
+                                    <ion-col>{{ pregnancy.chronic }}</ion-col>
                                 </ion-row>
-                                <br/>
+                                <br />
                                 <ion-row>
                                     <ion-col class="contentTitle">LNMP</ion-col>
                                     <ion-col class="contentTitle">LIVE BIRTHS</ion-col>
@@ -56,27 +55,25 @@
                                     <ion-col class="contentTitle">OTHER ALLERGIES</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col>{{pregnancy.lnmp}}</ion-col>
-                                    <ion-col>{{pregnancy.LiveBirths}}</ion-col>
-                                    <ion-col>{{pregnancy.Parity}}</ion-col>
-                                    <ion-col>{{pregnancy.Other}}</ion-col> 
+                                    <ion-col>{{ pregnancy.lnmp }}</ion-col>
+                                    <ion-col>{{ pregnancy.LiveBirths }}</ion-col>
+                                    <ion-col>{{ pregnancy.Parity }}</ion-col>
+                                    <ion-col>{{ pregnancy.Other }}</ion-col>
                                 </ion-row>
-                                <br/>
+                                <br />
                                 <ion-row>
                                     <ion-col class="contentTitle">ULTRASOUND DONE</ion-col>
                                     <ion-col class="contentTitle">GESTATION AGE BY PALPATION</ion-col>
                                     <ion-col class="contentTitle">GESTATION USED</ion-col>
                                     <ion-col class="contentTitle">TETANUS DOSES</ion-col>
-                                
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col>{{pregnancy.Ultrasound}}</ion-col>
-                                    <ion-col>{{pregnancy.Gestation}}</ion-col>
-                                    <ion-col>{{pregnancy.gestationUsed }}</ion-col>
-                                    <ion-col>{{pregnancy.tetanus}}</ion-col>
-                                    
+                                    <ion-col>{{ pregnancy.Ultrasound }}</ion-col>
+                                    <ion-col>{{ pregnancy.Gestation }}</ion-col>
+                                    <ion-col>{{ pregnancy.gestationUsed }}</ion-col>
+                                    <ion-col>{{ pregnancy.tetanus }}</ion-col>
                                 </ion-row>
-                                <br/>
+                                <br />
                                 <ion-row>
                                     <ion-col class="contentTitle">MEDICATIONS CURRENTLY PRESCRIBED</ion-col>
                                     <ion-col class="contentTitle">DAILY CAFFEINE INTAKE</ion-col>
@@ -84,12 +81,12 @@
                                     <ion-col class="contentTitle">EXPOSURE TO SECOND HAND SMOKE</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col>{{pregnancy.prescription}}</ion-col>
-                                    <ion-col>{{pregnancy.caffeine}}</ion-col>
-                                    <ion-col>{{pregnancy.tobacco}}</ion-col>
-                                    <ion-col>{{pregnancy.smoke}}</ion-col>
+                                    <ion-col>{{ pregnancy.prescription }}</ion-col>
+                                    <ion-col>{{ pregnancy.caffeine }}</ion-col>
+                                    <ion-col>{{ pregnancy.tobacco }}</ion-col>
+                                    <ion-col>{{ pregnancy.smoke }}</ion-col>
                                 </ion-row>
-                                <br/>
+                                <br />
                                 <ion-row>
                                     <!-- <ion-col class="contentTitle">Tetanus doses</ion-col>
                                     <ion-col class="contentTitle">Medications currently prescribed</ion-col> -->
@@ -101,8 +98,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="noData" v-else>ANC Profile Data</div> 
-                     <!-- end of anc info -->
+                    <div class="noData" v-else-if="activeProgramID !== 32">ANC Profile Data</div>
+                    <!-- end of anc info -->
 
                     <div v-if="Object.values(vitals).every((value) => value !== '')">
                         <div style="max-width: 300px">
@@ -225,9 +222,11 @@ import { ProgramService } from "@/services/program_service";
 import HisDate from "@/utils/Date";
 import { ConceptService } from "@/services/concept_service";
 import { BMIService } from "@/services/bmi_service";
+import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 
 export default defineComponent({
     name: "Menu",
+    mixins: [SetPrograms],
     components: {
         IonContent,
         IonHeader,
@@ -254,12 +253,11 @@ export default defineComponent({
             vitals: {} as any,
             vitalsWeightHeight: {} as any,
             savedEncounters: [] as any,
-            pregnancy: {} as any
-
+            pregnancy: {} as any,
         };
     },
     watch: {
-        demographics: {
+        patient: {
             async handler() {
                 await this.updateData();
             },
@@ -277,7 +275,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDemographicsStore, ["demographics", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
         inputFields() {
             return this.investigations[0].selectedData;
         },
@@ -293,12 +291,12 @@ export default defineComponent({
         },
         async loadSavedEncounters(patientVisitDate: any) {
             this.visitDate = patientVisitDate;
-            const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
+            const encounters = await EncounterService.getEncounters(this.patient.patientID, { date: patientVisitDate });
             await this.setDiagnosisEncounters(encounters);
             await this.setVitalsEncounters(encounters);
             await this.setPresentingComplainsEncounters(encounters);
             await this.setTreatmentEncounters(encounters);
-            await this.setANCProfileEncounters(encounters)
+            await this.setANCProfileEncounters(encounters);
         },
         findEncounter(data: any, encounterType: any) {
             return data.find((obj: any) => obj.type && obj.type.name === encounterType);
@@ -318,35 +316,41 @@ export default defineComponent({
             this.vitals.systolic = this.filterObs(observations, "Systolic")?.[0]?.value_numeric ?? "";
             this.vitals.respirationRate = this.filterObs(observations, "Respiration rate")?.[0]?.value_numeric ?? "";
             this.vitals.diastolic = this.filterObs(observations, "Diastolic")?.[0]?.value_numeric ?? "";
-            
-            
 
             if (this.vitals.weight && this.vitals.height) {
                 await this.setBMI(this.vitals.weight, this.vitals.height);
             }
         },
-        async setANCProfileEncounters(data:any){
+        async setANCProfileEncounters(data: any) {
             const observations = this.findEncounter(data, "CURRENT PREGNANCY")?.observations;
             this.pregnancy.Gravida = this.filterObs(observations, "Gravida")?.[0]?.value_text ?? "";
             this.pregnancy.Stillbirths = this.filterObs(observations, "Stillbirths")?.[0]?.value_text ?? "";
             //this.pregnancy.LiveBirths = this.filterObs(observations, "LiveBirths")?.[0]?.value_text ?? "";
             //this.pregnancy.Parity = this.filterObs(observations, "Parity")?.[0]?.value_text ?? "";
-            this.pregnancy['Abortions/Miscarriages'] = this.filterObs(observations, "Abortions/Miscarriages")?.[0]?.value_text ?? "";
-            console.log("lets seeee",observations);
+            this.pregnancy["Abortions/Miscarriages"] = this.filterObs(observations, "Abortions/Miscarriages")?.[0]?.value_text ?? "";
+            console.log("lets seeee", observations);
             this.pregnancy.test = (await this.getConceptValues(this.filterObs(observations, "past pregnancies complications"), "coded"))?.[0];
-            this.pregnancy.surgeries = (await this.getConceptValues(this.filterObs(observations, "Does the woman have any past surgeries done?"), "coded"))?.[0];
-            this.pregnancy['Other notes'] = this.filterObs(observations, "Other notes")?.[0]?.value_text ?? "";
-            this.pregnancy.allergies = (await this.getConceptValues(this.filterObs(observations, "Does the woman have any allergies?"), "coded"))?.[0];
+            this.pregnancy.surgeries = (
+                await this.getConceptValues(this.filterObs(observations, "Does the woman have any past surgeries done?"), "coded")
+            )?.[0];
+            this.pregnancy["Other notes"] = this.filterObs(observations, "Other notes")?.[0]?.value_text ?? "";
+            this.pregnancy.allergies = (
+                await this.getConceptValues(this.filterObs(observations, "Does the woman have any allergies?"), "coded")
+            )?.[0];
             this.pregnancy.chronic = (await this.getConceptValues(this.filterObs(observations, "chronic conditions"), "coded"))?.[0];
             this.pregnancy.lnmp = (await this.getConceptValues(this.filterObs(observations, "LNMP Known?"), "coded"))?.[0];
             //this.pregnancy.lmnpDate = this.filterObs(observations, "lmnpDate")?.[0]?.value_text ?? "";
             //this.pregnancy.lmnpGestationAge = this.filterObs(observations, "lmnpGestationAge")?.[0]?.value_text ?? "";
-            this.pregnancy['Other'] = this.filterObs(observations, "Other notes")?.[0]?.value_text ?? "";
+            this.pregnancy["Other"] = this.filterObs(observations, "Other notes")?.[0]?.value_text ?? "";
             this.pregnancy.Ultrasound = (await this.getConceptValues(this.filterObs(observations, "Ultrasound done?"), "coded"))?.[0];
             this.pregnancy.Gestation = (await this.getConceptValues(this.filterObs(observations, "Gestation"), "coded"))?.[0];
             this.pregnancy.gestationUsed = (await this.getConceptValues(this.filterObs(observations, "Gestation age to be used"), "coded"))?.[0];
-            this.pregnancy.tetanus = (await this.getConceptValues(this.filterObs(observations, "The woman received tetanus doses for immunization?"), "coded"))?.[0];
-            this.pregnancy.prescription = (await this.getConceptValues(this.filterObs(observations, "Which medications is the woman currently prescribed?"), "coded"))?.[0];
+            this.pregnancy.tetanus = (
+                await this.getConceptValues(this.filterObs(observations, "The woman received tetanus doses for immunization?"), "coded")
+            )?.[0];
+            this.pregnancy.prescription = (
+                await this.getConceptValues(this.filterObs(observations, "Which medications is the woman currently prescribed?"), "coded")
+            )?.[0];
             this.pregnancy.caffeine = (await this.getConceptValues(this.filterObs(observations, "Daily caffeine use"), "coded"))?.[0];
             this.pregnancy.tobacco = (await this.getConceptValues(this.filterObs(observations, "Recently quit tobacco products"), "coded"))?.[0];
             this.pregnancy.smoke = (await this.getConceptValues(this.filterObs(observations, "Exposure to second hand smoke"), "coded"))?.[0];
@@ -358,8 +362,6 @@ export default defineComponent({
             // this.pregnancy['Date for ultrasound'] = this.filterObs(observations, "Ultrasound")?.[0]?.value_text ?? "";
             // this.pregnancy['Gestation age from ultrasound'] = this.filterObs(observations, "specify")?.[0]?.value_text ?? "";
             // this.pregnancy.smoke = (await this.getConceptValues(this.filterObs(observations, "The woman received tetanus doses for immunization?"), "coded"))?.[0];
-            
-
         },
         async setTreatmentEncounters(data: any) {},
         async setPresentingComplainsEncounters(data: any) {
@@ -387,12 +389,12 @@ export default defineComponent({
             createModal(InvestigationsModal);
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.patient?.personInformation?.gender && this.patient?.personInformation?.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
-                    this.demographics.gender,
-                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                    this.patient?.personInformation?.gender,
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
                 );
             }
             this.updateBMI();

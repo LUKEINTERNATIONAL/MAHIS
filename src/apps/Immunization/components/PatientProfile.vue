@@ -1,36 +1,60 @@
 <template>
     <div :fullscreen="true" style="--background: #fff">
         <div class="demographics">
-            <div style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
-                <ion-row>
-                    <ion-col size="3.3">
-                        <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+                <div
+                    style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-content: center;
+                        padding-bottom: 5px;
+                        padding-top: 5px;
+                        padding-left: 5px;
+                    "
+                >
+                    <div style="margin-right: 5px">
+                        <div :class="patient?.personInformation?.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
                             <ion-icon style="color: #fff; font-size: 100px" :icon="person"></ion-icon>
                         </div>
-                    </ion-col>
-                    <ion-col size="8.7">
+                    </div>
+                    <div>
                         <div class="demographicsFirstRow">
-                            <div class="name">{{ demographics.name }}</div>
-                        </div>
-                        <div class="demographicsOtherRow">
-                            <div class="demographicsText">
-                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
-                                {{ getAge(demographics.birthdate) }} ({{ formatBirthdate() }})
+                            <div class="name">
+                                {{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                                {{ patient?.personInformation?.family_name }}
                             </div>
                         </div>
-                        <div class="demographicsOtherRow">
+                        <div class="demographicsOtherRow" style="margin-top: 10px">
+                            <div class="demographicsText">
+                                {{ patient?.personInformation?.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
+                                {{ getAge(patient?.personInformation?.birthdate) }} ({{ formatBirthdate() }})
+                            </div>
+                        </div>
+                        <div class="demographicsOtherRow" v-if="patient?.personInformation?.current_district">
                             <div class="demographicsText">Current Address:</div>
-                            <div class="demographicsText mediumFontColor">{{ demographics.address }}</div>
+                            <div class="demographicsText mediumFontColor">{{ formatCurrentAddress(patient) }}</div>
+                        </div>
+                        <div class="demographicsOtherRow" v-if="patient?.personInformation?.country">
+                            <div class="demographicsText">Country:</div>
+                            <div class="demographicsText mediumFontColor">{{ patient?.personInformation?.country }}</div>
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">
-                                MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span>
+                                MRN: <span class="mediumFontColor">{{ patient.ID }}</span>
                             </div>
                         </div>
                         <div class="demographicsOtherRow">
-                            <div class="demographicsText smallFont">Outcome: <span class="outcomeStatus"> Active</span></div>
+                            <div class="demographicsText smallFont" v-if="selectedStatus == 7">
+                                Outcome: <span class="outcomeStatus"> Active</span>
+                            </div>
+                            <div class="demographicsText smallFont" v-if="selectedStatus == 6">
+                                Outcome: <span class="outcomeStatus" style="background: #fecdca; color: #b42318"> Inactive</span>
+                            </div>
+                            <div class="demographicsText smallFont" v-if="selectedStatus == 3">
+                                Outcome: <span class="outcomeStatus" style="background: #fecdca; color: #b42318"> Died</span>
+                            </div>
                         </div>
-                        <div class="demographicsOtherRow">
+                        <div class="demographicsOtherRow" style="margin-bottom: 10px">
                             <div class="demographicsText smallFont">
                                 Status:
                                 <span v-if="protectedStatus == 'No'" style="background: #fedf89; color: #b54708" class="protectedStatus"
@@ -42,8 +66,8 @@
                                 <span v-else class="protectedStatus" style="background: #fecdca; color: #b42318">Unknown protection at birth</span>
                             </div>
                         </div>
-                    </ion-col>
-                </ion-row>
+                    </div>
+                </div>
             </div>
             <div class="name" style="color: var(--ion-color-primary); margin-top: 10px" @click="openPopover($event)">
                 <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
@@ -154,21 +178,48 @@
             </div>
         </div>
     </div>
-    <ion-popover
-        style="--offset-x: -10px"
-        :is-open="popoverOpen"
-        :show-backdrop="false"
-        :dismiss-on-select="true"
-        :event="event"
-        @didDismiss="popoverOpen = false"
-    >
+    <ion-popover style="--offset-x: -10px" :is-open="popoverOpen" :show-backdrop="false" :event="event" @didDismiss="popoverOpen = false">
         <div>
-            <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
-                <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
-                <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>
-                <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
-                <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
-            </ion-list>
+            <ion-accordion-group :multiple="true">
+                <ion-accordion value="first" toggle-icon="" @click="openPIM()">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Update demographics</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="first" toggle-icon="" @click="openFollowModal()">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Follow up visits</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="second" toggle-icon="" @click="printVisitSummary()">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Print visit summary</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="third" toggle-icon="" @click="printID()">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Print client identifier</ion-label>
+                    </ion-item>
+                </ion-accordion>
+                <ion-accordion value="fourth">
+                    <ion-item slot="header" color="light">
+                        <ion-label>Update outcome</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <ion-list>
+                            <ion-item>
+                                <ion-toggle :checked="selectedStatus == 7" value="active" @ionChange="updateState(7)"> Active </ion-toggle>
+                            </ion-item>
+                            <ion-item>
+                                <ion-toggle :checked="selectedStatus == 6" value="inactive" @ionChange="updateState(6)"> Inactive </ion-toggle>
+                            </ion-item>
+                            <ion-item>
+                                <ion-toggle :checked="selectedStatus == 3" value="died" @ionChange="updateState(3)"> Died </ion-toggle>
+                            </ion-item>
+                        </ion-list>
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
         </div>
     </ion-popover>
 </template>
@@ -203,7 +254,6 @@ import { chevronBackOutline, checkmark, ellipsisVerticalSharp, person } from "io
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "@/stores/VitalsStore";
-import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
@@ -213,8 +263,6 @@ import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useOutcomeStore } from "@/stores/OutcomeStore";
-import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
@@ -242,7 +290,8 @@ import { ObservationService } from "@/services/observation_service";
 import missedVaccinesModal from "@/apps/Immunization/components/Modals/missedVaccinesModal.vue";
 import { DrugOrderService } from "@/services/drug_order_service";
 import customVaccine from "@/apps/Immunization/components/customVaccine.vue";
-import { PatientPrintoutService } from "@/services/patient_printout_service";
+import PatientProfileMixin from "@/views/Mixin/PatientProfile.vue";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 
 import {
     getFieldValue,
@@ -255,7 +304,10 @@ import {
 } from "@/services/data_helpers";
 import PatientProfileVue from "@/views/PatientProfile.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
+import Enrollment from "@/apps/NCD/views/Enrollment.vue";
+import { PatientProgramService } from "@/services/patient_program_service";
 export default defineComponent({
+    mixins: [PatientProfileMixin],
     name: "Home",
     components: {
         IonContent,
@@ -299,15 +351,11 @@ export default defineComponent({
             todays_date: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
             lastVaccine: [] as any,
             visits: [] as any,
-            popoverOpen: false,
-            event: null as any,
+            selectedStatus: 7 as any,
         };
     },
     computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useAdministerVaccineStore, [
@@ -319,40 +367,14 @@ export default defineComponent({
             "nextAppointMentDate",
         ]),
     },
-    created() {
-        this.getData();
-    },
     async mounted() {
-        this.markWizard();
         this.loadCurrentMilestone();
         this.checkAge();
         await this.checkProtectedStatus();
         await this.openFollowModal();
+        await this.programEnrollment();
     },
     watch: {
-        vitals: {
-            handler() {
-                this.markWizard();
-            },
-            deep: true,
-        },
-        investigations: {
-            handler() {
-                this.markWizard();
-            },
-            deep: true,
-        },
-        diagnosis: {
-            handler() {
-                this.markWizard();
-            },
-            deep: true,
-        },
-        selectedMedicalDrugsList: {
-            handler() {
-                this.markWizard();
-            },
-        },
         currentMilestone: {
             handler() {
                 this.loadCurrentMilestone();
@@ -360,17 +382,17 @@ export default defineComponent({
         },
         $route: {
             async handler(data) {
-                console.log("patientProfile", data.name);
-                if (data.name == "patientProfile") {
+                if (data.name == "patientProfile" && this.patient.patientID) {
                     await this.checkProtectedStatus();
+                    await this.programEnrollment();
                 }
             },
         },
-        demographics: {
+        patient: {
             async handler() {
-                if (this.demographics) {
+                if (this.patient) {
                     await this.checkProtectedStatus();
-                    if (!this.demographics.active) await this.openFollowModal();
+                    await this.programEnrollment();
                     this.checkAge();
                     this.setMilestoneReload();
                 }
@@ -382,38 +404,51 @@ export default defineComponent({
     },
 
     methods: {
+        handleChange(status: any) {
+            this.selectedStatus = status;
+        },
+        async programEnrollment() {
+            if (this.patient.patientID) {
+                this.program = new PatientProgramService(this.patient.patientID);
+                const checkEnrollment = await this.program.getProgramCurrentStates();
+                if (!checkEnrollment) {
+                    try {
+                        await this.program.enrollProgram();
+                        await this.program.setStateId(7);
+                    } catch (error) {
+                        await this.program.setStateId(7);
+                    }
+                    await this.program.updateState();
+
+                    this.selectedStatus = 7;
+                } else {
+                    this.selectedStatus = checkEnrollment.state;
+                }
+            }
+        },
+        async updateState(state: any) {
+            this.selectedStatus = state;
+            await this.program.setStateId(state);
+            await this.program.updateState();
+        },
         getAge(dateOfBirth: string): string {
             return HisDate.calculateDisplayAge(HisDate.toStandardHisFormat(dateOfBirth));
         },
-        printID() {
-            new PatientPrintoutService(this.demographics.patient_id).printNidLbl();
-        },
-        async printVisitSummary() {
-            this.visits = await PatientService.getPatientVisits(this.demographics.patient_id, false);
-            if (this.visits.length) {
-                const lbl = new PatientPrintoutService(this.demographics.patient_id);
-                return lbl.printVisitSummaryLbl(this.visits[0]);
-            } else {
-                toastWarning("No visits available");
-            }
-        },
-        openPopover(e: Event) {
-            this.event = e;
-            this.popoverOpen = true;
-        },
         async checkProtectedStatus() {
-            this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+            this.protectedStatus = this.getData(this.patient.birthRegistration, 11759)[0];
+        },
+        getData(data: any, concept_id: any) {
+            if (data) return data.filter((w: any) => w.concept_id == concept_id).map((w: any) => w.value_text);
+            else return "";
         },
         checkAge() {
-            if (!isEmpty(this.demographics.birthdate)) {
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics.birthdate) < 42 ? true : false;
+            if (!isEmpty(this.patient?.personInformation?.birthdate)) {
+                this.checkUnderSixWeeks =
+                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
             }
         },
         openVitalsModal() {
             createModal(OtherVitals, { class: "otherVitalsModal" });
-        },
-        openPIM() {
-            createModal(personalInformationModal, { class: "otherVitalsModal largeModal" });
         },
         openWH() {
             createModal(weightAndHeight, { class: "otherVitalsModal" });
@@ -422,10 +457,10 @@ export default defineComponent({
             createModal(vaccinationHistory, { class: "otherVitalsModal vaccineHistoryModal" });
         },
         async openFollowModal() {
-            if (this.demographics?.patient_id) {
-                this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-                const dataToPass = { protectedStatus: this.protectedStatus };
-                if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
+            if (this.patient?.patientID) {
+                this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.patient.patientID);
+                const dataToPass = { protectedStatus: this.protectedStatus, lastVaccinesGiven: this.lastVaccinesGiven };
+                if (this.lastVaccinesGiven.length > 0) createModal(followUpVisitModal, { class: "fullScreenModal" }, true, dataToPass);
             }
         },
         openAdministerVaccineModal() {
@@ -436,122 +471,24 @@ export default defineComponent({
         },
         isChild() {
             const patient = new PatientService();
-            if (patient.getID()) {
-                if (patient.isUnderFive()) return true;
-                else return false;
-            }
+            if (patient.isUnderFive()) return true;
+            else return false;
         },
-        async getData() {
-            const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];
-            // const steps = this.activities;
-            for (let i = 0; i < steps.length; i++) {
-                const title = steps[i];
-                const number = i + 1;
-
-                this.wizardData.push({
-                    title,
-                    class: "common_step",
-                    checked: i === 0 ? false : "",
-                    disabled: false,
-                    number,
-                    last_step: i === steps.length - 1 ? "last_step" : "",
-                });
-                let component = title;
-                if (title == "Next Appointment") component = "Immunization Next Appointment";
-                this.StepperData.push({
-                    title,
-                    component: component.replace(/\s+/g, ""),
-                    value: number.toString(),
-                });
-            }
-        },
-        markWizard() {
-            if (this.vitals.validationStatus) {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Vital Signs", {
-                    checked: false,
-                });
-            }
-
-            if (this.investigations[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Investigations", {
-                    checked: false,
-                });
-            }
-
-            if (this.diagnosis[0].selectedData.length > 0) {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Diagnosis", {
-                    checked: false,
-                });
-            }
-
-            if (this.selectedMedicalDrugsList.length > 0) {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Treatment Plan", {
-                    checked: false,
-                });
-            }
-
-            if (this.dispositions.length > 0) {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: true,
-                    class: "open_step common_step",
-                });
-            } else {
-                modifyWizardData(this.wizardData, "Outcome", {
-                    checked: false,
-                });
-            }
-        },
-
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
             });
         },
-        async saveData() {
-            await this.saveVitals();
-            await this.saveDiagnosis();
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
-            resetPatientData();
-            this.$router.push("patientProfile");
-        },
         async saveVitals() {
             if (this.vitals.validationStatus) {
                 const userID: any = Service.getUserID();
-                const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+                const vitalsInstance = new VitalsService(this.patient.patientID, userID);
                 vitalsInstance.onFinish(this.vitals);
-            }
-        },
-        async saveDiagnosis() {
-            if (this.diagnosis[0].selectedData.length > 0) {
-                const userID: any = Service.getUserID();
-                const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
             }
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
             const treatmentInstance = new Treatment();
 
             if (!isEmpty(this.selectedMedicalAllergiesList)) {
@@ -583,7 +520,7 @@ export default defineComponent({
 
         async saveOutComeStatus() {
             const userID: any = Service.getUserID();
-            const patientID = this.demographics.patient_id;
+            const patientID = this.patient.patientID;
 
             if (!isEmpty(this.dispositions)) {
                 this.dispositions.forEach(async (disposition: any) => {
@@ -639,7 +576,7 @@ export default defineComponent({
             });
         },
         formatBirthdate() {
-            return HisDate.toStandardHisDisplayFormat(this.demographics.birthdate);
+            return HisDate.toStandardHisDisplayFormat(this.patient?.personInformation?.birthdate);
         },
         calculateExpireDate(startDate: string | Date, duration: any) {
             const date = new Date(startDate);
@@ -676,9 +613,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+ion-accordion {
+    background: #fff;
+}
+ion-list {
+    --ion-background-color: #fff;
+}
 .demographics {
     box-sizing: border-box;
-    width: 95vw;
+    width: 98vw;
     /* height: 92px; */
     left: calc(50% - 461px / 2 + 27.5px);
     margin-top: 10px;
@@ -687,6 +630,7 @@ export default defineComponent({
     border-radius: 7px;
     display: flex;
     justify-content: space-between;
+    margin-left: 1vw;
 }
 .demographicsFirstRow {
     /* _Input dropdown menu item */
@@ -730,13 +674,9 @@ export default defineComponent({
 }
 .demographicsOtherRow {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 1px 5px;
     gap: 10px;
-    height: 25px;
-    left: calc(50% - 243px / 2 + 26.5px);
-    top: calc(50% - 23px / 2 - 455.5px);
+    margin-top: 20px;
+    margin-left: 5px;
 }
 .smallFont {
     font-size: 14px;

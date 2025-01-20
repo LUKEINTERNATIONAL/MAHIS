@@ -28,7 +28,7 @@ import Screentimeout from "@/composables/Screentimeout";
 import useFacility from "./composables/useFacility";
 import { useStatusStore } from "@/stores/StatusStore";
 import { storeToRefs } from "pinia";
-import { savePatientRecord } from "@/services/save_records";
+import { useWorkerStore } from "@/stores/workerStore";
 
 export default defineComponent({
     name: "App",
@@ -42,6 +42,7 @@ export default defineComponent({
     },
     setup() {
         const status = useStatusStore();
+        const workerStore = useWorkerStore();
         const apiOk = ref(true);
         const route = useRoute();
         const notConfigPage = ref(true);
@@ -60,7 +61,7 @@ export default defineComponent({
         Screentimeout.initiateSystemIdleMonitor();
 
         if (typeof auth.getAppConf("promptFullScreenDialog") === "boolean") {
-            checkFullScreen.value = auth.getAppConf("promptFullScreenDialog");
+            // checkFullScreen.value = auth.getAppConf("promptFullScreenDialog");
         }
 
         nprogress.configure({
@@ -92,7 +93,8 @@ export default defineComponent({
                 // });
                 // if (confirm) location.reload();
                 toastSuccess("Connection restored");
-                await savePatientRecord();
+                workerStore.terminate();
+                workerStore.postData("SYNC_ALL_DATA");
             }
             if (res && res.status === 401 && route.name != "Login") {
                 router.push("/login");
@@ -108,7 +110,7 @@ export default defineComponent({
                         ApiClient.healthCheck();
                     }
                 }, 2500);
-                toastWarning("Unable to reach api");
+                toastWarning("Offline mode");
             }
             nprogress.done();
         });
