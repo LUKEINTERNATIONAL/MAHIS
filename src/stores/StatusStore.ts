@@ -10,6 +10,7 @@ export const useStatusStore = defineStore("statusStore", {
             offlineTAsStatus: {} as any,
             offlineRelationshipStatus: {} as any,
             offlinePatientsStatus: {} as any,
+            isSyncingDone: false,
         };
     },
     actions: {
@@ -34,17 +35,18 @@ export const useStatusStore = defineStore("statusStore", {
         setOfflinePatientsStatus(data: any) {
             this.offlinePatientsStatus = data;
         },
-        registrationMetaDataStatus() {
+        checkMetaDataStatus() {
             if (
                 this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
                 this.offlineRelationshipStatus?.total_relationships == this.offlineRelationshipStatus?.total &&
                 this.offlineCountriesStatus?.total_countries == this.offlineCountriesStatus?.total &&
                 this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
-                this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
+                this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total &&
+                this.offlinePatientsStatus?.offlinePatientsCount == this.offlinePatientsStatus?.serverPatientsCount
             ) {
-                return true;
+                this.isSyncingDone = true;
             } else {
-                return false;
+                this.isSyncingDone = false;
             }
         },
     },
