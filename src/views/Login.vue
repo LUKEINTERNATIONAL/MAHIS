@@ -194,7 +194,8 @@ const facilityB = async () => {
 // Watchers
 watch(
     route,
-    async () => {
+    async (newRoute) => {
+        if (newRoute.name == "Login") localStorage.setItem("apiKey", "");
         await setPrograms();
     },
     { deep: true }
@@ -202,6 +203,7 @@ watch(
 
 // Lifecycle Hooks
 onMounted(async () => {
+    localStorage.setItem("apiKey", "");
     await auth.value.loadConfig();
     setVersion();
     await setPrograms();
