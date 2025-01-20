@@ -8,11 +8,11 @@
                         <div style="font-size: 16px">
                             <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                         </div>
-                        <div>
-                            <small class="facility-name" style="font-size: 68%">
-                                {{ userFacilityName }}
-                            </small>
-                            <small style="font-size: 68%"> | {{ sessionDate }} </small>
+                        <div :style="screenWidth <= 500 && userFacilityName.length > 25 ? 'display: block' : 'display: flex'">
+                            <div class="facility-name" style="font-size: 68%">{{ userFacilityName }}</div>
+                            <div style="font-size: 68%">
+                                <span v-if="screenWidth > 500 && userFacilityName.length > 25" style="margin-left: 5px">|</span> {{ sessionDate }}
+                            </div>
                         </div>
                     </div>
                 </ion-title>
@@ -20,6 +20,13 @@
                     <ToolbarSearch />
                 </div>
                 <div class="notifaction_person" slot="end">
+                    <ion-buttons style="cursor: pointer; margin-right: 15px; width: 20px" slot="end" class="iconFont">
+                        <img v-if="apiStatus && !isSyncingDone" src="/public/gif/syncing.gif" height="30" alt="" />
+                        <img v-if="isSyncingDone" src="/public/images/synced.png" height="30" alt="" />
+                        <img v-if="!apiStatus && !isSyncingDone" src="/public/images/unsynced.png" height="30" alt="" />
+                        <!-- <ion-icon :icon="notificationsOutline"></ion-icon> -->
+                        <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
+                    </ion-buttons>
                     <ion-buttons
                         v-if="apiStatus"
                         style="cursor: pointer; margin-right: 15px; color: #74ff15"
@@ -38,10 +45,7 @@
                     >
                         <ion-icon :icon="iconsContent.WifiOff"></ion-icon>
                     </ion-buttons>
-                    <ion-buttons style="cursor: pointer; margin-right: 5px" slot="end" class="iconFont">
-                        <ion-icon :icon="notificationsOutline"></ion-icon>
-                        <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
-                    </ion-buttons>
+
                     <ion-buttons style="cursor: pointer" slot="end" @click="openPopover($event)" class="iconFont" id="popover-button">
                         <ion-icon :icon="personCircleOutline"></ion-icon>
                     </ion-buttons>
@@ -57,7 +61,7 @@
                                 <ion-icon :icon="documentOutline" slot="start"></ion-icon>
                                 <span class="rght-drpm">Syncing status</span>
                             </ion-item>
-                            <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer">
+                            <ion-item :button="true" :detail="false" @click="logout()" style="cursor: pointer">
                                 <ion-icon :icon="logOutOutline" slot="start"></ion-icon>
                                 <span class="rght-drpm">Logout</span>
                             </ion-item>
@@ -120,6 +124,7 @@ import { icons } from "@/utils/svg";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { createModal } from "@/utils/Alerts";
 import SyncingStatusModal from "./Modal/SyncingStatusModal.vue";
+import img from "../utils/Img";
 export default defineComponent({
     mixins: [ScreenSizeMixin],
     name: "Toolbar",
@@ -169,7 +174,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useProgramStore, ["programs"]),
-        ...mapState(useStatusStore, ["apiStatus"]),
+        ...mapState(useStatusStore, ["apiStatus", "isSyncingDone"]),
         ...mapState(useUserStore, ["userFacilityName", "user_ID"]),
     },
     mounted() {
@@ -181,6 +186,10 @@ export default defineComponent({
         return { notificationsOutline, personCircleOutline, documentOutline, facilityName, logOutOutline };
     },
     methods: {
+        logout() {
+            localStorage.setItem("apiKey", "");
+            this.nav("/login");
+        },
         openSyncModal() {
             createModal(SyncingStatusModal);
         },

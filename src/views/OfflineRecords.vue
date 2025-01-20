@@ -178,8 +178,7 @@ export default defineComponent({
                                 item.saveStatusGuardianInformation,
                                 "",
                                 "",
-                                `<button class="btn btn-sm btn-primary edit-btn" data-id='${JSON.stringify(item)}'>More details</button>
-                                <button class="btn btn-sm btn-danger delete-btn" data-id="${item.offlinePatientID}">Delete</button>`,
+                                `<button class="btn btn-sm btn-primary edit-btn" data-id='${JSON.stringify(item)}'>More details</button>`,
                             ];
                         });
                         DataTable.use(DataTablesCore);
