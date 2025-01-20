@@ -4,8 +4,7 @@ import { useWebWorker } from "@vueuse/core";
 import { Service } from "@/services/service";
 import { watch } from "vue";
 import { useWorkerStatus } from "@/composables/useWorkerStatus";
-import { getOfflineRecords } from "@/services/offline_service";
-import { useDemographicsStore } from "./DemographicStore";
+import { useStatusStore } from "@/stores/StatusStore";
 
 interface WorkerState {
     url: string;
@@ -80,7 +79,7 @@ export const useWorkerStore = defineStore("worker", {
 
             // Get totals
             try {
-                const totals = await Service.getJson("/totals", { paginate: false });
+                const totals = useStatusStore().apiStatus ? await Service.getJson("/totals", { paginate: false }) : "";
                 if (totals) {
                     localStorage.setItem("totals", JSON.stringify(totals));
                     this.totals = JSON.stringify(totals);
@@ -121,6 +120,7 @@ export const useWorkerStore = defineStore("worker", {
                     programId: this.programId,
                     totals: this.totals,
                     date: this.date,
+                    apiStatus: useStatusStore().apiStatus,
                     payload,
                 });
             } else {
