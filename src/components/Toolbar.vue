@@ -8,11 +8,11 @@
                         <div style="font-size: 16px">
                             <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                         </div>
-                        <div>
-                            <small class="facility-name" style="font-size: 68%">
-                                {{ userFacilityName }}
-                            </small>
-                            <small style="font-size: 68%"> | {{ sessionDate }} </small>
+                        <div :style="screenWidth <= 500 && userFacilityName.length > 25 ? 'display: block' : 'display: flex'">
+                            <div class="facility-name" style="font-size: 68%">{{ userFacilityName }}</div>
+                            <div style="font-size: 68%">
+                                <span v-if="screenWidth > 500 && userFacilityName.length > 25" style="margin-left: 5px">|</span> {{ sessionDate }}
+                            </div>
                         </div>
                     </div>
                 </ion-title>
@@ -20,7 +20,7 @@
                     <ToolbarSearch />
                 </div>
                 <div class="notifaction_person" slot="end">
-                    <ion-buttons style="cursor: pointer; margin-right: 15px" slot="end" class="iconFont">
+                    <ion-buttons style="cursor: pointer; margin-right: 15px; width: 20px" slot="end" class="iconFont">
                         <img v-if="apiStatus && !isSyncingDone" src="/public/gif/syncing.gif" height="30" alt="" />
                         <img v-if="isSyncingDone" src="/public/images/synced.png" height="30" alt="" />
                         <img v-if="!apiStatus && !isSyncingDone" src="/public/images/unsynced.png" height="30" alt="" />
