@@ -61,7 +61,7 @@
                                 <ion-icon :icon="documentOutline" slot="start"></ion-icon>
                                 <span class="rght-drpm">Syncing status</span>
                             </ion-item>
-                            <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer">
+                            <ion-item :button="true" :detail="false" @click="logout()" style="cursor: pointer">
                                 <ion-icon :icon="logOutOutline" slot="start"></ion-icon>
                                 <span class="rght-drpm">Logout</span>
                             </ion-item>
@@ -186,6 +186,10 @@ export default defineComponent({
         return { notificationsOutline, personCircleOutline, documentOutline, facilityName, logOutOutline };
     },
     methods: {
+        logout() {
+            localStorage.setItem("apiKey", "");
+            this.nav("/login");
+        },
         openSyncModal() {
             createModal(SyncingStatusModal);
         },
