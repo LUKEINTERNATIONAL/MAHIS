@@ -49,6 +49,9 @@ export const useWorkerStore = defineStore("worker", {
                             // const patientData: any = await getOfflineRecords("patientRecords", { whereClause: { ID: demographicsStore.patient.ID } });
                             // demographicsStore.setRecord(patientData[0]);
                         }
+                        if (newData == "healthCheckError") {
+                            Service.getJson("_health");
+                        }
                         this.updateFromWorker(newData);
                     }
                 });
