@@ -45,6 +45,7 @@
             v-if="show_admitted_options"
             @data-saved="dataSavedTrigFn"
             :selected_ward_prop="selected_ward_data"
+            :admitted_other_props="admitted_other_data"
         />
 
         <ReferredOutCome
@@ -128,6 +129,7 @@ const selected_referral_type = ref()
 const selected_referral_type_data = ref(null)
 const selected_referral_data = ref(null) as any
 const selected_ward_data = ref(null) as any
+const admitted_other_data = ref(null) as any
 
 const referralType = ref([
     {
@@ -199,8 +201,7 @@ function removeItem(index: number) {
 }
 
 const editItem = (data: any) => { 
-    // removeItem(data.index)
-    console.log("edt_data: ",data.item)   
+    removeItem(data.index)  
     listUpdated(data.item)
 
     selected_referral_type_data.value = data.item.other.location_data
@@ -211,8 +212,7 @@ const editItem = (data: any) => {
     }
 
     selected_ward_data.value = data.item.other
-
-
+    admitted_other_data.value = data.item
 }
 
 async function checkRefType(clear_inputs: boolean = true) {
