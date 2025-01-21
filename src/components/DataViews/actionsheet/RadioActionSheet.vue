@@ -5,7 +5,7 @@
         <ion-list>
             <ion-radio-group :compare-with="compareWith" @ion-change="onclick">
                 <ion-item class="his-md-text" v-for="(item, index) in list" :key="index">
-                    <ion-radio slot="start" :value="item">
+                    <ion-radio label-placement="end" :value="item">
                         {{ getLabel(item) }}
                     </ion-radio>
                 </ion-item>
