@@ -100,6 +100,11 @@ const show_location_error = ref(false) as any
 const selectedDistrictIds = ref([]) as any
 const selected_location = ref({}) as any
 
+const other_store_data = {
+    ref_data: {},
+    location_data: {},
+}
+
 const note_properties = [
     {
         placeHolder: 'Reason',
@@ -155,8 +160,10 @@ watch(
   () => props.selected_referral_data,
   (newValue) => {
     if (!newValue) return;
+
+    FacilityData.value = newValue.selected_location
+    other_store_data.location_data = newValue
     
-    // Access the underlying values using toRaw if needed
     const districtIds = Array.isArray(newValue.selected_district_ids) 
       ? [...newValue.selected_district_ids]
       : [];
@@ -242,11 +249,6 @@ function validateFacility() {
         show_location_error.value = true    
     }
 
-}
-
-const other_store_data = {
-    ref_data: {},
-    location_data: {},
 }
 
 const facilitySelected = (data: any) => {
