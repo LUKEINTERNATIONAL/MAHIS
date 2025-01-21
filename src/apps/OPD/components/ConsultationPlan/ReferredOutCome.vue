@@ -145,7 +145,6 @@ const props = defineProps<Props>()
 watch(() => props.selected_other_referral_data,
   (newValue) => {
     if (!newValue) return;
-    console.log("newValue QQ: ", newValue)
     note_properties[0].dataValue.value = newValue.reason
     date_properties[0].dataValue.value = newValue.date
     time_properties[0].dataValue.value = newValue.time

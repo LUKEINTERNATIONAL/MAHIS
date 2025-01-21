@@ -179,6 +179,22 @@ const time_properties = [
     },
 ]
 
+interface Props {
+  selected_ward_prop: any,
+}
+const props = defineProps<Props>()
+
+watch(() => props.selected_ward_prop,
+  (newValue) => {
+    if (!newValue) return;
+    selected_ward.value = newValue
+  },
+    {
+        immediate: true,
+        deep: true
+    }
+)
+
 function timeUpdate_fn1(data: any) {
     time_properties[0].dataValue.value = data
 }
@@ -252,8 +268,8 @@ function saveDataToStores() {
         date: date_properties[0].dataValue,
         time: time_properties[0].dataValue,
         reason: note_properties[0].dataValue,
-        other: selected_ward.value
-        // dataItem: refDataItem.value,
+        other: selected_ward.value,
+        selected: true,
     }
 
     store.addOutcomeData(referralData, editIndex.value)
