@@ -268,7 +268,7 @@ export default defineComponent({
             }
         }
         const isSuperuser = computed(() => {
-            return user_data.value?.roles.some((role: any) => role.role === "Superuser");
+            return user_data.value?.roles.some((role: any) => role.role === "Superuser" || role.role === "Superuser,Superuser,");
         });
         async function onMenuOpen() {
             await fetchUserData();

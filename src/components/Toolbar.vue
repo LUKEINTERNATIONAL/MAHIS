@@ -11,7 +11,12 @@
                         <div :style="screenWidth <= 500 && userFacilityName.length > 25 ? 'display: block' : 'display: flex'">
                             <div class="facility-name" style="font-size: 68%">{{ userFacilityName }}</div>
                             <div style="font-size: 68%">
-                                <span v-if="screenWidth > 500 && userFacilityName.length > 25" style="margin-left: 5px">|</span> {{ sessionDate }}
+                                <span
+                                    v-if="(screenWidth > 500 && userFacilityName.length > 25) || userFacilityName.length <= 25"
+                                    style="margin-left: 5px"
+                                    >|</span
+                                >
+                                {{ sessionDate }}
                             </div>
                         </div>
                     </div>
