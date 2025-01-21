@@ -35,6 +35,7 @@
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
+                        :date_prop="''"
                     />
 
                     <div>
@@ -50,6 +51,7 @@
                     <TimePicker
                     :place_holder="time_properties[0].placeHolder"
                     @time-up-dated="time_properties[0].dataHandler"
+                    :time_prop="''"
                 />
 
                 <div>
@@ -271,7 +273,6 @@ function cancelE() {
 }
 
 function validateDate() {
-    console.log(date_properties[0].dataValue.value)
     if (date_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
         date_properties[0].show_error.value = true 
     } else {
@@ -280,7 +281,6 @@ function validateDate() {
 }
 
 function validateTime() {
-    console.log(time_properties[0].dataValue.value)
     if (time_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
         time_properties[0].show_error.value = true 
     } else {

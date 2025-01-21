@@ -15,7 +15,11 @@
             </div>
         </ion-col>
         <ion-col>
-            <DatePicker :place_holder="date_properties[0].placeHolder" @date-up-dated="date_properties[0].dataHandler" />
+            <DatePicker
+                :place_holder="date_properties[0].placeHolder"
+                @date-up-dated="date_properties[0].dataHandler"
+                :date_prop="''"
+            />
 
             <div>
                 <ion-label v-if="date_properties[0].show_error.value" class="error-label"> {{ date_properties[0].error_message }}</ion-label>
@@ -160,7 +164,11 @@
 
     <ion-row>
         <ion-col>
-            <TimePicker :place_holder="time_properties[2].placeHolder" @time-up-dated="time_properties[2].dataHandler" />
+            <TimePicker
+                :place_holder="time_properties[2].placeHolder"
+                @time-up-dated="time_properties[2].dataHandler"
+                :time_prop="''"
+            />
 
             <div>
                 <ion-label v-if="time_properties[2].show_error.value" class="error-label">

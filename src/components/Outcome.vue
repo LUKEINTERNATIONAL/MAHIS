@@ -2,7 +2,7 @@
     <ion-list>
         <ion-row>
             <ion-col>
-                <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="dispositions" />
+                <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="dispositions"  />
             </ion-col>
         </ion-row>
 
@@ -10,32 +10,36 @@
             <span class="dash_box">{{ initialMsg }}</span>
         </ion-row>
 
-        <div style="margin-top: 100px;" v-if="showAddItemButton">
-            <ion-row>
-                <VueMultiselect
-                    v-model="selected_referral_type"
-                    @update:model-value="selectedReferralType($event)"
-                    :multiple="false"
-                    :taggable="false"
-                    :hide-selected="true"
-                    :close-on-select="true"
-                    openDirection="top"
-                    tag-placeholder="Find and a referral type"
-                    placeholder="Find and a referral type"
-                    selectLabel=""
-                    label="name"
-                    :searchable="true"
-                    :disabled="disableFacilitySelection"
-                    @search-change="($event)=>{}"
-                    track-by="name"
-                    :options="referralType"
-                />
+        <ion-row>
+            <ion-col>
+                <div style="margin-top: 100px;" v-if="showAddItemButton">
+                    <ion-row>
+                        <VueMultiselect
+                            v-model="selected_referral_type"
+                            @update:model-value="selectedReferralType($event)"
+                            :multiple="false"
+                            :taggable="false"
+                            :hide-selected="true"
+                            :close-on-select="true"
+                            openDirection="top"
+                            tag-placeholder="find and select a referral type"
+                            placeholder="find and a referral type"
+                            selectLabel=""
+                            label="name"
+                            :searchable="true"
+                            :disabled="false"
+                            @search-change="($event)=>{}"
+                            track-by="name"
+                            :options="referralType"
+                        />
 
-                <div>
-                    <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ 'please select a type' }}</ion-label>
+                        <div>
+                            <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ 'please select a type' }}</ion-label>
+                        </div>
+                    </ion-row>
                 </div>
-            </ion-row>
-        </div>
+            </ion-col>
+        </ion-row>
 
         <AdmittedforShortStayOutcome
             v-if="show_admitted_options"
@@ -45,6 +49,8 @@
         <ReferredOutCome
             v-if="show_referred_options"
             @data-saved="dataSavedTrigFn"
+            :selected_referral_data="selected_referral_type_data"
+            :selected_other_referral_data="selected_referral_data"
         />
 
         <DischargedHome
@@ -96,12 +102,9 @@ import {
     codeSlashOutline,
 } from "ionicons/icons";
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
-import DynamicButton from "@/components/DynamicButton.vue"
-import { icons } from "@/utils/svg"
 import DynamicDispositionList from "@/components/DynamicDispositionList.vue"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import deadOutcome from "@/apps/OPD/components/ConsultationPlan/DeadOutcome.vue"
-import ListPicker from "@/components/ListPicker.vue"
 import AdmittedforShortStayOutcome from "@/apps/OPD/components/ConsultationPlan/AdmittedforShortStayOutcome.vue"
 import ReferredOutCome from '@/apps/OPD/components/ConsultationPlan/ReferredOutCome.vue'
 import DischargedHome from "@/apps/OPD/components/ConsultationPlan/DischargedHome.vue";
@@ -109,10 +112,6 @@ import VueMultiselect from "vue-multiselect";
 
 const initialMsg = ref("No outcome created yet");
 const show_error_msg_for_ref_type = ref(false);
-const btnName1 = ref("Add new outcome");
-const btnFill = "clear";
-let event: null = null;
-const addItemButton = ref(true);
 const showAddItemButton = ref(true);
 const refType = ref("");
 const showEmptyMsg = ref(true);;
@@ -124,9 +123,9 @@ const show_dead_options = ref(false)
 const show_admitted_options = ref(false)
 const show_referred_options = ref(false)
 const show_discharged_options = ref(false)
-const editItem =ref();
-const dischargeDate = ref<any>(null);
 const selected_referral_type = ref()
+const selected_referral_type_data = ref(null)
+const selected_referral_data = ref(null) as any
 
 const referralType = ref([
     {
@@ -150,7 +149,7 @@ const referralType = ref([
 
 function listUpdated(data: any) {
     referralType.value.forEach((item: any) => {
-        if (data.selected == true && data.name == item.name) {
+        if (data.selected == true && (data.name == item.name || data.type == item.name)) {
             refType.value = item.name
         }
     })
@@ -185,7 +184,6 @@ function resetSelection() {
     refType.value = ''
 }
 
-
 function checkForDispositions() {
     if (dispositions.value.length > 0) {
         showEmptyMsg.value = false;
@@ -194,9 +192,19 @@ function checkForDispositions() {
     }
 }
 
-
 function removeItem(index: number) {
     dispositions.value.splice(index, 1);
+}
+
+const editItem = (data: any) => { 
+    removeItem(data.index)   
+    listUpdated(data.item)
+    selected_referral_type_data.value = data.item.other.location_data
+    selected_referral_data.value = {
+        reason: data.item.reason,
+        date: data.item.date,
+        time: data.item.time
+    }
 }
 
 async function checkRefType(clear_inputs: boolean = true) {

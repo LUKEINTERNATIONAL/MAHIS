@@ -6,6 +6,7 @@
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
+                        :date_prop="''"
                     />
 
                     <div>
@@ -49,10 +50,7 @@ import {
     pencilOutline,
     removeOutline
 } from "ionicons/icons"
-import ListPicker from "@/components/ListPicker.vue"
 import DatePicker from "@/components/DatePicker.vue"
-import TimePicker from "@/components/TimePicker.vue"
-import BasicInputField from "@/components/BasicInputField.vue"
 import { LocationService } from "@/services/location_service"
 import DynamicButton from "@/components/DynamicButton.vue"
 import { isEmpty } from "lodash"
