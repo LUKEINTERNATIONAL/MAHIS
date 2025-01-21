@@ -122,11 +122,6 @@ const routes: Array<RouteRecordRaw> = [
         name: "privacypolicy",
         component: PrivacyPolicyView,
     },
-    {
-        path: "/managePrinters",
-        name: "managePrinters",
-        component: () => import("@/views/ManagePrinters.vue"),
-    },
     ...NCD,
     ...OPD,
     ...ANC,
