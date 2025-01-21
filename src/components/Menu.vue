@@ -176,6 +176,12 @@
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
+                <ion-accordion value="10" @click="navigationMenu('managePrinters')" toggle-icon="">
+                    <ion-item slot="header" color="light">
+                        <ion-icon :icon="printOutline" slot="start"></ion-icon>
+                        <ion-label class="header lft-drpm">Manage Printers</ion-label>
+                    </ion-item>
+                </ion-accordion>
             </ion-accordion-group>
         </ion-content>
     </ion-menu>
@@ -193,6 +199,7 @@ import {
     documentOutline,
     peopleOutline,
     barChartOutline,
+    printOutline,
 } from "ionicons/icons";
 import { UserService } from "@/services/user_service";
 import { useRouter } from "vue-router";
@@ -283,6 +290,7 @@ export default defineComponent({
             peopleOutline,
             barChartOutline,
             settingsOutline,
+            printOutline,
         };
     },
     methods: {
