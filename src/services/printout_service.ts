@@ -125,20 +125,22 @@ export class PrintoutService extends Service {
             const option = await optionsActionSheet(
                 "Select Printer",
                 "Please, select default printer",
-                printers.map((p) => p.name || p.address),
+                printers,
                 [
                     { name: "Cancel", slot: "start", color: "danger" },
                     { name: "Refresh", slot: "end", color: "primary" },
                     { name: "Continue", slot: "end", role: "action" },
-                ]
+                ],
+                "darkred",
+                "action-sheet-modal",
+                "name",
+                "address"
             );
 
             if (option.action === "Cancel") return;
             if (option.action === "Refresh") return this.selectDefaultPrinter();
 
-            defualtPrinter = printers.find((p) => {
-                return p.name === option.selection || p.address === option.selection;
-            }) as PrinterDevice;
+            defualtPrinter = option.selection;
         }
 
         if (defualtPrinter) this.setDefaultPrinter(defualtPrinter);
@@ -163,6 +165,7 @@ export class PrintoutService extends Service {
                 eplCommands: rawString,
                 name: printer.name,
                 address: printer.address,
+                url: "/managePrinters",
             });
         } catch (error) {
             console.error(error);
