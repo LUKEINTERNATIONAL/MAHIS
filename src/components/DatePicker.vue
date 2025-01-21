@@ -8,6 +8,7 @@
         @clicked:inputValue="openDate"
         :key="componentKey"
     />
+
     <ion-popover
         :show-backdrop="false"
         :keep-contents-mounted="true"
@@ -22,13 +23,13 @@
 <script setup lang="ts">
 import { IonDatetime } from "@ionic/vue";
 import BasicInputField from "./BasicInputField.vue";
-import DynamicButton from "./DynamicButton.vue";
 import { today } from "ionicons/icons";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { icons } from "../utils/svg";
 import { Service } from "@/services/service";
 
 const refDate = ref();
+
 const maxdate = Service.getSessionDate();
 const calenderIcon = icons.calendar;
 const popoverProperties = ref({
@@ -50,12 +51,32 @@ const showPicker = ref(true);
 const isSetTimeNowPressed = ref(false);
 const componentKey = ref(0 as any);
 
-const props = defineProps<{
-    place_holder: {
-        type: string;
-        default: "";
-    };
-}>();
+interface Props {
+  place_holder: any,
+  date_prop: any,
+}
+
+const props = defineProps<Props>()
+
+function createDate(day: any, month: any, year: any) {
+    let date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    });
+}
+
+watch(() => props.date_prop,
+  (newValue) => {
+    if (!newValue) return;
+    refDate.value = createDate(newValue.day, newValue.month, newValue.year)
+  },
+    {
+        immediate: true,
+        deep: true
+    }
+)
 
 function openDate(event: any) {
     if (isSetTimeNowPressed.value == true) {

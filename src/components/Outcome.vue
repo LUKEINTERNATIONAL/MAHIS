@@ -50,6 +50,7 @@
             v-if="show_referred_options"
             @data-saved="dataSavedTrigFn"
             :selected_referral_data="selected_referral_type_data"
+            :selected_other_referral_data="selected_referral_data"
         />
 
         <DischargedHome
@@ -124,6 +125,7 @@ const show_referred_options = ref(false)
 const show_discharged_options = ref(false)
 const selected_referral_type = ref()
 const selected_referral_type_data = ref(null)
+const selected_referral_data = ref(null) as any
 
 const referralType = ref([
     {
@@ -194,12 +196,14 @@ function removeItem(index: number) {
     dispositions.value.splice(index, 1);
 }
 
-const editItem = (data: any) => {
-    // dispositions.value.splice(data.index, 1);
-    console.log(data.item)
-    
+const editItem = (data: any) => {    
     listUpdated(data.item)
     selected_referral_type_data.value = data.item.other.location_data
+    selected_referral_data.value = {
+        reason: data.item.reason,
+        date: data.item.date,
+        time: data.item.time
+    }
 }
 
 async function checkRefType(clear_inputs: boolean = true) {

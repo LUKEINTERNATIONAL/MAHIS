@@ -62,7 +62,6 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
 import BasicForm from "@/components/BasicForm.vue";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
-import DatePicker from "@/components/DatePicker.vue";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { VitalsService } from "@/services/vitals_service";

@@ -10,6 +10,7 @@
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
+                        :date_prop="date_properties[0].dataValue.value"
                     />
 
                     <div>
@@ -25,6 +26,7 @@
                     <TimePicker
                     :place_holder="time_properties[0].placeHolder"
                     @time-up-dated="time_properties[0].dataHandler"
+                    :time_prop="time_properties[0].dataValue.value"
                 />
 
                 <div>
@@ -83,14 +85,11 @@ import {
     pencilOutline,
     removeOutline
 } from "ionicons/icons"
-import ListPicker from "@/components/ListPicker.vue"
 import DatePicker from "@/components/DatePicker.vue"
 import TimePicker from "@/components/TimePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
-import { LocationService } from "@/services/location_service"
 import DynamicButton from "@/components/DynamicButton.vue"
 import SelectFacility from "@/apps/OPD/components/SelectFacility.vue"
-import { isEmpty } from "lodash"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 const editIndex = ref(NaN)
@@ -101,11 +100,56 @@ const show_location_error = ref(false) as any
 const selectedDistrictIds = ref([]) as any
 const selected_location = ref({}) as any
 
+const note_properties = [
+    {
+        placeHolder: 'Reason',
+        dataHandler: notesUpDated_fn1,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'please provide a reason'
+    },
+]
+
+const date_properties = [
+    {
+        placeHolder: {default: 'Enter date'} as any,
+        dataHandler: dateUpdate_fn1,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'please provide date'
+    }
+]
+
+const time_properties = [
+    {
+        placeHolder: {default: 'Enter time of referral'} as any,
+        dataHandler: timeUpdate_fn1,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
+    },
+]
+
 interface Props {
-  selected_referral_data: any
+  selected_referral_data: any,
+  selected_other_referral_data: any,
 }
 
 const props = defineProps<Props>()
+
+watch(() => props.selected_other_referral_data,
+  (newValue) => {
+    if (!newValue) return;
+    console.log("newValue QQ: ", newValue)
+    note_properties[0].dataValue.value = newValue.reason
+    date_properties[0].dataValue.value = newValue.date
+    time_properties[0].dataValue.value = newValue.time
+  },
+    {
+        immediate: true,
+        deep: true
+    }
+)
 
 watch(
   () => props.selected_referral_data,
@@ -131,28 +175,8 @@ watch(
 )
 
 onMounted(() => {
-  console.log("init: ", props.selected_referral_data)
+    //console.log("init: ", props.selected_referral_data)
 })
-
-const note_properties = [
-    {
-        placeHolder: 'Reason',
-        dataHandler: notesUpDated_fn1,
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: 'please provide a reason'
-    },
-]
-
-const date_properties = [
-    {
-        placeHolder: {default: 'Enter date'} as any,
-        dataHandler: dateUpdate_fn1,
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: 'please provide date'
-    }
-]
 
 function dateUpdate_fn1(data: any) {
     const date_data = {
@@ -168,16 +192,6 @@ function notesUpDated_fn1(event: any) {
     const reason = event.target.value
     note_properties[0].dataValue.value = reason
 }
-
-const time_properties = [
-    {
-        placeHolder: {default: 'Enter time of referral'} as any,
-        dataHandler: timeUpdate_fn1,
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: 'error',
-    },
-]
 
 function timeUpdate_fn1(data: any) {
     time_properties[0].dataValue.value = data
