@@ -35,7 +35,7 @@
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
-                        :date_prop="''"
+                        :date_prop="date_properties[0].dataValue.value"
                     />
 
                     <div>
@@ -51,7 +51,7 @@
                     <TimePicker
                     :place_holder="time_properties[0].placeHolder"
                     @time-up-dated="time_properties[0].dataHandler"
-                    :time_prop="''"
+                    :time_prop="time_properties[0].dataValue.value"
                 />
 
                 <div>
@@ -179,6 +179,40 @@ const time_properties = [
     },
 ]
 
+interface Props {
+    selected_ward_prop: any,
+    admitted_other_props: any,
+}
+const props = defineProps<Props>()
+
+watch(() => props.selected_ward_prop,
+    (newValue) => {
+        if (!newValue) return;
+        selected_ward.value = newValue
+    },
+    {
+        immediate: true,
+        deep: true
+    }
+)
+
+watch(() => props.admitted_other_props,
+    (newValue) => {
+        if (!newValue) return;
+
+        note_properties[0].dataValue.value = newValue.reason
+        time_properties[0].dataValue.value = newValue.time
+        date_properties[0].dataValue.value = newValue.date
+
+        // console.log(newValue)
+        // selected_ward.value = newValue
+    },
+    {
+        immediate: true,
+        deep: true
+    }
+)
+
 function timeUpdate_fn1(data: any) {
     time_properties[0].dataValue.value = data
 }
@@ -252,8 +286,8 @@ function saveDataToStores() {
         date: date_properties[0].dataValue,
         time: time_properties[0].dataValue,
         reason: note_properties[0].dataValue,
-        other: selected_ward.value
-        // dataItem: refDataItem.value,
+        other: selected_ward.value,
+        selected: true,
     }
 
     store.addOutcomeData(referralData, editIndex.value)

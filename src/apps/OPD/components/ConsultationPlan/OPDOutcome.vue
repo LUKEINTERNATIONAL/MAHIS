@@ -15,7 +15,6 @@
 
         <div v-if="showAddItemButton">
             <ion-row>
-
                 <ion-col>
                     <ListPicker
                         :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -36,24 +35,12 @@
             </ion-row>
         </div>
 
-        <AdmittedforShortStayOutcomef
-            v-if="show_admitted_options"
-            @data-saved="dataSavedTrigFn"
-        />
+        <AdmittedforShortStayOutcomef v-if="show_admitted_options" @data-saved="dataSavedTrigFn" />
 
-        <ReferredOutCome
-            v-if="show_referred_options"
-            @data-saved="dataSavedTrigFn"
-        />
-      <DischargedHome
-          v-if="show_discharged_options"
-          @data-saved="dataSavedTrigFn"
-      />
+        <ReferredOutCome v-if="show_referred_options" @data-saved="dataSavedTrigFn" />
+        <DischargedHome v-if="show_discharged_options" @data-saved="dataSavedTrigFn" />
 
-        <deadOutcome
-            v-if="show_dead_options"
-            @data-saved="dataSavedTrigFn"
-        />
+        <deadOutcome v-if="show_dead_options" @data-saved="dataSavedTrigFn" />
     </ion-list>
 </template>
 <script lang="ts">
@@ -93,15 +80,15 @@ import {
     chevronUpOutline,
     codeSlashOutline,
 } from "ionicons/icons";
-import { ref, watch, computed, onMounted, onUpdated } from "vue"
-import DynamicButton from "@/components/DynamicButton.vue"
-import { icons } from "@/utils/svg"
-import DynamicDispositionList from "@/components/DynamicDispositionList.vue"
-import { useOutcomeStore } from "@/stores/OutcomeStore"
-import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
-import ListPicker from "@/components/ListPicker.vue"
-import AdmittedforShortStayOutcomef from "../ConsultationPlan/AdmittedforShortStayOutcome.vue"
-import ReferredOutCome from '../ConsultationPlan/ReferredOutCome.vue'
+import { ref, watch, computed, onMounted, onUpdated } from "vue";
+import DynamicButton from "@/components/DynamicButton.vue";
+import { icons } from "@/utils/svg";
+import DynamicDispositionList from "@/components/DynamicDispositionList.vue";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
+import deadOutcome from "./DeathOutcome.vue";
+import ListPicker from "@/components/ListPicker.vue";
+import AdmittedforShortStayOutcomef from "../ConsultationPlan/AdmittedforShortStayOutcome.vue";
+import ReferredOutCome from "../ConsultationPlan/ReferredOutCome.vue";
 import DischargedHome from "../ConsultationPlan/DischargedHome.vue";
 
 const initialMsg = ref("No outcome created yet");
@@ -113,15 +100,15 @@ let event: null = null;
 const addItemButton = ref(true);
 const showAddItemButton = ref(true);
 const refType = ref("");
-const showEmptyMsg = ref(true);;
+const showEmptyMsg = ref(true);
 const showAddReferralInfo = ref(false);
 const store = useOutcomeStore();
 const dispositions = computed(() => store.dispositions);
 const EditEvnt = ref(false);
-const show_dead_options = ref(false)
-const show_admitted_options = ref(false)
-const show_referred_options = ref(false)
-const show_discharged_options = ref(false)
+const show_dead_options = ref(false);
+const show_admitted_options = ref(false);
+const show_referred_options = ref(false);
+const show_discharged_options = ref(false);
 
 const referralType = ref([
     {
@@ -135,41 +122,40 @@ const referralType = ref([
     {
         name: "Discharged Home",
         selected: false,
-
     },
     {
         name: "Death",
         selected: false,
-    }
-] as any)
+    },
+] as any);
 
 const list_picker_prperties = [
     {
         multi_Selection: false as any,
         show_list_label: true as any,
-        unqueId: 'qwerty2' as any,
-        name_of_list: 'Add new outcome' as any,
-        placeHolder: 'Choose one' as any,
+        unqueId: "qwerty2" as any,
+        name_of_list: "Add new outcome" as any,
+        placeHolder: "Choose one" as any,
         items: referralType.value,
         listUpdatedFN: listUpdated1,
-        listFilteredFN: ()=>{},
+        listFilteredFN: () => {},
         use_internal_filter: true as any,
         disabled: ref(false) as any,
-    }
-]
+    },
+];
 
 function listUpdated1(data: any) {
-    referralType.value = data
+    referralType.value = data;
     referralType.value.forEach((item: any) => {
         if (item.selected == true) {
-            refType.value = item.name
+            refType.value = item.name;
         }
-    })
+    });
 }
 
 onMounted(async () => {
     checkForDispositions();
-})
+});
 
 watch(
     () => refType.value,
@@ -177,25 +163,24 @@ watch(
         if (EditEvnt.value == true) {
             EditEvnt.value = false;
         } else {
-            checkRefType()
+            checkRefType();
         }
     }
-)
+);
 
 watch(
     () => dispositions.value.length,
     async (newvalue) => {
-        checkForDispositions()
+        checkForDispositions();
     }
-)
+);
 
 function resetSelection() {
-    referralType.value.forEach((item: any) =>{
-        item.selected = false
-    })
-    refType.value = ''
+    referralType.value.forEach((item: any) => {
+        item.selected = false;
+    });
+    refType.value = "";
 }
-
 
 function checkForDispositions() {
     if (dispositions.value.length > 0) {
@@ -205,104 +190,96 @@ function checkForDispositions() {
     }
 }
 
-
 function removeItem(index: number) {
     dispositions.value.splice(index, 1);
 }
 
 const editItem = (data: any) => {
     // dispositions.value.splice(data.index, 1);
-}
+};
 
 async function checkRefType(clear_inputs: boolean = true) {
     const tempRefType = refType.value;
-    console.log(tempRefType)
-
+    console.log(tempRefType);
 
     refType.value = tempRefType;
     const ref_type = refType.value;
 
     if (ref_type == referralType.value[0].name) {
-        show_admitted_options.value = true
-    }
-    else {
-        show_admitted_options.value = false
+        show_admitted_options.value = true;
+    } else {
+        show_admitted_options.value = false;
     }
 
     if (ref_type == referralType.value[1].name) {
-        show_referred_options.value = true
-      console.log('show_discharged_options is set to true');
-
+        show_referred_options.value = true;
+        console.log("show_discharged_options is set to true");
+    } else {
+        show_referred_options.value = false;
     }
-    else {
-        show_referred_options.value = false
+    if (ref_type == referralType.value[2].name) {
+        show_discharged_options.value = true;
+        console.log("show_discharged_options is set to true");
+    } else {
+        show_discharged_options.value = false;
     }
-  if (ref_type == referralType.value[2].name) {
-    show_discharged_options.value = true
-    console.log('show_discharged_options is set to true');
-
-  }
-  else {
-    show_discharged_options.value = false
-  }
 
     if (ref_type == referralType.value[3].name) {
-        show_dead_options.value = true
-    }
-    else {
-        show_dead_options.value = false
+        show_dead_options.value = true;
+    } else {
+        show_dead_options.value = false;
     }
 }
 
 function dataSavedTrigFn() {
-    show_dead_options.value = false
-    show_admitted_options.value = false
-    show_referred_options.value = false
-    show_discharged_options.value = false
-    resetSelection()
+    show_dead_options.value = false;
+    show_admitted_options.value = false;
+    show_referred_options.value = false;
+    show_discharged_options.value = false;
+    resetSelection();
 }
 </script>
 
 <style scoped>
-    .initTxt {
-        text-align: center;
-    }
-    .spc_btwn {
-        margin-top: 2%;
-    }
-    .item-al {
-        cursor: pointer;
-        padding: 5px;
-        background-color: #ebebeb;
-        margin-top: 8px;
-    }
-    .item-al:hover {
-        background-color: #55515148;
-        padding: 5px;
-        border-radius: 3px;
-    }
-    ion-popover.popover-al {
-        --background: #fff;
-    }
-    ion-list.list-al {
-        --background: #fff;
-        -ion-item-background: #fff;
-    }
-    .saveContainer {
-        display: flex;
-        align-items: flex-end;
-    }
-    .action_buttons {
-        margin-top: 5px;
-    }
-    .error-label {
-        background: #fecdca;
-        color: #b42318;
-        text-transform: none;
-        padding: 6%;
-        border-radius: 10px;
-        margin-top: 7px;
-        display: flex;
-        text-align: center;
-    }
+.initTxt {
+    text-align: center;
+}
+.spc_btwn {
+    margin-top: 2%;
+}
+.item-al {
+    cursor: pointer;
+    padding: 5px;
+    background-color: #ebebeb;
+    margin-top: 8px;
+}
+.item-al:hover {
+    background-color: #55515148;
+    padding: 5px;
+    border-radius: 3px;
+}
+ion-popover.popover-al {
+    --background: #fff;
+}
+ion-list.list-al {
+    --background: #fff;
+    -ion-item-background: #fff;
+}
+.saveContainer {
+    display: flex;
+    align-items: flex-end;
+}
+.action_buttons {
+    margin-top: 5px;
+}
+.error-label {
+    background: #fecdca;
+    color: #b42318;
+    text-transform: none;
+    padding: 6%;
+    border-radius: 10px;
+    margin-top: 7px;
+    display: flex;
+    text-align: center;
+}
 </style>

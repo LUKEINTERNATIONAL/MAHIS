@@ -28,7 +28,7 @@
     </ion-row>
     <ion-row>
         <ion-col>
-            <TimePicker :place_holder="time_properties[0].placeHolder" @time-up-dated="time_properties[0].dataHandler" />
+            <TimePicker :place_holder="time_properties[0].placeHolder" @time-up-dated="time_properties[0].dataHandler" :time_prop="''"/>
 
             <div>
                 <ion-label v-if="time_properties[0].show_error.value" class="error-label">{{ time_properties[0].error_message }}</ion-label>
@@ -66,14 +66,22 @@
 
     <ion-row>
         <ion-col>
-            <BasicInputField :placeholder="phone_number_place_holder" :icon="phonePortraitOutline" :inputValue="phone_number_value" />
+            <BasicInputField
+                :placeholder="phone_number_place_holder"
+                :icon="phonePortraitOutline"
+                :inputValue="phone_number_value"
+            />
         </ion-col>
         <ion-col></ion-col>
     </ion-row>
 
     <ion-row>
         <ion-col>
-            <DatePicker :place_holder="date_properties[1].placeHolder" @date-up-dated="date_properties[1].dataHandler" />
+            <DatePicker
+                :place_holder="date_properties[1].placeHolder"
+                @date-up-dated="date_properties[1].dataHandler"
+                :date_prop="''"
+            />
 
             <div>
                 <ion-label v-if="date_properties[1].show_error.value" class="error-label">
@@ -82,7 +90,11 @@
             </div>
         </ion-col>
         <ion-col>
-            <TimePicker :place_holder="time_properties[1].placeHolder" @time-up-dated="time_properties[1].dataHandler" />
+            <TimePicker
+                :place_holder="time_properties[1].placeHolder"
+                @time-up-dated="time_properties[1].dataHandler"
+                :time_prop="''"
+            />
 
             <div>
                 <ion-label v-if="time_properties[1].show_error.value" class="error-label">
