@@ -196,7 +196,8 @@ function removeItem(index: number) {
     dispositions.value.splice(index, 1);
 }
 
-const editItem = (data: any) => {    
+const editItem = (data: any) => { 
+    removeItem(data.index)   
     listUpdated(data.item)
     selected_referral_type_data.value = data.item.other.location_data
     selected_referral_data.value = {
