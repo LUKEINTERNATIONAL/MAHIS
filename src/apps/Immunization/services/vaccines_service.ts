@@ -14,8 +14,10 @@ import platform, { FileExportType } from "@/composables/usePlatform";
 import { exportMobile } from "@/utils/Export";
 import { saveOfflinePatientData } from "@/services/offline_service";
 import { getOfflineRecords } from "@/services/offline_service";
+import { useStatusStore } from "@/stores/StatusStore";
 
-export async function saveVaccineAdministeredDrugs(patient: any) {
+export async function saveVaccineAdministeredDrugs(patientData: any) {
+    const patient = JSON.parse(JSON.stringify(patientData));
     const store = useAdministerVaccineStore();
     if (!isEmpty(store.getAdministeredVaccines())) {
         const drugOrders = mapToOrders();
@@ -28,16 +30,18 @@ export async function saveVaccineAdministeredDrugs(patient: any) {
         if (vaccines.orders.length > 0) {
             store.setLastVaccineAdminstredOnschedule(vaccines.orders);
         }
-        updateVaccineStatus(patient, drugOrders[0]?.drug_name, "administered");
+        updateVaccineStatus(patient, drugOrders[0]?.drug_name, "administered", obs[0]?.obs_datetime);
         await saveOfflinePatientData(patient);
         toastSuccess("Saved successful");
+        await checkIfLastVaccineAdministered(patient);
     }
 }
-function updateVaccineStatus(patient: any, drugName: any, newStatus: any) {
+function updateVaccineStatus(patient: any, drugName: any, newStatus: any, date: any) {
     patient.vaccineSchedule.vaccine_schedule.forEach((visit: any) => {
         visit.antigens.forEach((antigen: any) => {
             if (antigen.drug_name === drugName) {
                 antigen.status = newStatus;
+                antigen.date_administered = date;
             }
         });
     });
@@ -49,18 +53,26 @@ export async function getOfflineVaccineSchedule(gender: string, birthdate: strin
 
 async function getGenericVaccineSchedule(gender: string) {
     try {
-        const genericVaccineSchedule: any = await getOfflineRecords("genericVaccineSchedule");
-        if (gender == "M") {
-            return genericVaccineSchedule[0].genericVaccineSchedule.male_schedule;
-        } else if (gender == "F") {
-            return genericVaccineSchedule[0].genericVaccineSchedule.female_schedule;
+        let genericVaccineSchedule: any = await getOfflineRecords("genericVaccineSchedule");
+        if (genericVaccineSchedule.length > 0) {
+            if (gender == "M") {
+                return genericVaccineSchedule[0].genericVaccineSchedule.male_schedule;
+            } else if (gender == "F") {
+                return genericVaccineSchedule[0].genericVaccineSchedule.female_schedule;
+            }
+        } else if (useStatusStore().apiStatus) {
+            genericVaccineSchedule = await Service.getJson("eir/schedule/generic", { paginate: false });
+            if (gender == "M") {
+                return genericVaccineSchedule.male_schedule;
+            } else if (gender == "F") {
+                return genericVaccineSchedule.female_schedule;
+            }
         }
     } catch (error) {
         console.error("Error getting offline generic vaccine schedule", error);
         return [];
     }
 }
-
 async function updateMilestoneStatus(birthdate: Date, schedule: any[]) {
     const today = new Date();
 
@@ -133,7 +145,7 @@ async function createObForEachDrugAdminstred() {
             return {
                 concept_id: 2876,
                 value_text: drug?.drug_?.drug?.drug_name || drug?.drug_?.drug_name,
-                obs_datetime: HisDate.currentDate(),
+                obs_datetime: drug.date_administered,
             };
         })
     );
@@ -148,7 +160,7 @@ function calculateExpireDate(startDate: string | Date, duration: any) {
 }
 
 function openNextVaccineAppoinment() {
-    createModal(nextAppointMent, { class: "otherVitalsModal" }, false);
+    createModal(nextAppointMent, { class: "otherVitalsModal", id: "nextAppointment" }, false);
 }
 
 function validateBatchString(input: any) {
@@ -159,11 +171,11 @@ function validateBatchString(input: any) {
     return true;
 }
 
-export async function checkIfLastVaccineAdministered() {
+export async function checkIfLastVaccineAdministered(patient: any) {
     const store = useAdministerVaccineStore();
     const lastVaccineAdminstredOnschedule = store.getLastVaccineAdminstredOnschedule();
     if (lastVaccineAdminstredOnschedule.length > 0) {
-        store.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
+        patient?.vaccineSchedule?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
             if (checkIfAllVaccinesAdministeredOnSchedule(vaccineSchudule.antigens) == true) {
                 vaccineSchudule.antigens.forEach((antigen: any) => {
                     if (antigen.drug_id == lastVaccineAdminstredOnschedule[0].drug_inventory_id) {
@@ -180,7 +192,8 @@ function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
     return antigens.every((antigen: any) => antigen.status === "administered");
 }
 
-export async function voidVaccine(patient: any, vaccine: any, reason: string) {
+export async function voidVaccine(patientData: any, vaccine: any, reason: string) {
+    const patient = JSON.parse(JSON.stringify(patientData));
     let vaccines = patient?.vaccineAdministration;
     const drugExists = vaccines.orders.some((drug: any) => drug.drug_name === vaccine.drug.drug_name);
     if (drugExists) {
@@ -189,7 +202,7 @@ export async function voidVaccine(patient: any, vaccine: any, reason: string) {
     } else {
         vaccines.voided = [...vaccines?.voided, { reason: reason, order_id: vaccine.drug.order_id, drug_name: vaccine.drug.drug_name }];
     }
-    updateVaccineStatus(patient, vaccine.drug.drug_name, "pending");
+    updateVaccineStatus(patient, vaccine.drug.drug_name, "pending", "");
     await saveOfflinePatientData(patient);
 }
 

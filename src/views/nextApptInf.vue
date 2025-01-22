@@ -72,6 +72,7 @@ import voidReason from "@/apps/Immunization/components/Modals/voidReason.vue";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
 import smsConfirmation from "@/apps/Immunization/components/Modals/smsConfirmation.vue";
 import { SmsService } from "@/apps/Immunization/services/sms_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 export default defineComponent({
     name: "PersonCard",
     components: {
@@ -113,7 +114,7 @@ export default defineComponent({
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
-            useWorkerStore().setPatientRecord(patientData[0]);
+            await useDemographicsStore().setPatientRecord(patientData[0]);
             this.$router.push("patientProfile");
         },
         async voidAppoinment() {

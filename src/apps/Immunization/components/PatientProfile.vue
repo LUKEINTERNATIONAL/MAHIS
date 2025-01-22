@@ -390,10 +390,9 @@ export default defineComponent({
         },
         patient: {
             async handler() {
-                if (this.patient.patientID) {
+                if (this.patient) {
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
-                    // if (!this.patient.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
                 }
@@ -409,20 +408,22 @@ export default defineComponent({
             this.selectedStatus = status;
         },
         async programEnrollment() {
-            this.program = new PatientProgramService(this.patient.patientID);
-            const checkEnrollment = await this.program.getProgramCurrentStates();
-            if (!checkEnrollment) {
-                try {
-                    await this.program.enrollProgram();
-                    await this.program.setStateId(7);
-                } catch (error) {
-                    await this.program.setStateId(7);
-                }
-                await this.program.updateState();
+            if (this.patient.patientID) {
+                this.program = new PatientProgramService(this.patient.patientID);
+                const checkEnrollment = await this.program.getProgramCurrentStates();
+                if (!checkEnrollment) {
+                    try {
+                        await this.program.enrollProgram();
+                        await this.program.setStateId(7);
+                    } catch (error) {
+                        await this.program.setStateId(7);
+                    }
+                    await this.program.updateState();
 
-                this.selectedStatus = 7;
-            } else {
-                this.selectedStatus = checkEnrollment.state;
+                    this.selectedStatus = 7;
+                } else {
+                    this.selectedStatus = checkEnrollment.state;
+                }
             }
         },
         async updateState(state: any) {

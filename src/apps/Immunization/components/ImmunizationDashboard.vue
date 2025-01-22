@@ -105,6 +105,7 @@ import { PatientService } from "@/services/patient_service";
 import img from "@/utils/Img";
 import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
 import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 export default defineComponent({
     name: "Menu",
     mixins: [DashboardMixin],
@@ -126,6 +127,7 @@ export default defineComponent({
     },
     data() {
         return {
+            route: "",
             totalStats: [
                 {
                     name: "Total vaccinated this year",
@@ -165,7 +167,7 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel", location_id: localStorage.getItem("locationID") })) {
                 this.reportData = data.message;
-                console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
+                console.log("DASHBOARD DATA", this.reportData);
                 this.totalStats = [
                     {
                         name: "Total vaccinated this year",
@@ -183,14 +185,14 @@ export default defineComponent({
             }
         },
         openDueModal(name: any) {
-            const dataToPass = { title: name };
+            const dataToPass = { title: name, dashBoardData: this.reportData };
             createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
         },
 
         async openClientProfile(patientID: any) {
-            useWorkerStore().route = "patientProfile";
             const patientData = await PatientService.findByNpid(patientID);
-            useWorkerStore().setPatientRecord(patientData[0]);
+            await useDemographicsStore().setPatientRecord(patientData[0]);
+            this.$router.push("patientProfile");
         },
     },
 });

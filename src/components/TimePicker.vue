@@ -16,7 +16,8 @@
         side="top"
         @didDismiss="popoverProperties.isOpen = false"
     >
-        <ion-datetime v-if="showPicker" @ionChange="saveTime" id="datetime" presentation="time" :show-default-buttons="true" />
+
+    <ion-datetime v-if="showPicker" @ionChange="saveTime" id="datetime" presentation="time" :show-default-buttons="true" />
     </ion-popover>
 </template>
 <script setup lang="ts">
@@ -45,19 +46,30 @@ const showPicker = ref(true);
 const isSetTimeNowPressed = ref(false);
 const componentKey = ref(0 as any);
 
-const props = defineProps<{
-    place_holder: {
-        type: string;
-        default: "";
-    };
-}>();
+interface Props {
+  place_holder: any,
+  time_prop: any,
+}
+
+const props = defineProps<Props>()
+
+watch(() => props.time_prop,
+  (newValue) => {
+    if (!newValue) return;
+    refTime.value = newValue.time
+  },
+    {
+        immediate: true,
+        deep: true
+    }
+)
 
 const emit = defineEmits<{
     (e: "timeUpDated", timeObject: any): void;
 }>();
 
 function timeUpDated() {
-    emit("timeUpDated", timeObject);
+    emit("timeUpDated", timeObject.value);
 }
 
 function openDatePopOver(event: Event) {

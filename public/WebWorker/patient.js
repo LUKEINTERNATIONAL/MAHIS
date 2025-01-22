@@ -78,16 +78,19 @@ const patientService = {
     },
     async saveDemographicsRecord(record) {
         if (!(await this.validateID(record.otherPersonInformation))) return;
-        const patientID = await this.savePersonInformation(record);
+        const data = await this.savePersonInformation(record);
+        const patientID = data.patientID;
         if (!patientID) return;
         await Promise.all([
-            await this.createGuardian(patientID, record),
-            await this.saveBirthdayData(patientID, record),
-            await this.saveVitalsData(patientID, record),
-            await this.saveVaccines(patientID, record),
-            await this.voidVaccine(patientID, record),
+            this.createGuardian(patientID, record),
+            this.saveBirthdayData(patientID, record),
+            this.saveVitalsData(patientID, record),
+            this.saveVaccines(patientID, record),
+            this.saveAppointments(patientID, record),
+            this.sendSMS(patientID, record),
+            this.voidVaccine(patientID, record),
         ]);
-        return patientID;
+        return { ID: data.ID, patientID };
     },
     async validateID({ nationalID, birthID }) {
         return (await this.validateNationalID(nationalID)) && (await this.validateBirthID(birthID));
@@ -97,20 +100,35 @@ const patientService = {
             try {
                 const data = await this.createPerson(record.personInformation);
                 const patient = await this.createPatient(data.person_id, record.ID);
+                const ID = this.patientIdentifier(patient, 3);
                 const patientID = data.person_id;
                 await this.updateSaveStatus(record, {
                     saveStatusPersonInformation: "complete",
                     patientID: patientID,
+                    ID,
                 });
-                await this.createIDs(record.otherPersonInformation, patientID);
-                await this.enrollProgram(patientID);
-                await this.createRegistrationEncounter(patientID);
-                return patientID;
+                await Promise.all([
+                    this.createIDs(record.otherPersonInformation, patientID),
+                    this.enrollProgram(patientID),
+                    this.createRegistrationEncounter(patientID),
+                ]);
+
+                return { patientID, ID };
             } catch (error) {
                 console.error("Failed to save person information", error);
             }
         }
-        return record.patientID;
+        return { patientID: record.patientID, ID: record.ID };
+    },
+    patientIdentifier(identifiers, identifier_type_id) {
+        if (identifiers) {
+            return identifiers.patient_identifiers
+                .filter((identifier) => identifier.identifier_type === identifier_type_id)
+                .map((identifier) => identifier.identifier)
+                .join(", ");
+        } else {
+            return "";
+        }
     },
     async create_patient_identifiers(newID, type, patientID) {
         await ApiService.post("patient_identifiers", {
@@ -125,14 +143,18 @@ const patientService = {
     },
     async createGuardian(patientID, record) {
         if (record.saveStatusGuardianInformation === "pending") {
-            if (record.guardianInformation.given_name && record.guardianInformation.family_name && record.otherPersonInformation.relationshipID) {
+            if (
+                record.guardianInformation.unsaved[0].given_name &&
+                record.guardianInformation.unsaved[0].family_name &&
+                record.otherPersonInformation.relationshipID
+            ) {
                 try {
-                    const data = await this.createPerson(record.guardianInformation);
+                    const data = await this.createPerson(record.guardianInformation.unsaved[0]);
                     const guardianID = data.person_id;
                     await this.createRelation(patientID, guardianID, record.otherPersonInformation.relationshipID);
                     await this.updateSaveStatus(record, { saveStatusGuardianInformation: "complete" });
                 } catch (error) {
-                    console.error("Failed to save guardian information");
+                    console.error("Failed to save guardian information", error);
                 }
             } else {
                 await this.updateSaveStatus(record, { saveStatusGuardianInformation: "Not recorded" });
@@ -165,39 +187,48 @@ const patientService = {
                     encounter_id: encounterID,
                     observations: record.vitals.unsaved,
                 });
-                if (obs?.length > 0) {
-                    const vitals = record.vitals;
-                    vitals.unsaved = [];
-                    await DatabaseManager.updateRecord(
-                        "patientRecords",
-                        { ID: record.ID },
-                        {
-                            vitals: vitals,
-                        }
-                    );
-                }
             } catch (error) {
-                console.error("Failed to save vitals information");
+                console.error("Failed to save vitals information", error);
             }
         }
     },
     async saveVaccines(patientID, record) {
         if (record?.vaccineAdministration?.orders?.length > 0) {
-            const encounterID = await this.createEncounter(patientID, 25);
-            const data = {
-                encounter_id: encounterID,
-                drug_orders: record.vaccineAdministration.orders,
-                program_id: PROGRAMID,
-            };
-            await ApiService.post("/immunization/administer_vaccine", data);
+            Promise.all(
+                record?.vaccineAdministration?.orders.map(async (order) => {
+                    const encounterID = await this.createEncounter(patientID, 25);
+                    const obs = record.vaccineAdministration.obs.find((item) => item.value_text === order.drug_name);
+                    const data = {
+                        encounter_id: encounterID,
+                        drug_orders: [order],
+                        program_id: PROGRAMID,
+                        observations: [obs],
+                    };
+                    await ApiService.post("/immunization/administer_vaccine", data);
+                })
+            );
 
-            await this.saveObs({
+            // await this.saveObs({
+            //     encounter_id: encounterID,
+            //     observations: record.vaccineAdministration.obs,
+            // });
+        }
+    },
+    async saveAppointments(patientID, record) {
+        if (record?.appointments?.unsaved?.length > 0) {
+            const encounterID = await this.createEncounter(patientID, 7);
+            const data = await this.saveObs({
                 encounter_id: encounterID,
-                observations: record.vaccineAdministration.obs,
+                observations: record?.appointments?.unsaved,
             });
-            record.vaccineAdministration.orders = [];
-            record.vaccineAdministration.obs = [];
-            DatabaseManager.overRideRecordRecord("patientRecords", record, { ID: record.ID });
+        }
+    },
+    async sendSMS(patientID, record) {
+        if (record?.sms?.appointment_date) {
+            await ApiService.post("send_sms", {
+                person_id: patientID,
+                appointment_date: record.sms.appointment_date,
+            });
         }
     },
     async voidVaccine(patientID, record) {
@@ -215,9 +246,6 @@ const patientService = {
                     }
                 })
             );
-
-            record.vaccineAdministration.voided = [];
-            DatabaseManager.overRideRecordRecord("patientRecords", record, { ID: record.ID });
         }
     },
     async enrollProgram(patientId) {

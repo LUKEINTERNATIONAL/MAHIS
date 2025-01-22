@@ -1,10 +1,10 @@
-import workerData from "@/activate_worker";
-import { toRaw } from "vue";
 import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useStatusStore } from "@/stores/StatusStore";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
-const DB_VERSION = 1;
+const DB_VERSION = 5;
 
 /**
  * Open or create the IndexedDB database connection
@@ -16,14 +16,14 @@ function openDatabase(storeName: string = "defaultStore", keyPath: string = "id"
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-        request.onupgradeneeded = (event) => {
-            const db = (event.target as IDBOpenDBRequest).result;
+        // request.onupgradeneeded = (event) => {
+        //     const db = (event.target as IDBOpenDBRequest).result;
 
-            // Create object store if it doesn't exist
-            if (!db.objectStoreNames.contains(storeName)) {
-                db.createObjectStore(storeName, { keyPath });
-            }
-        };
+        // Create object store if it doesn't exist
+        // if (!db.objectStoreNames.contains(storeName)) {
+        //     db.createObjectStore(storeName, { keyPath });
+        // }
+        // };
 
         request.onsuccess = (event) => {
             resolve((event.target as IDBOpenDBRequest).result);
@@ -58,8 +58,8 @@ export async function getOfflineRecords<T = any>(
     } = {}
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
     const { currentPage = 1, itemsPerPage = 0, whereClause, likeClause, inClause, sortBy, sortOrder = "asc" } = options;
-
     const db = await openDatabase(storeName);
+    if (!(db.objectStoreNames.length > 0)) return [];
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([storeName], "readonly");
         const objectStore = transaction.objectStore(storeName);
@@ -158,7 +158,10 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
 }
 export async function saveOfflinePatientData(patientData: any) {
     const plainPatientData = JSON.parse(JSON.stringify(patientData));
-    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
-    await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
-    useWorkerStore().postWorkerData("SYNC_PATIENT_RECORD", { msg: "Done Syncing", data: plainPatientData });
+    const workerStore = useWorkerStore();
+    await workerStore.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
+    await workerStore.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
+    const demographicsStore = useDemographicsStore();
+    demographicsStore.setRecord(plainPatientData);
+    if (useStatusStore().apiStatus && !workerStore.isSyncing) await workerStore.postData("SAVE_PATIENT_RECORD", { data: plainPatientData });
 }

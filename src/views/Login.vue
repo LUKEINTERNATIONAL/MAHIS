@@ -10,30 +10,35 @@
                                 <div>
                                     MaHIS <small style="font-size: 15px">(v{{ version }})</small>
                                 </div>
-                                <div style="font-size: 12px; color: #34af4d">({{ mode }} mode)</div>
+                                <div style="font-size: 12px; color: #34af4d">({{ mode }})</div>
                             </span>
-                            <span v-else
-                                >MaHIS <small style="font-size: 15px">(v{{ version }})</small></span
-                            >
+                            <span v-else>
+                                MaHIS <small style="font-size: 15px">(v{{ version }})</small>
+                            </span>
                         </ion-title>
                         <span style="text-align: left">
                             <ion-input
-                                v-model="username"
+                                :value="username"
+                                @ion-input="username = ($event.target as any).value || ''"
                                 type="text"
                                 label="Username"
-                                ref="username"
+                                ref="usernameRef"
                                 label-placement="floating"
                                 fill="outline"
                                 placeholder="Enter Username"
                                 class="input-fields"
                                 required
-                                ><ion-label slot="end"> <ion-icon :icon="person" @click="togglePasswordVisibility"></ion-icon> </ion-label
-                            ></ion-input>
+                            >
+                                <ion-label slot="end">
+                                    <ion-icon :icon="person"></ion-icon>
+                                </ion-label>
+                            </ion-input>
                             <ion-input
-                                v-model="password"
+                                :value="password"
+                                @ion-input="password = ($event.target as any).value || ''"
                                 :type="showPassword ? 'text' : 'password'"
                                 label="Password"
-                                ref="Password"
+                                ref="passwordRef"
                                 label-placement="floating"
                                 fill="outline"
                                 placeholder="Enter Password"
@@ -47,7 +52,7 @@
 
                             <VueMultiselect
                                 v-model="program"
-                                @update:model-value="handleInput($event)"
+                                @update:model-value="handleInput"
                                 :multiple="false"
                                 :taggable="false"
                                 :hide-selected="true"
@@ -60,7 +65,7 @@
                                 :searchable="true"
                                 @search-change="$emit('search-change', $event)"
                                 track-by="program_id"
-                                :options="multiSelectData"
+                                :options="sortPrograms(workerData?.payload) || []"
                             />
                         </span>
 
@@ -80,172 +85,128 @@
     </ion-page>
 </template>
 
-<script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonAccordion,
-    IonAccordionGroup,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonImg,
-} from "@ionic/vue";
-import { defineComponent } from "vue";
-import Toolbar from "@/components/Toolbar.vue";
-import ToolbarSearch from "@/components/ToolbarSearch.vue";
+<script setup lang="ts">
+import { IonContent, IonPage, IonTitle, IonButton, IonCard, IonCardContent, IonLabel, IonInput, IonImg } from "@ionic/vue";
+import { ref, onMounted, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { eye, eyeOff, person } from "ionicons/icons";
 import { AuthService, InvalidCredentialsError } from "@/services/auth_service";
 import { toastWarning, toastDanger } from "@/utils/Alerts";
 import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
-import { ProgramService } from "@/services/program_service";
 import { getUserFacility } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
-import workerData from "@/activate_worker";
+import { useWorkerStore } from "@/stores/workerStore";
+import { storeToRefs } from "pinia";
+import { getOfflineRecords } from "@/services/offline_service";
 
-export default defineComponent({
-    name: "Login",
-    components: {
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        Toolbar,
-        ToolbarSearch,
-        IonButton,
-        IonCard,
-        IonCardContent,
-        IonCardHeader,
-        IonCardSubtitle,
-        IonCardTitle,
-        IonAccordion,
-        IonAccordionGroup,
-        IonItem,
-        IonLabel,
-        IonInput,
-        IonImg,
-        VueMultiselect,
-    },
-    data: function () {
-        return {
-            multiSelectData: [] as any,
-            auth: {} as any,
-            password: "" as any,
-            username: "" as any,
-            programList: "" as any,
-            version: "" as any,
-            program: "" as any,
-            workerApi: null as any,
-            togglePasswordVisibility: false,
-            showPassword: false,
-            mode: import.meta.env.MODE as string,
-        };
-    },
-    watch: {
-        workerApi: {
-            handler() {
-                if (this.workerApi.data !== null && !this.programList) {
-                    this.programList = this.workerApi.data.payload;
-                    this.getPrograms();
-                }
-            },
-            deep: true,
-        },
-        $route: {
-            async handler() {
-                await this.setPrograms();
-            },
-            deep: true,
-        },
-    },
-    computed: {},
-    setup() {
-        return { eye, person, eyeOff };
-    },
-    created() {
-        this.auth = new AuthService();
-    },
+interface Program {
+    program_id: string;
+    name: string;
+}
 
-    async mounted() {
-        const auth = new AuthService();
-        await auth.loadConfig();
-        this.setVersion();
-        await this.setPrograms();
-    },
-    methods: {
-        async setPrograms() {
-            this.workerApi = workerData.workerApi;
-            await workerData.postData("SET_OFFLINE_PROGRAMS");
-        },
-        async getPrograms() {
-            if (this.programList && Object.keys(this.programList).length > 0) {
-                this.programList.sort((a: any, b: any) => a.name.localeCompare(b.name));
-                this.multiSelectData = this.programList;
-            }
-        },
-        setVersion() {
-            this.version = localStorage.getItem("core_version");
-        },
-        doLogin: async function () {
-            if (this.username && this.password && this.program) {
-                this.auth.setUsername(this.username);
-                try {
-                    if (this.auth.versionLockingIsEnabled()) {
-                        await this.auth.validateIfCorrectAPIVersion();
-                    }
-                    // if (!(await this.auth.checkTimeIntegrity())) {
-                    //     throw "Local date does not match API date. Please Update your device's date";
-                    // }
-                    await this.auth.login(this.password);
+// Refs with proper typing
+const username = ref("");
+const password = ref("");
+const version = ref("");
+const program = ref<Program | null>(null);
+const showPassword = ref(false);
+const offlinePrograms = ref<Program[]>([]) as any;
+const programList = ref<Program[]>([]);
+const mode = ref(import.meta.env.MODE);
+const auth = ref(new AuthService());
+const workerApi = ref(null);
 
-                    if (this.auth.checkUserPrograms(this.program.name)) {
-                        this.facilityB();
-                        this.$router.push("/home");
-                    } else {
-                        toastDanger("You don't have permission to access the program.");
-                    }
-                } catch (e) {
-                    if (e instanceof InvalidCredentialsError) {
-                        toastDanger("Invalid username or password");
-                    } else {
-                        toastDanger(`${e}`, 50000);
-                    }
-                }
+// Router
+const router = useRouter();
+const route = useRoute();
+
+const store = useWorkerStore();
+const { workerData, lastUpdate }: any = storeToRefs(store);
+
+// Methods
+const setPrograms = async () => {
+    store.terminate();
+    await useWorkerStore().postData("SET_OFFLINE_PROGRAMS");
+};
+
+const sortPrograms = (data: any) => {
+    if (data && data.length > 0) {
+        data.sort((a: any, b: any) => a?.name.localeCompare(b?.name));
+        return data;
+    }
+};
+
+const setVersion = () => {
+    version.value = localStorage.getItem("core_version") || "";
+};
+
+const doLogin = async () => {
+    if (username.value && password.value && program.value) {
+        auth.value.setUsername(username.value);
+        try {
+            await auth.value.login(password.value);
+
+            if (auth.value.checkUserPrograms(program.value.name)) {
+                await facilityB();
+                router.push("/home");
             } else {
-                toastWarning("Complete form to log in");
+                toastDanger("You don't have permission to access the program.");
             }
-        },
-        handleInput(event: any) {
-            localStorage.setItem("app", JSON.stringify({ programID: event.program_id, applicationName: event.name }));
-        },
-        togglePasswordVisibility() {
-            if (!this.togglePasswordVisibility) return true;
-            else return false;
-        },
-        loginIcon() {
-            return img("mw.png");
-        },
-        async facilityB() {
-            const store = useUserStore();
-            const data = await getUserFacility();
-            store.setUserFacilityName(data.name);
-            store.setFacilityLocation(data);
-            store.setCurrentUserProgram(this.program);
-        },
+        } catch (e) {
+            if (e instanceof InvalidCredentialsError) {
+                toastDanger("Invalid username or password");
+            } else {
+                toastDanger(`${e}`, 50000);
+            }
+        }
+    } else {
+        toastWarning("Complete form to log in");
+    }
+};
+
+const handleInput = (event: Program) => {
+    if (event) {
+        localStorage.setItem(
+            "app",
+            JSON.stringify({
+                programID: event.program_id,
+                applicationName: event.name,
+            })
+        );
+    }
+};
+
+const loginIcon = () => {
+    return img("mw.png");
+};
+
+const facilityB = async () => {
+    const store = useUserStore();
+    const data = await getUserFacility();
+    if (data) {
+        store.setUserFacilityName(data.name);
+        store.setFacilityLocation(data);
+    }
+    store.setCurrentUserProgram(program.value);
+};
+
+// Watchers
+watch(
+    route,
+    async (newRoute) => {
+        if (newRoute.name == "Login") localStorage.setItem("apiKey", "");
+        await setPrograms();
     },
+    { deep: true }
+);
+
+// Lifecycle Hooks
+onMounted(async () => {
+    localStorage.setItem("apiKey", "");
+    await auth.value.loadConfig();
+    setVersion();
+    await setPrograms();
 });
 </script>
 
@@ -293,23 +254,29 @@ export default defineComponent({
 .signup-link a {
     text-decoration: underline;
 }
+
 .password-toggle {
     font-size: 20px;
 }
+
 .login_img {
     width: 90px;
     margin: auto;
 }
+
 .multiselect__content-wrapper {
     position: unset !important;
     width: inherit !important;
 }
+
 .multiselect::before {
     top: -7px;
 }
+
 ion-card {
     min-width: 330px;
 }
+
 @media (max-width: 902px) {
     .login-page {
         --ion-background-color: #ffffff;

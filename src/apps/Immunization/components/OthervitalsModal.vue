@@ -60,7 +60,6 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { formatInputFiledData } from "@/services/formatServerData";
-import workerData from "@/activate_worker";
 import { saveOfflinePatientData } from "@/services/offline_service";
 
 export default defineComponent({

@@ -1,14 +1,18 @@
 import { defineStore } from "pinia";
 
 export const useStatusStore = defineStore("statusStore", {
-    state: () => ({
-        apiStatus: true,
-        offlineVillageStatus: {} as any,
-        offlineDistrictStatus: {} as any,
-        offlineCountriesStatus: {} as any,
-        offlineTAsStatus: {} as any,
-        offlineRelationshipStatus: {} as any,
-    }),
+    state: () => {
+        return {
+            apiStatus: true,
+            offlineVillageStatus: {} as any,
+            offlineDistrictStatus: {} as any,
+            offlineCountriesStatus: {} as any,
+            offlineTAsStatus: {} as any,
+            offlineRelationshipStatus: {} as any,
+            offlinePatientsStatus: {} as any,
+            isSyncingDone: false,
+        };
+    },
     actions: {
         setApiStatus(data: any) {
             this.apiStatus = data;
@@ -27,6 +31,23 @@ export const useStatusStore = defineStore("statusStore", {
         },
         setOfflineRelationshipStatus(data: any) {
             this.offlineRelationshipStatus = data;
+        },
+        setOfflinePatientsStatus(data: any) {
+            this.offlinePatientsStatus = data;
+        },
+        checkMetaDataStatus() {
+            if (
+                this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
+                this.offlineRelationshipStatus?.total_relationships == this.offlineRelationshipStatus?.total &&
+                this.offlineCountriesStatus?.total_countries == this.offlineCountriesStatus?.total &&
+                this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
+                this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total &&
+                this.offlinePatientsStatus?.offlinePatientsCount == this.offlinePatientsStatus?.serverPatientsCount
+            ) {
+                this.isSyncingDone = true;
+            } else {
+                this.isSyncingDone = false;
+            }
         },
     },
     persist: true,

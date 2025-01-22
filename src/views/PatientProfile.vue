@@ -39,7 +39,7 @@
                 :title="enrollModalTitle"
             />
 
-            <PatientProfile v-if="activeProgramID == 33" />
+            <PatientProfile :updateData="patient" v-if="activeProgramID == 33" />
             <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
                 <ion-row class="content_width">
                     <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
@@ -145,8 +145,13 @@
                         <ion-card style="background-color: #fff; margin-inline: 0px; contain: unset; overflow: unset">
                             <div style="display: flex; justify-content: space-between">
                                 <div class="vitalsTitle">Most recent Vitals & Biometrics</div>
-                                <div class="startVisitClass">
-                                    <Programs
+
+                                <div class="start-visit">
+                                    <div class="send-button-container">
+                                        <button class="send-text">Start visit</button>
+                                        <button class="send-arrow" @click="openProgramPopover($event)"></button>
+                                    </div>
+                                    <!-- <Programs
                                         :btn="true"
                                         verticalPosition="top"
                                         side="bottom"
@@ -156,7 +161,7 @@
                                                 await handleProgramClick(btn);
                                             }
                                         "
-                                    />
+                                    /> -->
                                 </div>
                             </div>
                             <div style="padding-left: 10px; padding-right: 10px">
@@ -250,6 +255,30 @@
                     <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
                 </ion-list>
             </div>
+        </ion-popover>
+        <ion-popover
+            :is-open="programPopover"
+            :show-backdrop="false"
+            :dismiss-on-select="true"
+            :event="programEvent"
+            @didDismiss="programPopover = false"
+            style="--width: 350px"
+        >
+            <ion-content>
+                <ion-list>
+                    <ion-item
+                        :button="true"
+                        :detail="false"
+                        style="cursor: pointer"
+                        v-for="(btn, index) in programBtn"
+                        :key="index"
+                        @click="handleProgramClick(btn)"
+                    >
+                        <ion-icon slot="start" :icon="add"></ion-icon>
+                        <span class="rght-drpm">{{ btn.actionName.replace(/\+/g, "") }}</span>
+                    </ion-item>
+                </ion-list>
+            </ion-content>
         </ion-popover>
     </ion-page>
 </template>
@@ -417,6 +446,7 @@ export default defineComponent({
         return {
             checkUnderOne: false,
             isLoading: false,
+            programPopover: false,
             checkUnderFourteen: true,
             checkUnderNine: false,
             checkUnderFive: false,
@@ -424,6 +454,7 @@ export default defineComponent({
             segmentContent: "Patient Charts",
             iconsContent: icons,
             isModalOpen: false,
+            programEvent: "" as any,
             url: "" as any,
             NCDProgramActionName: "+ Enroll in NCD Program" as any,
             OPDProgramActionName: "+ Start New OPD consultation" as any,
@@ -577,8 +608,10 @@ export default defineComponent({
             modalController.dismiss();
         },
         async updateCheckInStatus() {
-            const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
-            this.checkedIn = !!visit.length;
+            try {
+                const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
+                this.checkedIn = !!visit.length;
+            } catch (error) {}
         },
         closeCheckInModal() {
             this.checkInModalOpen = false;
@@ -644,6 +677,10 @@ export default defineComponent({
 
         togglePopover() {
             this.popoverOpen = !this.popoverOpen;
+        },
+        openProgramPopover(event: any) {
+            this.programEvent = event;
+            this.programPopover = !this.programPopover;
         },
 
         async handleProgramClick(btn: any) {
@@ -726,9 +763,7 @@ export default defineComponent({
         async refreshPrograms() {
             const programs = await ProgramService.getPatientPrograms(this.patient.patientID);
 
-            console.log({ programs });
-
-            this.enrolledPrograms = programs.map((p: any) => ({
+            this.enrolledPrograms = programs?.map((p: any) => ({
                 name: p.program.name,
                 id: p.program_id,
             }));
@@ -768,6 +803,74 @@ export default defineComponent({
     },
 });
 </script>
+<style>
+.start-visit {
+    margin-top: 5px;
+    margin-right: 5px;
+}
+.send-button-container {
+    display: inline-flex;
+    border-radius: 9999px;
+    overflow: hidden;
+    min-width: 120px;
+}
+
+.send-text {
+    background-color: #006401;
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-family: system-ui, -apple-system, sans-serif;
+    cursor: pointer;
+    flex-grow: 1;
+    transition: background-color 0.2s;
+}
+
+.send-arrow {
+    background-color: #008000;
+    color: white;
+    border: none;
+    border-left: 1px solid #135a14;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.send-text:hover {
+    background-color: #004d00;
+}
+
+.send-arrow:hover {
+    background-color: #006b00;
+}
+
+.send-arrow::after {
+    content: "▾";
+    font-size: 16px;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+    .send-button-container {
+        min-width: 140px;
+    }
+
+    .send-text {
+        padding: 8px 20px;
+        font-size: 16px;
+    }
+
+    .send-arrow {
+        padding: 8px 14px;
+    }
+
+    .send-arrow::after {
+        font-size: 18px;
+    }
+}
+</style>
 
 <style scoped>
 .vitalsHeading {

@@ -89,6 +89,7 @@ import dates from "@/utils/Date";
 import { useWorkerStore } from "@/stores/workerStore";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import { getUserLocation } from "@/services/userService";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     components: {
@@ -186,8 +187,7 @@ export default defineComponent({
         },
         async navigateTo(id: any, route: string) {
             const patient = await PatientService.findByID(id);
-            console.log("🚀 ~ navigateTo ~ patient:", patient);
-            useWorkerStore().setPatientRecord(patient);
+            await useDemographicsStore().setPatientRecord(patient);
             this.$router.push(route);
         },
         async handleAbscond(visitId: any) {

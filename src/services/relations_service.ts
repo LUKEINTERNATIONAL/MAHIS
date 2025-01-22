@@ -14,7 +14,7 @@ export class RelationsService extends Service {
         return RelationsService.createRelation(patientID, guardianID, newRelationTypeID);
     }
 
-    static getRelations() {
+    static async getRelations() {
         return super.getJson("types/relationships", { paginate: false });
     }
 

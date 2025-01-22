@@ -214,22 +214,24 @@ export default defineComponent({
             this.initialFirstDecisionData = followUp.getInitialFirstDecision();
             this.initialOutcomeData = followUp.getInitialOutcome();
             const guardianData = await RelationshipService.getRelationships(this.patient.patientID);
+            if (guardianData?.length > 0) {
+                modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
+                modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+                modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+                modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+                modifyFieldValue(
+                    this.changeGuardianInfo,
+                    "guardianPhoneNumber",
+                    "value",
+                    this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
+                );
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "value", {
+                    id: guardianData[0]?.type.relationship_type_id,
+                    name: guardianData[0]?.type.b_is_to_a,
+                });
+                await this.setRelationShip();
+            }
 
-            modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
-            modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
-            modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
-            modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
-            modifyFieldValue(
-                this.changeGuardianInfo,
-                "guardianPhoneNumber",
-                "value",
-                this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
-            );
-            modifyFieldValue(this.changeGuardianInfo, "relationship", "value", {
-                id: guardianData[0]?.type.relationship_type_id,
-                name: guardianData[0]?.type.b_is_to_a,
-            });
-            await this.setRelationShip();
             this.resetData();
             // await this.getVaccineAdverseEffects();
         },
@@ -279,7 +281,6 @@ export default defineComponent({
             if (this.patient.patientID) {
                 const date = getFieldValue(this.outcome, "Date of death", "value") || HisDate.currentDate();
                 const serious = await this.formatCheckBoxData(this.serious, HisDate.currentDate(), this.lastVaccinesGiven);
-                console.log("🚀 ~ saveVaccineAdverseEffects ~ this.lastVaccinesGiven):", this.lastVaccinesGiven);
                 const outcome = await this.formatRadioButtonData(this.outcome, date, this.lastVaccinesGiven);
                 const vaccineAdverseEffects = await this.formatCheckBoxData(
                     this.vaccineAdverseEffects,

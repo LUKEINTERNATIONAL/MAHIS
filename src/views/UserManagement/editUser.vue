@@ -908,7 +908,7 @@ async function updateUserDetails() {
             toastSuccess("username updated successfully");
         } catch (error) {
             saveEvent(true);
-            toastWarning("username update failed, already existing");
+            // toastWarning("username update failed, already existing");
         }
     } catch (error) {}
 }

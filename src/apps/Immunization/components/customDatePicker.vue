@@ -58,6 +58,7 @@
   }>()
 
 function dateChange() {
+  
     const clientBODYear = getYearFromDateString(patient.getBirthdate() as any)
     const clientBODMonth = removeLeadingZero(getMonthFromDateString(patient.getBirthdate() as any))
     const clientBODDay = removeLeadingZero(getDayFromDateString(patient.getBirthdate() as any))
@@ -94,6 +95,7 @@ function dateChange() {
         corrected_date.setFullYear(sessionYear)
         pickerInstance.setDate(corrected_date)
     }
+    emit("dateChange", pickerInstance.getDate())
   }
 
   function datePickerEventListener(event: any) {

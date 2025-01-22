@@ -18,6 +18,7 @@ importScripts(
 
 let APIURL = "";
 let APIKEY = "";
+let APISTATUS = "";
 let TOTALS = "";
 let USERID = "";
 let PROGRAMID = "";
@@ -29,39 +30,32 @@ let DATE = "";
  **********************************************************************
  **********************************************************************/
 self.onmessage = async (event) => {
-    const { type, url, apiKey, userId, programId, totals, date, payload } = event.data;
+    const { type, url, apiKey, userId, programId, totals, date, payload, apiStatus } = event.data;
     USERID = userId;
     PROGRAMID = programId;
     DATE = date;
     APIURL = url;
     APIKEY = apiKey;
+    APISTATUS = apiStatus;
     TOTALS = JSON.parse(totals);
     await DatabaseManager.openDatabase();
     try {
         switch (type) {
+            case "SYNC_ALL_DATA":
+                try {
+                    await syncPatientDataService.syncAllData();
+                    self.postMessage("Done syncing all data");
+                    console.log("SYNC_ALL_DATA ~ storeName:", type);
+                } catch (error) {
+                    console.log("SYNC_ALL_DATA ~ error:", error);
+                }
+                break;
             case "SET_OFFLINE_LOCATION":
                 try {
                     await LocationService.setOfflineLocation();
                     console.log("SET_OFFLINE_LOCATION ~ storeName:", type);
                 } catch (error) {
                     console.log("SET_OFFLINE_LOCATION ~ error:", error);
-                }
-                break;
-            case "SYNC_CONCEPTS":
-                try {
-                    await conceptSetService.setConceptSet();
-                    await conceptNameService.setConceptName();
-                    console.log("SYNC_CONCEPTS ~ storeName:", type);
-                } catch (error) {
-                    console.log("SYNC_CONCEPTS ~ error:", error);
-                }
-                break;
-            case "GET_OFFLINE_LOCATION":
-                try {
-                    const result = await DatabaseManager.getOfflineData("location");
-                    console.log("GET_OFFLINE_LOCATION ~ result:", result);
-                } catch (error) {
-                    console.log("GET_OFFLINE_LOCATION ~ error:", error);
                 }
                 break;
             case "SET_OFFLINE_PROGRAMS":
@@ -78,15 +72,6 @@ self.onmessage = async (event) => {
                     console.log("SET_OFFLINE_RELATIONSHIPS ~ storeName:", type);
                 } catch (error) {
                     console.log("SET_OFFLINE_RELATIONSHIPS ~ error:", error);
-                }
-                break;
-            case "SET_GENERIC_VACCINE_SCHEDULE":
-                try {
-                    await genericsService.setOfflineGenericVaccineSchedule();
-
-                    console.log("SET_OFFLINE_LOCATION ~ storeName:", type);
-                } catch (error) {
-                    console.log("GET_OFFLINE_LOCATION ~ error:", error);
                 }
                 break;
             case "DELETE_RECORD":
@@ -121,39 +106,21 @@ self.onmessage = async (event) => {
                     console.log("UPDATE_RECORD ~ error:", error);
                 }
                 break;
-            case "SYNC_PATIENT_RECORD":
-                // try {
-                self.postMessage("");
-                await patientService.savePatientRecord();
-                await syncPatientDataService.getPatientData();
-                self.postMessage({ payload: payload.data, msg: "Done Syncing" });
-                console.log("SYNC_PATIENT_RECORD ~ storeName:", type);
-                // } catch (error) {
-                //     console.log("SYNC_PATIENT_RECORD ~ error:", error);
-                // }
-                break;
             case "SAVE_PATIENT_RECORD":
                 try {
                     self.postMessage("");
-                    await patientService.saveDemographicsRecord(payload.data);
+                    const { ID, patientID } = await patientService.saveDemographicsRecord(payload.data);
                     console.log("SAVE_PATIENT_RECORD ~ storeName:", type);
-                    self.postMessage({ payload: payload.data, msg: "saved successfully" });
+                    self.postMessage({ ID, msg: "Patient record saved successfully" });
                 } catch (error) {
                     console.log("SAVE_PATIENT_RECORD ~ error:", error);
-                }
-                break;
-            case "BUILD_PATIENT_RECORD":
-                try {
-                    const patientData = await syncPatientDataService.buildPatientData(payload.data);
-                    console.log("BUILD_PATIENT_RECORD ~ storeName:", type);
-                    self.postMessage({ payload: patientData, msg: "done building patient record" });
-                } catch (error) {
-                    console.log("BUILD_PATIENT_RECORD ~ error:", error);
                 }
                 break;
             case "SYNC_STOCK_RECORD":
                 try {
                     await stockService.setStock();
+                    const stockData = await DatabaseManager.getOfflineData("stock");
+                    self.postMessage({ payload: stockData });
                     console.log("SYNC_STOCK_RECORD ~ storeName:", type);
                 } catch (error) {
                     console.log("SYNC_STOCK_RECORD ~ error:", error);
@@ -168,11 +135,6 @@ self.onmessage = async (event) => {
                     console.log("SYNC_DDE ~ error:", error);
                 }
                 break;
-            case "RESET":
-                self.postMessage("");
-                break;
-            default:
-                console.log("Unknown type: " + type);
         }
     } catch (error) {
         console.log("Error Offline database initialization: " + error);

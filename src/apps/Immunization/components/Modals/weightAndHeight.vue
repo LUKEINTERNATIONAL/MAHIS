@@ -62,7 +62,6 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
 import BasicForm from "@/components/BasicForm.vue";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
-import DatePicker from "@/components/DatePicker.vue";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { VitalsService } from "@/services/vitals_service";
@@ -78,8 +77,6 @@ import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
-import workerData from "@/activate_worker";
-import db from "@/db";
 import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
     name: "Home",
@@ -174,10 +171,11 @@ export default defineComponent({
 
             const newVitals = await formatInputFiledData(this.vitalsWeightHeight);
             if (newVitals.length > 0 && weight == null && height == null) {
-                let vitals = this.patient?.vitals;
+                const patientData = JSON.parse(JSON.stringify(this.patient));
+                let vitals = patientData?.vitals;
                 vitals.unsaved = [...vitals.unsaved, ...newVitals];
-                await saveOfflinePatientData(this.patient);
-                toastSuccess("Saved successful");
+                await saveOfflinePatientData(patientData);
+                toastSuccess("Vitals saved successful");
                 this.cleanInputFields();
             } else {
                 toastWarning("Please complete the form");
