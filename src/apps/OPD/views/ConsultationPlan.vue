@@ -145,7 +145,7 @@ export default defineComponent({
     },
     data() {
         return {
-            dispositions: "" as any,
+            outcomes: "" as any,
             openStepper: "1" as any,
             wizardData: [] as any,
             StepperData: [] as any,
@@ -313,7 +313,7 @@ export default defineComponent({
             } else {
                 return async () => {
                     // await this.saveTreatmentPlan();
-                    // await this.saveOutComeStatus();
+                    await useOutcomeStore().saveOutcomPatientData()
                     const location = await getUserLocation();
                     const locationId = location ? location.code : null;
 
@@ -463,7 +463,7 @@ export default defineComponent({
                 });
             }
 
-            if (this.dispositions.length > 0) {
+            if (this.outcomes.length > 0) {
                 modifyWizardData(this.wizardData, "Outcome", {
                     checked: true,
                     class: "open_step common_step",
@@ -635,19 +635,6 @@ export default defineComponent({
                     });
                 }
                 toastSuccess("Drug order has been created");
-            }
-        },
-
-        async saveOutComeStatus() {
-            const userID: any = Service.getUserID();
-            const patientID = this.patient.patientID;
-            if (!isEmpty(this.dispositions)) {
-                for (let key in this.dispositions) {
-                    if (this.dispositions[key].type == "Admit") {
-                        console.log(this.dispositions[key]);
-                    } else {
-                    }
-                }
             }
         },
       saveInvestigations(){

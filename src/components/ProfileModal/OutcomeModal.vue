@@ -5,10 +5,10 @@
       <span @click="dismiss()" style="cursor: pointer; font-weight: 300;">x</span>
     </div>
 
-    <DashBox v-if="dispositions.length == 0" :content="'No dispositions added yet.'"></DashBox>
+    <DashBox v-if="outcomes.length == 0" :content="'No outcomes added yet.'"></DashBox>
 
     <div class="dashed_bottom_border" style="padding-bottom:5px"
-      v-for="(outcome, index) in dispositions" :key="index">
+      v-for="(outcome, index) in outcomes" :key="index">
       <div class="text_header_14">
         <h4 style="margin-bottom: 0px; font-weight: bold;">{{ outcome.name }}</h4>
       </div>
@@ -61,7 +61,7 @@ export default defineComponent({
     IonToolbar
   },
   computed: {
-        ...mapState(useOutcomeStore, ["dispositions"]),
+      ...mapState(useOutcomeStore, ["outcomes"]),
     },
   data() {
     return {
