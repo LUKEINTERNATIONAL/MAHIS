@@ -232,7 +232,6 @@ function validateDate() {
 }
 
 function validateTime() {
-    console.log(time_properties[0].dataValue.value)
     if (time_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
         time_properties[0].show_error.value = true 
     } else {
@@ -254,7 +253,6 @@ const facilitySelected = (data: any) => {
     FacilityData.value = data.selected_location
     validateFacility()
     other_store_data.location_data = data
-    console.log( data)
 }
 
 const saveDataToStores = () => {
