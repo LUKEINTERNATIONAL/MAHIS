@@ -245,9 +245,11 @@ const dynamic_button_properties = [
         background: #fecdca;
         color: #b42318;
         text-transform: none;
-        padding: 6%;
+        padding: 5%;
+        padding-top: 2%;
+        padding-bottom: 2%;
         border-radius: 10px;
-        margin-top: 7px;
+        margin-top: 4px;
         display: flex;
         text-align: center;
     }
