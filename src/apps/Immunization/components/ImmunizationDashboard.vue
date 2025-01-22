@@ -185,7 +185,7 @@ export default defineComponent({
             }
         },
         openDueModal(name: any) {
-            const dataToPass = { title: name };
+            const dataToPass = { title: name, dashBoardData: this.reportData };
             createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
         },
 

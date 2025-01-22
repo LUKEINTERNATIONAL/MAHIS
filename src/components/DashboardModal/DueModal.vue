@@ -213,6 +213,9 @@ export default defineComponent({
         title: {
             default: [] as any,
         },
+        dashBoardData: {
+            default: "" as any,
+        },
     },
     computed: {
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
@@ -221,6 +224,10 @@ export default defineComponent({
     },
     async mounted() {
         this.isLoading = true;
+        if (!this.dashBoardData) {
+            this.isLoading = false;
+            return [];
+        }
         this.data = await getVaccinesData();
 
         this.tableData = this.processData();
@@ -261,7 +268,8 @@ export default defineComponent({
             this.$router.push("patientProfile");
         },
         processData() {
-            const data = this.data.map((item: any) => {
+            // if (!this.dashBoardData) return [];
+            const data = this.data?.map((item: any) => {
                 if (item.name == "missed_immunizations") {
                     this.clientDetails = []; //Ressetting client details
                     this.villageList = ["All"]; //Ressetting client details
