@@ -1,46 +1,52 @@
 import { Service } from "@/services/service";
-import { ObservationService } from "@/services/observation_service";
 import { Encounter } from "@/interfaces/encounter";
-import { EncounterService } from "@/services/encounter_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { AppEncounterService } from "@/services/app_encounter_service";
+
+interface CreateEncounterPayload {
+    encounter_type_id: number;
+    patient_id: number;
+    encounter_datetime: Date;
+    provider_id?: number;
+}
 
 export class OutcomeService extends Service {
-    patientID: number;
-    providerID: number;
+    private encounterTypeID: number;
+    private date: Date;
 
     constructor() {
         super();
+        this.encounterTypeID = 40;
+        this.date = new Date();
     }
 
-    async createEncounter(): Promise<Encounter | undefined> {
-        const payload: any = {
+    async createEncounter(data: []): Promise<Encounter | undefined> {
+        const payload: CreateEncounterPayload = {
             encounter_type_id: this.encounterTypeID,
-            patient_id: this.getPatientID(),
+            patient_id: OutcomeService.getPatientID(),
             encounter_datetime: this.date,
         };
-        if (this.providerID != -1) {
-            payload["provider_id"] = this.providerID;
+
+        const providerID = OutcomeService.getProviderID();
+        if (providerID !== -1) {
+            payload.provider_id = providerID;
         }
-        const encounter = await EncounterService.create(payload);
-        if (encounter) {
-            this.encounterID = encounter.encounter_id;
-            return encounter;
+        if (data.length > 0) {
+            const encounter = new AppEncounterService(OutcomeService.getPatientID(), this.encounterTypeID, OutcomeService.getProviderID());
+            await encounter.createEncounter();
+            return await encounter.saveObservationList(data);
+        } else {
+            return undefined;
         }
     }
 
     private static getPatientID(): number {
         const store = useDemographicsStore();
         const demographics = store.patient;
-        const patientID = demographics.patientID;
-        return patientID;
+        return demographics.patientID;
     }
 
     private static getProviderID(): number {
-        const providerID = Service.getUserID() as number;
-        return providerID;
-    }
-
-    saveObs(obs: ObsValue) {
-        // return AppEncounterService.saveObs(this.encounterID, obs);
+        return Service.getUserID() as number;
     }
 }
