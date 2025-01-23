@@ -19,7 +19,7 @@
       </ion-row>
 
       <!-- No Users Found -->
-      <ion-row v-else-if="paginatedUsers.length === 0">
+      <ion-row v-else-if="_items_.length === 0">
         <ion-col size="12" class="ion-text-center">
           <p>No users found.</p>
         </ion-col>
@@ -32,7 +32,7 @@
           size-sm="6"
           size-md="4"
           size-lg="3"
-          v-for="user in paginatedUsers"
+          v-for="user in _items_"
           :key="user.userId"
         >
           <ion-card>
@@ -191,7 +191,7 @@ export default defineComponent({
     const error = ref("");
     const user_id = ref("");
     const _items_ = ref<User[]>([]);
-    const totalCount = ref(0)
+    const totalCount = ref(0);
 
     // Fetch users on mount
     onMounted(() => {
@@ -203,9 +203,7 @@ export default defineComponent({
       try {
         isLoading.value = true;
         const userData = await UserService.getAllUsers(pagination.page, pagination.itemsPerPage);
-        console.log("userData", userData);
-
-        totalCount.value = userData.count
+        totalCount.value = userData.count;
 
         // Transform data
         _items_.value = userData.results.map((item: any) => ({
@@ -237,13 +235,6 @@ export default defineComponent({
       );
     });
 
-    // Paginate users
-    const paginatedUsers = computed(() => {
-      const start = (pagination.page - 1) * pagination.itemsPerPage;
-      const end = start + pagination.itemsPerPage;
-      
-      return filteredUsers.value.slice(start, end);
-    });
 
     // Show nav bar if there are users
     const showNavBar = computed(() => filteredUsers.value.length > 0);
@@ -252,7 +243,7 @@ export default defineComponent({
     const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number; itemsPerPage: number }) => {
       pagination.page = page;
       pagination.itemsPerPage = itemsPerPage;
-      getUsers();
+      getUsers(); // Fetch new data when pagination changes
     };
 
     // Open user profile
@@ -282,7 +273,6 @@ export default defineComponent({
       filteredUsers,
       pagination,
       handlePaginationUpdate,
-      paginatedUsers,
       showNavBar,
       isLoading,
       error,
@@ -295,12 +285,11 @@ export default defineComponent({
       modalClosed,
       softModalClosed,
       _items_,
-      totalCount
+      totalCount,
     };
   },
 });
 </script>
-
 
 <style scoped>
 .container {
