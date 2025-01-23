@@ -30,24 +30,18 @@
         </ion-content>
     </ion-page>
 </template>
-
-<script lang="ts">
+<script setup lang="ts">
+import { ref, onMounted, nextTick, computed, watch } from "vue";
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard } from "@ionic/vue";
-import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
-import { Service } from "@/services/service";
-import img from "@/utils/Img";
 import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
 import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
-import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 import { useUserStore } from "@/stores/userStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
-import { mapState } from "pinia";
-import { UserService } from "@/services/user_service";
-import SetUser from "@/views/Mixin/SetUser.vue";
-import ApiClient from "@/services/api_client";
-import HisDate from "@/utils/Date";
+import { useStockStore } from "@/stores/StockStore";
+import { useStartEndDate } from "@/stores/StartEndDate";
+import { storeToRefs } from "pinia";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 import DataTablesResponsive from "datatables.net-responsive";
@@ -58,148 +52,115 @@ import "datatables.net-responsive";
 import DynamicButton from "@/components/DynamicButton.vue";
 import OfflineMoreDetailsModal from "@/components/Modal/OfflineMoreDetailsModal.vue";
 import { createModal } from "@/utils/Alerts";
-import { StockService } from "@/services/stock_service";
-import { useStockStore } from "@/stores/StockStore";
-import { useStartEndDate } from "@/stores/StartEndDate";
-import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import "datatables.net-select";
 import db from "@/db";
-// DataTable.use(DataTablesCore);
+import HisDate from "@/utils/Date";
+import { useStatusStore } from "@/stores/StatusStore";
+import { getOfflineRecords } from "@/services/offline_service";
 
-export default defineComponent({
-    name: "offline-records",
-    mixins: [SetUser],
-    components: {
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        Toolbar,
-        ToolbarSearch,
-        IonRow,
-        IonCol,
-        ImmunizationTrendsGraph,
-        ImmunizationGroupGraph,
-        DataTable,
-        IonCard,
-        DynamicButton,
-        BasicForm,
+const reportData = ref([]);
+const currentStock = ref([]);
+const allStock = ref([]);
+const startDate = ref(HisDate.currentDate());
+const endDate = ref(HisDate.currentDate());
+const selectedButton = ref("all");
+const isLoading = ref(false);
+const dataTable = ref(null);
+
+const stockStore = useStockStore();
+const startEndDateStore = useStartEndDate();
+const { stock } = storeToRefs(stockStore);
+const { startEndDate } = storeToRefs(startEndDateStore);
+const statusStore = useStatusStore();
+const { offlineVillageStatus, offlineCountriesStatus, offlineDistrictStatus, offlineTAsStatus, offlineRelationshipStatus, offlinePatientsStatus } =
+    storeToRefs(statusStore);
+
+const options = {
+    responsive: true,
+    select: false,
+    layout: {
+        topStart: null,
+        topEnd: "search",
+        bottomStart: "info",
+        bottomEnd: "paging",
     },
-    data() {
-        return {
-            reportData: [] as any,
-            currentStock: [] as any,
-            allStock: [] as any,
-            outStock: [] as any,
-            startDate: HisDate.currentDate(),
-            endDate: HisDate.currentDate(),
-            options: {
-                responsive: true,
-                select: false,
-                layout: {
-                    topStart: null,
-                    topEnd: "search",
-                    bottomStart: "info",
-                    bottomEnd: "paging",
-                },
-            } as any,
-            selectedButton: "all",
-            isLoading: false,
-        };
-    },
-    computed: {
-        ...mapState(useStockStore, ["stock"]),
-        ...mapState(useStartEndDate, ["startEndDate"]),
-    },
-    $route: {
-        async handler() {
-            await this.buildTableData();
-        },
-        deep: true,
-    },
-    watch: {
-        stock: {
-            async handler() {
-                // await this.buildTableData();
-            },
-            deep: true,
-        },
-    },
-    async mounted() {
-        await this.buildTableData();
-        this.$nextTick(() => {
-            const table = (this.$refs.dataTable as any).dt;
-            table.columns.adjust().draw();
-            table.on("click", ".edit-btn", (e: Event) => {
-                const id = (e.target as HTMLElement).getAttribute("data-id");
-                this.handleEdit(id);
-            });
-            table.on("click", ".delete-btn", (e: Event) => {
-                const id = (e.target as HTMLElement).getAttribute("data-id");
-                this.handleDelete(id);
-            });
+};
+// Watchers
+const buildTableData = async () => {
+    isLoading.value = true;
+    try {
+        const documents: any = await getOfflineRecords("patientRecords");
+        reportData.value = documents.map((item: any) => [
+            `${item.personInformation.given_name} ${item.personInformation.family_name}`,
+            item.ID,
+            item.saveStatusPersonInformation,
+            item.saveStatusBirthRegistration,
+            item.saveStatusGuardianInformation,
+            "",
+            "",
+            `<button class="btn btn-sm btn-primary edit-btn" data-id='${JSON.stringify(item)}'>More details</button>`,
+        ]);
+        DataTable.use(DataTablesCore);
+    } catch (error) {
+        toastWarning("An error occurred while loading data.");
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+const fractionToPercentage = (numerator: any, denominator: any) => {
+    if (denominator === 0) {
+        return 0;
+    }
+    let percentage = (numerator / denominator) * 100;
+    return `${percentage ? percentage.toFixed(2) : 0}`; // Keeps two decimal places
+};
+const handleEdit = (data: any) => {
+    openModal(JSON.parse(data));
+};
+
+const handleDelete = async (id: any) => {
+    console.log(`Deleting item with id: ${id}`);
+};
+
+const handleInputData = async (event: any) => {
+    if (event.inputHeader === "Start date") {
+        startDate.value = HisDate.toStandardHisFormat(event.value);
+    }
+    if (event.inputHeader === "End date") {
+        endDate.value = HisDate.toStandardHisFormat(event.value);
+    }
+    await buildTableData();
+};
+
+const selectButton = async (button: string) => {
+    selectedButton.value = button;
+    await buildTableData();
+};
+
+const openModal = async (clientData: any) => {
+    const data = await createModal(OfflineMoreDetailsModal, { class: "fullScreenModal" }, true, { clientData });
+    if (data === "dismiss") {
+        await buildTableData();
+    }
+};
+
+onMounted(async () => {
+    await buildTableData();
+    nextTick(() => {
+        const table = (dataTable.value as any).dt;
+        table.columns.adjust().draw();
+        table.on("click", ".edit-btn", (e: Event) => {
+            const id = (e.target as HTMLElement).getAttribute("data-id");
+            handleEdit(id);
         });
-    },
-    methods: {
-        handleEdit(data: any) {
-            this.openModal(JSON.parse(data));
-        },
-
-        async handleDelete(id: any) {
-            // Implement delete logic here
-            console.log(`Deleting item with id: ${id}`);
-        },
-        async handleInputData(event: any) {
-            if (event.inputHeader == "Start date") {
-                this.startDate = HisDate.toStandardHisFormat(event.value);
-            }
-            if (event.inputHeader == "End date") {
-                this.endDate = HisDate.toStandardHisFormat(event.value);
-            }
-            await this.buildTableData();
-        },
-        async buildTableData() {
-            this.isLoading = true;
-            await db
-                .collection("patientRecords")
-                .get()
-                .then(async (document: any) => {
-                    try {
-                        this.reportData = document.map((item: any) => {
-                            return [
-                                item.personInformation.given_name + " " + item.personInformation.family_name,
-                                item.ID,
-                                item.saveStatusPersonInformation,
-                                item.saveStatusBirthRegistration,
-                                item.saveStatusGuardianInformation,
-                                "",
-                                "",
-                                `<button class="btn btn-sm btn-primary edit-btn" data-id='${JSON.stringify(item)}'>More details</button>`,
-                            ];
-                        });
-                        DataTable.use(DataTablesCore);
-                    } catch (error) {
-                        toastWarning("An error occurred while loading data.");
-                    } finally {
-                        this.isLoading = false;
-                    }
-                });
-        },
-        async selectButton(button: any) {
-            this.selectedButton = button;
-            await this.buildTableData();
-        },
-        async openModal(clientData: any) {
-            const data: any = await createModal(OfflineMoreDetailsModal, { class: "fullScreenModal" }, true, { clientData: clientData });
-            if (data == "dismiss") {
-                await this.buildTableData();
-            }
-        },
-    },
+        table.on("click", ".delete-btn", (e: Event) => {
+            const id = (e.target as HTMLElement).getAttribute("data-id");
+            handleDelete(id);
+        });
+    });
 });
 </script>
 
