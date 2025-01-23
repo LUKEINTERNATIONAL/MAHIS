@@ -22,7 +22,7 @@
 
   <!-- User Card List -->
   <ion-row>
-    <user-card-list :users="items" :filterValue="searchValue" @reload="closeModal" />
+    <user-card-list :users="items" :filterValue="searchValue" @reload="closeModal" :search="searchValue"/>
   </ion-row>
 
   <!-- Add User Modal -->
@@ -67,8 +67,7 @@ function OpenAddUserModal() {
 }
 
 function notesUpDated_fn1(event: any) {
-  const reason = event.target.value;
-  searchValue.value = reason;
+  searchValue.value  = event.target.value;
 }
 
 function reload(user_id: any) {

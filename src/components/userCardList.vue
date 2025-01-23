@@ -179,6 +179,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    search: {
+      type: String,
+      required: true,
+    },
   },
   setup(props, { emit }) {
     const isPopooverOpen = ref(false);
@@ -197,11 +201,18 @@ export default defineComponent({
       getUsers();
     });
 
+    watch(
+      () => props.search,
+      (newValue, oldValue) => {
+        getUsers();  
+      }
+    );
+
     // Fetch users function
     const getUsers = async () => {
       try {
         isLoading.value = true;
-        const userData = await UserService.getAllUsers(pagination.page, pagination.itemsPerPage);
+        const userData = await UserService.getAllUsers(pagination.page, pagination.itemsPerPage, props.search);
         totalCount.value = userData.count;
 
         // Transform data
