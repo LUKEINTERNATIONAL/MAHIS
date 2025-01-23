@@ -86,8 +86,8 @@ export class UserService extends Service {
         });
         return roles.length > 0;
     }
-    static getAllUsers() {
-        return this.getJson("users", { page_size: 100 });
+    static getAllUsers(page = 1, pageSize = 10) {
+        return this.getJson("users", { page: page, page_size: pageSize });
     }
 
     static getAllRoles() {
