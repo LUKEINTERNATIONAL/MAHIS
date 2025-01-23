@@ -96,6 +96,7 @@
 import { defineComponent, reactive, computed, ref, watch, onMounted } from 'vue';
 import editUserModal from "../views/UserManagement/editUserModal.vue";
 import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
+import { UserService } from "@/services/user_service";
 import {
   IonContent,
   IonPage,
@@ -169,10 +170,11 @@ export default defineComponent({
     const isLoading = ref(true);
     const error = ref('');
     const user_id = ref("") as any;
+    const _items_ = ref([]) as any;
 
     const filteredUsers = computed(() => {
-      if (!props.filterValue) return props.users;
-      return props.users.filter(user => 
+      if (!props.filterValue) return _items_.value;
+      return _items_.value.filter((user: any) => 
         user.username.toLowerCase().includes(props.filterValue.toLowerCase()) ||
         user.firstName.toLowerCase().includes(props.filterValue.toLowerCase()) ||
         user.lastName.toLowerCase().includes(props.filterValue.toLowerCase())
@@ -213,8 +215,55 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      // 
+      getUsers()
     });
+
+    const userRolesStr = (items: any) => {
+      return items.map((item: any) => item.role);
+    };
+
+    const userFirstname = (items: any) => {
+      return items.length > 0 ? items[items.length - 1].given_name : "";
+    };
+
+    const userLastname = (items: any) => {
+      return items.length > 0 ? items[items.length - 1].family_name : "";
+    };
+
+    const userProgramsStr = (items: any) => {
+      return items.map((item: any) => item.name);
+    };
+
+    const  getUsers = async () => {
+      try {
+          isLoading.value = true;
+          const userData = await UserService.getAllUsers();
+          console.log("userData", userData);
+          const user_data = ref([]);
+          user_data.value = userData.results.map((item: any) => ({
+              username: item.username,
+              label: item.username,
+              value: item.user_id,
+              other: item,
+          }));
+
+          _items_.value = userData.results.map((item: any) => ({
+              userId: item.user_id,
+              username: item.username,
+              roles: userRolesStr(item.roles),
+              programs: userProgramsStr(item.programs),
+              gender: item.person.gender,
+              status: item.deactivated_on,
+              firstName: userFirstname(item.person.names),
+              lastName: userLastname(item.person.names),
+          }));
+
+      } catch (error) {
+          console.error('Error fetching users:', error);
+      } finally {
+          isLoading.value = false;
+      }
+    }
 
     const openUserProfile = (userId: string) => {
       isPopooverOpen.value = true;
@@ -247,6 +296,7 @@ export default defineComponent({
       isPopooverOpen,
       modalClosed,
       softModalClosed,
+      _items_,
     };
   },
 });
