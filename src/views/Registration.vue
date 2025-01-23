@@ -492,6 +492,7 @@ export default defineComponent({
                         this.workerStore.postData("SYNC_ALL_DATA");
                         await this.setURLs();
                     } else if (ddeIds?.ids?.length > 0) {
+                        useStatusStore().syncingTotal = useStatusStore().syncingTotal + 1;
                         const demographicsStore = useDemographicsStore();
                         demographicsStore.setRecord(patientData);
                         await this.workerStore.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: patientData });
