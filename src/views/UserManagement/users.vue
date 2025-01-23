@@ -20,7 +20,6 @@ import { chevronBackOutline } from "ionicons/icons";
 import { IonContent, IonPage, IonRow, IonCol, IonIcon } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
 import usersTemplate from "@/components/usersTemplate.vue";
-import { UserService } from "@/services/user_service";
 import NavigationMenu from "@/apps/Immunization/components/Reports/NavigationMenu.vue";
 import router from "@/router";
 import { ref, onMounted } from "vue";
@@ -42,7 +41,6 @@ export default defineComponent({
     },
     setup() {
         const isPopooverOpen = ref(false);
-        const user_data = ref([]);
         const isLoading = ref(true);
         const search_fields_ = ref([
             {
@@ -60,48 +58,7 @@ export default defineComponent({
         });
 
         async function getUsers() {
-            try {
-                isLoading.value = true;
-                const userData = await UserService.getAllUsers();
-                user_data.value = userData.map((item: any) => ({
-                    username: item.username,
-                    label: item.username,
-                    value: item.user_id,
-                    other: item,
-                }));
-
-                _items_.value = userData.map((item: any) => ({
-                    userId: item.user_id,
-                    username: item.username,
-                    roles: userRolesStr(item.roles),
-                    programs: userProgramsStr(item.programs),
-                    gender: item.person.gender,
-                    status: item.deactivated_on,
-                    firstName: userFirstname(item.person.names),
-                    lastName: userLastname(item.person.names),
-                }));
-            } catch (error) {
-                console.error('Error fetching users:', error);
-            } finally {
-                isLoading.value = false;
-            }
-            
-        }
-
-        function userRolesStr(items: any) {
-            return items.map((item: any) => item.role);
-        }
-
-        function userFirstname(items: any) {
-            return items.length > 0 ? items[items.length - 1].given_name : "";
-        }
-
-        function userLastname(items: any) {
-            return items.length > 0 ? items[items.length - 1].family_name : "";
-        }
-
-        function userProgramsStr(items: any) {
-            return items.map((item: any) => item.name);
+            isLoading.value = false;
         }
 
         function closeModal(data: any) {
