@@ -100,7 +100,6 @@
       <ion-row>
         <ion-col size="12" style="max-width: 100%;">
           <bottomNavBar
-            v-if="showNavBar"
             :totalItems="totalCount"
             :currentPage="pagination.page"
             :itemsPerPage="pagination.itemsPerPage"
@@ -236,9 +235,6 @@ export default defineComponent({
     });
 
 
-    // Show nav bar if there are users
-    const showNavBar = computed(() => filteredUsers.value.length > 0);
-
     // Handle pagination update
     const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number; itemsPerPage: number }) => {
       pagination.page = page;
@@ -273,7 +269,6 @@ export default defineComponent({
       filteredUsers,
       pagination,
       handlePaginationUpdate,
-      showNavBar,
       isLoading,
       error,
       personCircleOutline,
