@@ -44,20 +44,24 @@
                 @getInputID="updateReason"
                 @getSelectedReason="setSelectedReason"
             />
-        </div>
-        <div v-else>Loading, Please Wait. If this takes more than 2 seconds then something went wrong...</div>
-        <div>
+          <div>
             <div class="space3" />
-            <ion-button class="primary_btn" style="padding-left: 15px" @click="saveDispensations()">
-                <ion-icon slot="start" name="checkmark-circle"></ion-icon>
-                Dispense
+            <ion-button
+                class="faded-green"
+                style="padding-left: 15px; border-radius: 1px;"
+                @click="saveDispensations()">
+              <ion-icon slot="start" :icon="addOutline"></ion-icon>
+              Submit
             </ion-button>
+          </div>
         </div>
+        <div v-else>No medications were added for this patient.</div>
+
     </ion-list>
     <ion-list>
-        <ion-label>Here is the dispensation summary</ion-label>
         <div v-if="dispensationStore.getDispensedMedications() && dispensationStore.getDispensedMedications().length > 0">
-            <dynamic-list
+          <ion-label>Here is the dispensation summary</ion-label>
+          <dynamic-list
                 @click="editDispensations"
                 :dataArray="dispensationStore.getDispensedMedications()"
                 :withCheckboxs="false"
@@ -65,7 +69,6 @@
                 :show_actions_buttons="false"
             />
         </div>
-        <div v-else>Please complete dispensing of prescribed medications first. Then the summary will appear here.</div>
     </ion-list>
 </template>
 
@@ -81,6 +84,10 @@ import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
 import { Service } from "@/services/service";
 import { resetDemographics } from "@/services/reset_data";
 import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
+import { IonSpinner } from "@ionic/vue";
+import { addOutline, checkmarkCircle } from "ionicons/icons";
+
+
 
 export default defineComponent({
     watch: {
@@ -102,6 +109,7 @@ export default defineComponent({
     },
     data() {
         return {
+          addOutline,
             list: [] as any,
         };
     },
@@ -452,5 +460,10 @@ ion-list.list-al {
     flex: 1; /* Let the type take 1 space */
     text-align: left; /* Align text to the right */
     color: #777; /* Slightly muted color for type */
+}
+
+ion-button {
+  --ion-color-primary: transparent;
+  --background: rgba(76, 175, 80, 0.5);
 }
 </style>
