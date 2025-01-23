@@ -97,7 +97,7 @@ export default defineComponent({
         return {
             isLoading: false,
             hasValidationErrors: [] as any,
-            dispositions: "" as any,
+            outcomes: "" as any,
             actionBtn: "" as any,
             wizardData: [
                 {

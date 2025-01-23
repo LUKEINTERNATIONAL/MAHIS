@@ -2,7 +2,7 @@
     <ion-list>
         <ion-row>
             <ion-col>
-                <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="dispositions" />
+                <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="outcomes" />
             </ion-col>
         </ion-row>
 
@@ -113,7 +113,7 @@ const refType = ref("");
 const showEmptyMsg = ref(true);
 const showAddReferralInfo = ref(false);
 const store = useOutcomeStore();
-const dispositions = computed(() => store.dispositions);
+const outcomes = computed(() => store.outcomes);
 const EditEvnt = ref(false);
 const show_dead_options = ref(false);
 const show_admitted_options = ref(false);
@@ -153,7 +153,7 @@ function listUpdated(data: any) {
 }
 
 onMounted(async () => {
-    checkForDispositions();
+    checkForOutcomes();
 });
 
 watch(
@@ -168,9 +168,9 @@ watch(
 );
 
 watch(
-    () => dispositions.value.length,
+    () => outcomes.value.length,
     async (newvalue) => {
-        checkForDispositions();
+        checkForOutcomes();
     }
 );
 
@@ -181,16 +181,16 @@ function resetSelection() {
     refType.value = "";
 }
 
-function checkForDispositions() {
-    if (dispositions.value.length > 0) {
+function checkForOutcomes() {
+    if (outcomes.value.length > 0) {
         showEmptyMsg.value = false;
-    } else if (dispositions.value.length == 0 && showAddReferralInfo.value == false) {
+    } else if (outcomes.value.length == 0 && showAddReferralInfo.value == false) {
         showEmptyMsg.value = true;
     }
 }
 
 function removeItem(index: number) {
-    dispositions.value.splice(index, 1);
+    outcomes.value.splice(index, 1);
 }
 
 const editItem = (data: any) => {
@@ -231,11 +231,11 @@ async function checkRefType(clear_inputs: boolean = true) {
         show_discharged_options.value = false;
     }
 
-    if (ref_type == referralType.value[3].name) {
-        show_dead_options.value = true;
-    } else {
-        show_dead_options.value = false;
-    }
+    // if (ref_type == referralType.value[3].name) {
+    //     show_dead_options.value = true;
+    // } else {
+    //     show_dead_options.value = false;
+    // }
 }
 
 function dataSavedTrigFn() {

@@ -89,7 +89,7 @@ export default defineComponent({
     data() {
         return {
             checkedIn: false as Boolean,
-            dispositions: "" as any,
+            outcomes: "" as any,
             showUndispensedMedication: false,
             wizardData: [
                 {

@@ -328,20 +328,22 @@ const selectedWard = (data: any) => {
 </script>
 
 <style scoped>
-.error-label {
-    background: #fecdca;
-    color: #b42318;
-    text-transform: none;
-    padding: 6%;
-    border-radius: 10px;
-    margin-top: 7px;
-    display: flex;
-    text-align: center;
-}
-.spc_btwn {
-    margin-top: 2%;
-}
-.lsp-cls-1 {
-    margin: -15px; margin-left: 0px;
-}
+    .error-label {
+        background: #fecdca;
+        color: #b42318;
+        text-transform: none;
+        padding: 5%;
+        padding-top: 2%;
+        padding-bottom: 2%;
+        border-radius: 10px;
+        margin-top: 4px;
+        display: flex;
+        text-align: center;
+    }
+    .spc_btwn {
+        margin-top: 2%;
+    }
+    .lsp-cls-1 {
+        margin: -15px; margin-left: 0px;
+    }
 </style>

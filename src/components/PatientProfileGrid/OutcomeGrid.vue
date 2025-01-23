@@ -3,7 +3,7 @@
         <div>Outcome</div>
     </div>
 
-    <div v-if="dispositions.length == 0" class="no_content">
+    <div v-if="outcomes.length == 0" class="no_content">
         <div>
             <div class="no_content_title">No outcome added today.</div>
             <div class="start_consultation">Start new consultation</div>
@@ -13,7 +13,7 @@
         class="dashed_bottom_border"
         style="cursor: pointer; padding-bottom: 5px"
         @click="openModal()"
-        v-for="(outcome, index) in dispositions"
+        v-for="(outcome, index) in outcomes"
         :key="index"
     >
         <div class="text_header_14">
@@ -47,7 +47,7 @@ import { OutCome } from "../../apps/NCD/services/outcome";
 export default defineComponent({
     name: "Menu",
     computed: {
-        ...mapState(useOutcomeStore, ["dispositions"]),
+        ...mapState(useOutcomeStore, ["outcomes"]),
     },
     components: {
         IonContent,

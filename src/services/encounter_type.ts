@@ -214,6 +214,6 @@ export async function saveEncounterData(patientId: number, typeId: EncounterType
     if (data.length > 0) {
         const encounter = createEncounterType(patientId, typeId, providerId);
         await encounter.createEncounter();
-        await encounter.saveObservationList(data);
+        return await encounter.saveObservationList(data);
     }
 }
