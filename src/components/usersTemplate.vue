@@ -19,9 +19,6 @@
         
           <ion-row>
             <ion-col>
-
-            </ion-col>
-            <ion-col size="4">
               <BasicInputField
                 :placeholder="note_properties[0].placeHolder"
                 :icon="searchOutline"
@@ -44,7 +41,7 @@
       </ion-row>
 
       <ion-row>
-        <user-card-list :users="items" style="margin-left: 20px;" :filterValue="searchValue" @reload="closeModal"/>
+        <user-card-list :users="items" :filterValue="searchValue" @reload="closeModal"/>
       </ion-row>
 
       <addUserModal

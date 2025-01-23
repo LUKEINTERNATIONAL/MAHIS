@@ -35,7 +35,7 @@
           v-for="user in _items_"
           :key="user.userId"
         >
-          <ion-card>
+          <ion-card class="user-card">
             <ion-card-header>
               <ion-card-subtitle>
                 <ion-icon :icon="personCircleOutline" size="small" style="margin-bottom: -3px;"></ion-icon>
@@ -234,7 +234,6 @@ export default defineComponent({
       );
     });
 
-
     // Handle pagination update
     const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number; itemsPerPage: number }) => {
       pagination.page = page;
@@ -290,67 +289,40 @@ export default defineComponent({
 .container {
   display: flex;
   flex-direction: column;
-  min-height: 80vh;
+  height: 100vh; /* Full height of the parent */
+  padding: 16px; /* Add some padding */
 }
 
 .dynamic-grid {
-  flex: 1;
-  max-height: calc(69.8vh - 1px);
-  overflow: auto;
+  flex: 1; /* Take up remaining space */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 8px; /* Add some padding */
 }
 
 .user-cards-row {
   display: flex;
   flex-wrap: wrap;
+  gap: 16px; /* Add gap between cards */
   justify-content: flex-start;
 }
 
-ion-card {
-  min-width: 250px;
-  width: 37%;
-  margin-right: auto;
-  margin-top: 10px;
+.user-card {
+  width: 100%; /* Full width of the column */
+  height: 100%; /* Full height of the column */
+  margin: 0; /* Remove default margin */
 }
 
 ion-card-content {
   padding: 16px;
 }
 
-ion-card-title, ion-card-subtitle, ion-label h3, ion-label p {
+ion-card-title,
+ion-card-subtitle,
+ion-label h3,
+ion-label p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.user-cards-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-
-@media (min-width: 768px) {
-  ion-col {
-    flex: 0 0 calc(50% - 20px);
-    max-width: calc(50% - 20px);
-  }
-}
-
-@media (min-width: 1024px) {
-  ion-col {
-    flex: 0 0 calc(33.333% - 20px);
-    max-width: calc(33.333% - 20px);
-  }
-}
-
-@media (min-width: 1200px) {
-  ion-col {
-    flex: 0 0 calc(25% - 20px);
-    max-width: calc(25% - 20px);
-  }
-}
-
-ion-list {
-  padding: 0;
 }
 
 .edit-icon {
@@ -359,42 +331,40 @@ ion-list {
   cursor: pointer;
 }
 
-@media (max-width: 576px) {
-  ion-card-title {
-    font-size: 1.2rem;
-  }
-  
-  ion-card-subtitle {
-    font-size: 0.9rem;
-  }
-}
-
-/* Center grid contents on larger screens */
-@media (min-width: 1024px) {
-  .container {
-    padding: 0;
-  }
-
-  .user-cards-row {
-    justify-content: center;
-  }
-
-  ion-col {
-    flex: 0 0 calc(25% - 20px);
-    max-width: calc(25% - 20px);
-    margin-right: auto;
-    margin-left: 10px;
-  }
-}
-
 .sticky-footer {
-  margin-top: auto;
-  position: relative;
+  position: sticky;
+  bottom: 0;
+  background: white; /* Match the background color */
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Ensure footer is above other content */
 }
 
-ion-footer {
-  width: 100%;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  ion-col {
+    flex: 0 0 100%; /* Full width on small screens */
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  ion-col {
+    flex: 0 0 calc(50% - 16px); /* Two columns on medium screens */
+    max-width: calc(50% - 16px);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  ion-col {
+    flex: 0 0 calc(33.333% - 16px); /* Three columns on larger screens */
+    max-width: calc(33.333% - 16px);
+  }
+}
+
+@media (min-width: 1024px) {
+  ion-col {
+    flex: 0 0 calc(25% - 16px); /* Four columns on extra-large screens */
+    max-width: calc(25% - 16px);
+  }
 }
 </style>
