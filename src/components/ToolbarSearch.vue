@@ -620,7 +620,7 @@ export default defineComponent({
                 let isAlreadyCheckedIn = false;
                 for (const stage of stages) {
                     const patientList = (await PatientOpdList.getPatientList(stage, locationId)) as Array<{ patient_id: string }>;
-                    if (patientList.some((patient) => patient.patientID === this.selectedPatient.patient_id)) {
+                    if (patientList.some((patient: any) => patient.patientID === this.selectedPatient.patient_id)) {
                         isAlreadyCheckedIn = true;
                         break;
                     }
