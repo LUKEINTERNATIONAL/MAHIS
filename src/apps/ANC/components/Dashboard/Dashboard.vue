@@ -66,11 +66,10 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import ApexChart from "vue3-apexcharts";
-import { nextTick } from "vue";
+import { defineComponent, nextTick } from "vue";
 import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
-import { defineComponent } from "vue";
 import { Service } from "@/services/service";
 import HisDate from "@/utils/Date";
 export default defineComponent({
