@@ -6,7 +6,7 @@
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
-                        :date_prop="''"
+                        :date_prop="date_properties[0].dataValue.value"
                     />
 
                     <div>
@@ -60,6 +60,8 @@ const editIndex = ref(NaN)
 const FacilityData = ref([] as any)
 const store = useOutcomeStore()
 let temp_data_v: any[] = []
+const selected_discharged = ref();
+
 
 onMounted(async () => {
     findWardName('')
@@ -84,7 +86,35 @@ const date_properties = [
         error_message: 'please provide date'
     }
 ]
+interface Props {
+  selected_discharged_prop: any,
+  selected_discharged_data: any,
+}
+const props = defineProps<Props>()
 
+watch(() => props.selected_discharged_prop,
+    (newValue) => {
+      if (!newValue) return;
+      selected_discharged.value = newValue
+    },
+    {
+      immediate: true,
+      deep: true
+    }
+)
+
+watch(() => props.selected_discharged_data,
+    (newValue) => {
+      if (!newValue) return;
+
+      date_properties[0].dataValue.value = newValue.date || '';
+
+    },
+    {
+      immediate: true,
+      deep: true
+    }
+)
 function dateUpdate_fn1(data: any) {
     const date_data = {
         day: data.value.day,
