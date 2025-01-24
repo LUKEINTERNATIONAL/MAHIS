@@ -1,74 +1,45 @@
 <template>
-    <div class="modal_wrapper">
-        <basic-form :contentData="nonPharmacologicalIntervention" @update:inputValue="handleInputData"></basic-form>
-    </div>
+  <div class="checklist-container">
+    <ion-item v-for="item in items" :key="item.id" class="no-border">
+      <ion-checkbox :id="item.id" v-model="item.checked" slot="start"></ion-checkbox>
+      <ion-label>{{ item.label }}</ion-label>
+    </ion-item>
+  </div>
 </template>
 
-<script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
-import { defineComponent } from "vue";
-import BasicForm from "@/components/BasicForm.vue";
-import { useNonPharmacologicalInterventionStore } from "@/apps/OPD/stores/NonPharmacologicalInterventionStore";
-import { mapState } from "pinia";
-import {
-    modifyCheckboxInputField,
-    getCheckboxSelectedValue,
-    getRadioSelectedValue,
-    modifyFieldValue,
-    modifyRadioValue,
-} from "@/services/data_helpers";
-import { formatCheckBoxData } from "@/services/formatServerData";
-import { Service } from "@/services/service";
-import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import { Treatment } from "@/apps/OPD/services/treatment";
-export default defineComponent({
-    name: "Menu",
-    components: {
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        BasicForm,
-    },
+<script setup>
+import { IonItem, IonCheckbox, IonLabel } from '@ionic/vue';
+import { useNonPharmaTherapyStore } from '@/stores/nonPharmaTherapyStore'; // Adjust the path as needed
 
-    data() {
-        return {};
-    },
-    computed: {
-        ...mapState(useNonPharmacologicalInterventionStore, ["nonPharmacologicalIntervention"]),
-    },
-    methods: {
-        handleInputData(event: any) {
-            console.log(event);
-            // if (event?.al?.name == "TB" && event?.al?.checked) {
-            //     modifyRadioValue(this.nonPharmacologicalIntervention, "TBmedication", "displayNone", false);
-            // } else if (event?.al?.name == "TB" && !event?.al?.checked) {
-            //     modifyRadioValue(this.nonPharmacologicalIntervention, "TBmedication", "displayNone", true);
-            // }
+// Access the Pinia store
+const nonPharmaTherapyStore = useNonPharmaTherapyStore();
 
-            // if (event?.name == "TBmedication" && event?.selectedValue == "Yes") {
-            //     this.nonPharmacologicalIntervention[2].displayNone = false;
-            // } else if (event?.name == "TBmedication" && event?.selectedValue == "No") {
-            //     this.nonPharmacologicalIntervention[2].displayNone = true;
-            // }
-        },
-        async BuildNonPharmacologicalIntervention() {
-            return [...(await formatCheckBoxData(this.nonPharmacologicalIntervention))];
-        },
-        async saveNonPharmacologicalIntervention() {
-            const data: any = await this.BuildNonPharmacologicalIntervention();
-            console.log("🚀 ~ saveNonPharmacologicalIntervention ~ data:", data);
-            if (data.length > 0) {
-                const userID: any = Service.getUserID();
-                const treatmentInstance = new Treatment();
-                //   treatmentInstance.onSubmit(this.treatment.patient_id, userID, data);
-            }
-        },
-    },
-});
+// Access the items state from the store
+const items = nonPharmaTherapyStore.items;
 </script>
 
-<style scoped></style>
+<style scoped>
+.checklist-container {
+  padding: 16px;
+}
+
+/* Remove the bottom border from ion-item */
+.no-border {
+  --border-width: 0; /* Removes the border */
+  --inner-border-width: 0; /* Removes the inner border (if any) */
+}
+
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 12px;
+}
+
+ion-checkbox {
+  margin-right: 12px;
+}
+
+ion-label {
+  font-size: 16px;
+}
+</style>
