@@ -162,6 +162,9 @@ export default defineComponent({
             }
             this.list = additionalDiagnoses;
         },
+      resetStore() {
+        this.drugPrescriptions = [];
+      },
         setListData(data: any) {
             this.list = [];
             data.forEach((item: any) => {
@@ -203,19 +206,31 @@ const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
 const selectedReason = ref("");
 
-onMounted(async () => {
-    dispensationStore.resetStore();
-    const previousTreatment = new PreviousTreatment();
-    const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters();
+watch(
+    () => demographics.value,
+    async (newPatient, oldPatient) => {
+      if (newPatient && newPatient.patientID !== oldPatient.patientID) {
+        dispensationStore.resetStore();
 
-    dispensationStore.setDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions);
-    for (let index = 0; index < dispensationStore.getDrugPrescriptions().length; index++) {
-        dispensationStore.initializeValidationsBoolean();
-        dispensationStore.initializeReasonParameter();
-        dispensationStore.initializeDispensedAmount();
-        dispensationStore.updateCheckboxBool(true, index);
-    }
-});
+        const previousTreatment = new PreviousTreatment();
+        const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters();
+
+        if (previousDrugPrescriptions.length > 0) {
+          dispensationStore.setDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions);
+
+          for (let index = 0; index < dispensationStore.getDrugPrescriptions().length; index++) {
+            dispensationStore.initializeValidationsBoolean();
+            dispensationStore.initializeReasonParameter();
+            dispensationStore.initializeDispensedAmount();
+            dispensationStore.updateCheckboxBool(true, index);
+          }
+        } else {
+          dispensationStore.setDrugPrescriptions([]);
+        }
+      }
+    },
+    { immediate: true, deep: true }
+);
 
 function editDispensations() {
     dispensationStore.editDispensations();
