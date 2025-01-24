@@ -8,7 +8,23 @@
             <div class="" style="display: block">
                 <div class="title"></div>
                 <div class="container">
-                    <ion-button style="width: 100px; margin-bottom: 10px" @click="reloadData">Reload</ion-button>
+                    <div style="margin-bottom: 20px">
+                        <div>
+                            <h5>Records from device to server</h5>
+                            <div class="sub_title">
+                                Patients
+                                <span class="count"> ({{ syncingTotal - countPendingRecords }}/{{ syncingTotal }})</span>
+                            </div>
+                            <k-progress
+                                :percent="fractionToPercentage(syncingTotal - countPendingRecords, syncingTotal)"
+                                :active="!(syncingTotal - countPendingRecords == syncingTotal)"
+                                active-color="#fff"
+                                color="rgb(107, 199, 107)"
+                            ></k-progress>
+                        </div>
+                        <ion-button style="float: right; margin-right: 70px" @click="reloadData('offline')"> Sync </ion-button>
+                    </div>
+                    <h5>Records from server to device</h5>
                     <div class="sub_title">
                         Relationships
                         <span class="count"> ({{ offlineRelationshipStatus?.total_relationships }}/{{ offlineRelationshipStatus?.total }})</span>
@@ -68,29 +84,43 @@
                         color="rgb(107, 199, 107)"
                     ></k-progress>
                 </div>
+                <ion-button style="width: 70px; margin-bottom: 10px; margin-right: 160px; float: right" @click="reloadData('')">Sync</ion-button>
             </div>
         </ion-content>
     </ion-page>
 </template>
 <script setup lang="ts">
 import { IonContent, IonPage, IonButton, modalController } from "@ionic/vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import { useWorkerStatus } from "@/composables/useWorkerStatus";
 import { useStatusStore } from "@/stores/StatusStore";
 import { storeToRefs } from "pinia";
 import { useWorkerStore } from "@/stores/workerStore";
 import { icons } from "@/utils/svg";
+import { getOfflineRecords } from "@/services/offline_service";
 
 const workerStore = useWorkerStore();
+let countPendingRecords = ref(0) as any;
 const isLoading = ref(false) as any;
 const statusStore = useStatusStore();
-const { offlineVillageStatus, offlineCountriesStatus, offlineDistrictStatus, offlineTAsStatus, offlineRelationshipStatus, offlinePatientsStatus } =
-    storeToRefs(statusStore);
+const {
+    syncingTotal,
+    offlineVillageStatus,
+    offlineCountriesStatus,
+    offlineDistrictStatus,
+    offlineTAsStatus,
+    offlineRelationshipStatus,
+    offlinePatientsStatus,
+} = storeToRefs(statusStore);
 onMounted(async () => {
-    // await syncRegistrationMetaData();
+    countPendingRecords.value = await getPendingRecord();
 });
-const reloadData = async () => {
+const reloadData = async (data: any) => {
+    if (data == "offline") {
+        countPendingRecords.value = await getPendingRecord();
+        useStatusStore().syncingTotal = countPendingRecords.value;
+    }
     workerStore.terminate();
     workerStore.postData("SYNC_ALL_DATA");
 };
@@ -101,6 +131,19 @@ const fractionToPercentage = (numerator: any, denominator: any) => {
     }
     let percentage = (numerator / denominator) * 100;
     return `${percentage ? percentage.toFixed(2) : 0}`; // Keeps two decimal places
+};
+watch(
+    () => offlinePatientsStatus,
+    async () => {
+        countPendingRecords.value = await getPendingRecord();
+    },
+    { deep: true }
+);
+const getPendingRecord = async () => {
+    const data: any = await getOfflineRecords("patientRecords", {
+        whereClause: { saveStatusPersonInformation: "pending" },
+    });
+    return data.length;
 };
 </script>
 <style scoped>

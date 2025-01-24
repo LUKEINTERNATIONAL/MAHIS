@@ -11,6 +11,7 @@ export const useStatusStore = defineStore("statusStore", {
             offlineRelationshipStatus: {} as any,
             offlinePatientsStatus: {} as any,
             isSyncingDone: false,
+            syncingTotal: 0 as any,
         };
     },
     actions: {
