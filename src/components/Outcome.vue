@@ -28,7 +28,7 @@
                             label="name"
                             :searchable="true"
                             :disabled="false"
-                            @search-change="($event) => {}"
+                            @search-change="() => {}"
                             track-by="name"
                             :options="referralType"
                         />

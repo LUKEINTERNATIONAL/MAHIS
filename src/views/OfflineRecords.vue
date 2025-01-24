@@ -86,7 +86,7 @@ const options = {
         bottomStart: "info",
         bottomEnd: "paging",
     },
-};
+} as any;
 // Watchers
 const buildTableData = async () => {
     isLoading.value = true;

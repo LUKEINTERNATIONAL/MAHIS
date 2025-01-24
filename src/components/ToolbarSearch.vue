@@ -521,50 +521,7 @@ export default defineComponent({
 
             return await getOfflineRecords("patientRecords", { likeClause });
         },
-        async handleSearchResults(patient: Promise<Patient | Patient[]>) {
-            let results: Patient[] | Patient = [];
-            try {
-                results = (await patient) as Patient[] | Patient;
-            } catch (e) {
-                // [DDE] A person might have missing attributes such as home_village,
-                // or home_ta.
-                if (e instanceof IncompleteEntityError && !isEmpty(e.entity)) {
-                    results = e.entity;
-                } else if (e instanceof BadRequestError && Array.isArray(e.errors)) {
-                    const [msg, ...entities] = e.errors;
-                    if (typeof msg === "string" && msg === "Invalid parameter(s)") {
-                        this.setInvalidParametersFacts(entities);
-                    }
-                } else {
-                    toastDanger(`${e}`, 300000);
-                }
-            }
 
-            // Use local patient if available if DDE never found them
-            if (isEmpty(results) && !isEmpty(this.localPatient)) results = this.localPatient;
-
-            if (Array.isArray(results) && results.length > 1) {
-                this.facts.npidHasDuplicates = results.length <= 5;
-                this.facts.npidHasOverFiveDuplicates = results.length > 5;
-            } else {
-                this.facts.patientFound = !isEmpty(results);
-            }
-
-            if (this.facts.patientFound) {
-                this.patient = new PatientService(Array.isArray(results) ? results[0] : results);
-                const factPromises = [];
-                if (this.useDDE) {
-                    factPromises.push(this.setDDEFacts());
-                }
-                this.facts.currentNpid = this.patient.getNationalID();
-                factPromises.push(this.validateNpid());
-                await Promise.all(factPromises);
-            } else {
-                // [DDE] a user might scan a deleted npid but might have a newer one.
-                // The function below checks for newer version
-                if (this.facts.scannedNpid) this.setVoidedNpidFacts(this.facts.scannedNpid);
-            }
-        },
         async validateNpid() {
             if (this.useDDE) {
                 this.facts.hasInvalidNpid = !this.patient.getDocID() || (this.patient.getDocID() && isUnknownOrEmpty(this.patient.getNationalID()));
