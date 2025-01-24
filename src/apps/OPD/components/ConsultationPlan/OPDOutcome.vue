@@ -35,9 +35,9 @@
             </ion-row>
         </div>
 
-        <AdmittedforShortStayOutcomef v-if="show_admitted_options" @data-saved="dataSavedTrigFn" />
+        <AdmittedforShortStayOutcomef v-if="show_admitted_options" @data-saved="dataSavedTrigFn" :selected_ward_prop="''" :admitted_other_props="''" />
 
-        <ReferredOutCome v-if="show_referred_options" @data-saved="dataSavedTrigFn" />
+        <ReferredOutCome v-if="show_referred_options" @data-saved="dataSavedTrigFn" :selected_referral_data="''" :selected_other_referral_data="''"/>
         <DischargedHome v-if="show_discharged_options" @data-saved="dataSavedTrigFn" />
 
         <deadOutcome v-if="show_dead_options" @data-saved="dataSavedTrigFn" />

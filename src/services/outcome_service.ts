@@ -11,13 +11,13 @@ interface CreateEncounterPayload {
 }
 
 export class OutcomeService extends Service {
-    private encounterTypeID: number;
+    protected encounterTypeID: number;
     private date: Date;
 
     constructor() {
         super();
         this.encounterTypeID = 40;
-        this.date = new Date();
+        this.date = Service.getSessionDate() as any;
     }
 
     async createEncounter(data: []): Promise<Encounter | undefined> {
