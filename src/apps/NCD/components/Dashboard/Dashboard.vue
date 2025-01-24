@@ -80,7 +80,7 @@ export default defineComponent({
     },
     data() {
         return {
-            dashboardData: "",
+            dashboardData: "" as any,
             isChartReady: false,
             lineChartOptions: {
                 chart: {
