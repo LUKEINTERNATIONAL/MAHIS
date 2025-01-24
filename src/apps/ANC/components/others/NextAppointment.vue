@@ -172,7 +172,7 @@ const props = defineProps<{
 async function save() {
     await voidApt();
     await getMobilePhones();
-    const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
+    const appointment_service: any = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
     const appointmentDetails = await appointment_service.createAppointment();
     setMilestoneReload();
     setAppointmentMentsReload();

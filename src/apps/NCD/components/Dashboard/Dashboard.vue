@@ -65,7 +65,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import ApexChart from "vue3-apexcharts";
 import { nextTick } from "vue";
 import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";

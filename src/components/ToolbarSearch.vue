@@ -587,45 +587,6 @@ export default defineComponent({
             }
             return { comparisons, rowColors: [diffIndexes] };
         },
-        async setVoidedNpidFacts(npid: string) {
-            const cols = ["Name", "Birthdate", "Gender", "Ancestry Home", "CurrentID", "Action"];
-            let rows = [];
-            const req = await this.ddeInstance.findVoidedIdentifier(npid);
-            if (req) {
-                rows = req.map((d: any) => {
-                    const p = new PatientService(d);
-                    return [
-                        p.getFullName(),
-                        p.getBirthdate(),
-                        p.getGender(),
-                        p.getHomeTA(),
-                        p.getNationalID(),
-                        {
-                            type: "button",
-                            name: "Select",
-                            action: async () => {
-                                if (!p.patientIsComplete()) {
-                                    return this.$router.push(`/patient/registration?edit_person=${p.getID()}`);
-                                } else if (p.getNationalID().match(/unknown/i) || !p.getDocID()) {
-                                    try {
-                                        // await p.assignNpid();
-                                        // await this.findAndSetPatient(p.getID(), undefined);
-                                        // return modalController.dismiss();
-                                    } catch (e) {
-                                        toastWarning("Failed to assign npid to patient with unknown npid.");
-                                        return console.error(e);
-                                    }
-                                }
-                                // await modalController.dismiss();
-                                // await this.findAndSetPatient(undefined, p.getNationalID());
-                            },
-                        },
-                    ];
-                });
-                this.facts.dde.voidedNpids.cols = cols;
-                this.facts.dde.voidedNpids.rows = rows;
-            }
-        },
         /**
          * DDE sometimes sends 400 bad request which contains
          * a list of invalid demographic attributes
