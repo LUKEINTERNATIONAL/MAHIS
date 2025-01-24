@@ -24,67 +24,78 @@
                         </div>
                         <ion-button style="float: right; margin-right: 70px" @click="reloadData('offline')"> Sync </ion-button>
                     </div>
-                    <h5>Records from server to device</h5>
-                    <div class="sub_title">
-                        Relationships
-                        <span class="count"> ({{ offlineRelationshipStatus?.total_relationships }}/{{ offlineRelationshipStatus?.total }})</span>
+                    <div style="margin-bottom: 20px">
+                        <div>
+                            <h5>Records from server to device</h5>
+                            <div class="sub_title">
+                                Relationships
+                                <span class="count">
+                                    ({{ offlineRelationshipStatus?.total_relationships }}/{{ offlineRelationshipStatus?.total }})</span
+                                >
+                            </div>
+                            <k-progress
+                                :percent="fractionToPercentage(offlineRelationshipStatus?.total_relationships, offlineRelationshipStatus?.total)"
+                                :active="!offlineRelationshipStatus?.total_relationships == offlineRelationshipStatus?.total"
+                                active-color="#fff"
+                                color="rgb(107, 199, 107)"
+                            ></k-progress>
+                            <div class="sub_title">
+                                Countries
+                                <span class="count"> ({{ offlineCountriesStatus?.total_countries }}/{{ offlineCountriesStatus?.total }})</span>
+                            </div>
+                            <k-progress
+                                :percent="fractionToPercentage(offlineCountriesStatus?.total_countries, offlineCountriesStatus?.total)"
+                                :active="!offlineCountriesStatus?.total_countries == offlineCountriesStatus?.total"
+                                active-color="#fff"
+                                color="rgb(107, 199, 107)"
+                            ></k-progress>
+                            <div class="sub_title">
+                                Districts
+                                <span class="count"> ({{ offlineDistrictStatus?.total_districts }}/{{ offlineDistrictStatus?.total }})</span>
+                            </div>
+                            <k-progress
+                                :percent="fractionToPercentage(offlineDistrictStatus?.total_districts, offlineDistrictStatus?.total)"
+                                :active="!offlineDistrictStatus?.total_districts == offlineDistrictStatus?.total"
+                                active-color="#fff"
+                                color="rgb(107, 199, 107)"
+                            ></k-progress>
+                            <div class="sub_title">
+                                TAs <span class="count"> ({{ offlineTAsStatus?.total_TAs }}/{{ offlineTAsStatus?.total }})</span>
+                            </div>
+                            <k-progress
+                                :percent="fractionToPercentage(offlineTAsStatus?.total_TAs, offlineTAsStatus?.total)"
+                                :active="!offlineTAsStatus?.total_TAs == offlineTAsStatus?.total"
+                                active-color="#fff"
+                                color="rgb(107, 199, 107)"
+                            ></k-progress>
+                            <div class="sub_title">
+                                Villages <span class="count"> ({{ offlineVillageStatus?.total_village }}/{{ offlineVillageStatus?.total }})</span>
+                            </div>
+                            <k-progress
+                                :percent="fractionToPercentage(offlineVillageStatus?.total_village, offlineVillageStatus?.total)"
+                                :active="!offlineVillageStatus?.total_village == offlineVillageStatus?.total"
+                                active-color="#fff"
+                                color="rgb(107, 199, 107)"
+                            ></k-progress>
+                            <div class="sub_title">
+                                Patients
+                                <span class="count">
+                                    ({{ offlinePatientsStatus?.offlinePatientsCount }}/{{ offlinePatientsStatus?.serverPatientsCount }})</span
+                                >
+                            </div>
+                            <k-progress
+                                :percent="
+                                    fractionToPercentage(offlinePatientsStatus?.offlinePatientsCount, offlinePatientsStatus?.serverPatientsCount)
+                                "
+                                :active="!offlinePatientsStatus?.offlinePatientsCount == offlinePatientsStatus?.serverPatientsCount"
+                                active-color="#fff"
+                                color="rgb(107, 199, 107)"
+                            ></k-progress>
+                        </div>
+
+                        <ion-button style="float: right; margin-right: 70px" @click="reloadData('')"> Sync </ion-button>
                     </div>
-                    <k-progress
-                        :percent="fractionToPercentage(offlineRelationshipStatus?.total_relationships, offlineRelationshipStatus?.total)"
-                        :active="!offlineRelationshipStatus?.total_relationships == offlineRelationshipStatus?.total"
-                        active-color="#fff"
-                        color="rgb(107, 199, 107)"
-                    ></k-progress>
-                    <div class="sub_title">
-                        Countries <span class="count"> ({{ offlineCountriesStatus?.total_countries }}/{{ offlineCountriesStatus?.total }})</span>
-                    </div>
-                    <k-progress
-                        :percent="fractionToPercentage(offlineCountriesStatus?.total_countries, offlineCountriesStatus?.total)"
-                        :active="!offlineCountriesStatus?.total_countries == offlineCountriesStatus?.total"
-                        active-color="#fff"
-                        color="rgb(107, 199, 107)"
-                    ></k-progress>
-                    <div class="sub_title">
-                        Districts <span class="count"> ({{ offlineDistrictStatus?.total_districts }}/{{ offlineDistrictStatus?.total }})</span>
-                    </div>
-                    <k-progress
-                        :percent="fractionToPercentage(offlineDistrictStatus?.total_districts, offlineDistrictStatus?.total)"
-                        :active="!offlineDistrictStatus?.total_districts == offlineDistrictStatus?.total"
-                        active-color="#fff"
-                        color="rgb(107, 199, 107)"
-                    ></k-progress>
-                    <div class="sub_title">
-                        TAs <span class="count"> ({{ offlineTAsStatus?.total_TAs }}/{{ offlineTAsStatus?.total }})</span>
-                    </div>
-                    <k-progress
-                        :percent="fractionToPercentage(offlineTAsStatus?.total_TAs, offlineTAsStatus?.total)"
-                        :active="!offlineTAsStatus?.total_TAs == offlineTAsStatus?.total"
-                        active-color="#fff"
-                        color="rgb(107, 199, 107)"
-                    ></k-progress>
-                    <div class="sub_title">
-                        Villages <span class="count"> ({{ offlineVillageStatus?.total_village }}/{{ offlineVillageStatus?.total }})</span>
-                    </div>
-                    <k-progress
-                        :percent="fractionToPercentage(offlineVillageStatus?.total_village, offlineVillageStatus?.total)"
-                        :active="!offlineVillageStatus?.total_village == offlineVillageStatus?.total"
-                        active-color="#fff"
-                        color="rgb(107, 199, 107)"
-                    ></k-progress>
-                    <div class="sub_title">
-                        Patients
-                        <span class="count">
-                            ({{ offlinePatientsStatus?.offlinePatientsCount }}/{{ offlinePatientsStatus?.serverPatientsCount }})</span
-                        >
-                    </div>
-                    <k-progress
-                        :percent="fractionToPercentage(offlinePatientsStatus?.offlinePatientsCount, offlinePatientsStatus?.serverPatientsCount)"
-                        :active="!offlinePatientsStatus?.offlinePatientsCount == offlinePatientsStatus?.serverPatientsCount"
-                        active-color="#fff"
-                        color="rgb(107, 199, 107)"
-                    ></k-progress>
                 </div>
-                <ion-button style="width: 70px; margin-bottom: 10px; margin-right: 160px; float: right" @click="reloadData('')">Sync</ion-button>
             </div>
         </ion-content>
     </ion-page>

@@ -120,6 +120,7 @@ import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { ObservationService } from "@/services/observation_service";
 import { OrderService } from "@/services/order_service";
 import { ConceptService } from "@/services/concept_service";
+import { useNonPharmaTherapyStore } from "@/stores/nonPharmaTherapyStore";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -481,6 +482,7 @@ export default defineComponent({
             }
 
             await createNCDDrugOrder();
+            await useNonPharmaTherapyStore().saveNonPharmaTherapyPatientData()
         },
         openModal() {
             createModal(SaveProgressModal);

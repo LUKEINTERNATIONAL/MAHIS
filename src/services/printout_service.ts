@@ -122,25 +122,23 @@ export class PrintoutService extends Service {
             defualtPrinter = printers[0];
         }
         if (isEmpty(defualtPrinter)) {
-            const option = await optionsActionSheet(
-                "Select Printer",
-                "Please, select default printer",
-                printers,
-                [
-                    { name: "Cancel", slot: "start", color: "danger" },
-                    { name: "Refresh", slot: "end", color: "primary" },
-                    { name: "Continue", slot: "end", role: "action" },
-                ],
-                "darkred",
-                "action-sheet-modal",
-                "name",
-                "address"
-            );
-
-            if (option.action === "Cancel") return;
-            if (option.action === "Refresh") return this.selectDefaultPrinter();
-
-            defualtPrinter = option.selection;
+            // const option = await optionsActionSheet(
+            //     "Select Printer",
+            //     "Please, select default printer",
+            //     printers,
+            //     [
+            //         { name: "Cancel", slot: "start", color: "danger" },
+            //         { name: "Refresh", slot: "end", color: "primary" },
+            //         { name: "Continue", slot: "end", role: "action" },
+            //     ],
+            //     "darkred",
+            //     "action-sheet-modal",
+            //     "name",
+            //     "address"
+            // );
+            // if (option.action === "Cancel") return;
+            // if (option.action === "Refresh") return this.selectDefaultPrinter();
+            // defualtPrinter = option.selection;
         }
 
         if (defualtPrinter) this.setDefaultPrinter(defualtPrinter);

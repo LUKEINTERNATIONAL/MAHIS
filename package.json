@@ -1,7 +1,7 @@
 {
   "name": "MaHIS",
   "private": true,
-  "version": "1.0.4-beta-8",
+  "version": "1.0.4",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -39,7 +39,6 @@
     "@vuepic/vue-datepicker": "^8.1.0",
     "apexcharts": "^4.0.0",
     "bootstrap": "^5.3.3",
-    "cap-label-printer-plugin": "^2.2.0",
     "capacitor-blob-writer": "^1.1.14",
     "chart.js": "^4.4.2",
     "datatables.net": "^2.1.8",

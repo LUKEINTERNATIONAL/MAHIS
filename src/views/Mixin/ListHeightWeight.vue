@@ -97,7 +97,10 @@ export default defineComponent({
         processObservations() {
             if (!this.weight && !this.height) return [];
 
-            const allDates = new Set([...(this.weight?.map((w: any) => w.obs_datetime) || []), ...(this.height?.map((h) => h.obs_datetime) || [])]);
+            const allDates = new Set([
+                ...(this.weight?.map((w: any) => w.obs_datetime) || []),
+                ...(this.height?.map((h: any) => h.obs_datetime) || []),
+            ]);
 
             return Array.from(allDates).map((datetime) => ({
                 ids: {

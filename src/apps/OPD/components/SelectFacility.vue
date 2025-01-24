@@ -1,62 +1,61 @@
 <template>
-        <ion-row>
-            <ion-col>
-                <VueMultiselect
-                    v-model="selected_Districts"
-                    @update:model-value="selectedDistrictF($event, true)"
-                    :multiple="false"
-                    :taggable="false"
-                    :hide-selected="true"
-                    :close-on-select="true"
-                    openDirection="bottom"
-                    tag-placeholder="Find and select District"
-                    placeholder="Find and select District"
-                    selectLabel=""
-                    label="name"
-                    :searchable="true"
-                    @search-change=""
-                    track-by="id"
-                    :options="districtList"
-                    :disabled="disableFacilitySelection"
-                />
+    <ion-row>
+        <ion-col>
+            <VueMultiselect
+                v-model="selected_Districts"
+                @update:model-value="selectedDistrictF($event, true)"
+                :multiple="false"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select District"
+                placeholder="Find and select District"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change=""
+                track-by="id"
+                :options="districtList"
+                :disabled="disableFacilitySelection"
+            />
 
-                <div>
-                    <ion-label v-if="district_show_error" class="error-label">
-                        {{ 'Select district' }}
-                    </ion-label>
-                </div>
-            </ion-col>
-        </ion-row>
+            <div>
+                <ion-label v-if="district_show_error" class="error-label">
+                    {{ "Select district" }}
+                </ion-label>
+            </div>
+        </ion-col>
+    </ion-row>
 
-        <ion-row>
-            <ion-col>
-                    <VueMultiselect
-                        v-model="selected_location"
-                        @update:model-value="selectedLocation($event)"
-                        :multiple="false"
-                        :taggable="false"
-                        :hide-selected="true"
-                        :close-on-select="true"
-                        openDirection="bottom"
-                        tag-placeholder="Find and select facility"
-                        placeholder="Find and select facility"
-                        selectLabel=""
-                        label="name"
-                        :searchable="true"
-                        :disabled="disableFacilitySelection"
-                        @search-change="($event)=>{}"
-                        track-by="code"
-                        :options="locationData"
-                    />
+    <ion-row>
+        <ion-col>
+            <VueMultiselect
+                v-model="selected_location"
+                @update:model-value="selectedLocation($event)"
+                :multiple="false"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select facility"
+                placeholder="Find and select facility"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                :disabled="disableFacilitySelection"
+                @search-change="() => {}"
+                track-by="code"
+                :options="locationData"
+            />
 
-                    <div>
-                        <ion-label v-if="location_show_error" class="error-label">
-                            {{ 'Select location' }}
-                        </ion-label>
-                    </div>
-
-            </ion-col>
-        </ion-row>
+            <div>
+                <ion-label v-if="location_show_error" class="error-label">
+                    {{ "Select location" }}
+                </ion-label>
+            </div>
+        </ion-col>
+    </ion-row>
 </template>
 
 <script lang="ts">
@@ -71,85 +70,75 @@ import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { LocationService } from "@/services/location_service";
 import VueMultiselect from "vue-multiselect";
 
-const location_show_error = ref(false)
-const locationData = ref<any[]>([])
-const selected_location = ref<Location | null>(null)
-const selected_Districts = ref<any[]>([]) as any
-const district_show_error = ref(false)
-const selectedDistrictIds = ref<any[]>([])
-const disableFacilitySelection = ref(false)
-const OLDDistrictsList = ref<any[]>([])
-const districtList = ref<any[]>([])
-const selectedDistrict_id = ref() as any //temp should be replavced in near future
+const location_show_error = ref(false);
+const locationData = ref<any[]>([]);
+const selected_location = ref<Location | null>(null);
+const selected_Districts = ref<any[]>([]) as any;
+const district_show_error = ref(false);
+const selectedDistrictIds = ref<any[]>([]);
+const disableFacilitySelection = ref(false);
+const OLDDistrictsList = ref<any[]>([]);
+const districtList = ref<any[]>([]);
+const selectedDistrict_id = ref() as any; //temp should be replavced in near future
 
 interface Props {
-  show_error: boolean;
-  selected_district_ids: any[];
-  selected_location: Location | null;
+    show_error: boolean;
+    selected_district_ids: any[];
+    selected_location: Location | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  show_error: false,
-  selected_district_ids: () => [],
-  selected_location: null
-})
+    show_error: false,
+    selected_district_ids: () => [],
+    selected_location: null,
+});
 
 watch(
-  () => props.selected_district_ids,
+    () => props.selected_district_ids,
     async (newValue: any) => {
         try {
-            const [oldDistricts, facilityDistricts] = await Promise.all([
-                getdistrictList(),
-                getFacilityDistricts()
-            ])
+            const [oldDistricts, facilityDistricts] = await Promise.all([getdistrictList(), getFacilityDistricts()]);
 
-            OLDDistrictsList.value = oldDistricts
-            districtList.value = facilityDistricts
-            
+            OLDDistrictsList.value = oldDistricts;
+            districtList.value = facilityDistricts;
+
             if (Array.isArray(newValue)) {
-                const ids_array = [...newValue]
+                const ids_array = [...newValue];
                 districtList.value.forEach((district: any) => {
                     ids_array.forEach((districtId: any) => {
                         if (district.id == districtId) {
-                            selected_Districts.value = district
+                            selected_Districts.value = district;
                         }
-                    })
+                    });
                 });
             }
-        } catch (error) {
-            
-        }
+        } catch (error) {}
     },
-  {
-    immediate: true,
-    deep: true
-  }
-)
+    {
+        immediate: true,
+        deep: true,
+    }
+);
 
 watch(
-  () => props.selected_location,
+    () => props.selected_location,
     async (newValue: any) => {
         try {
-            const [oldDistricts, facilityDistricts] = await Promise.all([
-                getdistrictList(),
-                getFacilityDistricts()
-            ])
+            const [oldDistricts, facilityDistricts] = await Promise.all([getdistrictList(), getFacilityDistricts()]);
 
-            OLDDistrictsList.value = oldDistricts
-            districtList.value = facilityDistricts
-        
+            OLDDistrictsList.value = oldDistricts;
+            districtList.value = facilityDistricts;
+
             if (newValue) {
-                selected_location.value = newValue
+                selected_location.value = newValue;
             }
-        } catch (error) {
-            
-        }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
+        } catch (error) {}
+    },
+    {
+        immediate: true,
+        deep: true,
+    }
+);
 
 onMounted(async () => {
     OLDDistrictsList.value = await getdistrictList();
@@ -166,8 +155,7 @@ watch(
 const changeErrValues = () => {
     location_show_error.value = props.show_error;
     district_show_error.value = props.show_error;
-};      
-
+};
 
 function selectedDistrictF(selectedDistrict: any, clearFL = false) {
     if (clearFL == true) {
@@ -241,20 +229,19 @@ const emit = defineEmits<{
 function facilitySelected(value: any) {
     emit("facilitySelected", value);
 }
-
 </script>
 
 <style scoped>
-    .error-label {
-        background: #fecdca;
-        color: #b42318;
-        text-transform: none;
-        padding: 5%;
-        padding-top: 2%;
-        padding-bottom: 2%;
-        border-radius: 10px;
-        margin-top: 4px;
-        display: flex;
-        text-align: center;
-    }
+.error-label {
+    background: #fecdca;
+    color: #b42318;
+    text-transform: none;
+    padding: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    border-radius: 10px;
+    margin-top: 4px;
+    display: flex;
+    text-align: center;
+}
 </style>

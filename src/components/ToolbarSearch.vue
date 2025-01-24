@@ -521,50 +521,7 @@ export default defineComponent({
 
             return await getOfflineRecords("patientRecords", { likeClause });
         },
-        async handleSearchResults(patient: Promise<Patient | Patient[]>) {
-            let results: Patient[] | Patient = [];
-            try {
-                results = (await patient) as Patient[] | Patient;
-            } catch (e) {
-                // [DDE] A person might have missing attributes such as home_village,
-                // or home_ta.
-                if (e instanceof IncompleteEntityError && !isEmpty(e.entity)) {
-                    results = e.entity;
-                } else if (e instanceof BadRequestError && Array.isArray(e.errors)) {
-                    const [msg, ...entities] = e.errors;
-                    if (typeof msg === "string" && msg === "Invalid parameter(s)") {
-                        this.setInvalidParametersFacts(entities);
-                    }
-                } else {
-                    toastDanger(`${e}`, 300000);
-                }
-            }
 
-            // Use local patient if available if DDE never found them
-            if (isEmpty(results) && !isEmpty(this.localPatient)) results = this.localPatient;
-
-            if (Array.isArray(results) && results.length > 1) {
-                this.facts.npidHasDuplicates = results.length <= 5;
-                this.facts.npidHasOverFiveDuplicates = results.length > 5;
-            } else {
-                this.facts.patientFound = !isEmpty(results);
-            }
-
-            if (this.facts.patientFound) {
-                this.patient = new PatientService(Array.isArray(results) ? results[0] : results);
-                const factPromises = [];
-                if (this.useDDE) {
-                    factPromises.push(this.setDDEFacts());
-                }
-                this.facts.currentNpid = this.patient.getNationalID();
-                factPromises.push(this.validateNpid());
-                await Promise.all(factPromises);
-            } else {
-                // [DDE] a user might scan a deleted npid but might have a newer one.
-                // The function below checks for newer version
-                if (this.facts.scannedNpid) this.setVoidedNpidFacts(this.facts.scannedNpid);
-            }
-        },
         async validateNpid() {
             if (this.useDDE) {
                 this.facts.hasInvalidNpid = !this.patient.getDocID() || (this.patient.getDocID() && isUnknownOrEmpty(this.patient.getNationalID()));
@@ -630,45 +587,6 @@ export default defineComponent({
             }
             return { comparisons, rowColors: [diffIndexes] };
         },
-        async setVoidedNpidFacts(npid: string) {
-            const cols = ["Name", "Birthdate", "Gender", "Ancestry Home", "CurrentID", "Action"];
-            let rows = [];
-            const req = await this.ddeInstance.findVoidedIdentifier(npid);
-            if (req) {
-                rows = req.map((d: any) => {
-                    const p = new PatientService(d);
-                    return [
-                        p.getFullName(),
-                        p.getBirthdate(),
-                        p.getGender(),
-                        p.getHomeTA(),
-                        p.getNationalID(),
-                        {
-                            type: "button",
-                            name: "Select",
-                            action: async () => {
-                                if (!p.patientIsComplete()) {
-                                    return this.$router.push(`/patient/registration?edit_person=${p.getID()}`);
-                                } else if (p.getNationalID().match(/unknown/i) || !p.getDocID()) {
-                                    try {
-                                        // await p.assignNpid();
-                                        // await this.findAndSetPatient(p.getID(), undefined);
-                                        // return modalController.dismiss();
-                                    } catch (e) {
-                                        toastWarning("Failed to assign npid to patient with unknown npid.");
-                                        return console.error(e);
-                                    }
-                                }
-                                // await modalController.dismiss();
-                                // await this.findAndSetPatient(undefined, p.getNationalID());
-                            },
-                        },
-                    ];
-                });
-                this.facts.dde.voidedNpids.cols = cols;
-                this.facts.dde.voidedNpids.rows = rows;
-            }
-        },
         /**
          * DDE sometimes sends 400 bad request which contains
          * a list of invalid demographic attributes
@@ -702,7 +620,7 @@ export default defineComponent({
                 let isAlreadyCheckedIn = false;
                 for (const stage of stages) {
                     const patientList = (await PatientOpdList.getPatientList(stage, locationId)) as Array<{ patient_id: string }>;
-                    if (patientList.some((patient) => patient.patientID === this.selectedPatient.patient_id)) {
+                    if (patientList.some((patient: any) => patient.patientID === this.selectedPatient.patient_id)) {
                         isAlreadyCheckedIn = true;
                         break;
                     }
