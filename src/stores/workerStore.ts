@@ -5,6 +5,8 @@ import { Service } from "@/services/service";
 import { watch } from "vue";
 import { useWorkerStatus } from "@/composables/useWorkerStatus";
 import { useStatusStore } from "@/stores/StatusStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { getOfflineRecords } from "@/services/offline_service";
 
 interface WorkerState {
     url: string;
@@ -16,7 +18,6 @@ interface WorkerState {
     workerApi: any;
     workerData: any;
     lastUpdate: Date | null;
-    isSyncing: boolean;
 }
 
 export const useWorkerStore = defineStore("worker", {
@@ -30,7 +31,6 @@ export const useWorkerStore = defineStore("worker", {
         workerApi: null,
         workerData: null,
         lastUpdate: null,
-        isSyncing: false,
     }),
 
     actions: {
@@ -42,12 +42,12 @@ export const useWorkerStore = defineStore("worker", {
                 watch(data, async (newData) => {
                     if (newData) {
                         if (newData == "Done syncing all data") {
-                            this.isSyncing = false;
-                        }
-                        if (newData.msg == "Patient record saved successfully") {
-                            // const demographicsStore = useDemographicsStore();
-                            // const patientData: any = await getOfflineRecords("patientRecords", { whereClause: { ID: demographicsStore.patient.ID } });
-                            // demographicsStore.setRecord(patientData[0]);
+                            const demographicsStore = useDemographicsStore();
+                            const patientData: any = await getOfflineRecords("patientRecords", {
+                                whereClause: { ID: demographicsStore.patient.ID },
+                            });
+                            sessionStorage.setItem("updatePatient", "false");
+                            demographicsStore.setRecord(patientData[0]);
                         }
                         if (newData == "healthCheckError") {
                             Service.getJson("_health");
@@ -112,8 +112,7 @@ export const useWorkerStore = defineStore("worker", {
             if (!this.workerApi) {
                 this.initWorker();
             }
-            if (!this.isSyncing || type != "SYNC_ALL_DATA") {
-                if (type == "SYNC_ALL_DATA") this.isSyncing = true;
+            if (useStatusStore().isSyncingDone) {
                 await this.updateSettings();
                 return this.workerApi.post({
                     type,
