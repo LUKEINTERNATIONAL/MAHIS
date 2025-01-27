@@ -107,14 +107,19 @@ watch(() => props.selected_discharged_data,
     (newValue) => {
       if (!newValue) return;
 
+      // Populate the date field with the existing data
       date_properties[0].dataValue.value = newValue.date || '';
 
+      // Populate the reason field if it exists
+      if (newValue.reason) {
+        note_properties[0].dataValue.value = newValue.reason;
+      }
     },
     {
       immediate: true,
       deep: true
     }
-)
+);
 function dateUpdate_fn1(data: any) {
     const date_data = {
         day: data.value.day,
@@ -233,10 +238,11 @@ function saveDataToStores() {
   const dischargeData = {
     type: 'Discharged Home',
     date: date_properties[0].dataValue,
+    reason: note_properties[0].dataValue.value, // Include the reason field
   };
 
   store.addOutcomeData(dischargeData, editIndex.value);
-  dataSaved({"dataSaved": false});
+  dataSaved({ "dataSaved": false });
 }
 
 function cancelE() {

@@ -215,8 +215,6 @@ const editItem = (data: any) => {
     selected_ward_data.value = data.item.other;
     admitted_other_data.value = data.item;
 
-   selected_discharged_type_data.value=data.item.other;
-   selected_discharged_data.value=data.item;
   if (data.item.type === 'Discharged Home') {
     selected_discharged_type_data.value = data.item;
     selected_discharged_data.value = {
