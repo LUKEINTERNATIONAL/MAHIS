@@ -36,10 +36,8 @@
         </div>
 
         <AdmittedforShortStayOutcomef v-if="show_admitted_options" @data-saved="dataSavedTrigFn" :selected_ward_prop="''" :admitted_other_props="''" />
-
         <ReferredOutCome v-if="show_referred_options" @data-saved="dataSavedTrigFn" :selected_referral_data="''" :selected_other_referral_data="''"/>
-        <DischargedHome v-if="show_discharged_options" @data-saved="dataSavedTrigFn" />
-
+        <DischargedHome v-if="show_discharged_options" @data-saved="dataSavedTrigFn" :selected_discharged_prop="''" :selected_discharged_data="''"/>
         <deadOutcome v-if="show_dead_options" @data-saved="dataSavedTrigFn" />
     </ion-list>
 </template>
@@ -109,6 +107,8 @@ const show_dead_options = ref(false);
 const show_admitted_options = ref(false);
 const show_referred_options = ref(false);
 const show_discharged_options = ref(false);
+const selected_discharged_type_data= ref(null) as any;
+const selected_discharged_data = ref(null) as any;
 
 const referralType = ref([
     {
