@@ -475,9 +475,11 @@ function selectedTA(selectedTAList: any) {
 
 function selectedDistrictF(selectedDistrict: any) {
     selectedDistrictIds.length = 0
-
-    const filteredDistricts = OLDDistrictsList.value.filter((district: any) => {
-        selectedDistrict.name.toLowerCase() === district.name.toLowerCase()
+    const filteredDistricts: any[] = [];
+    OLDDistrictsList.value.forEach((district: any) => {
+        if (selectedDistrict.name.toLowerCase() === district.name.toLowerCase()) {
+            filteredDistricts.push(district);
+        }
     });
 
     filteredDistricts.forEach((district: any) => {
