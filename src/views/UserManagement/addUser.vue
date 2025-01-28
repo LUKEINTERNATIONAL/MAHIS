@@ -836,6 +836,7 @@ const input_properties = [
         dataHandler: inputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
+        type: 'text',
         error_message: 'Input required, Only letters allowed',
     },
     {
@@ -843,6 +844,7 @@ const input_properties = [
         property_name: 'last_name',
         dataHandler: inputUpDated_fn3,
         dataValue: ref(),
+        type: 'text',
         show_error: ref(false),
         error_message: 'Input required, Only letters allowed',
     },
@@ -923,6 +925,7 @@ const list_picker_prperties = [
 function listUpdated1(data: any) {
     user_roles.value = data
     checkIfSelectedIsHSA(user_roles.value)
+    isRoleSelected()
 }
 
 function checkIfSelectedIsHSA(role_list: any) {
@@ -951,6 +954,7 @@ function listUpdated2(data: any) {
             j.push(1)
         }
     })
+    isProgramSelected()
 }
 
 const isSSelection_properties = [
@@ -998,19 +1002,23 @@ async function inputUpDated_fn1(event: any) {
 function inputUpDated_fn2(event: any) {
     const input = event.target.value
     input_properties[1].dataValue.value = input
+    areFieldsValid([input_properties[1]])
 }
 function inputUpDated_fn3(event: any) {
     const input = event.target.value
     input_properties[2].dataValue.value = input
+    areFieldsValid([input_properties[2]])
 }
 
 function passwordInputUpDated_fn1(event: any) {
     const input = event.target.value
     password_input_properties[0].dataValue.value = input
+    ValidatePassword()
 }
 function passwordInputUpDated_fn2(event: any) {
     const input = event.target.value
     password_input_properties[1].dataValue.value = input
+    ValidatePassword()
 }
 
 async function getdistrictList() {
