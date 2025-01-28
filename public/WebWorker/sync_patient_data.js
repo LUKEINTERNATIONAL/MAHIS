@@ -24,13 +24,6 @@ const syncPatientDataService = {
                 return;
             }
 
-            const needsReset = await this.checkIfResetNeeded(patientsData);
-            if (needsReset) {
-                await this.handleDataReset();
-                previousSyncDate = "";
-                patientsData = await this.getPatientIds("");
-            }
-
             // Use a buffer to batch save operations
             await this.processBatchWithBuffer(patientsData);
 
@@ -38,17 +31,10 @@ const syncPatientDataService = {
             if (patientsData.sync_count > BATCH_SIZE) {
                 await this.processRemainingPagesInBatches(previousSyncDate, patientsData.sync_count);
             }
-
-            await this.updateSyncStatus(patientsData.latest_encounter_datetime);
         } catch (error) {
             console.error("Error in getPatientData:", error);
             throw error;
         }
-    },
-
-    async checkIfResetNeeded(patientsData) {
-        const localCount = await this.getLocalPatientCount();
-        return localCount !== patientsData.server_patient_count;
     },
 
     async handleDataReset() {
@@ -113,7 +99,7 @@ const syncPatientDataService = {
             await Promise.all(buffer.map((op) => op.delete()));
             // Then execute all adds
             await Promise.all(buffer.map((op) => op.add()));
-
+            await this.updateSyncStatus(patientsData.latest_encounter_datetime);
             // Update progress after each buffer flush
             const currentCount = await this.getLocalPatientCount();
             this.updateProgressStatus(currentCount, patientsData.server_patient_count, patientsData.latest_encounter_datetime);
