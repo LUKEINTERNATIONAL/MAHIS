@@ -8,14 +8,10 @@
           :icon="searchOutline"
           :inputValue="note_properties[0].dataValue.value"
           @update:inputValue="note_properties[0].dataHandler"
-          :minHeight="40"
+          :minHeight="50"
+          :-inner-action-btn-propeties="InnerActionBtnPropeties"
+          @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
         />
-      </ion-col>
-      <ion-col class="button-col">
-        <ion-button fill="solid" @click="OpenAddUserModal" class="btn-cls-2" style="float: right;">
-          <ion-icon :icon="personAddOutline" slot="start" style="margin-right: 5px;"></ion-icon>
-          {{ 'Add User' }}
-        </ion-button>
       </ion-col>
     </ion-row>
   </ion-row>
@@ -45,6 +41,14 @@ import { personAddOutline, searchOutline } from "ionicons/icons";
 const searchValue = ref("");
 const isPopooverOpen = ref(false);
 const user_id = ref('');
+
+const InnerActionBtnPropeties = {
+  name: "add user",
+  show: true,
+  fn: OpenAddUserModal as any,
+  icon: personAddOutline,
+  show_icon: true,
+};
 
 const props = defineProps<{
   items: any;

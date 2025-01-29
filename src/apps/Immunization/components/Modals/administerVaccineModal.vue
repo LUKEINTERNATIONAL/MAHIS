@@ -141,6 +141,8 @@ export default defineComponent({
                 fn: () => {
                     createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false);
                 },
+                icon: '',
+                show_icon: false,
             },
             selected_date_: "",
             is_a_vaccine: true,
