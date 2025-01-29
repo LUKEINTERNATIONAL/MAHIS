@@ -23,7 +23,7 @@
                             :close-on-select="true"
                             openDirection="top"
                             tag-placeholder="find and select a referral type"
-                            placeholder="find and a referral type"
+                            placeholder="find and select a referral type"
                             selectLabel=""
                             label="name"
                             :searchable="true"
@@ -55,7 +55,13 @@
             :selected_other_referral_data="selected_referral_data"
         />
 
-        <DischargedHome v-if="show_discharged_options" @data-saved="dataSavedTrigFn" />
+        <DischargedHome
+            v-if="show_discharged_options"
+            @data-saved="dataSavedTrigFn"
+            :selected_discharged_prop="selected_discharged_type_data"
+            :selected_discharged_data="selected_discharged_data"
+
+        />
 
         <!-- <deadOutcome v-if="show_dead_options" @data-saved="dataSavedTrigFn" /> -->
     </ion-list>
@@ -124,6 +130,8 @@ const selected_referral_type_data = ref(null);
 const selected_referral_data = ref(null) as any;
 const selected_ward_data = ref(null) as any;
 const admitted_other_data = ref(null) as any;
+const selected_discharged_type_data= ref(null) as any;
+const selected_discharged_data = ref(null) as any;
 
 const referralType = ref([
     {
@@ -206,6 +214,15 @@ const editItem = (data: any) => {
 
     selected_ward_data.value = data.item.other;
     admitted_other_data.value = data.item;
+
+  if (data.item.type === 'Discharged Home') {
+    selected_discharged_type_data.value = data.item;
+    selected_discharged_data.value = {
+      reason: data.item.reason,
+      date: data.item.date,
+    };
+  }
+
 };
 
 async function checkRefType(clear_inputs: boolean = true) {

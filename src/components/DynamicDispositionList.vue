@@ -13,7 +13,7 @@
         </ion-col>
 
         <ion-col class="action_buttons">
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index,item, $event)"><ion-icon   :icon="iconsContent.edit"></ion-icon></ion-label>
+            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="editItemAtIndex(index,item, $event)"><ion-icon   :icon="iconsContent.edit"></ion-icon></ion-label>
             <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><ion-icon   :icon="iconsContent.delete"></ion-icon></ion-label>
         </ion-col>
 

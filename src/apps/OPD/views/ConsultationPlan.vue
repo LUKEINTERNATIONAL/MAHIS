@@ -291,8 +291,6 @@ export default defineComponent({
 
         },
         getSaveFunction(index: any) {
-            const disableNextButton = this.userRole !== "Lab" && this.hasPatientsWaitingForLab && index >= 1;
-
             if (index < this.StepperData.length - 1) {
                 switch (index) {
                     case 0:
@@ -302,19 +300,22 @@ export default defineComponent({
                             return () => Promise.resolve();
                         }
                     case 1:
-                        return disableNextButton ? () => Promise.resolve() : this.saveInvestigations;
+                        return  () => Promise.resolve();
                     case 2:
-                        return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
+                        return () => Promise.resolve();
                     case 3:
-                        return disableNextButton ? () => Promise.resolve() : this.saveTreatmentPlan;
+                        return () => Promise.resolve();
                     default:
                         return () => Promise.resolve();
                 }
             } else {
                 return async () => {
-                    // await this.saveTreatmentPlan();
-                    await useOutcomeStore().saveOutcomPatientData()
-                    const location = await getUserLocation();
+                    this.saveDiagnosis();
+                    await this.saveTreatmentPlan();
+                    await useOutcomeStore().saveOutcomPatientData();
+                    resetOPDPatientData();
+
+                  const location = await getUserLocation();
                     const locationId = location ? location.code : null;
 
                     if (!locationId) {
@@ -508,6 +509,10 @@ export default defineComponent({
         },
         async saveData() {
           try {
+            this.saveDiagnosis();
+            await this.saveTreatmentPlan();
+            await useOutcomeStore().saveOutcomPatientData();
+            resetOPDPatientData();
             const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
             await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
             const location = await getUserLocation();

@@ -1,5 +1,10 @@
 <template>
     <ion-page>
+      <!-- Spinner -->
+      <div v-if="isLoading" class="spinner-overlay">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <div class="loading-text">Please wait...</div>
+      </div>
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
@@ -93,7 +98,7 @@ export default defineComponent({
             showUndispensedMedication: false,
             wizardData: [
                 {
-                    title: "Dispense Medications",
+                    title: "Dispensation",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -104,6 +109,8 @@ export default defineComponent({
             ],
             isOpen: false,
             iconsContent: icons,
+          isLoading: false,
+
         };
     },
     mounted() {
