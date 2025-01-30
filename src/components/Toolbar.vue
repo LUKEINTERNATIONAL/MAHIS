@@ -25,7 +25,7 @@
                     <ToolbarSearch />
                 </div>
                 <div class="notifaction_person" slot="end">
-                    <ion-buttons style="cursor: pointer; margin-right: 15px" slot="end" class="iconFont">
+                    <ion-buttons style="cursor: pointer; margin-right: 10px" slot="end" class="iconFont">
                         <ion-icon
                             @click="openSyncModal()"
                             v-if="apiStatus && !isSyncingDone"
@@ -37,18 +37,18 @@
                             @click="openSyncModal()"
                             v-if="isSyncingDone"
                             :icon="sync"
-                            style="--ionicon-stroke-width: 40px; font-size: 30px; color: #74ff15"
+                            style="--ionicon-stroke-width: 40px; font-size: 28px; color: #74ff15"
                         ></ion-icon>
                         <ion-icon
                             @click="openSyncModal()"
                             v-if="!apiStatus && !isSyncingDone"
                             :icon="sync"
-                            style="--ionicon-stroke-width: 40px; font-size: 30px; color: #f00"
+                            style="--ionicon-stroke-width: 40px; font-size: 28px; color: #f00"
                         ></ion-icon>
                     </ion-buttons>
                     <ion-buttons
                         v-if="apiStatus"
-                        style="cursor: pointer; margin-right: 15px; color: #74ff15"
+                        style="cursor: pointer; margin-right: 10px; color: #74ff15"
                         slot="end"
                         class="iconFont"
                         id="popover-button"
