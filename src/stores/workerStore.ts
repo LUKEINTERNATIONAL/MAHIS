@@ -133,7 +133,6 @@ export const useWorkerStore = defineStore("worker", {
         terminate() {
             useStatusStore().isSyncingDone = true;
             if (this.workerApi) {
-                useStatusStore().isSyncingDone = false;
                 this.workerApi.terminate();
                 this.workerApi = null;
                 this.$reset();
