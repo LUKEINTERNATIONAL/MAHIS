@@ -53,11 +53,9 @@ const syncPatientDataService = {
                 const page = i + j + 2; // +2 because we already processed page 1
                 pagePromises.push(this.processPage(previousSyncDate, page));
             }
-            const results = await Promise.all(pagePromises);
-
-            const dates = results.map((dateStr) => new Date(dateStr));
-            const latestDate = new Date(Math.max(...dates)).toISOString();
-            await this.updateSyncStatus(latestDate);
+            const dates = await Promise.all(pagePromises);
+            const latestDate = dates.sort().pop();
+            if (latestDate) await this.updateSyncStatus(latestDate);
         }
     },
 
