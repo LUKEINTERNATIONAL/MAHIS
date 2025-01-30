@@ -152,7 +152,6 @@ import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useWorkerStore } from "@/stores/workerStore";
 import { getOfflineVaccineSchedule } from "@/apps/Immunization/services/vaccines_service";
-import { RegistrationService } from "@/services/registration_service";
 import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
@@ -485,9 +484,9 @@ export default defineComponent({
                         this.workerStore.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: ddeIds });
                     }
 
-                    if ((this.apiStatus && this.programID() != 33) || (this.apiStatus && ddeIds?.ids?.length == 0)) {
+                    if ((this.apiStatus && this.programID() != 33) || (this.apiStatus && !ddeIds?.ids)) {
                         this.workerStore.postData("SYNC_DDE");
-                        const result = await new RegistrationService().saveDemographicsRecord(patientData);
+                        const result = await Service.postJson("/save_patient_record", { record: patientData });
                         await useDemographicsStore().setPatientRecord(result);
                         this.workerStore.postData("SYNC_ALL_DATA");
                         await this.setURLs();
@@ -525,10 +524,18 @@ export default defineComponent({
             }
             const birthdate = this.personInformation[0].selectedData.birthdate;
             const gender = this.personInformation[0].selectedData.gender;
+
+            let program: any = localStorage.getItem("app");
+            program = JSON.parse(program);
+
             const offlineRecord: any = {
                 patientID: "",
                 ID: this.ddeId,
                 NcdID: "",
+                program_id: program ? program.programID : null,
+                location_id: localStorage.getItem("locationID"),
+                provider_id: localStorage.getItem("userID"),
+                encounter_datetime: new Date().toISOString(),
                 personInformation: toRaw(this.personInformation[0].selectedData),
                 guardianInformation: {
                     saved: [],
