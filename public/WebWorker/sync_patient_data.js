@@ -1,4 +1,5 @@
 const BATCH_SIZE = 50; // Increased batch size for better performance
+let count = [];
 
 const syncPatientDataService = {
     async syncAllData() {
@@ -26,7 +27,7 @@ const syncPatientDataService = {
 
             // Use a buffer to batch save operations
             await this.processBatchWithBuffer(patientsData);
-
+            await this.updateSyncStatus(patientsData.latest_encounter_datetime);
             // Process remaining pages in optimized batches
             if (patientsData.sync_count > BATCH_SIZE) {
                 await this.processRemainingPagesInBatches(previousSyncDate, patientsData.sync_count);
@@ -52,7 +53,11 @@ const syncPatientDataService = {
                 const page = i + j + 2; // +2 because we already processed page 1
                 pagePromises.push(this.processPage(previousSyncDate, page));
             }
-            await Promise.all(pagePromises);
+            const results = await Promise.all(pagePromises);
+
+            const dates = results.map((dateStr) => new Date(dateStr));
+            const latestDate = new Date(Math.max(...dates)).toISOString();
+            await this.updateSyncStatus(latestDate);
         }
     },
 
@@ -61,6 +66,7 @@ const syncPatientDataService = {
             const pageData = await this.getPatientIds(previousSyncDate, BATCH_SIZE, page);
             if (pageData?.sync_patients?.length) {
                 await this.processBatchWithBuffer(pageData);
+                return pageData.latest_encounter_datetime;
             }
         } catch (error) {
             console.error(`Error processing page ${page}:`, error);
@@ -99,7 +105,6 @@ const syncPatientDataService = {
             await Promise.all(buffer.map((op) => op.delete()));
             // Then execute all adds
             await Promise.all(buffer.map((op) => op.add()));
-            await this.updateSyncStatus(patientsData.latest_encounter_datetime);
             // Update progress after each buffer flush
             const currentCount = await this.getLocalPatientCount();
             this.updateProgressStatus(currentCount, patientsData.server_patient_count, patientsData.latest_encounter_datetime);
@@ -131,6 +136,7 @@ const syncPatientDataService = {
     },
 
     async updateSyncStatus(latestEncounterDateTime) {
+        console.log("🚀 ~ updateSyncStatus ~ latestEncounterDateTime:", latestEncounterDateTime);
         await previousSyncService.setPreviousSyncDate(latestEncounterDateTime);
     },
 };
