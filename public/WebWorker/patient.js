@@ -1,6 +1,6 @@
 const patientService = {
     async savePatientRecord() {
-        const patientRecords = await DatabaseManager.getOfflineData("patientRecords");
+        const patientRecords = await DatabaseManager.getOfflineData("patientRecords", { encounter_datetime: { $ne: "" } });
         if (patientRecords) {
             await Promise.all(
                 patientRecords.map(async (record) => {
