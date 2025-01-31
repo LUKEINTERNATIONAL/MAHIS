@@ -55,22 +55,24 @@ export const useStatusStore = defineStore("statusStore", {
         },
         async setSyncingTotal() {
             // Fetch all offline records in parallel for better performance
-            const [villages, relationships, countries, districts, TAs, patientRecords] = await Promise.all([
-                getOfflineRecords("villages"),
-                getOfflineRecords("relationship"),
-                getOfflineRecords("countries"),
-                getOfflineRecords("districts"),
-                getOfflineRecords("TAs"),
-                getOfflineRecords("patientRecords"),
-            ] as any);
+            if (this.apiStatus) {
+                const [villages, relationships, countries, districts, TAs, patientRecords] = await Promise.all([
+                    getOfflineRecords("villages"),
+                    getOfflineRecords("relationship"),
+                    getOfflineRecords("countries"),
+                    getOfflineRecords("districts"),
+                    getOfflineRecords("TAs"),
+                    getOfflineRecords("patientRecords"),
+                ] as any);
 
-            // Update statuses
-            this.offlineVillageStatus.total_village = villages.length;
-            this.offlineRelationshipStatus.total_relationships = relationships.length;
-            this.offlineCountriesStatus.total_countries = countries.length;
-            this.offlineDistrictStatus.total_districts = districts.length;
-            this.offlineTAsStatus.total_TAs = TAs.length;
-            this.offlinePatientsStatus.offlinePatientsCount = patientRecords.length;
+                // Update statuses
+                this.offlineVillageStatus.total_village = villages.length;
+                this.offlineRelationshipStatus.total_relationships = relationships.length;
+                this.offlineCountriesStatus.total_countries = countries.length;
+                this.offlineDistrictStatus.total_districts = districts.length;
+                this.offlineTAsStatus.total_TAs = TAs.length;
+                this.offlinePatientsStatus.offlinePatientsCount = patientRecords.length;
+            }
         },
     },
     persist: true,
