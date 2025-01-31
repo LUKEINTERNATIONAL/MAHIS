@@ -7,7 +7,6 @@ import { useWorkerStatus } from "@/composables/useWorkerStatus";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { getOfflineRecords } from "@/services/offline_service";
-import { a } from "../activate_worker";
 
 interface WorkerState {
     url: string;
@@ -44,12 +43,15 @@ export const useWorkerStore = defineStore("worker", {
                     if (newData) {
                         if (newData == "Done syncing all data") {
                             const demographicsStore = useDemographicsStore();
-                            if (demographicsStore.patient.ID) {
+                            if (demographicsStore?.patient?.ID) {
                                 const patientData: any = await getOfflineRecords("patientRecords", {
                                     whereClause: { ID: demographicsStore.patient.ID },
                                 });
-                                sessionStorage.setItem("updatePatient", "false");
-                                demographicsStore.setRecord(patientData[0]);
+
+                                if (patientData.length > 0) {
+                                    sessionStorage.setItem("updatePatient", "false");
+                                    demographicsStore.setRecord(patientData[0]);
+                                }
                             }
                         }
                         if (newData == "healthCheckError") {
