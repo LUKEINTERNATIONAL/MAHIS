@@ -98,7 +98,6 @@ import { getUserFacility } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
 import { useWorkerStore } from "@/stores/workerStore";
 import { storeToRefs } from "pinia";
-import { getOfflineRecords } from "@/services/offline_service";
 
 interface Program {
     program_id: string;

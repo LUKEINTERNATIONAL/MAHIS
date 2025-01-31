@@ -8,11 +8,11 @@
                         <div style="font-size: 16px">
                             <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                         </div>
-                        <div :style="screenWidth <= 500 && userFacilityName.length > 25 ? 'display: block' : 'display: flex'">
+                        <div :style="screenWidth <= 500 && userFacilityName.length > 23 ? 'display: block' : 'display: flex'">
                             <div class="facility-name" style="font-size: 68%">{{ userFacilityName }}</div>
                             <div style="font-size: 68%">
                                 <span
-                                    v-if="(screenWidth > 500 && userFacilityName.length > 25) || userFacilityName.length <= 25"
+                                    v-if="(screenWidth > 500 && userFacilityName.length > 23) || userFacilityName.length <= 23"
                                     style="margin-left: 5px"
                                     >|</span
                                 >
@@ -25,16 +25,30 @@
                     <ToolbarSearch />
                 </div>
                 <div class="notifaction_person" slot="end">
-                    <ion-buttons style="cursor: pointer; margin-right: 15px; width: 20px" slot="end" class="iconFont">
-                        <img v-if="apiStatus && !isSyncingDone" src="/public/gif/syncing.gif" height="30" alt="" />
-                        <img v-if="isSyncingDone" src="/public/images/synced.png" height="30" alt="" />
-                        <img v-if="!apiStatus && !isSyncingDone" src="/public/images/unsynced.png" height="30" alt="" />
-                        <!-- <ion-icon :icon="notificationsOutline"></ion-icon> -->
-                        <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
+                    <ion-buttons style="cursor: pointer; margin-right: 10px" slot="end" class="iconFont">
+                        <ion-icon
+                            @click="openSyncModal()"
+                            v-if="apiStatus && !isSyncingDone"
+                            :icon="sync"
+                            class="rotating-icon"
+                            style="--ionicon-stroke-width: 40px; font-size: 28px; color: #74ff15"
+                        ></ion-icon>
+                        <ion-icon
+                            @click="openSyncModal()"
+                            v-if="isSyncingDone"
+                            :icon="sync"
+                            style="--ionicon-stroke-width: 40px; font-size: 28px; color: #74ff15"
+                        ></ion-icon>
+                        <ion-icon
+                            @click="openSyncModal()"
+                            v-if="!apiStatus && !isSyncingDone"
+                            :icon="sync"
+                            style="--ionicon-stroke-width: 40px; font-size: 28px; color: #f00"
+                        ></ion-icon>
                     </ion-buttons>
                     <ion-buttons
                         v-if="apiStatus"
-                        style="cursor: pointer; margin-right: 15px; color: #74ff15"
+                        style="cursor: pointer; margin-right: 10px; color: #74ff15"
                         slot="end"
                         class="iconFont"
                         id="popover-button"
@@ -113,7 +127,7 @@ import {
     IonSearchbar,
     IonPopover,
 } from "@ionic/vue";
-import { notificationsOutline, personCircleOutline, logOutOutline, documentOutline } from "ionicons/icons";
+import { notificationsOutline, personCircleOutline, logOutOutline, documentOutline, sync } from "ionicons/icons";
 import { defineComponent, ref } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
@@ -188,7 +202,7 @@ export default defineComponent({
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
-        return { notificationsOutline, personCircleOutline, documentOutline, facilityName, logOutOutline };
+        return { notificationsOutline, personCircleOutline, documentOutline, facilityName, logOutOutline, sync };
     },
     methods: {
         logout() {
@@ -227,6 +241,18 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.rotating-icon {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 #container {
     text-align: center;
 
