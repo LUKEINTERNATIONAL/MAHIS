@@ -1180,7 +1180,7 @@ function selectedDistrictF(selectedDistrict: any, clearFL = false) {
 
     const filteredDistricts: any[] = [];
     OLDDistrictsList.value.forEach((district: any) => {
-        if (selectedDistrict.name.toLowerCase() === district.name.toLowerCase()) {
+        if (selectedDistrict[0].name.toLowerCase() === district.name.toLowerCase()) {
             filteredDistricts.push(district);
         }
     });
