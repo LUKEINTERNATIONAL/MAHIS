@@ -4,7 +4,7 @@ import { useStatusStore } from "@/stores/StatusStore";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
-const DB_VERSION = 5;
+const DB_VERSION = 6;
 
 /**
  * Open or create the IndexedDB database connection
