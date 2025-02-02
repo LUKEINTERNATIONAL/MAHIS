@@ -86,6 +86,9 @@
                     </div>
                 </ion-card>
             </div>
+            <div v-else>
+                <div class="card_hearder">DDE is disabled</div>
+            </div>
         </ion-content>
     </ion-page>
 </template>
