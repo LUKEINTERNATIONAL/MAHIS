@@ -26,7 +26,7 @@
                 </div>
                 <div class="notifaction_person" slot="end">
                     <ion-buttons style="cursor: pointer; margin-right: 10px" slot="end" class="iconFont">
-                        <ion-icon
+                        <!-- <ion-icon
                             @click="openSyncModal()"
                             v-if="apiStatus && !isSyncingDone"
                             :icon="sync"
@@ -44,6 +44,27 @@
                             v-if="!apiStatus && !isSyncingDone"
                             :icon="sync"
                             style="--ionicon-stroke-width: 40px; font-size: 28px; color: #f00"
+                        ></ion-icon> -->
+                        <ve-progress
+                            v-if="syncingCountPercentage < 100"
+                            @click="openSyncModal()"
+                            font-color="#ffffff"
+                            :color="!apiStatus && !isSyncingDone ? '#f00' : '#74ff15'"
+                            :thickness="2"
+                            font-size="7px"
+                            :size="28"
+                            :progress="syncingCountPercentage"
+                        >
+                            <template #default="{ counterTick }">
+                                <div v-if="counterTick.currentValue < 100" style="position: relative">{{ counterTick.currentValue }}%</div>
+                                <div v-if="counterTick.currentValue == 100" style="top: -6px; position: relative">Done</div>
+                            </template>
+                        </ve-progress>
+                        <ion-icon
+                            v-if="syncingCountPercentage == 100"
+                            @click="openSyncModal()"
+                            :icon="cloudDone"
+                            style="--ionicon-stroke-width: 80px; font-size: 28px; font-weight: 700; color: #74ff15"
                         ></ion-icon>
                     </ion-buttons>
                     <ion-buttons
@@ -127,7 +148,7 @@ import {
     IonSearchbar,
     IonPopover,
 } from "@ionic/vue";
-import { notificationsOutline, personCircleOutline, logOutOutline, documentOutline, sync } from "ionicons/icons";
+import { notificationsOutline, personCircleOutline, logOutOutline, documentOutline, sync, cloudDone } from "ionicons/icons";
 import { defineComponent, ref } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
@@ -144,6 +165,7 @@ import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { createModal } from "@/utils/Alerts";
 import SyncingStatusModal from "./Modal/SyncingStatusModal.vue";
 import img from "../utils/Img";
+import { VeProgress } from "vue-ellipse-progress";
 export default defineComponent({
     mixins: [ScreenSizeMixin],
     name: "Toolbar",
@@ -163,6 +185,7 @@ export default defineComponent({
         IonCol,
         IonLabel,
         TruncateText,
+        VeProgress,
     },
     data() {
         const user_name = ref();
@@ -193,7 +216,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useProgramStore, ["programs"]),
-        ...mapState(useStatusStore, ["apiStatus", "isSyncingDone"]),
+        ...mapState(useStatusStore, ["apiStatus", "isSyncingDone", "syncingCountPercentage"]),
         ...mapState(useUserStore, ["userFacilityName", "user_ID"]),
     },
     mounted() {
@@ -202,7 +225,7 @@ export default defineComponent({
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
-        return { notificationsOutline, personCircleOutline, documentOutline, facilityName, logOutOutline, sync };
+        return { notificationsOutline, personCircleOutline, documentOutline, facilityName, logOutOutline, sync, cloudDone };
     },
     methods: {
         logout() {
