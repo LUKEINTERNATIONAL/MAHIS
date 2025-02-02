@@ -7,14 +7,14 @@
         </div>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <div class="positionCenter">
+            <!-- <div class="positionCenter">
                 <ion-card class="registration_ion_card">
                     <div class="card_content">
                         <div class="card_hearder">Set DDE</div>
                         <ion-toggle :enable-on-off-labels="true" v-model="globalPropertyStore.dde_enabled">Enable DDE</ion-toggle>
                     </div>
                 </ion-card>
-            </div>
+            </div> -->
             <div class="positionCenter" v-if="globalPropertyStore.dde_enabled == 'true'">
                 <ion-card class="registration_ion_card">
                     <div class="card_content">
@@ -49,6 +49,22 @@
                             </ion-col>
                             <ion-col>
                                 <ion-row class="ddeStatusContent">{{ DDE.assigned }}</ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row class="ddeStatusHeader">Unallocated</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.unallocated }}</ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row class="ddeStatusHeader">Allocated</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.allocated }}</ion-row>
                             </ion-col>
                         </ion-row>
                         <ion-row>
@@ -174,6 +190,8 @@ export default defineComponent({
                         unassigned: stats["unassigned"],
                         assigned: stats["assigned"],
                         daysLeft: Math.floor(unassigned / avg),
+                        allocated: stats["allocated"],
+                        unallocated: stats["unallocated"],
                         lastUpdated: dayjs(stats["date_last_updated"]).format("DD/MMM/YYYY HH:mm:ss"),
                         title: stats["location_name"] + " DDE NPID Status",
                     };
