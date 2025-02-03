@@ -40,7 +40,7 @@
                             :progress="syncingCountPercentage"
                         >
                             <template #default="{ counterTick }">
-                                <div v-if="counterTick.currentValue < 100" style="position: relative">{{ counterTick.currentValue }}%</div>
+                                <div v-if="counterTick.currentValue < 100" style="top: -6px; position: relative">{{ counterTick.currentValue }}%</div>
                                 <div v-if="counterTick.currentValue == 100" style="top: -6px; position: relative">Done</div>
                             </template>
                         </ve-progress>
