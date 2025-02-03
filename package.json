@@ -4,6 +4,10 @@
   "version": "1.0.5-alpha",
   "type": "module",
   "main": "electron/main.cjs",
+  "author": {
+    "name": "Luke International",
+    "email": "kayangepetros@gmail.com"
+  },
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc && vite build",
