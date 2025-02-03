@@ -3,14 +3,14 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px" @click="nav('/home')">
+                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px">
                     <div style="display: block">
-                        <div style="font-size: 16px">
+                        <div style="font-size: 16px" @click="nav('/home')">
                             <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                         </div>
                         <div :style="screenWidth <= 500 && userFacilityName.length > 23 ? 'display: block' : 'display: flex'">
                             <div class="facility-name" style="font-size: 68%">{{ userFacilityName }}</div>
-                            <div style="font-size: 68%">
+                            <div style="font-size: 68%" @click="openSessionDateModal">
                                 <span
                                     v-if="(screenWidth > 500 && userFacilityName.length > 23) || userFacilityName.length <= 23"
                                     style="margin-left: 5px"
@@ -141,6 +141,7 @@ import { icons } from "@/utils/svg";
 import { useWindowSize } from "@/composables/screenSize";
 import { createModal } from "@/utils/Alerts";
 import SyncingStatusModal from "./Modal/SyncingStatusModal.vue";
+import SessionDate from "@/components/Modal/SessionDate.vue";
 import { useConfigStore } from "@/stores/ConfigStore";
 import { VeProgress } from "vue-ellipse-progress";
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
@@ -180,6 +181,10 @@ const logout = () => {
 
 const openSyncModal = () => {
     createModal(SyncingStatusModal);
+};
+
+const openSessionDateModal = () => {
+    createModal(SessionDate, { class: "mediumModal" });
 };
 
 const updateData = () => {
