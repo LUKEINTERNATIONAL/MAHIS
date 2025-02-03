@@ -8,15 +8,7 @@
                         <div class="card_hearder">Set Session Date</div>
                         <basic-form :contentData="sessionDate" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
                         <div>
-                            <DynamicButton @click="onSubmit()" name="Save" fill="solid" iconSlot="icon-only" style="float: right" />
-                            <DynamicButton
-                                v-if="date"
-                                @click="resetSessionDate()"
-                                name="Rest"
-                                fill="solid"
-                                iconSlot="icon-only"
-                                style="float: right"
-                            />
+                            <DynamicButton v-if="date" @click="resetSessionDate" name="Rest" fill="solid" iconSlot="icon-only" style="float: right" />
                         </div>
                     </div>
                 </ion-card>
@@ -25,13 +17,13 @@
     </ion-page>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonFooter, IonPage } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { ref, onMounted } from "vue";
 import DispositionModal from "@/components/ProfileModal/OutcomeModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { useConfigStore } from "@/stores/ConfigStore";
-import { mapState } from "pinia";
+import { storeToRefs } from "pinia";
 import HisDate from "@/utils/Date";
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
@@ -44,78 +36,58 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import { icons } from "@/utils/svg";
 import FacilityInformationBar from "@/components/FacilityInformationBar.vue";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-export default defineComponent({
-    name: "Menu",
-    components: {
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        BasicForm,
-        Toolbar,
-        DynamicButton,
-        IonFooter,
-        IonPage,
-        FacilityInformationBar,
-    },
-    data() {
-        return {
-            cardData: {} as any,
-            inputField: "" as any,
-            setName: "" as any,
-            initialPersonalData: [] as any,
-            iconsContent: icons,
-            apiDate: "" as string,
-            date: "" as string,
-        };
-    },
-    computed: {
-        ...mapState(useConfigStore, ["sessionDate"]),
-    },
-    async mounted() {
-        this.apiDate = await Service.getApiDate();
-        this.date = getFieldValue(this.sessionDate, "sessionDate", "value");
-    },
 
-    methods: {
-        openModal() {
-            createModal(DispositionModal);
-        },
-        S(event: any) {
-            return validateField(this.sessionDate, event.name, (this as any)[event.name]);
-        },
-        handleInputData() {},
-        async resetSessionDate() {
-            modifyFieldValue(this.sessionDate, "sessionDate", "value", "");
-            try {
-                await Service.resetSessionDate();
-                toastSuccess(`Session date has been reset to ${this.formatDate(this.apiDate)}`);
-                this.redirect();
-            } catch (e) {
-                toastWarning(`${e}`);
-            }
-        },
-        redirect() {
-            this.$router.back();
-        },
-        async onSubmit() {
-            this.date = getFieldValue(this.sessionDate, "sessionDate", "value");
-            console.log("🚀 ~ onSubmit ~ date:", this.date);
-            try {
-                await Service.setSessionDate(this.date);
-                toastSuccess(`Successfully Back dated to ${this.formatDate(this.date)}`);
-                this.redirect();
-            } catch (e) {
-                toastWarning(`${e}`);
-            }
-        },
-        formatDate(date: string) {
-            return HisDate.toStandardHisDisplayFormat(date);
-        },
-    },
+// Store setup
+const configStore = useConfigStore();
+const { sessionDate } = storeToRefs(configStore);
+
+// Refs
+const cardData = ref({});
+const inputField = ref("");
+const setName = ref("");
+const initialPersonalData = ref([]);
+const iconsContent = ref(icons);
+const apiDate = ref("");
+const date = ref("");
+
+// Methods
+const openModal = () => {
+    createModal(DispositionModal);
+};
+
+const validateFieldWrapper = (event: any) => {
+    return validateField(sessionDate.value, event.name, event.name);
+};
+
+const handleInputData = async () => {
+    date.value = getFieldValue(sessionDate.value, "sessionDate", "value");
+    try {
+        await Service.setSessionDate(date.value);
+        modifyFieldValue(sessionDate.value, "sessionDate", "value", date.value);
+        toastSuccess(`Successfully Back dated to ${formatDate(date.value)}`);
+    } catch (e) {
+        toastWarning(`${e}`);
+    }
+};
+
+const formatDate = (dateString: string) => {
+    return HisDate.toStandardHisDisplayFormat(dateString);
+};
+
+const resetSessionDate = async () => {
+    try {
+        await Service.resetSessionDate();
+        modifyFieldValue(sessionDate.value, "sessionDate", "value", "");
+        toastSuccess(`Session date has been reset to ${formatDate(apiDate.value)}`);
+    } catch (e) {
+        toastWarning(`${e}`);
+    }
+};
+
+// Lifecycle hooks
+onMounted(async () => {
+    apiDate.value = await Service.getApiDate();
+    date.value = getFieldValue(sessionDate.value, "sessionDate", "value");
 });
 </script>
 
