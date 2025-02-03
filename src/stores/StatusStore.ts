@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { getOfflineRecords } from "@/services/offline_service";
 import { set } from "lodash";
+import { sync } from "ionicons/icons";
 
 export const useStatusStore = defineStore("statusStore", {
     state: () => {
@@ -14,6 +15,7 @@ export const useStatusStore = defineStore("statusStore", {
             offlinePatientsStatus: {} as any,
             isSyncingDone: false,
             syncingTotal: 0 as any,
+            syncingCountPercentage: 0 as any,
         };
     },
     actions: {
@@ -39,6 +41,7 @@ export const useStatusStore = defineStore("statusStore", {
             this.offlinePatientsStatus = data;
         },
         async checkMetaDataStatus() {
+            this.getSyncingCountPercentage();
             try {
                 // Check if all counts match the expected totals
                 this.isSyncingDone =
@@ -52,6 +55,28 @@ export const useStatusStore = defineStore("statusStore", {
                 console.error("Error checking metadata status:", error);
                 this.isSyncingDone = false; // Ensure syncing is marked as not done in case of errors
             }
+        },
+        getSyncingCountPercentage() {
+            const denominator =
+                this.offlineVillageStatus.total +
+                this.offlineRelationshipStatus.total +
+                this.offlineCountriesStatus.total +
+                this.offlineDistrictStatus.total +
+                this.offlineTAsStatus.total +
+                this.offlinePatientsStatus.serverPatientsCount;
+            const numerator =
+                this.offlineVillageStatus.total_village +
+                this.offlineRelationshipStatus.total_relationships +
+                this.offlineCountriesStatus.total_countries +
+                this.offlineDistrictStatus.total_districts +
+                this.offlineTAsStatus.total_TAs +
+                this.offlinePatientsStatus.offlinePatientsCount;
+
+            if (denominator === 0) {
+                this.syncingCountPercentage = 0;
+            }
+            let percentage = (numerator / denominator) * 100;
+            this.syncingCountPercentage = `${percentage ? percentage.toFixed(0) : 0}`;
         },
         async setSyncingTotal() {
             // Fetch all offline records in parallel for better performance
