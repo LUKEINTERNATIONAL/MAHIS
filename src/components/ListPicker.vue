@@ -31,9 +31,9 @@
                         <ion-content color="light" class="ion-padding content-al popover-content">
                             <!-- Search Input Container (Fixed at the top) -->
                             <div class="search-container">
-                                <ion-label>{{ choose_place_holder }}:</ion-label>
+                                <ion-label style="color: gray;">{{ choose_place_holder }}:</ion-label>
                                 <div class="modern-input-container">
-                                    <input type="text" id="itemNameInput" class="modern-input" v-model="itemName" @input="FindItemName" placeholder="Enter name">
+                                    <input type="text" id="itemNameInput" style="width: 99%;" class="modern-input" v-model="itemName" @input="FindItemName" placeholder="Enter name">
                                 </div>
                             </div>
                             <!-- Scrollable List -->
@@ -361,6 +361,7 @@ ion-list.list-al {
 }
 .modern-input-container {
     margin: 2px;
+    width: 100%;
     margin-bottom: 10px;
 }
 
@@ -417,7 +418,7 @@ ion-list.list-al {
 
 .search-container {
     background-color: #fff;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
     position: sticky;
     top: 0;
     z-index: 10;
