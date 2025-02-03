@@ -13,7 +13,6 @@ import locationsManagement from "@/views/LocationsManagement.vue";
 import clinicalDaysTemplate from "@/views/ClinicalDays/clinicalDaysTemplate.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
-import setSessionDate from "@/views/Configurations/SessionDate.vue";
 import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
 import setDDE from "@/views/Configurations/setDDE.vue";
 import SetSitePrefix from "@/views/Configurations/SetSitePrefix.vue";
@@ -85,11 +84,6 @@ const routes: Array<RouteRecordRaw> = [
         path: "/patientProfile",
         name: "patientProfile",
         component: PatientProfile,
-    },
-    {
-        path: "/setSessionDate",
-        name: "setSessionDate",
-        component: setSessionDate,
     },
     {
         path: "/setSmsConfig",
