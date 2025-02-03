@@ -15,8 +15,14 @@
             :style="{ minHeight: minHeight + 'px' }"
         >
             <ion-label v-if="InnerActionBtnPropeties.show" style="display: flex" slot="end">
-                <ion-button slot="end" @click="handleInnerActionBtnPropetiesFn">{{ InnerActionBtnPropeties.name }}
-                    <ion-icon v-if="InnerActionBtnPropeties.show_icon" :icon="InnerActionBtnPropeties.icon" slot="start" style="margin-right: 5px;"></ion-icon>
+                <ion-button slot="end" @click="handleInnerActionBtnPropetiesFn"
+                    >{{ InnerActionBtnPropeties.name }}
+                    <ion-icon
+                        v-if="InnerActionBtnPropeties.show_icon"
+                        :icon="InnerActionBtnPropeties.icon"
+                        slot="start"
+                        style="margin-right: 5px"
+                    ></ion-icon>
                 </ion-button>
             </ion-label>
 
@@ -145,14 +151,14 @@ export default defineComponent({
             default: {
                 name: "provide name",
                 show: false,
-                icon: '',
+                icon: "",
                 show_icon: false,
             },
-        },
+        } as any,
         minHeight: {
             type: [String, Number],
             default: "",
-        }
+        },
     },
     methods: {
         handleClick(event: any) {
