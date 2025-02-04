@@ -7,14 +7,14 @@
         </div>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <!-- <div class="positionCenter">
+            <div v-if="!globalPropertyStore.dde_enabled" class="positionCenter">
                 <ion-card class="registration_ion_card">
                     <div class="card_content">
                         <div class="card_hearder">Set DDE</div>
                         <ion-toggle :enable-on-off-labels="true" v-model="globalPropertyStore.dde_enabled">Enable DDE</ion-toggle>
                     </div>
                 </ion-card>
-            </div> -->
+            </div>
             <div class="positionCenter" v-if="globalPropertyStore.dde_enabled == 'true'">
                 <ion-card class="registration_ion_card">
                     <div class="card_content">
@@ -166,12 +166,16 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.isLoading = true;
-        await useGlobalPropertyStore().loadDDEStatus();
-        this.apiDate = await Service.getApiDate();
-        await this.ddeData();
-        this.date = getFieldValue(this.sessionDate, "sessionDate", "value");
-        this.isLoading = false;
+        try {
+            this.isLoading = false;
+            await useGlobalPropertyStore().loadDDEStatus();
+            this.apiDate = await Service.getApiDate();
+            await this.ddeData();
+            this.date = getFieldValue(this.sessionDate, "sessionDate", "value");
+            this.isLoading = false;
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     methods: {
