@@ -27,6 +27,7 @@ npm-debug.log*
 !/.vscode/settings.json
 /coverage
 /dist
+/dist_electron
 /node_modules
 /platforms
 /plugins

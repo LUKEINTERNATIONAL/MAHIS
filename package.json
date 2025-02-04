@@ -3,6 +3,11 @@
   "private": true,
   "version": "1.0.5-alpha",
   "type": "module",
+  "main": "electron/main.cjs",
+  "author": {
+    "name": "Luke International",
+    "email": "kayangepetros@gmail.com"
+  },
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc && vite build",
@@ -14,7 +19,43 @@
     "preview": "vite preview",
     "test:e2e": "cypress run",
     "test:unit": "vitest",
-    "lint": "eslint"
+    "lint": "eslint",
+    "electron:dev": "electron electron/main.cjs",
+    "electron:build": "vite build && electron-builder"
+  },
+  "build": {
+    "appId": "gov.mw.mahis",
+    "productName": "MaHIS",
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "output": "dist_electron"
+    },
+    "extraResources": [
+      {
+        "from": "electron",
+        "to": "app"
+      }
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    }
   },
   "dependencies": {
     "@awesome-cordova-plugins/bluetooth-serial": "^6.4.0",
@@ -34,7 +75,6 @@
     "@schedule-x/vue": "^2.3.0",
     "@types/crypto-js": "^4.2.2",
     "@types/vue-select": "^3.16.8",
-    "@vue/compiler-sfc": "^3.4.31",
     "@vueform/toggle": "^2.1.4",
     "@vuepic/vue-datepicker": "^8.1.0",
     "apexcharts": "^4.0.0",
@@ -55,6 +95,7 @@
     "datatables.net-select-dt": "^2.0.3",
     "datatables.net-vue3": "^3.0.2",
     "date-fns": "^2.30.0",
+    "express": "^4.21.2",
     "fast-sort": "^3.4.0",
     "form-wizard-vue3": "^1.1.0",
     "ionicons": "^7.4.0",
@@ -92,14 +133,17 @@
     "@types/vue-tel-input": "^2.1.7",
     "@vitejs/plugin-basic-ssl": "^1.1.0",
     "@vitejs/plugin-legacy": "^4.0.2",
-    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue": "^4.6.2",
+    "@vue/compiler-sfc": "^3.5.13",
     "@vue/eslint-config-typescript": "^11.0.2",
     "@vue/test-utils": "^2.3.0",
     "cypress": "^13.14.1",
+    "electron": "^34.0.2",
+    "electron-builder": "^25.1.8",
     "eslint": "^8.35.0",
     "eslint-plugin-vue": "^9.9.0",
     "jsdom": "^22.1.0",
-    "typescript": "^5.1.6",
+    "typescript": "^5.7.3",
     "vite": "4.5.3",
     "vitest": "^0.32.2",
     "vue-tsc": "^2.0.22"
