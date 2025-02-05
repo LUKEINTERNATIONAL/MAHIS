@@ -2,7 +2,7 @@
     <ion-page>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <DemographicBar class="displayNoneDesktop" v-if="activeProgramID !== 33 && activeProgramID != ''" />
+            <DemographicBar class="displayNoneDesktop" v-if="programs.activeProgramID !== 33 && programs.activeProgramID != ''" />
             <CheckInConfirmationModal
                 :closeModalFunc="closeCheckInModal"
                 :onYes="handleCheckInYes"
@@ -39,8 +39,8 @@
                 :title="enrollModalTitle"
             />
 
-            <PatientProfile :updateData="patient" v-if="activeProgramID == 33" />
-            <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
+            <PatientProfile :updateData="patient" v-if="programs.activeProgramID == 33" />
+            <div class="content_manager" v-if="programs.activeProgramID !== 33 && programs.activeProgramID != ''">
                 <ion-row class="content_width">
                     <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
@@ -86,7 +86,7 @@
                                     <ion-col size="4">MRN:</ion-col>
                                     <ion-col class="demoContent">{{ patient.ID }}</ion-col>
                                 </ion-row>
-                                <ion-row v-if="activeProgramID === 32">
+                                <ion-row v-if="programs.activeProgramID === 32">
                                     <ion-col size="4">NCDNumber:</ion-col>
                                     <ion-col class="demoContent">{{ patient.NcdID }}</ion-col>
                                 </ion-row>
@@ -148,7 +148,7 @@
 
                                 <div class="start-visit">
                                     <div class="send-button-container">
-                                        <button class="send-text">Start visit</button>
+                                        <button class="send-text" @click="startVisit()">Start visit</button>
                                         <button class="send-arrow" @click="openProgramPopover($event)"></button>
                                     </div>
                                     <!-- <Programs
@@ -164,6 +164,7 @@
                                     /> -->
                                 </div>
                             </div>
+                            {{ programs }}
                             <div style="padding-left: 10px; padding-right: 10px">
                                 <ion-row>
                                     <ion-col class="vitalsHeading">Weight</ion-col>
@@ -270,12 +271,12 @@
                         :button="true"
                         :detail="false"
                         style="cursor: pointer"
-                        v-for="(btn, index) in programBtn"
+                        v-for="(btn, index) in programs.programBtn"
                         :key="index"
                         @click="handleProgramClick(btn)"
                     >
                         <ion-icon slot="start" :icon="add"></ion-icon>
-                        <span class="rght-drpm">{{ btn.actionName.replace(/\+/g, "") }}</span>
+                        <span class="rght-drpm">{{ btn?.actionName?.replace(/\+/g, "") }}</span>
                     </ion-item>
                 </ion-list>
             </ion-content>
@@ -352,7 +353,7 @@ import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { PatientService } from "@/services/patient_service";
-import { UserService } from "@/services/user_service";
+import { SetProgramService } from "@/services/set_program_service";
 import { Service } from "@/services/service";
 import { ObservationService } from "@/services/observation_service";
 import { useVitalsStore } from "@/stores/VitalsStore";
@@ -380,7 +381,6 @@ import PNCEnrollmentModal from "@/apps/PNC/components/Modals/PNCEnrollmentModal.
 
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
-import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import PatientProfileMixin from "@/views/Mixin/PatientProfile.vue";
 import { ProgramService } from "@/services/program_service";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
@@ -390,8 +390,9 @@ import dates from "@/utils/Date";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { useANCEnrollmentStore } from "@/apps/ANC/store/enrollment/ANCEnrollment";
 import { ConfirmPregnancyService } from "@/apps/ANC/service/confirm_pregnancy_service";
+import { useProgramStore } from "@/stores/ProgramStore";
 export default defineComponent({
-    mixins: [SetPrograms, PatientProfileMixin],
+    mixins: [PatientProfileMixin],
     components: {
         WeightHeightChart,
         PreviousVitals,
@@ -484,6 +485,7 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
+        ...mapState(useProgramStore, ["programs"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useANCEnrollmentStore, ["ConfirmPregnancy"]),
         pregnancyConfirmed() {
@@ -493,10 +495,10 @@ export default defineComponent({
             return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy planned");
         },
         activateVisitButtonVisible() {
-            return !this.checkedIn && this.activeProgramID == 14;
+            return !this.checkedIn && this.programs.activeProgramID == 14;
         },
         deactivateVisitButtonVisible() {
-            return this.checkedIn && this.activeProgramID == 14;
+            return this.checkedIn && this.programs.activeProgramID == 14;
         },
     },
     async mounted() {
@@ -511,6 +513,7 @@ export default defineComponent({
     watch: {
         patient: {
             async handler(btn: any) {
+                await SetProgramService.userProgramData(this.patient.PatientID);
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
                 this.updateCheckInStatus();
@@ -541,6 +544,7 @@ export default defineComponent({
     },
 
     methods: {
+        startVisit() {},
         checkAge() {
             if (this.patient?.personInformation?.birthdate) {
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate) >= 14 ? true : false;

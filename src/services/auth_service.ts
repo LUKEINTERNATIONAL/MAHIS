@@ -141,17 +141,14 @@ export class AuthService {
         localStorage.setItem("username", this.username);
         localStorage.setItem("userID", this.userID.toString());
         localStorage.setItem("userRoles", JSON.stringify(this.roles));
-        localStorage.setItem("userPrograms", JSON.stringify(this.programs));
         localStorage.setItem("sessionDate", this.sessionDate);
         localStorage.setItem("APIVersion", this.systemVersion);
         localStorage.setItem("locationID", this.locationID);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
     }
     checkUserPrograms(selectedProgram: any) {
-        const accessPrograms: any = localStorage.getItem("userPrograms");
-        const programs = JSON.parse(accessPrograms);
-        if (programs) return programs.some((program: any) => program.name === selectedProgram);
-        else toastDanger("No user programs");
+        if (this.programs) return { programs: this.programs, status: this.programs.some((program: any) => program.name === selectedProgram) };
+        else return;
     }
     clearSession() {
         localStorage.clear();

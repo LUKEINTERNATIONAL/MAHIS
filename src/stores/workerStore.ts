@@ -100,10 +100,10 @@ export const useWorkerStore = defineStore("worker", {
 
             // Get program ID
             try {
-                const programStr = localStorage.getItem("app");
+                const programStr = localStorage.getItem("programStore");
                 if (programStr) {
                     const program = JSON.parse(programStr);
-                    this.programId = program?.programID || null;
+                    this.programId = program?.activeProgramID || null;
                 } else {
                     this.programId = null;
                 }

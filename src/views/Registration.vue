@@ -525,14 +525,14 @@ export default defineComponent({
             const birthdate = this.personInformation[0].selectedData.birthdate;
             const gender = this.personInformation[0].selectedData.gender;
 
-            let program: any = localStorage.getItem("app");
+            let program: any = localStorage.getItem("programStore");
             program = JSON.parse(program);
 
             const offlineRecord: any = {
                 patientID: "",
                 ID: this.ddeId,
                 NcdID: "",
-                program_id: program ? program.programID : null,
+                program_id: program ? program.activeProgramID : null,
                 location_id: localStorage.getItem("locationID"),
                 provider_id: localStorage.getItem("userID"),
                 encounter_datetime: new Date().toISOString(),

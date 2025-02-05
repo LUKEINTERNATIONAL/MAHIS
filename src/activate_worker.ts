@@ -60,10 +60,10 @@ class WorkerManager {
 
         // Get program ID
         try {
-            const programStr = localStorage.getItem("app");
+            const programStr = localStorage.getItem("programStore");
             if (programStr) {
                 const program = JSON.parse(programStr);
-                this.state.value.programId = program?.programID || null;
+                this.state.value.programId = program?.activeProgramID || null;
             } else {
                 this.state.value.programId = null;
             }

@@ -51,7 +51,7 @@ export function useProgram() {
             })
         );
 
-        await setProgramInfo();
+        // await setProgramInfo();
 
         if (patient?.value?.patientID) {
             await nav(program.url);
@@ -63,43 +63,43 @@ export function useProgram() {
         router.push(url);
     };
 
-    const setProgramInfo = async () => {
-        let program: any = localStorage.getItem("app");
-        program = program ? JSON.parse(program) : null;
+    // const setProgramInfo = async () => {
+    //     let program: any = localStorage.getItem("app");
+    //     program = program ? JSON.parse(program) : null;
 
-        state.value.activeProgramID = program ? program.programID : null;
-        state.value.programBtn = await UserService.userProgramData(patient?.value?.patientID);
+    //     state.value.activeProgramID = program ? program.programID : null;
+    //     state.value.programBtn = await UserService.userProgramData(patient?.value?.patientID);
 
-        const programStore = useProgramStore();
-        programStore.setProgramInformation({
-            program: program,
-            programBtn: state.value.programBtn,
-        });
+    //     const programStore = useProgramStore();
+    //     programStore.setProgramInformation({
+    //         program: program,
+    //         programBtn: state.value.programBtn,
+    //     });
 
-        return state.value.programBtn;
-    };
+    //     return state.value.programBtn;
+    // };
 
     // Watchers
-    watch(
-        () => patient.value,
-        async () => {
-            await setProgramInfo();
-        },
-        { deep: true }
-    );
+    // watch(
+    //     () => patient.value,
+    //     async () => {
+    //         await setProgramInfo();
+    //     },
+    //     { deep: true }
+    // );
 
-    watch(
-        () => route?.path,
-        async () => {
-            await setProgramInfo();
-        },
-        { immediate: true }
-    );
+    // watch(
+    //     () => route?.path,
+    //     async () => {
+    //         await setProgramInfo();
+    //     },
+    //     { immediate: true }
+    // );
 
     return {
         programState: state,
         setProgram,
-        setProgramInfo,
+        // setProgramInfo,
         patient,
     };
 }

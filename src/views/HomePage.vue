@@ -6,7 +6,7 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="![33, 14, 32, 12, 34, 35].includes(programState.activeProgramID)">
+        <ion-content :fullscreen="true" v-if="![33, 14, 32, 12, 34, 35].includes(programs.activeProgramID)">
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -18,13 +18,13 @@
                 </div>
             </div>
         </ion-content>
-        <ImmunizationDashboard v-if="programState.activeProgramID == 33" />
-        <OPDDashboard v-if="programState.activeProgramID == 14" />
-        <NCDDashboard v-if="programState.activeProgramID == 32" />
-        <ANCDashboard v-if="programState.activeProgramID == 12" />
-        <LabourDashboard v-if="programState.activeProgramID == 34" />
-        <PNCDashboard v-if="programState.activeProgramID == 35" />
-        <Programs :programBtn="programState.programBtn" @clicked="setProgram($event)" />
+        <ImmunizationDashboard v-if="programs.activeProgramID == 33" />
+        <OPDDashboard v-if="programs.activeProgramID == 14" />
+        <NCDDashboard v-if="programs.activeProgramID == 32" />
+        <ANCDashboard v-if="programs.activeProgramID == 12" />
+        <LabourDashboard v-if="programs.activeProgramID == 34" />
+        <PNCDashboard v-if="programs.activeProgramID == 35" />
+        <Programs :programBtn="programs.programBtn" @clicked="setProgram($event)" />
     </ion-page>
 </template>
 
@@ -46,6 +46,8 @@ import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import { useProgram } from "@/composables/useProgram";
 import { useUserActivities } from "@/composables/useUserActivities";
 import { useUserRole } from "@/composables/useUserRole";
+import { useProgramStore } from "@/stores/ProgramStore";
+import { storeToRefs } from "pinia";
 
 import { useWorkerStore } from "@/stores/workerStore";
 const isLoading = ref(true);
@@ -53,7 +55,10 @@ const route = useRoute();
 const workerStore = useWorkerStore();
 useUserActivities();
 useUserRole();
-const { setProgram, programState } = useProgram();
+const { setProgram } = useProgram();
+const programStore = useProgramStore();
+
+const { programs } = storeToRefs(programStore);
 watch(
     () => route.name,
     async (newRoute) => {

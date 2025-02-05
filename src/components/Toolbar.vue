@@ -6,7 +6,7 @@
                 <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px">
                     <div style="display: block">
                         <div style="font-size: 16px" @click="nav('/home')">
-                            <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
+                            <b>MaHIS</b><small> ({{ programs?.name }})</small>
                         </div>
                         <div :style="screenWidth <= 500 && userFacilityName.length > 23 ? 'display: block' : 'display: flex'">
                             <div class="facility-name" style="font-size: 68%">{{ userFacilityName }}</div>
@@ -166,7 +166,6 @@ const { sessionDate } = storeToRefs(configStore);
 const popoverOpen = ref(false);
 const popoverEvent = ref(null);
 const locationName = ref("");
-const programName = ref("");
 const apiDate = ref("");
 const showUserProfileModal = ref(false);
 const displaySessionDate = ref(HisDate.toStandardHisDisplayFormat(Service.getSessionDate()));
@@ -185,10 +184,6 @@ const openSyncModal = () => {
 
 const openSessionDateModal = () => {
     createModal(SessionDate, { class: "mediumModal" });
-};
-
-const updateData = () => {
-    programName.value = Service.getProgramName();
 };
 
 const nav = (url: string) => {
@@ -218,21 +213,11 @@ const assignUserName = () => {
     userName.value = getUserName();
 };
 
-// Watchers
-watch(
-    () => programs.value,
-    () => {
-        updateData();
-    },
-    { deep: true }
-);
-
 watch(
     () => sessionDate.value,
     () => {
         displaySessionDate.value =
             getFieldValue(sessionDate.value, "sessionDate", "value") || HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
-        updateData();
     },
     { deep: true }
 );
@@ -248,7 +233,6 @@ watch(
 // Mounted
 onMounted(async () => {
     apiDate.value = await Service.getApiDate();
-    updateData();
     assignUserName();
 });
 </script>

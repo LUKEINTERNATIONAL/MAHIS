@@ -77,22 +77,22 @@ export default defineComponent({
             const store = useUserStore();
             store.setCurrentUserProgram(program);
             localStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
-            await this.setProgramInfo();
+            // await this.setProgramInfo();
             if (this.patient.patientID) await this.nav(program.url);
         },
         async nav(url: any) {
             await UserService.setProgramUserActions();
             this.$router.push(url);
         },
-        async setProgramInfo() {
-            let program: any = localStorage.getItem("app");
+        // async setProgramInfo() {
+        //     let program: any = localStorage.getItem("app");
 
-            program = JSON.parse(program);
-            this.activeProgramID = program ? program.programID : null;
-            this.programBtn = await UserService.userProgramData(this.patient.patientID);
-            const programStore = useProgramStore();
-            programStore.setProgramInformation({ program: program, programBtn: this.programBtn });
-        },
+        //     program = JSON.parse(program);
+        //     this.activeProgramID = program ? program.programID : null;
+        //     this.programBtn = await UserService.userProgramData(this.patient.patientID);
+        //     const programStore = useProgramStore();
+        //     programStore.setProgramInformation({ program: program, programBtn: this.programBtn });
+        // },
     },
 });
 </script>
