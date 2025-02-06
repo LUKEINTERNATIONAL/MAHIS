@@ -44,12 +44,10 @@ import { ProgramService } from "@/services/program_service";
 import HisDate from "@/utils/Date";
 import { ConceptService } from "@/services/concept_service";
 import { BMIService } from "@/services/bmi_service";
-import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import { ObservationService } from "@/services/observation_service";
 
 export default defineComponent({
     name: "Menu",
-    mixins: [SetPrograms],
     components: {
         IonContent,
         IonHeader,

@@ -185,6 +185,7 @@ export default defineComponent({
     },
     methods: {
         async initializeChartData() {
+            console.log("🚀 ~ initializeChartData ~ this.dashboardData:", this.dashboardData);
             this.dashboardData = await this.getDashboardData();
             this.lineChartOptions.xaxis.categories = this.dashboardData.gender_data.categories;
             this.lineChartSeries[0].data = this.dashboardData.gender_data.femaleSeries;
@@ -201,11 +202,15 @@ export default defineComponent({
             }, 100);
         },
         getDashboardData() {
-            const url = `programs/${32}/reports/ncd_dashboard`;
-            return Service.getJson(url, {
-                start_date: HisDate.currentDate(),
-                end_date: HisDate.currentDate(),
-            });
+            try {
+                const url = `programs/${32}/reports/ncd_dashboard`;
+                return Service.getJson(url, {
+                    start_date: HisDate.currentDate(),
+                    end_date: HisDate.currentDate(),
+                });
+            } catch (error) {
+                return [];
+            }
         },
     },
 });

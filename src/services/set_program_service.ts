@@ -4,127 +4,115 @@ import { User } from "@/interfaces/user";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { PatientService } from "@/services/patient_service";
 import HisDate from "@/utils/Date";
-import { Program } from "../interfaces/program";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { ProgramService } from "@/services/program_service";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { OrderService } from "@/services/order_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useProgramStore } from "@/stores/ProgramStore";
+import { UserService } from "./user_service";
 
+interface ProgramData {
+    url: string;
+    actionName: string;
+}
+
+interface Program {
+    name: string;
+    url?: string;
+    actionName?: string;
+}
 export class SetProgramService extends Service {
     constructor() {
         super();
     }
 
-    static getSystemUsageByUsers(startDate: string, endDate: string) {
-        return super.getJson("user_system_usage", {
-            start_date: startDate,
-            end_date: endDate,
-            program_id: super.getProgramID(),
-            date: super.getSessionDate(),
-        });
-    }
-    static async getUserActivities(activities: any) {
-        try {
-            const userID = Service.getUserID();
-            const userData = await UserService.getJson("user_properties", {
-                user_id: userID,
-                property: activities,
-            });
-            if (userData.property_value) {
-                return userData.property_value.split(",");
-            } else {
-                return []; // Return an empty array if property_value is not available
-            }
-        } catch (error) {
-            // console.error("Error fetching user activities:", error);
-            return []; // Return an empty array in case of error
-        }
-    }
-    static async userProgramData(patientID: any = "") {
+    private static readonly PROGRAM_CONFIGS: Record<string, () => Promise<ProgramData> | ProgramData> = {
+        "NCD PROGRAM": async () => await SetProgramService.setNCDValue(),
+        "IMMUNIZATION PROGRAM": () => ({
+            url: "patientProfile",
+            actionName: "Enroll in Immunization program",
+        }),
+        "OPD Program": async () => {
+            const demographicsInstance = useDemographicsStore();
+            const demographics = demographicsInstance.getPatient();
+            const orders = await OrderService.getOrders(demographics.patient_id);
+            const isToday = (order: any) => HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(order.order_date);
+
+            const hasTodayOrders = orders?.some(isToday);
+
+            return {
+                url: hasTodayOrders ? "OPDConsultationPlan" : "OPDvitals",
+                actionName: hasTodayOrders ? "Continue OPD consultation" : "Start OPD consultation",
+            };
+        },
+        "ANC PROGRAM": () => ({
+            url: "ANChome",
+            actionName: "Enroll in ANC Program",
+        }),
+        "LABOUR AND DELIVERY PROGRAM": () => ({
+            url: "LabourHome",
+            actionName: "Enroll in Labour and delivery program",
+        }),
+        "PNC PROGRAM": () => ({
+            url: "PNCHome",
+            actionName: "Enroll in PNC program",
+        }),
+    };
+
+    static async userProgramData(patientID: string = "", programs: any = "") {
         const programStore = useProgramStore();
-        const programs = programStore.programs.authorizedPrograms;
+        const authorizedPrograms = programStore.programs.authorizedPrograms;
 
-        const filteredPrograms = [];
-        for (const item of programs) {
-            if (patientID) {
-                if (item.name === "NCD PROGRAM") {
-                    const NCDData: any = await this.setNCDValue();
-                    if (NCDData) {
-                        item.url = NCDData.url;
-                        item.actionName = NCDData.actionName;
-                        filteredPrograms.push(item);
-                    }
-                } else if (item.name === "IMMUNIZATION PROGRAM") {
-                    item.url = "patientProfile";
-                    item.actionName = "+ Enroll in Immunization program";
-                    filteredPrograms.push(item);
-                } else if (item.name === "OPD Program") {
-                    const demographicsInstance = useDemographicsStore();
-                    const demographics = demographicsInstance.getPatient();
-                    const orders = await OrderService.getOrders(demographics.patient_id);
-                    const filteredArray = await orders?.filter((obj: any) => {
-                        return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
-                    });
-                    if (filteredArray?.length > 0) {
-                        item.url = "OPDConsultationPlan";
-                        item.actionName = "+ Continue OPD consultation";
-                    } else {
-                        item.url = "OPDvitals";
-                        item.actionName = "+ Start OPD consultation";
-                    }
-                    filteredPrograms.push(item);
-                } else if (item.name === "ANC PROGRAM") {
-                    let ANCItem = { ...item }; // Create a new object
-                    ANCItem.url = "ANChome";
-                    ANCItem.actionName = "+ Enroll in ANC Program";
-                    filteredPrograms.push(ANCItem);
-                } else if (item.name === "LABOUR AND DELIVERY PROGRAM") {
-                    let labourItem = { ...item }; // Create a new object
-                    labourItem.url = "LabourHome";
-                    labourItem.actionName = "+ Enroll in Labour and delivery program";
-                    filteredPrograms.push(labourItem);
-                } else if (item.name === "PNC PROGRAM") {
-                    let pncItem = { ...item }; // Create a new object
-                    pncItem.url = "PNCHome";
-                    pncItem.actionName = "+ Enroll in PNC program";
-                    filteredPrograms.push(pncItem);
-                }
+        if (!patientID) {
+            return;
+        }
+
+        for (const program of authorizedPrograms) {
+            const configHandler = this.PROGRAM_CONFIGS[program.name];
+
+            if (configHandler) {
+                const programData = await configHandler();
+                Object.assign(program, programData);
             } else {
-                item.url = "";
-                item.actionName = item.name;
-                filteredPrograms.push(item);
+                program.url = "";
+                program.actionName = program.name;
             }
         }
-        await Promise.resolve(filteredPrograms);
-        programStore.setProgramInformation({ activeProgramID: program.programID, programBtn: filteredPrograms });
+        const programData = programStore.programs;
+        if (!programs) {
+            programs = {
+                activeProgramID: programData.activeProgramID,
+                name: programData.name,
+            };
+        }
+        programStore.setProgramInformation(programs, authorizedPrograms);
     }
 
-    static async setNCDValue() {
+    static async setNCDValue(): Promise<ProgramData> {
         const patient = new PatientService();
         if (patient.getID()) {
             const visits = await PatientService.getPatientVisits(patient.getID(), false);
-            const activities = await this.getUserActivities("NCD_activities");
+            const activities = await UserService.getUserActivities("NCD_activities");
             let url = "";
             let NCDProgramActionName = "";
             if (patient.getNcdNumber() != "Unknown") {
                 if (activities.length == 0) {
                     this.setNCDNumber();
                     url = "/patientProfile";
-                    NCDProgramActionName = "+ Edit NCD Enrollment";
+                    NCDProgramActionName = "Edit NCD Enrollment";
                 } else {
                     if (localStorage.getItem("saveProgressStatus") == "true") {
-                        NCDProgramActionName = "+ Continue NCD consultation";
+                        NCDProgramActionName = "Continue NCD consultation";
                     } else if (visits.includes(HisDate.currentDate())) {
-                        NCDProgramActionName = "+ Edit NCD consultation";
-                    } else NCDProgramActionName = "+ Start new NCD consultation";
+                        NCDProgramActionName = "Edit NCD consultation";
+                    } else NCDProgramActionName = "Start new NCD consultation";
                     url = "/consultationPlan";
                 }
             } else {
                 this.setNCDNumber();
                 url = "/NCDEnrollment";
-                NCDProgramActionName = "+ Enroll in NCD Program";
+                NCDProgramActionName = "Enroll in NCD Program";
             }
 
             return {
@@ -132,6 +120,10 @@ export class SetProgramService extends Service {
                 url: url,
             };
         }
+        return {
+            actionName: "",
+            url: "",
+        };
     }
     static async setNCDNumber() {
         const j = await ProgramService.getNextSuggestedNCDNumber();

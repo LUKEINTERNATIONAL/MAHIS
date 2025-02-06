@@ -164,7 +164,6 @@
                                     /> -->
                                 </div>
                             </div>
-                            {{ programs }}
                             <div style="padding-left: 10px; padding-right: 10px">
                                 <ion-row>
                                     <ion-col class="vitalsHeading">Weight</ion-col>
@@ -271,12 +270,12 @@
                         :button="true"
                         :detail="false"
                         style="cursor: pointer"
-                        v-for="(btn, index) in programs.programBtn"
+                        v-for="(btn, index) in programs.authorizedPrograms"
                         :key="index"
                         @click="handleProgramClick(btn)"
                     >
                         <ion-icon slot="start" :icon="add"></ion-icon>
-                        <span class="rght-drpm">{{ btn?.actionName?.replace(/\+/g, "") }}</span>
+                        <span class="rght-drpm">{{ btn?.actionName }}</span>
                     </ion-item>
                 </ion-list>
             </ion-content>
@@ -502,6 +501,7 @@ export default defineComponent({
         },
     },
     async mounted() {
+        await SetProgramService.userProgramData(this.patient.patientID);
         this.checkAge();
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
@@ -513,11 +513,10 @@ export default defineComponent({
     watch: {
         patient: {
             async handler(btn: any) {
-                await SetProgramService.userProgramData(this.patient.PatientID);
+                await SetProgramService.userProgramData(this.patient.patientID);
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
                 this.updateCheckInStatus();
-                // await this.handleProgramClick(btn);
             },
             deep: true,
         },
@@ -727,10 +726,9 @@ export default defineComponent({
                         }
                     }
                 }
-
-                return this.$router.push(btn.url);
             }
-            this.setProgram(btn);
+            await SetProgramService.userProgramData(this.patient.patientID, btn);
+            return this.$router.push(btn.url);
         },
 
         closeEnrollmentModal() {

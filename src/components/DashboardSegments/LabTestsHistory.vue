@@ -48,7 +48,6 @@ import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 import DataTablesResponsive from "datatables.net-responsive";
@@ -65,7 +64,6 @@ import { ConceptService } from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
-    mixins: [SetPrograms],
     components: {
         CheckInConfirmationModal,
         IonContent,
@@ -116,7 +114,7 @@ export default defineComponent({
                     bottomEnd: "paging",
                 },
                 ordering: false,
-              order: [[3, 'desc']],
+                order: [[3, "desc"]],
             } as any,
 
             header: ["Lab Test", "Specimen", "Accession Number", "Order Date", "Result"],
@@ -189,61 +187,61 @@ export default defineComponent({
             },
             deep: true,
         },
-      patient: {
-        async handler(newPatient) {
-          if (newPatient && newPatient.patientID) {
-            await this.setListData();
-          }
+        patient: {
+            async handler(newPatient) {
+                if (newPatient && newPatient.patientID) {
+                    await this.setListData();
+                }
+            },
+            immediate: true,
         },
-        immediate: true,
-      },
-      tableData: {
-        handler(newData) {
-          if (this.$refs.dataTable) {
-            const table = (this.$refs.dataTable as any).dt;
-            table.clear();
-            table.rows.add(newData);
-            table.draw();
-          }
+        tableData: {
+            handler(newData) {
+                if (this.$refs.dataTable) {
+                    const table = (this.$refs.dataTable as any).dt;
+                    table.clear();
+                    table.rows.add(newData);
+                    table.draw();
+                }
+            },
+            deep: true,
         },
-        deep: true,
-      },
     },
     methods: {
         async closeModal() {
             this.openModal = false;
             await this.setListData();
         },
-      async saveTest(data: any) {
-        const investigationInstance = new LabOrder();
-        await investigationInstance.postActivities(this.patient.patientID, [
-          {
-            concept_id: await ConceptService.getConceptID(data.name, true),
-            name: data.name,
-            specimen: data.specimen,
-            reason: "Routine",
-            specimenConcept: await ConceptService.getConceptID(data.specimen, true),
-          },
-        ]);
-        toastSuccess("Successfully saved");
+        async saveTest(data: any) {
+            const investigationInstance = new LabOrder();
+            await investigationInstance.postActivities(this.patient.patientID, [
+                {
+                    concept_id: await ConceptService.getConceptID(data.name, true),
+                    name: data.name,
+                    specimen: data.specimen,
+                    reason: "Routine",
+                    specimenConcept: await ConceptService.getConceptID(data.specimen, true),
+                },
+            ]);
+            toastSuccess("Successfully saved");
 
-        // Fetch the updated orders and regenerate the table data
-        this.orders = await OrderService.getOrders(this.patient.patientID);
-        this.tableData = this.generateListItems(this.orders, "order");
+            // Fetch the updated orders and regenerate the table data
+            this.orders = await OrderService.getOrders(this.patient.patientID);
+            this.tableData = this.generateListItems(this.orders, "order");
 
-        // Sort the table data by order date
-        this.tableData.sort((a: any, b: any) => {
-          const dateA = new Date(a[3]);
-          const dateB = new Date(b[3]);
-          return dateB.getTime() - dateA.getTime();
-        });
+            // Sort the table data by order date
+            this.tableData.sort((a: any, b: any) => {
+                const dateA = new Date(a[3]);
+                const dateB = new Date(b[3]);
+                return dateB.getTime() - dateA.getTime();
+            });
 
-        // Update the DataTable instance
-        const table = (this.$refs.dataTable as any).dt;
-        table.clear();
-        table.rows.add(this.tableData);
-        table.draw();
-      },
+            // Update the DataTable instance
+            const table = (this.$refs.dataTable as any).dt;
+            table.clear();
+            table.rows.add(this.tableData);
+            table.draw();
+        },
         async openEnterResultModal() {
             const dataToPass = { title: "name" };
             await createModal(EnterResultModal, { class: "lab-results-modal" }, true, dataToPass);
@@ -440,70 +438,70 @@ export default defineComponent({
             this.labResultsContent = labResults;
             this.openResultsModal = true;
         },
-      async setListData() {
-        this.orders = await OrderService.getOrders(this.patient.patientID);
-        let tableData: any = this.generateListItems(this.orders, "order");
+        async setListData() {
+            this.orders = await OrderService.getOrders(this.patient.patientID);
+            let tableData: any = this.generateListItems(this.orders, "order");
 
-        // Sort the table data by order date in descending order (most recent first)
-        tableData.sort((a: any, b: any) => {
-          const dateA = new Date(a[3]); // Access the order date from the array
-          const dateB = new Date(b[3]);
-          return dateB.getTime() - dateA.getTime(); // Sort in descending order
-        });
+            // Sort the table data by order date in descending order (most recent first)
+            tableData.sort((a: any, b: any) => {
+                const dateA = new Date(a[3]); // Access the order date from the array
+                const dateB = new Date(b[3]);
+                return dateB.getTime() - dateA.getTime(); // Sort in descending order
+            });
 
-        const predefineTests = [
-          [
-            "FBS",
-            "Blood",
-            "",
-            "",
-            "",
-            `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
-              name: "FBS",
-              specimen: "Blood",
-            })}'>Order Test</button> `,
-          ],
-          [
-            "HbA1c",
-            "Blood",
-            "",
-            "",
-            "",
-            `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
-              name: "HbA1c",
-              specimen: "Blood",
-            })}'>Order Test</button> `,
-          ],
-          [
-            "RBS",
-            "Blood",
-            "",
-            "",
-            "",
-            `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
-              name: "RBS",
-              specimen: "Blood",
-            })}'>Order Test</button> `,
-          ],
-        ];
+            const predefineTests = [
+                [
+                    "FBS",
+                    "Blood",
+                    "",
+                    "",
+                    "",
+                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
+                        name: "FBS",
+                        specimen: "Blood",
+                    })}'>Order Test</button> `,
+                ],
+                [
+                    "HbA1c",
+                    "Blood",
+                    "",
+                    "",
+                    "",
+                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
+                        name: "HbA1c",
+                        specimen: "Blood",
+                    })}'>Order Test</button> `,
+                ],
+                [
+                    "RBS",
+                    "Blood",
+                    "",
+                    "",
+                    "",
+                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
+                        name: "RBS",
+                        specimen: "Blood",
+                    })}'>Order Test</button> `,
+                ],
+            ];
 
-        const uniquePredefineTests = predefineTests.filter((predefTest) => {
-          return !tableData.some((tableRow: any) => tableRow[0] === predefTest[0]);
-        });
+            const uniquePredefineTests = predefineTests.filter((predefTest) => {
+                return !tableData.some((tableRow: any) => tableRow[0] === predefTest[0]);
+            });
 
-        const duplicateTests = tableData.filter((tableRow: any) => {
-          return predefineTests.some((predefTest) => predefTest[0] === tableRow[0]);
-        });
+            const duplicateTests = tableData.filter((tableRow: any) => {
+                return predefineTests.some((predefTest) => predefTest[0] === tableRow[0]);
+            });
 
-        const uniqueTableDataTests = tableData.filter((predefTest: any) => {
-          return !duplicateTests.some((tableRow: any) => tableRow[0] === predefTest[0]);
-        });
+            const uniqueTableDataTests = tableData.filter((predefTest: any) => {
+                return !duplicateTests.some((tableRow: any) => tableRow[0] === predefTest[0]);
+            });
 
-        // Combine all data and assign to this.tableData
-        this.tableData = [...duplicateTests, ...uniquePredefineTests, ...uniqueTableDataTests];
-        await this.updateInvestigationWizard();
-        DataTable.use(DataTablesCore);
-      },
+            // Combine all data and assign to this.tableData
+            this.tableData = [...duplicateTests, ...uniquePredefineTests, ...uniqueTableDataTests];
+            await this.updateInvestigationWizard();
+            DataTable.use(DataTablesCore);
+        },
 
         generateListItems(data: any, type: any) {
             let count = 0;

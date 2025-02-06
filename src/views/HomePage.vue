@@ -26,7 +26,7 @@
         <ANCDashboard v-if="programs.activeProgramID == 12" />
         <LabourDashboard v-if="programs.activeProgramID == 34" />
         <PNCDashboard v-if="programs.activeProgramID == 35" />
-        <Programs :programBtn="programs.programBtn" @clicked="setProgram($event)" />
+        <Programs :programBtn="programs.programBtn" />
     </ion-page>
 </template>
 
@@ -45,7 +45,6 @@ import PNCDashboard from "@/apps/PNC/components/PNCDashboard.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import { useProgram } from "@/composables/useProgram";
 import { useUserActivities } from "@/composables/useUserActivities";
 import { useUserRole } from "@/composables/useUserRole";
 import { useProgramStore } from "@/stores/ProgramStore";
@@ -57,7 +56,6 @@ const route = useRoute();
 const workerStore = useWorkerStore();
 useUserActivities();
 useUserRole();
-const { setProgram } = useProgram();
 const programStore = useProgramStore();
 
 const { programs } = storeToRefs(programStore);
