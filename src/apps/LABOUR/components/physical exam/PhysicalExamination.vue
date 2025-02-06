@@ -86,9 +86,14 @@ export default defineComponent({
     watch: {
         otherphysicalExams: {
             handler() {
-                this.handleOedema();
                 this.handleOtherPresentation();
                 this.handleContractions();
+            },
+            deep: true,
+        },
+        anaemia: {
+            handler() {
+                this.handleOedema();
             },
             deep: true,
         },

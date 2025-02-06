@@ -41,6 +41,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 radioBtnContent: {
                     header: {
                         title: "General condition",
+                        name: "General condition",
                         selectedValue: "",
                     },
                     data: [
@@ -115,6 +116,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 radioBtnContent: {
                     header: {
                         title: "Conjunctiva pale?",
+                        name: "Conjunctiva pale",
                         selectedValue: "",
                     },
                     data: [
@@ -142,6 +144,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 radioBtnContent: {
                     header: {
                         title: "Palmer pallor?",
+                        name: "Palmer pallor",
                         selectedValue: "",
                     },
                     data: [
@@ -169,6 +172,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 radioBtnContent: {
                     header: {
                         title: "Haemoglobin low?",
+                        name: "Haemoglobin low",
                         selectedValue: "",
                     },
                     data: [
@@ -196,6 +200,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 radioBtnContent: {
                     header: {
                         title: "Jaundice?",
+                        name: "Jaundice",
                         selectedValue: "",
                     },
                     data: [
@@ -297,6 +302,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 radioBtnContent: {
                     header: {
                         title: "Oedema",
+                        name: "Oedema",
                         selectedValue: "",
                     },
                     data: [
@@ -349,6 +355,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 radioBtnContent: {
                     header: {
                         title: "Lie",
+                        name: "Lie",
                         selectedValue: "",
                     },
                     data: [
