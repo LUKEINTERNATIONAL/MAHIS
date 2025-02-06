@@ -83,6 +83,7 @@ export default defineComponent({
         patient: {
             async handler() {
                 if (this.patient?.vitals) {
+                    if (sessionStorage.getItem("updatePatient") == "false") return sessionStorage.removeItem("updatePatient");
                     await this.updateData();
                     await this.changeGraph("weight");
                     await this.displayWeightGraph();

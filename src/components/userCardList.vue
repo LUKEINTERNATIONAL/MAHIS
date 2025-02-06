@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <ion-grid class="dynamic-grid">
+      <!-- Error Message -->
       <ion-row v-if="error">
         <ion-col size="12" class="ion-text-center">
           <ion-text color="danger">
@@ -8,28 +9,46 @@
           </ion-text>
         </ion-col>
       </ion-row>
+
+      <!-- Loading Spinner -->
       <ion-row v-else-if="isLoading">
         <ion-col size="12" class="ion-text-center">
           <ion-spinner name="circular"></ion-spinner>
           <p>Loading users...</p>
         </ion-col>
       </ion-row>
-      <ion-row v-else-if="paginatedUsers.length === 0">
+
+      <!-- No Users Found -->
+      <ion-row v-else-if="_items_.length === 0">
         <ion-col size="12" class="ion-text-center">
           <p>No users found.</p>
         </ion-col>
       </ion-row>
+
+      <!-- User Cards -->
       <ion-row v-else class="user-cards-row">
-        <ion-col size-xs="12" size-sm="6" size-md="4" size-lg="3" v-for="user in paginatedUsers" :key="user.userId">
-          <ion-card>
+        <ion-col
+          size-xs="12"
+          size-sm="6"
+          size-md="4"
+          size-lg="3"
+          v-for="user in _items_"
+          :key="user.userId"
+        >
+          <ion-card class="user-card">
             <ion-card-header>
               <ion-card-subtitle>
                 <ion-icon :icon="personCircleOutline" size="small" style="margin-bottom: -3px;"></ion-icon>
-                {{ user.roles.join(', ') }}
+                {{ user.roles.join(", ") }}
               </ion-card-subtitle>
               <ion-card-title>
                 {{ user.firstName }} {{ user.lastName }}
-                <ion-icon @click="openUserProfile(user.userId)" :icon="createOutline" size="small" class="edit-icon"></ion-icon>
+                <ion-icon
+                  @click="openUserProfile(user.userId)"
+                  :icon="createOutline"
+                  size="small"
+                  class="edit-icon"
+                ></ion-icon>
               </ion-card-title>
             </ion-card-header>
             <ion-card-content>
@@ -58,7 +77,7 @@
                       <ion-icon :icon="appsOutline" size="small" style="margin-bottom: -3px;"></ion-icon>
                       Programs
                     </h3>
-                    <p>{{ user.programs.join(', ') }}</p>
+                    <p>{{ user.programs.join(", ") }}</p>
                   </ion-label>
                 </ion-item>
               </ion-list>
@@ -67,35 +86,36 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+
+    <!-- Edit User Modal -->
+    <editUserModal
+      :is_open="isPopooverOpen"
+      :user_id="user_id"
+      @close-popoover="softModalClosed"
+      @save="modalClosed"
+    />
+
+    <!-- Footer -->
+    <ion-footer class="sticky-footer">
+      <ion-row>
+        <ion-col size="12" style="max-width: 100%;">
+          <bottomNavBar
+            :totalItems="totalCount"
+            :currentPage="pagination.page"
+            :itemsPerPage="pagination.itemsPerPage"
+            @update:pagination="handlePaginationUpdate"
+          />
+        </ion-col>
+      </ion-row>
+    </ion-footer>
   </div>
-
-  <editUserModal 
-    :is_open="isPopooverOpen" 
-    :user_id="user_id" 
-    @close-popoover="softModalClosed"
-    @save="modalClosed" 
-  />
-
-  <!-- Footer -->
-  <ion-footer class="sticky-footer">
-    <ion-row>
-      <ion-col size="12" style="max-width: 100%;">
-        <bottomNavBar
-          v-if="showNavBar"
-          :totalItems="filteredUsers.length"
-          :currentPage="pagination.page"
-          :itemsPerPage="pagination.itemsPerPage"
-          @update:pagination="handlePaginationUpdate"
-        />
-      </ion-col>
-    </ion-row>
-  </ion-footer>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, ref, watch, onMounted } from 'vue';
+import { defineComponent, reactive, computed, ref, watch, onMounted } from "vue";
 import editUserModal from "../views/UserManagement/editUserModal.vue";
 import bottomNavBar from "@/apps/Immunization/components/bottomNavBar.vue";
+import { UserService } from "@/services/user_service";
 import {
   IonContent,
   IonPage,
@@ -114,8 +134,8 @@ import {
   IonSpinner,
   IonText,
   IonIcon,
-} from '@ionic/vue';
-import { personCircleOutline, createOutline, appsOutline } from 'ionicons/icons';
+} from "@ionic/vue";
+import { personCircleOutline, createOutline, appsOutline } from "ionicons/icons";
 
 interface User {
   userId: string;
@@ -128,7 +148,7 @@ interface User {
 }
 
 export default defineComponent({
-  name: 'UserCardList',
+  name: "UserCardList",
   components: {
     IonContent,
     IonPage,
@@ -158,85 +178,107 @@ export default defineComponent({
     filterValue: {
       type: String,
       required: true,
-    }
+    },
+    search: {
+      type: String,
+      required: true,
+    },
   },
   setup(props, { emit }) {
     const isPopooverOpen = ref(false);
     const pagination = reactive({
       page: 1,
-      itemsPerPage: 6
+      itemsPerPage: 10,
     });
     const isLoading = ref(true);
-    const error = ref('');
-    const user_id = ref("") as any;
+    const error = ref("");
+    const user_id = ref("");
+    const _items_ = ref<User[]>([]);
+    const totalCount = ref(0);
 
+    // Fetch users on mount
+    onMounted(() => {
+      getUsers();
+    });
+
+    watch(
+      () => props.search,
+      (newValue, oldValue) => {
+        getUsers();  
+      }
+    );
+
+    // Fetch users function
+    const getUsers = async () => {
+      try {
+        isLoading.value = true;
+        const userData = await UserService.getAllUsers(pagination.page, pagination.itemsPerPage, props.search);
+        totalCount.value = userData.count;
+
+        // Transform data
+        _items_.value = userData.results.map((item: any) => ({
+          userId: item.user_id,
+          username: item.username,
+          roles: userRolesStr(item.roles),
+          programs: userProgramsStr(item.programs),
+          gender: item.person.gender,
+          status: item.deactivated_on,
+          firstName: userFirstname(item.person.names),
+          lastName: userLastname(item.person.names),
+        }));
+      } catch (err) {
+        error.value = "Failed to fetch users. Please try again later.";
+        console.error("Error fetching users:", err);
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
+    // Filter users based on filterValue
     const filteredUsers = computed(() => {
-      if (!props.filterValue) return props.users;
-      return props.users.filter(user => 
-        user.username.toLowerCase().includes(props.filterValue.toLowerCase()) ||
-        user.firstName.toLowerCase().includes(props.filterValue.toLowerCase()) ||
-        user.lastName.toLowerCase().includes(props.filterValue.toLowerCase())
-        // user.lastName.toLowerCase().includes(props.filterValue.toLowerCase()) ||
-        // user.userId.toLowerCase().includes(props.filterValue.toLowerCase())
+      if (!props.filterValue) return _items_.value;
+      return _items_.value.filter(
+        (user) =>
+          user.username.toLowerCase().includes(props.filterValue.toLowerCase()) ||
+          user.firstName.toLowerCase().includes(props.filterValue.toLowerCase()) ||
+          user.lastName.toLowerCase().includes(props.filterValue.toLowerCase())
       );
     });
 
-    const paginatedUsers = computed(() => {
-      const start = (pagination.page - 1) * pagination.itemsPerPage;
-      const end = start + pagination.itemsPerPage;
-      return filteredUsers.value.slice(start, end);
-    });
-
-    const showNavBar = computed(() => filteredUsers.value.length > 0);
-
-    const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number, itemsPerPage: number }) => {
+    // Handle pagination update
+    const handlePaginationUpdate = ({ page, itemsPerPage }: { page: number; itemsPerPage: number }) => {
       pagination.page = page;
       pagination.itemsPerPage = itemsPerPage;
+      getUsers(); // Fetch new data when pagination changes
     };
 
-
-    function reload(data: any) {
-      emit("reload", data)
-    }
-
-    watch(() => props.users, (newUsers) => {
-      isLoading.value = false;
-      if (newUsers.length === 0) {
-        error.value = 'No users data received.';
-      } else {
-        error.value = '';
-      }
-    }, { immediate: true });
-
-    watch(() => props.filterValue, () => {
-      pagination.page = 1; // Reset to first page when filter value changes
-    });
-
-    onMounted(() => {
-      // 
-    });
-
+    // Open user profile
     const openUserProfile = (userId: string) => {
       isPopooverOpen.value = true;
       user_id.value = userId;
     };
 
+    // Close modal
     const modalClosed = () => {
       isPopooverOpen.value = false;
-      reload(isPopooverOpen.value)
+      emit("reload", isPopooverOpen.value);
     };
 
+    // Soft close modal
     const softModalClosed = () => {
       isPopooverOpen.value = false;
     };
 
+    // Helper functions
+    const userRolesStr = (items: any) => items.map((item: any) => item.role);
+    const userFirstname = (items: any) => (items.length > 0 ? items[items.length - 1].given_name : "");
+    const userLastname = (items: any) => (items.length > 0 ? items[items.length - 1].family_name : "");
+    const userProgramsStr = (items: any) => items.map((item: any) => item.name);
 
     return {
       filteredUsers,
       pagination,
       handlePaginationUpdate,
-      paginatedUsers,
-      showNavBar,
       isLoading,
       error,
       personCircleOutline,
@@ -247,6 +289,8 @@ export default defineComponent({
       isPopooverOpen,
       modalClosed,
       softModalClosed,
+      _items_,
+      totalCount,
     };
   },
 });
@@ -256,67 +300,40 @@ export default defineComponent({
 .container {
   display: flex;
   flex-direction: column;
-  min-height: 80vh;
+  height: 100vh; /* Full height of the parent */
+  padding: 16px; /* Add some padding */
 }
 
 .dynamic-grid {
-  flex: 1;
-  max-height: calc(69.8vh - 1px);
-  overflow: auto;
+  flex: 1; /* Take up remaining space */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 8px; /* Add some padding */
 }
 
 .user-cards-row {
   display: flex;
   flex-wrap: wrap;
+  gap: 16px; /* Add gap between cards */
   justify-content: flex-start;
 }
 
-ion-card {
-  min-width: 250px;
-  width: 37%;
-  margin-right: auto;
-  margin-top: 10px;
+.user-card {
+  width: 100%; /* Full width of the column */
+  height: 100%; /* Full height of the column */
+  margin: 0; /* Remove default margin */
 }
 
 ion-card-content {
   padding: 16px;
 }
 
-ion-card-title, ion-card-subtitle, ion-label h3, ion-label p {
+ion-card-title,
+ion-card-subtitle,
+ion-label h3,
+ion-label p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.user-cards-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-
-@media (min-width: 768px) {
-  ion-col {
-    flex: 0 0 calc(50% - 20px);
-    max-width: calc(50% - 20px);
-  }
-}
-
-@media (min-width: 1024px) {
-  ion-col {
-    flex: 0 0 calc(33.333% - 20px);
-    max-width: calc(33.333% - 20px);
-  }
-}
-
-@media (min-width: 1200px) {
-  ion-col {
-    flex: 0 0 calc(25% - 20px);
-    max-width: calc(25% - 20px);
-  }
-}
-
-ion-list {
-  padding: 0;
 }
 
 .edit-icon {
@@ -325,42 +342,40 @@ ion-list {
   cursor: pointer;
 }
 
-@media (max-width: 576px) {
-  ion-card-title {
-    font-size: 1.2rem;
-  }
-  
-  ion-card-subtitle {
-    font-size: 0.9rem;
-  }
-}
-
-/* Center grid contents on larger screens */
-@media (min-width: 1024px) {
-  .container {
-    padding: 0;
-  }
-
-  .user-cards-row {
-    justify-content: center;
-  }
-
-  ion-col {
-    flex: 0 0 calc(25% - 20px);
-    max-width: calc(25% - 20px);
-    margin-right: auto;
-    margin-left: 10px;
-  }
-}
-
 .sticky-footer {
-  margin-top: auto;
-  position: relative;
+  position: sticky;
+  bottom: 0;
+  background: white; /* Match the background color */
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Ensure footer is above other content */
 }
 
-ion-footer {
-  width: 100%;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  ion-col {
+    flex: 0 0 100%; /* Full width on small screens */
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  ion-col {
+    flex: 0 0 calc(50% - 16px); /* Two columns on medium screens */
+    max-width: calc(50% - 16px);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  ion-col {
+    flex: 0 0 calc(33.333% - 16px); /* Three columns on larger screens */
+    max-width: calc(33.333% - 16px);
+  }
+}
+
+@media (min-width: 1024px) {
+  ion-col {
+    flex: 0 0 calc(25% - 16px); /* Four columns on extra-large screens */
+    max-width: calc(25% - 16px);
+  }
 }
 </style>

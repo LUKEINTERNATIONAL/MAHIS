@@ -53,7 +53,7 @@ export function useProgram() {
 
         await setProgramInfo();
 
-        if (patient.value.patientID) {
+        if (patient?.value?.patientID) {
             await nav(program.url);
         }
     };
@@ -68,7 +68,7 @@ export function useProgram() {
         program = program ? JSON.parse(program) : null;
 
         state.value.activeProgramID = program ? program.programID : null;
-        state.value.programBtn = await UserService.userProgramData(patient.value.patientID);
+        state.value.programBtn = await UserService.userProgramData(patient?.value?.patientID);
 
         const programStore = useProgramStore();
         programStore.setProgramInformation({

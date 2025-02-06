@@ -435,7 +435,7 @@ export default {
         };
     },
     getPersonAttributeOptions(person: any) {
-        const patient = new PatientService(person);
+        const patient = new PatientService();
         const prop = (patient: any, prop: string) => (prop in patient ? patient[prop]() : "-");
         return {
             label: patient.getPatientInfoString(),

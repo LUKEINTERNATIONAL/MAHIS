@@ -3,15 +3,23 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px" @click="nav('/home')">
+                <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px">
                     <div style="display: block">
-                        <div style="font-size: 16px">
+                        <div style="font-size: 16px" @click="nav('/home')">
                             <b>MaHIS</b><small> ({{ programs?.program?.applicationName }})</small>
                         </div>
-                        <div :style="screenWidth <= 500 && userFacilityName.length > 25 ? 'display: block' : 'display: flex'">
+                        <div :style="screenWidth <= 500 && userFacilityName.length > 23 ? 'display: block' : 'display: flex'">
                             <div class="facility-name" style="font-size: 68%">{{ userFacilityName }}</div>
-                            <div style="font-size: 68%">
-                                <span v-if="screenWidth > 500 && userFacilityName.length > 25" style="margin-left: 5px">|</span> {{ sessionDate }}
+                            <div style="font-size: 68%" @click="openSessionDateModal">
+                                <span
+                                    v-if="(screenWidth > 500 && userFacilityName.length > 23) || userFacilityName.length <= 23"
+                                    style="margin-left: 5px"
+                                    >|</span
+                                >
+                                <span style="color: #74ff15" v-if="HisDate.toStandardHisDisplayFormat(apiDate) == displaySessionDate">{{
+                                    " " + displaySessionDate
+                                }}</span>
+                                <span style="color: #f00" v-else> {{ " " + displaySessionDate }}</span>
                             </div>
                         </div>
                     </div>
@@ -20,16 +28,32 @@
                     <ToolbarSearch />
                 </div>
                 <div class="notifaction_person" slot="end">
-                    <ion-buttons style="cursor: pointer; margin-right: 15px; width: 20px" slot="end" class="iconFont">
-                        <img v-if="apiStatus && !isSyncingDone" src="/public/gif/syncing.gif" height="30" alt="" />
-                        <img v-if="isSyncingDone" src="/public/images/synced.png" height="30" alt="" />
-                        <img v-if="!apiStatus && !isSyncingDone" src="/public/images/unsynced.png" height="30" alt="" />
-                        <!-- <ion-icon :icon="notificationsOutline"></ion-icon> -->
-                        <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
+                    <ion-buttons style="cursor: pointer; margin-right: 10px" slot="end" class="iconFont">
+                        <ve-progress
+                            v-if="syncingCountPercentage < 100"
+                            @click="openSyncModal"
+                            font-color="#ffffff"
+                            :color="!apiStatus && !isSyncingDone ? '#f00' : '#74ff15'"
+                            :thickness="2"
+                            font-size="7px"
+                            :size="28"
+                            :progress="syncingCountPercentage"
+                        >
+                            <template #default="{ counterTick }">
+                                <div v-if="counterTick.currentValue < 100" style="top: -6px; position: relative">{{ counterTick.currentValue }}%</div>
+                                <div v-if="counterTick.currentValue == 100" style="top: -6px; position: relative">Done</div>
+                            </template>
+                        </ve-progress>
+                        <ion-icon
+                            v-if="syncingCountPercentage == 100"
+                            @click="openSyncModal"
+                            :icon="cloudDone"
+                            style="--ionicon-stroke-width: 80px; font-size: 28px; font-weight: 700; color: #74ff15"
+                        ></ion-icon>
                     </ion-buttons>
                     <ion-buttons
                         v-if="apiStatus"
-                        style="cursor: pointer; margin-right: 15px; color: #74ff15"
+                        style="cursor: pointer; margin-right: 10px; color: #74ff15"
                         slot="end"
                         class="iconFont"
                         id="popover-button"
@@ -46,22 +70,28 @@
                         <ion-icon :icon="iconsContent.WifiOff"></ion-icon>
                     </ion-buttons>
 
-                    <ion-buttons style="cursor: pointer" slot="end" @click="openPopover($event)" class="iconFont" id="popover-button">
+                    <ion-buttons style="cursor: pointer" slot="end" @click="openPopover" class="iconFont" id="popover-button">
                         <ion-icon :icon="personCircleOutline"></ion-icon>
                     </ion-buttons>
                 </div>
-                <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
+                <ion-popover
+                    :is-open="popoverOpen"
+                    :show-backdrop="false"
+                    :dismiss-on-select="true"
+                    :event="popoverEvent"
+                    @didDismiss="popoverOpen = false"
+                >
                     <ion-content>
                         <ion-list>
-                            <ion-item :button="true" :detail="false" @click="showUserProfile()" style="cursor: pointer">
+                            <ion-item :button="true" :detail="false" @click="showUserProfile" style="cursor: pointer">
                                 <ion-icon :icon="personCircleOutline" slot="start"></ion-icon>
-                                <span class="rght-drpm">{{ user_name }}</span>
+                                <span class="rght-drpm">{{ userName }}</span>
                             </ion-item>
-                            <ion-item :button="true" @click="openSyncModal()" style="cursor: pointer">
+                            <ion-item :button="true" @click="openSyncModal" style="cursor: pointer">
                                 <ion-icon :icon="documentOutline" slot="start"></ion-icon>
                                 <span class="rght-drpm">Syncing status</span>
                             </ion-item>
-                            <ion-item :button="true" :detail="false" @click="logout()" style="cursor: pointer">
+                            <ion-item :button="true" :detail="false" @click="logout" style="cursor: pointer">
                                 <ion-icon :icon="logOutOutline" slot="start"></ion-icon>
                                 <span class="rght-drpm">Logout</span>
                             </ion-item>
@@ -75,25 +105,11 @@
             </div>
         </div>
     </ion-header>
-    <!-- <ion-header>
-        <ion-toolbar color="dark" class="compact-toolbar">
-            <ion-grid class="ion-no-padding content_width" style="margin-top: -3px">
-                <ion-row class="ion-align-items-center">
-                    <ion-col size="6">
-                        <TruncateText style="margin-left: 10px" class="date-value" :text="userFacilityName" :maxLines="1" />
-                    </ion-col>
-                    <ion-col size="6" class="ion-text-right">
-                        <TruncateText style="margin-right: 10px" class="date-value" :text="sessionDate" :maxLines="1" />
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </ion-toolbar>
-    </ion-header> -->
 
     <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed" />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
     IonContent,
     IonHeader,
@@ -108,123 +124,151 @@ import {
     IonSearchbar,
     IonPopover,
 } from "@ionic/vue";
-import { notificationsOutline, personCircleOutline, logOutOutline, documentOutline } from "ionicons/icons";
-import { defineComponent, ref } from "vue";
+import { notificationsOutline, personCircleOutline, logOutOutline, documentOutline, sync, cloudDone } from "ionicons/icons";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
 import userProfile from "@/views/UserManagement/userProfile.vue";
 import { useProgramStore } from "@/stores/ProgramStore";
 import { useStatusStore } from "@/stores/StatusStore";
-import { mapState } from "pinia";
+import { storeToRefs } from "pinia";
 import HisDate from "@/utils/Date";
 import TruncateText from "@/components/TruncateText.vue";
 import { useUserStore } from "@/stores/userStore";
 import { icons } from "@/utils/svg";
-import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import { useWindowSize } from "@/composables/screenSize";
 import { createModal } from "@/utils/Alerts";
 import SyncingStatusModal from "./Modal/SyncingStatusModal.vue";
-import img from "../utils/Img";
-export default defineComponent({
-    mixins: [ScreenSizeMixin],
-    name: "Toolbar",
-    components: {
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonSearchbar,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        ToolbarSearch,
-        IonIcon,
-        IonPopover,
-        userProfile,
-        IonRow,
-        IonCol,
-        IonLabel,
-        TruncateText,
+import SessionDate from "@/components/Modal/SessionDate.vue";
+import { useConfigStore } from "@/stores/ConfigStore";
+import { VeProgress } from "vue-ellipse-progress";
+import { getFieldValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+
+// Component setup
+const router = useRouter();
+const { facilityName, facilityUUID, district } = useFacility();
+const { screenWidth } = useWindowSize();
+
+// Store refs
+const programStore = useProgramStore();
+const statusStore = useStatusStore();
+const userStore = useUserStore();
+const configStore = useConfigStore();
+
+const { programs } = storeToRefs(programStore);
+const { apiStatus, isSyncingDone, syncingCountPercentage } = storeToRefs(statusStore);
+const { userFacilityName, user_ID } = storeToRefs(userStore);
+const { sessionDate } = storeToRefs(configStore);
+
+// Local refs
+const popoverOpen = ref(false);
+const popoverEvent = ref(null);
+const locationName = ref("");
+const programName = ref("");
+const apiDate = ref("");
+const showUserProfileModal = ref(false);
+const displaySessionDate = ref(HisDate.toStandardHisDisplayFormat(Service.getSessionDate()));
+const userName = ref("");
+const iconsContent = icons;
+
+// Methods
+const logout = () => {
+    localStorage.setItem("apiKey", "");
+    nav("/login");
+};
+
+const openSyncModal = () => {
+    createModal(SyncingStatusModal);
+};
+
+const openSessionDateModal = () => {
+    createModal(SessionDate, { class: "mediumModal" });
+};
+
+const updateData = () => {
+    programName.value = Service.getProgramName();
+};
+
+const nav = (url: string) => {
+    router.push(url);
+};
+
+const openPopover = (e: any) => {
+    popoverEvent.value = e;
+    popoverOpen.value = true;
+};
+
+const showUserProfile = () => {
+    showUserProfileModal.value = true;
+};
+
+const modalClosed = () => {
+    showUserProfileModal.value = false;
+};
+
+const getUserName = () => {
+    const store = useUserStore();
+    const user = store.getUser();
+    return user.username;
+};
+
+const assignUserName = () => {
+    userName.value = getUserName();
+};
+
+// Watchers
+watch(
+    () => programs.value,
+    () => {
+        updateData();
     },
-    data() {
-        const user_name = ref();
-        return {
-            popoverOpen: false,
-            iconsContent: icons,
-            event: null as any,
-            locationName: "",
-            programName: "",
-            showUserProfileModal: false,
-            sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
-            user_name,
-        };
+    { deep: true }
+);
+
+watch(
+    () => sessionDate.value,
+    () => {
+        displaySessionDate.value =
+            getFieldValue(sessionDate.value, "sessionDate", "value") || HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
+        updateData();
     },
-    watch: {
-        programs: {
-            handler() {
-                this.updateData();
-            },
-            deep: true,
-        },
-        user_ID: {
-            handler() {
-                this.assignUserName();
-            },
-            deep: true,
-        },
+    { deep: true }
+);
+
+watch(
+    () => user_ID.value,
+    () => {
+        assignUserName();
     },
-    computed: {
-        ...mapState(useProgramStore, ["programs"]),
-        ...mapState(useStatusStore, ["apiStatus", "isSyncingDone"]),
-        ...mapState(useUserStore, ["userFacilityName", "user_ID"]),
-    },
-    mounted() {
-        this.updateData();
-        this.assignUserName();
-    },
-    setup() {
-        const { facilityName, facilityUUID, district } = useFacility();
-        return { notificationsOutline, personCircleOutline, documentOutline, facilityName, logOutOutline };
-    },
-    methods: {
-        logout() {
-            localStorage.setItem("apiKey", "");
-            this.nav("/login");
-        },
-        openSyncModal() {
-            createModal(SyncingStatusModal);
-        },
-        updateData() {
-            this.programName = Service.getProgramName();
-        },
-        nav(url: any) {
-            this.$router.push(url);
-        },
-        openPopover(e: Event) {
-            this.event = e;
-            this.popoverOpen = true;
-        },
-        showUserProfile() {
-            this.showUserProfileModal = true;
-        },
-        modalClosed() {
-            this.showUserProfileModal = false;
-        },
-        getUserName() {
-            const store = useUserStore();
-            const user = store.getUser();
-            return user.username;
-        },
-        assignUserName() {
-            this.user_name = this.getUserName();
-        },
-    },
+    { deep: true }
+);
+
+// Mounted
+onMounted(async () => {
+    apiDate.value = await Service.getApiDate();
+    updateData();
+    assignUserName();
 });
 </script>
 
 <style scoped>
+.rotating-icon {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 #container {
     text-align: center;
-
     position: absolute;
     left: 0;
     right: 0;
@@ -244,18 +288,18 @@ export default defineComponent({
 #container p {
     font-size: 16px;
     line-height: 22px;
-
     color: #8c8c8c;
-
     margin: 0;
 }
 
 #container a {
     text-decoration: none;
 }
+
 .iconFont {
     font-size: 30px;
 }
+
 .badge {
     position: relative;
     background: #c82424;
@@ -270,13 +314,14 @@ export default defineComponent({
     left: -18px;
     color: #fff;
 }
+
 .notifaction_person {
     display: flex;
     margin-left: 20px;
     margin-right: 20px;
     align-items: center;
-    /* justify-content: center; */
 }
+
 .compact-toolbar {
     --min-height: 11px;
 }
@@ -285,6 +330,7 @@ export default defineComponent({
     color: #ffffff;
     font-size: 14px;
 }
+
 @media (max-width: 200px) {
     .facility-name {
         display: inline-block;

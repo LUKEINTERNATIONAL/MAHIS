@@ -6,6 +6,7 @@
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
+                        :date_prop="date_properties[0].dataValue.value"
                     />
 
                     <div>
@@ -49,10 +50,7 @@ import {
     pencilOutline,
     removeOutline
 } from "ionicons/icons"
-import ListPicker from "@/components/ListPicker.vue"
 import DatePicker from "@/components/DatePicker.vue"
-import TimePicker from "@/components/TimePicker.vue"
-import BasicInputField from "@/components/BasicInputField.vue"
 import { LocationService } from "@/services/location_service"
 import DynamicButton from "@/components/DynamicButton.vue"
 import { isEmpty } from "lodash"
@@ -62,6 +60,8 @@ const editIndex = ref(NaN)
 const FacilityData = ref([] as any)
 const store = useOutcomeStore()
 let temp_data_v: any[] = []
+const selected_discharged = ref();
+
 
 onMounted(async () => {
     findWardName('')
@@ -86,7 +86,40 @@ const date_properties = [
         error_message: 'please provide date'
     }
 ]
+interface Props {
+  selected_discharged_prop: any,
+  selected_discharged_data: any,
+}
+const props = defineProps<Props>()
 
+watch(() => props.selected_discharged_prop,
+    (newValue) => {
+      if (!newValue) return;
+      selected_discharged.value = newValue
+    },
+    {
+      immediate: true,
+      deep: true
+    }
+)
+
+watch(() => props.selected_discharged_data,
+    (newValue) => {
+      if (!newValue) return;
+
+      // Populate the date field with the existing data
+      date_properties[0].dataValue.value = newValue.date || '';
+
+      // Populate the reason field if it exists
+      if (newValue.reason) {
+        note_properties[0].dataValue.value = newValue.reason;
+      }
+    },
+    {
+      immediate: true,
+      deep: true
+    }
+);
 function dateUpdate_fn1(data: any) {
     const date_data = {
         day: data.value.day,
@@ -205,10 +238,11 @@ function saveDataToStores() {
   const dischargeData = {
     type: 'Discharged Home',
     date: date_properties[0].dataValue,
+    reason: note_properties[0].dataValue.value, // Include the reason field
   };
 
   store.addOutcomeData(dischargeData, editIndex.value);
-  dataSaved({"dataSaved": false});
+  dataSaved({ "dataSaved": false });
 }
 
 function cancelE() {
@@ -247,9 +281,11 @@ const dynamic_button_properties = [
         background: #fecdca;
         color: #b42318;
         text-transform: none;
-        padding: 6%;
+        padding: 5%;
+        padding-top: 2%;
+        padding-bottom: 2%;
         border-radius: 10px;
-        margin-top: 7px;
+        margin-top: 4px;
         display: flex;
         text-align: center;
     }

@@ -128,6 +128,12 @@
                         @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                         @item-search-text="list_picker_prperties[0].searchTextFN"
                     />
+
+                    <div>
+                        <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label" style="margin-top: -10px;">
+                            {{ list_picker_prperties[0].error_message }}
+                        </ion-label>
+                    </div>
                 </ion-col>
             </ion-row>
 
@@ -149,6 +155,12 @@
                         @item-list-filtered="list_picker_prperties[1].listFilteredFN"
                         @item-search-text="list_picker_prperties[1].searchTextFN"
                     />
+
+                    <div>
+                        <ion-label v-if="list_picker_prperties[1].show_error.value" class="error-label">
+                            {{ list_picker_prperties[1].error_message }}
+                        </ion-label>
+                    </div>
                 </ion-col>
             </ion-row>
         </ion-col>
@@ -435,6 +447,8 @@ const traditionalAuthorities = ref([]) as any;
 const userStore = useUserStore();
 const disableFacilitySelection = ref(true);
 const selectedPhoneNumber = ref()
+const selectedRoleNames: any[] = []
+const selectedProgramIds: any[] = []
 
 const props = defineProps<{
     toggle: true;
@@ -606,10 +620,12 @@ const password_input_properties = [
 function passwordInputUpDated_fn1(event: any) {
     const input = event.target.value;
     password_input_properties[0].dataValue.value = input;
+     ValidatePassword()
 }
 function passwordInputUpDated_fn2(event: any) {
     const input = event.target.value;
     password_input_properties[1].dataValue.value = input;
+     ValidatePassword()
 }
 
 async function validateUsernameIfExists(username: string) {
@@ -639,11 +655,13 @@ function inputUpDated_fn2(event: any) {
     const input = event.target.value;
     input_properties[1].dataValue.value = input;
     first_name.value = input;
+    areFieldsValid([input_properties[1]])
 }
 function inputUpDated_fn3(event: any) {
     const input = event.target.value;
     input_properties[2].dataValue.value = input;
     last_name.value = input;
+    areFieldsValid([input_properties[2]])
 }
 
 function validateLocation() {
@@ -944,6 +962,49 @@ async function savePrograms(programIds: any) {
     });
 }
 
+function isRoleSelected() {
+    const selectedRoles: any[] = []
+    selectedRoleNames.length = 0
+    user_roles.value.forEach((role: any) => {
+        if (role.selected == true) {
+            selectedRoles.push(role)
+        }
+    })
+    selectedRoles.forEach((role: any) => {
+        selectedRoleNames.push(role.other.role)
+    })
+    if (selectedRoleNames.length > 0) {
+        list_picker_prperties[0].show_error.value = false
+        return true
+    }
+    if (selectedRoleNames.length == 0) {
+        list_picker_prperties[0].show_error.value = true
+        return false
+    }
+}
+
+function isProgramSelected() {
+    const selectedPrograms: any[] = []
+    selectedProgramIds.length = 0
+    user_programs.value.forEach((program: any) => {
+        if (program.selected == true) {
+            selectedPrograms.push(program)
+        }
+    })
+    selectedPrograms.forEach((program: any) => {
+        selectedProgramIds.push(program.other.program_id)
+    })
+
+    if (selectedProgramIds.length > 0) {
+        list_picker_prperties[1].show_error.value = false
+        return true
+    }
+    if (selectedProgramIds.length == 0) {
+        list_picker_prperties[1].show_error.value = true
+        return false
+    }
+}
+
 async function fillUserRoles() {
     user_roles.value.forEach((item: any) => {
         user_data.value.roles.forEach((userR: any) => {
@@ -1063,6 +1124,7 @@ const list_picker_prperties = [
 function listUpdated1(data: any) {
     user_roles.value = data;
     checkIfSelectedIsHSA(user_roles.value);
+    isRoleSelected()
 }
 
 function listUpdated2(data: any) {
@@ -1079,6 +1141,7 @@ function listUpdated2(data: any) {
     if (j.length == 0) {
         show_user_programs.value = false;
     }
+    isProgramSelected()
 }
 
 function userFirstname(items: any) {
@@ -1115,8 +1178,11 @@ function selectedDistrictF(selectedDistrict: any, clearFL = false) {
     selectedDistrict = [selectedDistrict];
     selectedDistrictIds.length = 0;
 
-    const filteredDistricts = OLDDistrictsList.value.filter((district: any) => {
-        return selectedDistrict.some((selected: any) => selected.name.toLowerCase() === district.name.toLowerCase());
+    const filteredDistricts: any[] = [];
+    OLDDistrictsList.value.forEach((district: any) => {
+        if (selectedDistrict[0].name.toLowerCase() === district.name.toLowerCase()) {
+            filteredDistricts.push(district);
+        }
     });
 
     filteredDistricts.forEach((district: any) => {

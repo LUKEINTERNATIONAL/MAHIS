@@ -7,7 +7,7 @@
         </div>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <div class="positionCenter">
+            <div v-if="!globalPropertyStore.dde_enabled" class="positionCenter">
                 <ion-card class="registration_ion_card">
                     <div class="card_content">
                         <div class="card_hearder">Set DDE</div>
@@ -53,6 +53,22 @@
                         </ion-row>
                         <ion-row>
                             <ion-col>
+                                <ion-row class="ddeStatusHeader">Unallocated</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.unallocated }}</ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row class="ddeStatusHeader">Allocated</ion-row>
+                            </ion-col>
+                            <ion-col>
+                                <ion-row class="ddeStatusContent">{{ DDE.allocated }}</ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
                                 <ion-row class="ddeStatusHeader">Average consumption per day</ion-row>
                             </ion-col>
                             <ion-col>
@@ -69,6 +85,9 @@
                         </ion-row>
                     </div>
                 </ion-card>
+            </div>
+            <div v-else>
+                <div class="card_hearder">DDE is disabled</div>
             </div>
         </ion-content>
     </ion-page>
@@ -147,12 +166,16 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.isLoading = true;
-        await useGlobalPropertyStore().loadDDEStatus();
-        this.apiDate = await Service.getApiDate();
-        await this.ddeData();
-        this.date = getFieldValue(this.sessionDate, "sessionDate", "value");
-        this.isLoading = false;
+        try {
+            this.isLoading = false;
+            await useGlobalPropertyStore().loadDDEStatus();
+            this.apiDate = await Service.getApiDate();
+            await this.ddeData();
+            this.date = getFieldValue(this.sessionDate, "sessionDate", "value");
+            this.isLoading = false;
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     methods: {
@@ -174,6 +197,8 @@ export default defineComponent({
                         unassigned: stats["unassigned"],
                         assigned: stats["assigned"],
                         daysLeft: Math.floor(unassigned / avg),
+                        allocated: stats["allocated"],
+                        unallocated: stats["unallocated"],
                         lastUpdated: dayjs(stats["date_last_updated"]).format("DD/MMM/YYYY HH:mm:ss"),
                         title: stats["location_name"] + " DDE NPID Status",
                     };

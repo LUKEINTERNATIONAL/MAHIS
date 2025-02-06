@@ -98,7 +98,6 @@ import { getUserFacility } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
 import { useWorkerStore } from "@/stores/workerStore";
 import { storeToRefs } from "pinia";
-import { getOfflineRecords } from "@/services/offline_service";
 
 interface Program {
     program_id: string;
@@ -132,7 +131,7 @@ const setPrograms = async () => {
 
 const sortPrograms = (data: any) => {
     if (data && data.length > 0) {
-        data.sort((a: any, b: any) => a?.name.localeCompare(b?.name));
+        data.sort((a: any, b: any) => a?.name?.localeCompare(b?.name));
         return data;
     }
 };
@@ -195,8 +194,10 @@ const facilityB = async () => {
 watch(
     route,
     async (newRoute) => {
-        if (newRoute.name == "Login") localStorage.setItem("apiKey", "");
-        await setPrograms();
+        if (newRoute.name == "Login") {
+            localStorage.setItem("apiKey", "");
+            await setPrograms();
+        }
     },
     { deep: true }
 );

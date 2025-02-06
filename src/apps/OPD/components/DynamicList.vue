@@ -1,90 +1,66 @@
 <template>
-    <ion-row style="padding-top: 1rem;">
-        <ion-col>
-            <div style="display: flex; padding: 0.3em;">
-                <ion-label
-                    style="width: 260px; color: #00190E; font-weight: 550; line-height: 14px; line-height: 21px;">Drug
-                    Name</ion-label>
-            </div>
-        </ion-col>
-        <ion-col>
-            <div style="display: flex; padding: 0.3em;">
-                <ion-label
-                    style="width: 260px; color: #00190E; font-weight: 550; line-height: 14px; line-height: 21px;">Frequency</ion-label>
-            </div>
-        </ion-col>
-        <ion-col>
-            <div style="display: flex; padding: 0.3em;">
-                <ion-label
-                    style="width: 260px; color: #00190E; font-weight: 550; line-height: 14px; line-height: 21px;">Quantity
-                    Dispensed</ion-label>
-            </div>
-        </ion-col>
-    </ion-row>
+  <ion-row class="header-row" style="padding-top: 1rem;">
+    <ion-col class="header-col">
+      <ion-label class="header-label bold">Drug name and frequency </ion-label>
+    </ion-col>
+<!--    <ion-col class="header-col">-->
+<!--      <ion-label class="header-label">Frequency</ion-label>-->
+<!--    </ion-col>-->
+    <ion-col class="header-col">
+      <ion-label class="header-label bold">Quantity</ion-label>
+    </ion-col>
+  </ion-row>
 
-    <ion-item v-for="(item, index) in dataArray" class="ionLbltp" :key="index" @mousemove="highlightItem(index)"
-        @mouseout="undoHighlightItem(index)">
-        <ion-row>
-            <ion-col class="col-st1">
-                <ion-checkbox v-if="withCheckboxs" :id="index" @ionChange="$emit('clickt', $event)" justify="start"
-                    labelPlacement="end" :checked=true>
-                    <div style="display: flex; padding: 0.3em;">
-                        <ion-label :id="asignLblID(index)"
-                            style="width: 260px; color: #00190E; font-weight: 400; line-height: 14px; line-height: 21px;">{{
-        item.drugName }}</ion-label>
-                        <div class="padding"></div>
-                        <ion-label
-                            style="color: #636363; font-weight: 400; line-height: 14px; line-height: 21px;">
-                            {{ item.frequency }} /{{ " for" }} {{ item.duration }} days
-                        </ion-label>
-                    </div>
-                </ion-checkbox>
-                <div v-if="!withCheckboxs">
-                    <div @click="$emit('click', $event)" style="display: flex; padding: 0.3em; ">
-                        <ion-label :id="asignLblID(index)"
-                            style="width: 260px; color: #00190E; font-weight: 400; line-height: 14px; line-height: 21px;">{{
-        item.drugName }}</ion-label>
-                        <ion-label class="padding"></ion-label>
-                        <ion-label
-                            style="color: #636363; font-weight: 400;line-height: 14px; line-height: 21px;">
-                            {{ item.frequency }} /{{ " for" }} {{ item.duration }} days
-                        </ion-label>
-                    </div>
-                </div>
-            </ion-col>
-            <ion-col>
-                <div v-if="!showInputs && (item.other.quantity > 0)">
-                    <ion-label color="primary">{{ item.other.quantity }} dispensed</ion-label>
-                </div>
-                <div v-else-if="!showInputs && (item.other.quantity < 1)">
-                    <ion-label style="color: #b42318;">Not Dispensed. ({{ item.reason }})</ion-label>
-                </div>
-
-                <ion-item v-if="dispensationStore.getCheckedBool(index) && showInputs" class="input_item">
-                    <ion-label style="padding-right: 3px;">Quantity:</ion-label>
-                    <ion-input :id="index" placeholder="0" @ionInput="$emit('updateQuantity', $event)"></ion-input>
-                </ion-item>
-                <span v-if="dispensationStore.getValidation(index)">
-                    <ion-label style="color: red;">Please fill in this section</ion-label>
+  <ion-item v-for="(item, index) in dataArray" class="ionLbltp" :key="index" @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)">
+    <ion-row>
+      <ion-col class="col-st1">
+        <ion-checkbox v-if="withCheckboxs" :id="index" @ionChange="$emit('clickt', $event)" justify="start" labelPlacement="end" :checked="true">
+          <div style="display: flex; flex-direction: column; width: 100%;">
+            <div class="flex-item">
+              <ion-label :id="asignLblID(index)" style="color: #00190E; font-weight: 400;">{{ item.drugName }}</ion-label>
+              <ion-label style="color: #636363; font-weight: 400;">{{ item.frequency }} / for {{ item.duration }} days</ion-label>
+            </div>
+          </div>
+        </ion-checkbox>
+        <div v-if="!withCheckboxs">
+          <div @click="$emit('click', $event)" style="display: flex; flex-direction: column; width: 100%;">
+            <ion-label :id="asignLblID(index)" style="color: #00190E; font-weight: 400;">{{ item.drugName }}</ion-label>
+            <ion-label style="color: #636363; font-weight: 400;">{{ item.frequency }} / for {{ item.duration }} days</ion-label>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div v-if="!showInputs && (item.other.quantity > 0)">
+          <ion-label color="primary">{{ item.other.quantity }} dispensed</ion-label>
+        </div>
+        <div v-else-if="!showInputs && (item.other.quantity < 1)">
+          <ion-label style="color: #b42318;">Not Dispensed. ({{ item.reason }})</ion-label>
+        </div>
+        <ion-item v-if="dispensationStore.getCheckedBool(index) && showInputs" class="input_item">
+          <ion-label style="padding-right: 3px;">Quantity:</ion-label>
+          <ion-input :id="index" placeholder="0" @ionInput="$emit('updateQuantity', $event)"></ion-input>
+        </ion-item>
+        <span v-if="dispensationStore.getValidation(index)">
+                <ion-label style="color: red;">Please fill in this section</ion-label>
+            </span>
+        <ion-item v-if="!(dispensationStore.getCheckedBool(index)) && showInputs" class="input_item" style="width: 200px;">
+                <span style="display: flex; align-items: center;" id="chooseType" @click="openPopover">
+                    <ion-input :id="index" :value="dispensationStore.getReason(index)" @ionFocus="$emit('getInputID', $event)" placeholder="Reason why?"></ion-input>
+                    <ion-icon v-if="!showPopoverOpenForFrequency" :icon="chevronDownOutline" />
+                    <ion-icon v-if="showPopoverOpenForFrequency" :icon="chevronUpOutline" />
                 </span>
-                <ion-item v-if="!(dispensationStore.getCheckedBool(index)) && showInputs" class="input_item"
-                    style="width: 200px;">
-                    <span style="display: flex; align-items: center;" id="chooseType"
-                        @click="openPopover">
-                        <ion-input :id="index" :value="dispensationStore.getReason(index)" @ionFocus="$emit('getInputID', $event)" placeholder="Reason why?"></ion-input>
-                        <ion-icon v-if="!showPopoverOpenForFrequency" :icon="chevronDownOutline" />
-                        <ion-icon v-if="showPopoverOpenForFrequency" :icon="chevronUpOutline" />
-                    </span>
-                    <SelectionPopover 
-                    :content="noDispensationReason"
-                    :title="title"
-                    :popoverOpen="popoverOpen" @closePopoover="popoverOpen = $event" :event="event"
-                    @setSelection="$emit('getSelectedReason', $event)" />
-                </ion-item>
-
-            </ion-col>
-        </ion-row>
-    </ion-item>
+          <SelectionPopover
+              :content="noDispensationReason"
+              :title="title"
+              :popoverOpen="popoverOpen"
+              @closePopoover="popoverOpen = $event"
+              :event="event"
+              @setSelection="$emit('getSelectedReason', $event)"
+          />
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-item>
 
 </template>
 
@@ -266,5 +242,19 @@ ion-item.ionLbltp {
     align-items: center;
     width: 165rem;
 
+}
+.flex-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+ion-label {
+  margin-top: 2px;
+}
+
+input_item {
+  display: flex;
+  align-items: center;
 }
 </style>

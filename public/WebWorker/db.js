@@ -2,7 +2,7 @@ const DatabaseManager = {
     db: null,
     async openDatabase() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open("MaHis", 5);
+            const request = indexedDB.open("MaHis", 6);
 
             request.onerror = (event) => {
                 reject("Database error: " + event.target.error);
@@ -20,7 +20,7 @@ const DatabaseManager = {
                     relationship: { keyPath: "relationship_type_id", autoIncrement: true },
                     districts: { keyPath: "district_id", autoIncrement: true },
                     TAs: { keyPath: "traditional_authority_id", autoIncrement: true },
-                    villages: { keyPath: "village_id", autoIncrement: true },
+                    villages: { keyPath: "id", autoIncrement: true },
                     countries: { keyPath: "district_id", autoIncrement: true },
                     programs: { keyPath: "program_id", autoIncrement: true },
                     patientRecords: { keyPath: "id", autoIncrement: true },
@@ -148,8 +148,8 @@ const DatabaseManager = {
 
             const request = objectStore.add(data);
             request.onerror = (event) => {
-                console.log("🚀 ~ addData ~ storeName:", storeName, data);
                 const error = event.target.error;
+                console.log("🚀 ~ addData ~ storeName:", storeName, data, `Error adding data: ${error?.name} - ${error?.message}`);
                 reject(new Error(`Error adding data: ${error?.name} - ${error?.message}`));
             };
 
@@ -261,33 +261,78 @@ const DatabaseManager = {
 
                 // If a where condition is provided, use a cursor
                 if (whereCondition) {
-                    // Determine if an index exists for the filtering field
-                    const indexName = Object.keys(whereCondition)[0];
-
-                    if (objectStore.indexNames.contains(indexName)) {
-                        const index = objectStore.index(indexName);
-                        const keyRange = IDBKeyRange.only(whereCondition[indexName]);
-
-                        const results = [];
-                        request = index.openCursor(keyRange);
-
-                        request.onsuccess = (event) => {
-                            const cursor = event.target.result;
-                            if (cursor) {
-                                results.push(cursor.value);
-                                cursor.continue();
+                    // Separate equality and inequality conditions
+                    const conditions = Object.entries(whereCondition).reduce(
+                        (acc, [key, value]) => {
+                            if (typeof value === "object" && value !== null) {
+                                if ("$ne" in value) {
+                                    acc.inequality[key] = value.$ne;
+                                } else {
+                                    acc.equality[key] = value;
+                                }
                             } else {
-                                resolve(results.length > 0 ? results : null);
+                                acc.equality[key] = value;
                             }
-                        };
+                            return acc;
+                        },
+                        { equality: {}, inequality: {} }
+                    );
+
+                    // Check if we have any equality conditions to use with index
+                    const equalityKeys = Object.keys(conditions.equality);
+                    if (equalityKeys.length > 0) {
+                        const indexName = equalityKeys[0];
+
+                        if (objectStore.indexNames.contains(indexName)) {
+                            const index = objectStore.index(indexName);
+                            const keyRange = IDBKeyRange.only(conditions.equality[indexName]);
+
+                            const results = [];
+                            request = index.openCursor(keyRange);
+
+                            request.onsuccess = (event) => {
+                                const cursor = event.target.result;
+                                if (cursor) {
+                                    const item = cursor.value;
+                                    // Check both equality and inequality conditions
+                                    const matchesAllConditions =
+                                        // Check remaining equality conditions
+                                        Object.entries(conditions.equality).every(([key, value]) => item[key] === value) &&
+                                        // Check inequality conditions
+                                        Object.entries(conditions.inequality).every(([key, value]) => item[key] !== value);
+
+                                    if (matchesAllConditions) {
+                                        results.push(item);
+                                    }
+                                    cursor.continue();
+                                } else {
+                                    resolve(results.length > 0 ? results : null);
+                                }
+                            };
+                        } else {
+                            // Fallback to manual filtering if no index exists
+                            request = objectStore.getAll();
+                            request.onsuccess = (event) => {
+                                const allResults = event.target.result;
+                                const filteredResults = allResults.filter((item) => {
+                                    return (
+                                        // Check equality conditions
+                                        Object.entries(conditions.equality).every(([key, value]) => item[key] === value) &&
+                                        // Check inequality conditions
+                                        Object.entries(conditions.inequality).every(([key, value]) => item[key] !== value)
+                                    );
+                                });
+                                resolve(filteredResults.length > 0 ? filteredResults : null);
+                            };
+                        }
                     } else {
-                        // Fallback to manual filtering if no index exists
+                        // If we only have inequality conditions
                         request = objectStore.getAll();
                         request.onsuccess = (event) => {
                             const allResults = event.target.result;
-                            const filteredResults = allResults.filter((item) => {
-                                return Object.entries(whereCondition).every(([key, value]) => item[key] === value);
-                            });
+                            const filteredResults = allResults.filter((item) =>
+                                Object.entries(conditions.inequality).every(([key, value]) => item[key] !== value)
+                            );
                             resolve(filteredResults.length > 0 ? filteredResults : null);
                         };
                     }

@@ -85,7 +85,7 @@ export class Service {
     }
 
     static async getThirdpartyApps() {
-        return JSON.parse((await ApiClient.getConfig()).thirdpartyapps);
+        return "";
     }
 
     private static async jsonResponseHandler(request: Promise<any>) {
@@ -193,7 +193,6 @@ export class Service {
         return "";
     }
 
-
     static getSuspendedProgram() {
         return localStorage.getItem("suspendedApp") || "";
     }
@@ -238,5 +237,4 @@ export class Service {
     static patchJson(url: string, data: Record<string, any>) {
         return this.jsonResponseHandler(ApiClient.patch(url, data));
     }
-
 }
