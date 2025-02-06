@@ -6,6 +6,7 @@ import { useUserStore } from "@/stores/userStore";
 import * as CryptoJS from "crypto-js";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { useStatusStore } from "@/stores/StatusStore";
+import { Service } from "@/services/service";
 export class InvalidAPIVersionError extends Error {
     message: string;
     constructor(version: string) {
@@ -147,7 +148,9 @@ export class AuthService {
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
     }
     checkUserPrograms(selectedProgram: any) {
-        if (this.programs) return { programs: this.programs, status: this.programs.some((program: any) => program.name === selectedProgram) };
+        const programs = Service.getAuthorizedPrograms() || this.programs;
+        console.log("🚀 ~ AuthService ~ checkUserPrograms ~ programs:", programs);
+        if (programs) return { programs: programs, status: programs.some((program: any) => program.name === selectedProgram) };
         else return;
     }
     clearSession() {

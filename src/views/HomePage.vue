@@ -7,6 +7,7 @@
         </div>
         <Toolbar />
         <ion-content :fullscreen="true" v-if="![33, 14, 32, 12, 34, 35].includes(programs.activeProgramID)">
+            {{ programs }}
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -18,6 +19,7 @@
                 </div>
             </div>
         </ion-content>
+
         <ImmunizationDashboard v-if="programs.activeProgramID == 33" />
         <OPDDashboard v-if="programs.activeProgramID == 14" />
         <NCDDashboard v-if="programs.activeProgramID == 32" />

@@ -1,6 +1,7 @@
 import { useWorkerStore } from "@/stores/workerStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useStatusStore } from "@/stores/StatusStore";
+import { Service } from "@/services/service";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
@@ -157,9 +158,7 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
     return filteredData.sort((a: any, b: any) => new Date(b.obs_datetime).getTime() - new Date(a.obs_datetime).getTime())[0]?.[value_type];
 }
 export async function saveOfflinePatientData(patientData: any) {
-    let program: any = localStorage.getItem("programStore");
-    program = JSON.parse(program);
-    patientData.program_id = program ? program.activeProgramID : null;
+    patientData.program_id = Service.getProgramID() || null;
 
     patientData.location_id = localStorage.getItem("locationID");
     patientData.provider_id = localStorage.getItem("userID");

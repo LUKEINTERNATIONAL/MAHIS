@@ -188,7 +188,12 @@ export class Service {
     static getProgramName() {
         let app: any = localStorage.getItem("programStore");
         app = JSON.parse(app);
-        return app?.programs;
+        return app?.programs?.name;
+    }
+    static getAuthorizedPrograms() {
+        let app: any = localStorage.getItem("programStore");
+        app = JSON.parse(app);
+        return app?.programs?.authorizedPrograms;
     }
 
     static getSuspendedProgram() {

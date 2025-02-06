@@ -7,8 +7,13 @@ export const useProgramStore = defineStore("programStore", {
         programs: initialProgram,
     }),
     actions: {
-        setProgramInformation(data: any) {
-            this.programs = data;
+        setProgramInformation(program: any, authorizedPrograms: any) {
+            this.programs = {
+                activeProgramID: program.program_id,
+                name: program.name,
+                shortName: program.short_name,
+                authorizedPrograms: authorizedPrograms,
+            };
         },
     },
     persist: true,
