@@ -6,7 +6,7 @@
                 <ion-title slot="start" style="cursor: pointer; padding-left: 0; line-height: 20px; padding: 0px">
                     <div style="display: block">
                         <div style="font-size: 16px" @click="nav('/home')">
-                            <b>MaHIS</b><small> ({{ programs?.name }})</small>
+                            <b>MaHIS</b><small> ({{ activeProgram?.name }})</small>
                         </div>
                         <div :style="screenWidth <= 500 && userFacilityName.length > 23 ? 'display: block' : 'display: flex'">
                             <div class="facility-name" style="font-size: 68%">{{ userFacilityName }}</div>
@@ -157,7 +157,7 @@ const statusStore = useStatusStore();
 const userStore = useUserStore();
 const configStore = useConfigStore();
 
-const { programs } = storeToRefs(programStore);
+const { activeProgram } = storeToRefs(programStore);
 const { apiStatus, isSyncingDone, syncingCountPercentage } = storeToRefs(statusStore);
 const { userFacilityName, user_ID } = storeToRefs(userStore);
 const { sessionDate } = storeToRefs(configStore);

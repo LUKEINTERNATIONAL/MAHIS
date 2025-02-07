@@ -2,7 +2,7 @@
     <ion-page>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <DemographicBar class="displayNoneDesktop" v-if="programs.activeProgramID !== 33 && programs.activeProgramID != ''" />
+            <DemographicBar class="displayNoneDesktop" v-if="activeProgram.program_id !== 33 && activeProgram.program_id != ''" />
             <CheckInConfirmationModal
                 :closeModalFunc="closeCheckInModal"
                 :onYes="handleCheckInYes"
@@ -39,8 +39,8 @@
                 :title="enrollModalTitle"
             />
 
-            <PatientProfile :updateData="patient" v-if="programs.activeProgramID == 33" />
-            <div class="content_manager" v-if="programs.activeProgramID !== 33 && programs.activeProgramID != ''">
+            <PatientProfile :updateData="patient" v-if="activeProgram.program_id == 33" />
+            <div class="content_manager" v-if="activeProgram.program_id !== 33 && activeProgram.program_id != ''">
                 <ion-row class="content_width">
                     <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
@@ -86,7 +86,7 @@
                                     <ion-col size="4">MRN:</ion-col>
                                     <ion-col class="demoContent">{{ patient.ID }}</ion-col>
                                 </ion-row>
-                                <ion-row v-if="programs.activeProgramID === 32">
+                                <ion-row v-if="activeProgram.program_id === 32">
                                     <ion-col size="4">NCDNumber:</ion-col>
                                     <ion-col class="demoContent">{{ patient.NcdID }}</ion-col>
                                 </ion-row>
@@ -148,7 +148,7 @@
 
                                 <div class="start-visit">
                                     <div class="send-button-container">
-                                        <button class="send-text" @click="startVisit()">Start visit</button>
+                                        <button class="send-text" @click="handleProgramClick(activeProgram)">Start visit</button>
                                         <button class="send-arrow" @click="openProgramPopover($event)"></button>
                                     </div>
                                     <!-- <Programs
@@ -270,7 +270,7 @@
                         :button="true"
                         :detail="false"
                         style="cursor: pointer"
-                        v-for="(btn, index) in programs.authorizedPrograms"
+                        v-for="(btn, index) in authorizedPrograms"
                         :key="index"
                         @click="handleProgramClick(btn)"
                     >
@@ -460,7 +460,6 @@ export default defineComponent({
             OPDProgramActionName: "+ Start New OPD consultation" as any,
             visits: [] as any,
             vitals: [] as any,
-            activeProgram: [] as any,
             NCDUserAction: [] as any,
             alerts: [] as any,
             colors: {
@@ -485,7 +484,7 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
-        ...mapState(useProgramStore, ["programs"]),
+        ...mapState(useProgramStore, ["activeProgram", "authorizedPrograms"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useANCEnrollmentStore, ["ConfirmPregnancy"]),
         pregnancyConfirmed() {
@@ -495,14 +494,13 @@ export default defineComponent({
             return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy planned");
         },
         activateVisitButtonVisible() {
-            return !this.checkedIn && this.programs.activeProgramID == 14;
+            return !this.checkedIn && this.activeProgram.program_id == 14;
         },
         deactivateVisitButtonVisible() {
-            return this.checkedIn && this.programs.activeProgramID == 14;
+            return this.checkedIn && this.activeProgram.program_id == 14;
         },
     },
     async mounted() {
-        console.log(this.programs);
         await SetProgramService.userProgramData(this.patient.patientID);
         this.checkAge();
         const patient = new PatientService();
@@ -519,12 +517,6 @@ export default defineComponent({
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
                 this.updateCheckInStatus();
-            },
-            deep: true,
-        },
-        $route: {
-            async handler() {
-                await SetProgramService.userProgramData(this.patient.patientID, this.activeProgram);
             },
             deep: true,
         },
@@ -551,7 +543,6 @@ export default defineComponent({
     },
 
     methods: {
-        startVisit() {},
         checkAge() {
             if (this.patient?.personInformation?.birthdate) {
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate) >= 14 ? true : false;
@@ -694,8 +685,7 @@ export default defineComponent({
             this.programPopover = !this.programPopover;
         },
 
-        async handleProgramClick(activeProgram: any) {
-            this.activeProgram = activeProgram;
+        async handleProgramClick(selectedProgram: any) {
             await this.refreshPrograms();
 
             const lower = (title: string) => title?.toLowerCase().replace(/\s+/g, "");
@@ -703,11 +693,11 @@ export default defineComponent({
             const age = HisDate.getAgeInYears(this.patient.personInformation?.birthdate);
 
             if (
-                activeProgram.program_id == ProgramId.ANC_PROGRAM ||
-                activeProgram.program_id == ProgramId.PNC_PROGRAM ||
-                activeProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM
+                selectedProgram.program_id == ProgramId.ANC_PROGRAM ||
+                selectedProgram.program_id == ProgramId.PNC_PROGRAM ||
+                selectedProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM
             ) {
-                const found: any = this.enrolledPrograms.find((p: any) => p.id == activeProgram.program_id);
+                const found: any = this.enrolledPrograms.find((p: any) => p.id == selectedProgram.program_id);
 
                 if (!found) {
                     if (gender === "Male") {
@@ -719,29 +709,26 @@ export default defineComponent({
                         toastWarning("The client's age is below the required minimum age limit");
                         return;
                     } else {
-                        if (activeProgram.program_id == ProgramId.ANC_PROGRAM) {
+                        if (selectedProgram.program_id == ProgramId.ANC_PROGRAM) {
                             this.isEnrollmentModalOpen = true;
-                            this.programToEnroll = activeProgram.program_id;
+                            this.programToEnroll = selectedProgram.program_id;
                             return;
-                        } else if (activeProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM) {
+                        } else if (selectedProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM) {
                             this.isLabourEnrollmentModalOpen = true;
                             this.enrollModalTitle = `Are you sure you want to enroll ${this.patient?.personInformation?.given_name.toUpperCase()} in this program?`;
-                            this.programToEnroll = activeProgram.program_id;
+                            this.programToEnroll = selectedProgram.program_id;
                             return;
                         } else {
                             this.isPNCEnrollmentModalOpen = true;
                             this.enrollModalTitle = `Are you sure you want to enroll ${this.patient?.personInformation?.given_name.toUpperCase()} in this program?`;
-                            this.programToEnroll = activeProgram.program_id;
+                            this.programToEnroll = selectedProgram.program_id;
                             return;
                         }
                     }
                 }
             }
-
-            return this.$router.push(activeProgram.url);
-        },
-        getProgramById(programId: any) {
-            return this.programs.find((program: any) => program.program_id === programId) || null;
+            await SetProgramService.userProgramData(this.patient.patientID, selectedProgram);
+            return this.$router.push(selectedProgram.url);
         },
         closeEnrollmentModal() {
             this.isEnrollmentModalOpen = false;

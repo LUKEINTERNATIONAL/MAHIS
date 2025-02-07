@@ -16,10 +16,10 @@
                     ProgramId.ANC_PROGRAM,
                     ProgramId.PNC_PROGRAM,
                     ProgramId.LABOUR_AND_DELIVERY_PROGRAM,
-                ].includes(programs.activeProgramID)
+                ].includes(activeProgram.program_id)
             "
         >
-            {{ programs }}
+            {{ activeProgram }}
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -32,13 +32,13 @@
             </div>
         </ion-content>
 
-        <ImmunizationDashboard v-if="programs.activeProgramID == ProgramId.IMMUNIZATION_PROGRAM" />
-        <OPDDashboard v-if="programs.activeProgramID == ProgramId.OPD_PROGRAM" />
-        <NCDDashboard v-if="programs.activeProgramID == ProgramId.NCD_PROGRAM" />
-        <ANCDashboard v-if="programs.activeProgramID == ProgramId.ANC_PROGRAM" />
-        <LabourDashboard v-if="programs.activeProgramID == ProgramId.PNC_PROGRAM" />
-        <PNCDashboard v-if="programs.activeProgramID == ProgramId.LABOUR_AND_DELIVERY_PROGRAM" />
-        <Programs :programBtn="programs.programBtn" />
+        <ImmunizationDashboard v-if="activeProgram.program_id == ProgramId.IMMUNIZATION_PROGRAM" />
+        <OPDDashboard v-if="activeProgram.program_id == ProgramId.OPD_PROGRAM" />
+        <NCDDashboard v-if="activeProgram.program_id == ProgramId.NCD_PROGRAM" />
+        <ANCDashboard v-if="activeProgram.program_id == ProgramId.ANC_PROGRAM" />
+        <LabourDashboard v-if="activeProgram.program_id == ProgramId.PNC_PROGRAM" />
+        <PNCDashboard v-if="activeProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM" />
+        <Programs :programBtn="activeProgram.programBtn" />
     </ion-page>
 </template>
 
@@ -71,7 +71,7 @@ useUserActivities();
 useUserRole();
 const programStore = useProgramStore();
 
-const { programs } = storeToRefs(programStore);
+const { activeProgram } = storeToRefs(programStore);
 watch(
     () => route.name,
     async (newRoute) => {

@@ -27,7 +27,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="noData" v-else-if="activeProgramID !== 32">OBSTETRIC DATA IS EMPTY</div>
+                    <div class="noData" v-else-if="activeProgram.program_id !== 32">OBSTETRIC DATA IS EMPTY</div>
                     <!-- end of anc info -->
                     <!-- <div class="noData" v-else>ANC-Profile</div> -->
                 </div>
@@ -55,6 +55,7 @@ import { ProgramService } from "@/services/program_service";
 import HisDate from "@/utils/Date";
 import { ConceptService } from "@/services/concept_service";
 import { BMIService } from "@/services/bmi_service";
+import { useProgramStore } from "@/stores/ProgramStore";
 
 export default defineComponent({
     name: "Menu",
@@ -106,7 +107,8 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDemographicsStore, ["patient", "patient"]),
+        ...mapState(useDemographicsStore, ["patient"]),
+        ...mapState(useProgramStore, ["activeProgram"]),
         inputFields() {
             return this.investigations[0].selectedData;
         },

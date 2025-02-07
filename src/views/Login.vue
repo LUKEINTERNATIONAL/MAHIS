@@ -166,7 +166,8 @@ const doLogin = async () => {
 };
 
 const setProgram = async (authorizedPrograms: any) => {
-    useProgramStore().setProgramInformation(program.value, authorizedPrograms);
+    useProgramStore().setActiveProgram(program.value);
+    useProgramStore().setAuthorizedPrograms(authorizedPrograms);
 };
 
 const loginIcon = () => {

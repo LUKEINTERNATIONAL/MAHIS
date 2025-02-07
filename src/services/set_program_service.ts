@@ -62,7 +62,7 @@ export class SetProgramService extends Service {
 
     static async userProgramData(patientID: string = "", programs: any = "") {
         const programStore = useProgramStore();
-        const authorizedPrograms = programStore.programs.authorizedPrograms;
+        const authorizedPrograms = programStore.authorizedPrograms;
 
         if (!patientID) {
             return;
@@ -79,14 +79,12 @@ export class SetProgramService extends Service {
                 program.actionName = program.name;
             }
         }
-        const programData = programStore.programs;
+        const programData = programStore.activeProgram;
         if (!programs) {
-            programs = {
-                activeProgramID: programData.activeProgramID,
-                name: programData.name,
-            };
+            programs = programData;
         }
-        programStore.setProgramInformation(programs, authorizedPrograms);
+        programStore.setActiveProgram(programs);
+        programStore.setAuthorizedPrograms(authorizedPrograms);
     }
 
     static async setNCDValue(): Promise<ProgramData> {

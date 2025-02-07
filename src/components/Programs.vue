@@ -2,7 +2,7 @@
     <ion-fab slot="fixed" :vertical="verticalPosition" horizontal="end">
         <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
         <ion-fab-list :side="side" class="fab-list">
-            <ion-fab-button @click="changeProgram(btn, programBtn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.name">
+            <ion-fab-button @click="changeProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.name">
                 <ion-icon :icon="add"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>
@@ -71,8 +71,8 @@ export default defineComponent({
         this.programBtn = Service.getAuthorizedPrograms();
     },
     methods: {
-        changeProgram(program: any, authorizedPrograms: any) {
-            useProgramStore().setProgramInformation(program, authorizedPrograms);
+        changeProgram(program: any) {
+            useProgramStore().setActiveProgram(program);
         },
     },
 });

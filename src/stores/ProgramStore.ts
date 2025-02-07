@@ -4,16 +4,15 @@ import _ from "lodash";
 const initialProgram = {} as any;
 export const useProgramStore = defineStore("programStore", {
     state: () => ({
-        programs: initialProgram,
+        activeProgram: initialProgram,
+        authorizedPrograms: initialProgram,
     }),
     actions: {
-        setProgramInformation(program: any, authorizedPrograms: any) {
-            this.programs = {
-                activeProgramID: program.program_id,
-                name: program.name,
-                shortName: program.short_name,
-                authorizedPrograms: authorizedPrograms,
-            };
+        setActiveProgram(data: any) {
+            this.activeProgram = data;
+        },
+        setAuthorizedPrograms(data: any) {
+            this.authorizedPrograms = data;
         },
     },
     persist: true,

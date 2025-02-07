@@ -25,7 +25,7 @@
         <div style="font-weight: 700">Lab Orders</div>
         <div class="scrollable-container">
             <list
-                :listData="listOrders.map((item:any) => ({...item, disabledEnterResults: hasPatientsWaitingForLab && programs.activeProgramID === 14 && (userRoles === 'Clinician' || userRoles === 'Superuser'), }))"
+                :listData="listOrders.map((item:any) => ({...item, disabledEnterResults: hasPatientsWaitingForLab && activeProgram.program_id === 14 && (userRoles === 'Clinician' || userRoles === 'Superuser'), }))"
                 @clicked:delete="voidLabOrder"
                 @clicked:results="openResultsForm"
             >
@@ -38,7 +38,7 @@
             <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
     </div>
-    <div v-if="programs.activeProgramID == 14 && hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
+    <div v-if="activeProgram.program_id == 14 && hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
         <div v-if="hasPatientsWaitingForLab">
             <DynamicButton
                 class="no-margin-left"
@@ -117,7 +117,7 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabResultsStore, ["labResults"]),
-        ...mapState(useProgramStore, ["programs"]),
+        ...mapState(useProgramStore, ["activeProgram"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(usePatientList, [
             "patientsWaitingForVitals",
