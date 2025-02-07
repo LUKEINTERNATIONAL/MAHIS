@@ -1,6 +1,6 @@
 <template>
-    <div style="display: flex; gap: 20px; width: 100%; padding-left: 20px; padding-right: 20px">
-        <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
+    <div class="cards-container">
+        <ion-card class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
                     <div class="text-2xl font-bold">{{ appointments.length }}</div>
@@ -8,7 +8,7 @@
                 </div>
             </ion-card-content>
         </ion-card>
-        <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
+        <ion-card class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
                     <div class="text-2xl font-bold">{{ 0 }}</div>
@@ -16,7 +16,7 @@
                 </div>
             </ion-card-content>
         </ion-card>
-        <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
+        <ion-card class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
                     <div class="text-2xl font-bold">{{ dashboardData?.total_complications }}</div>
@@ -24,7 +24,7 @@
                 </div>
             </ion-card-content>
         </ion-card>
-        <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
+        <ion-card class="top-card">
             <ion-card-content>
                 <div class="top-card-text">
                     <div class="text-2xl font-bold">{{ dashboardData?.total_client_registered }}</div>
@@ -33,7 +33,7 @@
             </ion-card-content>
         </ion-card>
     </div>
-    <div style="display: flex; gap: 20px; padding-left: 20px; padding-right: 20px">
+    <div class="charts" style="gap: 20px; margin-top: 20px; padding-left: 20px; padding-right: 20px">
         <ion-card style="margin-bottom: 20px; background-color: #fff; width: 100%" class="top-card">
             <ion-card-content>
                 <div class="font-medium">Quarterly Case Distribution</div>
@@ -72,6 +72,7 @@ import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
 import { defineComponent } from "vue";
 import { Service } from "@/services/service";
 import HisDate from "@/utils/Date";
+import calculateAge from "@/utils/Date";
 export default defineComponent({
     name: "NCDDashboard",
     mixins: [DashboardMixin],
@@ -185,7 +186,6 @@ export default defineComponent({
     },
     methods: {
         async initializeChartData() {
-            console.log("🚀 ~ initializeChartData ~ this.dashboardData:", this.dashboardData);
             this.dashboardData = await this.getDashboardData();
             this.lineChartOptions.xaxis.categories = this.dashboardData.gender_data.categories;
             this.lineChartSeries[0].data = this.dashboardData.gender_data.femaleSeries;
@@ -216,6 +216,14 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.charts {
+    display: flex;
+}
+@media (max-width: 835px) {
+    .charts {
+        display: block;
+    }
+}
 .grid {
     display: grid;
 }
@@ -229,17 +237,29 @@ export default defineComponent({
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 }
-.top-card {
-    width: 25%;
-    padding-bottom: 20px;
-    padding-top: 10px;
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    padding: 0 20px;
 }
+
+.top-card {
+    flex: 1 1 200px; /* This makes cards flexible but with a minimum width */
+    min-width: 200px; /* Ensures cards don't get too narrow */
+    margin-bottom: 0px;
+    background-color: #fff;
+    padding-bottom: 30px;
+    padding-top: 20px;
+}
+
 .top-card-text {
     width: 100%;
     text-align: center;
 }
 .text-2xl {
-    font-size: 25px;
+    font-size: 35px;
 }
 .font-medium {
     font-size: 18px;

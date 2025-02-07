@@ -782,7 +782,11 @@ ion-footer {
 .sx__month-agenda-day {
     color: #000;
 }
-
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .dp__theme_light {
     --dp-background-color: #fff;
     --dp-text-color: #212121;
