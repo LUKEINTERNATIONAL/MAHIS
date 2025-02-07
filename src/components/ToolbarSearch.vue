@@ -469,7 +469,6 @@ export default defineComponent({
                     this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32 && this.apiStatus) {
-                const actions: any = await UserService.setProgramUserActions();
                 router.push("/patientProfile");
             }
             this.route = url;

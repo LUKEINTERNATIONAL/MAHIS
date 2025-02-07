@@ -131,10 +131,4 @@ export class SetProgramService extends Service {
             modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
         }
     }
-    static async setProgramUserActions() {
-        const actions = await this.setNCDValue();
-        const generalStore = useGeneralStore();
-        generalStore.setNCDUserActions(actions);
-        return actions;
-    }
 }

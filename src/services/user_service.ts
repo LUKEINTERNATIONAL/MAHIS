@@ -127,39 +127,6 @@ export class UserService extends Service {
             return []; // Return an empty array in case of error
         }
     }
-
-    static async setNCDValue() {
-        const patient = new PatientService();
-        if (patient.getID()) {
-            const visits = await PatientService.getPatientVisits(patient.getID(), false);
-            const activities = await this.getUserActivities("NCD_activities");
-            let url = "";
-            let NCDProgramActionName = "";
-            if (patient.getNcdNumber() != "Unknown") {
-                if (activities.length == 0) {
-                    this.setNCDNumber();
-                    url = "/patientProfile";
-                    NCDProgramActionName = "+ Edit NCD Enrollment";
-                } else {
-                    if (localStorage.getItem("saveProgressStatus") == "true") {
-                        NCDProgramActionName = "+ Continue NCD consultation";
-                    } else if (visits.includes(HisDate.currentDate())) {
-                        NCDProgramActionName = "+ Edit NCD consultation";
-                    } else NCDProgramActionName = "+ Start new NCD consultation";
-                    url = "/consultationPlan";
-                }
-            } else {
-                this.setNCDNumber();
-                url = "/NCDEnrollment";
-                NCDProgramActionName = "+ Enroll in NCD Program";
-            }
-
-            return {
-                actionName: NCDProgramActionName,
-                url: url,
-            };
-        }
-    }
     static async setNCDNumber() {
         const j = await ProgramService.getNextSuggestedNCDNumber();
         if (j) {
@@ -167,11 +134,5 @@ export class UserService extends Service {
             modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
             modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
         }
-    }
-    static async setProgramUserActions() {
-        const actions = await this.setNCDValue();
-        const generalStore = useGeneralStore();
-        generalStore.setNCDUserActions(actions);
-        return actions;
     }
 }

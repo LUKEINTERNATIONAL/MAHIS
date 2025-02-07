@@ -100,7 +100,6 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
-import { UserService } from "@/services/user_service";
 import BasicFooter from "@/components/BasicFooter.vue";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import FormWizard from "@/views/Mixin/FormWizard.vue";
@@ -374,7 +373,6 @@ export default defineComponent({
                 await this.saveSubstanceAbuse();
                 await this.saveComplications();
                 await resetNCDPatientData();
-                await UserService.setProgramUserActions();
                 this.$router.push("patientProfile");
             }
         },
@@ -482,7 +480,7 @@ export default defineComponent({
             }
 
             await createNCDDrugOrder();
-            await useNonPharmaTherapyStore().saveNonPharmaTherapyPatientData()
+            await useNonPharmaTherapyStore().saveNonPharmaTherapyPatientData();
         },
         openModal() {
             createModal(SaveProgressModal);
