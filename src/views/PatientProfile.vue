@@ -381,7 +381,7 @@ import PNCEnrollmentModal from "@/apps/PNC/components/Modals/PNCEnrollmentModal.
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
 import PatientProfileMixin from "@/views/Mixin/PatientProfile.vue";
-import { ProgramService } from "@/services/program_service";
+import { ProgramId, ProgramService } from "@/services/program_service";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import { PatientOpdList } from "@/services/patient_opd_list";
 import { getUserLocation } from "@/services/userService";
@@ -460,6 +460,7 @@ export default defineComponent({
             OPDProgramActionName: "+ Start New OPD consultation" as any,
             visits: [] as any,
             vitals: [] as any,
+            activeProgram: [] as any,
             NCDUserAction: [] as any,
             alerts: [] as any,
             colors: {
@@ -501,6 +502,7 @@ export default defineComponent({
         },
     },
     async mounted() {
+        console.log(this.programs);
         await SetProgramService.userProgramData(this.patient.patientID);
         this.checkAge();
         const patient = new PatientService();
@@ -517,6 +519,12 @@ export default defineComponent({
                 await this.updateData();
                 await this.checkPatientIFCheckedIn();
                 this.updateCheckInStatus();
+            },
+            deep: true,
+        },
+        $route: {
+            async handler() {
+                await SetProgramService.userProgramData(this.patient.patientID, this.activeProgram);
             },
             deep: true,
         },
@@ -686,18 +694,20 @@ export default defineComponent({
             this.programPopover = !this.programPopover;
         },
 
-        async handleProgramClick(btn: any) {
+        async handleProgramClick(activeProgram: any) {
+            this.activeProgram = activeProgram;
             await this.refreshPrograms();
+
             const lower = (title: string) => title?.toLowerCase().replace(/\s+/g, "");
             const gender = this.covertGender(this.patient.personInformation?.gender);
             const age = HisDate.getAgeInYears(this.patient.personInformation?.birthdate);
 
             if (
-                lower(btn.actionName) == lower("+ Enroll in ANC Program") ||
-                lower(btn.actionName) == lower("+ Enroll in PNC Program") ||
-                lower(btn.actionName) == lower("+ Enroll in Labour and delivery program")
+                activeProgram.program_id == ProgramId.ANC_PROGRAM ||
+                activeProgram.program_id == ProgramId.PNC_PROGRAM ||
+                activeProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM
             ) {
-                const found: any = this.enrolledPrograms.find((p: any) => p.id == btn.program_id);
+                const found: any = this.enrolledPrograms.find((p: any) => p.id == activeProgram.program_id);
 
                 if (!found) {
                     if (gender === "Male") {
@@ -709,28 +719,30 @@ export default defineComponent({
                         toastWarning("The client's age is below the required minimum age limit");
                         return;
                     } else {
-                        if (lower(btn.actionName) == lower("+ Enroll in ANC Program")) {
+                        if (activeProgram.program_id == ProgramId.ANC_PROGRAM) {
                             this.isEnrollmentModalOpen = true;
-                            this.programToEnroll = btn.program_id;
+                            this.programToEnroll = activeProgram.program_id;
                             return;
-                        } else if (lower(btn.actionName) == lower("+ Enroll in Labour and delivery program")) {
+                        } else if (activeProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM) {
                             this.isLabourEnrollmentModalOpen = true;
                             this.enrollModalTitle = `Are you sure you want to enroll ${this.patient?.personInformation?.given_name.toUpperCase()} in this program?`;
-                            this.programToEnroll = btn.program_id;
+                            this.programToEnroll = activeProgram.program_id;
                             return;
                         } else {
                             this.isPNCEnrollmentModalOpen = true;
                             this.enrollModalTitle = `Are you sure you want to enroll ${this.patient?.personInformation?.given_name.toUpperCase()} in this program?`;
-                            this.programToEnroll = btn.program_id;
+                            this.programToEnroll = activeProgram.program_id;
                             return;
                         }
                     }
                 }
             }
-            await SetProgramService.userProgramData(this.patient.patientID, btn);
-            return this.$router.push(btn.url);
-        },
 
+            return this.$router.push(activeProgram.url);
+        },
+        getProgramById(programId: any) {
+            return this.programs.find((program: any) => program.program_id === programId) || null;
+        },
         closeEnrollmentModal() {
             this.isEnrollmentModalOpen = false;
         },
