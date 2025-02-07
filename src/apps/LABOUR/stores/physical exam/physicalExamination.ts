@@ -349,6 +349,30 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 },
             },
             {
+                isFinishBtn: false,
+                sectionHeader: "",
+                classDash: "dashed_bottom_border _padding",
+
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: "Number of fetuses",
+                                    unit: "",
+                                    icon: icons.editPen,
+                                    value: "",
+                                    name: "Fetuses",
+                                    required: true,
+                                    eventType: "input",
+                                    inputWidth: "85%",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: "dashed_bottom_border _padding",
@@ -380,6 +404,13 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                             colSize: "7",
                             justify: "space-between",
                         },
+                        {
+                            name: "Undefined",
+                            value: "undefined",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
                     ],
                 },
             },
@@ -396,6 +427,13 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                     data: [
                         {
                             name: "Cephalic",
+                            value: "cephalic",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "Breech",
                             value: "Breech",
                             labelPlacement: "start",
                             colSize: "7",
@@ -409,8 +447,8 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                             justify: "space-between",
                         },
                         {
-                            name: "Breech",
-                            value: "Breech",
+                            name: "Footling",
+                            value: "footling",
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
@@ -423,22 +461,15 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                             justify: "space-between",
                         },
                         {
-                            name: "Compound",
-                            value: "Compound",
+                            name: "Fetal back/arms/shoulders",
+                            value: "Fetal",
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
                         },
                         {
-                            name: "Undefined",
-                            value: "Undefined",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Other",
-                            value: "Other",
+                            name: "No palpable fetal part",
+                            value: "no palpable fetal part",
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
@@ -510,14 +541,14 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                             justify: "space-between",
                         },
                         {
-                            name: "Left occiput posterior (lop)",
+                            name: "Left occiput posterior (LOP)",
                             value: "lop",
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
                         },
                         {
-                            name: "Right occiput posterior (rop)",
+                            name: "Right occiput posterior (ROP)",
                             value: "rop",
                             labelPlacement: "start",
                             colSize: "7",
@@ -618,6 +649,26 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
+                        },
+                    ],
+                },
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: "",
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: "Fetal Heart Rate (beats per minute)",
+                                    value: "",
+                                    name: "Fetal Heart Rate",
+                                    required: true,
+                                    eventType: "input",
+                                    placeholder: "",
+                                },
+                            ],
                         },
                     ],
                 },
