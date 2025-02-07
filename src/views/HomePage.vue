@@ -6,7 +6,19 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="![33, 14, 32, 12, 34, 35].includes(programs.activeProgramID)">
+        <ion-content
+            :fullscreen="true"
+            v-if="
+                ![
+                    ProgramId.IMMUNIZATION_PROGRAM,
+                    ProgramId.OPD_PROGRAM,
+                    ProgramId.NCD_PROGRAM,
+                    ProgramId.ANC_PROGRAM,
+                    ProgramId.PNC_PROGRAM,
+                    ProgramId.LABOUR_AND_DELIVERY_PROGRAM,
+                ].includes(programs.activeProgramID)
+            "
+        >
             {{ programs }}
             <div id="container">
                 <strong>Search your patient profile</strong>
@@ -20,12 +32,12 @@
             </div>
         </ion-content>
 
-        <ImmunizationDashboard v-if="programs.activeProgramID == 33" />
-        <OPDDashboard v-if="programs.activeProgramID == 14" />
-        <NCDDashboard v-if="programs.activeProgramID == 32" />
-        <ANCDashboard v-if="programs.activeProgramID == 12" />
-        <LabourDashboard v-if="programs.activeProgramID == 34" />
-        <PNCDashboard v-if="programs.activeProgramID == 35" />
+        <ImmunizationDashboard v-if="programs.activeProgramID == ProgramId.IMMUNIZATION_PROGRAM" />
+        <OPDDashboard v-if="programs.activeProgramID == ProgramId.OPD_PROGRAM" />
+        <NCDDashboard v-if="programs.activeProgramID == ProgramId.NCD_PROGRAM" />
+        <ANCDashboard v-if="programs.activeProgramID == ProgramId.ANC_PROGRAM" />
+        <LabourDashboard v-if="programs.activeProgramID == ProgramId.PNC_PROGRAM" />
+        <PNCDashboard v-if="programs.activeProgramID == ProgramId.LABOUR_AND_DELIVERY_PROGRAM" />
         <Programs :programBtn="programs.programBtn" />
     </ion-page>
 </template>
@@ -51,6 +63,7 @@ import { useProgramStore } from "@/stores/ProgramStore";
 import { storeToRefs } from "pinia";
 
 import { useWorkerStore } from "@/stores/workerStore";
+import { ProgramId } from "@/services/program_service";
 const isLoading = ref(true);
 const route = useRoute();
 const workerStore = useWorkerStore();
