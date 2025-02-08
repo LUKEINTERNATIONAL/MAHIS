@@ -1,6 +1,6 @@
 <template>
     <div class="table-responsive">
-        <DataTable ref="dataTable" :options="options" :data="tableData" class="display nowrap" width="100%">
+        <DataTable ref="dataTableRef" :options="options" :data="tableData" class="display nowrap" width="100%">
             <thead>
                 <tr>
                     <th v-for="head in header" :key="head">{{ head }}</th>
@@ -10,170 +10,165 @@
     </div>
 </template>
 
-<script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, IonPopover } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+<script setup lang="ts">
+import { ref, onMounted, nextTick, watch } from "vue";
+import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { PatientDiagnosisService } from "@/services/patient_diagnosis_service";
-import DashBox from "@/components/DashBox.vue";
-import SelectionPopover from "@/components/SelectionPopover.vue";
-import BasicInputField from "@/components/BasicInputField.vue";
-import { useDiagnosisStore } from "@/stores/DiagnosisStore";
-import { mapState } from "pinia";
-import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
-import List from "@/components/List.vue";
-import BasicForm from "@/components/BasicForm.vue";
-import DynamicButton from "@/components/DynamicButton.vue";
-import { Service } from "@/services/service";
-import previousDiagnosis from "@/apps/NCD/components/ConsultationPlan/previousVisits/previousDiagnosis.vue";
-import { Diagnosis } from "../../services/diagnosis";
-import HisDate from "@/utils/Date";
 import { ObservationService } from "@/services/observation_service";
+import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { createModal, toastDanger, toastSuccess, popoverConfirmation } from "@/utils/Alerts";
+import { getOfflineRecords, saveOfflinePatientData } from "@/services/offline_service";
+import HisDate from "@/utils/Date";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 import DataTablesResponsive from "datatables.net-responsive";
+import AddDiagnosisModal from "./Diagnosis/AddDiagnosisModal.vue";
+
+// Import DataTables extensions
 import "datatables.net-buttons";
 import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-buttons-dt";
 import "datatables.net-responsive";
 import "datatables.net-select";
-import "datatables.net-buttons";
-import { createModal, toastDanger, toastSuccess } from "@/utils/Alerts";
-import AddDiagnosisModal from "./Diagnosis/AddDiagnosisModal.vue";
-import { EncounterService } from "@/services/encounter_service";
 
-export default defineComponent({
-    name: "Menu",
-    components: {
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        IonInput,
-        IonPopover,
-        DashBox,
-        SelectionPopover,
-        BasicInputField,
-        List,
-        BasicForm,
-        DynamicButton,
-        previousDiagnosis,
-        DataTable,
-    },
-    data() {
-        return {
-            iconsContent: icons,
-            no_item: false,
-            search_item: false,
-            display_item: false,
-            addItemButton: true,
-            selectedText: "" as any,
-            conditionStatus: "" as any,
-            data: [] as any,
-            diagnosisData: [] as any,
-            popoverOpen: false,
-            event: "" as any,
-            selectedCondition: "" as any,
-            tableData: [] as any,
-            options: {
-                responsive: true,
-                select: false,
-                layout: {
-                    topStart: "buttons",
-                    topEnd: "search",
-                    bottomStart: "info",
-                    bottomEnd: "paging",
-                },
-                ordering: false,
-                buttons: [
-                    {
-                        text: " <b>+ Add diagnosis </b>",
-                        className: "add-test text-white",
-                        action: async () => {
-                            await this.openEnterResultModal();
-                        },
-                    },
-                ],
-            } as any,
+// Component imports
+import DashBox from "@/components/DashBox.vue";
+import SelectionPopover from "@/components/SelectionPopover.vue";
+import BasicInputField from "@/components/BasicInputField.vue";
+import List from "@/components/List.vue";
+import BasicForm from "@/components/BasicForm.vue";
+import DynamicButton from "@/components/DynamicButton.vue";
+import previousDiagnosis from "@/apps/NCD/components/ConsultationPlan/previousVisits/previousDiagnosis.vue";
 
-            header: ["Diagnosis", "Date", "Action"],
-        };
+// Store setup
+const diagnosisStore = useDiagnosisStore();
+const demographicsStore = useDemographicsStore();
+const { diagnosis } = storeToRefs(diagnosisStore);
+const { patient } = storeToRefs(demographicsStore);
+
+// Refs
+const dataTableRef = ref(null);
+const tableData = ref([]);
+const iconsContent = ref(icons);
+
+// Constants
+const header = ["Diagnosis", "Date", "Action"];
+
+// DataTable options
+const options = {
+    responsive: true,
+    select: false,
+    layout: {
+        topStart: "buttons",
+        topEnd: "search",
+        bottomStart: "info",
+        bottomEnd: "paging",
     },
-    setup() {
-        return { checkmark, pulseOutline };
-    },
-    computed: {
-        ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useDemographicsStore, ["patient"]),
-    },
-    watch: {
-        $route: {
-            async handler() {
-                await this.setListData();
+    ordering: false,
+    buttons: [
+        {
+            text: " <b>+ Add diagnosis </b>",
+            className: "add-test text-white",
+            action: async () => {
+                await openEnterResultModal();
             },
-            deep: true,
         },
-    },
-    async mounted() {
-        await this.setListData();
-        this.$nextTick(() => {
-            const table = (this.$refs.dataTable as any).dt;
-            table.columns.adjust().draw();
-            table.on("click", ".delete-btn", (e: Event) => {
-                const data: any = (e.target as HTMLElement).getAttribute("data-id");
-                this.voidDiagnosis(JSON.parse(data), e);
-            });
-        });
-    },
-    methods: {
-        async voidDiagnosis(data: any, event: any) {
-            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${data.name} ?`, event);
-            if (deleteConfirmed) {
-                await ObservationService.voidObs(data.id);
-                await this.setListData();
-            }
-        },
-        async openEnterResultModal() {
-            await createModal(AddDiagnosisModal, { class: "lab-results-modal" }, true);
-            await this.setListData();
-        },
-        async setListData() {
-            const obsP = await ObservationService.getAll(this.patient.patientID, "Primary diagnosis");
-            const obsS = await ObservationService.getAll(this.patient.patientID, "Secondary diagnosis");
-            const observations = [...(obsP || []), ...(obsS || [])];
-            this.tableData = await this.generateListItems(observations);
-            DataTable.use(DataTablesCore);
-        },
-        async generateListItems(data: any) {
-            if (data.length > 0) {
-                const promiseResults = await Promise.all(
-                    data.map(async (item: any) => {
-                        const name = await ObservationService.getConceptName(item.value_coded);
-                        const obs_date = item.obs_datetime;
-                        return [
-                            name,
-                            HisDate.toStandardHisFormat(obs_date),
-                            `<button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify({
-                                id: item.obs_id,
-                                name: name,
-                            })}'>${this.iconsContent.delete2}</button>`,
-                        ];
-                    })
-                );
+    ],
+};
 
-                return promiseResults;
-            } else {
-                return [];
-            }
-        },
+// Methods
+const openEnterResultModal = async () => {
+    await createModal(AddDiagnosisModal, { class: "lab-results-modal" }, true);
+    await setListData();
+};
+
+const generateListItems = async (data: any[]) => {
+    if (data.length > 0) {
+        return await Promise.all(
+            data.map(async (item: any) => {
+                const name = await ObservationService.getConceptName(item.value_coded);
+                const obs_date = item.obs_datetime;
+                return [
+                    name,
+                    HisDate.toStandardHisFormat(obs_date),
+                    `<button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify({
+                        id: item.obs_id,
+                        value_coded: item.value_coded,
+                        name: name,
+                        obs_date: obs_date,
+                    })}'>${iconsContent.value.delete2}</button>`,
+                ];
+            })
+        );
+    }
+    return [];
+};
+
+const voidDiagnosis = async (data: any, event: any) => {
+    const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${data.name} ?`, event);
+    if (deleteConfirmed) {
+        const patientData = JSON.parse(JSON.stringify(patient.value));
+        const diagnosisData = patientData.diagnosis;
+
+        if (data?.id) {
+            diagnosisData.saved = diagnosisData.saved.filter(
+                (diagnosis: any) => !(diagnosis.value_coded === data.value_coded && diagnosis.obs_datetime === data.obs_date)
+            );
+            diagnosisData.voided = [...diagnosisData.voided, data];
+        } else {
+            diagnosisData.unsaved = diagnosisData.unsaved.filter(
+                (diagnosis: any) => !(diagnosis.value_coded === data.value_coded && diagnosis.obs_datetime === data.obs_date)
+            );
+        }
+
+        await saveOfflinePatientData(patientData);
+    }
+};
+
+const setListData = async () => {
+    const patientData = JSON.parse(JSON.stringify(patient.value));
+    const observations = [...(patientData?.diagnosis?.unsaved || []), ...(patientData?.diagnosis?.saved || [])];
+    console.log("🚀 ~ setListData ~ observations:", observations);
+    tableData.value = await generateListItems(observations);
+    DataTable.use(DataTablesCore);
+};
+
+// Watchers
+const route = useRoute();
+watch(
+    () => route,
+    async () => {
+        await setListData();
     },
+    { deep: true }
+);
+watch(
+    () => patient,
+    async () => {
+        await setListData();
+    },
+    { deep: true }
+);
+
+// Lifecycle hooks
+onMounted(async () => {
+    await setListData();
+    nextTick(() => {
+        const table = (dataTableRef.value as any).dt;
+        table.columns.adjust().draw();
+        table.on("click", ".delete-btn", (e: Event) => {
+            const data: any = (e.target as HTMLElement).getAttribute("data-id");
+            voidDiagnosis(JSON.parse(data), e);
+        });
+    });
 });
 </script>
+
 <style>
 @import "datatables.net-dt";
 @import "datatables.net-buttons-dt";
@@ -197,10 +192,10 @@ div.dt-buttons > .dt-button:hover:not(.disabled) {
     text-align: left !important;
 }
 </style>
+
 <style scoped>
 #container {
     text-align: center;
-
     position: absolute;
     left: 0;
     right: 0;
@@ -216,9 +211,7 @@ div.dt-buttons > .dt-button:hover:not(.disabled) {
 #container p {
     font-size: 16px;
     line-height: 22px;
-
     color: #8c8c8c;
-
     margin: 0;
 }
 
