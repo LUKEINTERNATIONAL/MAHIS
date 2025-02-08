@@ -33,7 +33,8 @@
                             />
                         </div>
                     </div>
-                    <VitalSigns v-if="currentTabIndex === 0" />
+
+                    <VitalSigns v-if="currentTabIndex === 0 || !currentTabIndex" />
                     <RiskAssessment v-if="currentTabIndex === 1" />
                     <Investigations v-if="currentTabIndex === 2" />
                     <DiagnosisComponent v-if="currentTabIndex === 3" />
@@ -163,7 +164,7 @@ const { selectedNCDMedicationList } = storeToRefs(ncdMedicationsStore);
 const { FootScreening, visualScreening, cvScreening } = storeToRefs(complicationsStore);
 
 //services
-import { saveOfflinePatientData } from "@/services/offline_service";
+import { getOfflineFirstObsValue, getOfflineRecords, saveOfflinePatientData } from "@/services/offline_service";
 
 // Tabs configuration
 const tabs = ref([
@@ -208,7 +209,6 @@ const getData = async () => {
 
 const refreshWizard = () => {
     showWizard.value = false;
-    currentTabIndex.value = 0;
     setTimeout(() => {
         showWizard.value = true;
     }, 0);
@@ -234,8 +234,12 @@ const markWizard = async () => {
     });
     tabs.value[2].icon = filteredArray.length > 0 ? "check" : "";
 
-    const firstDate = await ObservationService.getFirstObsDatetime(patient.value.patientID, "Primary diagnosis");
-    tabs.value[3].icon = firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate() ? "check" : "";
+    const firstDate: any = await getOfflineFirstObsValue(
+        [...(patient?.value.diagnosis?.saved || []), ...(patient?.value.diagnosis?.unsaved || [])],
+        "obs_datetime",
+        3065
+    );
+    tabs.value[3].icon = firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.toStandardHisFormat(HisDate.sessionDate()) ? "check" : "";
 
     if (await setComplications()) {
         tabs.value[4].icon = "check";
@@ -284,15 +288,6 @@ const saveVitals = async () => {
     return false;
 };
 
-const saveDiagnosis = async () => {
-    if (diagnosis.value[0].selectedData.length > 0) {
-        const userID = Service.getUserID();
-        const diagnosisInstance = new Diagnosis();
-        const formattedData = diagnosis.value[0].selectedData.map((item: any) => item?.data);
-        diagnosisInstance.onSubmit(patient.value.patientID, userID, formattedData);
-    }
-};
-
 const saveComplications = async () => {
     const data = [];
     const childDataVisualScreening = await formatInputFiledData(visualScreening.value);
@@ -322,13 +317,22 @@ const saveComplications = async () => {
     }
 
     if (data.length > 0) {
-        await saveEncounterData(patient.value.patientID, EncounterTypeId.SCREENING, "" as any, data);
+        // await saveEncounterData(patient.value.patientID, EncounterTypeId.SCREENING, "" as any, data);
+        const patientData = JSON.parse(JSON.stringify(patient.value));
+        (patientData.screening ??= {}).unsaved ??= [];
+        patientData.screening.unsaved.push(...data);
+        await saveOfflinePatientData(patientData);
         toastSuccess("Complications saved successfully");
     }
 };
 
 const saveSubstanceAbuse = async () => {
-    await saveEncounterData(patient.value.patientID, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(substance.value));
+    // await saveEncounterData(patient.value.patientID, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(substance.value));
+    const patientData = JSON.parse(JSON.stringify(patient.value));
+    let substanceAbuse = patientData?.substanceAbuse;
+    substanceAbuse.unsaved = [...substanceAbuse.unsaved, ...(await formatRadioButtonData(substance.value))];
+    await saveOfflinePatientData(patientData);
+    toastSuccess("Complications saved successfully");
 };
 
 const saveTreatmentPlan = async () => {
@@ -364,7 +368,7 @@ const saveTreatmentPlan = async () => {
 
 const saveData = async () => {
     if (await saveVitals()) {
-        await saveDiagnosis();
+        // await saveDiagnosis();
         await saveTreatmentPlan();
         await saveSubstanceAbuse();
         await saveComplications();
@@ -394,7 +398,7 @@ watch(
 watch(
     patient,
     async () => {
-        refreshWizard();
+        // refreshWizard();
         await markWizard();
     },
     { deep: true }
