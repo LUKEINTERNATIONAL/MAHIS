@@ -162,6 +162,9 @@ const { substance } = storeToRefs(enrollmentStore);
 const { selectedNCDMedicationList } = storeToRefs(ncdMedicationsStore);
 const { FootScreening, visualScreening, cvScreening } = storeToRefs(complicationsStore);
 
+//services
+import { saveOfflinePatientData } from "@/services/offline_service";
+
 // Tabs configuration
 const tabs = ref([
     { title: "Vitals", icon: "" },
@@ -269,13 +272,15 @@ const setComplications = async () => {
 };
 const saveVitals = async () => {
     if (await validateInputFiledData(vitals.value)) {
-        const userID: any = Service.getUserID();
-        const vitalsInstance = new VitalsService(patient.value.patientID, userID);
-        vitalsInstance.onFinish(vitals.value);
-        toastSuccess("Vitals saved successfully");
-        return true;
-    }
-    toastWarning("Failed to save vitals");
+        const newVitals = await formatInputFiledData(vitals.value);
+        if (newVitals.length > 0) {
+            const patientData = JSON.parse(JSON.stringify(patient.value));
+            let vitals = patientData?.vitals;
+            vitals.unsaved = [...vitals.unsaved, ...newVitals];
+            await saveOfflinePatientData(patientData);
+            toastSuccess("Vitals saved successful");
+        }
+    } else toastWarning("Failed to save vitals");
     return false;
 };
 
