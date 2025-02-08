@@ -22,6 +22,7 @@ const initialVitals = [
                             eventType: "input",
                             alertsErrorMassage: "",
                             disabled: false,
+                            valueType: "number",
                             validationFunctionName: "vitalsHeight",
                         },
                         {
@@ -34,6 +35,7 @@ const initialVitals = [
                             eventType: "input",
                             alertsErrorMassage: "",
                             disabled: false,
+                            valueType: "number",
                             validationFunctionName: "vitalsWeight",
                         },
                     ],
@@ -120,6 +122,7 @@ const initialVitals = [
                             required: true,
                             eventType: "input",
                             disabled: false,
+                            valueType: "number",
                             validationFunctionName: "vitalsSystolic",
                         },
                         {
@@ -131,6 +134,7 @@ const initialVitals = [
                             required: true,
                             eventType: "input",
                             disabled: false,
+                            valueType: "number",
                             validationFunctionName: "vitalsDiastolic",
                         },
                     ],
@@ -216,6 +220,7 @@ const initialVitals = [
                             value: "",
                             name: "Temperature",
                             eventType: "input",
+                            valueType: "number",
                             validationFunctionName: "vitalsTemperature",
                         },
                         {
@@ -225,6 +230,7 @@ const initialVitals = [
                             value: "",
                             name: "Pulse",
                             eventType: "input",
+                            valueType: "number",
                             validationFunctionName: "vitalsPulseRate",
                         },
                     ],
@@ -316,6 +322,7 @@ const initialVitals = [
                             value: "",
                             name: "Respiratory rate",
                             eventType: "input",
+                            valueType: "number",
                             validationFunctionName: "vitalsRespiratoryRate",
                         },
                         {
@@ -325,6 +332,7 @@ const initialVitals = [
                             value: "",
                             name: "SAO2",
                             eventType: "input",
+                            valueType: "number",
                             validationFunctionName: "vitalsOxygenSaturation",
                         },
                     ],
