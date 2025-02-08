@@ -53,7 +53,7 @@ const { patient } = storeToRefs(demographicsStore);
 
 // Refs
 const dataTableRef = ref(null);
-const tableData = ref([]);
+const tableData = ref([] as any);
 const iconsContent = ref(icons);
 
 // Constants
@@ -79,7 +79,7 @@ const options = {
             },
         },
     ],
-};
+} as any;
 
 // Methods
 const openEnterResultModal = async () => {
