@@ -450,8 +450,7 @@ export default defineComponent({
 
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
-            const userProgramsData: any = localStorage.getItem("userPrograms");
-            const userPrograms: any = JSON.parse(userProgramsData);
+            const userPrograms: any = this.programs?.authorizedPrograms;
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
             const roles: any = roleData ? roleData : [];
 
@@ -470,7 +469,6 @@ export default defineComponent({
                     this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32 && this.apiStatus) {
-                const actions: any = await UserService.setProgramUserActions();
                 router.push("/patientProfile");
             }
             this.route = url;
@@ -645,7 +643,7 @@ export default defineComponent({
             this.checkInModalOpen = !this.checkInModalOpen;
         },
         async openCheckInModal(item: any) {
-            if (this.programs?.program?.applicationName == "OPD Program") {
+            if (this.programs?.name == "OPD Program") {
                 try {
                     const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
                     if (checkInStatus.length > 0) {

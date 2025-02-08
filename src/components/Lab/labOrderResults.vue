@@ -10,9 +10,8 @@
     <div class="modal_wrapper" v-if="listResults.length > 1">
         <div style="font-weight: 1000">Lab Results</div>
         <div style="--background: #fff">
-<!--            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"> </list>-->
-          <LabTestsHistory />
-
+            <!--            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"> </list>-->
+            <LabTestsHistory />
         </div>
         <div style="margin-top: 5px" v-if="listResults.length <= 4 && listSeeMoreResults.length >= 4">
             <DynamicButton @click="seeOrderStatus('more')" name="Show More Lab Results" fill="clear" iconSlot="icon-only" />
@@ -26,7 +25,7 @@
         <div style="font-weight: 700">Lab Orders</div>
         <div class="scrollable-container">
             <list
-                :listData="listOrders.map((item:any) => ({...item, disabledEnterResults: hasPatientsWaitingForLab && activeProgramID === 14 && (userRoles === 'Clinician' || userRoles === 'Superuser'), }))"
+                :listData="listOrders.map((item:any) => ({...item, disabledEnterResults: hasPatientsWaitingForLab && activeProgram.program_id === 14 && (userRoles === 'Clinician' || userRoles === 'Superuser'), }))"
                 @clicked:delete="voidLabOrder"
                 @clicked:results="openResultsForm"
             >
@@ -39,7 +38,7 @@
             <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
     </div>
-    <div v-if="activeProgramID == 14 && hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
+    <div v-if="activeProgram.program_id == 14 && hasEnterResults && (userRoles === 'Clinician' || userRoles === 'Superuser')">
         <div v-if="hasPatientsWaitingForLab">
             <DynamicButton
                 class="no-margin-left"
@@ -91,14 +90,13 @@ import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import LabTestsHistory from "@/components/DashboardSegments/LabTestsHistory.vue";
+import { useProgramStore } from "@/stores/ProgramStore";
 
 export default defineComponent({
     name: "Menu",
-    mixins: [SetPrograms],
     components: {
-      LabTestsHistory,
+        LabTestsHistory,
         CheckInConfirmationModal,
         IonContent,
         IonHeader,
@@ -119,6 +117,7 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["patient"]),
         ...mapState(useLabResultsStore, ["labResults"]),
+        ...mapState(useProgramStore, ["activeProgram"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(usePatientList, [
             "patientsWaitingForVitals",
@@ -559,6 +558,6 @@ export default defineComponent({
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     width: 100%;
-  white-space: nowrap;
+    white-space: nowrap;
 }
 </style>

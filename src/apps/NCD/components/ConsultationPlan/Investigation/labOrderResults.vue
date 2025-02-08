@@ -48,7 +48,6 @@ import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 import DataTablesResponsive from "datatables.net-responsive";
@@ -65,7 +64,6 @@ import { ConceptService } from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
-    mixins: [SetPrograms],
     components: {
         CheckInConfirmationModal,
         IonContent,
