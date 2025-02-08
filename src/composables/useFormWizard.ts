@@ -1,11 +1,10 @@
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, toRaw } from "vue";
 
 export const useFormWizard = () => {
     const currentTabIndex = ref("") as any;
 
     const onChangeCurrentTab = (index: number, oldIndex: number) => {
         if (index % 1 === 0) currentTabIndex.value = index;
-        else currentTabIndex.value = 0;
     };
 
     const onTabBeforeChange = () => {
