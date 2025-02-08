@@ -105,7 +105,7 @@ export const useWorkerStore = defineStore("worker", {
             if (!this.workerApi) {
                 this.initWorker();
             }
-            if (useStatusStore().isSyncingDone) {
+            if (useStatusStore().isSyncingDone || type != "SYNC_ALL_DATA") {
                 if (type == "SYNC_ALL_DATA") await useStatusStore().setSyncingTotal();
                 await this.updateSettings();
                 return this.workerApi.post({
