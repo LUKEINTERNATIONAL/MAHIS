@@ -112,10 +112,11 @@ async function getValue(element: any, value: any, obs_datetime: any, childData =
     //     name: element.name,
     // };
     if (element.valueType === "coded") {
+        const value_concept_id = await ConceptService.getConceptID(value, true);
         if (childData) {
             return {
                 concept_id,
-                value_coded: value,
+                value_coded: value_concept_id,
                 obs_datetime,
                 child: [
                     {
@@ -126,7 +127,7 @@ async function getValue(element: any, value: any, obs_datetime: any, childData =
                 ],
             };
         } else {
-            return { concept_id, value_coded: value, obs_datetime };
+            return { concept_id, value_coded: value_concept_id, obs_datetime };
         }
     } else if (element.valueType === "text") {
         return { concept_id, value_text: value, obs_datetime };
