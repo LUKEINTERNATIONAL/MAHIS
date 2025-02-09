@@ -48,6 +48,7 @@ import dayjs from "dayjs";
 import Validation from "@/validations/StandardValidations";
 import { validateInputFiledData } from "@/services/group_validation";
 import VitalsMixin from "@/views/Mixin/VitalsMixin.vue";
+import { getOfflineFirstObsValue } from "@/services/offline_service";
 export default defineComponent({
     mixins: [VitalsMixin],
     components: {
@@ -94,10 +95,9 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
+        this.updateVitalsStores();
         this.vitalsData = this.vitals;
         await this.checkHeight();
-        const userID: any = Service.getUserID();
-        this.vitalsInstance = new VitalsService(this.patient.patientID, userID);
         await this.validateRowData("onload");
     },
     setup() {
@@ -115,7 +115,7 @@ export default defineComponent({
         },
         updateVitalsStores() {
             const vitalsStore = useVitalsStore();
-            vitalsStore.setVitals(this.vitals);
+            vitalsStore.setVitals(vitalsStore.getInitialVitals());
         },
         async validationController(inputData: any) {
             if (inputData?.col?.name == "Height And Weight Not Done" && inputData.col.checked) {
@@ -183,12 +183,12 @@ export default defineComponent({
             // await validateInputFiledData(this.vitals);
         },
         async checkHeight() {
+            const vitals = [...(this.patient?.vitals?.saved || []), ...(this.patient?.vitals?.unsaved || [])];
+            const recentHeight: any = await getOfflineFirstObsValue(vitals, "value_numeric", 5090);
+            const obs_datetime: any = await getOfflineFirstObsValue(vitals, "obs_datetime", 5090);
             const patient = new PatientService();
-            const lastHeight = await patient.getRecentHeightObs();
-            if (!isEmpty(lastHeight)) {
-                const patientAgeAtPrevRecordedHeight = dayjs(lastHeight["obs_datetime"]).diff(patient.getBirthdate(), "year");
-                const recentHeight = lastHeight["value_numeric"];
-                const recentHeightObsID = lastHeight["obs_id"];
+            if (!isEmpty(recentHeight)) {
+                const patientAgeAtPrevRecordedHeight = dayjs(obs_datetime).diff(patient.getBirthdate(), "year");
                 /**
                  * For a scenario where a patient's height was last updated when they were a minor
                  * and they return as an adult, provide an option to update their height.
@@ -200,30 +200,32 @@ export default defineComponent({
             }
         },
         async validateRowData(inputData: any) {
-            await this.validationController(inputData);
-            const height = getFieldValue(this.vitals, "Height (cm)", "value");
-            const weight = getFieldValue(this.vitals, "Weight", "value");
-            const systolic = getFieldValue(this.vitals, "Systolic", "value");
-            const diastolic = getFieldValue(this.vitals, "Diastolic", "value");
-            const temp = getFieldValue(this.vitals, "Temperature", "value");
-            const pulse = getFieldValue(this.vitals, "Pulse", "value");
-            const respiratoryRate = getFieldValue(this.vitals, "Respiratory rate", "value");
-            const SAO2 = getFieldValue(this.vitals, "SAO2", "value");
+            if (inputData != "onload") {
+                await this.validationController(inputData);
+                const height = getFieldValue(this.vitals, "Height (cm)", "value");
+                const weight = getFieldValue(this.vitals, "Weight", "value");
+                const systolic = getFieldValue(this.vitals, "Systolic", "value");
+                const diastolic = getFieldValue(this.vitals, "Diastolic", "value");
+                const temp = getFieldValue(this.vitals, "Temperature", "value");
+                const pulse = getFieldValue(this.vitals, "Pulse", "value");
+                const respiratoryRate = getFieldValue(this.vitals, "Respiratory rate", "value");
+                const SAO2 = getFieldValue(this.vitals, "SAO2", "value");
 
-            await this.setBMI(height, weight);
-            await this.updateBP(systolic, diastolic);
+                await this.setBMI(height, weight);
+                await this.updateBP(systolic, diastolic);
 
-            const pulseStatus = this.getPulseRateStatus(pulse);
-            await this.updateRate("pulse", pulse, " BMP", pulseStatus, 4);
+                const pulseStatus = this.getPulseRateStatus(pulse);
+                await this.updateRate("pulse", pulse, " BMP", pulseStatus, 4);
 
-            const tempStatus = this.getTemperatureStatus(temp);
-            this.updateRate("temp", temp, "°C", tempStatus, 4);
+                const tempStatus = this.getTemperatureStatus(temp);
+                this.updateRate("temp", temp, "°C", tempStatus, 4);
 
-            const respiratoryStatus = this.getRespiratoryRateStatus(respiratoryRate);
-            this.updateRate("respiratory", respiratoryRate, "BMP", respiratoryStatus, 6);
+                const respiratoryStatus = this.getRespiratoryRateStatus(respiratoryRate);
+                this.updateRate("respiratory", respiratoryRate, "BMP", respiratoryStatus, 6);
 
-            const oxygenStatus = this.getOxygenSaturationStatus(SAO2);
-            this.updateRate("oxygen", SAO2, "%", oxygenStatus, 6);
+                const oxygenStatus = this.getOxygenSaturationStatus(SAO2);
+                this.updateRate("oxygen", SAO2, "%", oxygenStatus, 6);
+            }
         },
     },
 });
