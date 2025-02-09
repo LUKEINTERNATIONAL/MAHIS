@@ -2,7 +2,10 @@
     <ion-page>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <DemographicBar v-if="activeProgram.program_id !== 33 && activeProgram.program_id != '' && screenWidth < 1120" />
+            <DemographicBar
+                v-if="activeProgram.program_id !== 33 && activeProgram.program_id != '' && screenWidth < 1120"
+                @openPopover="openPopover($event)"
+            />
             <CheckInConfirmationModal
                 :closeModalFunc="closeCheckInModal"
                 :onYes="handleCheckInYes"
