@@ -120,6 +120,7 @@ export const useWorkerStore = defineStore("worker", {
                     payload,
                 });
             } else {
+                await useStatusStore().checkMetaDataStatus();
                 console.log("Worker is already syncing");
             }
         },
