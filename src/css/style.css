@@ -328,6 +328,11 @@ ion-modal > .ion-page {
         --height: 90%;
     }
 }
+@media (max-width: 937px) {
+    .form-wizard-vue .fw-body-list {
+        display: none;
+    }
+}
 
 @media (min-width: 1024px) {
     .large-modal {
