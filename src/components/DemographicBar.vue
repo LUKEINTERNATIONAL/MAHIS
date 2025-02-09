@@ -16,7 +16,7 @@
                     MRN: <b>{{ patient.ID }}</b>
                 </li>
                 <li>
-                    Birthday: <b>{{ formatBirthdate() }} </b>
+                    Birthday: <b>{{ formatBirthdate() }}</b>
                 </li>
                 <li>
                     Gender: <b>{{ patient?.personInformation?.gender }}</b>
@@ -26,61 +26,50 @@
                 </li>
             </ul>
         </div>
-
-        <div style="margin-top: 15px">
+        <div style="margin-top: 15px; cursor: pointer" @click="emit('openPopover', $event)">
             <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
         </div>
     </ion-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonIcon } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { storeToRefs } from "pinia";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import { ellipsisVerticalSharp } from "ionicons/icons";
-export default defineComponent({
-    name: "Menu",
-    components: {
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        IonIcon,
-    },
-    setup() {
-        return { ellipsisVerticalSharp };
-    },
-    data: () => ({}),
+import { useRouter } from "vue-router";
 
-    computed: {
-        ...mapState(useDemographicsStore, ["patient"]),
-    },
-    methods: {
-        navigationMenu(url: any) {
-            menuController.close();
-            this.$router.push(url);
-        },
-        covertGender(gender: any) {
-            return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
-        },
-        formatBirthdate() {
-            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
-        },
-        formatCurrentAddress(data: any) {
-            const addressComponents = [
-                data?.personInformation?.current_district,
-                data?.personInformation?.current_traditional_authority,
-                data?.personInformation?.current_village,
-            ];
-            return addressComponents.filter(Boolean).join(",");
-        },
-    },
-});
+// Define emits
+const emit = defineEmits<{
+    (e: "openPopover", event: any): void;
+}>();
+
+const router = useRouter();
+const demographicsStore = useDemographicsStore();
+const { patient } = storeToRefs(demographicsStore);
+
+const navigationMenu = (url: any) => {
+    menuController.close();
+    router.push(url);
+};
+
+const covertGender = (gender: any) => {
+    return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
+};
+
+const formatBirthdate = () => {
+    return HisDate.getBirthdateAge(patient.value?.personInformation?.birthdate);
+};
+
+const formatCurrentAddress = (data: any) => {
+    const addressComponents = [
+        data?.personInformation?.current_district,
+        data?.personInformation?.current_traditional_authority,
+        data?.personInformation?.current_village,
+    ];
+    return addressComponents.filter(Boolean).join(",");
+};
 </script>
 
 <style scoped>
@@ -89,10 +78,10 @@ export default defineComponent({
     margin: 0;
     border-radius: unset;
     margin-bottom: 20px;
-    /* position: fixed; */
     width: 100%;
     z-index: 1000;
 }
+
 .second_bar_list {
     list-style: none;
     justify-content: space-between;
