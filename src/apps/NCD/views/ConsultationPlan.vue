@@ -285,7 +285,6 @@ const saveVitals = async () => {
             toastSuccess("Vitals saved successful");
         }
     } else toastWarning("Failed to save vitals");
-    return false;
 };
 
 const saveComplications = async () => {
@@ -329,8 +328,8 @@ const saveComplications = async () => {
 const saveSubstanceAbuse = async () => {
     // await saveEncounterData(patient.value.patientID, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(substance.value));
     const patientData = JSON.parse(JSON.stringify(patient.value));
-    let substanceAbuse = patientData?.substanceAbuse;
-    substanceAbuse.unsaved = [...substanceAbuse.unsaved, ...(await formatRadioButtonData(substance.value))];
+    (patientData.substanceAbuse ??= {}).unsaved ??= [];
+    patientData.substanceAbuse.unsaved.push(...(await formatRadioButtonData(substance.value)));
     await saveOfflinePatientData(patientData);
     toastSuccess("Complications saved successfully");
 };
@@ -367,14 +366,12 @@ const saveTreatmentPlan = async () => {
 };
 
 const saveData = async () => {
-    if (await saveVitals()) {
-        // await saveDiagnosis();
-        await saveTreatmentPlan();
-        await saveSubstanceAbuse();
-        await saveComplications();
-        await resetNCDPatientData();
-        router.push("patientProfile");
-    }
+    await saveVitals();
+    await saveTreatmentPlan();
+    await saveSubstanceAbuse();
+    await saveComplications();
+    await resetNCDPatientData();
+    router.push("patientProfile");
 };
 
 // Lifecycle hooks and watchers

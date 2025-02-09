@@ -133,7 +133,6 @@ const voidDiagnosis = async (data: any, event: any) => {
 const setListData = async () => {
     const patientData = JSON.parse(JSON.stringify(patient.value));
     const observations = [...(patientData?.diagnosis?.unsaved || []), ...(patientData?.diagnosis?.saved || [])];
-    console.log("🚀 ~ setListData ~ observations:", observations);
     tableData.value = await generateListItems(observations);
     DataTable.use(DataTablesCore);
 };
