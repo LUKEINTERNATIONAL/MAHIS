@@ -2,7 +2,7 @@
     <ion-page>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <DemographicBar class="displayNoneDesktop" v-if="activeProgram.program_id !== 33 && activeProgram.program_id != ''" />
+            <DemographicBar v-if="activeProgram.program_id !== 33 && activeProgram.program_id != '' && screenWidth < 1120" />
             <CheckInConfirmationModal
                 :closeModalFunc="closeCheckInModal"
                 :onYes="handleCheckInYes"
@@ -42,7 +42,7 @@
             <PatientProfile :updateData="patient" v-if="activeProgram.program_id == 33" />
             <div class="content_manager" v-if="activeProgram.program_id !== 33 && activeProgram.program_id != ''">
                 <ion-row class="content_width">
-                    <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
+                    <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneLeftPanel">
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-card-content>
                                 <div style="display: flex; justify-content: space-between">
@@ -112,7 +112,7 @@
                                         <ion-label class="side_title">Alerts & Reminders </ion-label>
                                     </ion-item>
                                     <ion-card-content slot="content">
-                                        <span v-for="(al, index3) in alerts" :key="index3">
+                                        <span v-for="(al, index3) in setAlerts()" :key="index3">
                                             <ion-row
                                                 v-if="al.value"
                                                 :style="
@@ -141,7 +141,7 @@
                             </ion-accordion-group>
                         </ion-card>
                     </ion-col>
-                    <ion-col size-sm="12" size-md="12" size-lg="9.4">
+                    <ion-col size-sm="12" size-md="12" :size-lg="screenWidth > 1120 ? '9.4' : '12'">
                         <ion-card style="background-color: #fff; margin-inline: 0px; contain: unset; overflow: unset">
                             <div style="display: flex; justify-content: space-between">
                                 <div class="vitalsTitle">Most recent Vitals & Biometrics</div>
@@ -164,29 +164,31 @@
                                     /> -->
                                 </div>
                             </div>
-                            <div style="padding-left: 10px; padding-right: 10px">
-                                <ion-row>
-                                    <ion-col class="vitalsHeading">Weight</ion-col>
-                                    <ion-col class="vitalsHeading">Height</ion-col>
-                                    <ion-col class="vitalsHeading">Temperature</ion-col>
-                                    <ion-col class="vitalsHeading">Blood glucose</ion-col>
-                                    <ion-col class="vitalsHeading">Pulse Rate</ion-col>
-                                    <ion-col class="vitalsHeading">Blood pressure</ion-col>
-                                </ion-row>
-                                <ion-row>
-                                    <ion-col class="vitalsValue">{{ vitals["Weight"] }} <span class="vitalsUnits">kg</span></ion-col>
-                                    <ion-col class="vitalsValue">{{ vitals["Height"] }} <span class="vitalsUnits">cm</span></ion-col>
-                                    <ion-col class="vitalsValue">{{ vitals["Temperature"] }} <span class="vitalsUnits">&deg;C</span></ion-col>
-                                    <ion-col class="vitalsValue">0 <span class="vitalsUnits">mg/dL</span></ion-col>
-                                    <ion-col class="vitalsValue">{{ vitals["Pulse"] }} <span class="vitalsUnits">bpm </span></ion-col>
-                                    <ion-col class="vitalsValue"
-                                        >{{ vitals["Systolic"] }}/{{ vitals["Diastolic"] }}<span class="vitalsUnits">mmhg</span></ion-col
-                                    >
-                                </ion-row>
+                            <div style="width: 98%; overflow: scroll">
+                                <div style="padding-left: 10px; padding-right: 10px; min-width: 738px">
+                                    <ion-row>
+                                        <ion-col class="vitalsHeading">Weight</ion-col>
+                                        <ion-col class="vitalsHeading">Height</ion-col>
+                                        <ion-col class="vitalsHeading">Temperature</ion-col>
+                                        <ion-col class="vitalsHeading">Blood glucose</ion-col>
+                                        <ion-col class="vitalsHeading">Pulse Rate</ion-col>
+                                        <ion-col class="vitalsHeading">Blood pressure</ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col class="vitalsValue">{{ vitalsData["Weight"] }} <span class="vitalsUnits">kg</span></ion-col>
+                                        <ion-col class="vitalsValue">{{ vitalsData["Height"] }} <span class="vitalsUnits">cm</span></ion-col>
+                                        <ion-col class="vitalsValue">{{ vitalsData["Temperature"] }} <span class="vitalsUnits">&deg;C</span></ion-col>
+                                        <ion-col class="vitalsValue">0 <span class="vitalsUnits">mg/dL</span></ion-col>
+                                        <ion-col class="vitalsValue">{{ vitalsData["Pulse"] }} <span class="vitalsUnits">bpm </span></ion-col>
+                                        <ion-col class="vitalsValue"
+                                            >{{ vitalsData["Systolic"] }}/{{ vitalsData["Diastolic"] }}<span class="vitalsUnits">mmhg</span></ion-col
+                                        >
+                                    </ion-row>
+                                </div>
                             </div>
                         </ion-card>
-                        <div>
-                            <ion-segment :value="segmentContent" style="margin-top: 5px">
+                        <div style="width: 100%; overflow: scroll; height: 64px">
+                            <ion-segment :value="segmentContent" style="margin-top: 5px; min-width: 540px">
                                 <ion-segment-button value="Patient Charts" @click="setSegmentContent('Patient Charts')">
                                     <ion-label>Patient Charts</ion-label>
                                 </ion-segment-button>
@@ -207,15 +209,15 @@
                                 </ion-segment-button>
                             </ion-segment>
                         </div>
-                        <div v-if="segmentContent == 'Patient Charts'">
-                            <div style="display: flex; margin-top: 10px">
-                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
+                        <div v-if="segmentContent == 'Patient Charts'" style="margin-top: 1px">
+                            <div :style="screenWidth > 826 ? 'display: flex;' : 'display: block;'">
+                                <div class="patient-chart" v-if="checkUnderFive">
                                     <WeightHeightChart />
                                 </div>
-                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px">
+                                <div class="patient-chart">
                                     <BloodPressure />
                                 </div>
-                                <div style="width: 50vw; background-color: #fff; border-radius: 5px" v-if="!checkUnderFive">
+                                <div class="patient-chart" v-if="!checkUnderFive">
                                     <PreviousVitals />
                                 </div>
                             </div>
@@ -283,7 +285,7 @@
     </ion-page>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
     IonSegment,
     IonSegmentButton,
@@ -312,7 +314,7 @@ import {
     IonFabButton,
     IonFabList,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import {
     medkit,
     grid,
@@ -320,20 +322,24 @@ import {
     chevronForwardCircle,
     chevronUpCircle,
     colorPalette,
-    document,
+    document as docIcon,
     globe,
     add,
     checkboxOutline,
     closeCircleOutline,
+    chevronBackOutline,
+    checkmark,
+    ellipsisVerticalSharp,
+    person,
 } from "ionicons/icons";
-
 import { modalController } from "@ionic/vue";
 import { icons } from "@/utils/svg";
+import { storeToRefs } from "pinia";
 
+// Components imports
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
-
 import DispositionGrid from "@/components/PatientProfileGrid/OutcomeGrid.vue";
 import InvestigationsGrid from "@/components/PatientProfileGrid/InvestigationsGrid.vue";
 import bottomSummary from "./bottomSummary.vue";
@@ -343,19 +349,46 @@ import DiagnosesHistory from "@/components/DashboardSegments/DiagnosesHistory.vu
 import AllergiesContraindication from "@/components/DashboardSegments/AllergiesContraindication.vue";
 import VisitsHistory from "@/components/DashboardSegments/VisitsHistory.vue";
 import VitalsMeasurementsSummary from "@/components/DashboardSegments/VitalsMeasurementsSummary.vue";
-import { chevronBackOutline, checkmark, ellipsisVerticalSharp, person } from "ionicons/icons";
+import DynamicButton from "@/components/DynamicButton.vue";
+import Programs from "@/components/Programs.vue";
+import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
+import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
+import BloodPressure from "@/components/Graphs/BloodPressure.vue";
+import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
+import AncEnrollmentModal from "@/apps/ANC/components/Modals/AncEnrollmentModal.vue";
+import LabourEnrollmentModal from "@/apps/LABOUR/components/Modals/LabourEnrollmentModal.vue";
+import PNCEnrollmentModal from "@/apps/PNC/components/Modals/PNCEnrollmentModal.vue";
 
+// Store imports
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { mapState } from "pinia";
-import HisDate from "@/utils/Date";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
+import { useProgramStore } from "@/stores/ProgramStore";
+import { useVitalsStore } from "@/stores/VitalsStore";
+import { useANCEnrollmentStore } from "@/apps/ANC/store/enrollment/ANCEnrollment";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+
+// Services imports
 import { PatientService } from "@/services/patient_service";
 import { SetProgramService } from "@/services/set_program_service";
 import { Service } from "@/services/service";
 import { ObservationService } from "@/services/observation_service";
-import { useVitalsStore } from "@/stores/VitalsStore";
+import { ProgramService, ProgramId } from "@/services/program_service";
+import { PatientOpdList } from "@/services/patient_opd_list";
+import { ConfirmPregnancyService } from "@/apps/ANC/service/confirm_pregnancy_service";
+import { getUserLocation } from "@/services/userService";
+
+// composables
+import { usePatientProfile } from "@/composables/usePatientProfile";
+import { useWindowSize } from "@/composables/screenSize";
+
+// Utils imports
+import HisDate from "@/utils/Date";
+import dates from "@/utils/Date";
+import { toastDanger, toastSuccess, toastWarning } from "@/utils/Alerts";
+import { iconBMI } from "@/utils/SvgDynamicColor";
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -364,446 +397,380 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
-import { toastDanger, toastSuccess, toastWarning } from "@/utils/Alerts";
-import { ref } from "vue";
-import DynamicButton from "@/components/DynamicButton.vue";
-import Programs from "@/components/Programs.vue";
-import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
-import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
-import PreviousVitals from "@/components/Graphs/previousVitals.vue";
-import BloodPressure from "@/components/Graphs/BloodPressure.vue";
-import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
-import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
-import AncEnrollmentModal from "@/apps/ANC/components/Modals/AncEnrollmentModal.vue";
-import LabourEnrollmentModal from "@/apps/LABOUR/components/Modals/LabourEnrollmentModal.vue";
-import PNCEnrollmentModal from "@/apps/PNC/components/Modals/PNCEnrollmentModal.vue";
+import { useRouter } from "vue-router";
 
-import { iconBMI } from "@/utils/SvgDynamicColor";
-import { createModal } from "@/utils/Alerts";
-import PatientProfileMixin from "@/views/Mixin/PatientProfile.vue";
-import { ProgramId, ProgramService } from "@/services/program_service";
-import { usePatientList } from "@/apps/OPD/stores/patientListStore";
-import { PatientOpdList } from "@/services/patient_opd_list";
-import { getUserLocation } from "@/services/userService";
-import dates from "@/utils/Date";
-import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
-import { useANCEnrollmentStore } from "@/apps/ANC/store/enrollment/ANCEnrollment";
-import { ConfirmPregnancyService } from "@/apps/ANC/service/confirm_pregnancy_service";
-import { useProgramStore } from "@/stores/ProgramStore";
-export default defineComponent({
-    mixins: [PatientProfileMixin],
-    components: {
-        WeightHeightChart,
-        PreviousVitals,
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        Toolbar,
-        ToolbarSearch,
-        DemographicBar,
-        IonButton,
-        IonCard,
-        IonCardContent,
-        IonCardHeader,
-        IonCardSubtitle,
-        IonCardTitle,
-        IonAccordion,
-        IonAccordionGroup,
-        IonItem,
-        IonLabel,
-        IonModal,
-        DispositionGrid,
-        InvestigationsGrid,
-        VitalsGrid,
-        IonRow,
-        IonCol,
-        IonGrid,
-        IonIcon,
-        DynamicButton,
-        IonFab,
-        IonFabButton,
-        IonFabList,
-        PatientProfile,
-        IonSegmentButton,
-        IonSegment,
-        BloodPressure,
-        VisitsHistory,
-        VitalsMeasurementsSummary,
-        AllergiesContraindication,
-        DiagnosesHistory,
-        LabTestsHistory,
-        Programs,
-        CheckInConfirmationModal,
-        AncEnrollmentModal,
-        LabourEnrollmentModal,
-        PNCEnrollmentModal,
-        bottomSummary,
-    },
-    data() {
-        return {
-            checkUnderOne: false,
-            isLoading: false,
-            programPopover: false,
-            checkUnderFourteen: true,
-            checkUnderNine: false,
-            checkUnderFive: false,
-            checkUnderSixWeeks: false,
-            segmentContent: "Patient Charts",
-            iconsContent: icons,
-            isModalOpen: false,
-            programEvent: "" as any,
-            url: "" as any,
-            NCDProgramActionName: "+ Enroll in NCD Program" as any,
-            OPDProgramActionName: "+ Start New OPD consultation" as any,
-            visits: [] as any,
-            vitals: [] as any,
-            NCDUserAction: [] as any,
-            alerts: [] as any,
-            colors: {
-                Low: ["#B9E6FE", "#026AA2", "#9ADBFE"],
-                Normal: ["#DDEEDD", "#016302", "#BBDDBC"],
-                PreHigh: ["#FEDF89", "#B54708", "#FED667"],
-                High: ["#FECDCA", "#B42318", "#FDA19B"],
-            } as any,
-            checkInModalOpen: false,
-            checkOutModalOpen: false,
-            checkedIn: false as Boolean,
-            isEnrollmentModalOpen: false,
-            isLabourEnrollmentModalOpen: false,
-            isPNCEnrollmentModalOpen: false,
-            enrolledPrograms: [],
-            programToEnroll: 0,
-            enrollModalTitle: "",
-            programBtn: [],
-        };
-    },
-    computed: {
-        ...mapState(useDemographicsStore, ["patient"]),
-        ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
-        ...mapState(useEnrollementStore, ["NCDNumber"]),
-        ...mapState(useProgramStore, ["activeProgram", "authorizedPrograms"]),
-        ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useANCEnrollmentStore, ["ConfirmPregnancy"]),
-        pregnancyConfirmed() {
-            return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy confirmed");
-        },
-        pregnancyPlanned() {
-            return getRadioSelectedValue(this.ConfirmPregnancy, "Pregnancy planned");
-        },
-        activateVisitButtonVisible() {
-            return !this.checkedIn && this.activeProgram.program_id == 14;
-        },
-        deactivateVisitButtonVisible() {
-            return this.checkedIn && this.activeProgram.program_id == 14;
-        },
-    },
-    async mounted() {
-        await SetProgramService.userProgramData(this.patient.patientID);
-        this.checkAge();
-        const patient = new PatientService();
-        this.visits = await PatientService.getPatientVisits(patient.getID(), false);
-        await this.refreshPrograms();
-        this.setAlerts();
-        await this.updateData();
-        await this.checkPatientIFCheckedIn();
-    },
-    watch: {
-        patient: {
-            async handler(btn: any) {
-                await SetProgramService.userProgramData(this.patient.patientID);
-                await this.updateData();
-                await this.checkPatientIFCheckedIn();
-                this.updateCheckInStatus();
-            },
-            deep: true,
-        },
-    },
-    setup() {
-        const modal = ref();
-        return {
-            chevronBackOutline,
-            checkmark,
-            grid,
-            chevronDownCircle,
-            chevronForwardCircle,
-            chevronUpCircle,
-            colorPalette,
-            document,
-            globe,
-            medkit,
-            add,
-            person,
-            checkboxOutline,
-            closeCircleOutline,
-            ellipsisVerticalSharp,
-        };
-    },
+// Router instance
+const router = useRouter();
+// Store initialization
+const demographicsStore = useDemographicsStore();
+const treatmentPlanStore = useTreatmentPlanStore();
+const enrollmentStore = useEnrollementStore();
+const programStore = useProgramStore();
+const vitalsStore = useVitalsStore();
+const ancEnrollmentStore = useANCEnrollmentStore();
 
-    methods: {
-        checkAge() {
-            if (this.patient?.personInformation?.birthdate) {
-                this.checkUnderFourteen = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate) >= 14 ? true : false;
-                this.checkUnderNine = HisDate.ageInMonths(this.patient?.personInformation?.birthdate) < 9 ? true : false;
-                this.checkUnderFive = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate) < 5 ? true : false;
-                this.checkUnderSixWeeks =
-                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
-            }
-        },
-        setSegmentContent(name: any) {
-            this.segmentContent = name;
-        },
-        setAlerts() {
-            this.alerts = [
-                {
-                    backgroundColor: "#B9E6FE",
-                    status: "",
-                    icon: iconBMI(["#B9E6FE", "#026AA2", "#9ADBFE"]),
-                    textColor: "#026AA2",
-                    value: "No further action is required.",
-                    name: "",
-                    index: "Blood sugar is normal",
-                },
-                {
-                    backgroundColor: "#FEDF89",
-                    status: "",
-                    icon: iconBMI(["#FEDF89", "#B54708", "#FED667"]),
-                    textColor: "#B54708",
-                    value: "Please call or follow up!",
-                    name: "",
-                    index: "Patient Defaulted",
-                },
-                {
-                    backgroundColor: "#FECDCA",
-                    status: "",
-                    icon: iconBMI(["#FECDCA", "#B42318", "#FDA19B"]),
-                    textColor: "#B42318",
-                    value: "Administer medications!",
-                    name: "",
-                    index: "Patient is hypertensive",
-                },
-            ];
-        },
+// composable destructuring
+const { event, popoverOpen, openPopover, openPIM, openOutCome, printVisitSummary, printID, formatCurrentAddress } = usePatientProfile();
+const { screenWidth } = useWindowSize();
 
-        convertToDisplayDate(date: any) {
-            return HisDate.toStandardHisDisplayFormat(date);
+// Store state destructuring
+const { patient } = storeToRefs(demographicsStore) as any;
+const { selectedMedicalAllergiesList } = storeToRefs(treatmentPlanStore);
+const { NCDNumber } = storeToRefs(enrollmentStore);
+const { activeProgram, authorizedPrograms } = storeToRefs(programStore);
+const { vitals } = storeToRefs(vitalsStore);
+const { ConfirmPregnancy } = storeToRefs(ancEnrollmentStore);
+
+// Refs
+const checkUnderOne = ref(false);
+const isLoading = ref(false);
+const programPopover = ref(false);
+const checkUnderFourteen = ref(true);
+const checkUnderNine = ref(false);
+const checkUnderFive = ref(false);
+const checkUnderSixWeeks = ref(false);
+const segmentContent = ref("Patient Charts");
+const isModalOpen = ref(false);
+const programEvent = ref<any>(null);
+const url = ref<any>(null);
+const NCDProgramActionName = ref("+ Enroll in NCD Program");
+const OPDProgramActionName = ref("+ Start New OPD consultation");
+const visits = ref<any[]>([]);
+const alert = ref<any[]>([]);
+const vitalsData = ref({}) as any;
+const NCDUserAction = ref<any[]>([]);
+const checkInModalOpen = ref(false);
+const checkOutModalOpen = ref(false);
+const checkedIn = ref(false);
+const isEnrollmentModalOpen = ref(false);
+const isLabourEnrollmentModalOpen = ref(false);
+const isPNCEnrollmentModalOpen = ref(false);
+const enrolledPrograms = ref<any[]>([]);
+const programToEnroll = ref(0);
+const enrollModalTitle = ref("");
+const programBtn = ref<any[]>([]);
+const modal = ref();
+
+// Constants
+const colors = {
+    Low: ["#B9E6FE", "#026AA2", "#9ADBFE"],
+    Normal: ["#DDEEDD", "#016302", "#BBDDBC"],
+    PreHigh: ["#FEDF89", "#B54708", "#FED667"],
+    High: ["#FECDCA", "#B42318", "#FDA19B"],
+};
+
+// Computed properties
+const pregnancyConfirmed = computed(() => {
+    return getRadioSelectedValue(ConfirmPregnancy.value, "Pregnancy confirmed");
+});
+
+const pregnancyPlanned = computed(() => {
+    return getRadioSelectedValue(ConfirmPregnancy.value, "Pregnancy planned");
+});
+
+const activateVisitButtonVisible = computed(() => {
+    return !checkedIn.value && activeProgram.value.program_id == 14;
+});
+
+const deactivateVisitButtonVisible = computed(() => {
+    return checkedIn.value && activeProgram.value.program_id == 14;
+});
+
+// Methods
+const checkAge = () => {
+    if (patient.value?.personInformation?.birthdate) {
+        checkUnderFourteen.value = HisDate.getAgeInYears(patient.value.personInformation.birthdate) >= 14;
+        checkUnderNine.value = HisDate.ageInMonths(patient.value.personInformation.birthdate) < 9;
+        checkUnderFive.value = HisDate.getAgeInYears(patient.value.personInformation.birthdate) < 5;
+        checkUnderSixWeeks.value = HisDate.dateDiffInDays(HisDate.currentDate(), patient.value.personInformation.birthdate) < 42;
+    }
+};
+
+const setSegmentContent = (name: any) => {
+    segmentContent.value = name;
+};
+
+const setAlerts = () => {
+    return [
+        {
+            backgroundColor: "#B9E6FE",
+            status: "",
+            icon: iconBMI(["#B9E6FE", "#026AA2", "#9ADBFE"]),
+            textColor: "#026AA2",
+            value: "No further action is required.",
+            name: "",
+            index: "Blood sugar is normal",
         },
-        getSessionDate() {
-            return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
+        {
+            backgroundColor: "#FEDF89",
+            status: "",
+            icon: iconBMI(["#FEDF89", "#B54708", "#FED667"]),
+            textColor: "#B54708",
+            value: "Please call or follow up!",
+            name: "",
+            index: "Patient Defaulted",
         },
-        programAccess(programName: string): boolean {
-            const accessPrograms: any = localStorage.getItem("userPrograms");
-            const programs: any = JSON.parse(accessPrograms);
-            if (programs.some((program: any) => program.name === programName)) {
-                return true;
+        {
+            backgroundColor: "#FECDCA",
+            status: "",
+            icon: iconBMI(["#FECDCA", "#B42318", "#FDA19B"]),
+            textColor: "#B42318",
+            value: "Administer medications!",
+            name: "",
+            index: "Patient is hypertensive",
+        },
+    ];
+};
+
+const convertToDisplayDate = (date: any) => {
+    return HisDate.toStandardHisDisplayFormat(date);
+};
+
+const getSessionDate = () => {
+    return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
+};
+
+const programAccess = (programName: any) => {
+    const accessPrograms: any = localStorage.getItem("userPrograms");
+    const programs = JSON.parse(accessPrograms);
+    return programs.some((program: any) => program.name === programName);
+};
+
+const openModal = () => {
+    isModalOpen.value = true;
+};
+
+const dismiss = () => {
+    modalController.dismiss();
+};
+
+const updateCheckInStatus = async () => {
+    try {
+        const visit = await PatientOpdList.getCheckInStatus(patient.value.patientID);
+        checkedIn.value = !!visit.length;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const closeCheckInModal = () => {
+    checkInModalOpen.value = false;
+};
+
+const closeCheckOutModal = () => {
+    checkOutModalOpen.value = false;
+};
+
+const toggleCheckInModal = () => {
+    checkInModalOpen.value = !checkInModalOpen.value;
+};
+
+const toggleCheckOutModal = () => {
+    checkOutModalOpen.value = !checkOutModalOpen.value;
+};
+
+const handleCheckInYes = async () => {
+    try {
+        const location = await getUserLocation();
+        const locationId = location ? location.code : null;
+        if (!locationId) {
+            toastDanger("Location ID could not be found. Please check your settings.");
+            return;
+        }
+        await PatientOpdList.checkInPatient(patient.value.patientID, dates.todayDateFormatted(), locationId);
+        await PatientOpdList.addPatientToStage(patient.value.patientID, dates.todayDateFormatted(), "VITALS", locationId);
+        await usePatientList().refresh(locationId);
+        toggleCheckInModal();
+        checkedIn.value = true;
+        toastSuccess("The patient's visit is now active. Patient is on the waiting list for vitals");
+    } catch (e) {
+        toastDanger("An error occurred while attempting to check in the patient. Please try again.");
+    }
+};
+
+const handleCheckOutYes = async () => {
+    try {
+        const visit = await PatientOpdList.getCheckInStatus(patient.value.patientID);
+        await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
+        const location = await getUserLocation();
+        const locationId = location ? location.location_id : null;
+        await usePatientList().refresh(locationId);
+        checkedIn.value = false;
+        toggleCheckOutModal();
+        toastSuccess("The patient's visit is now closed");
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+const checkPatientIFCheckedIn = async () => {
+    try {
+        const result = await PatientOpdList.getCheckInStatus(patient.value.patientID);
+        checkedIn.value = result.length > 0;
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+const handleCheckInNo = () => {
+    toggleCheckInModal();
+};
+
+const handleCheckOutNo = () => {
+    toggleCheckOutModal();
+};
+
+const togglePopover = () => {
+    popoverOpen.value = !popoverOpen.value;
+};
+
+const openProgramPopover = (event: any) => {
+    programEvent.value = event;
+    programPopover.value = !programPopover.value;
+};
+
+const handleProgramClick = async (selectedProgram: any) => {
+    await refreshPrograms();
+
+    const lower = (title: any) => title?.toLowerCase().replace(/\s+/g, "");
+    const gender = covertGender(patient.value.personInformation?.gender);
+    const age = HisDate.getAgeInYears(patient.value.personInformation?.birthdate);
+
+    if (
+        selectedProgram.program_id == ProgramId.ANC_PROGRAM ||
+        selectedProgram.program_id == ProgramId.PNC_PROGRAM ||
+        selectedProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM
+    ) {
+        const found = enrolledPrograms.value.find((p) => p.id == selectedProgram.program_id);
+
+        if (!found) {
+            if (gender === "Male") {
+                toastWarning("Males cannot be enrolled in this program");
+                return;
+            } else if (gender === "Female" && age < 9) {
+                toastWarning("The client's age is below the required minimum age limit");
+                return;
             } else {
-                return false;
-            }
-        },
-
-        openModal() {
-            this.isModalOpen = true;
-        },
-        dismiss() {
-            modalController.dismiss();
-        },
-        async updateCheckInStatus() {
-            try {
-                const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
-                this.checkedIn = !!visit.length;
-            } catch (error) {}
-        },
-        closeCheckInModal() {
-            this.checkInModalOpen = false;
-        },
-        closeCheckOutModal() {
-            this.checkOutModalOpen = false;
-        },
-        toggleCheckInModal() {
-            this.checkInModalOpen = !this.checkInModalOpen;
-        },
-        toggleCheckOutModal() {
-            this.checkOutModalOpen = !this.checkOutModalOpen;
-        },
-        async handleCheckInYes() {
-            try {
-                const location = await getUserLocation();
-                const locationId = location ? location.code : null;
-                if (!locationId) {
-                    toastDanger("Location ID could not be found. Please check your settings.");
+                if (selectedProgram.program_id == ProgramId.ANC_PROGRAM) {
+                    isEnrollmentModalOpen.value = true;
+                    programToEnroll.value = selectedProgram.program_id;
+                    return;
+                } else if (selectedProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM) {
+                    isLabourEnrollmentModalOpen.value = true;
+                    enrollModalTitle.value = `Are you sure you want to enroll ${patient.value?.personInformation?.given_name.toUpperCase()} in this program?`;
+                    programToEnroll.value = selectedProgram.program_id;
+                    return;
+                } else {
+                    isPNCEnrollmentModalOpen.value = true;
+                    enrollModalTitle.value = `Are you sure you want to enroll ${patient.value?.personInformation?.given_name.toUpperCase()} in this program?`;
+                    programToEnroll.value = selectedProgram.program_id;
                     return;
                 }
-                await PatientOpdList.checkInPatient(this.patient.patientID, dates.todayDateFormatted(), locationId);
-
-                await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "VITALS", locationId);
-                await usePatientList().refresh(locationId);
-                this.toggleCheckInModal();
-                this.checkedIn = true;
-                toastSuccess("The patient's visit is now active. Patient is on the waiting list for vitals");
-            } catch (e) {
-                toastDanger("An error occurred while attempting to check in the patient. Please try again.");
             }
-        },
-        async handleCheckOutYes() {
-            try {
-                const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
-                await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
-                const location = await getUserLocation();
-                const locationId = location ? location.location_id : null;
-                await usePatientList().refresh(locationId);
-                this.checkedIn = false;
-                this.toggleCheckOutModal();
-                toastSuccess("The patient's visit is now closed");
-            } catch (e) {}
-        },
-        async checkPatientIFCheckedIn() {
-            try {
-                const result = await PatientOpdList.getCheckInStatus(this.patient.patientID);
-                this.checkedIn = result.length > 0;
-                // if (Boolean(result)) {
-                //     this.checkedIn = true;
-                // }
-            } catch (e) {
-                console.log({ e });
-            }
-        },
+        }
+    }
+    await SetProgramService.userProgramData(patient.value.patientID, selectedProgram);
+    return router.push(selectedProgram.url);
+};
 
-        handleCheckInNo() {
-            this.toggleCheckInModal();
-        },
-        handleCheckOutNo() {
-            this.toggleCheckOutModal();
-        },
+const closeEnrollmentModal = () => {
+    isEnrollmentModalOpen.value = false;
+};
 
-        togglePopover() {
-            this.popoverOpen = !this.popoverOpen;
-        },
-        openProgramPopover(event: any) {
-            this.programEvent = event;
-            this.programPopover = !this.programPopover;
-        },
+const toggleEnrollmentModal = () => {
+    isEnrollmentModalOpen.value = !isEnrollmentModalOpen.value;
+};
 
-        async handleProgramClick(selectedProgram: any) {
-            await this.refreshPrograms();
+const handleANCEnrollmentYes = async () => {
+    const userID: any = Service.getUserID();
+    const quickCheck = new ConfirmPregnancyService(patient.value.patientID, userID);
+    const encounter = await quickCheck.createEncounter();
+    if (!encounter) return toastWarning("Unable to create quick check encounter");
+    const patientStatus = await quickCheck.saveObservationList(await buildANCEnrollment());
+    await ProgramService.enrollProgram(patient.value.patientID, programToEnroll.value, new Date().toString());
+    if (!patientStatus) return toastWarning("Unable to create quick check details!");
+    toastSuccess("Enrollment is successful");
+    await refreshPrograms();
+    toggleEnrollmentModal();
+    return router.push("ANCHome");
+};
 
-            const lower = (title: string) => title?.toLowerCase().replace(/\s+/g, "");
-            const gender = this.covertGender(this.patient.personInformation?.gender);
-            const age = HisDate.getAgeInYears(this.patient.personInformation?.birthdate);
+const handleLabourEnrollmentYes = async () => {
+    await ProgramService.enrollProgram(patient.value.patientID, programToEnroll.value, new Date().toString());
+    await refreshPrograms();
+    toastSuccess("Enrollment is successful");
+    return router.push("LabourHome");
+};
 
-            if (
-                selectedProgram.program_id == ProgramId.ANC_PROGRAM ||
-                selectedProgram.program_id == ProgramId.PNC_PROGRAM ||
-                selectedProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM
-            ) {
-                const found: any = this.enrolledPrograms.find((p: any) => p.id == selectedProgram.program_id);
+const handlePNCEnrollmentYes = async () => {
+    await ProgramService.enrollProgram(patient.value.patientID, programToEnroll.value, new Date().toString());
+    await refreshPrograms();
+    toastSuccess("Enrollment is successful");
+    return router.push("PNCHome");
+};
 
-                if (!found) {
-                    if (gender === "Male") {
-                        // Toast message for males
-                        toastWarning("Males cannot be enrolled in this program");
-                        return;
-                    } else if (gender === "Female" && age < 9) {
-                        // Toast message for females under 9 years
-                        toastWarning("The client's age is below the required minimum age limit");
-                        return;
-                    } else {
-                        if (selectedProgram.program_id == ProgramId.ANC_PROGRAM) {
-                            this.isEnrollmentModalOpen = true;
-                            this.programToEnroll = selectedProgram.program_id;
-                            return;
-                        } else if (selectedProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM) {
-                            this.isLabourEnrollmentModalOpen = true;
-                            this.enrollModalTitle = `Are you sure you want to enroll ${this.patient?.personInformation?.given_name.toUpperCase()} in this program?`;
-                            this.programToEnroll = selectedProgram.program_id;
-                            return;
-                        } else {
-                            this.isPNCEnrollmentModalOpen = true;
-                            this.enrollModalTitle = `Are you sure you want to enroll ${this.patient?.personInformation?.given_name.toUpperCase()} in this program?`;
-                            this.programToEnroll = selectedProgram.program_id;
-                            return;
-                        }
-                    }
-                }
-            }
-            await SetProgramService.userProgramData(this.patient.patientID, selectedProgram);
-            return this.$router.push(selectedProgram.url);
-        },
-        closeEnrollmentModal() {
-            this.isEnrollmentModalOpen = false;
-        },
-        toggleEnrollmentModal() {
-            this.isEnrollmentModalOpen = !this.isEnrollmentModalOpen;
-        },
-        async handleANCEnrollmentYes() {
-            const userID: any = Service.getUserID();
-            const quickCheck = new ConfirmPregnancyService(this.patient.patientID, userID);
-            const encounter = await quickCheck.createEncounter();
-            if (!encounter) return toastWarning("Unable to create quick check encounter");
-            const patientStatus = await quickCheck.saveObservationList(await this.buildANCEnrollment());
-            await ProgramService.enrollProgram(this.patient.patientID, this.programToEnroll, new Date().toString());
-            if (!patientStatus) return toastWarning("Unable to create quick check details!");
-            toastSuccess("Enrollment is sucessful");
-            await this.refreshPrograms();
-            this.toggleEnrollmentModal();
-            return this.$router.push("ANCHome");
-        },
-        async handleLabourEnrollmentYes() {
-            await ProgramService.enrollProgram(this.patient.patientID, this.programToEnroll, new Date().toString());
-            await this.refreshPrograms();
-            toastSuccess("Enrollment is sucessful");
-            return this.$router.push("LabourHome");
-        },
-        async handlePNCEnrollmentYes() {
-            await ProgramService.enrollProgram(this.patient.patientID, this.programToEnroll, new Date().toString());
-            await this.refreshPrograms();
-            toastSuccess("Enrollment is sucessful");
-            return this.$router.push("PNCHome");
-        },
-        async refreshPrograms() {
-            const programs = await ProgramService.getPatientPrograms(this.patient.patientID);
+const refreshPrograms = async () => {
+    const programs = await ProgramService.getPatientPrograms(patient.value.patientID);
+    enrolledPrograms.value = programs?.map((p: any) => ({
+        name: p.program.name,
+        id: p.program_id,
+    }));
+};
 
-            this.enrolledPrograms = programs?.map((p: any) => ({
-                name: p.program.name,
-                id: p.program_id,
-            }));
-        },
-        handleEnrollmentNo() {
-            this.toggleEnrollmentModal();
-        },
-        checkProgram(btn: any) {
-            const found: any = this.enrolledPrograms.find((p: any) => p.id == btn.program_id);
-            if (found) return `Start ${btn.name}`;
+const handleEnrollmentNo = () => {
+    toggleEnrollmentModal();
+};
 
-            return btn.actionName;
-        },
-        async updateData() {
-            const array = ["Height", "Weight", "Systolic", "Diastolic", "Temperature", "Pulse", "SAO2", "Respiratory rate"];
-            // An array to store all promises
-            const promises = array.map(async (item) => {
-                const dd = await ObservationService.getFirstValueNumber(this.patient.patientID, item);
-                return { [item]: dd };
-            });
+const checkProgram = (btn: any) => {
+    const found = enrolledPrograms.value.find((p) => p.id == btn.program_id);
+    return found ? `Start ${btn.name}` : btn.actionName;
+};
 
-            // Wait for all promises to resolve
-            const resultsArray = await Promise.all(promises);
+const updateData = async () => {
+    const array = ["Height", "Weight", "Systolic", "Diastolic", "Temperature", "Pulse", "SAO2", "Respiratory rate"];
+    const promises = array.map(async (item) => {
+        const dd = await ObservationService.getFirstValueNumber(patient.value.patientID, item);
+        return { [item]: dd };
+    });
+    const resultsArray = await Promise.all(promises);
+    Object.assign(vitalsData.value, ...resultsArray);
+};
 
-            // Combine the objects in resultsArray into a single object
-            this.vitals = Object.assign({}, ...resultsArray);
-        },
-        covertGender(gender: any) {
-            return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
-        },
-        formatBirthdate() {
-            return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
-        },
-        async buildANCEnrollment() {
-            return [...(await formatRadioButtonData(this.ConfirmPregnancy))];
-        },
-    },
+const covertGender = (gender: any) => {
+    return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
+};
+
+const formatBirthdate = () => {
+    return HisDate.getBirthdateAge(patient.value?.personInformation?.birthdate);
+};
+
+const buildANCEnrollment = async () => {
+    return [...(await formatRadioButtonData(ConfirmPregnancy))];
+};
+
+onMounted(async () => {
+    await SetProgramService.userProgramData(patient.patientID);
+    checkAge();
+    const patientInstance = new PatientService();
+    visits.value = await PatientService.getPatientVisits(patientInstance.getID(), false);
+    await refreshPrograms();
+    setAlerts();
+    await updateData();
+    await checkPatientIFCheckedIn();
 });
+
+watch(
+    () => patient,
+    async () => {
+        await SetProgramService.userProgramData(patient.patientID);
+        await updateData();
+        await checkPatientIFCheckedIn();
+        updateCheckInStatus();
+    },
+    { deep: true }
+);
 </script>
+
 <style>
 .start-visit {
     margin-top: 5px;
@@ -813,18 +780,18 @@ export default defineComponent({
     display: inline-flex;
     border-radius: 9999px;
     overflow: hidden;
-    min-width: 120px;
+    min-width: 130px;
 }
 
 .send-text {
     background-color: #006401;
     color: white;
     border: none;
-    font-size: 14px;
     font-family: system-ui, -apple-system, sans-serif;
     cursor: pointer;
     flex-grow: 1;
     transition: background-color 0.2s;
+    font-size: 14px;
 }
 
 .send-arrow {
@@ -837,6 +804,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     transition: background-color 0.2s;
+    padding: 8px 14px;
 }
 
 .send-text:hover {
@@ -849,31 +817,30 @@ export default defineComponent({
 
 .send-arrow::after {
     content: "▾";
-    font-size: 16px;
+    font-size: 18px;
 }
 
 /* Responsive styles */
-@media (min-width: 768px) {
-    .send-button-container {
-        min-width: 140px;
-    }
 
-    .send-text {
-        padding: 8px 20px;
-        font-size: 16px;
+@media (max-width: 1120px) {
+    .regDisplayFlex {
+        display: flex;
+        justify-content: space-between;
     }
-
-    .send-arrow {
-        padding: 8px 14px;
-    }
-
-    .send-arrow::after {
-        font-size: 18px;
+    .displayNoneLeftPanel {
+        display: none !important;
     }
 }
 </style>
 
 <style scoped>
+.patient-chart {
+    width: 100vw;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
 .vitalsHeading {
     font-style: normal;
     font-weight: 300;
