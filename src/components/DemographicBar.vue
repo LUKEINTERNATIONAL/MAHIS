@@ -1,37 +1,35 @@
 <template>
-    <ion-card class="second_bar">
-        <ul class="second_bar_list desktop position_content">
-            <li>
-                Fullname:
-                <b
-                    >{{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
-                    {{ patient?.personInformation?.family_name }}</b
-                >
-            </li>
-            <li>
-                MRN: <b>{{ patient.ID }}</b>
-            </li>
-            <li>
-                Birthday: <b>{{ formatBirthdate() }} </b>
-            </li>
-            <li>Category: <b> </b></li>
-            <li>
-                Sex: <b>{{ patient?.personInformation?.gender }}</b>
-            </li>
-        </ul>
-        <ul class="second_bar_list mobile position_content">
-            <li>
-                Fullname:
-                <b
-                    >{{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
-                    {{ patient?.personInformation?.family_name }}</b
-                >
-            </li>
-            <li>
-                MRN: <b>{{ patient.ID }}</b>
-            </li>
-            <li><ion-icon :icon="ellipsisVerticalSharp"></ion-icon></li>
-        </ul>
+    <ion-card class="second_bar" style="display: flex">
+        <div style="width: 97%; overflow: scroll">
+            <ul class="second_bar_list">
+                <li>
+                    Fullname:
+                    <b
+                        >{{ patient?.personInformation?.given_name }} {{ patient?.personInformation?.middle_name }}
+                        {{ patient?.personInformation?.family_name }}</b
+                    >
+                </li>
+                <li>
+                    NCDNumber: <b>{{ patient.NcdID }}</b>
+                </li>
+                <li>
+                    MRN: <b>{{ patient.ID }}</b>
+                </li>
+                <li>
+                    Birthday: <b>{{ formatBirthdate() }} </b>
+                </li>
+                <li>
+                    Gender: <b>{{ patient?.personInformation?.gender }}</b>
+                </li>
+                <li>
+                    Address: <b>{{ formatCurrentAddress(patient) }}</b>
+                </li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 15px">
+            <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
+        </div>
     </ion-card>
 </template>
 
@@ -73,6 +71,14 @@ export default defineComponent({
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.patient?.personInformation?.birthdate);
         },
+        formatCurrentAddress(data: any) {
+            const addressComponents = [
+                data?.personInformation?.current_district,
+                data?.personInformation?.current_traditional_authority,
+                data?.personInformation?.current_village,
+            ];
+            return addressComponents.filter(Boolean).join(",");
+        },
     },
 });
 </script>
@@ -93,5 +99,8 @@ export default defineComponent({
     display: flex;
     font-size: 16px;
     padding: 18px;
+    min-width: fit-content;
+    white-space: nowrap;
+    gap: 20px;
 }
 </style>
