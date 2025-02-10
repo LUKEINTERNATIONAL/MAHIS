@@ -205,8 +205,8 @@ export default defineComponent({
             try {
                 const url = `programs/${32}/reports/ncd_dashboard`;
                 return Service.getJson(url, {
-                    start_date: HisDate.currentDate(),
-                    end_date: HisDate.currentDate(),
+                    start_date: HisDate.sessionDate(),
+                    end_date: HisDate.sessionDate(),
                 });
             } catch (error) {
                 return [];

@@ -87,8 +87,8 @@ export default defineComponent({
     data() {
         return {
             reportData: [] as any,
-            startDate: HisDate.currentDate(),
-            endDate: HisDate.currentDate(),
+            startDate: HisDate.sessionDate(),
+            endDate: HisDate.sessionDate(),
             options: {
                 responsive: true,
                 select: false,

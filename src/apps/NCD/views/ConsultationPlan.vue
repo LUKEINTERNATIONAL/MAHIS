@@ -230,7 +230,7 @@ const markWizard = async () => {
 
     const labOrders = await OrderService.getOrders(patient.value.patientID);
     const filteredArray = labOrders.filter((obj: any) => {
-        return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+        return HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(obj.order_date);
     });
     tabs.value[2].icon = filteredArray.length > 0 ? "check" : "";
 
@@ -261,12 +261,12 @@ const setComplications = async () => {
     const rightEye = await ObservationService.getFirstValueText(patient.value.patientID, "Right eye visual acuity");
     const cv = await ObservationService.getFirstValueText(patient.value.patientID, "CVD");
 
-    if (leftEye) modifyFieldValue(visualScreening.value, "Left eye visual acuity", "value", leftEye);
-    if (rightEye) modifyFieldValue(visualScreening.value, "Right eye visual acuity", "value", rightEye);
-    if (cv) modifyFieldValue(cvScreening.value, "CVD", "value", cv);
-    if (neuropathy) modifyGroupedRadioValue(FootScreening.value, "Peripheral neuropathy", "selectedValue", neuropathy);
-    if (deformity) modifyGroupedRadioValue(FootScreening.value, "Deformity", "selectedValue", deformity);
-    if (ulcers) modifyGroupedRadioValue(FootScreening.value, "Ulcers", "selectedValue", ulcers);
+    // if (leftEye) modifyFieldValue(visualScreening.value, "Left eye visual acuity", "value", leftEye);
+    // if (rightEye) modifyFieldValue(visualScreening.value, "Right eye visual acuity", "value", rightEye);
+    // if (cv) modifyFieldValue(cvScreening.value, "CVD", "value", cv);
+    // if (neuropathy) modifyGroupedRadioValue(FootScreening.value, "Peripheral neuropathy", "selectedValue", neuropathy);
+    // if (deformity) modifyGroupedRadioValue(FootScreening.value, "Deformity", "selectedValue", deformity);
+    // if (ulcers) modifyGroupedRadioValue(FootScreening.value, "Ulcers", "selectedValue", ulcers);
 
     if (neuropathy || deformity || ulcers || leftEye || rightEye || cv) {
         return true;
@@ -329,9 +329,14 @@ const saveSubstanceAbuse = async () => {
     // await saveEncounterData(patient.value.patientID, EncounterTypeId.ASSESSMENT, "" as any, await formatRadioButtonData(substance.value));
     const patientData = JSON.parse(JSON.stringify(patient.value));
     (patientData.substanceAbuse ??= {}).unsaved ??= [];
-    patientData.substanceAbuse.unsaved.push(...(await formatRadioButtonData(substance.value)));
-    await saveOfflinePatientData(patientData);
-    toastSuccess("Complications saved successfully");
+    const substanceAbuse = await formatRadioButtonData(substance.value);
+    if (substanceAbuse.length > 0) {
+        patientData.substanceAbuse.unsaved.push(...substanceAbuse);
+        await saveOfflinePatientData(patientData);
+        toastSuccess("Substance abuse saved successfully");
+    } else {
+        toastWarning("Substance abuse not saved");
+    }
 };
 
 const saveTreatmentPlan = async () => {

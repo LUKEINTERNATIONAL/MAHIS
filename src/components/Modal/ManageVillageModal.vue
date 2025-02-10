@@ -66,8 +66,8 @@ const route = useRoute();
 const dataTableRef = ref(null);
 const isLoading = ref(false);
 const selectedButton = ref("all");
-const startDate = ref(HisDate.currentDate());
-const endDate = ref(HisDate.currentDate());
+const startDate = ref(HisDate.sessionDate());
+const endDate = ref(HisDate.sessionDate());
 
 const props: any = defineProps({
     taData: Object,

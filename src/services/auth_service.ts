@@ -194,7 +194,7 @@ export class AuthService {
 
     async checkTimeIntegrity() {
         const serverDate = await this.getSystemDate();
-        const localDate = HisDate.currentDate();
+        const localDate = HisDate.sessionDate();
         if (!serverDate) throw "Unable to fetch server date";
         return localDate === serverDate;
     }

@@ -147,7 +147,7 @@ export default defineComponent({
         async updateInvestigationWizard() {
             this.labOrders = await OrderService.getOrders(this.patient.patientID);
             const filteredArray = await this.labOrders.filter((obj: any) => {
-                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+                return HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(obj.order_date);
             });
             if (filteredArray.length > 0) {
                 this.investigations[0].selectedData = filteredArray;

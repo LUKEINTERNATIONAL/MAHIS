@@ -485,7 +485,7 @@ const checkAge = () => {
         checkUnderFourteen.value = HisDate.getAgeInYears(patient.value.personInformation.birthdate) >= 14;
         checkUnderNine.value = HisDate.ageInMonths(patient.value.personInformation.birthdate) < 9;
         checkUnderFive.value = HisDate.getAgeInYears(patient.value.personInformation.birthdate) < 5;
-        checkUnderSixWeeks.value = HisDate.dateDiffInDays(HisDate.currentDate(), patient.value.personInformation.birthdate) < 42;
+        checkUnderSixWeeks.value = HisDate.dateDiffInDays(HisDate.sessionDate(), patient.value.personInformation.birthdate) < 42;
     }
 };
 

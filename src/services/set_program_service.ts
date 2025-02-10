@@ -37,7 +37,7 @@ export class SetProgramService extends Service {
             const demographicsInstance = useDemographicsStore();
             const demographics = demographicsInstance.getPatient();
             const orders = await OrderService.getOrders(demographics.patient_id);
-            const isToday = (order: any) => HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(order.order_date);
+            const isToday = (order: any) => HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(order.order_date);
 
             const hasTodayOrders = orders?.some(isToday);
 
@@ -102,7 +102,7 @@ export class SetProgramService extends Service {
                 } else {
                     if (localStorage.getItem("saveProgressStatus") == "true") {
                         NCDProgramActionName = "Continue NCD consultation";
-                    } else if (visits.includes(HisDate.currentDate())) {
+                    } else if (visits.includes(HisDate.sessionDate())) {
                         NCDProgramActionName = "Edit NCD consultation";
                     } else NCDProgramActionName = "Start new NCD consultation";
                     url = "/consultationPlan";

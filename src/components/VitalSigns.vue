@@ -112,7 +112,7 @@ export default defineComponent({
             const age = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
             const promises = array.map(async (item: any) => {
                 const firstDate = await ObservationService.getFirstObsDatetime(this.patient.patientID, item);
-                if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
+                if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.sessionDate()) {
                     if (item == "Weight") {
                         modifyCheckboxValue(this.vitals, "Height And Weight Not Done", "displayNone", true);
                     }
@@ -126,7 +126,7 @@ export default defineComponent({
                         this.vitals,
                         item,
                         "value",
-                        await ObservationService.getFirstValueNumber(this.patient.patientID, item, HisDate.currentDate())
+                        await ObservationService.getFirstValueNumber(this.patient.patientID, item, HisDate.sessionDate())
                     );
                     modifyFieldValue(this.vitals, item, "disabled", true);
                     mandatoryDone.push("true");
@@ -323,7 +323,7 @@ export default defineComponent({
                     parseInt(weight),
                     parseInt(height),
                     this.patient?.personInformation?.gender,
-                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.sessionDate())
                 );
                 console.log("🚀 ~ setBMI ~ this.BMI:", this.BMI);
                 this.updateBMI();
