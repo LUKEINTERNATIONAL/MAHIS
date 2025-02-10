@@ -13,10 +13,18 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
-import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+import {
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    modifyFieldValue,
+    modifyRadioValue,
+} from "@/services/data_helpers";
 
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
+import { getOfflineFirstObsValue } from "@/services/offline_service";
+import { ObservationService } from "@/services/observation_service";
 
 export default defineComponent({
     name: "Menu",
@@ -55,6 +63,7 @@ export default defineComponent({
     mounted() {
         this.updateEnrollmentStores();
         this.buildCards();
+        this.setRiskAssessment();
     },
     methods: {
         buildCards() {
@@ -76,7 +85,14 @@ export default defineComponent({
             const enrollmentStore = useEnrollementStore();
             enrollmentStore.setSubstance(this.substance);
         },
-
+        async setRiskAssessment() {
+            const patientData = JSON.parse(JSON.stringify(this.patient));
+            const substanceAbuse = [...(patientData?.substanceAbuse?.unsaved || []), ...(patientData?.substanceAbuse?.saved || [])];
+            const drinking: any = await getOfflineFirstObsValue(substanceAbuse, "value_coded", 2318);
+            const smoking: any = await getOfflineFirstObsValue(substanceAbuse, "value_coded", 1551);
+            modifyRadioValue(this.substance, "Smoking history", "selectedValue", await ObservationService.getConceptName(smoking));
+            modifyRadioValue(this.substance, "Does the patient drink alcohol?", "selectedValue", await ObservationService.getConceptName(drinking));
+        },
         testF(data: any) {
             console.log(data);
         },
