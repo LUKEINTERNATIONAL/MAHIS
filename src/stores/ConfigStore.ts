@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
+import HisDate from "@/utils/Date";
 const initialSessionDate = [
     {
         data: {
@@ -15,6 +16,7 @@ const initialSessionDate = [
                             alertsErrorMassage: "",
                             required: true,
                             isDatePopover: true,
+                            maxDate: HisDate.currentDate(),
                         },
                     ],
                 },
