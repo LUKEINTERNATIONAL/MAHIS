@@ -142,7 +142,7 @@ export class AuthService {
         localStorage.setItem("username", this.username);
         localStorage.setItem("userID", this.userID.toString());
         localStorage.setItem("userRoles", JSON.stringify(this.roles));
-        localStorage.setItem("sessionDate", this.sessionDate);
+        localStorage.setItem("sessionDate", HisDate.toStandardHisFormat(this.sessionDate));
         localStorage.setItem("APIVersion", this.systemVersion);
         localStorage.setItem("locationID", this.locationID);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
