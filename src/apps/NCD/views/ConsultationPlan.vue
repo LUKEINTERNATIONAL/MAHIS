@@ -102,6 +102,7 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { useComplicationsStore } from "@/stores/ComplicationsStore";
 import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
 import { useNonPharmaTherapyStore } from "@/stores/nonPharmaTherapyStore";
+import { useConfigStore } from "@/stores/ConfigStore";
 
 // Import services and utilities
 import { Service } from "@/services/service";
@@ -122,6 +123,7 @@ import {
     modifyFieldValue,
     modifyCheckboxValue,
     modifyGroupedRadioValue,
+    getFieldValue,
 } from "@/services/data_helpers";
 import { validateInputFiledData } from "@/services/group_validation";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
@@ -153,6 +155,7 @@ const generalStore = useGeneralStore();
 const outcomeStore = useOutcomeStore();
 const enrollmentStore = useEnrollementStore();
 const complicationsStore = useComplicationsStore();
+const configStore = useConfigStore();
 
 // Destructure store refs
 const { patient } = storeToRefs(demographicsStore);
@@ -162,9 +165,10 @@ const { diagnosis } = storeToRefs(diagnosisStore);
 const { substance } = storeToRefs(enrollmentStore);
 const { selectedNCDMedicationList } = storeToRefs(ncdMedicationsStore);
 const { FootScreening, visualScreening, cvScreening } = storeToRefs(complicationsStore);
+const { sessionDate } = storeToRefs(configStore);
 
 //services
-import { getOfflineFirstObsValue, getOfflineRecords, saveOfflinePatientData } from "@/services/offline_service";
+import { getOfflineFirstObsValue, getOfflineSavedUnsavedData, saveOfflinePatientData } from "@/services/offline_service";
 
 // Tabs configuration
 const tabs = ref([
@@ -215,37 +219,24 @@ const refreshWizard = () => {
 };
 
 const markWizard = async () => {
-    if (await validateInputFiledData(vitals.value, false)) {
-        tabs.value[0].icon = "check";
-    } else {
-        tabs.value[0].icon = "";
-    }
+    const sessionD = getFieldValue(sessionDate.value, "sessionDate", "value") || HisDate.sessionDate();
+    const vitalsData = getOfflineSavedUnsavedData("vitals");
+    tabs.value[0].icon = isDateInArray(sessionD, vitalsData) ? "check" : "";
 
-    const data = await formatRadioButtonData(substance.value);
-    if (data.length > 0) {
-        tabs.value[1].icon = "check";
-    } else {
-        tabs.value[1].icon = "";
-    }
+    const substanceAbuseData = getOfflineSavedUnsavedData("substanceAbuse");
+    tabs.value[1].icon = isDateInArray(sessionD, substanceAbuseData) ? "check" : "";
 
     const labOrders = await OrderService.getOrders(patient.value.patientID);
     const filteredArray = labOrders.filter((obj: any) => {
-        return HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(obj.order_date);
+        return HisDate.toStandardHisFormat(sessionD) === HisDate.toStandardHisFormat(obj.order_date);
     });
     tabs.value[2].icon = filteredArray.length > 0 ? "check" : "";
 
-    const firstDate: any = await getOfflineFirstObsValue(
-        [...(patient?.value.diagnosis?.saved || []), ...(patient?.value.diagnosis?.unsaved || [])],
-        "obs_datetime",
-        3065
-    );
-    tabs.value[3].icon = firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.toStandardHisFormat(HisDate.sessionDate()) ? "check" : "";
+    const diagnosisData = getOfflineSavedUnsavedData("diagnosis");
+    tabs.value[3].icon = isDateInArray(sessionD, diagnosisData) ? "check" : "";
 
-    if (await setComplications()) {
-        tabs.value[4].icon = "check";
-    } else {
-        tabs.value[4].icon = "";
-    }
+    const screeningData = getOfflineSavedUnsavedData("screening");
+    tabs.value[4].icon = isDateInArray(sessionD, screeningData) ? "check" : "";
 
     if (selectedNCDMedicationList.value.length > 0) {
         tabs.value[5].icon = MedicationSelectionHasValues() ? "check" : "";
@@ -253,26 +244,18 @@ const markWizard = async () => {
         tabs.value[5].icon = "";
     }
 };
-const setComplications = async () => {
-    const neuropathy = await ObservationService.getFirstValueCoded(patient.value.patientID, "Peripheral neuropathy");
-    const deformity = await ObservationService.getFirstValueCoded(patient.value.patientID, "Deformity");
-    const ulcers = await ObservationService.getFirstValueCoded(patient.value.patientID, "Ulcers");
-    const leftEye = await ObservationService.getFirstValueText(patient.value.patientID, "Left eye visual acuity");
-    const rightEye = await ObservationService.getFirstValueText(patient.value.patientID, "Right eye visual acuity");
-    const cv = await ObservationService.getFirstValueText(patient.value.patientID, "CVD");
+const isDateInArray = (dateToCheck: any, diagnosisArray: any) => {
+    // Convert input date to start of day for comparison
+    const checkDate = new Date(dateToCheck);
+    checkDate.setHours(0, 0, 0, 0);
 
-    // if (leftEye) modifyFieldValue(visualScreening.value, "Left eye visual acuity", "value", leftEye);
-    // if (rightEye) modifyFieldValue(visualScreening.value, "Right eye visual acuity", "value", rightEye);
-    // if (cv) modifyFieldValue(cvScreening.value, "CVD", "value", cv);
-    // if (neuropathy) modifyGroupedRadioValue(FootScreening.value, "Peripheral neuropathy", "selectedValue", neuropathy);
-    // if (deformity) modifyGroupedRadioValue(FootScreening.value, "Deformity", "selectedValue", deformity);
-    // if (ulcers) modifyGroupedRadioValue(FootScreening.value, "Ulcers", "selectedValue", ulcers);
+    return diagnosisArray.some((diagnosis: any) => {
+        // Convert each obs_datetime to start of day
+        const obsDate = new Date(diagnosis.obs_datetime);
+        obsDate.setHours(0, 0, 0, 0);
 
-    if (neuropathy || deformity || ulcers || leftEye || rightEye || cv) {
-        return true;
-    } else {
-        return false;
-    }
+        return obsDate.getTime() === checkDate.getTime();
+    });
 };
 const saveVitals = async () => {
     if (await validateInputFiledData(vitals.value)) {
@@ -399,6 +382,14 @@ watch(
 
 watch(
     patient,
+    async () => {
+        // refreshWizard();
+        await markWizard();
+    },
+    { deep: true }
+);
+watch(
+    sessionDate,
     async () => {
         // refreshWizard();
         await markWizard();
