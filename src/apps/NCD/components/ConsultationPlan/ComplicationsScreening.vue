@@ -92,7 +92,7 @@ const cvdRiskObj = ref({
 });
 const iconsContent = ref(icons);
 // Constants
-const header = ["Screened", "Results", "Date", "Action"];
+const header = ["Condition", "Result", "Date", "Action"];
 // DataTable options
 const options = {
     responsive: true,
