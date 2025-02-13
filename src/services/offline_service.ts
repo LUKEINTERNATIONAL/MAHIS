@@ -5,7 +5,7 @@ import { Service } from "@/services/service";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
-const DB_VERSION = 6;
+const DB_VERSION = 7;
 
 /**
  * Open or create the IndexedDB database connection
