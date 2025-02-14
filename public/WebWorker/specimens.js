@@ -5,7 +5,7 @@ const specimenService = {
             return specimenData;
         }
         const totalPages = Math.ceil(TOTALS.total_specimens / 500);
-        allRecords = [];
+        const allRecords = [];
         for (let i = 1; i <= totalPages; i++) {
             const specimens = await ApiService.getData("/lab/specimen_types", {
                 page: i,

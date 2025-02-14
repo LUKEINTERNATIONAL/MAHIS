@@ -5,7 +5,7 @@ const diagnosisService = {
             return diagnosisData;
         }
         const totalPages = Math.ceil(TOTALS.total_diagnosis / 500);
-        allRecords = [];
+        const allRecords = [];
         for (let i = 1; i <= totalPages; i++) {
             const diagnosis = await ApiService.getData("diagnosis", {
                 id: 7409, //Qech outpatient diagnosis list
@@ -14,6 +14,7 @@ const diagnosisService = {
             });
             allRecords.push(...diagnosis);
         }
+        console.log("🚀 ~ setDiagnosis ~ allRecords:", allRecords);
 
         if (allRecords && Object.keys(allRecords).length > 0) {
             await DatabaseManager.overRideCollection("diagnosis", allRecords);

@@ -5,7 +5,7 @@ const testTypeService = {
             return testTypesData;
         }
         const totalPages = Math.ceil(TOTALS.total_test_types / 500);
-        allRecords = [];
+        const allRecords = [];
         for (let i = 1; i <= totalPages; i++) {
             const testTypes = await ApiService.getData("/lab/test_types", {
                 page: i,
