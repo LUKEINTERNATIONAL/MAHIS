@@ -50,6 +50,7 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { ConceptService } from "@/services/concept_service";
+import { getOfflineRecords } from "@/services/offline_service";
 
 export default defineComponent({
     name: "Menu",
@@ -225,6 +226,11 @@ export default defineComponent({
             modifyFieldValue(this.investigations, "specimen", "alertsErrorMassage", "");
             if (col.inputHeader == "Test" && col.value) {
                 this.specimen = await OrderService.getSpecimens(col.value.name);
+                console.log("🚀 ~ handleInputData ~ col:", col.value);
+                console.log("🚀 ~ handleInputData ~ col.value.name:", col.value.name);
+                console.log("🚀 ~ handleInputData ~ this.specimen:", this.specimen);
+                const diagnosis = await getOfflineRecords("specimens", { whereClause: { name: col.value.name } });
+                console.log("🚀 ~ handleInputData ~ diagnosis:", diagnosis);
                 if (this.specimen.length == 1) {
                     modifyFieldValue(this.investigations, "specimen", "value", this.specimen[0]);
                     modifyFieldValue(this.investigations, "specimen", "disabled", true);

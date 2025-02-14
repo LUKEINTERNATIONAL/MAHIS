@@ -48,9 +48,7 @@ export async function getOfflineRecords<T = any>(
         currentPage?: number;
         itemsPerPage?: number;
         whereClause?: Partial<T>;
-        likeClause?: {
-            [K in keyof Partial<T>]?: string;
-        };
+        likeClause?: any;
         inClause?: {
             [K in keyof Partial<T>]?: any[];
         };
