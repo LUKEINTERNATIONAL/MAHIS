@@ -142,7 +142,7 @@ export class AuthService {
         localStorage.setItem("username", this.username);
         localStorage.setItem("userID", this.userID.toString());
         localStorage.setItem("userRoles", JSON.stringify(this.roles));
-        localStorage.setItem("sessionDate", this.sessionDate);
+        localStorage.setItem("sessionDate", HisDate.toStandardHisFormat(this.sessionDate));
         localStorage.setItem("APIVersion", this.systemVersion);
         localStorage.setItem("locationID", this.locationID);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
@@ -194,7 +194,7 @@ export class AuthService {
 
     async checkTimeIntegrity() {
         const serverDate = await this.getSystemDate();
-        const localDate = HisDate.currentDate();
+        const localDate = HisDate.sessionDate();
         if (!serverDate) throw "Unable to fetch server date";
         return localDate === serverDate;
     }

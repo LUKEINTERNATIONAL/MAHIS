@@ -5,7 +5,7 @@ import { Service } from "@/services/service";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
-const DB_VERSION = 6;
+const DB_VERSION = 7;
 
 /**
  * Open or create the IndexedDB database connection
@@ -48,9 +48,7 @@ export async function getOfflineRecords<T = any>(
         currentPage?: number;
         itemsPerPage?: number;
         whereClause?: Partial<T>;
-        likeClause?: {
-            [K in keyof Partial<T>]?: string;
-        };
+        likeClause?: any;
         inClause?: {
             [K in keyof Partial<T>]?: any[];
         };
@@ -156,6 +154,11 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
 
     // Then sort and return the first item's specified value
     return filteredData.sort((a: any, b: any) => new Date(b.obs_datetime).getTime() - new Date(a.obs_datetime).getTime())[0]?.[value_type];
+}
+export function getOfflineSavedUnsavedData(element: string) {
+    const data = useDemographicsStore();
+    const patientRecord = data.patient;
+    return [...(patientRecord[element]?.saved || []), ...(patientRecord[element]?.unsaved || [])];
 }
 export async function saveOfflinePatientData(patientData: any) {
     const plainPatientData = JSON.parse(JSON.stringify(patientData));

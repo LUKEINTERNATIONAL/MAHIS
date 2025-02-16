@@ -139,7 +139,7 @@ const initialStock = [
                             alertsErrorMassage: "",
                             required: true,
                             isDatePopover: true,
-                            minDate: HisDate.currentDate(),
+                            minDate: HisDate.sessionDate(),
                             maxDate: "",
                             validationFunctionName: "required",
                         },

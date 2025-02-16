@@ -70,8 +70,8 @@ export class WebSocketService {
 
     public async getPatientSummary() {
         const data = await Service.getJson("immunization/stats", {
-            start_date: HisDate.getDateBeforeByDays(HisDate.currentDate(), 365),
-            end_date: HisDate.currentDate(),
+            start_date: HisDate.getDateBeforeByDays(HisDate.sessionDate(), 365),
+            end_date: HisDate.sessionDate(),
         });
     }
 

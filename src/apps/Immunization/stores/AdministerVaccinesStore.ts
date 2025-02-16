@@ -82,10 +82,10 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
             return this.missedVaccineSchedules;
         },
         setVaccineToBeVoided(vaccine: any) {
-            this.vaccineToBeVoided = vaccine
+            this.vaccineToBeVoided = vaccine;
         },
         getVaccineToBeVoided() {
-            return this.vaccineToBeVoided
+            return this.vaccineToBeVoided;
         },
         resetMissedVaccineSchedules(): void {
             this.missedVaccineSchedules = [];
@@ -117,31 +117,31 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
             this.tempScannedBatchNumber = tempScannedBatchNumber;
         },
         setLastVaccinesGiven(data: any) {
-            this.lastVaccinesGiven.length = 0
-            data.forEach((drug:any) => {
-                this.lastVaccinesGiven.push(drug)
-                this.lastVaccineGievenDate = drug.date_administered
-            })
+            this.lastVaccinesGiven.length = 0;
+            data.forEach((drug: any) => {
+                this.lastVaccinesGiven.push(drug);
+                this.lastVaccineGievenDate = drug.date_administered;
+            });
         },
         setLotNumberData(data: any) {
-            this.lotNumberData = data
-            return true
+            this.lotNumberData = data;
+            return true;
         },
         getLotNumberData() {
-            return this.lotNumberData
+            return this.lotNumberData;
         },
         setLastVaccineAdminstredOnschedule(data: any) {
-            this.lastVaccineAdminstredOnschedule = data
+            this.lastVaccineAdminstredOnschedule = data;
         },
         getLastVaccineAdminstredOnschedule() {
-            return this.lastVaccineAdminstredOnschedule
+            return this.lastVaccineAdminstredOnschedule;
         },
         setNextAppointMentDate(NextAppointMentDate: string): void {
-            if (compareDates(HisDate.currentDate(), NextAppointMentDate) == false) {
-                this.nextAppointMentDate ='NA'
+            if (compareDates(HisDate.sessionDate(), NextAppointMentDate) == false) {
+                this.nextAppointMentDate = "NA";
             } else {
-                this.nextAppointMentDate = HisDate.toStandardHisDisplayFormat(NextAppointMentDate)
-            }  
+                this.nextAppointMentDate = HisDate.toStandardHisDisplayFormat(NextAppointMentDate);
+            }
         },
     },
     persist: true,

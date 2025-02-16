@@ -174,8 +174,8 @@ export default defineComponent({
             allStock: [] as any,
             outStock: [] as any,
             filter: "" as any,
-            startDate: HisDate.currentDate(),
-            endDate: HisDate.currentDate(),
+            startDate: HisDate.sessionDate(),
+            endDate: HisDate.sessionDate(),
             options: {
                 responsive: true,
                 select: true,

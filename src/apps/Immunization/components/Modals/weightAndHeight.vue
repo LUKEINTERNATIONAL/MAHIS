@@ -96,7 +96,7 @@ export default defineComponent({
             event: null as any,
             BMI: "" as any,
             showPD: false as boolean,
-            vitals_date: HisDate.toStandardHisFormat(HisDate.currentDate()),
+            vitals_date: HisDate.toStandardHisFormat(HisDate.sessionDate()),
             formOpen: true,
             checkUnderSixWeeks: false,
             showDateBtns: true as boolean,
@@ -121,7 +121,7 @@ export default defineComponent({
         checkAge() {
             if (!isEmpty(this.patient?.personInformation?.birthdate)) {
                 this.checkUnderSixWeeks =
-                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
+                    HisDate.dateDiffInDays(HisDate.sessionDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
                 this.controlHeight();
             }
         },
@@ -195,7 +195,7 @@ export default defineComponent({
                     parseInt(weight),
                     parseInt(height),
                     this.patient?.personInformation?.gender,
-                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.sessionDate())
                 );
             }
             this.updateBMI();

@@ -119,7 +119,8 @@ const voidDiagnosis = async (data: any, event: any) => {
             diagnosisData.saved = diagnosisData.saved.filter(
                 (diagnosis: any) => !(diagnosis.value_coded === data.value_coded && diagnosis.obs_datetime === data.obs_date)
             );
-            diagnosisData.voided = [...diagnosisData.voided, data];
+            diagnosisData.voided ??= [];
+            diagnosisData.voided.push(data);
         } else {
             diagnosisData.unsaved = diagnosisData.unsaved.filter(
                 (diagnosis: any) => !(diagnosis.value_coded === data.value_coded && diagnosis.obs_datetime === data.obs_date)

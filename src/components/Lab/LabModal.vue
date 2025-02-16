@@ -115,7 +115,7 @@ export default defineComponent({
         async saveResults() {
             const patientLabResultService = new PatientLabResultService(this.patient.patientID);
             patientLabResultService.setTestID(this.labResults[0].id);
-            patientLabResultService.setResultDate(HisDate.currentDate());
+            patientLabResultService.setResultDate(HisDate.sessionDate());
             await patientLabResultService.createEncounter();
             await patientLabResultService.createLabResult(this.buildResults());
             toastSuccess("Saved successfully");

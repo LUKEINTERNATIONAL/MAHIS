@@ -247,8 +247,8 @@ export default defineComponent({
             allStock: [] as any,
             outStock: [] as any,
             filter: "" as any,
-            startDate: HisDate.currentDate(),
-            endDate: HisDate.currentDate(),
+            startDate: HisDate.sessionDate(),
+            endDate: HisDate.sessionDate(),
             options: {
                 responsive: true,
                 select: true,
@@ -316,7 +316,7 @@ export default defineComponent({
     methods: {
         checkExpired(item: any) {
             const expiry_date: Date = new Date(item.expiry_date);
-            const currentDate: Date = new Date(HisDate.currentDate());
+            const currentDate: Date = new Date(HisDate.sessionDate());
             if (currentDate >= expiry_date) {
                 return false;
             } else {
@@ -339,7 +339,7 @@ export default defineComponent({
                     drug_id: this.stockData.drug_id,
                     reallocation_code: "MA20",
                     waste_reason: reason,
-                    date: HisDate.currentDate(),
+                    date: HisDate.sessionDate(),
                     reason: reason,
                 };
                 try {
@@ -374,7 +374,7 @@ export default defineComponent({
                     drug_id: this.stockData.drug_id,
                     reallocation_code: "MA20",
                     waste_reason: reason,
-                    date: HisDate.currentDate(),
+                    date: HisDate.sessionDate(),
                     reason: reason,
                 };
                 try {

@@ -71,7 +71,7 @@ import {
     modifyCheckboxValue,
 } from "@/services/data_helpers";
 import { ConceptService } from "@/services/concept_service";
-import { saveOfflinePatientData } from "@/services/offline_service";
+import { getOfflineRecords, saveOfflinePatientData } from "@/services/offline_service";
 import { formatInputFiledData } from "@/services/formatServerData";
 import { validateInputFiledData } from "@/services/group_validation";
 
@@ -124,7 +124,12 @@ export default defineComponent({
     },
     methods: {
         async getDiagnosis(value: any) {
-            const diagnosis = await PatientDiagnosisService.getDiagnosis(value, 1, 5);
+            const diagnosis = await getOfflineRecords("diagnosis", {
+                likeClause: value ? { name: `%${value}%` } : "",
+                currentPage: 1,
+                itemsPerPage: 5,
+            }).then((data: any) => data.records);
+
             modifyFieldValue(this.diagnosis, "diagnosis", "multiSelectData", diagnosis);
         },
         dismiss() {

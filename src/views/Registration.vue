@@ -337,7 +337,7 @@ export default defineComponent({
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.birthdate) >= 14 ? true : false;
                 this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.birthdate) < 42 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.sessionDate(), this.birthdate) < 42 ? true : false;
             }
         },
         disableNationalIDInput() {
@@ -517,7 +517,7 @@ export default defineComponent({
                 vitals.unsaved = [
                     {
                         concept_id: 5089,
-                        obs_datetime: HisDate.currentDate(),
+                        obs_datetime: HisDate.sessionDate(),
                         value_numeric: Weight,
                     },
                 ];

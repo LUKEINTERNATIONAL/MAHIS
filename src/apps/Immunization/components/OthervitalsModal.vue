@@ -86,7 +86,7 @@ export default defineComponent({
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false, pulseRate: false } as any,
             showPD: false as boolean,
-            todays_date: HisDate.currentDate(),
+            todays_date: HisDate.sessionDate(),
             formOpen: true,
         };
     },
