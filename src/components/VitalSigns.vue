@@ -1,4 +1,5 @@
 <template>
+  <div class="scrollable-container">
     <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
@@ -12,6 +13,7 @@
             </ion-accordion>
         </ion-accordion-group>
     </ion-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -576,6 +578,29 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.scrollable-container {
+  max-height: 40vh;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+
+.scrollable-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 .vitals_title {
     border-bottom: 1px solid #b3b3b3;
     margin-bottom: 50px;
