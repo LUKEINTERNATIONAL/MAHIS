@@ -8,8 +8,18 @@
         <Toolbar />
         <ion-content
             :fullscreen="true"
-            v-if="programID() != 33 && programID() != 14 && programID() != 32 && programID() != 12 && programID() != 34 && programID() != 35"
+            v-if="
+                ![
+                    ProgramId.IMMUNIZATION_PROGRAM,
+                    ProgramId.OPD_PROGRAM,
+                    ProgramId.NCD_PROGRAM,
+                    ProgramId.ANC_PROGRAM,
+                    ProgramId.PNC_PROGRAM,
+                    ProgramId.LABOUR_AND_DELIVERY_PROGRAM,
+                ].includes(activeProgram.program_id)
+            "
         >
+            {{ activeProgram }}
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -22,196 +32,68 @@
             </div>
         </ion-content>
 
-        <ImmunizationDashboard v-if="programID() == 33" />
-        <OPDDashboard v-if="programID() == 14" />
-        <NCDDashboard v-if="programID() == 32" />
-        <ANCDashboard v-if="programID() == 12" />
-        <LabourDashboard v-if="programID() == 34" />
-        <PNCDashboard v-if="programID() == 35" />
-        <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
+        <ImmunizationDashboard v-if="activeProgram.program_id == ProgramId.IMMUNIZATION_PROGRAM" />
+        <OPDDashboard v-if="activeProgram.program_id == ProgramId.OPD_PROGRAM" />
+        <NCDDashboard v-if="activeProgram.program_id == ProgramId.NCD_PROGRAM" />
+        <ANCDashboard v-if="activeProgram.program_id == ProgramId.ANC_PROGRAM" />
+        <LabourDashboard v-if="activeProgram.program_id == ProgramId.PNC_PROGRAM" />
+        <PNCDashboard v-if="activeProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM" />
+        <Programs :programBtn="activeProgram.programBtn" />
     </ion-page>
 </template>
 
-<script lang="ts">
-import {
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonRow,
-    IonCol,
-    modalController,
-} from "@ionic/vue";
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { IonContent, IonPage } from "@ionic/vue";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
-import { Service } from "@/services/service";
-import img from "@/utils/Img";
-import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
-import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
-import { useUserStore } from "@/stores/userStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
-import { mapState } from "pinia";
-
-import SetUser from "@/views/Mixin/SetUser.vue";
-import ApiClient from "@/services/api_client";
-
-import { Appointment } from "../apps/Immunization/services/immunization_appointment_service";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-
 import NCDDashboard from "@/apps/NCD/components/NCDDashboard.vue";
 import ImmunizationDashboard from "@/apps/Immunization/components/ImmunizationDashboard.vue";
 import OPDDashboard from "@/apps/OPD/components/OPDDashboard.vue";
 import ANCDashboard from "@/apps/ANC/components/ANCDashboard.vue";
 import LabourDashboard from "@/apps/LABOUR/components/LabourDashboard.vue";
 import PNCDashboard from "@/apps/PNC/components/PNCDashboard.vue";
-
-import SetPrograms from "@/views/Mixin/SetPrograms.vue";
-import OfflineStatusModal from "@/components/Modal/OfflineStatus.vue";
-import DDERequestIDsModal from "@/components/Modal/DDERequestIDsModal.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
-
-import { createModal } from "@/utils/Alerts";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import { useWebWorker } from "@vueuse/core";
-import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import workerData from "@/activate_worker";
-import { useStatusStore } from "@/stores/StatusStore";
+import { useUserActivities } from "@/composables/useUserActivities";
+import { useUserRole } from "@/composables/useUserRole";
+import { useProgramStore } from "@/stores/ProgramStore";
+import { storeToRefs } from "pinia";
 
-export default defineComponent({
-    name: "Home",
-    mixins: [SetUser, SetPrograms, SetUserRole],
-    components: {
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        Toolbar,
-        ToolbarSearch,
-        IonRow,
-        IonCol,
-        ImmunizationTrendsGraph,
-        ImmunizationGroupGraph,
-        IonCard,
-        IonCardContent,
-        IonCardHeader,
-        IonCardSubtitle,
-        IonCardTitle,
-        Programs,
-        NCDDashboard,
-        ImmunizationDashboard,
-        OPDDashboard,
-        ANCDashboard,
-        LabourDashboard,
-        PNCDashboard,
-    },
-    data() {
-        return {
-            workerApi: null as any,
-            controlGraphs: "months" as any,
-            dataToPass: { payloadData: "tes" } as any,
-            programBtn: {} as any,
-            isLoading: false,
-        };
-    },
-    computed: {
-        ...mapState(useGeneralStore, ["OPDActivities"]),
-        ...mapState(useStatusStore, [
-            "offlineVillageStatus",
-            "offlineCountriesStatus",
-            "offlineDistrictStatus",
-            "offlineTAsStatus",
-            "offlineRelationshipStatus",
-        ]),
-        backgroundStyle() {
-            return {
-                background: `linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%), url(${img("backgroundImg.png")})`,
-                backgroundSize: "cover",
-                backgroundBlendMode: "overlay",
-                height: "22.8vh",
-            };
-        },
-    },
-    watch: {
-        $route: {
-            async handler(data) {
-                if (data.name == "Home") resetDemographics();
-            },
-            deep: true,
-        },
-        workerApi: {
-            async handler() {
-                const status = useStatusStore();
-                if (this.workerApi?.data?.payload) {
-                    if (this.workerApi?.data?.payload?.total_relationships) status.setOfflineRelationshipStatus(this.workerApi?.data?.payload);
-                    if (this.workerApi?.data?.payload?.total_village) status.setOfflineVillageStatus(this.workerApi?.data?.payload);
-                    if (this.workerApi?.data?.payload?.total_countries) status.setOfflineCountriesStatus(this.workerApi?.data?.payload);
-                    if (this.workerApi?.data?.payload?.total_districts) status.setOfflineDistrictStatus(this.workerApi?.data?.payload);
-                    if (this.workerApi?.data?.payload?.total_TAs) status.setOfflineTAsStatus(this.workerApi?.data?.payload);
+import { useWorkerStore } from "@/stores/workerStore";
+import { ProgramId } from "@/services/program_service";
+const isLoading = ref(true);
+const route = useRoute();
+const workerStore = useWorkerStore();
+useUserActivities();
+useUserRole();
+const programStore = useProgramStore();
 
-                    if (
-                        this.offlineVillageStatus?.total_village &&
-                        this.offlineRelationshipStatus?.total_relationships &&
-                        this.offlineCountriesStatus?.total_countries &&
-                        this.offlineDistrictStatus?.total_districts &&
-                        this.offlineTAsStatus?.total_TAs &&
-                        this.offlineVillageStatus?.total_village == this.offlineVillageStatus?.total &&
-                        this.offlineRelationshipStatus?.total_relationships == this.offlineRelationshipStatus?.total &&
-                        this.offlineCountriesStatus?.total_countries == this.offlineCountriesStatus?.total &&
-                        this.offlineDistrictStatus?.total_districts == this.offlineDistrictStatus?.total &&
-                        this.offlineTAsStatus?.total_TAs == this.offlineTAsStatus?.total
-                    ) {
-                        modalController.dismiss();
-                        await workerData.postData("SYNC_DDE");
-                        await workerData.postData("SYNC_CONCEPTS");
-                        await workerData.postData("SYNC_STOCK_RECORD");
-                        await workerData.postData("SYNC_PATIENT_RECORD", { msg: "Done Syncing" });
-                        await workerData.postData("SET_GENERIC_VACCINE_SCHEDULE");
-                        // await workerData.terminate();
-                    }
-                }
-            },
-            deep: true,
-        },
+const { activeProgram } = storeToRefs(programStore);
+watch(
+    () => route.name,
+    async (newRoute) => {
+        if (newRoute === "Home") {
+            await resetDemographics();
+            workerStore.postData("SYNC_ALL_DATA");
+        }
     },
-    async mounted() {
-        this.isLoading = true;
-        const status = useStatusStore();
-        status.setOfflineVillageStatus("");
-        status.setOfflineDistrictStatus("");
-        status.setOfflineTAsStatus("");
-        status.setOfflineRelationshipStatus("");
-        this.openOfflineStatusModal("data");
-        this.workerApi = workerData.workerApi;
-        await workerData.postData("SET_OFFLINE_LOCATION");
-        await workerData.postData("SET_OFFLINE_RELATIONSHIPS");
-        resetDemographics();
+    { immediate: true, deep: true }
+);
+
+onMounted(async () => {
+    try {
+        isLoading.value = true;
+        workerStore.terminate();
+        await resetDemographics();
         await useGlobalPropertyStore().loadGlobalProperty();
-        this.isLoading = false;
-    },
-    methods: {
-        programID() {
-            return Service.getProgramID();
-        },
-        openOfflineStatusModal(name: any) {
-            const dataToPass = { title: name };
-            createModal(OfflineStatusModal, { class: "fullScreenModal" }, false, this.dataToPass);
-        },
-        openDDERequestIDModal(name: any) {
-            const dataToPass = { title: name };
-            createModal(DDERequestIDsModal, { class: "" }, false, this.dataToPass);
-        },
-    },
+    } catch (error) {
+        console.error("Error initializing component:", error);
+    } finally {
+        isLoading.value = false;
+    }
 });
 </script>
 <style scoped>

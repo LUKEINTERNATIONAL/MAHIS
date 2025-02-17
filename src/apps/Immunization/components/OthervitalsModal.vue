@@ -60,7 +60,6 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { formatInputFiledData } from "@/services/formatServerData";
-import workerData from "@/activate_worker";
 import { saveOfflinePatientData } from "@/services/offline_service";
 
 export default defineComponent({
@@ -87,7 +86,7 @@ export default defineComponent({
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false, pulseRate: false } as any,
             showPD: false as boolean,
-            todays_date: HisDate.currentDate(),
+            todays_date: HisDate.sessionDate(),
             formOpen: true,
         };
     },

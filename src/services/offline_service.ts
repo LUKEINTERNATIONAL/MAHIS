@@ -1,10 +1,11 @@
-import workerData from "@/activate_worker";
-import { toRaw } from "vue";
 import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useStatusStore } from "@/stores/StatusStore";
+import { Service } from "@/services/service";
 // IndexedDB Helper Functions for MaHis Database
 
 const DB_NAME = "MaHis";
-const DB_VERSION = 1;
+const DB_VERSION = 7;
 
 /**
  * Open or create the IndexedDB database connection
@@ -16,14 +17,14 @@ function openDatabase(storeName: string = "defaultStore", keyPath: string = "id"
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-        request.onupgradeneeded = (event) => {
-            const db = (event.target as IDBOpenDBRequest).result;
+        // request.onupgradeneeded = (event) => {
+        //     const db = (event.target as IDBOpenDBRequest).result;
 
-            // Create object store if it doesn't exist
-            if (!db.objectStoreNames.contains(storeName)) {
-                db.createObjectStore(storeName, { keyPath });
-            }
-        };
+        // Create object store if it doesn't exist
+        // if (!db.objectStoreNames.contains(storeName)) {
+        //     db.createObjectStore(storeName, { keyPath });
+        // }
+        // };
 
         request.onsuccess = (event) => {
             resolve((event.target as IDBOpenDBRequest).result);
@@ -47,9 +48,7 @@ export async function getOfflineRecords<T = any>(
         currentPage?: number;
         itemsPerPage?: number;
         whereClause?: Partial<T>;
-        likeClause?: {
-            [K in keyof Partial<T>]?: string;
-        };
+        likeClause?: any;
         inClause?: {
             [K in keyof Partial<T>]?: any[];
         };
@@ -58,8 +57,8 @@ export async function getOfflineRecords<T = any>(
     } = {}
 ): Promise<{ records: T[]; totalCount: number } | T[]> {
     const { currentPage = 1, itemsPerPage = 0, whereClause, likeClause, inClause, sortBy, sortOrder = "asc" } = options;
-
     const db = await openDatabase(storeName);
+    if (!(db.objectStoreNames.length > 0)) return [];
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([storeName], "readonly");
         const objectStore = transaction.objectStore(storeName);
@@ -156,9 +155,21 @@ export async function getOfflineFirstObsValue(data: any, value_type: string, con
     // Then sort and return the first item's specified value
     return filteredData.sort((a: any, b: any) => new Date(b.obs_datetime).getTime() - new Date(a.obs_datetime).getTime())[0]?.[value_type];
 }
+export function getOfflineSavedUnsavedData(element: string) {
+    const data = useDemographicsStore();
+    const patientRecord = data.patient;
+    return [...(patientRecord[element]?.saved || []), ...(patientRecord[element]?.unsaved || [])];
+}
 export async function saveOfflinePatientData(patientData: any) {
     const plainPatientData = JSON.parse(JSON.stringify(patientData));
-    await workerData.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
-    await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
-    useWorkerStore().postWorkerData("SYNC_PATIENT_RECORD", { msg: "Done Syncing", data: plainPatientData });
+    plainPatientData.program_id = Service.getProgramID() || null;
+    plainPatientData.location_id = localStorage.getItem("locationID");
+    plainPatientData.provider_id = localStorage.getItem("userID");
+    plainPatientData.encounter_datetime = new Date().toISOString();
+    const workerStore = useWorkerStore();
+    await workerStore.postData("DELETE_RECORD", { storeName: "patientRecords", whereClause: { ID: plainPatientData.ID } });
+    await workerStore.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: plainPatientData });
+    const demographicsStore = useDemographicsStore();
+    demographicsStore.setRecord(plainPatientData);
+    if (useStatusStore().apiStatus && useStatusStore().isSyncingDone) await workerStore.postData("SYNC_ALL_DATA", { data: plainPatientData });
 }

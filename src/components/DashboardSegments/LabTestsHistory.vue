@@ -4,7 +4,7 @@
             <DataTable ref="dataTable" :options="options" :data="tableData" class="display nowrap" width="100%">
                 <thead>
                     <tr>
-                        <th v-for="head in header" :key="head">{{ head }}</th>
+                        <th v-for="head in header" :key="head" :data-orderable="true">{{ head }}</th>
                     </tr>
                 </thead>
             </DataTable>
@@ -48,7 +48,6 @@ import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 import DataTablesResponsive from "datatables.net-responsive";
@@ -65,7 +64,6 @@ import { ConceptService } from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
-    mixins: [SetPrograms],
     components: {
         CheckInConfirmationModal,
         IonContent,
@@ -116,6 +114,7 @@ export default defineComponent({
                     bottomEnd: "paging",
                 },
                 ordering: false,
+                order: [[3, "desc"]],
             } as any,
 
             header: ["Lab Test", "Specimen", "Accession Number", "Order Date", "Result"],
@@ -188,6 +187,25 @@ export default defineComponent({
             },
             deep: true,
         },
+        patient: {
+            async handler(newPatient) {
+                if (newPatient && newPatient.patientID) {
+                    await this.setListData();
+                }
+            },
+            immediate: true,
+        },
+        tableData: {
+            handler(newData) {
+                if (this.$refs.dataTable) {
+                    const table = (this.$refs.dataTable as any).dt;
+                    table.clear();
+                    table.rows.add(newData);
+                    table.draw();
+                }
+            },
+            deep: true,
+        },
     },
     methods: {
         async closeModal() {
@@ -206,7 +224,23 @@ export default defineComponent({
                 },
             ]);
             toastSuccess("Successfully saved");
-            await this.setListData();
+
+            // Fetch the updated orders and regenerate the table data
+            this.orders = await OrderService.getOrders(this.patient.patientID);
+            this.tableData = this.generateListItems(this.orders, "order");
+
+            // Sort the table data by order date
+            this.tableData.sort((a: any, b: any) => {
+                const dateA = new Date(a[3]);
+                const dateB = new Date(b[3]);
+                return dateB.getTime() - dateA.getTime();
+            });
+
+            // Update the DataTable instance
+            const table = (this.$refs.dataTable as any).dt;
+            table.clear();
+            table.rows.add(this.tableData);
+            table.draw();
         },
         async openEnterResultModal() {
             const dataToPass = { title: "name" };
@@ -232,7 +266,7 @@ export default defineComponent({
         async updateInvestigationWizard() {
             this.orders = await OrderService.getOrders(this.patient.patientID);
             const filteredArray = await this.orders.filter((obj: any) => {
-                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+                return HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(obj.order_date);
             });
             if (filteredArray.length > 0) {
                 this.investigations[0].selectedData = filteredArray;
@@ -406,7 +440,15 @@ export default defineComponent({
         },
         async setListData() {
             this.orders = await OrderService.getOrders(this.patient.patientID);
-            const tableData: any = this.generateListItems(this.orders, "order");
+            let tableData: any = this.generateListItems(this.orders, "order");
+
+            // Sort the table data by order date in descending order (most recent first)
+            tableData.sort((a: any, b: any) => {
+                const dateA = new Date(a[3]); // Access the order date from the array
+                const dateB = new Date(b[3]);
+                return dateB.getTime() - dateA.getTime(); // Sort in descending order
+            });
+
             const predefineTests = [
                 [
                     "FBS",
@@ -442,6 +484,7 @@ export default defineComponent({
                     })}'>Order Test</button> `,
                 ],
             ];
+
             const uniquePredefineTests = predefineTests.filter((predefTest) => {
                 return !tableData.some((tableRow: any) => tableRow[0] === predefTest[0]);
             });
@@ -453,6 +496,8 @@ export default defineComponent({
             const uniqueTableDataTests = tableData.filter((predefTest: any) => {
                 return !duplicateTests.some((tableRow: any) => tableRow[0] === predefTest[0]);
             });
+
+            // Combine all data and assign to this.tableData
             this.tableData = [...duplicateTests, ...uniquePredefineTests, ...uniqueTableDataTests];
             await this.updateInvestigationWizard();
             DataTable.use(DataTablesCore);

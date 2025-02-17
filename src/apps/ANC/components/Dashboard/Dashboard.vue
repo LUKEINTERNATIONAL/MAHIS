@@ -25,14 +25,14 @@
                 </div>
             </ion-card-content>
         </ion-card>
-      <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
-        <ion-card-content>
-          <div class="top-card-text">
-            <div class="text-2xl font-bold">0</div>
-            <h3 class="text-sm font-medium">Due this week</h3>
-          </div>
-        </ion-card-content>
-      </ion-card>
+        <ion-card style="margin-bottom: 20px; background-color: #fff" class="top-card">
+            <ion-card-content>
+                <div class="top-card-text">
+                    <div class="text-2xl font-bold">0</div>
+                    <h3 class="text-sm font-medium">Due this week</h3>
+                </div>
+            </ion-card-content>
+        </ion-card>
     </div>
     <div style="display: flex; gap: 20px; padding-left: 20px; padding-right: 20px">
         <ion-card style="margin-bottom: 20px; background-color: #fff; width: 100%" class="top-card">
@@ -66,11 +66,10 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import ApexChart from "vue3-apexcharts";
-import { nextTick } from "vue";
+import { defineComponent, nextTick } from "vue";
 import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
-import { defineComponent } from "vue";
 import { Service } from "@/services/service";
 import HisDate from "@/utils/Date";
 export default defineComponent({
@@ -81,7 +80,7 @@ export default defineComponent({
     },
     data() {
         return {
-            dashboardData: "",
+            dashboardData: "" as any,
             isChartReady: false,
             lineChartOptions: {
                 chart: {
@@ -204,8 +203,8 @@ export default defineComponent({
         getDashboardData() {
             const url = `programs/${32}/reports/ncd_dashboard`;
             return Service.getJson(url, {
-                start_date: HisDate.currentDate(),
-                end_date: HisDate.currentDate(),
+                start_date: HisDate.sessionDate(),
+                end_date: HisDate.sessionDate(),
             });
         },
     },

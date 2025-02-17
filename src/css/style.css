@@ -328,6 +328,11 @@ ion-modal > .ion-page {
         --height: 90%;
     }
 }
+@media (max-width: 937px) {
+    .form-wizard-vue .fw-body-list {
+        display: none;
+    }
+}
 
 @media (min-width: 1024px) {
     .large-modal {
@@ -635,6 +640,11 @@ ion-footer {
     --height: 100vh;
     --width: 100vh;
 }
+.mediumModal {
+    --height: 50vh;
+    --width: 50vh;
+    --border-radius: 10px;
+}
 @media only screen and (max-width: 480px) {
     .Toastify__toast-container {
         left: unset;
@@ -777,7 +787,32 @@ ion-footer {
 .sx__month-agenda-day {
     color: #000;
 }
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@import "datatables.net-dt";
+@import "datatables.net-buttons-dt";
+@import "datatables.net-responsive-dt";
+@import "datatables.net-select-dt";
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+div.dt-buttons > .dt-button:first-child {
+    border: 1px solid #fff;
+    background: #046c04;
+    border-radius: 5px;
+}
+div.dt-buttons > .dt-button:hover:not(.disabled) {
+    background: #188907 !important;
+    border: 1px solid #fff !important;
+}
+.dt-type-date {
+    text-align: left !important;
+}
 .dp__theme_light {
     --dp-background-color: #fff;
     --dp-text-color: #212121;

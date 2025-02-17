@@ -1,5 +1,5 @@
 <template>
-    <ion-page :class="{ loading: isLoading }">
+    <ion-page :class="{ loading: isLoading }" :keep-alive="false">
         <!-- Spinner -->
         <div v-if="isLoading" class="spinner-overlay">
             <ion-spinner name="bubbles"></ion-spinner>
@@ -45,8 +45,8 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
-                        v-if="combinedBatches?.length > 0"
-                        :total-items="combinedBatches?.length"
+                        v-if="totalPages > 0"
+                        :total-items="totalPages"
                         :items-per-page="4"
                         :max-pages-shown="2"
                         v-model="currentPage"
@@ -106,6 +106,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
+import { useWorkerStore } from "@/stores/workerStore";
 import {
     medkit,
     chevronBackOutline,
@@ -173,8 +174,8 @@ export default defineComponent({
             allStock: [] as any,
             outStock: [] as any,
             filter: "" as any,
-            startDate: HisDate.currentDate(),
-            endDate: HisDate.currentDate(),
+            startDate: HisDate.sessionDate(),
+            endDate: HisDate.sessionDate(),
             options: {
                 responsive: true,
                 select: true,
@@ -182,6 +183,8 @@ export default defineComponent({
             selectedButton: "all",
             isLoading: false,
             combinedBatches: [] as any,
+            stockData: [] as any,
+            totalPages: 0 as any,
         };
     },
     setup() {
@@ -205,6 +208,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useStockStore, ["stock"]),
+        ...mapState(useWorkerStore, ["workerData"]),
         ...mapState(useSearchName, ["searchName"]),
         ...mapState(useStatusStore, ["apiStatus"]),
     },
@@ -216,14 +220,14 @@ export default defineComponent({
             deep: true,
         },
         $route: {
-            async handler() {
-                await this.buildTableData();
+            async handler(data) {
+                if (data.name == "stockManagement") await this.updateBuildStockData();
             },
             deep: true,
         },
     },
     async mounted() {
-        await this.buildTableData();
+        await this.updateBuildStockData();
     },
     methods: {
         combineDrugBatches(batches: DrugBatch[]): CombinedDrugBatch[] {
@@ -277,11 +281,31 @@ export default defineComponent({
                 await this.buildTableData();
             }
         },
+        async updateBuildStockData() {
+            useWorkerStore().postData("SYNC_STOCK_RECORD");
+            this.buildTableData();
+        },
         async buildTableData(page = 1) {
             this.isLoading = true;
             try {
-                const stock: any = await getOfflineRecords("stock");
-                this.reportData = this.paginateArray(this.combineDrugBatches(stock), this.currentPage);
+                if (this.apiStatus) {
+                    const stockService = new StockService();
+                    this.reportData = {
+                        items: await stockService.getItems({
+                            start_date: "2000-01-01",
+                            end_date: this.endDate,
+                            drug_name: this.filter,
+                            page: page,
+                            page_size: 4,
+                            display_details: "true",
+                        }),
+                    };
+                    if (this.reportData?.items) this.totalPages = this.reportData?.items[0]?.total_count;
+                } else {
+                    this.stockData = await getOfflineRecords("stock");
+                    this.reportData = this.paginateArray(this.combineDrugBatches(this.stockData), this.currentPage);
+                    this.totalPages = this.combinedBatches?.length;
+                }
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {

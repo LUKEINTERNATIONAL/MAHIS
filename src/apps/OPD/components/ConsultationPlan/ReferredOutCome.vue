@@ -1,25 +1,7 @@
 <template>
     <ion-list>
         <ion-row>
-            <ion-col class="lsp-cls-1">
-                <ListPicker
-                    :multiSelection="list_picker_prperties[0].multi_Selection"
-                    :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
-                    :name_of_list="list_picker_prperties[0].name_of_list"
-                    :choose_place_holder="list_picker_prperties[0].placeHolder"
-                    :items_-list="list_picker_prperties[0].items"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[0].disabled.value"
-                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                    @item-search-text="list_picker_prperties[0].searchTextFN"
-                />
-
-                <div style="margin-bottom: 15px;">
-                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">{{ list_picker_prperties[0].error_message }}</ion-label>
-                </div>
-            </ion-col>
+            <SelectFacility :show_error="show_location_error" @facility-selected="facilitySelected" :selected_district_ids="selectedDistrictIds" :selected_location="selected_location"/>
         </ion-row>
 
         <ion-row>
@@ -28,6 +10,7 @@
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
+                        :date_prop="date_properties[0].dataValue.value"
                     />
 
                     <div>
@@ -43,6 +26,7 @@
                     <TimePicker
                     :place_holder="time_properties[0].placeHolder"
                     @time-up-dated="time_properties[0].dataHandler"
+                    :time_prop="time_properties[0].dataValue.value"
                 />
 
                 <div>
@@ -101,24 +85,25 @@ import {
     pencilOutline,
     removeOutline
 } from "ionicons/icons"
-import ListPicker from "@/components/ListPicker.vue"
 import DatePicker from "@/components/DatePicker.vue"
 import TimePicker from "@/components/TimePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
-import { LocationService } from "@/services/location_service"
 import DynamicButton from "@/components/DynamicButton.vue"
-import { isEmpty } from "lodash"
+import SelectFacility from "@/apps/OPD/components/SelectFacility.vue"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 const editIndex = ref(NaN)
 
-const FacilityData = ref([] as any)
+const FacilityData = ref(null) as any
 const store = useOutcomeStore()
-let temp_data_v: any[] = []
+const show_location_error = ref(false) as any
+const selectedDistrictIds = ref([]) as any
+const selected_location = ref({}) as any
 
-onMounted(async () => {
-    findWardName('')
-})
+const other_store_data = {
+    ref_data: {},
+    location_data: {},
+}
 
 const note_properties = [
     {
@@ -140,6 +125,65 @@ const date_properties = [
     }
 ]
 
+const time_properties = [
+    {
+        placeHolder: {default: 'Enter time of referral'} as any,
+        dataHandler: timeUpdate_fn1,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
+    },
+]
+
+interface Props {
+  selected_referral_data: any,
+  selected_other_referral_data: any,
+}
+
+const props = defineProps<Props>()
+
+watch(() => props.selected_other_referral_data,
+  (newValue) => {
+    if (!newValue) return;
+    note_properties[0].dataValue.value = newValue.reason
+    date_properties[0].dataValue.value = newValue.date
+    time_properties[0].dataValue.value = newValue.time
+  },
+    {
+        immediate: true,
+        deep: true
+    }
+)
+
+watch(
+  () => props.selected_referral_data,
+  (newValue) => {
+    if (!newValue) return;
+
+    FacilityData.value = newValue.selected_location
+    other_store_data.location_data = newValue
+    
+    const districtIds = Array.isArray(newValue.selected_district_ids) 
+      ? [...newValue.selected_district_ids]
+      : [];
+      
+    const location = newValue.selected_location 
+      ? { ...newValue.selected_location }
+      : null;
+    
+    selectedDistrictIds.value = districtIds;
+    selected_location.value = location;
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
+
+onMounted(() => {
+    //console.log("init: ", props.selected_referral_data)
+})
+
 function dateUpdate_fn1(data: any) {
     const date_data = {
         day: data.value.day,
@@ -155,54 +199,8 @@ function notesUpDated_fn1(event: any) {
     note_properties[0].dataValue.value = reason
 }
 
-const list_picker_prperties = [
-    {
-        multi_Selection: false as any,
-        show_list_label: true as any,
-        unqueId: 'qwerty4' as any,
-        name_of_list: 'Choose Facility' as any,
-        placeHolder: 'Choose one' as any,
-        items: FacilityData.value,
-        listUpdatedFN: listUpdated1,
-        listFilteredFN: ()=>{},
-        searchTextFN: findWardName,
-        use_internal_filter: true as any,
-        show_error: ref(false),
-        error_message: 'please select a Facility',
-        disabled: ref(false) as any,
-    }
-]
-
-const time_properties = [
-    {
-        placeHolder: {default: 'Enter time of referral'} as any,
-        dataHandler: timeUpdate_fn1,
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: 'error',
-    },
-]
-
 function timeUpdate_fn1(data: any) {
     time_properties[0].dataValue.value = data
-}
-
-const uniqueLocations = new Set()
-async function findWardName(data: any) {
-    const srch_text = data
-    const temp_data1 = await LocationService.getFacilities({ name: srch_text })
-    temp_data1.forEach((item: any) => {
-        if (!uniqueLocations.has(item.location_id)) {
-            uniqueLocations.add(item.location_id)
-            if (isEmpty(item.name) == false) {
-                FacilityData.value.push({name: item.name,selected: false, other: item})
-            }
-        }
-    })
-}
-
-function listUpdated1(data: any) {
-    FacilityData.value = data
 }
 
 function validateForm() {
@@ -210,7 +208,7 @@ function validateForm() {
     validateNotes()
     validateDate()
     validateTime()
-    if (date_properties[0].show_error.value == false && time_properties[0].show_error.value == false && note_properties[0].show_error.value == false && list_picker_prperties[0].show_error.value == false) {
+    if (date_properties[0].show_error.value == false && time_properties[0].show_error.value == false && note_properties[0].show_error.value == false && show_location_error.value == false) {
         saveDataToStores()
     } else {
         toastWarning("Please enter correct data values", 4000)
@@ -234,7 +232,6 @@ function validateDate() {
 }
 
 function validateTime() {
-    console.log(time_properties[0].dataValue.value)
     if (time_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
         time_properties[0].show_error.value = true 
     } else {
@@ -243,36 +240,44 @@ function validateTime() {
 }
 
 function validateFacility() {
-    temp_data_v = []
-    FacilityData.value.forEach((item: any) => {
-        if (item.selected == true) {
-            temp_data_v.push(item)
-        }
-    })
-    if (temp_data_v.length > 0) {
-        list_picker_prperties[0].show_error.value = false 
+
+    if (FacilityData.value) {
+        show_location_error.value = false
     } else {
-        list_picker_prperties[0].show_error.value = true
-        console.log( list_picker_prperties[0].show_error)
+        show_location_error.value = true    
     }
+
 }
 
-function saveDataToStores() {
-    const referralData = {
-        name: temp_data_v[0].name,
+const facilitySelected = (data: any) => {
+    FacilityData.value = data.selected_location
+    validateFacility()
+    other_store_data.location_data = data
+}
+
+const saveDataToStores = () => {
+    const referralInfo = {
+        name: FacilityData.value.name,
         type: 'Referred out',
+        selected: true,
         date: date_properties[0].dataValue,
         time: time_properties[0].dataValue,
         reason: note_properties[0].dataValue,
-        other: temp_data_v[0].other
-        // dataItem: refDataItem.value,
+    }
+    
+    const referralData = {
+        ...referralInfo,
+        other: {
+            ref_data: referralInfo,
+            location_data: other_store_data.location_data
+        }
     }
 
     store.addOutcomeData(referralData, editIndex.value)
     dataSaved({"dataSaved": false})
 }
 
-function cancelE() {
+const cancelE = () =>{
     dataSaved()
 }
 
@@ -308,9 +313,11 @@ const dynamic_button_properties = [
         background: #fecdca;
         color: #b42318;
         text-transform: none;
-        padding: 6%;
+        padding: 5%;
+        padding-top: 2%;
+        padding-bottom: 2%;
         border-radius: 10px;
-        margin-top: 7px;
+        margin-top: 4px;
         display: flex;
         text-align: center;
     }

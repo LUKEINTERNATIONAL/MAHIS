@@ -4,6 +4,7 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore";
 import HisDate from "@/utils/Date";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { saveOfflinePatientData } from "@/services/offline_service";
 export class Appointment extends AppEncounterService {
     patientID: number;
     providerID: number;
@@ -34,22 +35,19 @@ export class Appointment extends AppEncounterService {
         this.patientID = patientID as any;
     }
 
-    async createAppointment() {
+    async createAppointment(patientData: any) {
+        let patient = JSON.parse(JSON.stringify(patientData));
         const _appointment_ = [] as any;
         const store = useImmunizationAppointMentStore();
         store.selectedAppointmentMent.forEach((appointment: any) => {
             const next_appointment_date = HisDate.toStandardHisFormat(appointment.date);
             _appointment_.push(next_appointment_date);
         });
-        await this.createEncounter();
-        // const res = await this.getNextAppointment();
-        // const nextAppointmentDate = res.appointment_date;
-        // const n_a_obs = await this.buildValueDate("Estimated date", nextAppointmentDate)
         const a_obs = (await this.buildValueDate("Appointment date", _appointment_[0])) as any;
-        const appointment_onbs = await this.saveObservationList([a_obs]);
-        if (!appointment_onbs) return toastWarning("Unable set Next Appointment");
+        patient?.appointments.unsaved?.push(a_obs);
+        await saveOfflinePatientData(patient);
         toastSuccess("next Appointment Set Successfully");
-        return [this.patientID, _appointment_[0]];
+        return _appointment_[0];
     }
 
     async getNextAppointment() {

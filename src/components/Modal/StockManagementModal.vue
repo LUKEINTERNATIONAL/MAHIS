@@ -90,8 +90,8 @@
                 </div>
                 <div class="example-one">
                     <vue-awesome-paginate
-                        v-if="reportData.totalCount"
-                        :total-items="reportData.totalCount"
+                        v-if="totalPages > 0"
+                        :total-items="totalPages"
                         :items-per-page="4"
                         :max-pages-shown="2"
                         v-model="currentPage"
@@ -186,7 +186,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useStatusStore } from "@/stores/StatusStore";
-import workerData from "@/activate_worker";
+import { useWorkerStore } from "@/stores/workerStore";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -247,8 +247,8 @@ export default defineComponent({
             allStock: [] as any,
             outStock: [] as any,
             filter: "" as any,
-            startDate: HisDate.currentDate(),
-            endDate: HisDate.currentDate(),
+            startDate: HisDate.sessionDate(),
+            endDate: HisDate.sessionDate(),
             options: {
                 responsive: true,
                 select: true,
@@ -260,6 +260,7 @@ export default defineComponent({
             event: null as any,
             stockService: {} as any,
             disabled: false,
+            totalPages: 0 as any,
         };
     },
     setup() {
@@ -315,7 +316,7 @@ export default defineComponent({
     methods: {
         checkExpired(item: any) {
             const expiry_date: Date = new Date(item.expiry_date);
-            const currentDate: Date = new Date(HisDate.currentDate());
+            const currentDate: Date = new Date(HisDate.sessionDate());
             if (currentDate >= expiry_date) {
                 return false;
             } else {
@@ -338,7 +339,7 @@ export default defineComponent({
                     drug_id: this.stockData.drug_id,
                     reallocation_code: "MA20",
                     waste_reason: reason,
-                    date: HisDate.currentDate(),
+                    date: HisDate.sessionDate(),
                     reason: reason,
                 };
                 try {
@@ -373,7 +374,7 @@ export default defineComponent({
                     drug_id: this.stockData.drug_id,
                     reallocation_code: "MA20",
                     waste_reason: reason,
-                    date: HisDate.currentDate(),
+                    date: HisDate.sessionDate(),
                     reason: reason,
                 };
                 try {
@@ -472,13 +473,28 @@ export default defineComponent({
         },
         async buildTableData(page = 1) {
             this.isLoading = true;
-            await workerData.postData("SYNC_STOCK_RECORD");
+            useWorkerStore().postData("SYNC_STOCK_RECORD");
             try {
-                this.reportData = await getOfflineRecords("stock", {
-                    whereClause: { drug_legacy_name: this.data.drug_legacy_name },
-                    currentPage: this.currentPage,
-                    itemsPerPage: 4,
-                });
+                if (this.apiStatus) {
+                    const stockService = new StockService();
+                    this.reportData = {
+                        records: await stockService.getItems({
+                            start_date: "2000-01-01",
+                            end_date: this.endDate,
+                            drug_name: this.data.drug_legacy_name,
+                            page: page,
+                            page_size: 4,
+                        }),
+                    };
+                    if (this.reportData?.records) this.totalPages = this.reportData?.records[0]?.total_count;
+                } else {
+                    this.reportData = await getOfflineRecords("stock", {
+                        whereClause: { drug_legacy_name: this.data.drug_legacy_name },
+                        currentPage: this.currentPage,
+                        itemsPerPage: 4,
+                    });
+                    this.totalPages = this.reportData.totalCount;
+                }
             } catch (error) {
                 toastWarning("An error occurred while loading data.");
             } finally {

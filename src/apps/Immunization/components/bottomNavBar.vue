@@ -73,7 +73,7 @@
     setup(props, { emit }) {
       const localCurrentPage = ref(props.currentPage);
       const localItemsPerPage = ref(props.itemsPerPage);
-      const itemsPerPageOptions = [6,10, 20, 30, 50];
+      const itemsPerPageOptions = [6,10, 20, 30, 50, 100];
       const isMobileView = ref(false);
   
       const totalPages = computed(() => Math.max(1, Math.ceil(props.totalItems / localItemsPerPage.value)));

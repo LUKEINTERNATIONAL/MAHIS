@@ -151,7 +151,7 @@ export default defineComponent({
         handleInput(event: any) {
             //if (this.popOverData?.data) this.setEvent(event);
             this.$emit("update:inputValue", event);
-            this.$emit("update:phone", this.phone)
+            this.$emit("update:phone", this.phone);
         },
         handleBlur(event: any) {
             this.$emit("update:inputValue", event);
@@ -180,11 +180,11 @@ export default defineComponent({
         },
         assignCountryAndPhone(country: any, phone: any) {
             this.country = [country];
-            this.phone   =  phone;
+            this.phone = phone;
         },
     },
     setup(props, { emit }) {
-        const instance = getCurrentInstance();
+        const instance: any = getCurrentInstance();
         const counter = ref(0);
         const forceReRender = () => {
             counter.value++;
@@ -197,12 +197,15 @@ export default defineComponent({
             }
         );
 
-        watch(() => props.p_country, (newValue) => {
-            if (newValue !== undefined) {
-                instance?.proxy?.assignCountryAndPhone(newValue, props.inputValue);
-                forceReRender();
+        watch(
+            () => props.p_country,
+            (newValue) => {
+                if (newValue !== undefined) {
+                    instance?.proxy?.assignCountryAndPhone(newValue, props.inputValue);
+                    forceReRender();
+                }
             }
-        });
+        );
         return {
             caretDownSharp,
             counter,

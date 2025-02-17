@@ -32,6 +32,13 @@ import "@ionic/vue/css/text-transformation.css";
 import "@ionic/vue/css/flex-utils.css";
 import "@ionic/vue/css/display.css";
 
+// Import DataTables extensions
+import "datatables.net-buttons";
+import "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-buttons-dt";
+import "datatables.net-responsive";
+import "datatables.net-select";
+
 /* Theme variables */
 import "./theme/variables.css";
 /* font variables */
@@ -40,7 +47,6 @@ import "./css/style.css";
 import "./css/component_view.css";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
-import { useWorkerStore } from "@/stores/workerStore";
 
 const pinia = createPinia();
 const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePaginate);
@@ -48,8 +54,7 @@ const app = createApp(App).use(IonicVue).use(router).use(pinia).use(VueAwesomePa
 app.component("VueDatePicker", VueDatePicker);
 app.component("v-select", vSelect);
 app.component("k-progress", KProgress);
-const workerStore = useWorkerStore();
-workerStore.setRouter(router);
+app.component("DataTable", DataTable);
 pinia.use(piniaPluginPersistedState);
 DataTable.use(DataTablesCore);
 router.isReady().then(() => {

@@ -183,6 +183,8 @@ export default defineComponent({
                 fn: () => {
                     createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false);
                 },
+                icon: '',
+                show_icon: false,
             },
             showDateBtns: true as boolean,
             selected_date_: "",

@@ -164,7 +164,6 @@ import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServ
 import { IdentifierService } from "@/services/identifier_service";
 import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
-import { UserService } from "@/services/user_service";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { resetPatientData } from "@/services/reset_data";
 import { useWorkerStore } from "@/stores/workerStore";
@@ -277,15 +276,16 @@ export default defineComponent({
             else {
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                useWorkerStore().setPatientRecord(await PatientService.findByID(this.patient.patientID));
+                useDemographicsStore().setPatientRecord(await PatientService.findByID(this.patient.patientID));
                 await this.saveEnrollment();
                 await resetNCDPatientData();
-                await UserService.setProgramUserActions();
+                let url = "";
                 if (this.NCDActivities.length == 0) {
-                    useWorkerStore().route = "patientProfile";
+                    url = "patientProfile";
                 } else {
-                    useWorkerStore().route = "consultationPlan";
+                    url = "consultationPlan";
                 }
+                this.$router.push(url);
             }
         },
         openModal() {

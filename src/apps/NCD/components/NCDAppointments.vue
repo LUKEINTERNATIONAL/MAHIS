@@ -109,6 +109,7 @@ import { PatientService } from "@/services/patient_service";
 import DashboardMixin from "@/views/Mixin/DashboardMixin.vue";
 import { Service } from "@/services/service";
 import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
@@ -127,9 +128,9 @@ export default defineComponent({
         IonCol,
     },
     data() {
-        const startDate = ref(HisDate.currentDate());
-        const endDate = ref(HisDate.currentDate());
-        const minDate = ref(HisDate.currentDate());
+        const startDate = ref(HisDate.sessionDate());
+        const endDate = ref(HisDate.sessionDate());
+        const minDate = ref(HisDate.sessionDate());
         const people = ref([]) as any;
         return {
             minDate,
@@ -182,18 +183,20 @@ export default defineComponent({
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
             this.isPharmacist();
-            useWorkerStore().setPatientRecord(patientData[0]);
+            useDemographicsStore().setPatientRecord(patientData[0]);
         },
         isPharmacist() {
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
             const roles: any = roleData ? roleData : [];
             if (roles.some((role: any) => roles.some((role: any) => role.role === "Pharmacist"))) {
                 this.$router.push("dispensation");
+                let url = "";
                 if (Service.getProgramID() == 32) {
-                    useWorkerStore().route = "NCDDispensations";
+                    url = "NCDDispensations";
                 } else {
-                    useWorkerStore().route = "patientProfile";
+                    url = "patientProfile";
                 }
+                this.$router.push(url);
             }
         },
     },

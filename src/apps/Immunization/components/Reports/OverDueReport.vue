@@ -61,6 +61,7 @@ import { toastWarning } from "@/utils/Alerts";
 import "datatables.net-select";
 import { PatientService } from "@/services/patient_service";
 import { useWorkerStore } from "@/stores/workerStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     name: "Home",
@@ -86,8 +87,8 @@ export default defineComponent({
     data() {
         return {
             reportData: [] as any,
-            startDate: HisDate.currentDate(),
-            endDate: HisDate.currentDate(),
+            startDate: HisDate.sessionDate(),
+            endDate: HisDate.sessionDate(),
             options: {
                 responsive: true,
                 select: false,
@@ -130,8 +131,8 @@ export default defineComponent({
     methods: {
         async handleFollowUp(id: any) {
             const patientData = await PatientService.findByID(id);
-            useWorkerStore().route = "patientProfile";
-            useWorkerStore().setPatientRecord(patientData);
+            await useDemographicsStore().setPatientRecord(patientData);
+            this.$router.push("patientProfile");
         },
         async handleInputData(event: any) {
             if (event.inputHeader == "Start date") {

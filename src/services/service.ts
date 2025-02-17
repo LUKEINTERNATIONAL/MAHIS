@@ -85,7 +85,7 @@ export class Service {
     }
 
     static async getThirdpartyApps() {
-        return JSON.parse((await ApiClient.getConfig()).thirdpartyapps);
+        return "";
     }
 
     private static async jsonResponseHandler(request: Promise<any>) {
@@ -186,26 +186,26 @@ export class Service {
     }
 
     static getProgramName() {
-        let app: any = localStorage.getItem("app");
-        if (!app) return "";
+        let app: any = localStorage.getItem("programStore");
         app = JSON.parse(app);
-        if ("applicationName" in app) return app.applicationName;
-        return "";
+        return app?.activeProgram?.name;
     }
-
+    static getAuthorizedPrograms() {
+        let app: any = localStorage.getItem("programStore");
+        app = JSON.parse(app);
+        return app?.authorizedPrograms;
+    }
 
     static getSuspendedProgram() {
         return localStorage.getItem("suspendedApp") || "";
     }
 
     static getProgramID() {
-        let app: any = localStorage.getItem("app");
+        let app: any = localStorage.getItem("programStore");
 
         if (app) {
             app = JSON.parse(app);
-            if ("programID" in app) {
-                return app.programID;
-            }
+            return app?.activeProgram?.program_id;
         }
 
         return "";
@@ -238,5 +238,4 @@ export class Service {
     static patchJson(url: string, data: Record<string, any>) {
         return this.jsonResponseHandler(ApiClient.patch(url, data));
     }
-
 }

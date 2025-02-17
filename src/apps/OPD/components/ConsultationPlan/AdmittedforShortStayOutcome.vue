@@ -1,23 +1,31 @@
 <template>
     <ion-list>
         <ion-row>
-            <ion-col class="lsp-cls-1">
-                <ListPicker class="aro-cls-1"
-                    :multiSelection="list_picker_prperties[0].multi_Selection"
-                    :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
-                    :name_of_list="list_picker_prperties[0].name_of_list"
-                    :choose_place_holder="list_picker_prperties[0].placeHolder"
-                    :items_-list="list_picker_prperties[0].items"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[0].disabled.value"
-                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                />
+            <ion-col>
+                    <VueMultiselect
+                        v-model="selected_ward"
+                        @update:model-value="selectedWard($event)"
+                        :multiple="false"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Find and select a ward"
+                        placeholder="Find and select a ward"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        :disabled="false"
+                        @search-change="($event)={}"
+                        track-by="location_ward_id"
+                        :options="WardsData"
+                    />
 
-                <div style="margin-bottom: 15px;">
-                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">{{ list_picker_prperties[0].error_message }}</ion-label>
-                </div>
+                    <div>
+                        <ion-label v-if="ward_show_error" class="error-label">
+                            {{ 'Please select a ward' }}
+                        </ion-label>
+                    </div>
             </ion-col>
         </ion-row>
 
@@ -27,6 +35,7 @@
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
+                        :date_prop="date_properties[0].dataValue.value"
                     />
 
                     <div>
@@ -42,6 +51,7 @@
                     <TimePicker
                     :place_holder="time_properties[0].placeHolder"
                     @time-up-dated="time_properties[0].dataHandler"
+                    :time_prop="time_properties[0].dataValue.value"
                 />
 
                 <div>
@@ -97,12 +107,12 @@ export default defineComponent({
 import { IonRow, IonCol, IonLabel, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import DynamicButton from "@/components/DynamicButton.vue"
+import VueMultiselect from "vue-multiselect";
 import {
     addOutline,
     pencilOutline,
     removeOutline
 } from "ionicons/icons";
-import ListPicker from "@/components/ListPicker.vue"
 import DatePicker from "@/components/DatePicker.vue"
 import TimePicker from "@/components/TimePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
@@ -114,6 +124,8 @@ const WardsData = ref([] as any)
 const store = useOutcomeStore()
 let temp_data_v: any[] = []
 const editIndex = ref(NaN)
+const ward_show_error = ref(false)
+const selected_ward = ref();
 
 onMounted(async () => {
     findWardName({})
@@ -167,6 +179,40 @@ const time_properties = [
     },
 ]
 
+interface Props {
+    selected_ward_prop: any,
+    admitted_other_props: any,
+}
+const props = defineProps<Props>()
+
+watch(() => props.selected_ward_prop,
+    (newValue) => {
+        if (!newValue) return;
+        selected_ward.value = newValue
+    },
+    {
+        immediate: true,
+        deep: true
+    }
+)
+
+watch(() => props.admitted_other_props,
+    (newValue) => {
+        if (!newValue) return;
+
+        note_properties[0].dataValue.value = newValue.reason
+        time_properties[0].dataValue.value = newValue.time
+        date_properties[0].dataValue.value = newValue.date
+
+        // console.log(newValue)
+        // selected_ward.value = newValue
+    },
+    {
+        immediate: true,
+        deep: true
+    }
+)
+
 function timeUpdate_fn1(data: any) {
     time_properties[0].dataValue.value = data
 }
@@ -187,23 +233,6 @@ function notesUpDated_fn1(event: any) {
     note_properties[0].dataValue.value = reason
 }
 
-const list_picker_prperties = [
-    {
-        multi_Selection: false as any,
-        show_list_label: true as any,
-        unqueId: 'qwerty3' as any,
-        name_of_list: 'Choose Ward' as any,
-        placeHolder: 'Choose one' as any,
-        items: WardsData.value,
-        listUpdatedFN: listUpdated1,
-        listFilteredFN: ()=>{},
-        use_internal_filter: true as any,
-        show_error: ref(false),
-        error_message: 'please select a ward',
-        disabled: ref(false) as any,
-    }
-]
-
 async function findWardName(data: any) {
     const srch_text = data.value
     const temp_data1 = await getFacilityWards(srch_text)
@@ -211,7 +240,8 @@ async function findWardName(data: any) {
         const _item_ = {
             name: item.name,
             selected: false,
-            other: item
+            other: item,
+            location_ward_id: item.other.location_id
         }
         WardsData.value.push(_item_)
     })
@@ -226,7 +256,7 @@ function validateForm() {
     validateNotes()
     validateDate()
     validateTime()
-    if (date_properties[0].show_error.value == false && time_properties[0].show_error.value == false && note_properties[0].show_error.value == false && list_picker_prperties[0].show_error.value == false) {
+    if (date_properties[0].show_error.value == false && time_properties[0].show_error.value == false && note_properties[0].show_error.value == false &&  ward_show_error.value == false) {
         saveDataToStores()
     } else {
         toastWarning("Please enter correct data values", 4000)
@@ -234,17 +264,10 @@ function validateForm() {
 }
 
 function validateWard() {
-    temp_data_v = []
-    WardsData.value.forEach((item: any) => {
-        if (item.selected == true) {
-            temp_data_v.push(item)
-        }
-    })
-    if (temp_data_v.length > 0) {
-        list_picker_prperties[0].show_error.value = false 
+    if (selected_ward.value === undefined || selected_ward.value == "") {
+        ward_show_error.value = true
     } else {
-        list_picker_prperties[0].show_error.value = true
-        console.log( list_picker_prperties[0].show_error)
+        ward_show_error.value = false
     }
 }
 
@@ -258,13 +281,13 @@ function validateNotes() {
 
 function saveDataToStores() {
     const referralData = {
-        name: temp_data_v[0].name,
+        name:  selected_ward.value.name,
         type: 'Admitted for short stay',
         date: date_properties[0].dataValue,
         time: time_properties[0].dataValue,
         reason: note_properties[0].dataValue,
-        other: temp_data_v[0].other
-        // dataItem: refDataItem.value,
+        other: selected_ward.value,
+        selected: true,
     }
 
     store.addOutcomeData(referralData, editIndex.value)
@@ -284,7 +307,6 @@ function cancelE() {
 }
 
 function validateDate() {
-    console.log(date_properties[0].dataValue.value)
     if (date_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
         date_properties[0].show_error.value = true 
     } else {
@@ -293,30 +315,35 @@ function validateDate() {
 }
 
 function validateTime() {
-    console.log(time_properties[0].dataValue.value)
     if (time_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
         time_properties[0].show_error.value = true 
     } else {
         time_properties[0].show_error.value = false
     }
 }
+
+const selectedWard = (data: any) => {
+    selected_ward.value = data
+}
 </script>
 
 <style scoped>
-.error-label {
-    background: #fecdca;
-    color: #b42318;
-    text-transform: none;
-    padding: 6%;
-    border-radius: 10px;
-    margin-top: 7px;
-    display: flex;
-    text-align: center;
-}
-.spc_btwn {
-    margin-top: 2%;
-}
-.lsp-cls-1 {
-    margin: -15px; margin-left: 0px;
-}
+    .error-label {
+        background: #fecdca;
+        color: #b42318;
+        text-transform: none;
+        padding: 5%;
+        padding-top: 2%;
+        padding-bottom: 2%;
+        border-radius: 10px;
+        margin-top: 4px;
+        display: flex;
+        text-align: center;
+    }
+    .spc_btwn {
+        margin-top: 2%;
+    }
+    .lsp-cls-1 {
+        margin: -15px; margin-left: 0px;
+    }
 </style>

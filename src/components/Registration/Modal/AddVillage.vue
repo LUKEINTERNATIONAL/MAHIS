@@ -6,7 +6,7 @@
         <div>
             <div class="center text_12">
                 <ion-row>
-                    <BasicForm :contentData="addVillage" @update:inputValue="validaterowData()" />
+                    <BasicForm :contentData="villageForm" />
                 </ion-row>
             </div>
         </div>
@@ -19,7 +19,7 @@
         </div>
     </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import {
     IonContent,
     IonButton,
@@ -39,7 +39,6 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
 import BasicForm from "@/components/BasicForm.vue";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
-import DatePicker from "@/components/DatePicker.vue";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { VitalsService } from "@/services/vitals_service";
@@ -57,124 +56,59 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { LocationService } from "@/services/location_service";
 import Validation from "@/validations/StandardValidations";
 import { isPlainObject, isEmpty } from "lodash";
+import { validateInputFiledData } from "@/services/group_validation";
+import { useWorkerStore } from "@/stores/workerStore";
+import { getOfflineRecords } from "@/services/offline_service";
 
-export default defineComponent({
-    name: "AddVillage",
-    components: {
-        IonContent,
-        IonHeader,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        BasicForm,
-    },
-    data() {
-        return {
-            popoverOpen: false,
-            iconContent: icons,
-            event: null as any,
-            BMI: "" as any,
-            showPD: false as boolean,
-            validationStatus: false as boolean,
-            validationData: "" as any,
-            districtType: "" as any,
-            TAType: "" as any,
-            VillageType: "" as any,
-            location: "" as any,
-        };
-    },
-    computed: {
-        ...mapState(useDemographicsStore, ["patient"]),
-        ...mapState(useRegistrationStore, ["addVillage", "currentLocation", "homeLocation"]),
-    },
-    mounted() {
-        if (localStorage.getItem("activeLocation") == "current") {
-            this.districtType = "current_district";
-            this.TAType = "current_traditional_authority";
-            this.VillageType = "current_village";
-            this.location = this.currentLocation;
-        } else {
-            this.districtType = "home_district";
-            this.TAType = "home_traditional_authority";
-            this.VillageType = "home_village";
-            this.location = this.homeLocation;
-        }
-    },
-    setup() {},
-    methods: {
-        dismiss() {
-            modalController.dismiss();
-        },
-        async saveData() {
-            const villageValue = getFieldValue(this.addVillage, "Village", "value");
-            if (Validation.isNames(villageValue) == null) {
-                const address = await LocationService.createAddress(
-                    this.validationData.address_type,
-                    this.validationData.addresses_name,
-                    this.validationData.parent_location
-                );
-                if (address) {
-                    toastSuccess(`${this.validationData.address_type} added successfully`);
-                    return true;
-                } else {
-                    toastWarning(`Unable to add ${this.validationData.address_type}`);
-                }
-            } else {
-                toastWarning(`Please Fill all the required field with the correct value`);
-            }
-            return false;
-        },
-        async saveVillage() {
-            if (await this.validaterowData()) {
-                await this.saveData();
-                const villageValue = getFieldValue(this.addVillage, "Village", "value");
-                const TAData = getFieldValue(this.location, this.TAType, "value");
-                const villageList = await LocationService.getVillages(TAData.traditional_authority_id, "");
-                modifyFieldValue(this.location, this.VillageType, "multiSelectData", villageList);
-                modifyFieldValue(this.location, this.VillageType, "value", { name: villageValue });
+onMounted(async () => {});
 
-                modifyFieldValue(this.addVillage, "Village", "value", "");
-                if (localStorage.getItem("activeLocation") == "current") {
-                    modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsErrorMassage", false);
-                    modifyFieldValue(this.currentLocation, "current_village", "alertsErrorMassage", false);
-                } else {
-                    modifyFieldValue(this.homeLocation, "home_traditional_authority", "alertsErrorMassage", false);
-                    modifyFieldValue(this.homeLocation, "home_village", "alertsErrorMassage", false);
-                }
-
-                this.dismiss();
-            }
-        },
-        async validaterowData() {
-            this.validationStatus = false;
-            const name = getFieldValue(this.addVillage, "Village", "value");
-            const TAData = getFieldValue(this.location, this.TAType, "value");
-
-            if (Validation.isNames(name) != null) {
-                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "Please enter a valid " + "Village");
-                return false;
-            } else {
-                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "");
-            }
-
-            const villageList = await LocationService.getVillages(TAData.traditional_authority_id, "");
-
-            const filteredData = villageList.filter((item: any) => item.name.toLowerCase() == name.toLowerCase());
-            if (!isEmpty(filteredData)) {
-                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "Can't add existing " + "Village");
-                return false;
-            } else {
-                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "");
-            }
-            this.validationData = {
-                address_type: "Village",
-                addresses_name: name,
-                parent_location: TAData.traditional_authority_id,
-            };
-            return true;
-        },
-    },
+const props: any = defineProps({
+    taData: Object,
 });
+const dismiss = () => {
+    modalController.dismiss();
+};
+const saveVillage = async () => {
+    if (await validateInputFiledData(villageForm.value)) {
+        const villageValue = getFieldValue(villageForm.value, "Village", "value").split(",");
+        const address = await LocationService.createAddress({
+            address_type: "Village",
+            addresses: villageValue,
+            parent_location: props.taData.traditional_authority_id,
+        });
+        if (address) {
+            Promise.all(
+                address.village_data.map((item: any) => useWorkerStore().postData("ADD_OBJECT_STORE", { storeName: "villages", data: item }))
+            );
+            toastSuccess(`Location added successfully`);
+        }
+        dismiss();
+    } else {
+        toastWarning("Please fill all the required field");
+    }
+};
+
+const villageForm = ref([
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Village*",
+                            value: "",
+                            name: "Village",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            validate: false,
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any);
 </script>
 <style scoped>
 .lbl-tl {
@@ -200,6 +134,8 @@ ion-footer {
 .modal_wrapper {
     padding: 0px 10px;
     background: #fff;
+    margin: 0 auto;
+    width: 60%;
 }
 
 .OtherVitalsTitle {

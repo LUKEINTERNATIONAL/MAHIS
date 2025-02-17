@@ -187,8 +187,8 @@ import { PatientOpdList } from "@/services/patient_opd_list";
 import { getUserLocation } from "@/services/userService";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import dates from "@/utils/Date";
-import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
+import { UserService } from "@/services/user_service";
 export default defineComponent({
     name: "ToolbarSearch",
     mixins: [DeviceDetection, SetPersonInformation],
@@ -216,6 +216,7 @@ export default defineComponent({
     },
     data() {
         return {
+            route: "",
             iconContent: icons,
             ddeInstance: {} as any,
             popoverOpen: false,
@@ -438,14 +439,8 @@ export default defineComponent({
                 });
             }
         },
+
         async setPatientData(url: any, item: any) {
-            useWorkerStore().route = url;
-            this.popoverOpen = false;
-            this.searchValue = "";
-            await this.openNewPage();
-            await useWorkerStore().setPatientRecord(item);
-        },
-        async openNewPage() {
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
                 await resetNCDPatientData();
             } else if (Service.getProgramID() == 14) {
@@ -455,8 +450,7 @@ export default defineComponent({
 
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
-            const userProgramsData: any = localStorage.getItem("userPrograms");
-            const userPrograms: any = JSON.parse(userProgramsData);
+            const userPrograms: any = this.programs?.authorizedPrograms;
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
             const roles: any = roleData ? roleData : [];
 
@@ -464,19 +458,24 @@ export default defineComponent({
                 this.isRoleSelectionModalOpen = true;
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 if (this.programID() == 32) {
-                    useWorkerStore().route = "NCDDispensations";
+                    this.route = "NCDDispensations";
                 } else {
-                    useWorkerStore().route = "dispensation";
+                    this.route = "dispensation";
                 }
             } else if (roles.some((role: any) => role.role === "Lab")) {
-                useWorkerStore().route = "OPDConsultationPlan";
+                this.route = "OPDConsultationPlan";
             } else if (userPrograms?.length == 1) {
                 if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
-                    useWorkerStore().route = "OPDvitals";
+                    this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32 && this.apiStatus) {
-                useWorkerStore().route = "";
+                router.push("/patientProfile");
             }
+            this.route = url;
+            this.popoverOpen = false;
+            this.searchValue = "";
+            await useDemographicsStore().setPatientRecord(item);
+            this.$router.push(this.route);
         },
         getPhone(item: any) {
             return item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value;
@@ -520,50 +519,7 @@ export default defineComponent({
 
             return await getOfflineRecords("patientRecords", { likeClause });
         },
-        async handleSearchResults(patient: Promise<Patient | Patient[]>) {
-            let results: Patient[] | Patient = [];
-            try {
-                results = (await patient) as Patient[] | Patient;
-            } catch (e) {
-                // [DDE] A person might have missing attributes such as home_village,
-                // or home_ta.
-                if (e instanceof IncompleteEntityError && !isEmpty(e.entity)) {
-                    results = e.entity;
-                } else if (e instanceof BadRequestError && Array.isArray(e.errors)) {
-                    const [msg, ...entities] = e.errors;
-                    if (typeof msg === "string" && msg === "Invalid parameter(s)") {
-                        this.setInvalidParametersFacts(entities);
-                    }
-                } else {
-                    toastDanger(`${e}`, 300000);
-                }
-            }
 
-            // Use local patient if available if DDE never found them
-            if (isEmpty(results) && !isEmpty(this.localPatient)) results = this.localPatient;
-
-            if (Array.isArray(results) && results.length > 1) {
-                this.facts.npidHasDuplicates = results.length <= 5;
-                this.facts.npidHasOverFiveDuplicates = results.length > 5;
-            } else {
-                this.facts.patientFound = !isEmpty(results);
-            }
-
-            if (this.facts.patientFound) {
-                this.patient = new PatientService(Array.isArray(results) ? results[0] : results);
-                const factPromises = [];
-                if (this.useDDE) {
-                    factPromises.push(this.setDDEFacts());
-                }
-                this.facts.currentNpid = this.patient.getNationalID();
-                factPromises.push(this.validateNpid());
-                await Promise.all(factPromises);
-            } else {
-                // [DDE] a user might scan a deleted npid but might have a newer one.
-                // The function below checks for newer version
-                if (this.facts.scannedNpid) this.setVoidedNpidFacts(this.facts.scannedNpid);
-            }
-        },
         async validateNpid() {
             if (this.useDDE) {
                 this.facts.hasInvalidNpid = !this.patient.getDocID() || (this.patient.getDocID() && isUnknownOrEmpty(this.patient.getNationalID()));
@@ -629,45 +585,6 @@ export default defineComponent({
             }
             return { comparisons, rowColors: [diffIndexes] };
         },
-        async setVoidedNpidFacts(npid: string) {
-            const cols = ["Name", "Birthdate", "Gender", "Ancestry Home", "CurrentID", "Action"];
-            let rows = [];
-            const req = await this.ddeInstance.findVoidedIdentifier(npid);
-            if (req) {
-                rows = req.map((d: any) => {
-                    const p = new PatientService(d);
-                    return [
-                        p.getFullName(),
-                        p.getBirthdate(),
-                        p.getGender(),
-                        p.getHomeTA(),
-                        p.getNationalID(),
-                        {
-                            type: "button",
-                            name: "Select",
-                            action: async () => {
-                                if (!p.patientIsComplete()) {
-                                    return this.$router.push(`/patient/registration?edit_person=${p.getID()}`);
-                                } else if (p.getNationalID().match(/unknown/i) || !p.getDocID()) {
-                                    try {
-                                        // await p.assignNpid();
-                                        // await this.findAndSetPatient(p.getID(), undefined);
-                                        // return modalController.dismiss();
-                                    } catch (e) {
-                                        toastWarning("Failed to assign npid to patient with unknown npid.");
-                                        return console.error(e);
-                                    }
-                                }
-                                // await modalController.dismiss();
-                                // await this.findAndSetPatient(undefined, p.getNationalID());
-                            },
-                        },
-                    ];
-                });
-                this.facts.dde.voidedNpids.cols = cols;
-                this.facts.dde.voidedNpids.rows = rows;
-            }
-        },
         /**
          * DDE sometimes sends 400 bad request which contains
          * a list of invalid demographic attributes
@@ -701,7 +618,7 @@ export default defineComponent({
                 let isAlreadyCheckedIn = false;
                 for (const stage of stages) {
                     const patientList = (await PatientOpdList.getPatientList(stage, locationId)) as Array<{ patient_id: string }>;
-                    if (patientList.some((patient) => patient.patientID === this.selectedPatient.patient_id)) {
+                    if (patientList.some((patient: any) => patient.patientID === this.selectedPatient.patient_id)) {
                         isAlreadyCheckedIn = true;
                         break;
                     }
@@ -726,7 +643,7 @@ export default defineComponent({
             this.checkInModalOpen = !this.checkInModalOpen;
         },
         async openCheckInModal(item: any) {
-            if (this.programs?.program?.applicationName == "OPD Program") {
+            if (this.programs?.name == "OPD Program") {
                 try {
                     const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
                     if (checkInStatus.length > 0) {
@@ -743,7 +660,7 @@ export default defineComponent({
                     return;
                 }
             }
-            this.setPatientData("patientProfile", item);
+            this.setPatientData("/patientProfile", item);
         },
     },
 });

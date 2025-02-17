@@ -1,7 +1,43 @@
 import { Service } from "@/services/service";
 // import Modal from "@/components/ApplicationModal.vue";
 import { modalController } from "@ionic/vue";
-
+export enum ProgramId {
+    HIV_PROGRAM = 1,
+    TB_PROGRAM = 2,
+    VHW_PROGRAM = 3,
+    EARLY_INFANT_DIAGNOSIS_PROGRAM = 4,
+    MDR_TB_PROGRAM = 5,
+    KAPOSIS_SARCOMA_PROGRAM = 6,
+    FOOD_PROGRAM = 7,
+    ART_PROGRAM = 8,
+    PRE_ART_PROGRAM = 9,
+    CHRONIC_CARE_PROGRAM = 10,
+    MATERNITY_PROGRAM = 11,
+    ANC_PROGRAM = 12,
+    DIABETES_PROGRAM = 13,
+    OPD_PROGRAM = 14,
+    IPD_PROGRAM = 15,
+    UNDER_5_PROGRAM = 16,
+    CIVIL_REGISTRATION_PROGRAM = 17,
+    HTC_PROGRAM = 18,
+    ANC_CONNECT_PROGRAM = 19,
+    HYPERTENSION_PROGRAM = 20,
+    VMMC_PROGRAM = 21,
+    IPT_PROGRAM = 22,
+    LABORATORY_PROGRAM = 23,
+    CXCA_PROGRAM = 24,
+    LABORATORY_PROGRAM_DUPLICATE = 25,
+    CXCA_PROGRAM_DUPLICATE = 26,
+    TRIAGE_PROGRAM = 27,
+    RADIOLOGY_PROGRAM = 28,
+    PATIENT_REGISTRATION_PROGRAM = 29,
+    AETC_PROGRAM = 30,
+    SPINE_PROGRAM = 31,
+    NCD_PROGRAM = 32,
+    IMMUNIZATION_PROGRAM = 33,
+    PNC_PROGRAM = 34,
+    LABOUR_AND_DELIVERY_PROGRAM = 35,
+}
 export class ProgramService extends Service {
     constructor() {
         super();

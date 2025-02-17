@@ -1,24 +1,8 @@
 <template>
     <ion-fab slot="fixed" :vertical="verticalPosition" horizontal="end">
-        <ion-fab-button
-            v-if="btn"
-            color="primary"
-            style="
-                --border-radius: 4px;
-                width: 80px;
-                height: 40px;
-                font-weight: 900;
-                top: -5px;
-                position: relative;
-                border: 1px solid #cdcdcd;
-                border-radius: 5px;
-            "
-        >
-            Start visit
-        </ion-fab-button>
-        <ion-fab-button v-else color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
-        <ion-fab-list :side="side" :class="btn ? 'btn' : 'fab-list'">
-            <ion-fab-button @click="$emit('clicked', btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
+        <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
+        <ion-fab-list :side="side" class="fab-list">
+            <ion-fab-button @click="changeProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.name">
                 <ion-icon :icon="add"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>
@@ -30,6 +14,7 @@ import { defineComponent } from "vue";
 import { Service } from "@/services/service";
 import { UserService } from "@/services/user_service";
 import { IonIcon, IonFab, IonFabButton, IonFabList } from "@ionic/vue";
+import { useProgramStore } from "@/stores/ProgramStore";
 import {
     medkit,
     chevronBackOutline,
@@ -53,11 +38,9 @@ export default defineComponent({
     },
     data: () => ({
         ready: false,
+        programBtn: [] as any,
     }),
     props: {
-        programBtn: {
-            default: [] as any,
-        },
         btn: {
             default: false,
         },
@@ -83,6 +66,14 @@ export default defineComponent({
             add,
             person,
         };
+    },
+    mounted() {
+        this.programBtn = Service.getAuthorizedPrograms();
+    },
+    methods: {
+        changeProgram(program: any) {
+            useProgramStore().setActiveProgram(program);
+        },
     },
 });
 </script>

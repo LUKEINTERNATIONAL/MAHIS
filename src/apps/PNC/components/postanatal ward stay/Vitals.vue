@@ -132,7 +132,7 @@ export default defineComponent({
                     parseInt(weight),
                     parseInt(height),
                     this.patient?.personInformation?.gender,
-                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.sessionDate())
                 );
             }
             this.updateBMI();

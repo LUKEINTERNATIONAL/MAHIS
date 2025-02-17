@@ -357,7 +357,7 @@ export default defineComponent({
     computed: {
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useOutcomeStore, ["dispositions"]),
+        ...mapState(useOutcomeStore, ["outcomes"]),
         ...mapState(useAdministerVaccineStore, [
             "currentMilestone",
             "missedVaccineSchedules",
@@ -390,10 +390,9 @@ export default defineComponent({
         },
         patient: {
             async handler() {
-                if (this.patient.patientID) {
+                if (this.patient) {
                     await this.checkProtectedStatus();
                     await this.programEnrollment();
-                    // if (!this.patient.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
                 }
@@ -409,20 +408,22 @@ export default defineComponent({
             this.selectedStatus = status;
         },
         async programEnrollment() {
-            this.program = new PatientProgramService(this.patient.patientID);
-            const checkEnrollment = await this.program.getProgramCurrentStates();
-            if (!checkEnrollment) {
-                try {
-                    await this.program.enrollProgram();
-                    await this.program.setStateId(7);
-                } catch (error) {
-                    await this.program.setStateId(7);
-                }
-                await this.program.updateState();
+            if (this.patient.patientID) {
+                this.program = new PatientProgramService(this.patient.patientID);
+                const checkEnrollment = await this.program.getProgramCurrentStates();
+                if (!checkEnrollment) {
+                    try {
+                        await this.program.enrollProgram();
+                        await this.program.setStateId(7);
+                    } catch (error) {
+                        await this.program.setStateId(7);
+                    }
+                    await this.program.updateState();
 
-                this.selectedStatus = 7;
-            } else {
-                this.selectedStatus = checkEnrollment.state;
+                    this.selectedStatus = 7;
+                } else {
+                    this.selectedStatus = checkEnrollment.state;
+                }
             }
         },
         async updateState(state: any) {
@@ -443,7 +444,7 @@ export default defineComponent({
         checkAge() {
             if (!isEmpty(this.patient?.personInformation?.birthdate)) {
                 this.checkUnderSixWeeks =
-                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
+                    HisDate.dateDiffInDays(HisDate.sessionDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
             }
         },
         openVitalsModal() {
@@ -514,45 +515,6 @@ export default defineComponent({
                 const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
                 if (!drugOrder) return toastWarning("Unable to create drug orders!");
                 toastSuccess("Drug order has been created");
-            }
-        },
-
-        async saveOutComeStatus() {
-            const userID: any = Service.getUserID();
-            const patientID = this.patient.patientID;
-
-            if (!isEmpty(this.dispositions)) {
-                this.dispositions.forEach(async (disposition: any) => {
-                    if (disposition.type == "Admitted for short stay") {
-                        const prePayload = {
-                            obs_datetime: disposition.date.year + "-" + disposition.date.month + "-" + disposition.date.day,
-                            concept_id: disposition.concept_id,
-                            value_text: disposition.name,
-                        } as any;
-
-                        const admissionOutcome = new PatientAdmitService(patientID, userID);
-                        const obs = await admissionOutcome.buildValueText("Admit to ward", prePayload.value_text);
-                        obs.obs_datetime = prePayload.obs_datetime;
-                        obs.value_text = prePayload.value_text;
-                        await admissionOutcome.createEncounter();
-                        await admissionOutcome.saveObservationList([obs] as any);
-                    }
-                    if (disposition.type == "Referred out") {
-                        const prePayload = {
-                            obs_datetime: disposition.date.year + "-" + disposition.date.month + "-" + disposition.date.day,
-                            concept_id: disposition.concept_id,
-                            value_text: disposition.name,
-                            location_id: disposition.other.location_id,
-                        } as any;
-
-                        const referralOutcome = new PatientReferralService(patientID, userID);
-                        const obs = await referralOutcome.buildValueText("Referred", prePayload.value_text);
-                        obs.obs_datetime = prePayload.obs_datetime;
-                        obs.value_text = prePayload.location_id;
-                        await referralOutcome.createEncounter();
-                        await referralOutcome.saveObservationList([obs] as any);
-                    }
-                });
             }
         },
         openModal() {

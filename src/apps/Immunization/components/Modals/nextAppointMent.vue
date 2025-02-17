@@ -111,6 +111,9 @@ import { voidVaccineEncounter } from "@/apps/Immunization/services/vaccines_serv
 import { RelationshipService } from "@/services/relationship_service";
 import { PatientService } from "@/services/patient_service";
 import { AppointmentService } from "@/services/appointment_service";
+import { getOfflineRecords } from "@/services/offline_service";
+import { createModal } from "@/utils/Alerts";
+import { saveOfflinePatientData } from "@/services/offline_service";
 
 const client: any = useDemographicsStore();
 const date = ref();
@@ -131,13 +134,13 @@ function disablePastDates(date: any) {
     return date < today;
 }
 
-async function createModal(component: any, options: any) {
-    const modal = await modalController.create({
-        component,
-        ...options,
-    });
-    return modal.present();
-}
+// async function createModal(component: any, options: any) {
+//     const modal = await modalController.create({
+//         component,
+//         ...options,
+//     });
+//     return modal.present();
+// }
 
 const props = defineProps<{
     patient_Id: string;
@@ -148,41 +151,37 @@ async function save() {
     const store = useImmunizationAppointMentStore();
     if (store.selectedAppointmentMent.length > 0) {
         try {
-            await voidApt();
+            // await voidApt();
             await getMobilePhones();
-            const appointment_service = props.patient_Id ? new Appointment(props.patient_Id as any) : new Appointment();
-            const appointmentDetails = await appointment_service.createAppointment();
-            setMilestoneReload();
-            setAppointmentMentsReload();
-            dismiss();
-            smspost(appointmentDetails);
+            const appointment_service = new Appointment();
+            const appointmentDate = await appointment_service.createAppointment(client.patient);
+            await setMilestoneReload();
+            await setAppointmentMentsReload();
+            await dismiss();
+            smspost(appointmentDate);
         } catch (error) {}
     } else {
         toastWarning("please select next appointment date on the calendar");
     }
 }
 
-async function smspost(appointmentDetails: any) {
+async function smspost(appointmentDate: any) {
     if (phoneNumbers.value.length == 0) {
         toastWarning("No phone numbers available for sms reminder!");
         return;
     }
 
-    if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
-        if (configsSms.value) {
-            const modal = await modalController.create({
-                component: smsConfirmation,
-                componentProps: {
-                    date: appointmentDetails[1],
-                    patient: appointmentDetails[0],
-                    modalaction: "saveAppointment",
-                },
-            });
-
-            await modal.present();
-        } else {
-            await SmsService.appointment(appointmentDetails[0], appointmentDetails[1]);
+    if (appointmentDate) {
+        // if (configsSms.value) {
+        const modal = await createModal(smsConfirmation, { class: "nationalIDModal" });
+        if (modal == "send-SMS") {
+            const plainPatientData = JSON.parse(JSON.stringify(client.patient));
+            plainPatientData.sms = { appointment_date: appointmentDate };
+            await saveOfflinePatientData(plainPatientData);
         }
+        // } else {
+        // await SmsService.appointment(appointmentDetails[0], appointmentDetails[1]);
+        // }
     }
 }
 
@@ -218,7 +217,6 @@ async function suggestNextAppointmentDate() {
 
         if (vaccinesPreviouslyAdministered.length > 0) {
             const lastVaccine = vaccinesPreviouslyAdministered[vaccinesPreviouslyAdministered.length - 1];
-            console.log(lastVaccine);
             const is_timely_adminstred = await isTimelyAdminstred(lastVaccine, patientId as any);
             if (is_timely_adminstred == false) {
                 date.value = addDaysAndFormat(lastVaccine.vaccine.date_administered, convertToDays(mileStone.age) as any);
@@ -233,8 +231,7 @@ async function suggestNextAppointmentDate() {
 
 async function isTimelyAdminstred(vaccine: any, patientId: number) {
     try {
-        const patientData = await PatientService.findByID(patientId);
-        const DOB = new Date(patientData.person.birthdate);
+        const DOB = new Date(client.patient.personInformation.birthdate);
         const expectedAdminstrationDate = addDaysAndFormat(DOB as any, convertToDays(vaccine.age) as any);
         const DA = convertToDate(vaccine.vaccine.date_administered);
         const EAD = new Date(expectedAdminstrationDate);
@@ -300,7 +297,7 @@ function findPreviouslyAdministeredVaccineSchedule(vaccine_schedule: any) {
 
 async function getFirstUpcomingVaccineMilestone(patientId: string): Promise<any | null> {
     try {
-        const data = client.vaccineSchedule;
+        const data = client.patient.vaccineSchedule;
         findPreviouslyAdministeredVaccineSchedule(data.vaccine_schedule);
         for (const milestone of data.vaccine_schedule) {
             if (milestone.milestone_status === "current") {
@@ -320,12 +317,16 @@ async function getFirstUpcomingVaccineMilestone(patientId: string): Promise<any 
 async function getAppointmentMents(date: any) {
     try {
         const res = await AppointmentService.getDailiyAppointments(HisDate.toStandardHisFormat(date), HisDate.toStandardHisFormat(date));
-        appointment_count.value = res.length + 1;
+        appointment_count.value = res.length;
     } catch (error) {}
 }
 
-function dismiss() {
-    modalController.dismiss();
+async function dismiss() {
+    try {
+        await modalController.dismiss();
+    } catch (error) {
+        console.error("Modal dismissal error:", error);
+    }
 }
 async function getfacilityConfiguration() {
     try {
@@ -335,19 +336,15 @@ async function getfacilityConfiguration() {
 }
 
 async function getMobilePhones() {
-    try {
-        const guardianData = await RelationshipService.getRelationships(client.patientID);
-        if (guardianData.length > 0) {
-            const phone = guardianData[0].relation.person_attributes.find((x: any) => x.type.name == "Cell Phone Number");
-            if (phone) {
-                phoneNumbers.value.push(phone.value);
-            }
-        }
+    const plainPatientData = JSON.parse(JSON.stringify(client.patient.guardianInformation));
+    const guardianInformation = [...plainPatientData?.unsaved, ...plainPatientData?.saved];
 
-        if (client.personInformation.cell_phone_number) {
-            phoneNumbers.value.push(client.personInformation.cell_phone_number);
-        }
-    } catch (error) {}
+    if (guardianInformation.length > 0 && guardianInformation[0]?.cell_phone_number)
+        phoneNumbers.value.push(guardianInformation[0]?.cell_phone_number);
+
+    if (client.patient.personInformation.cell_phone_number) {
+        phoneNumbers.value.push(client.patient.personInformation.cell_phone_number);
+    }
 }
 
 async function DateUpdated(date: any) {
@@ -407,7 +404,8 @@ function convertToDays(input: string) {
     }
 }
 
-function addDaysAndFormat(dateInput: string | Date, daysToAdd: number): string {
+function addDaysAndFormat(dateInput: string | Date, daysToAdd: any): string {
+    if (daysToAdd == "Invalid input format") return "";
     let date: Date;
 
     if (dateInput instanceof Date) {

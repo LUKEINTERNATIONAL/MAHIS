@@ -182,8 +182,7 @@ export default defineComponent({
             }
         },
         async setVillage(obj: any) {
-            const targetData =
-                (await this.getVillages(obj.traditional_authority_id)) || (await LocationService.getVillages(obj.traditional_authority_id));
+            const targetData = await this.getVillages(obj.traditional_authority_id);
             if (targetData.length > 0) {
                 modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
                 modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);

@@ -13,7 +13,10 @@
                     style="background: #ddeedd; border-radius: 8px; color: #636363"
                 >
                     <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine)"></ion-icon>
-                    {{ checkVaccineName(vaccine.drug_name) }}
+                    <div class="button-content">
+                        <div style="margin-top: 20px">{{ checkVaccineName(vaccine.drug_name) }}</div>
+                        <div>{{ covertToDate(vaccine.date_administered) }}</div>
+                    </div>
                     <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine)"></ion-icon>
                 </ion-button>
             </ion-col>
@@ -55,6 +58,7 @@ import { StockService } from "@/services/stock_service";
 import alert from "@/apps/Immunization/components/Modals/alert.vue";
 import { checkDrugName } from "@/apps/Immunization/services/vaccines_service";
 import { getOfflineRecords } from "@/services/offline_service";
+import HisDate from "@/utils/Date";
 export default defineComponent({
     name: "Home",
     components: {
@@ -115,6 +119,9 @@ export default defineComponent({
         };
     },
     methods: {
+        covertToDate(date: any) {
+            return HisDate.toStandardHisDisplayFormat(date);
+        },
         getColorForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return "success";
@@ -231,6 +238,13 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.administerVac .button-content {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    text-align: center; /* Center-align text */
+    width: 100%; /* Full button width */
+    gap: 15px; /* Space between items (adjust value as needed) */
+}
 .demographics {
     box-sizing: border-box;
     width: 95vw;
@@ -502,7 +516,7 @@ export default defineComponent({
     align-items: center;
 }
 .administerVac {
-    height: 58px;
+    height: 78px;
     min-width: 160px;
     max-width: 100%;
     width: auto;

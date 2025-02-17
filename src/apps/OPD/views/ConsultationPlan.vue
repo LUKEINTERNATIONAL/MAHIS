@@ -22,11 +22,10 @@
                 :specialButtonLabel="'Save and end visit'"
                 :specialButtonFn="saveData"
                 :userRole="userRole"
-
             />
         </ion-content>
-<!--      <OPDFooter @finishBtn="saveData()" />-->
-      <div v-if="(userRole === 'Clinician' || userRole === 'Superuser') && showAlert" class="pause-alert">
+        <!--      <OPDFooter @finishBtn="saveData()" />-->
+        <div v-if="(userRole === 'Clinician' || userRole === 'Superuser') && showAlert" class="pause-alert">
             Consultation for this patient is paused due to lab orders.
         </div>
     </ion-page>
@@ -145,7 +144,7 @@ export default defineComponent({
     },
     data() {
         return {
-            dispositions: "" as any,
+            outcomes: "" as any,
             openStepper: "1" as any,
             wizardData: [] as any,
             StepperData: [] as any,
@@ -155,8 +154,7 @@ export default defineComponent({
             isLoading: false,
             patients: [] as any,
             showAlert: false,
-          checkedIn: false as Boolean,
-
+            checkedIn: false as Boolean,
         };
     },
     props: {
@@ -252,9 +250,9 @@ export default defineComponent({
         async function setPresentingComplainsEncounters(data: any) {
             const observations = data.find((encounter: any) => encounter.type.name === "PRESENTING COMPLAINTS")?.observations;
             if (observations) {
-              presentingComplaintsValue.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
+                presentingComplaintsValue.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
             } else {
-              presentingComplaintsValue.value = [];
+                presentingComplaintsValue.value = [];
             }
         }
 
@@ -279,20 +277,16 @@ export default defineComponent({
         };
         mounted();
         return {
-          presentingComplaintsValue,
-          loadSavedEncounters,
+            presentingComplaintsValue,
+            loadSavedEncounters,
             chevronBackOutline,
             checkmark,
         };
     },
 
     methods: {
-        endConsultation(){
-
-        },
+        endConsultation() {},
         getSaveFunction(index: any) {
-            const disableNextButton = this.userRole !== "Lab" && this.hasPatientsWaitingForLab && index >= 1;
-
             if (index < this.StepperData.length - 1) {
                 switch (index) {
                     case 0:
@@ -302,18 +296,21 @@ export default defineComponent({
                             return () => Promise.resolve();
                         }
                     case 1:
-                        return disableNextButton ? () => Promise.resolve() : this.saveInvestigations;
+                        return () => Promise.resolve();
                     case 2:
-                        return disableNextButton ? () => Promise.resolve() : this.saveDiagnosis;
+                        return () => Promise.resolve();
                     case 3:
-                        return disableNextButton ? () => Promise.resolve() : this.saveTreatmentPlan;
+                        return () => Promise.resolve();
                     default:
                         return () => Promise.resolve();
                 }
             } else {
                 return async () => {
-                    // await this.saveTreatmentPlan();
-                    // await this.saveOutComeStatus();
+                    this.saveDiagnosis();
+                    await this.saveTreatmentPlan();
+                    await useOutcomeStore().saveOutcomPatientData();
+                    resetOPDPatientData();
+
                     const location = await getUserLocation();
                     const locationId = location ? location.code : null;
 
@@ -325,7 +322,7 @@ export default defineComponent({
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "DISPENSATION", locationId);
                         await usePatientList().refresh(locationId);
                         this.$router.push("home");
-                         toastSuccess("Patient has finished consultation!");
+                        toastSuccess("Patient has finished consultation!");
                     } else {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
                         await usePatientList().refresh(locationId);
@@ -463,7 +460,7 @@ export default defineComponent({
                 });
             }
 
-            if (this.dispositions.length > 0) {
+            if (this.outcomes.length > 0) {
                 modifyWizardData(this.wizardData, "Outcome", {
                     checked: true,
                     class: "open_step common_step",
@@ -486,14 +483,15 @@ export default defineComponent({
                 let filteredArray = [];
                 if (obs) {
                     filteredArray = obs.filter((obj: any) => {
-                        return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+                        return HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
                     });
                 }
                 if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
-                    await this.saveWomenStatus();
-                    await this.savePresentingComplaints();
-                    await this.savePastMedicalHistory();
                     await this.saveConsciousness();
+                    await this.savePresentingComplaints();
+                    await this.saveWomenStatus();
+                    await this.savePastMedicalHistory();
+                    await this.saveAllergies();
                     await this.savePhysicalExam();
                     resetOPDPatientData();
                 } else {
@@ -506,16 +504,20 @@ export default defineComponent({
             }
         },
         async saveData() {
-          try {
-            const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
-            await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
-            const location = await getUserLocation();
-            const locationId = location ? location.code : null;
-            await usePatientList().refresh(locationId);
-            this.checkedIn = false;
-           await toastSuccess("Finished and visit closed");
-          } catch (e) {}
-          this.$router.push("/home");
+            try {
+                this.saveDiagnosis();
+                await this.saveTreatmentPlan();
+                await useOutcomeStore().saveOutcomPatientData();
+                resetOPDPatientData();
+                const visit = await PatientOpdList.getCheckInStatus(this.patient.patientID);
+                await PatientOpdList.checkOutPatient(visit[0].id, dates.todayDateFormatted());
+                const location = await getUserLocation();
+                const locationId = location ? location.code : null;
+                await usePatientList().refresh(locationId);
+                this.checkedIn = false;
+                await toastSuccess("Finished and visit closed");
+            } catch (e) {}
+            this.$router.push("/home");
         },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
@@ -570,6 +572,15 @@ export default defineComponent({
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
                 diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
+            }
+        },
+        async saveAllergies() {
+            const userID: any = Service.getUserID();
+            const patientID = this.patient.patientID;
+            const treatmentInstance = new Treatment();
+            if (!isEmpty(this.selectedMedicalAllergiesList)) {
+                const allergies = this.mapToAllergies();
+                treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
             }
         },
         async saveTreatmentPlan() {
@@ -627,22 +638,7 @@ export default defineComponent({
                 toastSuccess("Drug order has been created");
             }
         },
-
-        async saveOutComeStatus() {
-            const userID: any = Service.getUserID();
-            const patientID = this.patient.patientID;
-            if (!isEmpty(this.dispositions)) {
-                for (let key in this.dispositions) {
-                    if (this.dispositions[key].type == "Admit") {
-                        console.log(this.dispositions[key]);
-                    } else {
-                    }
-                }
-            }
-        },
-      saveInvestigations(){
-
-      },
+        saveInvestigations() {},
         openModal() {
             createModal(SaveProgressModal);
         },

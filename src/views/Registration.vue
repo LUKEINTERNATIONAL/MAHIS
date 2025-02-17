@@ -148,11 +148,11 @@ import { alertConfirmation } from "@/utils/Alerts";
 import { PatientDemographicsExchangeService } from "@/services/patient_demographics_exchange_service";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
-import workerData from "@/activate_worker";
 import { getOfflineRecords } from "@/services/offline_service";
 import { useStatusStore } from "@/stores/StatusStore";
 import { useWorkerStore } from "@/stores/workerStore";
 import { getOfflineVaccineSchedule } from "@/apps/Immunization/services/vaccines_service";
+import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -337,7 +337,7 @@ export default defineComponent({
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.birthdate) >= 14 ? true : false;
                 this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.birthdate) < 42 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.sessionDate(), this.birthdate) < 42 ? true : false;
             }
         },
         disableNationalIDInput() {
@@ -398,8 +398,8 @@ export default defineComponent({
         },
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
+            await useDemographicsStore().setPatientRecord(patientData);
             this.setURLs();
-            this.workerStore.setPatientRecord(patientData);
         },
 
         validateGaudiarnInfo() {
@@ -448,8 +448,8 @@ export default defineComponent({
         },
         async createPatient() {
             const ddeIds: any = await getOfflineRecords("dde").then((data: any) => data?.[0]);
-            if (ddeIds?.ids.length > 0) {
-                this.ddeId = ddeIds.ids[0].npid;
+            if (ddeIds?.ids?.length > 0 || this.apiStatus) {
+                this.ddeId = ddeIds?.ids[0]?.npid || "";
 
                 const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
                 const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
@@ -478,19 +478,27 @@ export default defineComponent({
                     }
 
                     if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
+                    const patientData = await this.buildPatientRecord();
+                    if (ddeIds?.ids?.length > 0) {
+                        ddeIds.ids = ddeIds.ids.slice(1);
+                        this.workerStore.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: ddeIds });
+                    }
 
-                    const offlinePatientData = await this.createOfflineRecord();
-
-                    ddeIds.ids = ddeIds.ids.slice(1);
-                    await workerData.postData("OVERRIDE_OBJECT_STORE", { storeName: "dde", data: ddeIds });
-                    await this.setURLs();
-                    if (this.apiStatus) {
-                        await workerData.postData("SYNC_DDE");
-                        this.workerStore.postWorkerData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
-                        // workerData.postData("SAVE_PATIENT_RECORD", { data: toRaw(offlinePatientData) });
-                        // this.savePatientRecord(offlinePatientData);
+                    if ((this.apiStatus && this.programID() != 33) || (this.apiStatus && !ddeIds?.ids)) {
+                        this.workerStore.postData("SYNC_DDE");
+                        const result = await Service.postJson("/save_patient_record", { record: patientData });
+                        await useDemographicsStore().setPatientRecord(result);
+                        this.workerStore.postData("SYNC_ALL_DATA");
+                        await this.setURLs();
+                    } else if (ddeIds?.ids?.length > 0) {
+                        useStatusStore().syncingTotal = useStatusStore().syncingTotal + 1;
+                        const demographicsStore = useDemographicsStore();
+                        demographicsStore.setRecord(patientData);
+                        await this.workerStore.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: patientData });
+                        this.isLoading = false;
+                        this.$router.push("/patientProfile");
                     } else {
-                        this.workerStore.setPatientRecord(offlinePatientData);
+                        toastDanger("DDE IDs are not available. Please connect to the server to sync the IDs.");
                     }
                 } else {
                     toastWarning("Please complete all required fields");
@@ -499,7 +507,7 @@ export default defineComponent({
                 toastDanger("DDE IDs are not available. Please connect to the server to sync the IDs.");
             }
         },
-        async createOfflineRecord() {
+        async buildPatientRecord() {
             const Weight = getFieldValue(this.birthRegistration, "Weight", "value");
             let vitals: any = {
                 saved: [],
@@ -509,19 +517,27 @@ export default defineComponent({
                 vitals.unsaved = [
                     {
                         concept_id: 5089,
-                        obs_datetime: HisDate.currentDate(),
+                        obs_datetime: HisDate.sessionDate(),
                         value_numeric: Weight,
                     },
                 ];
             }
             const birthdate = this.personInformation[0].selectedData.birthdate;
             const gender = this.personInformation[0].selectedData.gender;
+
             const offlineRecord: any = {
                 patientID: "",
                 ID: this.ddeId,
                 NcdID: "",
+                program_id: Service.getProgramID() || null,
+                location_id: localStorage.getItem("locationID"),
+                provider_id: localStorage.getItem("userID"),
+                encounter_datetime: new Date().toISOString(),
                 personInformation: toRaw(this.personInformation[0].selectedData),
-                guardianInformation: toRaw(this.guardianInformation[0].selectedData),
+                guardianInformation: {
+                    saved: [],
+                    unsaved: [toRaw(this.guardianInformation[0].selectedData)],
+                },
                 birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
                 otherPersonInformation: {
                     nationalID: this.validatedNationalID(),
@@ -535,6 +551,10 @@ export default defineComponent({
                     obs: [],
                     voided: [],
                 },
+                appointments: {
+                    saved: [],
+                    unsaved: [],
+                },
                 saveStatusPersonInformation: "pending",
                 saveStatusGuardianInformation: "pending",
                 saveStatusBirthRegistration: "pending",
@@ -542,8 +562,6 @@ export default defineComponent({
                 date_created: "",
                 creator: "",
             };
-
-            await workerData.postData("ADD_OBJECT_STORE", { storeName: "patientRecords", data: offlineRecord });
             return offlineRecord;
         },
         checkWeightForAge(age: any, weight: any) {
@@ -597,11 +615,13 @@ export default defineComponent({
             await resetPatientData();
             this.isLoading = false;
             this.disableSaveBtn = false;
+            let url = "";
             if (this.programID() == 32 && this.apiStatus) {
-                this.workerStore.route = "";
-            } else if (this.programID()) {
-                this.workerStore.route = "/patientProfile";
+                url = "/consultationPlan";
+            } else {
+                url = "/patientProfile";
             }
+            this.$router.push(url);
         },
         patientIdentifier(item: any) {
             // return item

@@ -172,9 +172,9 @@ export default defineComponent({
             else return "";
         },
         async openNewPage(url: any, item: any) {
-            useWorkerStore().route = url;
-            useWorkerStore().setPatientRecord(item);
+            await useDemographicsStore().setPatientRecord(item);
             await resetPatientData();
+            this.$router.push(url);
         },
 
         openPopover(e: any) {

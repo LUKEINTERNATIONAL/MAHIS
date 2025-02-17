@@ -63,7 +63,7 @@ export default defineComponent({
         },
         maxDate: {
             type: String,
-            default: HisDate.currentDate(),
+            default: HisDate.sessionDate(),
         },
         placeholder: {
             type: String,
@@ -138,9 +138,9 @@ export default defineComponent({
         },
         handleDateUpdate(date: any) {
             const formattedDate = this.formatDate(date);
-            this.$emit('update:dateValue', formattedDate);
-            this.$emit('update:rawDateValue', date);
-        }
+            this.$emit("update:dateValue", formattedDate);
+            this.$emit("update:rawDateValue", date);
+        },
     },
 });
 </script>
