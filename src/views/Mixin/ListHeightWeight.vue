@@ -2,8 +2,8 @@
     <div style="width: 100%; display: flex; justify-content: space-between; padding: 10px">
         <div>
             <div class="diplay_space_between bmi_blood" v-if="propsContent.displayGraph && propsContent.weight.length > 0">
-                <div style="cursor: pointer" :class="propsContent.activeWeight" @click="$emit('click:weight', $event)">Weight</div>
-                <div style="cursor: pointer" :class="propsContent.activeHeight" @click="$emit('click:height', $event)">Height</div>
+                <div style="cursor: pointer" :class="propsContent.activeWeight" @click="$emit('click:weight', $event)">Height</div>
+                <div style="cursor: pointer" :class="propsContent.activeHeight" @click="$emit('click:height', $event)">Weight</div>
             </div>
         </div>
         <div>
