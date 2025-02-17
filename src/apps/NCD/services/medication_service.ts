@@ -4,24 +4,45 @@ import HisDate from "@/utils/Date";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { storeToRefs } from "pinia";
+
+
 
 export async function createNCDDrugOrder() {
     try {
-        const userID: any = Service.getUserID();
-        const patient = new PatientService();
+        const demographicsStore = useDemographicsStore();
+        const { patient } = storeToRefs(demographicsStore);
+
+        console.log("Patient: ", patient.value)
         const drugOrders = mapToOrders();
         if (drugOrders.length > 0) {
-            const NCDMedicationsStore = useNCDMedicationsStore();
-            NCDMedicationsStore.clearMedicationDataStores();
-            const prescriptionService = new DrugPrescriptionService(patient.getID(), userID);
-            const encounter = await prescriptionService.createEncounter();
-            if (!encounter) return toastWarning("Unable to create treatment encounter");
-            const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
-            if (!drugOrder) return toastWarning("Unable to create drug orders!");
+            const patientData = JSON.parse(JSON.stringify(patient.value));
+            
+            patientData.MedicationOrder.unsaved.push(...drugOrders);
+            await saveOfflinePatientData(patientData);
             toastSuccess("Drug order(s) has been created");
         } else {
-            return toastWarning("No drug selected");
+            toastWarning("Substance abuse not saved");
         }
+
+
+        // console.log("createNCDDrugOrder: ",  patient.value)
+        // const userID: any = Service.getUserID();
+        // const p_patient = new PatientService();
+        // const drugOrders = mapToOrders();
+        // if (drugOrders.length > 0) {
+        //     const NCDMedicationsStore = useNCDMedicationsStore();
+        //     NCDMedicationsStore.clearMedicationDataStores();
+        //     const prescriptionService = new DrugPrescriptionService(p_patient.getID(), userID);
+        //     const encounter = await prescriptionService.createEncounter();
+        //     if (!encounter) return toastWarning("Unable to create treatment encounter");
+        //     const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
+        //     if (!drugOrder) return toastWarning("Unable to create drug orders!");
+        //     toastSuccess("Drug order(s) has been created");
+        // } else {
+            
+        // }
     } catch (error) {
         toastWarning("Unable to create drug orders!");
     }
