@@ -312,7 +312,7 @@ export default defineComponent({
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
         ...mapState(useGeneralStore, ["NCDUserActions"]),
         ...mapState(useStatusStore, ["apiStatus"]),
-        ...mapState(useProgramStore, ["programs"]),
+        ...mapState(useProgramStore, ["activeProgram"]),
     },
     async mounted() {
         this.ddeInstance = new PatientDemographicsExchangeService();
@@ -450,7 +450,7 @@ export default defineComponent({
 
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
-            const userPrograms: any = this.programs?.authorizedPrograms;
+            const userPrograms: any = this.activeProgram?.authorizedPrograms;
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
             const roles: any = roleData ? roleData : [];
 
@@ -643,7 +643,7 @@ export default defineComponent({
             this.checkInModalOpen = !this.checkInModalOpen;
         },
         async openCheckInModal(item: any) {
-            if (this.programs?.name == "OPD Program") {
+            if (this.activeProgram?.name == "OPD Program") {
                 try {
                     const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
                     if (checkInStatus.length > 0) {
