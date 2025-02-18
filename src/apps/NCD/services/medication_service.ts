@@ -14,20 +14,19 @@ export async function createNCDDrugOrder() {
     try {
         const demographicsStore = useDemographicsStore();
         const { patient } = storeToRefs(demographicsStore);
-
-        console.log("Patient: ", patient.value)
         const drugOrders = mapToOrders();
         if (drugOrders.length > 0) {
             const patientData = JSON.parse(JSON.stringify(patient.value));
             (patientData.MedicationOrder ??= {}).unsaved ??= [];
-            patientData.MedicationOrder.unsaved.push(...drugOrders);
+            const NCDdrugOrders = { NCD_Drug_Orders: drugOrders };
+            patientData.MedicationOrder.unsaved.push(NCDdrugOrders);
             await saveOfflinePatientData(patientData);
+            const NCDMedicationsStore = useNCDMedicationsStore();
+            NCDMedicationsStore.clearMedicationDataStores();
             toastSuccess("Drug order(s) has been created");
         } else {
             toastWarning("Substance abuse not saved");
         }
-
-
         // console.log("createNCDDrugOrder: ",  patient.value)
         // const userID: any = Service.getUserID();
         // const p_patient = new PatientService();
