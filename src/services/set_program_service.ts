@@ -11,6 +11,12 @@ import { OrderService } from "@/services/order_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useProgramStore } from "@/stores/ProgramStore";
 import { UserService } from "./user_service";
+import {getUserLocation} from "@/services/userService";
+import {usePatientList} from "@/apps/OPD/stores/patientListStore";
+import {storeToRefs} from "pinia";
+import {toastWarning} from "@/utils/Alerts";
+import {PatientOpdList} from "@/services/patient_opd_list";
+
 
 interface ProgramData {
     url: string;
@@ -38,14 +44,59 @@ export class SetProgramService extends Service {
             const demographics = demographicsInstance.getPatient();
             const orders = await OrderService.getOrders(demographics.patient_id);
             const isToday = (order: any) => HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(order.order_date);
-
             const hasTodayOrders = orders?.some(isToday);
 
-            return {
-                url: hasTodayOrders ? "OPDConsultationPlan" : "OPDvitals",
-                actionName: hasTodayOrders ? "Continue OPD consultation" : "Start OPD consultation",
-            };
+            // Fetch user location
+            const location = await getUserLocation();
+            const locationId = location ? location.code : null;
+            // Fetch patient lists dynamically using locationId
+            const patientListStore = usePatientList();
+            await patientListStore.refresh(locationId);
+
+            const patientsWaitingForVitals = await PatientOpdList.getPatientList("VITALS", locationId);
+            const patientsWaitingForConsultation = await PatientOpdList.getPatientList("CONSULTATION", locationId);
+            const patientsWaitingForLab = await PatientOpdList.getPatientList("LAB", locationId);
+            const patientsWaitingForDispensation = await PatientOpdList.getPatientList("DISPENSATION", locationId);
+
+            // Check if the patient is in the waiting list for each stage
+            const isWaitingForVitals = patientsWaitingForVitals.some((p: any) => p.patient_id === demographics.patientID);
+            const isWaitingForConsultation = patientsWaitingForConsultation.some((p: any) => p.patient_id === demographics.patientID);
+            const isWaitingForLab = patientsWaitingForLab.some((p: any) => p.patient_id === demographics.patientID);
+            const isWaitingForDispensation = patientsWaitingForDispensation.some((p: any) => p.patient_id === demographics.patientID);
+            // Fetch user roles
+            const userRoles = this.getUserRoles();
+
+            // Determine action based on user role and patient stage
+            if ((userRoles.includes("Clinician") || userRoles.includes("Nurse") || userRoles.includes("Superuser")) && isWaitingForVitals) {
+                return {
+                    url: "/OPDVitals",
+                    actionName: "Collect OPD vitals",
+                };
+            } else if ((userRoles.includes("Clinician") || userRoles.includes("Superuser")) && isWaitingForConsultation) {
+                return {
+                    url: "/OPDConsultation",
+                    actionName: "Start OPD consultation",
+                };
+            } else if ((userRoles.includes("Clinician") || userRoles.includes("Pharmacist") || userRoles.includes("Superuser")) && isWaitingForDispensation) {
+                return {
+                    url: "/Dispensation",
+                    actionName: "Start OPD dispensation",
+                };
+            } else if (userRoles.includes("Lab") && isWaitingForLab) {
+                return {
+                    url: "/OPDConsultation",
+                    actionName: "Start OPD Lab",
+                };
+            } else {
+                // If the patient is not in the waiting list for any stage, show a toast warning
+                toastWarning("Activate visit for the patient to start this service");
+                return {
+                    url: "",
+                    actionName: "OPD program",
+                };
+            }
         },
+
         "ANC PROGRAM": () => ({
             url: "ANChome",
             actionName: "Enroll in ANC Program",
