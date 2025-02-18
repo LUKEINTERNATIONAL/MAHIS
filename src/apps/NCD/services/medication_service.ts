@@ -6,6 +6,7 @@ import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { storeToRefs } from "pinia";
+import { saveOfflinePatientData } from "@/services/offline_service";
 
 
 
@@ -18,7 +19,7 @@ export async function createNCDDrugOrder() {
         const drugOrders = mapToOrders();
         if (drugOrders.length > 0) {
             const patientData = JSON.parse(JSON.stringify(patient.value));
-            
+            (patientData.MedicationOrder ??= {}).unsaved ??= [];
             patientData.MedicationOrder.unsaved.push(...drugOrders);
             await saveOfflinePatientData(patientData);
             toastSuccess("Drug order(s) has been created");
