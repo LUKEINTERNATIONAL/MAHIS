@@ -80,7 +80,7 @@ i {
     border: 1.5px solid var(--ion-color-primary) !important;
 }
 .fw-footer-left .fw-btn {
-    background: #ccc !important;
+    background: #5c5c5c !important;
 }
 .form-wizard-vue .fw-step-checked {
     border: 1.5px solid var(--ion-color-primary) !important;
@@ -134,7 +134,7 @@ i {
         display: inline;
     }
     .large-modal {
-        --width: 98%
+        --width: 98%;
     }
     ion-popover[mobilePopover] {
         --offset-x: 47%;

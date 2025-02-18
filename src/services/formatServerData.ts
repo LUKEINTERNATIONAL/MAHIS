@@ -1,5 +1,6 @@
 import { ConceptService } from "@/services/concept_service";
 import HisDate from "@/utils/Date";
+import get from "localbase/localbase/api/actions/get";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -67,7 +68,7 @@ export async function formatGroupRadioButtonData(data: any, date: any = ConceptS
 
     return (await Promise.all(buildObjPromises)).filter((obj) => obj !== null);
 }
-export async function formatInputFiledData(data: any, obs_datetime: any = HisDate.getCurrentDateTimeWithOffset(), childData = "") {
+export async function formatInputFiledData(data: any, obs_datetime: any = HisDate.sessionDate(), childData = "") {
     const buildObjPromises = data.map(async (item: any) => {
         if (!item?.data?.rowData) return [];
 
@@ -111,10 +112,11 @@ async function getValue(element: any, value: any, obs_datetime: any, childData =
     //     name: element.name,
     // };
     if (element.valueType === "coded") {
+        const value_concept_id = await ConceptService.getConceptID(value, true);
         if (childData) {
             return {
                 concept_id,
-                value_coded: value,
+                value_coded: value_concept_id,
                 obs_datetime,
                 child: [
                     {
@@ -125,7 +127,7 @@ async function getValue(element: any, value: any, obs_datetime: any, childData =
                 ],
             };
         } else {
-            return { concept_id, value_coded: value, obs_datetime };
+            return { concept_id, value_coded: value_concept_id, obs_datetime };
         }
     } else if (element.valueType === "text") {
         return { concept_id, value_text: value, obs_datetime };

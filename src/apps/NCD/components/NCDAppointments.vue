@@ -128,9 +128,9 @@ export default defineComponent({
         IonCol,
     },
     data() {
-        const startDate = ref(HisDate.currentDate());
-        const endDate = ref(HisDate.currentDate());
-        const minDate = ref(HisDate.currentDate());
+        const startDate = ref(HisDate.sessionDate());
+        const endDate = ref(HisDate.sessionDate());
+        const minDate = ref(HisDate.sessionDate());
         const people = ref([]) as any;
         return {
             minDate,

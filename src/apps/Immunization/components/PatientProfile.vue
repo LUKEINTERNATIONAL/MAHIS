@@ -444,7 +444,7 @@ export default defineComponent({
         checkAge() {
             if (!isEmpty(this.patient?.personInformation?.birthdate)) {
                 this.checkUnderSixWeeks =
-                    HisDate.dateDiffInDays(HisDate.currentDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
+                    HisDate.dateDiffInDays(HisDate.sessionDate(), this.patient?.personInformation?.birthdate) < 42 ? true : false;
             }
         },
         openVitalsModal() {

@@ -367,7 +367,7 @@ export default defineComponent({
         async updateList() {
             // const obs = await ObservationService.getAll(this.patient.patientID, "Presenting complaint");
             // const filteredArray = await obs.filter((obj: any) => {
-            //     return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+            //     return HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
             // });
         },
     },

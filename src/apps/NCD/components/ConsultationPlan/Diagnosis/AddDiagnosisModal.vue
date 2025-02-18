@@ -71,6 +71,9 @@ import {
     modifyCheckboxValue,
 } from "@/services/data_helpers";
 import { ConceptService } from "@/services/concept_service";
+import { getOfflineRecords, saveOfflinePatientData } from "@/services/offline_service";
+import { formatInputFiledData } from "@/services/formatServerData";
+import { validateInputFiledData } from "@/services/group_validation";
 
 export default defineComponent({
     name: "Menu",
@@ -121,24 +124,25 @@ export default defineComponent({
     },
     methods: {
         async getDiagnosis(value: any) {
-            const diagnosis = await PatientDiagnosisService.getDiagnosis(value, 1, 5);
+            const diagnosis = await getOfflineRecords("diagnosis", {
+                likeClause: value ? { name: `%${value}%` } : "",
+                currentPage: 1,
+                itemsPerPage: 5,
+            }).then((data: any) => data.records);
+
             modifyFieldValue(this.diagnosis, "diagnosis", "multiSelectData", diagnosis);
         },
         dismiss() {
             modalController.dismiss();
         },
         async addNewRow() {
-            const diagnosis = getFieldValue(this.diagnosis, "diagnosis", "value")?.name;
-            modifyFieldValue(this.diagnosis, "diagnosis", "alertsErrorMassage", "");
-            if (diagnosis) {
-                const concept_id = await ConceptService.getConceptID(diagnosis, true);
-                await saveEncounterData(this.patient.patientID, EncounterTypeId.DIAGNOSIS, "" as any, [
-                    {
-                        concept_id: 6542, //primary diagnosis
-                        value_coded: concept_id,
-                        obs_datetime: ConceptService.getSessionDate(),
-                    },
-                ]);
+            if (await validateInputFiledData(this.diagnosis)) {
+                modifyFieldValue(this.diagnosis, "diagnosis", "alertsErrorMassage", "");
+                const formattedData = await formatInputFiledData(this.diagnosis);
+                const patientData = JSON.parse(JSON.stringify(this.patient));
+                (patientData.diagnosis ??= {}).unsaved ??= [];
+                patientData.diagnosis.unsaved.push(...formattedData);
+                await saveOfflinePatientData(patientData);
                 toastSuccess("Diagnosis successfully saved");
                 this.dismiss();
             } else {

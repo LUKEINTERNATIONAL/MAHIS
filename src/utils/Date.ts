@@ -197,6 +197,7 @@ function calculateTimeDifference(timestamp: any) {
 }
 
 export default {
+    sessionDate,
     currentDate,
     getYearOfAge,
     getYear,

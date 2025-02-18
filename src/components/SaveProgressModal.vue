@@ -34,7 +34,6 @@ import { ref } from "vue";
 import { icons } from "@/utils/svg";
 import { resetPatientData } from "@/services/reset_data";
 import { mapState } from "pinia";
-import { UserService } from "@/services/user_service";
 
 export default defineComponent({
     name: "Menu",
@@ -66,7 +65,6 @@ export default defineComponent({
             } else {
                 localStorage.setItem("saveProgressStatus", "true");
             }
-            UserService.setProgramUserActions();
             this.dismiss();
             this.$router.push(url);
         },

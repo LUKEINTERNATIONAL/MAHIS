@@ -71,7 +71,7 @@ export default defineComponent({
     },
     methods: {
         async setAppointments() {
-            this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
+            this.appointments = await AppointmentService.getDailiyAppointments(HisDate.sessionDate());
             if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
         formatBirthdate(birthdate: any) {

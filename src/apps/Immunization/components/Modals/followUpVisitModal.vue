@@ -279,12 +279,12 @@ export default defineComponent({
         },
         async saveVaccineAdverseEffects() {
             if (this.patient.patientID) {
-                const date = getFieldValue(this.outcome, "Date of death", "value") || HisDate.currentDate();
-                const serious = await this.formatCheckBoxData(this.serious, HisDate.currentDate(), this.lastVaccinesGiven);
+                const date = getFieldValue(this.outcome, "Date of death", "value") || HisDate.sessionDate();
+                const serious = await this.formatCheckBoxData(this.serious, HisDate.sessionDate(), this.lastVaccinesGiven);
                 const outcome = await this.formatRadioButtonData(this.outcome, date, this.lastVaccinesGiven);
                 const vaccineAdverseEffects = await this.formatCheckBoxData(
                     this.vaccineAdverseEffects,
-                    HisDate.currentDate(),
+                    HisDate.sessionDate(),
                     this.lastVaccinesGiven
                 );
                 const investigationDate = getFieldValue(this.firstDecision, "Investigation needed", "value");
@@ -294,7 +294,7 @@ export default defineComponent({
                         {
                             concept_id: 11887,
                             value_text: investigationDate,
-                            obs_datetime: HisDate.currentDate(),
+                            obs_datetime: HisDate.sessionDate(),
                         },
                     ];
                 }

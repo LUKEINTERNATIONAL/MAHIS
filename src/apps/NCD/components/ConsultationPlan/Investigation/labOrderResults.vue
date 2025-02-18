@@ -48,7 +48,6 @@ import { PatientOpdList } from "@/services/patient_opd_list";
 import dates from "@/utils/Date";
 import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import SetUserRole from "@/views/Mixin/SetUserRole.vue";
-import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 import DataTablesResponsive from "datatables.net-responsive";
@@ -65,7 +64,6 @@ import { ConceptService } from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
-    mixins: [SetPrograms],
     components: {
         CheckInConfirmationModal,
         IonContent,
@@ -241,7 +239,7 @@ export default defineComponent({
         async updateInvestigationWizard() {
             this.orders = await OrderService.getOrders(this.patient.patientID);
             const filteredArray = await this.orders.filter((obj: any) => {
-                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+                return HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(obj.order_date);
             });
             if (filteredArray.length > 0) {
                 this.investigations[0].selectedData = filteredArray;

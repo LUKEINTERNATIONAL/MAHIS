@@ -52,7 +52,6 @@
 
                             <VueMultiselect
                                 v-model="program"
-                                @update:model-value="handleInput"
                                 :multiple="false"
                                 :taggable="false"
                                 :hide-selected="true"
@@ -98,6 +97,7 @@ import { getUserFacility } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
 import { useWorkerStore } from "@/stores/workerStore";
 import { storeToRefs } from "pinia";
+import { useProgramStore } from "@/stores/ProgramStore";
 
 interface Program {
     program_id: string;
@@ -108,7 +108,7 @@ interface Program {
 const username = ref("");
 const password = ref("");
 const version = ref("");
-const program = ref<Program | null>(null);
+const program = ref<Program | null>(null) as any;
 const showPassword = ref(false);
 const offlinePrograms = ref<Program[]>([]) as any;
 const programList = ref<Program[]>([]);
@@ -145,8 +145,9 @@ const doLogin = async () => {
         auth.value.setUsername(username.value);
         try {
             await auth.value.login(password.value);
-
-            if (auth.value.checkUserPrograms(program.value.name)) {
+            const userProgram: any = auth.value.checkUserPrograms(program.value.name);
+            if (userProgram.status) {
+                await setProgram(userProgram.programs);
                 await facilityB();
                 router.push("/home");
             } else {
@@ -164,16 +165,9 @@ const doLogin = async () => {
     }
 };
 
-const handleInput = (event: Program) => {
-    if (event) {
-        localStorage.setItem(
-            "app",
-            JSON.stringify({
-                programID: event.program_id,
-                applicationName: event.name,
-            })
-        );
-    }
+const setProgram = async (authorizedPrograms: any) => {
+    useProgramStore().setActiveProgram(program.value);
+    useProgramStore().setAuthorizedPrograms(authorizedPrograms);
 };
 
 const loginIcon = () => {

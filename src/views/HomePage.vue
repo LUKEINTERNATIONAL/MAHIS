@@ -6,7 +6,20 @@
             <div class="loading-text">Please wait...</div>
         </div>
         <Toolbar />
-        <ion-content :fullscreen="true" v-if="![33, 14, 32, 12, 34, 35].includes(programState.activeProgramID)">
+        <ion-content
+            :fullscreen="true"
+            v-if="
+                ![
+                    ProgramId.IMMUNIZATION_PROGRAM,
+                    ProgramId.OPD_PROGRAM,
+                    ProgramId.NCD_PROGRAM,
+                    ProgramId.ANC_PROGRAM,
+                    ProgramId.PNC_PROGRAM,
+                    ProgramId.LABOUR_AND_DELIVERY_PROGRAM,
+                ].includes(activeProgram.program_id)
+            "
+        >
+            {{ activeProgram }}
             <div id="container">
                 <strong>Search your patient profile</strong>
                 <p>
@@ -18,13 +31,14 @@
                 </div>
             </div>
         </ion-content>
-        <ImmunizationDashboard v-if="programState.activeProgramID == 33" />
-        <OPDDashboard v-if="programState.activeProgramID == 14" />
-        <NCDDashboard v-if="programState.activeProgramID == 32" />
-        <ANCDashboard v-if="programState.activeProgramID == 12" />
-        <LabourDashboard v-if="programState.activeProgramID == 34" />
-        <PNCDashboard v-if="programState.activeProgramID == 35" />
-        <Programs :programBtn="programState.programBtn" @clicked="setProgram($event)" />
+
+        <ImmunizationDashboard v-if="activeProgram.program_id == ProgramId.IMMUNIZATION_PROGRAM" />
+        <OPDDashboard v-if="activeProgram.program_id == ProgramId.OPD_PROGRAM" />
+        <NCDDashboard v-if="activeProgram.program_id == ProgramId.NCD_PROGRAM" />
+        <ANCDashboard v-if="activeProgram.program_id == ProgramId.ANC_PROGRAM" />
+        <LabourDashboard v-if="activeProgram.program_id == ProgramId.PNC_PROGRAM" />
+        <PNCDashboard v-if="activeProgram.program_id == ProgramId.LABOUR_AND_DELIVERY_PROGRAM" />
+        <Programs :programBtn="activeProgram.programBtn" />
     </ion-page>
 </template>
 
@@ -43,17 +57,21 @@ import PNCDashboard from "@/apps/PNC/components/PNCDashboard.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import { useProgram } from "@/composables/useProgram";
 import { useUserActivities } from "@/composables/useUserActivities";
 import { useUserRole } from "@/composables/useUserRole";
+import { useProgramStore } from "@/stores/ProgramStore";
+import { storeToRefs } from "pinia";
 
 import { useWorkerStore } from "@/stores/workerStore";
+import { ProgramId } from "@/services/program_service";
 const isLoading = ref(true);
 const route = useRoute();
 const workerStore = useWorkerStore();
 useUserActivities();
 useUserRole();
-const { setProgram, programState } = useProgram();
+const programStore = useProgramStore();
+
+const { activeProgram } = storeToRefs(programStore);
 watch(
     () => route.name,
     async (newRoute) => {

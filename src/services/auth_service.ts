@@ -6,6 +6,7 @@ import { useUserStore } from "@/stores/userStore";
 import * as CryptoJS from "crypto-js";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { useStatusStore } from "@/stores/StatusStore";
+import { Service } from "@/services/service";
 export class InvalidAPIVersionError extends Error {
     message: string;
     constructor(version: string) {
@@ -141,17 +142,16 @@ export class AuthService {
         localStorage.setItem("username", this.username);
         localStorage.setItem("userID", this.userID.toString());
         localStorage.setItem("userRoles", JSON.stringify(this.roles));
-        localStorage.setItem("userPrograms", JSON.stringify(this.programs));
-        localStorage.setItem("sessionDate", this.sessionDate);
+        localStorage.setItem("sessionDate", HisDate.toStandardHisFormat(this.sessionDate));
         localStorage.setItem("APIVersion", this.systemVersion);
         localStorage.setItem("locationID", this.locationID);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
     }
     checkUserPrograms(selectedProgram: any) {
-        const accessPrograms: any = localStorage.getItem("userPrograms");
-        const programs = JSON.parse(accessPrograms);
-        if (programs) return programs.some((program: any) => program.name === selectedProgram);
-        else toastDanger("No user programs");
+        const programs = Service.getAuthorizedPrograms() || this.programs;
+        console.log("🚀 ~ AuthService ~ checkUserPrograms ~ programs:", programs);
+        if (programs) return { programs: programs, status: programs.some((program: any) => program.name === selectedProgram) };
+        else return;
     }
     clearSession() {
         localStorage.clear();
@@ -194,7 +194,7 @@ export class AuthService {
 
     async checkTimeIntegrity() {
         const serverDate = await this.getSystemDate();
-        const localDate = HisDate.currentDate();
+        const localDate = HisDate.sessionDate();
         if (!serverDate) throw "Unable to fetch server date";
         return localDate === serverDate;
     }

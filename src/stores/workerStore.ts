@@ -98,26 +98,14 @@ export const useWorkerStore = defineStore("worker", {
                 this.totals = localStorage.getItem("totals");
             }
 
-            // Get program ID
-            try {
-                const programStr = localStorage.getItem("app");
-                if (programStr) {
-                    const program = JSON.parse(programStr);
-                    this.programId = program?.programID || null;
-                } else {
-                    this.programId = null;
-                }
-            } catch (error) {
-                console.error("Error parsing program data:", error);
-                this.programId = null;
-            }
+            this.programId = Service.getProgramID() || null;
         },
 
         async postData(type: string, payload: any = "") {
             if (!this.workerApi) {
                 this.initWorker();
             }
-            if (useStatusStore().isSyncingDone) {
+            if (useStatusStore().isSyncingDone || type != "SYNC_ALL_DATA") {
                 if (type == "SYNC_ALL_DATA") await useStatusStore().setSyncingTotal();
                 await this.updateSettings();
                 return this.workerApi.post({
@@ -132,6 +120,7 @@ export const useWorkerStore = defineStore("worker", {
                     payload,
                 });
             } else {
+                await useStatusStore().checkMetaDataStatus();
                 console.log("Worker is already syncing");
             }
         },

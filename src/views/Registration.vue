@@ -337,7 +337,7 @@ export default defineComponent({
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.birthdate) >= 14 ? true : false;
                 this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
-                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.birthdate) < 42 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.sessionDate(), this.birthdate) < 42 ? true : false;
             }
         },
         disableNationalIDInput() {
@@ -517,7 +517,7 @@ export default defineComponent({
                 vitals.unsaved = [
                     {
                         concept_id: 5089,
-                        obs_datetime: HisDate.currentDate(),
+                        obs_datetime: HisDate.sessionDate(),
                         value_numeric: Weight,
                     },
                 ];
@@ -525,14 +525,11 @@ export default defineComponent({
             const birthdate = this.personInformation[0].selectedData.birthdate;
             const gender = this.personInformation[0].selectedData.gender;
 
-            let program: any = localStorage.getItem("app");
-            program = JSON.parse(program);
-
             const offlineRecord: any = {
                 patientID: "",
                 ID: this.ddeId,
                 NcdID: "",
-                program_id: program ? program.programID : null,
+                program_id: Service.getProgramID() || null,
                 location_id: localStorage.getItem("locationID"),
                 provider_id: localStorage.getItem("userID"),
                 encounter_datetime: new Date().toISOString(),

@@ -1,4 +1,5 @@
 <template>
+  <div class="scrollable-container">
     <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
@@ -12,6 +13,7 @@
             </ion-accordion>
         </ion-accordion-group>
     </ion-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -112,7 +114,7 @@ export default defineComponent({
             const age = HisDate.getAgeInYears(this.patient?.personInformation?.birthdate);
             const promises = array.map(async (item: any) => {
                 const firstDate = await ObservationService.getFirstObsDatetime(this.patient.patientID, item);
-                if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
+                if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.sessionDate()) {
                     if (item == "Weight") {
                         modifyCheckboxValue(this.vitals, "Height And Weight Not Done", "displayNone", true);
                     }
@@ -126,7 +128,7 @@ export default defineComponent({
                         this.vitals,
                         item,
                         "value",
-                        await ObservationService.getFirstValueNumber(this.patient.patientID, item, HisDate.currentDate())
+                        await ObservationService.getFirstValueNumber(this.patient.patientID, item, HisDate.sessionDate())
                     );
                     modifyFieldValue(this.vitals, item, "disabled", true);
                     mandatoryDone.push("true");
@@ -323,7 +325,7 @@ export default defineComponent({
                     parseInt(weight),
                     parseInt(height),
                     this.patient?.personInformation?.gender,
-                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.currentDate())
+                    HisDate.calculateAge(this.patient?.personInformation?.birthdate, HisDate.sessionDate())
                 );
                 console.log("🚀 ~ setBMI ~ this.BMI:", this.BMI);
                 this.updateBMI();
@@ -576,6 +578,29 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.scrollable-container {
+  max-height: 40vh;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+
+.scrollable-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 .vitals_title {
     border-bottom: 1px solid #b3b3b3;
     margin-bottom: 50px;

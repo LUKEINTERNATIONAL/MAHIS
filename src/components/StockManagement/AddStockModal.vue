@@ -161,7 +161,7 @@ export default defineComponent({
                                 expiry_date: getFieldValue(this.stock, "expire date", "value"),
                                 manufacture: getFieldValue(this.stock, "manufacture", "value"),
                                 quantity: getFieldValue(this.stock, "quantity", "value"),
-                                delivery_date: getFieldValue(this.stock, "delivery_date", "value") || HisDate.currentDate(),
+                                delivery_date: getFieldValue(this.stock, "delivery_date", "value") || HisDate.sessionDate(),
                                 product_code: "",
                                 pack_size: "",
                             },
@@ -192,7 +192,7 @@ export default defineComponent({
                     drug_id: getFieldValue(this.stock, "product name", "value").drug_id,
                     reallocation_code: "MA20",
                     waste_reason: "Something wrong with the drug",
-                    date: HisDate.currentDate(),
+                    date: HisDate.sessionDate(),
                     reason: "Mistake Entirely",
                 };
                 try {
@@ -213,7 +213,7 @@ export default defineComponent({
                 const data = {
                     reallocation_code: "MA20",
                     quantity: doses_wasted,
-                    date: HisDate.currentDate(),
+                    date: HisDate.sessionDate(),
                     reason: "Something wrong with the drug",
                 };
                 await this.stockService.disposeItems(drug_id, data);

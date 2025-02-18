@@ -1,90 +1,144 @@
 <template>
     <basic-card :content="cardData" @update:inputValue="handleInputData"></basic-card>
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Previous Visits</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <div class="table-responsive">
+                        <DataTable ref="dataTableRef" :options="options" :data="tableData" class="display nowrap" width="100%">
+                            <thead>
+                                <tr>
+                                    <th v-for="head in header" :key="head">{{ head }}</th>
+                                </tr>
+                            </thead>
+                        </DataTable>
+                    </div>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { ref, computed, onMounted, watch } from "vue";
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonCheckbox } from "@ionic/vue";
-import { defineComponent } from "vue";
 import { icons } from "@/utils/svg";
-
 import DispositionModal from "@/components/ProfileModal/OutcomeModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import { mapState } from "pinia";
+import { storeToRefs } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
-import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
-
+import {
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    modifyFieldValue,
+    modifyRadioValue,
+} from "@/services/data_helpers";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
+import { getOfflineFirstObsValue, getOfflineSavedUnsavedData } from "@/services/offline_service";
+import { ObservationService } from "@/services/observation_service";
+import HisDate from "@/utils/Date";
+import { ConceptService } from "@/services/concept_service";
 
-export default defineComponent({
-    name: "Menu",
-    components: {
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        IonCheckbox,
-        BasicForm,
-        BasicCard,
+// Initialize stores
+const enrollmentStore = useEnrollementStore();
+const demographicsStore = useDemographicsStore();
+
+// Get store state using storeToRefs for reactivity
+const { substance } = storeToRefs(enrollmentStore);
+const { patient } = storeToRefs(demographicsStore);
+
+// Data properties
+const test = ref("");
+const cardData = ref({});
+const tableData = ref([] as any);
+
+const iconsContent = ref(icons);
+// Constants
+const header = ["Substance", "Answer", "Date", "Action"];
+// DataTable options
+const options = {
+    responsive: true,
+    select: false,
+    layout: {
+        topStart: "buttons",
+        topEnd: "search",
+        bottomStart: "info",
+        bottomEnd: "paging",
     },
-    data() {
-        return {
-            iconsContent: icons,
-            test: "" as any,
-            cardData: {} as any,
-        };
-    },
-    computed: {
-        ...mapState(useEnrollementStore, ["substance"]),
-        ...mapState(useDemographicsStore, ["patient"]),
-    },
-    watch: {
-        substance: {
-            handler() {
-                this.buildCards();
+    ordering: false,
+} as any;
+
+// Methods
+const buildCards = () => {
+    cardData.value = {
+        mainTitle: "Enrollment",
+        cards: [
+            {
+                cardTitle: "Substance use / Consumption",
+                content: substance.value,
             },
-            deep: true,
-        },
-    },
+        ],
+    };
+};
 
-    mounted() {
-        this.updateEnrollmentStores();
-        this.buildCards();
-    },
-    methods: {
-        buildCards() {
-            const enrollment = useEnrollementStore();
-            this.cardData = {
-                mainTitle: "Enrollment",
-                cards: [
-                    {
-                        cardTitle: "Substance use / Consumption",
-                        content: this.substance,
-                    },
-                ],
-            };
-        },
-        openModal() {
-            createModal(DispositionModal);
-        },
-        updateEnrollmentStores() {
-            const enrollmentStore = useEnrollementStore();
-            enrollmentStore.setSubstance(this.substance);
-        },
+const openModal = () => {
+    createModal(DispositionModal);
+};
 
-        testF(data: any) {
-            console.log(data);
-        },
-        async handleInputData(event: any) {},
+const updateEnrollmentStores = () => {
+    enrollmentStore.setSubstance(substance.value);
+};
+
+const setRiskAssessment = async () => {
+    const data = getOfflineSavedUnsavedData("substanceAbuse");
+    if (data.length === 0) return [];
+
+    tableData.value = await Promise.all(
+        data.map(async (item: any) => {
+            return [
+                item.concept_name,
+                await ConceptService.getConceptName(item.value_coded),
+                HisDate.toStandardHisFormat(item.obs_datetime),
+                `<button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify(item)}'>
+                            ${iconsContent.value.delete2}</button>`,
+            ];
+        })
+    );
+    // const patientData = JSON.parse(JSON.stringify(patient.value));
+    // const substanceAbuse = [...(patientData?.substanceAbuse?.unsaved || []), ...(patientData?.substanceAbuse?.saved || [])];
+    // const drinking: any = await getOfflineFirstObsValue(substanceAbuse, "value_coded", 2318);
+    // const smoking: any = await getOfflineFirstObsValue(substanceAbuse, "value_coded", 1551);
+    // modifyRadioValue(substance.value, "Smoking history", "selectedValue", await ObservationService.getConceptName(smoking));
+    // modifyRadioValue(substance.value, "Does the patient drink alcohol?", "selectedValue", await ObservationService.getConceptName(drinking));
+};
+
+const handleInputData = async (event: any) => {
+    // Implementation here
+};
+
+// Watch
+watch(
+    () => substance.value,
+    () => {
+        buildCards();
     },
+    { deep: true }
+);
+
+// Lifecycle hooks
+onMounted(async () => {
+    updateEnrollmentStores();
+    buildCards();
+    await setRiskAssessment();
 });
 </script>
-
 <style scoped>
 .sub_title {
     font-weight: 400;
