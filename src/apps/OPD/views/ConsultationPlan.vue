@@ -4,7 +4,7 @@
           :onYes="printYes"
           :onNo="printNo"
           :isOpen="printModalOpen"
-          :title="`Do you want to print?`"
+          :title="`Do you want to print the consultation summary?`"
       />
         <!-- Spinner -->
         <div v-if="isLoading" class="spinner-overlay">
@@ -315,8 +315,8 @@ export default defineComponent({
       },
 
       async printNo() {
-        this.$router.push("home");
         toastSuccess("Patient has finished consultation!");
+        this.$router.push("home");
       },
         getSaveFunction(index: any) {
             if (index < this.StepperData.length - 1) {
