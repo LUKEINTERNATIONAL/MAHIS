@@ -1,5 +1,11 @@
 <template>
     <ion-page>
+      <OPDPrintingModal
+          :onYes="printYes"
+          :onNo="printNo"
+          :isOpen="printModalOpen"
+          :title="`Do you want to print?`"
+      />
         <!-- Spinner -->
         <div v-if="isLoading" class="spinner-overlay">
             <ion-spinner name="bubbles"></ion-spinner>
@@ -113,11 +119,16 @@ import { PatientService } from "@/services/patient_service";
 import { EncounterService } from "@/services/encounter_service";
 import { ConceptService } from "@/services/concept_service";
 import OPDFooter from "@/apps/OPD/components/OPDFooter.vue";
+import CheckInConfirmationModal from "@/components/Modal/CheckInConfirmationModal.vue";
+import OPDPrintingModal from "@/apps/OPD/components/ConsultationPlan/Modals/OPDPrintingModal.vue";
+import { usePatientProfile } from "@/composables/usePatientProfile";
 
 export default defineComponent({
     name: "ConsultationPlan",
     mixins: [SetUserRole, SetEncounter],
     components: {
+      OPDPrintingModal,
+      CheckInConfirmationModal,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -155,6 +166,8 @@ export default defineComponent({
             patients: [] as any,
             showAlert: false,
             checkedIn: false as Boolean,
+            printModalOpen: false,
+
         };
     },
     props: {
@@ -239,7 +252,8 @@ export default defineComponent({
         },
     },
     setup() {
-        const presentingComplaintsValue = ref<string[]>([]);
+       const { printVisitSummary } = usePatientProfile();
+       const presentingComplaintsValue = ref<string[]>([]);
 
         async function loadSavedEncounters(patientVisitDate: any) {
             const patient = new PatientService();
@@ -278,6 +292,7 @@ export default defineComponent({
         mounted();
         return {
             presentingComplaintsValue,
+            printVisitSummary,
             loadSavedEncounters,
             chevronBackOutline,
             checkmark,
@@ -286,6 +301,23 @@ export default defineComponent({
 
     methods: {
         endConsultation() {},
+      togglePrintModal() {
+        this.printModalOpen = !this.printModalOpen;
+      },
+      closeCheckInModal() {
+        this.printModalOpen = false;
+      },
+
+      async printYes() {
+        await this.printVisitSummary();
+        this.$router.push("home");
+        toastSuccess("Patient has finished consultation!");
+      },
+
+      async printNo() {
+        this.$router.push("home");
+        toastSuccess("Patient has finished consultation!");
+      },
         getSaveFunction(index: any) {
             if (index < this.StepperData.length - 1) {
                 switch (index) {
@@ -321,8 +353,9 @@ export default defineComponent({
                     if (this.userRole !== "Lab") {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "DISPENSATION", locationId);
                         await usePatientList().refresh(locationId);
-                        this.$router.push("home");
-                        toastSuccess("Patient has finished consultation!");
+                        this.togglePrintModal();
+                        return;
+
                     } else {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
                         await usePatientList().refresh(locationId);
@@ -515,7 +548,7 @@ export default defineComponent({
                 const locationId = location ? location.code : null;
                 await usePatientList().refresh(locationId);
                 this.checkedIn = false;
-                await toastSuccess("Finished and visit closed");
+                toastSuccess("Finished and visit closed");
             } catch (e) {}
             this.$router.push("/home");
         },
