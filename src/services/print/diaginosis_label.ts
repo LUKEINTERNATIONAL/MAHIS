@@ -4,12 +4,8 @@ import { EncounterService } from "../encounter_service";
 export async function print_diagnosis(label: any, patient: any, visitDate: any) {
     const encounters = await EncounterService.getEncounters(patient.patientID, { date: visitDate });
     const diagnosis = await setDiagnosisEncounters(encounters);
-    console.log("🚀 ~ print_diagnosis ~ encounters:", encounters);
-    label.drawLine(20, 60, 800, 2);
-    label.drawText(`Primary diagnosis`, { fontSize: 3 });
-    label.drawText(`${diagnosis.primaryDiagnosis}`, { fontSize: 2 });
-    label.drawText(`Secondary diagnosis`, { fontSize: 3 });
-    label.drawText(`${diagnosis.secondaryDiagnosis}`, { fontSize: 2 });
+    label.drawText(`Primary diagnosis: ${diagnosis.primaryDiagnosis}`, { fontSize: 1 });
+    label.drawText(`Secondary diagnosis: ${diagnosis.secondaryDiagnosis}`, { fontSize: 1 });
     label.drawText("___________________________________________________", { fontSize: 3 });
     return label;
 }

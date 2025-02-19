@@ -18,15 +18,18 @@ import { PatientService } from "./patient_service";
 import { print_diagnosis } from "./print/diaginosis_label";
 import { DrugOrderService } from "./drug_order_service";
 import { print_prescription } from "./print/prescription_label";
+import HisDate from "@/utils/Date";
+import { UserService } from "./user_service";
+import { useUserStore } from "@/stores/userStore";
 
 export class PrintoutService extends Service {
     constructor() {
         super();
     }
 
-    private async _print() {
+    private async _print(labelType: any) {
         // const eplCommands =  await Service.getText(url);
-        const eplCommands: any = await this.generateEPLLabels();
+        const eplCommands: any = await this.generateEPLLabels("visit");
         console.log("🚀 ~ PrintoutService ~ _print ~ eplCommands:", eplCommands);
 
         if (!eplCommands) throw new Error("Unable to print Label. Try again later");
@@ -41,19 +44,21 @@ export class PrintoutService extends Service {
             // url: await ApiClient.expandPath(url),
         });
     }
-    async generateEPLLabels() {
+    async generateEPLLabels(labelType: any) {
         const patient = useDemographicsStore().patient;
+        const user = useUserStore();
         const visits = await PatientService.getPatientVisits(patient.patientID, false);
-
         let label: any = new ZebraLabel();
         label.setLabelFormat();
-        label.drawText("Visit: 14/Jan/2025 06:00 - 14/Jan/2025 06:00", { fontSize: 2 });
-        label = await print_diagnosis(label, patient, visits[0]);
-        label = await print_prescription(label, patient, visits[0]);
-        console.log("🚀 ~ PrintoutService ~ generateEPLLabels ~ visits:", visits);
-        // label = print_vitals(label, patient);
-        // label = print_barcode(label);
-        label.drawText("Seen by: S.User at Martin Preuss Centre", { fontSize: 2 });
+        if (labelType == "visit") {
+            label.drawText(`Visit: ${HisDate.toStandardHisDisplayFormat(visits[0])} `, { fontSize: 2 });
+            label = await print_diagnosis(label, patient, visits[0]);
+            label = await print_prescription(label, patient, visits[0]);
+            label.drawText(`Seen by: ${user.getGivenNameInitial()}.${user.getSurname()} at ${user.userFacilityName}`, { fontSize: 2 });
+            // label = print_vitals(label, patient);
+        }
+        if (labelType == "barcode") label = print_barcode(label);
+
         return label.generateLabel();
     }
     async batchPrintLbls(urls: string[], showPrintImage = true) {
