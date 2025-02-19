@@ -189,6 +189,7 @@ import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import dates from "@/utils/Date";
 import { getOfflineRecords } from "@/services/offline_service";
 import { UserService } from "@/services/user_service";
+import { SetProgramService } from "@/services/set_program_service";
 export default defineComponent({
     name: "ToolbarSearch",
     mixins: [DeviceDetection, SetPersonInformation],
@@ -446,8 +447,10 @@ export default defineComponent({
             } else if (Service.getProgramID() == 14) {
                 resetOPDPatientData();
             }
+            this.route = url;
             await resetPatientData();
-
+            const patientData = await useDemographicsStore();
+            patientData.setPatientRecord(item);
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
             const userPrograms: any = this.activeProgram?.authorizedPrograms;
@@ -469,12 +472,12 @@ export default defineComponent({
                     this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32 && this.apiStatus) {
-                router.push("/patientProfile");
+                await SetProgramService.userProgramData(patientData.patient.patientID, "data");
+                this.route = this.activeProgram.url;
             }
-            this.route = url;
+
             this.popoverOpen = false;
             this.searchValue = "";
-            await useDemographicsStore().setPatientRecord(item);
             this.$router.push(this.route);
         },
         getPhone(item: any) {

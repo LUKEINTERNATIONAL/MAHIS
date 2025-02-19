@@ -11,12 +11,11 @@ import { OrderService } from "@/services/order_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useProgramStore } from "@/stores/ProgramStore";
 import { UserService } from "./user_service";
-import {getUserLocation} from "@/services/userService";
-import {usePatientList} from "@/apps/OPD/stores/patientListStore";
-import {storeToRefs} from "pinia";
-import {toastWarning} from "@/utils/Alerts";
-import {PatientOpdList} from "@/services/patient_opd_list";
-
+import { getUserLocation } from "@/services/userService";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import { storeToRefs } from "pinia";
+import { toastWarning } from "@/utils/Alerts";
+import { PatientOpdList } from "@/services/patient_opd_list";
 
 interface ProgramData {
     url: string;
@@ -77,7 +76,10 @@ export class SetProgramService extends Service {
                     url: "/OPDConsultation",
                     actionName: "Start OPD consultation",
                 };
-            } else if ((userRoles.includes("Clinician") || userRoles.includes("Pharmacist") || userRoles.includes("Superuser")) && isWaitingForDispensation) {
+            } else if (
+                (userRoles.includes("Clinician") || userRoles.includes("Pharmacist") || userRoles.includes("Superuser")) &&
+                isWaitingForDispensation
+            ) {
                 return {
                     url: "/Dispensation",
                     actionName: "Start OPD dispensation",
@@ -145,7 +147,7 @@ export class SetProgramService extends Service {
             const activities = await UserService.getUserActivities("NCD_activities");
             let url = "";
             let NCDProgramActionName = "";
-            if (patient.getNcdNumber() != "Unknown") {
+            if (patient.getNcdNumber() && patient.getNcdNumber() != "Unknown") {
                 if (activities.length == 0) {
                     this.setNCDNumber();
                     url = "/patientProfile";
