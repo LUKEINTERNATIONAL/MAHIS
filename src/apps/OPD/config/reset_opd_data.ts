@@ -31,14 +31,13 @@ export async function resetOPDPatientData() {
     const outcome = useOutcomeStore();
     const medications = useMedicationsStore();
     const treatmentPlan = useTreatmentPlanStore();
-    const diagnosis = useDiagnosisStore();
     const enrollement = useEnrollementStore();
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
     const weightHeightVitals = useWeightHeightVitalsStore();
     const presentingComplaintsStore = usePresentingComplaintsStore();
     const pastMedicalHistoryStore = usePastMedicalHistoryStore();
-    const OPDDiagnosisStore = useOPDDiagnosisStore();
+    const OPDDiagnosis = useOPDDiagnosisStore();
 
     const levelOfConsciousness = useLevelOfConsciousnessStore()
     const pregnancy = usePregnancyStore()
@@ -79,10 +78,9 @@ export async function resetOPDPatientData() {
     outcome.$reset();
     medications.$reset();
     treatmentPlan.$reset();
-    diagnosis.$reset();
     enrollement.$reset();
     nextAppointment.$reset();
-    OPDDiagnosisStore.$reset();
+    OPDDiagnosis.$reset();
     allegy.$reset();
 }
 

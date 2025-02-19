@@ -25,7 +25,7 @@
                 :backBtn="userRoleSettings.btnName"
                 :getSaveFunction="getSaveFunction"
                 :hasPatientsWaitingList="hasPatientsWaitingForLab"
-                :specialButtonLabel="'Save and end visit'"
+                :specialButtonLabel="'save & end visit'"
                 :specialButtonFn="saveData"
                 :userRole="userRole"
             />
@@ -538,7 +538,7 @@ export default defineComponent({
         },
         async saveData() {
             try {
-                this.saveDiagnosis();
+                await this.saveDiagnosis();
                 await this.saveTreatmentPlan();
                 await useOutcomeStore().saveOutcomPatientData();
                 resetOPDPatientData();
@@ -548,9 +548,9 @@ export default defineComponent({
                 const locationId = location ? location.code : null;
                 await usePatientList().refresh(locationId);
                 this.checkedIn = false;
-                toastSuccess("Finished and visit closed");
             } catch (e) {}
-            this.$router.push("/home");
+          this.togglePrintModal();
+          return;
         },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
@@ -600,11 +600,11 @@ export default defineComponent({
                 toastSuccess("Pregnant Status has been created");
             }
         },
-        saveDiagnosis() {
+       async saveDiagnosis() {
             if (this.OPDdiagnosis[0].selectedData.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
-                diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
+               await diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
             }
         },
         async saveAllergies() {
@@ -613,7 +613,7 @@ export default defineComponent({
             const treatmentInstance = new Treatment();
             if (!isEmpty(this.selectedMedicalAllergiesList)) {
                 const allergies = this.mapToAllergies();
-                treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+               await treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
             }
         },
         async saveTreatmentPlan() {
