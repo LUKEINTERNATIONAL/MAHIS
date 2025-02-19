@@ -4,9 +4,11 @@ import { EncounterService } from "../encounter_service";
 export async function print_diagnosis(label: any, patient: any, visitDate: any) {
     const encounters = await EncounterService.getEncounters(patient.patientID, { date: visitDate });
     const diagnosis = await setDiagnosisEncounters(encounters);
-    label.drawText(`Primary diagnosis: ${diagnosis.primaryDiagnosis}`, { fontSize: 1 });
-    label.drawText(`Secondary diagnosis: ${diagnosis.secondaryDiagnosis}`, { fontSize: 1 });
-    label.drawText("___________________________________________________", { fontSize: 3 });
+    if (diagnosis.primaryDiagnosis) label.drawText(`PRIMARY DIAGNOSIS: ${diagnosis.primaryDiagnosis}`, { fontSize: 1 });
+    if (diagnosis.secondaryDiagnosis) label.drawText(`SECONDARY DIAGNOSIS: ${diagnosis.secondaryDiagnosis}`, { fontSize: 1 });
+    if (diagnosis.differentialDiagnosis) label.drawText(` DIFFERENTIAL DIAGNOSIS: ${diagnosis.differentialDiagnosis}`, { fontSize: 1 });
+    if (diagnosis.primaryDiagnosis || diagnosis.secondaryDiagnosis || diagnosis.differentialDiagnosis)
+        label.drawText("___________________________________________________", { fontSize: 3 });
     return label;
 }
 
@@ -17,7 +19,8 @@ async function setDiagnosisEncounters(data: any) {
     const observations = findEncounter(data, "OUTPATIENT DIAGNOSIS")?.observations;
     const primaryDiagnosis = await getConceptValues(filterObs(observations, "Primary diagnosis"), "coded");
     const secondaryDiagnosis = await getConceptValues(filterObs(observations, "Secondary diagnosis"), "coded");
-    return { primaryDiagnosis: primaryDiagnosis, secondaryDiagnosis: secondaryDiagnosis };
+    const differentialDiagnosis = await getConceptValues(filterObs(observations, "Attempted/ Differential Diagnosis"), "coded");
+    return { primaryDiagnosis, secondaryDiagnosis, differentialDiagnosis };
 }
 function filterObs(observations: any, conceptName: any) {
     return observations?.filter((obs: any) => obs.concept.concept_names.some((name: any) => name.name === conceptName));

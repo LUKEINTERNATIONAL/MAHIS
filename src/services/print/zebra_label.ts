@@ -67,11 +67,11 @@ export class ZebraLabel {
 
     private calculateCharsPerLine(fontSize: number): number {
         const fontSizeMap: Record<number, number> = {
-            1: 100,
-            2: 80,
-            3: 60,
-            4: 40,
-            5: 30,
+            1: 47,
+            2: 47,
+            3: 47,
+            4: 47,
+            5: 47,
         };
 
         if (!(fontSize in fontSizeMap)) {
