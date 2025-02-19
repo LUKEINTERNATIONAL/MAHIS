@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getUserLocation } from "@/services/userService"
+import { getUserLocation } from "@/services/userService";
 
 export const useUserStore = defineStore("userStore", {
     state: () => ({
@@ -47,6 +47,12 @@ export const useUserStore = defineStore("userStore", {
         },
         getUserRoles() {
             return this.userRoles;
+        },
+        getGivenNameInitial() {
+            return this.user.person.names[0].given_name[0];
+        },
+        getSurname() {
+            return this.user.person.names[0].family_name;
         },
     },
     persist: true,

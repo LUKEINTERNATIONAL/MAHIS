@@ -314,6 +314,15 @@ export class PatientService extends Service {
         }
     }
 
+    getCurrentAddress() {
+        const addressComponents = [
+            this.patient?.personInformation?.current_district,
+            this.patient?.personInformation?.current_traditional_authority,
+            this.patient?.personInformation?.current_village,
+        ];
+        return addressComponents.filter(Boolean).join(",");
+    }
+
     getDocID() {
         return this.patient.DocID;
     }
@@ -393,6 +402,7 @@ export class PatientService extends Service {
         }
         return addressOBJ;
     }
+    getStringAddress() {}
 
     public static async getCachedClientProfileDuplicates(page = 1, pageSize = 10) {
         const res = await Service.getJson(`/dde/patients/matches?page=${page}&page_size=${pageSize}`);

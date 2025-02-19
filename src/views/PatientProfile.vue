@@ -179,7 +179,7 @@
                                     </ion-row>
                                     <ion-row>
                                         <ion-col class="vitalsValue">{{ vitalsData["Weight"] }} <span class="vitalsUnits">kg</span></ion-col>
-                                        <ion-col class="vitalsValue">{{ vitalsData["Height"] }} <span class="vitalsUnits">cm</span></ion-col>
+                                        <ion-col class="vitalsValue">{{ vitalsData["Height (cm)"] }} <span class="vitalsUnits">cm</span></ion-col>
                                         <ion-col class="vitalsValue">{{ vitalsData["Temperature"] }} <span class="vitalsUnits">&deg;C</span></ion-col>
                                         <ion-col class="vitalsValue">0 <span class="vitalsUnits">mg/dL</span></ion-col>
                                         <ion-col class="vitalsValue">{{ vitalsData["Pulse"] }} <span class="vitalsUnits">bpm </span></ion-col>
@@ -730,7 +730,7 @@ const checkProgram = (btn: any) => {
 };
 
 const updateData = async () => {
-    const array = ["Height", "Weight", "Systolic", "Diastolic", "Temperature", "Pulse", "SAO2", "Respiratory rate"];
+    const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temperature", "Pulse", "SAO2", "Respiratory rate"];
     const promises = array.map(async (item) => {
         const dd = await ObservationService.getFirstValueNumber(patient.value.patientID, item);
         return { [item]: dd };
