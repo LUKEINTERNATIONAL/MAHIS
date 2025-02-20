@@ -189,6 +189,7 @@ import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import dates from "@/utils/Date";
 import { getOfflineRecords } from "@/services/offline_service";
 import { UserService } from "@/services/user_service";
+import { SetProgramService } from "@/services/set_program_service";
 export default defineComponent({
     name: "ToolbarSearch",
     mixins: [DeviceDetection, SetPersonInformation],
@@ -423,7 +424,7 @@ export default defineComponent({
                 if (nationalID && nationalID.length > 0) {
                     this.patients = [];
                     this.patients.push(...nationalID);
-                    this.setPatientData("patientProfile", this.patients[0]);
+                    await this.setPatientData("patientProfile", this.patients[0]);
                     return true;
                 } else return false;
             }
@@ -446,8 +447,10 @@ export default defineComponent({
             } else if (Service.getProgramID() == 14) {
                 resetOPDPatientData();
             }
+            this.route = url;
             await resetPatientData();
-
+            const patientData = await useDemographicsStore();
+            patientData.setPatientRecord(item);
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
             const userPrograms: any = this.activeProgram?.authorizedPrograms;
@@ -469,12 +472,12 @@ export default defineComponent({
                     this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32 && this.apiStatus) {
-                router.push("/patientProfile");
+                const _activeProgram = await SetProgramService.userProgramData(item.patient_id);
+                this.route = _activeProgram.url;
             }
-            this.route = url;
+
             this.popoverOpen = false;
             this.searchValue = "";
-            await useDemographicsStore().setPatientRecord(item);
             this.$router.push(this.route);
         },
         getPhone(item: any) {
@@ -602,8 +605,8 @@ export default defineComponent({
         closeCheckInModal() {
             this.checkInModalOpen = false;
         },
-        handleCheckInNo() {
-            this.setPatientData("patientProfile", this.selectedPatient);
+        async handleCheckInNo() {
+            await this.setPatientData("patientProfile", this.selectedPatient);
             this.toggleCheckInModal();
         },
         async handleCheckInYes() {
@@ -647,7 +650,7 @@ export default defineComponent({
                 try {
                     const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
                     if (checkInStatus.length > 0) {
-                        this.setPatientData("patientProfile", item);
+                        await this.setPatientData("patientProfile", item);
                         return;
                     }
                     this.checkInModalOpen = true;
@@ -660,7 +663,7 @@ export default defineComponent({
                     return;
                 }
             }
-            this.setPatientData("/patientProfile", item);
+            await this.setPatientData("/patientProfile", item);
         },
     },
 });

@@ -7,6 +7,7 @@ import { PatientService } from "@/services/patient_service";
 import { toastWarning } from "@/utils/Alerts";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import Outcome from "@/components/Outcome.vue";
+import { PrintoutService } from "@/services/printout_service";
 
 export function usePatientProfile() {
     const isMobile = ref(Capacitor.isNativePlatform());
@@ -34,15 +35,17 @@ export function usePatientProfile() {
     const printVisitSummary = async () => {
         visits.value = await PatientService.getPatientVisits(patient.patientID, false);
         if (visits.value.length) {
-            const lbl = new PatientPrintoutService(patient.patientID);
-            return lbl.printVisitSummaryLbl(visits.value[0]);
+            new PrintoutService().printData("visit");
+            // const lbl = new PatientPrintoutService(patient.patientID);
+            // return lbl.printVisitSummaryLbl(visits.value[0]);
         } else {
             toastWarning("No visits available");
         }
     };
 
     const printID = () => {
-        new PatientPrintoutService(patient.patientID).printNidLbl();
+        new PrintoutService().printData("barcode");
+        // new PatientPrintoutService(patient.patientID).printNidLbl();
     };
 
     const formatCurrentAddress = (data: any) => {

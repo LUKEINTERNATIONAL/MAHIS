@@ -80,7 +80,7 @@ const list_picker_prperties = [
 ];
 const addingCustomAllergy = ref(false);
 onMounted(async () => {
-  // allergyStore.clearSelectedMedicalAllergiesList();
+  allergyStore.clearSelectedMedicalAllergiesList();
 });
 
 watch(
@@ -113,7 +113,8 @@ async function FindAllegicDrugName(text: any) {
 
     const temp_data_1 = searchHealthcareEquipmentAllergies(searchText);
     const temp_data_2 = concatenateArrays(temp_data_1, drugs as any);
-    allergyStore.setMedicalAllergiesList(temp_data_2);
+   const sortedList = temp_data_2.sort((a, b) => a.name.localeCompare(b.name));
+   allergyStore.setMedicalAllergiesList(sortedList);
     setCommonAllergiesList();
 }
 
