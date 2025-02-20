@@ -458,46 +458,6 @@ export const usefirstVaginalExaminationStore = defineStore("firstVaginalExaminat
                 classDash: "dashed_bottom_border _padding",
                 radioBtnContent: {
                     header: {
-                        title: "Is the Cord Pulsating",
-                        name: "Is Cord Pulsating",
-                        selectedValue: "",
-                        displayNone: true,
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-                alerts: [
-                    {
-                        backgroundColor: "",
-                        status: "",
-                        icon: "",
-                        textColor: "",
-                        value: "",
-                        name: "",
-                        index: "",
-                    },
-                ],
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
                         title: "Color",
                         selectedValue: "",
                         name: "cold felt color",
@@ -741,13 +701,6 @@ export const usefirstVaginalExaminationStore = defineStore("firstVaginalExaminat
                         selectedValue: "",
                     },
                     data: [
-                        // {
-                        //     name: "zero",
-                        //     value: "zero",
-                        //     labelPlacement: "start",
-                        //     colSize: "7",
-                        //     justify: "space-between",
-                        // },
                         {
                             name: "+",
                             value: "+",
@@ -771,6 +724,46 @@ export const usefirstVaginalExaminationStore = defineStore("firstVaginalExaminat
                         },
                     ],
                 },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Is the Cord Pulsating",
+                        name: "Is Cord Pulsating",
+                        selectedValue: "",
+                        displayNone: true,
+                    },
+                    data: [
+                        {
+                            name: "Yes",
+                            value: "yes",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "No",
+                            value: "no",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                    ],
+                },
+                alerts: [
+                    {
+                        backgroundColor: "",
+                        status: "",
+                        icon: "",
+                        textColor: "",
+                        value: "",
+                        name: "",
+                        index: "",
+                    },
+                ],
             },
         ] as any,
     }),
