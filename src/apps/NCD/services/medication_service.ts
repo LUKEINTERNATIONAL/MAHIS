@@ -24,27 +24,9 @@ export async function createNCDDrugOrder() {
             const NCDMedicationsStore = useNCDMedicationsStore();
             NCDMedicationsStore.clearMedicationDataStores();
             toastSuccess("Drug order(s) has been created");
-
-            console.log("createNCDDrugOrder: ",  patientData.MedicationOrder.unsaved)
         } else {
             toastWarning("Unable to create drug orders!");
         }
-        
-        // const userID: any = Service.getUserID();
-        // const p_patient = new PatientService();
-        // const drugOrders = mapToOrders();
-        // if (drugOrders.length > 0) {
-        //     const NCDMedicationsStore = useNCDMedicationsStore();
-        //     NCDMedicationsStore.clearMedicationDataStores();
-        //     const prescriptionService = new DrugPrescriptionService(p_patient.getID(), userID);
-        //     const encounter = await prescriptionService.createEncounter();
-        //     if (!encounter) return toastWarning("Unable to create treatment encounter");
-        //     const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
-        //     if (!drugOrder) return toastWarning("Unable to create drug orders!");
-        //     toastSuccess("Drug order(s) has been created");
-        // } else {
-            
-        // }
     } catch (error) {
         toastWarning("Unable to create drug orders!");
     }

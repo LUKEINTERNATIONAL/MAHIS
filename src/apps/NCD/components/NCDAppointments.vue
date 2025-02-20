@@ -100,7 +100,6 @@
 <script lang="ts">
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol, IonCard, IonIcon, IonButton } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
-import Toolbar from "@/components/Toolbar.vue";
 import HisDate from "@/utils/Date";
 import { Appointment } from "@/apps/Immunization/services/ncd_appointment_service";
 import DateInputField from "@/components/DateInputField.vue";
@@ -120,7 +119,6 @@ export default defineComponent({
         IonHeader,
         IonPage,
         IonToolbar,
-        Toolbar,
         IonRow,
         DateInputField,
         IonIcon,
