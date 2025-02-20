@@ -1,7 +1,7 @@
 <template>
   <ion-modal :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
         <ion-buttons slot="start" >
-          <ion-title style="color: #0c0c0c">Do you want to print?</ion-title>
+          <ion-title style="color: #0c0c0c">{{title}}</ion-title>
           <ion-button @click="closeModal">
             <ion-icon slot="icon-only" :icon="closeOutline()" style="color: #b02a37"></ion-icon>
           </ion-button>
