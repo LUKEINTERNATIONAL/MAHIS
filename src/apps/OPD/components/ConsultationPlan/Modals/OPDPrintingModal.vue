@@ -1,32 +1,21 @@
 <template>
-  <ion-modal :is-open="isOpen" :show-backdrop="true" @didDismiss="closeModal">
-        <ion-buttons slot="start" >
-          <ion-title style="color: #0c0c0c">Do you want to print?</ion-title>
-          <ion-button @click="closeModal">
-            <ion-icon slot="icon-only" :icon="closeOutline()" style="color: #b02a37"></ion-icon>
-          </ion-button>
-        </ion-buttons>
+  <ion-modal :is-open="isOpen" :show-backdrop="true">
+    <ion-buttons slot="start" >
+      <ion-title style="color: #0c0c0c">{{ title }}</ion-title>
+      <ion-button >
+        <ion-icon slot="icon-only"  style="color: #b02a37"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-content>
-      <div v-if="isCheckInPrompt" style="display:flex;">
+      <div style="display:flex;">
         <ion-footer collapse="fade" class="ion-no-border">
           <ion-row>
             <ion-col>
-              <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="onYes"> Create visit </ion-button>
-            </ion-col>
-            <ion-col>
-              <DynamicButton name="View profile" @click="onNo()" fill="solid" style="float: right; margin: 2%; width: 130px" />
-            </ion-col>
-          </ion-row>
-        </ion-footer>
-      </div>
-      <div v-else style="display:flex;">
-        <ion-footer collapse="fade" class="ion-no-border">
-          <ion-row>
-            <ion-col>
-              <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="onNo">No</ion-button>
+              <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="onNo">No </ion-button>
             </ion-col>
             <ion-col>
               <DynamicButton name="Yes" @click="onYes()" fill="solid" style="float: right; margin: 2%; width: 130px" />
+
             </ion-col>
           </ion-row>
         </ion-footer>
@@ -46,14 +35,14 @@ import {
   IonContent,
   IonIcon, IonFooter, IonRow, IonCol
 } from '@ionic/vue';
-import { closeOutline } from 'ionicons/icons';
+import { closeOutline } from 'ionicons/icons'
 import DynamicButton from "@/components/DynamicButton.vue";
 
 export default defineComponent({
-  name: 'CheckInConfirmationModal',
+  name: 'OPDPrintingModal',
   components: {
-    IonCol, IonRow, IonFooter,
     DynamicButton,
+    IonCol, IonRow, IonFooter,
     IonModal,
     IonHeader,
     IonToolbar,
@@ -70,23 +59,23 @@ export default defineComponent({
       default: false
     },
     closeModalFunc : {
-        type: Function as PropType<()=>void>,
-        required: true
-        
+      type: Function as PropType<()=>void>,
+      required: false
+
     },
     onYes : {
-        type: Function as PropType<()=>void>,
-        required: true
-        
+      type: Function as PropType<()=>void>,
+      required: true
+
     },
     onNo : {
-        type: Function as PropType<()=>void>,
-        required: true
-        
+      type: Function as PropType<()=>void>,
+      required: true
+
     },
     title:{
-        type: String as PropType<string>,
-        required: true
+      type: String as PropType<string>,
+      required: true
     }
   },
   computed: {
@@ -99,13 +88,7 @@ export default defineComponent({
     closeOutline() {
       return closeOutline;
     },
-    closeModal() {
-      // this.$emit('update:isOpen', false);
-      this.closeModalFunc();
-    },
-    confirm(test:string) {
-      this.closeModal();
-    }
+
   }
 });
 </script>

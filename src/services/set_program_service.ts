@@ -74,22 +74,22 @@ export class SetProgramService extends Service {
                 };
             } else if ((userRoles.includes("Clinician") || userRoles.includes("Superuser")) && isWaitingForConsultation) {
                 return {
-                    url: "/OPDConsultation",
+                    url: "/OPDConsultationPlan",
                     actionName: "Start OPD consultation",
                 };
             } else if ((userRoles.includes("Clinician") || userRoles.includes("Pharmacist") || userRoles.includes("Superuser")) && isWaitingForDispensation) {
                 return {
-                    url: "/Dispensation",
+                    url: "/dispensation",
                     actionName: "Start OPD dispensation",
                 };
             } else if (userRoles.includes("Lab") && isWaitingForLab) {
                 return {
-                    url: "/OPDConsultation",
+                    url: "/OPDConsultationPlan",
                     actionName: "Start OPD Lab",
                 };
             } else {
                 // If the patient is not in the waiting list for any stage, show a toast warning
-                toastWarning("Activate visit for the patient to start this service");
+                toastWarning("The visit is not active or you don't have permissions for the current stage");
                 return {
                     url: "",
                     actionName: "OPD program",

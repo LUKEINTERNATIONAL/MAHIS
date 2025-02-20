@@ -3,11 +3,11 @@ import { EncounterService } from "../encounter_service";
 
 export async function print_diagnosis(label: any, patient: any, visitDate: any) {
     const encounters = await EncounterService.getEncounters(patient.patientID, { date: visitDate });
-    const diagnosis = await setDiagnosisEncounters(encounters);
-    if (diagnosis.primaryDiagnosis) label.drawText(`PRIMARY DIAGNOSIS: ${diagnosis.primaryDiagnosis}`, { fontSize: 1 });
-    if (diagnosis.secondaryDiagnosis) label.drawText(`SECONDARY DIAGNOSIS: ${diagnosis.secondaryDiagnosis}`, { fontSize: 1 });
-    if (diagnosis.differentialDiagnosis) label.drawText(` DIFFERENTIAL DIAGNOSIS: ${diagnosis.differentialDiagnosis}`, { fontSize: 1 });
-    if (diagnosis.primaryDiagnosis || diagnosis.secondaryDiagnosis || diagnosis.differentialDiagnosis)
+    const diagnosis: any = await setDiagnosisEncounters(encounters);
+    if (diagnosis.primaryDiagnosis.length > 0) label.drawText(`PRIMARY DIAGNOSIS: ${diagnosis.primaryDiagnosis}`, { fontSize: 1 });
+    if (diagnosis.secondaryDiagnosis.length > 0) label.drawText(`SECONDARY DIAGNOSIS: ${diagnosis.secondaryDiagnosis}`, { fontSize: 1 });
+    if (diagnosis.differentialDiagnosis.length > 0) label.drawText(` DIFFERENTIAL DIAGNOSIS: ${diagnosis.differentialDiagnosis}`, { fontSize: 1 });
+    if (diagnosis.primaryDiagnosis.length > 0 || diagnosis.secondaryDiagnosis.length > 0 || diagnosis.differentialDiagnosis.length > 0)
         label.drawText("___________________________________________________", { fontSize: 3 });
     return label;
 }
