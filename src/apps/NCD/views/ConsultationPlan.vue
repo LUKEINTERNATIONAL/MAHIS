@@ -302,7 +302,6 @@ const saveComplications = async () => {
         // await saveEncounterData(patient.value.patientID, EncounterTypeId.SCREENING, "" as any, data);
         const patientData = JSON.parse(JSON.stringify(patient.value));
         (patientData.screening ??= {}).unsaved ??= [];
-        patientData.screening.unsaved.length = 0;
         patientData.screening.unsaved.push(...data);
         await saveOfflinePatientData(patientData);
         toastSuccess("Complications saved successfully");
