@@ -424,7 +424,7 @@ export default defineComponent({
                 if (nationalID && nationalID.length > 0) {
                     this.patients = [];
                     this.patients.push(...nationalID);
-                    this.setPatientData("patientProfile", this.patients[0]);
+                    await this.setPatientData("patientProfile", this.patients[0]);
                     return true;
                 } else return false;
             }
@@ -472,8 +472,8 @@ export default defineComponent({
                     this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32 && this.apiStatus) {
-                await SetProgramService.userProgramData(patientData.patient.patientID, "data");
-                this.route = this.activeProgram.url;
+                const _activeProgram = await SetProgramService.userProgramData(item.patient_id);
+                this.route = _activeProgram.url;
             }
 
             this.popoverOpen = false;
@@ -605,8 +605,8 @@ export default defineComponent({
         closeCheckInModal() {
             this.checkInModalOpen = false;
         },
-        handleCheckInNo() {
-            this.setPatientData("patientProfile", this.selectedPatient);
+        async handleCheckInNo() {
+            await this.setPatientData("patientProfile", this.selectedPatient);
             this.toggleCheckInModal();
         },
         async handleCheckInYes() {
@@ -650,7 +650,7 @@ export default defineComponent({
                 try {
                     const checkInStatus = await PatientOpdList.getCheckInStatus(item.patient_id);
                     if (checkInStatus.length > 0) {
-                        this.setPatientData("patientProfile", item);
+                        await this.setPatientData("patientProfile", item);
                         return;
                     }
                     this.checkInModalOpen = true;
@@ -663,7 +663,7 @@ export default defineComponent({
                     return;
                 }
             }
-            this.setPatientData("/patientProfile", item);
+            await this.setPatientData("/patientProfile", item);
         },
     },
 });
