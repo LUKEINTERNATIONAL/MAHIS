@@ -3,7 +3,7 @@
         <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="vitals"></basic-form>
+                <basic-form :contentData="vitals" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
             </ion-card-content>
         </ion-card>
         <ion-card class="section">
@@ -44,8 +44,9 @@ import { mapState } from "pinia";
 import { checkmark, pulseOutline } from "ionicons/icons";
 
 import BasicCard from "@/components/BasicCard.vue";
-import { useLabourPhysicalExamStore } from "@/apps/LABOUR/stores/physical exam/physicalExamination";
+import { labourPhysicalExamSchema, useLabourPhysicalExamStore } from "@/apps/LABOUR/stores/physical exam/physicalExamination";
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
+import { YupValidateField } from "@/services/validation_service";
 export default defineComponent({
     name: "History",
     components: {
@@ -117,6 +118,12 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        async handleVitalsValidation(event: any) {
+            YupValidateField(this.vitals, labourPhysicalExamSchema, event.name, event.value);
+        },
+        async handleInputData(event: any) {
+            this.handleVitalsValidation(event);
+        },
         handleVitalsChange() {
             //reset alerts
             const heightValue = getFieldValue(this.vitals, "Height", "value");
@@ -145,13 +152,13 @@ export default defineComponent({
             modifyFieldValue(this.otherphysicalExams, "Number of contraction", "displayNone", isOther);
         },
         handleOedema() {
-            if (getRadioSelectedValue(this.otherphysicalExams, "Present") == "present") {
+            if (getRadioSelectedValue(this.otherphysicalExams, "Oedema") == "present") {
                 modifyFieldValue(this.otherphysicalExams, "Other", "displayNone", false);
             } else {
                 modifyFieldValue(this.otherphysicalExams, "Other", "displayNone", true);
             }
 
-            console.log("_________><><>", getRadioSelectedValue(this.otherphysicalExams, "Present"));
+            console.log("_________><><>", getRadioSelectedValue(this.otherphysicalExams, "Oedema"));
         },
         handleCephalic() {
             if (getRadioSelectedValue(this.otherphysicalExams, "Presentation") == "cephalic") {

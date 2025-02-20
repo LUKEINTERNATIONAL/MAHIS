@@ -1,5 +1,11 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import * as yup from "yup";
+import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers";
+
+export const labourPhysicalExamSchema = yup.object().shape({
+    Height: yup.number().typeError("Height can only be number").min(0),
+});
 
 export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
     state: () => ({
@@ -680,6 +686,12 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
     actions: {
         setLabourVitals(data: any) {
             this.vitals = data;
+        },
+        async validate() {
+            const generalConditon = extractArrayOfNameValue(this.vitals);
+            const generalConditonValid = await validateStore(this.vitals, labourPhysicalExamSchema, generalConditon);
+
+            return generalConditonValid;
         },
     },
     // persist:true,
