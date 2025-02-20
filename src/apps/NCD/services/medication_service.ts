@@ -15,8 +15,8 @@ export async function createNCDDrugOrder() {
         const demographicsStore = useDemographicsStore();
         const { patient } = storeToRefs(demographicsStore);
         const drugOrders = mapToOrders();
+        const patientData = JSON.parse(JSON.stringify(patient.value));
         if (drugOrders.length > 0) {
-            const patientData = JSON.parse(JSON.stringify(patient.value));
             (patientData.MedicationOrder ??= {}).unsaved ??= [];
             const NCDdrugOrders = { NCD_Drug_Orders: drugOrders };
             patientData.MedicationOrder.unsaved.push(NCDdrugOrders);
@@ -24,10 +24,12 @@ export async function createNCDDrugOrder() {
             const NCDMedicationsStore = useNCDMedicationsStore();
             NCDMedicationsStore.clearMedicationDataStores();
             toastSuccess("Drug order(s) has been created");
+
+            console.log("createNCDDrugOrder: ",  patientData.MedicationOrder.unsaved)
         } else {
-            toastWarning("Substance abuse not saved");
+            toastWarning("Unable to create drug orders!");
         }
-        // console.log("createNCDDrugOrder: ",  patient.value)
+        
         // const userID: any = Service.getUserID();
         // const p_patient = new PatientService();
         // const drugOrders = mapToOrders();
@@ -62,7 +64,7 @@ const mapToOrders = () => {
             start_date: startDate,
             auto_expire_date: calculateExpireDate(startDate, drug.duration),
             units: drug.units,
-            instructions: `${drug.name}: ${drug.totalDosage} ${drug.units} ${frequency?.code || ""} for ${drug.duration} days`,
+            instructions: `${drug.name} ${drug.totalDosage} ${drug.units} ${frequency?.code || ""} for ${drug.duration} days`,
             dose: drug.totalDosage,
             frequency: frequency?.code || "",
         };

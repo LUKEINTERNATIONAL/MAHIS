@@ -102,6 +102,7 @@ export const useWorkerStore = defineStore("worker", {
         },
 
         async postData(type: string, payload: any = "") {
+            console.log(payload)
             if (!this.workerApi) {
                 this.initWorker();
             }
