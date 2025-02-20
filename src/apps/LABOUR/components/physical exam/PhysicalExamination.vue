@@ -81,19 +81,22 @@ export default defineComponent({
         ...mapState(useLabourPhysicalExamStore, ["otherphysicalExams"]),
     },
     mounted() {
-        this.handleOedema();
+        // this.handleOedema();
+        this.handleCephalic();
     },
     watch: {
         otherphysicalExams: {
             handler() {
                 this.handleOtherPresentation();
                 this.handleContractions();
+                this.handleCephalic();
+                // this.handleOedema();
             },
             deep: true,
         },
         anaemia: {
             handler() {
-                this.handleOedema();
+                // this.handleOedema();
             },
             deep: true,
         },
@@ -149,6 +152,13 @@ export default defineComponent({
             }
 
             console.log("_________><><>", getRadioSelectedValue(this.otherphysicalExams, "Present"));
+        },
+        handleCephalic() {
+            if (getRadioSelectedValue(this.otherphysicalExams, "Presentation") == "cephalic") {
+                modifyRadioValue(this.otherphysicalExams, "Position", "displayNone", false);
+            } else {
+                modifyRadioValue(this.otherphysicalExams, "Position", "displayNone", true);
+            }
         },
 
         //       handleFacility(){

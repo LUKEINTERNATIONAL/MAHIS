@@ -333,7 +333,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                         {
                             colData: [
                                 {
-                                    displayNone: true,
+                                    // displayNone: true,
                                     inputHeader: "Specify",
                                     unit: "",
                                     icon: icons.editPen,
@@ -350,7 +350,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
             },
             {
                 isFinishBtn: false,
-                sectionHeader: "",
+                sectionHeader: "Number of fetuses",
                 classDash: "dashed_bottom_border _padding",
 
                 data: {
@@ -358,11 +358,11 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                         {
                             colData: [
                                 {
-                                    inputHeader: "Number of fetuses",
+                                    inputHeader: "Fetuses",
                                     unit: "",
                                     icon: icons.editPen,
                                     value: "",
-                                    name: "Fetuses",
+                                    name: "fetuse",
                                     required: true,
                                     eventType: "input",
                                     inputWidth: "85%",
@@ -509,6 +509,8 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 radioBtnContent: {
                     header: {
                         title: "Choose position",
+                        name: "Position",
+                        displayNone: true,
                         selectedValue: "",
                     },
                     data: [
@@ -576,6 +578,13 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
+                            name: "No Contraction felt",
+                            value: "no Contraction Felt",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
                             name: "Mild",
                             value: "mild",
                             labelPlacement: "start",
@@ -596,37 +605,30 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                             colSize: "7",
                             justify: "space-between",
                         },
-                        {
-                            name: "No Contraction felt",
-                            value: "no Contraction Felt",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
                     ],
                 },
             },
-            {
-                isFinishBtn: false,
-                sectionHeader: "",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Number Of Contractions",
-                                    displayNone: true,
-                                    value: "",
-                                    name: "Number of contraction",
-                                    required: true,
-                                    eventType: "input",
-                                    placeholder: "Enter Number of contraction",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
+            // {
+            //     isFinishBtn: false,
+            //     sectionHeader: "",
+            //     data: {
+            //         rowData: [
+            //             {
+            //                 colData: [
+            //                     {
+            //                         inputHeader: "Number Of Contractions",
+            //                         displayNone: true,
+            //                         value: "",
+            //                         name: "Number of contraction",
+            //                         required: true,
+            //                         eventType: "input",
+            //                         placeholder: "Enter Number of contraction",
+            //                     },
+            //                 ],
+            //             },
+            //         ],
+            //     },
+            // },
             {
                 selectdData: [],
                 isFinishBtn: false,
