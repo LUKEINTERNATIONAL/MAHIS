@@ -11,12 +11,11 @@ import { OrderService } from "@/services/order_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useProgramStore } from "@/stores/ProgramStore";
 import { UserService } from "./user_service";
-import {getUserLocation} from "@/services/userService";
-import {usePatientList} from "@/apps/OPD/stores/patientListStore";
-import {storeToRefs} from "pinia";
-import {toastWarning} from "@/utils/Alerts";
-import {PatientOpdList} from "@/services/patient_opd_list";
-
+import { getUserLocation } from "@/services/userService";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import { storeToRefs } from "pinia";
+import { toastWarning } from "@/utils/Alerts";
+import { PatientOpdList } from "@/services/patient_opd_list";
 
 interface ProgramData {
     url: string;
@@ -77,7 +76,10 @@ export class SetProgramService extends Service {
                     url: "/OPDConsultationPlan",
                     actionName: "Start OPD consultation",
                 };
-            } else if ((userRoles.includes("Clinician") || userRoles.includes("Pharmacist") || userRoles.includes("Superuser")) && isWaitingForDispensation) {
+            } else if (
+                (userRoles.includes("Clinician") || userRoles.includes("Pharmacist") || userRoles.includes("Superuser")) &&
+                isWaitingForDispensation
+            ) {
                 return {
                     url: "/dispensation",
                     actionName: "Start OPD dispensation",
@@ -111,31 +113,36 @@ export class SetProgramService extends Service {
         }),
     };
 
-    static async userProgramData(patientID: string = "", programs: any = "") {
+    static async userProgramData(patientID: string = "", activePrograms: any = "") {
         const programStore = useProgramStore();
-        const authorizedPrograms = programStore.authorizedPrograms;
+        let authorizedPrograms = programStore.authorizedPrograms;
 
         if (!patientID) {
             return;
         }
-
+        const programData = programStore.activeProgram;
+        if (!activePrograms) {
+            activePrograms = programData;
+        }
+        let updatedAuthorizedPrograms = [];
         for (const program of authorizedPrograms) {
             const configHandler = this.PROGRAM_CONFIGS[program.name];
-
             if (configHandler) {
                 const programData = await configHandler();
+
                 Object.assign(program, programData);
             } else {
                 program.url = "";
                 program.actionName = program.name;
             }
+            if (program.name == activePrograms.name) {
+                activePrograms = program;
+            }
+            updatedAuthorizedPrograms.push(program);
         }
-        const programData = programStore.activeProgram;
-        if (!programs) {
-            programs = programData;
-        }
-        programStore.setActiveProgram(programs);
-        programStore.setAuthorizedPrograms(authorizedPrograms);
+        programStore.setActiveProgram(activePrograms);
+        programStore.setAuthorizedPrograms(updatedAuthorizedPrograms);
+        return activePrograms;
     }
 
     static async setNCDValue(): Promise<ProgramData> {
@@ -145,9 +152,9 @@ export class SetProgramService extends Service {
             const activities = await UserService.getUserActivities("NCD_activities");
             let url = "";
             let NCDProgramActionName = "";
-            if (patient.getNcdNumber() != "Unknown") {
+            if (patient.getNcdNumber() && patient.getNcdNumber() != "Unknown") {
                 if (activities.length == 0) {
-                    this.setNCDNumber();
+                    // this.setNCDNumber();
                     url = "/patientProfile";
                     NCDProgramActionName = "Edit NCD Enrollment";
                 } else {
@@ -159,7 +166,7 @@ export class SetProgramService extends Service {
                     url = "/consultationPlan";
                 }
             } else {
-                this.setNCDNumber();
+                // this.setNCDNumber();
                 url = "/NCDEnrollment";
                 NCDProgramActionName = "Enroll in NCD Program";
             }
@@ -174,12 +181,12 @@ export class SetProgramService extends Service {
             url: "",
         };
     }
-    static async setNCDNumber() {
-        const j = await ProgramService.getNextSuggestedNCDNumber();
-        if (j) {
-            const NCDNumber = useEnrollementStore();
-            modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
-            modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
-        }
-    }
+    // static async setNCDNumber() {
+    //     const j = await ProgramService.getNextSuggestedNCDNumber();
+    //     if (j) {
+    //         const NCDNumber = useEnrollementStore();
+    //         modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
+    //         modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
+    //     }
+    // }
 }
