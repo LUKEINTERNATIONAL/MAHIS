@@ -11,6 +11,11 @@ import { OrderService } from "@/services/order_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useProgramStore } from "@/stores/ProgramStore";
 import { UserService } from "./user_service";
+import { getUserLocation } from "@/services/userService";
+import { usePatientList } from "@/apps/OPD/stores/patientListStore";
+import { storeToRefs } from "pinia";
+import { toastWarning } from "@/utils/Alerts";
+import { PatientOpdList } from "@/services/patient_opd_list";
 
 interface ProgramData {
     url: string;
@@ -38,14 +43,62 @@ export class SetProgramService extends Service {
             const demographics = demographicsInstance.getPatient();
             const orders = await OrderService.getOrders(demographics.patient_id);
             const isToday = (order: any) => HisDate.toStandardHisFormat(HisDate.sessionDate()) === HisDate.toStandardHisFormat(order.order_date);
-
             const hasTodayOrders = orders?.some(isToday);
 
-            return {
-                url: hasTodayOrders ? "OPDConsultationPlan" : "OPDvitals",
-                actionName: hasTodayOrders ? "Continue OPD consultation" : "Start OPD consultation",
-            };
+            // Fetch user location
+            const location = await getUserLocation();
+            const locationId = location ? location.code : null;
+            // Fetch patient lists dynamically using locationId
+            const patientListStore = usePatientList();
+            await patientListStore.refresh(locationId);
+
+            const patientsWaitingForVitals = await PatientOpdList.getPatientList("VITALS", locationId);
+            const patientsWaitingForConsultation = await PatientOpdList.getPatientList("CONSULTATION", locationId);
+            const patientsWaitingForLab = await PatientOpdList.getPatientList("LAB", locationId);
+            const patientsWaitingForDispensation = await PatientOpdList.getPatientList("DISPENSATION", locationId);
+
+            // Check if the patient is in the waiting list for each stage
+            const isWaitingForVitals = patientsWaitingForVitals.some((p: any) => p.patient_id === demographics.patientID);
+            const isWaitingForConsultation = patientsWaitingForConsultation.some((p: any) => p.patient_id === demographics.patientID);
+            const isWaitingForLab = patientsWaitingForLab.some((p: any) => p.patient_id === demographics.patientID);
+            const isWaitingForDispensation = patientsWaitingForDispensation.some((p: any) => p.patient_id === demographics.patientID);
+            // Fetch user roles
+            const userRoles = this.getUserRoles();
+
+            // Determine action based on user role and patient stage
+            if ((userRoles.includes("Clinician") || userRoles.includes("Nurse") || userRoles.includes("Superuser")) && isWaitingForVitals) {
+                return {
+                    url: "/OPDVitals",
+                    actionName: "Collect OPD vitals",
+                };
+            } else if ((userRoles.includes("Clinician") || userRoles.includes("Superuser")) && isWaitingForConsultation) {
+                return {
+                    url: "/OPDConsultationPlan",
+                    actionName: "Start OPD consultation",
+                };
+            } else if (
+                (userRoles.includes("Clinician") || userRoles.includes("Pharmacist") || userRoles.includes("Superuser")) &&
+                isWaitingForDispensation
+            ) {
+                return {
+                    url: "/dispensation",
+                    actionName: "Start OPD dispensation",
+                };
+            } else if (userRoles.includes("Lab") && isWaitingForLab) {
+                return {
+                    url: "/OPDConsultationPlan",
+                    actionName: "Start OPD Lab",
+                };
+            } else {
+                // If the patient is not in the waiting list for any stage, show a toast warning
+                toastWarning("The visit is not active or you don't have permissions for the current stage");
+                return {
+                    url: "",
+                    actionName: "OPD program",
+                };
+            }
         },
+
         "ANC PROGRAM": () => ({
             url: "ANChome",
             actionName: "Enroll in ANC Program",
@@ -60,31 +113,36 @@ export class SetProgramService extends Service {
         }),
     };
 
-    static async userProgramData(patientID: string = "", programs: any = "") {
+    static async userProgramData(patientID: string = "", activePrograms: any = "") {
         const programStore = useProgramStore();
-        const authorizedPrograms = programStore.authorizedPrograms;
+        let authorizedPrograms = programStore.authorizedPrograms;
 
         if (!patientID) {
             return;
         }
-
+        const programData = programStore.activeProgram;
+        if (!activePrograms) {
+            activePrograms = programData;
+        }
+        let updatedAuthorizedPrograms = [];
         for (const program of authorizedPrograms) {
             const configHandler = this.PROGRAM_CONFIGS[program.name];
-
             if (configHandler) {
                 const programData = await configHandler();
+
                 Object.assign(program, programData);
             } else {
                 program.url = "";
                 program.actionName = program.name;
             }
+            if (program.name == activePrograms.name) {
+                activePrograms = program;
+            }
+            updatedAuthorizedPrograms.push(program);
         }
-        const programData = programStore.activeProgram;
-        if (!programs) {
-            programs = programData;
-        }
-        programStore.setActiveProgram(programs);
-        programStore.setAuthorizedPrograms(authorizedPrograms);
+        programStore.setActiveProgram(activePrograms);
+        programStore.setAuthorizedPrograms(updatedAuthorizedPrograms);
+        return activePrograms;
     }
 
     static async setNCDValue(): Promise<ProgramData> {
@@ -94,9 +152,9 @@ export class SetProgramService extends Service {
             const activities = await UserService.getUserActivities("NCD_activities");
             let url = "";
             let NCDProgramActionName = "";
-            if (patient.getNcdNumber() != "Unknown") {
+            if (patient.getNcdNumber() && patient.getNcdNumber() != "Unknown") {
                 if (activities.length == 0) {
-                    this.setNCDNumber();
+                    // this.setNCDNumber();
                     url = "/patientProfile";
                     NCDProgramActionName = "Edit NCD Enrollment";
                 } else {
@@ -108,7 +166,7 @@ export class SetProgramService extends Service {
                     url = "/consultationPlan";
                 }
             } else {
-                this.setNCDNumber();
+                // this.setNCDNumber();
                 url = "/NCDEnrollment";
                 NCDProgramActionName = "Enroll in NCD Program";
             }
@@ -123,12 +181,12 @@ export class SetProgramService extends Service {
             url: "",
         };
     }
-    static async setNCDNumber() {
-        const j = await ProgramService.getNextSuggestedNCDNumber();
-        if (j) {
-            const NCDNumber = useEnrollementStore();
-            modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
-            modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
-        }
-    }
+    // static async setNCDNumber() {
+    //     const j = await ProgramService.getNextSuggestedNCDNumber();
+    //     if (j) {
+    //         const NCDNumber = useEnrollementStore();
+    //         modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
+    //         modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
+    //     }
+    // }
 }

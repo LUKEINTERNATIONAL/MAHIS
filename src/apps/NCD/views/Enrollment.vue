@@ -167,6 +167,8 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { saveEncounterData, EncounterTypeId } from "@/services/encounter_type";
 import { resetPatientData } from "@/services/reset_data";
 import { useWorkerStore } from "@/stores/workerStore";
+import { ProgramService } from "@/services/program_service";
+import { saveOfflinePatientData } from "@/services/offline_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -216,6 +218,7 @@ export default defineComponent({
         $route: {
             async handler() {
                 await resetPatientData();
+                await this.setNCDNumber();
             },
             deep: true,
         },
@@ -240,6 +243,7 @@ export default defineComponent({
     async mounted() {
         this.setDisplayType(this.enrollmentDisplayType);
         await resetPatientData();
+        await this.setNCDNumber();
     },
 
     setup() {
@@ -249,6 +253,13 @@ export default defineComponent({
     methods: {
         setCurrentStep(name: any) {
             this.currentStep = name;
+        },
+        async setNCDNumber() {
+            const j = await ProgramService.getNextSuggestedNCDNumber();
+            if (j) {
+                modifyFieldValue(this.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
+                modifyFieldValue(this.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
+            }
         },
         nextStep() {
             const currentIndex = this.steps.indexOf(this.currentStep);
@@ -285,6 +296,8 @@ export default defineComponent({
                 } else {
                     url = "consultationPlan";
                 }
+                this.patient.NcdID = formattedNCDNumber;
+                saveOfflinePatientData(this.patient);
                 this.$router.push(url);
             }
         },

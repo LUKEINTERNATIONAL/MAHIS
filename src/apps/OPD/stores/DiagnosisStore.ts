@@ -143,8 +143,8 @@ export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
         },
         getInitial() {
             const data = _.cloneDeep(initialOPDdiagnosis);
-            return [...data]; // Return a copy of the initial state
+            return [...data];
         },
     },
-    // persist: true,
+    persist: true,
 });

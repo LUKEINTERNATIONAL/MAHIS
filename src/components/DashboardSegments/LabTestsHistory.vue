@@ -252,7 +252,7 @@ export default defineComponent({
         },
         async fetchPatientLabStageData() {
             const location = await getUserLocation();
-            const locationId = location ? location.location_id : null;
+            const locationId = location ? location.code : null;
 
             if (locationId) {
                 const LabPatients = await PatientOpdList.getPatientList("LAB", locationId);

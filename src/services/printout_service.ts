@@ -10,14 +10,26 @@ import { LabelPrinter, PrinterDevice } from "cap-label-printer-plugin";
 import ApiClient from "./api_client";
 import nprogress from "nprogress";
 import { optionsActionSheet } from "@/utils/ActionSheets";
+import { print_barcode } from "./print/barcode_label";
+import { print_vitals } from "./print/vitals_label";
+import { ZebraLabel } from "@/services/print/zebra_label";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { PatientService } from "./patient_service";
+import { print_diagnosis } from "./print/diaginosis_label";
+import { DrugOrderService } from "./drug_order_service";
+import { print_prescription } from "./print/prescription_label";
+import HisDate from "@/utils/Date";
+import { UserService } from "./user_service";
+import { useUserStore } from "@/stores/userStore";
 
 export class PrintoutService extends Service {
     constructor() {
         super();
     }
 
-    private async _print(url: string) {
+    private async _print(url: any) {
         const eplCommands = await Service.getText(url);
+
         if (!eplCommands) throw new Error("Unable to print Label. Try again later");
         let printer = await this.getDefaultPrinter();
         if (isEmpty(printer)) printer = await this.selectDefaultPrinter();
@@ -30,7 +42,45 @@ export class PrintoutService extends Service {
             url: await ApiClient.expandPath(url),
         });
     }
+    async printData(labelType: any) {
+        const eplCommands = await this.generateEPLLabels(labelType);
+        console.log("🚀 ~ PrintoutService ~ printData ~ eplCommands:", eplCommands);
 
+        if (!eplCommands) throw new Error("Unable to print Label. Try again later");
+        let printer = await this.getDefaultPrinter();
+        if (isEmpty(printer)) printer = await this.selectDefaultPrinter();
+        if (isEmpty(printer)) throw new Error("No printer device found");
+        if (printer?.port === "BT") return this.printToBluetoothDevice(printer!, eplCommands);
+        return LabelPrinter.printLabel({
+            eplCommands,
+            name: printer.name,
+            address: printer.address,
+            // url: await ApiClient.expandPath(url),
+        });
+    }
+    async generateEPLLabels(labelType: any) {
+        const patient = useDemographicsStore().patient;
+        const user = useUserStore();
+        const visits = await PatientService.getPatientVisits(patient.patientID, false);
+        let label: any = new ZebraLabel();
+        label.setLabelFormat();
+        if (labelType == "visit") {
+            label.drawText(
+                `VISIT: ${HisDate.toStandardHisDisplayFormat(visits[0])} (${patient.personInformation.given_name} ${
+                    patient.personInformation.family_name
+                })`,
+                { fontSize: 2 }
+            );
+            label = await print_diagnosis(label, patient, visits[0]);
+            label = await print_prescription(label, patient, visits[0]);
+            // label = print_vitals(label, patient);
+            label.drawText(`Seen by: ${user.getGivenNameInitial()}.${user.getSurname()} at ${user.userFacilityName}`, { fontSize: 2 });
+        }
+
+        if (labelType == "barcode") label = print_barcode(label);
+
+        return label.generateLabel();
+    }
     async batchPrintLbls(urls: string[], showPrintImage = true) {
         if (showPrintImage) EventBus.emit(EventChannels.SHOW_MODAL, "zebra-modal");
         const errors: string[] = [];

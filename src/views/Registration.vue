@@ -153,6 +153,8 @@ import { useStatusStore } from "@/stores/StatusStore";
 import { useWorkerStore } from "@/stores/workerStore";
 import { getOfflineVaccineSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { saveOfflinePatientData } from "@/services/offline_service";
+import { SetProgramService } from "@/services/set_program_service";
+import { Patient } from "../interfaces/patient";
 export default defineComponent({
     mixins: [ScreenSizeMixin, Districts],
     components: {
@@ -399,7 +401,7 @@ export default defineComponent({
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
             await useDemographicsStore().setPatientRecord(patientData);
-            this.setURLs();
+            this.setURLs(patientID);
         },
 
         validateGaudiarnInfo() {
@@ -489,7 +491,7 @@ export default defineComponent({
                         const result = await Service.postJson("/save_patient_record", { record: patientData });
                         await useDemographicsStore().setPatientRecord(result);
                         this.workerStore.postData("SYNC_ALL_DATA");
-                        await this.setURLs();
+                        await this.setURLs(result.patientID);
                     } else if (ddeIds?.ids?.length > 0) {
                         useStatusStore().syncingTotal = useStatusStore().syncingTotal + 1;
                         const demographicsStore = useDemographicsStore();
@@ -611,13 +613,14 @@ export default defineComponent({
                 return this.birthID;
             } else return "";
         },
-        async setURLs() {
+        async setURLs(patient_id = "") {
             await resetPatientData();
             this.isLoading = false;
             this.disableSaveBtn = false;
             let url = "";
             if (this.programID() == 32 && this.apiStatus) {
-                url = "/consultationPlan";
+                const _activeProgram = await SetProgramService.userProgramData(patient_id);
+                url = _activeProgram.url;
             } else {
                 url = "/patientProfile";
             }
