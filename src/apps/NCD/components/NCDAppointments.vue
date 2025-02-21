@@ -180,23 +180,22 @@ export default defineComponent({
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
-            this.isPharmacist();
             useDemographicsStore().setPatientRecord(patientData[0]);
+            this.redirectUser();
         },
-        isPharmacist() {
+        redirectUser() {
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
             const roles: any = roleData ? roleData : [];
             if (roles.some((role: any) => roles.some((role: any) => role.role === "Pharmacist"))) {
-                this.$router.push("dispensation");
-                let url = "";
                 if (Service.getProgramID() == 32) {
-                    url = "NCDDispensations";
+                    this.$router.push('NCDDispensations');
                 } else {
-                    url = "patientProfile";
+                    this.$router.push("dispensation");
                 }
-                this.$router.push(url);
+            } else {
+                this.$router.push("patientProfile");
             }
-        },
+        }
     },
 });
 </script>
