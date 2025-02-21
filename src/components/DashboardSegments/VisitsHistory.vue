@@ -98,7 +98,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="noData" v-else-if="activeProgram.program_id !== 32">ANC Profile Data</div>
+                    <div class="noData" v-if="showANCProfileData()">ANC Profile Data</div>
                     <!-- end of anc info -->
 
                     <div v-if="Object.values(vitals).every((value) => value !== '')">
@@ -285,6 +285,14 @@ export default defineComponent({
             const patient = new PatientService();
             this.visits = await PatientService.getPatientVisits(patient.getID(), false);
             await this.loadSavedEncounters(this.visits[0]);
+        },
+        showANCProfileData(): boolean {
+            const patient = new PatientService();
+            if (this.activeProgram.program_id == 12 && patient.isFemale()) {
+                return true;
+            } else {
+                return false;
+            }
         },
         covertDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
