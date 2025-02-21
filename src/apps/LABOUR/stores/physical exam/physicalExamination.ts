@@ -234,9 +234,9 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 },
             },
             // {
-            //     isFinishBtn: false,
-            //     sectionHeader: "",
-            //     classDash: "dashed_bottom_border _padding",
+            // isFinishBtn: false,
+            // sectionHeader: "",
+            // classDash: "dashed_bottom_border _padding",
 
             //     data: {
             //         rowData: [
