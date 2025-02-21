@@ -273,6 +273,7 @@ export default defineComponent({
           showReports: false,
         },
       ],
+      selectedItem: null as string | null,
     };
   },
   watch: {
@@ -351,6 +352,10 @@ export default defineComponent({
         }
       });
     },
+    selectItem(item: string) {
+      this.selectedItem = item;
+      this.navigationMenu(item);
+    },
   },
 });
 </script>
@@ -363,9 +368,21 @@ ion-menu {
 /* Optional: Add a max-width for responsiveness */
 @media (max-width: 768px) {
   ion-menu {
-    --width: 250px; /* Adjust for smaller screens */
+    --width: 250px;
   }
 }
+
+ion-item.list-content:hover {
+  --background: #f0f4ff;
+  --color: #1a73e8;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+ion-item.list-content.selected {
+  --background: #e8f0fe;
+  --color: #1a73e8;
+}
+
 ion-accordion {
   margin: 0 auto;
   border-radius: 0px;
@@ -384,20 +401,6 @@ ion-label {
   margin-right: 12px; /* Adjust the value to increase or decrease the gap */
 }
 
-ion-accordion {
-  margin: 0 auto;
-  border-radius: 0px;
-  background-color: #fff;
-  font-weight: 700;
-}
-ion-item {
-  --background: #fff;
-  --color: #7b7b7b !important;
-}
-ion-label {
-  font-weight: 700;
-  --color: #7b7b7b !important;
-}
 ion-accordion.accordion-expanding,
 ion-accordion.accordion-expanded {
   width: calc(100% - 32px);
@@ -416,6 +419,13 @@ ion-accordion.accordion-expanded {
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
-  color: #5A5A5A;
+  color: #5a5a5a;
 }
+
+.menu-item:hover {
+  --background: #f0f4ff;
+  --color: #1a73e8;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
 </style>
