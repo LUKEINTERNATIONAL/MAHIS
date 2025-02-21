@@ -5,6 +5,12 @@ import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers"
 
 export const labourPhysicalExamSchema = yup.object().shape({
     Height: yup.number().typeError("Height can only be number").min(0),
+    Weight: yup.number().typeError("Height can only be number").min(0),
+    fetuse: yup.number().typeError("Height can only be number").min(0),
+    "Fetal Heart Rate": yup.number().typeError("Height can only be number").min(0),
+});
+export const examSchema = yup.object().shape({
+    fetuse: yup.number().typeError("Height can only be number").min(0),
 });
 
 export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
@@ -689,9 +695,16 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
         },
         async validate() {
             const generalConditon = extractArrayOfNameValue(this.vitals);
+
             const generalConditonValid = await validateStore(this.vitals, labourPhysicalExamSchema, generalConditon);
 
             return generalConditonValid;
+        },
+        async validateExams() {
+            const otherExam = extractArrayOfNameValue(this.otherphysicalExams);
+            const otherExamValid = await validateStore(this.otherphysicalExams, examSchema, otherExam);
+
+            return otherExamValid;
         },
     },
     // persist:true,

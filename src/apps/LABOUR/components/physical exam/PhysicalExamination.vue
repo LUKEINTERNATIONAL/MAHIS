@@ -44,7 +44,7 @@ import { mapState } from "pinia";
 import { checkmark, pulseOutline } from "ionicons/icons";
 
 import BasicCard from "@/components/BasicCard.vue";
-import { labourPhysicalExamSchema, useLabourPhysicalExamStore } from "@/apps/LABOUR/stores/physical exam/physicalExamination";
+import { examSchema, labourPhysicalExamSchema, useLabourPhysicalExamStore } from "@/apps/LABOUR/stores/physical exam/physicalExamination";
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 import { YupValidateField } from "@/services/validation_service";
 export default defineComponent({
@@ -121,8 +121,12 @@ export default defineComponent({
         async handleVitalsValidation(event: any) {
             YupValidateField(this.vitals, labourPhysicalExamSchema, event.name, event.value);
         },
+        async handleExamsValidate(event: any) {
+            YupValidateField(this.otherphysicalExams, examSchema, event.name, event.value);
+        },
         async handleInputData(event: any) {
             this.handleVitalsValidation(event);
+            this.handleExamsValidate(event);
         },
         handleVitalsChange() {
             //reset alerts
