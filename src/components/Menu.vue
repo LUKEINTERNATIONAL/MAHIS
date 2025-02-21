@@ -61,7 +61,7 @@
         </ion-accordion>
         <ion-accordion value="8">
           <ion-item slot="header" color="light">
-            <ion-icon :icon="barChartOutline" slot="start" class="sub-menu-icon"></ion-icon>
+            <ion-icon :icon="barChartOutline" slot="start"></ion-icon>
             <ion-label class="header lft-drpm">Reports</ion-label>
           </ion-item>
           <div class="ion-padding" slot="content">
@@ -90,7 +90,7 @@
               </ion-accordion>
               <ion-accordion value="seventh" v-if="programAttri[1].showReports">
                 <ion-item slot="header">
-                  <ion-icon :icon="heartOutline" slot="start" class="sub-menu-icon"></ion-icon>
+                  <ion-icon :icon="medkitOutline" slot="start" class="sub-menu-icon"></ion-icon>
                   <ion-label class="header">NCD Reports</ion-label>
                 </ion-item>
                 <div class="content" slot="content">
@@ -149,7 +149,7 @@
         </ion-accordion>
         <ion-accordion value="9" v-if="isSuperuser" style="border-radius: 0px">
           <ion-item slot="header" color="light">
-            <ion-icon :icon="settingsOutline" slot="start" class="sub-menu-icon"></ion-icon>
+            <ion-icon :icon="settingsOutline" slot="start"></ion-icon>
             <ion-label class="header lft-drpm">Settings</ion-label>
           </ion-item>
           <div class="ion-padding" slot="content">
@@ -198,7 +198,7 @@
         </ion-accordion>
         <ion-accordion value="10" @click="navigationMenu('managePrinters')" toggle-icon="">
           <ion-item slot="header" color="light">
-            <ion-icon :icon="printOutline" slot="start" class="sub-menu-icon"></ion-icon>
+            <ion-icon :icon="printOutline" slot="start"></ion-icon>
             <ion-label class="header lft-drpm">Manage Printers</ion-label>
           </ion-item>
         </ion-accordion>
