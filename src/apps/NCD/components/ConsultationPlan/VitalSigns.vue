@@ -82,8 +82,6 @@ export default defineComponent({
         $route: {
             async handler() {
                 this.vitalsData = this.vitals;
-                this.cleanVitalForm();
-                await this.setTodayVitals();
                 await this.validateRowData("onload");
             },
             deep: true,
@@ -102,18 +100,9 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
-        cleanVitalForm() {
-            const vitals = useVitalsStore();
-            vitals.setVitals(vitals.getInitialVitals());
-        },
-
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
-        },
-        updateVitalsStores() {
-            const vitalsStore = useVitalsStore();
-            vitalsStore.setVitals(vitalsStore.getInitialVitals());
         },
         async validationController(inputData: any) {
             if (inputData?.col?.name == "Height And Weight Not Done" && inputData.col.checked) {
