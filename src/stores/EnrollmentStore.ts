@@ -360,29 +360,29 @@ const patientHistoryHIV = [
             ],
         },
     },
-    // {
-    //     sideColSize: 1,
-    //     childName: "HIV status",
-    //     data: {
-    //         rowData: [
-    //             {
-    //                 colData: [
-    //                     {
-    //                         inputHeader: "ART Start Date:",
-    //                         icon: icons.calenderPrimary,
-    //                         placeholder: "Pick the date",
-    //                         buildConceptIgnore: true,
-    //                         value: "",
-    //                         name: "HIV status date",
-    //                         eventType: "input",
-    //                         isDatePopover: true,
-    //                         displayNone: true,
-    //                     },
-    //                 ],
-    //             },
-    //         ],
-    //     },
-    // },
+    {
+        sideColSize: 1,
+        childName: "HIV status",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "ART Start Date:",
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            buildConceptIgnore: true,
+                            value: "",
+                            name: "HIV status date",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
     {
         checkboxBtnContent: {
             header: {
@@ -392,8 +392,9 @@ const patientHistoryHIV = [
             },
             data: [
                 {
-                    name: "Use of traditional medicine",
+                    name: "traditional medicine",
                     value: "Herbal traditional medications",
+                    buildConceptIgnore: true,
                     checked: false,
                 },
             ],
@@ -401,7 +402,7 @@ const patientHistoryHIV = [
     },
     {
         sideColSize: 1,
-        childName: "Use of traditional medicine",
+        childName: "traditional medicine",
         data: {
             rowData: [
                 {
