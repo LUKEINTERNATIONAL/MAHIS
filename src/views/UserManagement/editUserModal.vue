@@ -3,13 +3,19 @@
         <ion-header>
             <ion-toolbar>
                 <ion-title>
-                    <b>User Profile</b>
+                    <div style="display: flex; align-items: center;">
+                        <ion-icon :icon="personAddOutline" class="sub-menu-icon"></ion-icon>
+                        <b style="margin-left: 6px;">User Profile</b>
+                     </div>
                 </ion-title>
                 <ion-buttons slot="end">
                     <ion-title>
                         <ion-button @click="$emit('closePopoover', false)" fill="solid">
                             <span style="font-weight: 400; font-size: 19px;">
-                                close
+                                <div style="display: flex; align-items: center;">
+                                    <ion-icon :icon="closeOutline" slot="start" class="sub-menu-icon"></ion-icon>
+                                    <span style="margin-left: 6px;">Close</span>
+                                </div>
                             </span>
                         </ion-button>
                     </ion-title>
@@ -40,7 +46,10 @@
                     <ion-title>
                         <ion-button @click="saveAction" fill="solid" color="success">
                             <span style="font-weight: 400; font-size: 20px;">
-                                save
+                                <div style="display: flex; align-items: center;">
+                                    <ion-icon :icon="saveOutline" slot="start" class="sub-menu-icon"></ion-icon>
+                                    <span style="margin-left: 6px;">Save</span>
+                                </div>
                             </span>
                         </ion-button>
                     </ion-title>
@@ -52,7 +61,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import { text } from "ionicons/icons"
+import { closeOutline, saveOutline, personAddOutline } from "ionicons/icons"
 import { it } from "date-fns/locale"
 export default defineComponent({
     watch: {},

@@ -98,9 +98,9 @@ export default defineComponent({
         const cardsData = [
             { title: "Labour profile", path: "/labourProfile", icon: people, color: "grey", isSaved: false },
             { title: "Labour assessment", path: "/labourAssessment", icon: medical, color: "grey", isSaved: false },
+            { title: "Continuous monitoring", path: "/continuousMonitoring", icon: notificationsOutline, color: "grey", isSaved: false },
             { title: "Delivery details", path: "/labourDeliveryDetails", icon: documentText, color: "grey" },
             { title: "Immediate postnatal checks", path: "/postnatalChecks", icon: checkmarkCircle, color: "grey", isSaved: false },
-            { title: "Continuous monitoring", path: "/continuousMonitoring", icon: notificationsOutline, color: "grey", isSaved: false },
             { title: "Referral", path: "/labourReferral", icon: people, color: "grey", isSaved: false },
             { title: "End labour program", path: "/labourEnd", icon: checkmarkDone, color: "grey", isSaved: false },
         ];

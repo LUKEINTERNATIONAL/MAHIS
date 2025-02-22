@@ -1,6 +1,6 @@
 <template>
     <ion-app>
-        <Menu />
+        <Menu/>
         <modal-container @modalDismissed="activeModal = ''" :modalName="activeModal"> </modal-container>
         <full-screen-notice v-if="checkFullScreen" />
         <update-notification v-if="checkForUpdates" />

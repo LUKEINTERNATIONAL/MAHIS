@@ -101,7 +101,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Other exams",
+                    title: "Fetal condition",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -117,7 +117,7 @@ export default defineComponent({
                     value: "1",
                 },
                 {
-                    title: "Other exams",
+                    title: "Fetal condition",
                     component: "OtherExams",
                     value: "2",
                 },
