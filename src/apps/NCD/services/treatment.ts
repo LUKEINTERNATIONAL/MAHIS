@@ -12,6 +12,8 @@ import { DrugOrderService } from "@/services/drug_order_service";
 import HisDate from "@/utils/Date";
 import { getFrequencyLabelOrCheckCode } from "@/services/drug_prescription_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { storeToRefs } from "pinia";
+import { getOfflineRecords } from "@/services/offline_service";
 
 export class Treatment {
     async onSubmitNotes(patientID: any, providerID: any, treatmentNotesData: any) {
@@ -173,26 +175,21 @@ function reverseObjectKeys(obj: any) {
 }
 
 export async function getNCDDiagnosis() {
-    const store = useDemographicsStore();
-    const patientId = store.patient.patientID;
-    const ncdConceptIds = [8809, 6410, 6409];
-    const names = [];
-
-    try {
-        const observations = await ObservationService.getAll(patientId, "Primary diagnosis");
-
-        if (observations) {
-            for (const obs of observations) {
-                if (ncdConceptIds.includes(obs.value_coded)) {
-                    const name = await ObservationService.getConceptName(obs.value_coded);
-                    names.push(name);
-                }
-            }
-        }
-
-        return names;
-    } catch (error) {
-        console.error("Error:", error);
-        return [];
-    }
+    const demographicsStore = useDemographicsStore();
+    const { patient } = storeToRefs(demographicsStore);
+    const patientData = patient.value;
+    const ncdConceptIds = [8809, 903, 6410, 6409];
+    const value = ""; // Empty value means no likeClause filtering
+    const diagnosis = await getOfflineRecords("diagnosis", {
+        likeClause: value ? { name: `%${value}%` } : "", // Optional likeClause
+        currentPage: 1,
+        itemsPerPage: 2000, // Fetch up to 2000 records
+    }).then((data: any) => data.records);
+    const filteredDiagnosis = diagnosis.filter((record: any) => ncdConceptIds.includes(record.concept_id));
+    const savedValueCoded = patientData.diagnosis.saved.map((item: any) => item.value_coded);
+    const unsavedValueCoded = patientData.diagnosis.unsaved.map((item: any) => item.value_coded);
+    const allValueCoded = [...savedValueCoded, ...unsavedValueCoded];
+    const matchedDiagnoses = filteredDiagnosis.filter((diagnosis: any) => allValueCoded.includes(diagnosis.concept_id));
+    const matchedNames = matchedDiagnoses.map((diagnosis: any) => diagnosis.name);
+    return matchedNames
 }

@@ -4,23 +4,28 @@ import HisDate from "@/utils/Date";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { storeToRefs } from "pinia";
+import { saveOfflinePatientData } from "@/services/offline_service";
+
+
 
 export async function createNCDDrugOrder() {
     try {
-        const userID: any = Service.getUserID();
-        const patient = new PatientService();
+        const demographicsStore = useDemographicsStore();
+        const { patient } = storeToRefs(demographicsStore);
         const drugOrders = mapToOrders();
+        const patientData = JSON.parse(JSON.stringify(patient.value));
         if (drugOrders.length > 0) {
+            (patientData.MedicationOrder ??= {}).unsaved ??= [];
+            const NCDdrugOrders = { NCD_Drug_Orders: drugOrders };
+            patientData.MedicationOrder.unsaved.push(NCDdrugOrders);
+            await saveOfflinePatientData(patientData);
             const NCDMedicationsStore = useNCDMedicationsStore();
             NCDMedicationsStore.clearMedicationDataStores();
-            const prescriptionService = new DrugPrescriptionService(patient.getID(), userID);
-            const encounter = await prescriptionService.createEncounter();
-            if (!encounter) return toastWarning("Unable to create treatment encounter");
-            const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
-            if (!drugOrder) return toastWarning("Unable to create drug orders!");
             toastSuccess("Drug order(s) has been created");
         } else {
-            return toastWarning("No drug selected");
+            toastWarning("Unable to create drug orders!");
         }
     } catch (error) {
         toastWarning("Unable to create drug orders!");
@@ -41,7 +46,7 @@ const mapToOrders = () => {
             start_date: startDate,
             auto_expire_date: calculateExpireDate(startDate, drug.duration),
             units: drug.units,
-            instructions: `${drug.name}: ${drug.totalDosage} ${drug.units} ${frequency?.code || ""} for ${drug.duration} days`,
+            instructions: `${drug.name} ${drug.totalDosage} ${drug.units} ${frequency?.code || ""} for ${drug.duration} days`,
             dose: drug.totalDosage,
             frequency: frequency?.code || "",
         };

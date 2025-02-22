@@ -69,7 +69,7 @@ ion-button {
   --background-activated: transparent;
   --background-focused: transparent;
   --box-shadow: none;
-  --color: var(--ion-color-medium);
+  --color: var(--ion-color-dark-shade);
   --padding-start: 0.5rem;
   --padding-end: 0.5rem;
   height: 2rem;
