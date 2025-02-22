@@ -65,11 +65,6 @@ const syncPatientDataService = {
 
     async processPage(previousSyncDate, page) {
         try {
-            console.log("################################");
-            console.log(`Processing page...`);
-
-            console.log(`Page ${page}`);
-
             const pageData = await this.getPatientIds(previousSyncDate, BATCH_SIZE, page);
             if (pageData?.sync_patients?.length) {
                 await this.processBatchWithBuffer(pageData);
