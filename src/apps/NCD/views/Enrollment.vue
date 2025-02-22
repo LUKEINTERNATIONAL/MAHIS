@@ -170,6 +170,7 @@ import { useWorkerStore } from "@/stores/workerStore";
 import { ProgramService } from "@/services/program_service";
 import { saveOfflinePatientData } from "@/services/offline_service";
 import { ConceptService } from "@/services/concept_service";
+import { SetProgramService } from "@/services/set_program_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -288,9 +289,9 @@ export default defineComponent({
             else {
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                useDemographicsStore().setPatientRecord(await PatientService.findByID(this.patient.patientID));
                 await this.saveEnrollment();
                 await resetNCDPatientData();
+                useDemographicsStore().setPatientRecord(await PatientService.findByID(this.patient.patientID));
                 let url = "";
                 if (this.NCDActivities.length == 0) {
                     url = "patientProfile";
