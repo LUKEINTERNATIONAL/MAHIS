@@ -400,10 +400,11 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 // Router instance
 const router = useRouter();
+const route = useRoute();
 // Store initialization
 const demographicsStore = useDemographicsStore();
 const treatmentPlanStore = useTreatmentPlanStore();
@@ -769,6 +770,13 @@ watch(
         await updateData();
         await checkPatientIFCheckedIn();
         updateCheckInStatus();
+    },
+    { deep: true }
+);
+watch(
+    route,
+    async (newRoute) => {
+        await SetProgramService.userProgramData(patient.patientID);
     },
     { deep: true }
 );
