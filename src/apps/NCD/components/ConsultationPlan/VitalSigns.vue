@@ -85,7 +85,6 @@ export default defineComponent({
                 this.cleanVitalForm();
                 await this.setTodayVitals();
                 await this.validateRowData("onload");
-                this.updateVitalsStores();
             },
             deep: true,
         },
