@@ -1,5 +1,17 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import * as yup from "yup";
+import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers";
+
+export const labourPhysicalExamSchema = yup.object().shape({
+    Height: yup.number().typeError("Height can only be number").min(0),
+    Weight: yup.number().typeError("Height can only be number").min(0),
+    fetuse: yup.number().typeError("Height can only be number").min(0),
+    "Fetal Heart Rate": yup.number().typeError("Height can only be number").min(0),
+});
+export const examSchema = yup.object().shape({
+    fetuse: yup.number().typeError("Height can only be number").min(0),
+});
 
 export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
     state: () => ({
@@ -222,9 +234,9 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 },
             },
             // {
-            //     isFinishBtn: false,
-            //     sectionHeader: "",
-            //     classDash: "dashed_bottom_border _padding",
+            // isFinishBtn: false,
+            // sectionHeader: "",
+            // classDash: "dashed_bottom_border _padding",
 
             //     data: {
             //         rowData: [
@@ -333,7 +345,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                         {
                             colData: [
                                 {
-                                    displayNone: true,
+                                    // displayNone: true,
                                     inputHeader: "Specify",
                                     unit: "",
                                     icon: icons.editPen,
@@ -350,7 +362,7 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
             },
             {
                 isFinishBtn: false,
-                sectionHeader: "",
+                sectionHeader: "Number of fetuses",
                 classDash: "dashed_bottom_border _padding",
 
                 data: {
@@ -358,11 +370,11 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                         {
                             colData: [
                                 {
-                                    inputHeader: "Number of fetuses",
+                                    inputHeader: "Fetuses",
                                     unit: "",
                                     icon: icons.editPen,
                                     value: "",
-                                    name: "Fetuses",
+                                    name: "fetuse",
                                     required: true,
                                     eventType: "input",
                                     inputWidth: "85%",
@@ -509,6 +521,8 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                 radioBtnContent: {
                     header: {
                         title: "Choose position",
+                        name: "Position",
+                        displayNone: true,
                         selectedValue: "",
                     },
                     data: [
@@ -576,6 +590,13 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
+                            name: "No Contraction felt",
+                            value: "no Contraction Felt",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
                             name: "Mild",
                             value: "mild",
                             labelPlacement: "start",
@@ -596,37 +617,30 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
                             colSize: "7",
                             justify: "space-between",
                         },
-                        {
-                            name: "No Contraction felt",
-                            value: "no Contraction Felt",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
                     ],
                 },
             },
-            {
-                isFinishBtn: false,
-                sectionHeader: "",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Number Of Contractions",
-                                    displayNone: true,
-                                    value: "",
-                                    name: "Number of contraction",
-                                    required: true,
-                                    eventType: "input",
-                                    placeholder: "Enter Number of contraction",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
+            // {
+            //     isFinishBtn: false,
+            //     sectionHeader: "",
+            //     data: {
+            //         rowData: [
+            //             {
+            //                 colData: [
+            //                     {
+            //                         inputHeader: "Number Of Contractions",
+            //                         displayNone: true,
+            //                         value: "",
+            //                         name: "Number of contraction",
+            //                         required: true,
+            //                         eventType: "input",
+            //                         placeholder: "Enter Number of contraction",
+            //                     },
+            //                 ],
+            //             },
+            //         ],
+            //     },
+            // },
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -678,6 +692,19 @@ export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
     actions: {
         setLabourVitals(data: any) {
             this.vitals = data;
+        },
+        async validate() {
+            const generalConditon = extractArrayOfNameValue(this.vitals);
+
+            const generalConditonValid = await validateStore(this.vitals, labourPhysicalExamSchema, generalConditon);
+
+            return generalConditonValid;
+        },
+        async validateExams() {
+            const otherExam = extractArrayOfNameValue(this.otherphysicalExams);
+            const otherExamValid = await validateStore(this.otherphysicalExams, examSchema, otherExam);
+
+            return otherExamValid;
         },
     },
     // persist:true,
