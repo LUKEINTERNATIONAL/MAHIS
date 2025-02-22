@@ -81,7 +81,7 @@ export default defineComponent({
                 // }
 
                 if (client_has_ncd_diagnosis.value == false) {
-                    toastWarning("Client has no NCD related Diagnosis!");
+                    // toastWarning("Client has no NCD related Diagnosis!");
                 }
             } catch (error) {}
         };

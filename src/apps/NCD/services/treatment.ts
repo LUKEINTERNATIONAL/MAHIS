@@ -179,11 +179,11 @@ export async function getNCDDiagnosis() {
     const { patient } = storeToRefs(demographicsStore);
     const patientData = patient.value;
     const ncdConceptIds = [8809, 903, 6410, 6409];
-    const value = ""; // Empty value means no likeClause filtering
+    const value = "";
     const diagnosis = await getOfflineRecords("diagnosis", {
-        likeClause: value ? { name: `%${value}%` } : "", // Optional likeClause
+        likeClause: value ? { name: `%${value}%` } : "",
         currentPage: 1,
-        itemsPerPage: 2000, // Fetch up to 2000 records
+        itemsPerPage: 2000,
     }).then((data: any) => data.records);
     const filteredDiagnosis = diagnosis.filter((record: any) => ncdConceptIds.includes(record.concept_id));
     const savedValueCoded = patientData.diagnosis.saved.map((item: any) => item.value_coded);
