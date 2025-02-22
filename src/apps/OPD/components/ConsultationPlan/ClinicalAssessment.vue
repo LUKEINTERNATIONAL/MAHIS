@@ -1,71 +1,85 @@
 <template>
-    <ion-row>
-        <div v-if="presentingComplaints && presentingComplaints.length > 0" style="width: 100%">
-            <VisitHistory />
-        </div>
-        <div style="width: 100%" v-else>
-            <ion-accordion-group ref="accordionGroup" class="previousView">
-                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="previousLabel">Level of consciousness</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                        <LevelOfConsciousness />
-                    </div>
-                </ion-accordion>
-            </ion-accordion-group>
-            <ion-accordion-group ref="accordionGroup" class="previousView">
-                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="previousLabel">Presenting complaints</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                        <PresentingComplaints />
-                    </div>
-                </ion-accordion>
-            </ion-accordion-group>
-            <ion-accordion-group ref="accordionGroup" class="previousView" v-if="checkPatient()">
-                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="previousLabel">Pregnancy and breastfeeding status</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                        <PregnancyBreastfeeding />
-                    </div>
-                </ion-accordion>
-            </ion-accordion-group>
-            <ion-accordion-group ref="accordionGroup" class="previousView">
-                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="previousLabel">Past medical history</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                        <PastMedicalHistory />
-                    </div>
-                </ion-accordion>
-            </ion-accordion-group>
-            <ion-accordion-group ref="accordionGroup" class="previousView">
-                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="previousLabel">Allergies</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                        <Allergies />
-                    </div>
-                </ion-accordion>
-            </ion-accordion-group>
-            <ion-accordion-group ref="accordionGroup" class="previousView">
-                <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
-                    <ion-item slot="header" color="light">
-                        <ion-label class="previousLabel">Physical examination</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                        <PhysicalExamination />
-                    </div>
-                </ion-accordion>
-            </ion-accordion-group>
-        </div>
-    </ion-row>
+  <ion-row>
+    <!-- Show a loading spinner while data is being fetched -->
+    <div v-if="loading" style="width: 100%; text-align: center; padding: 20px;">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading...</p>
+    </div>
+
+    <!-- Show VisitHistory if presentingComplaints is available -->
+    <div v-else-if="presentingComplaints && presentingComplaints.length > 0" style="width: 100%">
+      <VisitHistory />
+    </div>
+
+    <!-- Show the accordion groups if presentingComplaints is empty -->
+    <div v-else style="width: 100%">
+      <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+          <ion-item slot="header" color="light">
+            <ion-label class="previousLabel">Level of consciousness</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <LevelOfConsciousness />
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+          <ion-item slot="header" color="light">
+            <ion-label class="previousLabel">Presenting complaints</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <PresentingComplaints />
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group ref="accordionGroup" class="previousView" v-if="checkPatient()">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+          <ion-item slot="header" color="light">
+            <ion-label class="previousLabel">Pregnancy and breastfeeding status</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <PregnancyBreastfeeding />
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+          <ion-item slot="header" color="light">
+            <ion-label class="previousLabel">Past medical history</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <PastMedicalHistory />
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+          <ion-item slot="header" color="light">
+            <ion-label class="previousLabel">Allergies</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <Allergies />
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+          <ion-item slot="header" color="light">
+            <ion-label class="previousLabel">Physical examination</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <PhysicalExamination />
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+    </div>
+  </ion-row>
 </template>
 
 <script lang="ts">
@@ -159,49 +173,52 @@ export default defineComponent({
             otherOrdersStatus: false,
         };
     },
-    setup() {
-        const presentingComplaints = ref<string[]>([]);
+  setup() {
+    const presentingComplaints = ref<string[]>([]);
+    const loading = ref(true);
 
-        async function loadSavedEncounters(patientVisitDate: any) {
-            const patient = new PatientService();
-            const encounters = await EncounterService.getEncounters(patient.getID(), { date: patientVisitDate });
-            await setPresentingComplainsEncounters(encounters);
-        }
+    async function loadSavedEncounters(patientVisitDate: any) {
+      const patient = new PatientService();
+      const encounters = await EncounterService.getEncounters(patient.getID(), { date: patientVisitDate });
+      await setPresentingComplainsEncounters(encounters);
+    }
 
-        async function setPresentingComplainsEncounters(data: any) {
-            const observations = data.find((encounter: any) => encounter.type.name === "PRESENTING COMPLAINTS")?.observations;
-            if (observations) {
-                presentingComplaints.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
-            } else {
-                presentingComplaints.value = [];
-            }
-        }
+    async function setPresentingComplainsEncounters(data: any) {
+      const observations = data.find((encounter: any) => encounter.type.name === "PRESENTING COMPLAINTS")?.observations;
+      if (observations) {
+        presentingComplaints.value = await getConceptValues(filterObs(observations, "Presenting complaint"), "coded");
+      } else {
+        presentingComplaints.value = [];
+      }
+      loading.value = false; // Set loading to false once data is fetched
+    }
 
-        function filterObs(observations: any, conceptName: string) {
-            return observations?.filter((obs: any) => obs.concept.concept_names.some((name: any) => name.name === conceptName));
-        }
+    function filterObs(observations: any, conceptName: string) {
+      return observations?.filter((obs: any) => obs.concept.concept_names.some((name: any) => name.name === conceptName));
+    }
 
-        async function getConceptValues(filteredObservations: any, type: string) {
-            if (filteredObservations) {
-                return Promise.all(
-                    filteredObservations.map(async (item: any) => {
-                        return await ConceptService.getConceptName(item.value_coded);
-                    })
-                );
-            }
-            return [];
-        }
+    async function getConceptValues(filteredObservations: any, type: string) {
+      if (filteredObservations) {
+        return Promise.all(
+            filteredObservations.map(async (item: any) => {
+              return await ConceptService.getConceptName(item.value_coded);
+            })
+        );
+      }
+      return [];
+    }
 
-        const mounted = async () => {
-            const todayDate = new Date().toISOString().split("T")[0];
-            await loadSavedEncounters(todayDate);
-        };
-        mounted();
-        return {
-            presentingComplaints,
-            loadSavedEncounters,
-        };
-    },
+    const mounted = async () => {
+      const todayDate = new Date().toISOString().split("T")[0];
+      await loadSavedEncounters(todayDate);
+    };
+    mounted();
+
+    return {
+      presentingComplaints,
+      loading,
+    };
+  },
     computed: {
         ...mapState(useDemographicsStore, ["patient"]),
     },
