@@ -144,7 +144,7 @@ export async function fetchAndStoreMedications(medicationType: any) {
     const NCDMedicationsStore = useNCDMedicationsStore();
     const promises = medicationType.ids.map(async (medicationId: any) => {
         try {
-        const data = await DrugService.getDrugById(medicationId);
+            const data = await DrugService.getOfflineDrugById(medicationId);
         if (data) {
             if (!NCDMedicationsStore.medications.some((med: any) => med.drug_id === data.drug_id)) {
                 const drug = drugObj(data.drug_id, data.name, medicationType.name);
