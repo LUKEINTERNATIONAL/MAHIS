@@ -309,8 +309,12 @@ export default defineComponent({
       await fetchUserData();
     }
     function navigationMenu(url: string) {
-      menuController.close();
-      router.push(url).then(() => {});
+      try {
+        menuController.close();
+        router.push(url).then(() => {});
+      } catch (error) {
+        console.error(error)
+      }
     }
     return {
       isSuperuser,
