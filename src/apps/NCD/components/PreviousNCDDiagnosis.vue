@@ -76,9 +76,9 @@ export default defineComponent({
                     getDiabetesDrugs();
                 }
 
-                if (diagnoses.value.length == 0) {
-                    clearMedicationData();
-                }
+                // if (diagnoses.value.length == 0) {
+                //     clearMedicationData();
+                // }
 
                 if (client_has_ncd_diagnosis.value == false) {
                     toastWarning("Client has no NCD related Diagnosis!");
