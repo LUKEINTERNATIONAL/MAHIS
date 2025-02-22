@@ -24,6 +24,7 @@ export const useComplicationsStore = defineStore("complicationsStore", {
                                     alertsErrorMassage: "",
                                     disabled: false,
                                     valueType: "text",
+                                    validationFunctionName: "isNumber",
                                 },
                             ],
                         },

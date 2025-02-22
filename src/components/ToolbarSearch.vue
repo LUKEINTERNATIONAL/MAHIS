@@ -447,15 +447,17 @@ export default defineComponent({
             } else if (Service.getProgramID() == 14) {
                 resetOPDPatientData();
             }
+
             this.route = url;
             await resetPatientData();
             const patientData = await useDemographicsStore();
-            patientData.setPatientRecord(item);
+            await patientData.setPatientRecord(item);
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
             const userPrograms: any = this.activeProgram?.authorizedPrograms;
             const roleData: any = JSON.parse(localStorage.getItem("userRoles") as string);
             const roles: any = roleData ? roleData : [];
+            const _activeProgram = await SetProgramService.userProgramData(item.patient_id);
 
             if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
                 this.isRoleSelectionModalOpen = true;
@@ -472,7 +474,6 @@ export default defineComponent({
                     this.route = "OPDvitals";
                 }
             } else if (this.programID() == 32 && this.apiStatus) {
-                const _activeProgram = await SetProgramService.userProgramData(item.patient_id);
                 this.route = _activeProgram.url;
             }
 

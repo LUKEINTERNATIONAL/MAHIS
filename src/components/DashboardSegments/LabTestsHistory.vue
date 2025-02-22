@@ -449,48 +449,14 @@ export default defineComponent({
                 return dateB.getTime() - dateA.getTime(); // Sort in descending order
             });
 
-            const predefineTests = [
-                [
-                    "FBS",
-                    "Blood",
-                    "",
-                    "",
-                    "",
-                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
-                        name: "FBS",
-                        specimen: "Blood",
-                    })}'>Order Test</button> `,
-                ],
-                [
-                    "HbA1c",
-                    "Blood",
-                    "",
-                    "",
-                    "",
-                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
-                        name: "HbA1c",
-                        specimen: "Blood",
-                    })}'>Order Test</button> `,
-                ],
-                [
-                    "RBS",
-                    "Blood",
-                    "",
-                    "",
-                    "",
-                    `<button class="btn btn-outline-success btn-sm order-btn" data-id='${JSON.stringify({
-                        name: "RBS",
-                        specimen: "Blood",
-                    })}'>Order Test</button> `,
-                ],
-            ];
+            const predefineTests: any = [];
 
-            const uniquePredefineTests = predefineTests.filter((predefTest) => {
+            const uniquePredefineTests = predefineTests.filter((predefTest: any) => {
                 return !tableData.some((tableRow: any) => tableRow[0] === predefTest[0]);
             });
 
             const duplicateTests = tableData.filter((tableRow: any) => {
-                return predefineTests.some((predefTest) => predefTest[0] === tableRow[0]);
+                return predefineTests.some((predefTest: any) => predefTest[0] === tableRow[0]);
             });
 
             const uniqueTableDataTests = tableData.filter((predefTest: any) => {

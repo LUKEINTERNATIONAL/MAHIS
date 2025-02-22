@@ -16,7 +16,7 @@ export async function formatRadioButtonData(data: any, date: any = ConceptServic
         if (item && item.radioBtnContent && item.radioBtnContent.header && item.radioBtnContent.header.selectedValue) {
             const value_coded = await ConceptService.getConceptID(item.radioBtnContent.header.selectedValue, true);
             const concept_id = await ConceptService.getConceptID(item.radioBtnContent.header.name, true);
-            const obs_datetime = date || ConceptService.getSessionDate();
+            const obs_datetime = getFieldValue(data, item.radioBtnContent.header.name + " date", "value") || date;
             const childNames = childData.map((item: any) => {
                 return {
                     concept_id: value_coded,
