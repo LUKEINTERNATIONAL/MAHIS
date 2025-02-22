@@ -169,6 +169,7 @@ import { resetPatientData } from "@/services/reset_data";
 import { useWorkerStore } from "@/stores/workerStore";
 import { ProgramService } from "@/services/program_service";
 import { saveOfflinePatientData } from "@/services/offline_service";
+import { ConceptService } from "@/services/concept_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -331,17 +332,24 @@ export default defineComponent({
             await this.saveDiagnosis();
             await this.savePatientHistory();
             await this.savePatientRegistration();
+            await this.savePatientComplications();
+            await this.savePatientHIVStatus();
+            await this.savePatientTB();
+            await this.saveTraditionMedicines();
         },
         async savePatientHistory() {
             await saveEncounterData(
                 this.patient.patientID,
                 EncounterTypeId.FAMILY_MEDICAL_HISTORY,
                 "" as any,
-                await formatCheckBoxData(this.familyHistory)
+                await formatRadioButtonData(this.familyHistory)
             );
         },
         async savePatientComplications() {
             await saveEncounterData(this.patient.patientID, EncounterTypeId.COMPLICATIONS, "" as any, await formatCheckBoxData(this.patientHistory));
+        },
+        async savePatientTB() {
+            await saveEncounterData(this.patient.patientID, EncounterTypeId.TB_RECEPTION, "" as any, await formatCheckBoxData(this.patientHistory));
         },
         async savePatientHIVStatus() {
             await saveEncounterData(
@@ -350,6 +358,18 @@ export default defineComponent({
                 "" as any,
                 await formatRadioButtonData(this.patientHistoryHIV)
             );
+        },
+        async saveTraditionMedicines() {
+            const tradition = getCheckboxSelectedValue(this.patientHistoryHIV, "traditional medicine");
+            if (tradition) {
+                const date = getFieldValue(this.patientHistoryHIV, "traditional medicine date", "value");
+                const data = {
+                    concept_id: await ConceptService.getConceptID("Medical history"),
+                    value_coded: await ConceptService.getConceptID("Herbal traditional medications"),
+                    obs_datetime: date || ConceptService.getSessionDate(),
+                };
+                await saveEncounterData(this.patient.patientID, EncounterTypeId.MEDICAL_HISTORY, "" as any, data);
+            }
         },
 
         async savePatientRegistration() {
