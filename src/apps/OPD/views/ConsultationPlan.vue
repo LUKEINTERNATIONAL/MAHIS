@@ -11,6 +11,11 @@
             <ion-spinner name="bubbles"></ion-spinner>
             <div class="loading-text">Please wait...</div>
         </div>
+      <ion-loading
+          :is-open="isLoadingPrinter"
+          message="Printing consultation summary..."
+          spinner="circles"
+      ></ion-loading>
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
@@ -40,6 +45,7 @@
 <script lang="ts">
 import {
     IonContent,
+   IonLoading,
     IonHeader,
     IonMenuButton,
     IonPage,
@@ -135,6 +141,7 @@ export default defineComponent({
         IonPage,
         IonTitle,
         IonToolbar,
+        IonLoading,
         Toolbar,
         ToolbarSearch,
         DemographicBar,
@@ -163,6 +170,7 @@ export default defineComponent({
             hasPatientsWaitingForLab: false,
             iconsContent: icons,
             isLoading: false,
+            isLoadingPrinter:false,
             patients: [] as any,
             showAlert: false,
             checkedIn: false as Boolean,
@@ -247,7 +255,6 @@ export default defineComponent({
         hasPatientsWaitingForLab: {
             immediate: true,
             handler(newValue) {
-                console.log("Updated lab waiting status:", newValue);
             },
         },
     },
@@ -309,9 +316,20 @@ export default defineComponent({
       },
 
       async printYes() {
-        await this.printVisitSummary();
-        this.$router.push("home");
-        toastSuccess("Patient has finished consultation!");
+        this.isLoadingPrinter = true;
+        toastSuccess("Printing consultation summary... Please wait.");
+        try {
+          await this.printVisitSummary();
+          toastSuccess("Consultation summary printed successfully!");
+          setTimeout(() => {
+            this.$router.push("home");
+          }, 3500);
+        } catch (error) {
+          toastDanger("Failed to print consultation summary.");
+          console.error("Printing error:", error);
+        } finally {
+          this.isLoadingPrinter = false;
+        }
       },
 
       async printNo() {
@@ -604,8 +622,9 @@ export default defineComponent({
             if (this.OPDdiagnosis[0].selectedData.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();
-               await diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
+                await diagnosisInstance.onSubmit(this.patient.patientID, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
             }
+                this.OPDdiagnosis[0].selectedData = [];
         },
         async saveAllergies() {
             const userID: any = Service.getUserID();
@@ -732,6 +751,7 @@ export default defineComponent({
                 await consciousness.saveObservationList(data);
             }
         },
+
         async buildPhysicalExamination() {
             return [
                 ...(await formatCheckBoxData(this.physicalExam)),

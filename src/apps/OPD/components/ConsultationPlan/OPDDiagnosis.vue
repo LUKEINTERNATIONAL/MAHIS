@@ -5,7 +5,7 @@
     <span v-if="display_item">
 <!--      <div style="font-weight: 700; margin-left:2.5%">Diagnosis list</div>-->
             <list :listData="OPDdiagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
-            <div v-if="primaryDiagnosisExists" style="color: red; margin-top: 10px;">
+            <div v-if="primaryDiagnosisExists" style="color: red; margin-top: 10px; background: lightgoldenrodyellow">
   In order to update the diagnosis list, please remove/delete the primary diagnosis only and then re-add or change it along with the secondary and differential diagnoses.
   </div>
     </span>
@@ -124,6 +124,15 @@ export default defineComponent({
       },
       deep: true,
     },
+    patient: {
+      handler(newPatient) {
+        if (newPatient) {
+          this.resetDiagnosisList();
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
   },
   async mounted() {
     this.updateDiagnosisStores();
@@ -133,6 +142,10 @@ export default defineComponent({
     await this.getDiagnosis("");
   },
   methods: {
+    resetDiagnosisList() {
+      this.OPDdiagnosis[0].selectedData = [];
+      this.updateDiagnosisStores();
+    },
     displayInputFields() {
       this.conditionStatus = "";
       this.selectedText = "";

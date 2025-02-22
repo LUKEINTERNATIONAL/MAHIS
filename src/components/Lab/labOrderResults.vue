@@ -8,9 +8,9 @@
     />
     <DashBox v-if="listResults.length < 1 && listOrders.length < 1" :content="'No Investigations added '" />
     <div class="modal_wrapper" v-if="listResults.length > 1">
-        <div style="font-weight: 1000">Lab Results</div>
+        <div style="font-weight: 1000">Lab Investigations history</div>
         <div style="--background: #fff">
-            <!--            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"> </list>-->
+<!--                        <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"> </list>-->
             <LabTestsHistory />
         </div>
         <div style="margin-top: 5px" v-if="listResults.length <= 4 && listSeeMoreResults.length >= 4">
@@ -188,7 +188,6 @@ export default defineComponent({
     watch: {
         patientsWaitingForLab(newValue) {
             this.hasPatientsWaitingForLab = newValue.some((p: any) => p.patient_id === this.patient.patientID);
-            console.log("Updated lab waiting status:", this.hasPatientsWaitingForLab);
         },
         propOrders: {
             handler() {

@@ -56,21 +56,51 @@ export const useDispensationStore = defineStore("dispensation", {
         },
         validateInputs() {
             if (this.saveInitiated == false) {
-                return;
+                return false; // Return false if validation is not initiated
             }
+
             let isThereAnError = false;
-            this.drugPrescriptions.forEach((Element) => {
-                if (Element.other.quantity == 0 && Element.reason == "") {
-                    Element.showValidation = true;
+
+            console.log("Validating drugPrescriptions:", this.drugPrescriptions);
+
+            this.drugPrescriptions.forEach((Element, index) => {
+                if (!Element.other) {
+                    console.error(`Item ${index}: Element.other is undefined.`);
+                    Element.other = { quantity: 0 }; // Initialize if undefined
                     isThereAnError = true;
+                }
+
+                // Convert quantity to a number
+                const quantity = Number(Element.other.quantity);
+
+                console.log(`Item ${index}: Quantity = ${quantity}, Reason = ${Element.reason}, isSelected = ${Element.isSelected}`);
+
+                if (!Element.isSelected) {
+                    // If checkbox is unchecked, require a reason
+                    if (Element.reason === "") {
+                        Element.showValidation = true;
+                        isThereAnError = true;
+                    } else {
+                        Element.showValidation = false;
+                    }
                 } else {
-                    Element.showValidation = false;
+                    // If checkbox is checked, require a non-zero quantity
+                    if (quantity <= 0) {
+                        Element.showValidation = true;
+                        isThereAnError = true;
+                    } else {
+                        Element.showValidation = false;
+                    }
                 }
             });
+
             return isThereAnError;
         },
         initializeDispensedAmount() {
             this.drugPrescriptions.forEach((Element) => {
+                if (!Element.other) {
+                    Element.other = { quantity: 0 }; // Initialize if undefined
+                }
                 Element.other.quantity = 0;
             });
         },
@@ -97,8 +127,14 @@ export const useDispensationStore = defineStore("dispensation", {
             return this.drugPrescriptions;
         },
         updateCheckboxBool(selected: boolean, index: any) {
+            if (!this.drugPrescriptions[index].other) {
+                this.drugPrescriptions[index].other = { quantity: 0 }; // Initialize if undefined
+            }
+
             this.drugPrescriptions[index].isSelected = selected;
+
             if (!selected) {
+                // If checkbox is unchecked, reset quantity and require a reason
                 this.drugPrescriptions[index].other.quantity = 0;
                 this.drugPrescriptions[index].reason = "";
             }
@@ -112,8 +148,13 @@ export const useDispensationStore = defineStore("dispensation", {
         getDispensedMedications() {
             return this.dispensedMedication;
         },
-        addQuantity(quantity: number, index: number) {
-            this.drugPrescriptions[index].other.quantity = quantity;
+        addQuantity(quantity: number | string, index: number) {
+            if (!this.drugPrescriptions[index].other) {
+                this.drugPrescriptions[index].other = { quantity: 0 }; // Initialize if undefined
+            }
+
+            // Convert quantity to a number
+            this.drugPrescriptions[index].other.quantity = Number(quantity);
         },
         saveDispensedMedications() {
             this.dispensedMedication = this.drugPrescriptions;

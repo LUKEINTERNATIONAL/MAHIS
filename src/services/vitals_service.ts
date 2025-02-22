@@ -58,6 +58,13 @@ export class VitalsService extends AppEncounterService {
     isNotEmptyandNumber(vital: any) {
         return `${vital.value}`.match(/^-?\d+\.?\d*$/) ? null : [`Invalid entry for ${vital.inputHeader}`];
     }
+    isNumber(vital: any) {
+        const p = [];
+        if (!`${vital.value}`.match(/^-?\d+\.?\d*$/)) {
+            p.push(`Only numbers are required for ${vital.inputHeader}`);
+        }
+        return p.length > 0 ? p : null;
+    }
     isNotEmptyandFloat(vital: any) {
         return `${vital.value}`.match(/^\d{1,3}\.\d{1,5}$/)
             ? null
@@ -147,7 +154,7 @@ export class VitalsService extends AppEncounterService {
                 name: "Temperature",
                 validator: (val: any) => {
                     const errors = [];
-                    errors.push(this.isNotEmptyandNumber(val));
+                    // errors.push(this.isNumber(val));
                     errors.push(this.checkMinMax(val, 30, 42));
                     return this.mergeErrors(errors);
                 },
@@ -172,7 +179,7 @@ export class VitalsService extends AppEncounterService {
                 name: "Oxygen saturation",
                 validator: (val: any) => {
                     const errors = [];
-                    errors.push(this.isNotEmptyandNumber(val));
+                    // errors.push(this.isNumber(val));
                     errors.push(this.checkMinMax(val, 40, 100));
                     return this.mergeErrors(errors);
                 },
