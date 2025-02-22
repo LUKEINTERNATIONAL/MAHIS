@@ -326,7 +326,6 @@ export default defineComponent({
           }, 3500);
         } catch (error) {
           toastDanger("Failed to print consultation summary.");
-          console.error("Printing error:", error);
         } finally {
           this.isLoadingPrinter = false;
         }

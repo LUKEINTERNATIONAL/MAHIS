@@ -350,7 +350,6 @@ export default defineComponent({
         modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "colSize", "");
       }
 
-      console.log("Removed Items:", removedItems[0].data.concept_id);
     },
     setDashedBox() {
       if (this.primaryInputField[0]?.value?.name || this.primaryInputField[1]?.value?.name) {
