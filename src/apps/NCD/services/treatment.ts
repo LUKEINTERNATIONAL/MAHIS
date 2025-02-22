@@ -12,6 +12,7 @@ import { DrugOrderService } from "@/services/drug_order_service";
 import HisDate from "@/utils/Date";
 import { getFrequencyLabelOrCheckCode } from "@/services/drug_prescription_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { storeToRefs } from "pinia";
 
 export class Treatment {
     async onSubmitNotes(patientID: any, providerID: any, treatmentNotesData: any) {
@@ -173,8 +174,11 @@ function reverseObjectKeys(obj: any) {
 }
 
 export async function getNCDDiagnosis() {
-    const store = useDemographicsStore();
-    const patientId = store.patient.patientID;
+    const demographicsStore = useDemographicsStore();
+    const { patient } = storeToRefs(demographicsStore);
+    const patientData = patient.value;
+    
+    const patientId = demographicsStore.patient.patientID;
     const ncdConceptIds = [8809, 6410, 6409];
     const names = [];
 
