@@ -158,6 +158,8 @@ export default defineComponent({
         lengthChange: false,
         dom: 'Bfrtip',
         buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        order: [[1, 'desc']] as Array<[number, 'asc' | 'desc']>,
+
       },
     };
   },
