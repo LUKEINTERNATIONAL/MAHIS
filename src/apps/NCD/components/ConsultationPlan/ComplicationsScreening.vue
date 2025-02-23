@@ -1,14 +1,14 @@
 <template>
-    <basic-form :contentData="visualScreening"> </basic-form>
+    <basic-form :contentData="visualScreening"></basic-form>
     <ion-list>
         <ion-item :lines="footSC" class="dashed_bottom_border textSectionFormat">
             <span>Foot screening</span>
         </ion-item>
         <div class="sub_item_body">
-            <basic-form :contentData="FootScreening"> </basic-form>
+            <basic-form :contentData="FootScreening"></basic-form>
         </div>
     </ion-list>
-    <basic-form :contentData="cvScreening"> </basic-form>
+    <basic-form :contentData="cvScreening"></basic-form>
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
@@ -40,13 +40,12 @@ import {
     IonTitle,
     IonToolbar,
     IonMenu,
-    menuController,
     IonToggle,
     IonSelectOption,
     IonInput,
     IonSelect,
 } from "@ionic/vue";
-import { ref, computed, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import BasicInputField from "@/components/BasicInputField.vue";
@@ -80,19 +79,21 @@ const demographicsStore = useDemographicsStore();
 const { patient } = storeToRefs(demographicsStore);
 
 // Refs
-const dataTableRef = ref(null);
-const tableData = ref([] as any);
+const dataTableRef = ref(null) as any;
+const tableData = ref([]) as any;
 const footChecked = ref(false);
 const showVisualAcuityTest = ref(false);
 const visualAT = ref("");
-const footSC = ref("");
+const footSC = ref("") as any;
 const cvdRiskObj = ref({
     btnColor: "secondary",
     btnName: "No risk",
 });
 const iconsContent = ref(icons);
+
 // Constants
 const header = ["Condition", "Result", "Date", "Action"];
+
 // DataTable options
 const options = {
     responsive: true,
@@ -105,13 +106,15 @@ const options = {
     },
     ordering: false,
 } as any;
+
 // Methods
 const setPreviousData = async () => {
     const patientData = JSON.parse(JSON.stringify(patient.value));
     const screening = [...(patientData?.screening?.unsaved || []), ...(patientData?.screening?.saved || [])];
     tableData.value = await buildTableData(screening);
 };
-const buildTableData = async (data: any[]) => {
+
+const buildTableData = async (data: any) => {
     if (data.length === 0) return [];
 
     const result = await Promise.all(
@@ -130,7 +133,7 @@ const buildTableData = async (data: any[]) => {
                 return Promise.all(
                     item.children.map(async (child: any) => [
                         child.concept_name,
-                        await ConceptService.getConceptName(child.value_coded), // Ensure `await` is used here
+                        await ConceptService.getConceptName(child.value_coded),
                         HisDate.toStandardHisFormat(child.obs_datetime),
                         `<button class="btn btn-outline-danger btn-sm delete-btn" data-id='${JSON.stringify(child)}'>
                             ${iconsContent.value.delete2}</button>`,
@@ -150,17 +153,13 @@ const buildTableData = async (data: any[]) => {
                 ];
             }
 
-            return []; // Ensure all map cases return something
+            return [];
         })
     );
 
-    return result.flat(); // Use `.flat(2)` to properly flatten deeply nested arrays
+    return result.flat();
 };
 
-const navigationMenu = (url: any) => {
-    menuController.close();
-    router.push(url);
-};
 
 const footScreening = () => {
     footChecked.value = !footChecked.value;
@@ -171,6 +170,7 @@ const toggleShowVisualAcuityTest = () => {
     showVisualAcuityTest.value = !showVisualAcuityTest.value;
     visualAT.value = showVisualAcuityTest.value ? "none" : "";
 };
+
 const voidScreening = (data: any) => {
     console.log("🚀 ~ voidScreening ~ data:", data);
 };
@@ -188,19 +188,21 @@ const cvdRisk = () => {
         };
     }
 };
+
 // Lifecycle hooks
 onMounted(async () => {
     await setPreviousData();
     nextTick(() => {
-        const table = (dataTableRef.value as any).dt;
+        const table = dataTableRef.value.dt;
         table.columns.adjust().draw();
-        table.on("click", ".delete-btn", (e: Event) => {
-            const data: any = (e.target as HTMLElement).getAttribute("data-id");
-            voidScreening(JSON.parse(data), e);
+        table.on("click", ".delete-btn", (e: any) => {
+            const data = e.target.getAttribute("data-id");
+            voidScreening(JSON.parse(data));
         });
     });
 });
 </script>
+
 <style>
 @import "datatables.net-dt";
 @import "datatables.net-buttons-dt";
@@ -211,19 +213,23 @@ onMounted(async () => {
     width: 100%;
     overflow-x: auto;
 }
+
 div.dt-buttons > .dt-button:first-child {
     border: 1px solid #fff;
     background: #046c04;
     border-radius: 5px;
 }
+
 div.dt-buttons > .dt-button:hover:not(.disabled) {
     background: #188907 !important;
     border: 1px solid #fff !important;
 }
+
 .dt-type-date {
     text-align: left !important;
 }
 </style>
+
 <style scoped>
 #container {
     text-align: center;

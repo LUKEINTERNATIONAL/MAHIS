@@ -6,7 +6,7 @@ import deliveryDetails from "@/apps/LABOUR/views/deliveryDetails.vue";
 import postnatalChecks from "@/apps/LABOUR/views/postnatalChecks.vue";
 import end from "@/apps/LABOUR/views/end.vue";
 import labourAssessment from "@/apps/LABOUR/views/labourAssessment.vue";
-import LabourHome from "@/apps/LABOUR/views/labourHome.vue";
+import LabourHome from "@/apps/LABOUR/views/LabourHome.vue";
 
 export default [
     {
