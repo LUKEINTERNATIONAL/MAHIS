@@ -190,7 +190,7 @@ export default defineComponent({
       } else {
         presentingComplaints.value = [];
       }
-      loading.value = false; // Set loading to false once data is fetched
+      loading.value = false;
     }
 
     function filterObs(observations: any, conceptName: string) {

@@ -15,103 +15,45 @@
             </div>
         </div>
     </ion-header>
-    <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
-        <div>
-            <ion-card class="section" style="margin-bottom: 25px; margin-inline: 0px">
-                <ion-card-header> <ion-card-title class="sectionTitle"> </ion-card-title></ion-card-header>
-                <ion-card-content>
-                    <div class="dueCardContent">
-                        <!-- better implementation of a table is needed -->
-                        <div class="table-container">
-                            <!-- Table Header -->
-                            <ion-grid>
-                                <ion-row style="font-weight: bold" class="table-header">
-                                    <ion-col>Patient Name</ion-col>
-                                    <ion-col>Waiting Time</ion-col>
-                                    <ion-col>Actions</ion-col>
-                                </ion-row>
-
-                                <!-- Table Rows -->
-                                <ion-row v-for="(patient, index) in patients" :key="index" class="table-row">
-                                    <ion-col>{{ patient.fullName }}</ion-col>
-                                    <ion-col>{{ waitingTime(patient.arrivalTime) }}</ion-col>
-                                    <ion-col>
-                                        <ion-button size="small" class="btn-edit" @click="navigateTo(patient.patient_id, buttonLink)">{{
-                                            buttonTitle
-                                        }}</ion-button>
-                                        <ion-button size="small" class="btn-edit" @click="navigateTo(patient.patient_id, '/patientProfile')"
-                                            >Profile</ion-button
-                                        >
-                                        <ion-button size="small" class="btn-edit" @click="handleAbscond(patient)">Abscond</ion-button>
-                                    </ion-col>
-                                </ion-row>
-                                <ion-row v-if="patients.length === 0 && !isLoading">
-                                    <ion-col>No records found.</ion-col>
-                                </ion-row>
-                            </ion-grid>
-                        </div>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-        </div>
-        <ion-popover
-            style="--offset-x: -10px"
-            :is-open="popoverOpen"
-            :show-backdrop="false"
-            :dismiss-on-select="true"
-            :event="event"
-            @didDismiss="popoverOpen = false"
-        >
-            <div>
-                <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
-                    <ion-item :button="true" :detail="false" style="cursor: pointer"></ion-item>
-                </ion-list>
-            </div>
-        </ion-popover>
-    </ion-content>
+  <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
+    <div>
+      <ion-card class="section" style="margin-bottom: 25px; margin-inline: 0px">
+        <ion-card-header>
+          <ion-card-title class="sectionTitle"></ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="dueCardContent">
+            <DataTable
+                :data="patients"
+                :columns="tableColumns"
+                :options="tableOptions"
+                class="display nowrap"
+                width="100%"
+            />
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ion-content>
 </template>
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonTitle,
-    IonToolbar,
-    IonMenu,
-    menuController,
-    IonInput,
-    IonCol,
-    IonLabel,
-    IonRow,
-    modalController,
-} from "@ionic/vue";
 import { defineComponent } from "vue";
+import DataTable from "datatables.net-vue3";
+import DataTablesCore from "datatables.net";
+import "datatables.net-buttons";
+import "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-responsive";
+import "datatables.net-buttons-dt";
+
+// Import other necessary components and libraries
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, IonCol, IonLabel, IonRow, modalController } from "@ionic/vue";
 import { icons } from "@/utils/svg";
-import {
-    medkit,
-    chevronBackOutline,
-    pulseOutline,
-    clipboardOutline,
-    grid,
-    chevronDownCircle,
-    chevronForwardCircle,
-    chevronUpCircle,
-    colorPalette,
-    document,
-    globe,
-    add,
-    person,
-} from "ionicons/icons";
 import { useAdministerOtherVaccineStore } from "@/apps/Immunization/stores/AdministerOtherVaccinesStore";
 import { mapState } from "pinia";
-
 import BasicInputField from "@/components/BasicInputField.vue";
-
 import BasicForm from "@/components/BasicForm.vue";
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
-
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
@@ -121,12 +63,6 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
 import VueMultiselect from "vue-multiselect";
 import { isEmpty } from "lodash";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-import DataTable from "datatables.net-vue3";
-import DataTablesCore from "datatables.net";
-import "datatables.net-buttons";
-import "datatables.net-buttons/js/buttons.html5";
-import "datatables.net-responsive";
-import "datatables.net-buttons-dt";
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 import { getPatientsList } from "@/apps/OPD/services/opd_dashboard";
 import { PatientOpdList } from "@/services/patient_opd_list";
@@ -135,139 +71,171 @@ import { usePatientList } from "@/apps/OPD/stores/patientListStore";
 import { getUserLocation } from "@/services/userService";
 import { useWorkerStore } from "@/stores/workerStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import {clipboardOutline, person, pulseOutline} from "ionicons/icons";
 
 export default defineComponent({
-    components: {
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        IonInput,
-        BasicInputField,
-        BasicForm,
-        PreviousVitals,
-        customDatePicker,
-        IonCol,
-        IonRow,
-        VueMultiselect,
-        IonLabel,
-        DataTable,
-    },
-    data() {
-        return {
-            isLoading: false,
-            popoverOpen: false,
-            event: null as any,
-            iconsContent: icons,
-            showPD: false as boolean,
-            batchNumber: "" as any,
-            clientDetails: [] as any,
-            dueData: [] as any,
-            workerStore: useWorkerStore() as any,
-            options: {
-                responsive: true,
-                select: false,
-                searching: false,
-                ordering: false,
-                pageLength: 25,
-                lengthChange: false,
-            } as any,
-            sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
-            showDateBtns: true as boolean,
-            tableColumns: [
-                { title: "Patient Name", data: "fullName" },
-                {
-                    title: "Action",
-                    data: null,
-                    render: (data: any, type: any, row: any) => {
-                        return `<ion-button class="btn-edit" @click="navigateTo(${row})">Open Profile</ion-button>`;
-                    },
-                },
-            ],
-            patients: [] as any,
-        };
-    },
-    props: {
-        title: {
-            default: [] as any,
+  components: {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonMenu,
+    IonTitle,
+    IonToolbar,
+    IonInput,
+    BasicInputField,
+    BasicForm,
+    PreviousVitals,
+    customDatePicker,
+    IonCol,
+    IonRow,
+    VueMultiselect,
+    IonLabel,
+    DataTable,
+  },
+  data() {
+    return {
+      isLoading: false,
+      popoverOpen: false,
+      event: null as any,
+      iconsContent: icons,
+      showPD: false as boolean,
+      batchNumber: "" as any,
+      clientDetails: [] as any,
+      dueData: [] as any,
+      workerStore: useWorkerStore() as any,
+      sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
+      showDateBtns: true as boolean,
+      patients: [] as any,
+
+      // DataTable configuration
+      tableColumns: [
+        { title: "Patient Name", data: "fullName" },
+        { title: "Waiting Time", data: "arrivalTime", render: (data: any) => this.waitingTime(data) },
+        {
+          title: "Actions",
+          data: null,
+          render: (data: any, type: any, row: any) => {
+            const container = document.createElement('div');
+
+            const profileButton = document.createElement('ion-button');
+            profileButton.innerText = this.buttonTitle;
+            profileButton.size = 'small';
+            profileButton.classList.add('btn-edit');
+            profileButton.style.color = '#fff';
+            profileButton.style.marginRight = '8px';
+            profileButton.addEventListener('click', () => this.navigateTo(row.patient_id, this.buttonLink));
+            container.appendChild(profileButton);
+
+            const patientProfileButton = document.createElement('ion-button');
+            patientProfileButton.innerText = 'Profile';
+            patientProfileButton.size = 'small';
+            patientProfileButton.classList.add('btn-edit');
+            patientProfileButton.style.color = '#fd7e14';
+            patientProfileButton.style.marginRight = '8px';
+            patientProfileButton.addEventListener('click', () => this.navigateTo(row.patient_id, '/patientProfile'));
+            container.appendChild(patientProfileButton);
+
+            const abscondButton = document.createElement('ion-button');
+            abscondButton.innerText = 'Abscond';
+            abscondButton.size = 'small';
+            abscondButton.classList.add('btn-edit');
+            abscondButton.style.color = '#dc3545';
+            abscondButton.style.marginRight = '8px';
+            abscondButton.addEventListener('click', () => this.handleAbscond(row));
+            container.appendChild(abscondButton);
+
+            return container;
+          },
+          orderable: false,
         },
-        list: {
-            default: "" as any,
-        },
-        buttonTitle: {
-            default: "" as string,
-        },
-        buttonLink: {
-            default: "" as string,
-        },
+      ],
+      tableOptions: {
+        responsive: true,
+        searching: true,
+        ordering: true,
+        pageLength: 20,
+        lengthChange: false,
+        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+      },
+    };
+  },
+  props: {
+    title: {
+      default: [] as any,
     },
-    computed: {
-        ...mapState(usePatientList, [
-            "patientsWaitingForVitals",
-            "patientsWaitingForConsultation",
-            "patientsWaitingForLab",
-            "patientsWaitingForDispensation",
-            "counter",
-        ]),
+    list: {
+      default: "" as any,
     },
-    async mounted() {
+    buttonTitle: {
+      default: "" as string,
+    },
+    buttonLink: {
+      default: "" as string,
+    },
+  },
+  computed: {
+    ...mapState(usePatientList, [
+      "patientsWaitingForVitals",
+      "patientsWaitingForConsultation",
+      "patientsWaitingForLab",
+      "patientsWaitingForDispensation",
+      "counter",
+    ]),
+  },
+  async mounted() {
+    this.setList();
+  },
+  watch: {
+    counter: {
+      handler() {
         this.setList();
+      },
     },
-    watch: {
-        counter: {
-            handler() {
-                this.setList();
-            },
-        },
+  },
+  setup() {
+    return { person, pulseOutline, clipboardOutline };
+  },
+  methods: {
+    openPopover(e: Event) {
+      this.event = e;
+      this.popoverOpen = true;
     },
-    setup() {
-        return { person, pulseOutline, clipboardOutline };
+    dismiss() {
+      modalController.dismiss();
     },
-    methods: {
-        openPopover(e: Event) {
-            this.event = e;
-            this.popoverOpen = true;
-        },
-        dismiss() {
-            modalController.dismiss();
-        },
-        async navigateTo(id: any, route: string) {
-            const patient = await PatientService.findByID(id);
-            await useDemographicsStore().setPatientRecord(patient);
-            this.$router.push(route);
-        },
-        async handleAbscond(patient: any) {
-            try {
-                const location = await getUserLocation();
-                const locationId = location ? location.code : null;
-                await PatientOpdList.checkOutPatient(patient.visit_id, dates.todayDateFormatted());
-                this.patients = this.patients.filter((p: any) => p.patient_id !== patient.patient_id);
-                toastSuccess("Patient absconded successfully.");
-                await usePatientList().refresh(locationId);
-            } catch (e) {
-                console.error("Error absconding patient:", e);
-                toastDanger("Failed to abscond patient.");
-            }
-        },
+    async navigateTo(id: any, route: string) {
+      const patient = await PatientService.findByID(id);
+      await useDemographicsStore().setPatientRecord(patient);
+      this.$router.push(route);
+    },
+    async handleAbscond(patient: any) {
+      try {
+        const location = await getUserLocation();
+        const locationId = location ? location.code : null;
+        await PatientOpdList.checkOutPatient(patient.visit_id, dates.todayDateFormatted());
+        this.patients = this.patients.filter((p: any) => p.patient_id !== patient.patient_id);
+        toastSuccess("Patient absconded successfully.");
+        await usePatientList().refresh(locationId);
+      } catch (e) {
+        toastDanger("Failed to abscond patient.");
+      }
+    },
+    setList() {
+      const listMapping: Record<string, any[]> = {
+        VITALS: this.patientsWaitingForVitals,
+        CONSULTATION: this.patientsWaitingForConsultation,
+        LAB: this.patientsWaitingForLab,
+        DISPENSATION: this.patientsWaitingForDispensation,
+      };
 
-        setList() {
-            const listMapping: Record<string, any[]> = {
-                VITALS: this.patientsWaitingForVitals,
-                CONSULTATION: this.patientsWaitingForConsultation,
-                LAB: this.patientsWaitingForLab,
-                DISPENSATION: this.patientsWaitingForDispensation,
-            };
-
-            this.patients = listMapping[this.list] || [];
-        },
-
-        waitingTime(timeStamp: any) {
-            return dates.calculateTimeDifference(timeStamp);
-        },
+      this.patients = listMapping[this.list] || [];
     },
+    waitingTime(timeStamp: any) {
+      return dates.calculateTimeDifference(timeStamp);
+    },
+  },
 });
 </script>
 
