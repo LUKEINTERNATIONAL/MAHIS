@@ -62,8 +62,9 @@ export default defineComponent({
             
             const searchText = text
             const page = 1,
-                limit = 10;
-            const drugs: ConceptName[] = await DrugService.getOPDDrugs({
+                limit = 20;
+
+            const drugs: any = await DrugService.getOfflineOPDDrugs({
                 name: searchText,
                 page: page,
                 page_size: limit,

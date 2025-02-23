@@ -579,7 +579,7 @@ export default defineComponent({
 
 <style scoped>
 .scrollable-container {
-  max-height: 40vh;
+  max-height: 65vh;
   overflow-y: auto;
   padding-right: 2px;
 }

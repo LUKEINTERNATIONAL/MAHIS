@@ -82,10 +82,7 @@ export default defineComponent({
         $route: {
             async handler() {
                 this.vitalsData = this.vitals;
-                this.cleanVitalForm();
-                await this.setTodayVitals();
                 await this.validateRowData("onload");
-                this.updateVitalsStores();
             },
             deep: true,
         },
@@ -95,7 +92,6 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
-        this.updateVitalsStores();
         this.vitalsData = this.vitals;
         await this.checkHeight();
         await this.validateRowData("onload");
@@ -104,18 +100,9 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
-        cleanVitalForm() {
-            const vitals = useVitalsStore();
-            vitals.setVitals(vitals.getInitialVitals());
-        },
-
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
-        },
-        updateVitalsStores() {
-            const vitalsStore = useVitalsStore();
-            vitalsStore.setVitals(vitalsStore.getInitialVitals());
         },
         async validationController(inputData: any) {
             if (inputData?.col?.name == "Height And Weight Not Done" && inputData.col.checked) {
@@ -201,7 +188,7 @@ export default defineComponent({
         },
         async validateRowData(inputData: any) {
             if (inputData != "onload") {
-                await this.validationController(inputData);
+                // await this.validationController(inputData);
                 const height = getFieldValue(this.vitals, "Height (cm)", "value");
                 const weight = getFieldValue(this.vitals, "Weight", "value");
                 const systolic = getFieldValue(this.vitals, "Systolic", "value");

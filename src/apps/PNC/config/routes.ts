@@ -8,37 +8,38 @@ import PNCHome from "@/apps/PNC/views/PNCHome.vue";
 
 export default [
     {
-        path: '/postnatalDetails',
-        name: 'postnatalDetails',
-        component: postnatalDetails
+        path: "/postnatalDetails",
+        name: "postnatalDetails",
+        component: postnatalDetails,
     },
     {
-        path: '/postnatalWardMonitoring',
-        name: 'postnatalWardMonitoring',
-        component: postnatalWardMonitoring
-    }, {
-        path: '/babyStatus',
-        name: 'postnatalBabyStatus',
-        component: postnatalBabyStatus
-    }, {
-        path: '/postnatalVisit',
-        name: 'postnatalVisit',
-        component: postnatalVisit
-    }, {
-        path: '/dischargeWoman',
-        name: 'dischargeWoman',
-        component: dischargeWoman
-    }, {
-        path: '/pncEnd',
-        name: 'pncEnd',
-        component: pncEnd
+        path: "/postnatalWardMonitoring",
+        name: "postnatalWardMonitoring",
+        component: postnatalWardMonitoring,
     },
     {
-        path: '/PNCHome',
-        name: 'PNCHome',
-        component: PNCHome
+        path: "/babyStatus",
+        name: "postnatalBabyStatus",
+        component: postnatalBabyStatus,
     },
-
-
-]
-
+    {
+        path: "/postnatalVisit",
+        name: "postnatalVisit",
+        component: postnatalVisit,
+    },
+    {
+        path: "/dischargeWoman",
+        name: "dischargeWoman",
+        component: dischargeWoman,
+    },
+    {
+        path: "/pncEnd",
+        name: "pncEnd",
+        component: pncEnd,
+    },
+    {
+        path: "/PNCHome",
+        name: "PNCHome",
+        component: PNCHome,
+    },
+];

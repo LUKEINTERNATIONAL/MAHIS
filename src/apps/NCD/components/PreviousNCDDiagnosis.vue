@@ -30,6 +30,7 @@ import { getDiabetesDrugs, getAntiHypertensivesMedication, clearMedicationData }
 import SetUser from "@/views/Mixin/SetUser.vue";
 import { mapState } from "pinia";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 
 export default defineComponent({
     name: "Home",
@@ -56,6 +57,10 @@ export default defineComponent({
 
         const initC = async () => {
             try {
+                const client_has_ncd_diagnosis = ref(false);
+                const setClientHasNCDDiagnosis = (value: boolean) => {
+                    client_has_ncd_diagnosis.value = value
+                };
                 diagnoses.value = await getNCDDiagnosis();
 
                 const hasHypertension = diagnoses.value.some((diagnosis: any) => diagnosis.toLowerCase().includes("hypertension"));
@@ -63,14 +68,20 @@ export default defineComponent({
                 const hasDiabetes = diagnoses.value.some((diagnosis: any) => diagnosis.toLowerCase().includes("diabetes"));
 
                 if (hasHypertension) {
+                    setClientHasNCDDiagnosis(true);
                     getAntiHypertensivesMedication();
                 }
                 if (hasDiabetes) {
+                    setClientHasNCDDiagnosis(true);
                     getDiabetesDrugs();
                 }
 
-                if (diagnoses.value.length == 0) {
-                    clearMedicationData();
+                // if (diagnoses.value.length == 0) {
+                //     clearMedicationData();
+                // }
+
+                if (client_has_ncd_diagnosis.value == false) {
+                    // toastWarning("Client has no NCD related Diagnosis!");
                 }
             } catch (error) {}
         };

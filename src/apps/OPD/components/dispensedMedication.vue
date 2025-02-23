@@ -1,4 +1,10 @@
 <template>
+  <ion-loading
+      v-if="isLoading"
+      message="Loading data, please wait..."
+      spinner="bubbles"
+  >
+  </ion-loading>
     <ion-list>
         <ion-label>Allergies (Medication, Healthcare items, Environment and Food)</ion-label>
         <ion-row>
@@ -34,42 +40,42 @@
         <div class="space" />
         <ion-label>Prescribed Medications To Be Dispensed</ion-label>
         <div v-if="dispensationStore.getDrugPrescriptions() && dispensationStore.getDrugPrescriptions().length > 0">
-            <dynamic-list
-                @clickt="toggleCheckbox"
-                :dataArray="dispensationStore.drugPrescriptions"
-                :withCheckboxs="true"
-                :showInputs="true"
-                :show_actions_buttons="false"
-                @updateQuantity="sendQuantityToStore"
-                @getInputID="updateReason"
-                @getSelectedReason="setSelectedReason"
-            />
-          <div>
-            <div class="space3" />
-            <ion-button
-                class="faded-green"
-                style="padding-left: 15px; border-radius: 1px;"
-                @click="saveDispensations()">
-              <ion-icon slot="start" :icon="addOutline"></ion-icon>
-              Submit
-            </ion-button>
-          </div>
+        <dynamic-list
+            @clickt="toggleCheckbox"
+            :dataArray="dispensationStore.drugPrescriptions"
+            :withCheckboxs="true"
+            :showInputs="true"
+            :show_actions_buttons="false"
+            @updateQuantity="sendQuantityToStore"
+            @getInputID="updateReason"
+            @getSelectedReason="setSelectedReason"
+        />
+        <div>
+          <div class="space3" />
+          <ion-button
+              class="faded-green no-background"
+              style="padding-left: 15px; border-radius: 1px;"
+              @click="saveDispensations()">
+            <ion-icon slot="start" :icon="addOutline"></ion-icon>
+            Submit
+          </ion-button>
         </div>
-        <div v-else>No medications were added for this patient.</div>
+      </div>
+      <div v-else>No medications were added for this patient.</div>
 
     </ion-list>
-    <ion-list>
-        <div v-if="dispensationStore.getDispensedMedications() && dispensationStore.getDispensedMedications().length > 0">
-          <ion-label>Here is the dispensation summary</ion-label>
-          <dynamic-list
-                @click="editDispensations"
-                :dataArray="dispensationStore.getDispensedMedications()"
-                :withCheckboxs="false"
-                :showInputs="false"
-                :show_actions_buttons="false"
-            />
-        </div>
-    </ion-list>
+  <ion-list>
+    <div v-if="dispensationStore.getDispensedMedications() && dispensationStore.getDispensedMedications().length > 0">
+      <ion-label>Here is the dispensation summary</ion-label>
+      <dynamic-list
+          @click="editDispensations"
+          :dataArray="dispensationStore.getDispensedMedications()"
+          :withCheckboxs="false"
+          :showInputs="false"
+          :show_actions_buttons="false"
+      />
+    </div>
+  </ion-list>
 </template>
 
 <script lang="ts">
@@ -111,6 +117,7 @@ export default defineComponent({
         return {
           addOutline,
             list: [] as any,
+          isLoading: false,
         };
     },
     async mounted() {
@@ -118,50 +125,58 @@ export default defineComponent({
     },
 
     methods: {
-        async getPatientDiagnosis() {
-            this.list = [];
-            const patientID = this.patient.patientID;
-            const today = new Date(Service.getSessionDate()).toISOString().split("T")[0];
-            console.log(today);
-            const obs1 = await ObservationService.getAll(patientID, "Primary diagnosis");
-            const obs2 = await ObservationService.getAll(patientID, "Secondary diagnosis");
-            const obs3 = await ObservationService.getAll(patientID, "Attempted/ Differential diagnosis");
+      async getPatientDiagnosis() {
+        this.isLoading = true;
+        this.list = [];
+        const patientID = this.patient.patientID;
+        const today = new Date(Service.getSessionDate()).toISOString().split("T")[0];
+        console.log(today);
 
-            const additionalDiagnoses = [];
+        try {
+          const obs1 = await ObservationService.getAll(patientID, "Primary diagnosis");
+          const obs2 = await ObservationService.getAll(patientID, "Secondary diagnosis");
+          const obs3 = await ObservationService.getAll(patientID, "Attempted/ Differential diagnosis");
 
-            const filterByToday = (observations: any) => {
-                return observations.filter((ob: any) => {
-                    const obDate = new Date(ob.obs_datetime).toISOString().split("T")[0];
-                    return obDate === today;
-                });
-            };
+          const additionalDiagnoses = [];
 
-            const processDiagnoses = async (obs: any, type: any) => {
-                const filteredObs = filterByToday(obs);
-                return await Promise.all(
-                    filteredObs.map(async (ob: any) => {
-                        const name = await ObservationService.getConceptName(ob["value_coded"]);
-                        return {
-                            display: [name, type],
-                        };
-                    })
-                );
-            };
+          const filterByToday = (observations: any) => {
+            return observations.filter((ob: any) => {
+              const obDate = new Date(ob.obs_datetime).toISOString().split("T")[0];
+              return obDate === today;
+            });
+          };
 
-            if (!isEmpty(obs1)) {
-                const primaryDiagnoses = await processDiagnoses(obs1, "Primary diagnosis");
-                additionalDiagnoses.push(...primaryDiagnoses);
-            }
-            if (!isEmpty(obs2)) {
-                const secondaryDiagnoses = await processDiagnoses(obs2, "Secondary diagnosis");
-                additionalDiagnoses.push(...secondaryDiagnoses);
-            }
-            if (!isEmpty(obs3)) {
-                const attemptedDiagnoses = await processDiagnoses(obs3, "Differential diagnosis");
-                additionalDiagnoses.push(...attemptedDiagnoses);
-            }
-            this.list = additionalDiagnoses;
-        },
+          const processDiagnoses = async (obs: any, type: any) => {
+            const filteredObs = filterByToday(obs);
+            return await Promise.all(
+                filteredObs.map(async (ob: any) => {
+                  const name = await ObservationService.getConceptName(ob["value_coded"]);
+                  return {
+                    display: [name, type],
+                  };
+                })
+            );
+          };
+
+          if (!isEmpty(obs1)) {
+            const primaryDiagnoses = await processDiagnoses(obs1, "Primary diagnosis");
+            additionalDiagnoses.push(...primaryDiagnoses);
+          }
+          if (!isEmpty(obs2)) {
+            const secondaryDiagnoses = await processDiagnoses(obs2, "Secondary diagnosis");
+            additionalDiagnoses.push(...secondaryDiagnoses);
+          }
+          if (!isEmpty(obs3)) {
+            const attemptedDiagnoses = await processDiagnoses(obs3, "Differential diagnosis");
+            additionalDiagnoses.push(...attemptedDiagnoses);
+          }
+          this.list = additionalDiagnoses;
+        } catch (error) {
+          console.error("Error fetching diagnoses:", error);
+        } finally {
+          this.isLoading = true;
+        }
+      },
       resetStore() {
         this.drugPrescriptions = [];
       },
@@ -199,34 +214,89 @@ import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { DispensationService } from "@/apps/OPD/services/dispensation_service";
 import DynamicList from "@/apps/OPD/components/DynamicList.vue";
+import {DrugOrderService} from "@/services/drug_order_service";
 const usedemographics_store = useDemographicsStore();
 const demographics = computed(() => usedemographics_store.patient);
 const dispensationStore = useDispensationStore();
 const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
 const selectedReason = ref("");
+const dispensedMedications = computed(() => dispensationStore.getDispensedMedications());
+
+watch(dispensedMedications, (newVal) => {
+  console.log("Dispensed Medications Updated:", newVal);
+});
+
+function getFrequencyLabelOrCheckCode(frequency: string) {
+  return frequency;
+}
+
+function extractNumberBeforeDays(text: string): number | null {
+  const regex = /(\d+)\s+days/i;
+  const match = text.match(regex);
+  if (match && match.length > 1) {
+    return parseInt(match[1]);
+  }
+  return null;
+}
+
+async function fetchTodaysMedications() {
+  const today = new Date(Service.getSessionDate()).toISOString().split("T")[0];
+  const patientID = demographics.value.patientID;
+
+  try {
+    const medications = await DrugOrderService.getOrderByPatient(patientID, { start_date: today });
+    console.log("Fetched medications:", medications);
+
+    if (!medications || medications.length === 0) {
+      console.log("No medications found for the patient.");
+      dispensationStore.setDrugPrescriptions([]);
+      return;
+    }
+
+    const formattedMedications = medications.map((medication: any) => ({
+      drugName: medication.drug.name,
+      dose: medication.dose,
+      frequency: getFrequencyLabelOrCheckCode(medication.frequency),
+      duration: extractNumberBeforeDays(medication.order.instructions),
+      prescription: HisDate.toStandardHisFormat(medication.order.auto_expire_date),
+      drug_id: medication.drug.drug_id,
+      units: medication.units,
+      route_concept_id: medication.route_concept_id,
+      route_name: medication.route_name,
+      other: {
+        quantity: 0,
+        order_id: medication.order_id,
+      },
+      reason: "",
+      isSelected: true,
+      showValidation: false,
+    }));
+
+    console.log("Formatted medications:", formattedMedications);
+    dispensationStore.setDrugPrescriptions(formattedMedications);
+  } catch (error) {
+    console.error("Error fetching medications:", error);
+    dispensationStore.setDrugPrescriptions([]);
+  }
+}
+
+onMounted(async () => {
+  await fetchTodaysMedications();
+});
 
 watch(
     () => demographics.value,
     async (newPatient, oldPatient) => {
       if (newPatient && newPatient.patientID !== oldPatient.patientID) {
         dispensationStore.resetStore();
+        await fetchTodaysMedications();
 
-        const previousTreatment = new PreviousTreatment();
-        const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters();
-
-        if (previousDrugPrescriptions.length > 0) {
-          dispensationStore.setDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions);
-
-          for (let index = 0; index < dispensationStore.getDrugPrescriptions().length; index++) {
-            dispensationStore.initializeValidationsBoolean();
-            dispensationStore.initializeReasonParameter();
-            dispensationStore.initializeDispensedAmount();
-            dispensationStore.updateCheckboxBool(true, index);
+        dispensationStore.drugPrescriptions.forEach((item: any) => {
+          if (!item.quantity) {
+            item.quantity = 0;
           }
-        } else {
-          dispensationStore.setDrugPrescriptions([]);
-        }
+        });
       }
     },
     { immediate: true, deep: true }
@@ -261,16 +331,36 @@ function toggleCheckbox(event: any) {
     dispensationStore.updateCheckboxBool(CheckboxBoolean, index);
 }
 function saveDispensations() {
-    dispensationStore.isSaveInitiated(true);
-    if (dispensationStore.validateInputs()) {
-        return;
+  dispensationStore.isSaveInitiated(true);
+
+  if (dispensationStore.validateInputs()) {
+    return;
+  }
+
+  console.log("Saving dispensed medications...");
+  dispensationStore.saveDispensedMedications();
+  dispensationStore.setDispensedMedicationsPayload();
+
+  const dispensation_srvc = new DispensationService(demographics.value.patientID, Service.getUserID() as any);
+  const dispensation_payload: any = dispensationStore.getDispensedMedicationsPayload();
+  dispensation_srvc.saveDispensations(dispensation_payload.dispensations);
+
+  console.log("Dispensed Medications:", dispensationStore.getDispensedMedications());
+}
+function validateInputs() {
+  let isValid = true;
+
+  dispensationStore.drugPrescriptions.forEach((item: any, index: number) => {
+    if (!item || typeof item.quantity === "undefined") {
+      console.error(`Item ${index} is missing the quantity property:`, item);
+      isValid = false;
+    } else if (item.quantity <= 0) {
+      console.error(`Item ${index} has an invalid quantity:`, item.quantity);
+      isValid = false;
     }
-    dispensationStore.saveDispensedMedications();
-    dispensationStore.setDispensedMedicationsPayload();
-    usedemographics_store;
-    const dispensation_srvc = new DispensationService(demographics.value.patientID, Service.getUserID() as any);
-    const dispensation_payload: any = dispensationStore.getDispensedMedicationsPayload();
-    dispensation_srvc.saveDispensations(dispensation_payload.dispensations);
+  });
+
+  return isValid;
 }
 </script>
 
@@ -451,34 +541,55 @@ ion-list.list-al {
     justify-content: space-between;
     font-weight: bold;
     padding: 10px 0;
-    border-bottom: 2px solid #ccc; /* Line below header */
+    border-bottom: 2px solid #ccc;
 }
 
 .header-name,
 .header-type {
-    flex: 1; /* Equal space for both columns */
-    text-align: left; /* Align text to the left */
+    flex: 1;
+    text-align: left;
 }
 
 .diagnosis-item {
     display: flex;
     justify-content: start;
     padding: 8px 0;
-    border-bottom: 1px solid #eee; /* Light line between items */
+    border-bottom: 1px solid #eee;
 }
 
 .item-name {
-    flex: 1; /* Let the name take 1 space */
+    flex: 1;
 }
 
 .item-type {
-    flex: 1; /* Let the type take 1 space */
-    text-align: left; /* Align text to the right */
-    color: #777; /* Slightly muted color for type */
+    flex: 1;
+    text-align: left;
+    color: #777;
 }
 
 ion-button {
   --ion-color-primary: transparent;
   --background: rgba(76, 175, 80, 0.5);
+}
+.no-background {
+  --background: transparent !important;
+  --box-shadow: none !important;
+  --color: green !important;
+}
+
+.no-background ion-icon {
+  color: green !important;
+}
+.no-background:hover {
+  --color: darkgreen !important;
+}
+
+.no-background:hover ion-icon {
+  color: darkgreen !important;
+}
+ion-loading {
+  --background: rgba(0, 0, 0, 0.8);
+  --spinner-color: #4caf50;
+  --message-color: #ffffff;
 }
 </style>

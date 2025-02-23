@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import {
     IonContent,
     IonHeader,
@@ -137,6 +137,7 @@ import { useFormWizard } from "@/composables/useFormWizard";
 const { onTabBeforeChange, onChangeCurrentTab, currentTabIndex } = useFormWizard();
 // Router
 const router = useRouter();
+const route = useRoute();
 
 // State
 const wizardData = ref<any[]>([]);
@@ -214,10 +215,14 @@ const getData = async () => {
 const refreshWizard = () => {
     showWizard.value = false;
     setTimeout(() => {
+        currentTabIndex.value = 0;
         showWizard.value = true;
     }, 0);
 };
-
+const cleanVitalForm = () => {
+    const vitals = useVitalsStore();
+    vitals.setVitals(vitals.getInitialVitals());
+};
 const markWizard = async () => {
     const sessionD = getFieldValue(sessionDate.value, "sessionDate", "value") || HisDate.sessionDate();
     const vitalsData = getOfflineSavedUnsavedData("vitals");
@@ -425,6 +430,14 @@ watch(
     selectedNCDMedicationList,
     async () => {
         await markWizard();
+    },
+    { deep: true }
+);
+watch(
+    route,
+    async (newRoute) => {
+        refreshWizard();
+        cleanVitalForm();
     },
     { deep: true }
 );
