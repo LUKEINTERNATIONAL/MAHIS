@@ -46,7 +46,7 @@ const InnerActionBtnPropeties = {
     name: "Today",
     show: true,
     fn: setDateNow as any,
-};
+} as any;
 const showPicker = ref(true);
 const isSetTimeNowPressed = ref(false);
 const componentKey = ref(0 as any);
