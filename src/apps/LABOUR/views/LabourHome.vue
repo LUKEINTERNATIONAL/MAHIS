@@ -6,7 +6,7 @@
             <div class="container">
                 <ion-grid class="ion-grid">
                     <div class="back_profile">
-                        <DynamicButton name="Back to profile" iconSlot="start" fill="clear" :icon="chevronBackOutline()" @click="backToANChome" />
+                        <DynamicButton name="Back to profile" iconSlot="start" fill="clear" :icon="chevronBackOutline" @click="backToANChome" />
                     </div>
                     <ion-row class="card-row">
                         <ion-col v-for="(card, index) in cardsData" :key="index" size-xs="6" size-sm="6" size-md="4" size-lg="4" size-xl="4">
@@ -18,7 +18,7 @@
                                 <ion-card-header>
                                     <ion-card-title class="ion-title">
                                         {{ card.title }}
-                                        <ion-icon v-if="card.isSaved" :icon="checkmarkCircle()" class="check-icon"></ion-icon>
+                                        <ion-icon v-if="card.isSaved" :icon="checkmarkCircle" class="check-icon"></ion-icon>
                                     </ion-card-title>
                                 </ion-card-header>
                                 <ion-card-content>
@@ -35,33 +35,36 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonIcon, IonPage } from "@ionic/vue";
 import { useRouter } from "vue-router";
-import Toolbar from "@/components/Toolbar.vue";
+import {
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonIcon,
+    IonPage,
+} from "@ionic/vue";
 import {
     checkmarkCircle,
-    personCircle,
-    alertCircle,
-    heart,
-    flask,
-    medkit,
-    chatbubbles,
-    people,
-    bed,
     chevronBackOutline,
-    pulse,
-    checkmarkDone,
-    notificationsOutline,
-    documentText,
     medical,
+    documentText,
+    notificationsOutline,
+    people,
+    checkmarkDone,
 } from "ionicons/icons";
+import Toolbar from "@/components/Toolbar.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
-import { ObservationService } from "@/services/observation_service";
 import { mapState } from "pinia";
 import { useScheduleNextAppointmentStore } from "@/apps/ANC/store/others/scheduleNextAppointment";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
+import { ObservationService } from "@/services/observation_service";
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -91,16 +94,15 @@ export default defineComponent({
     },
     setup() {
         const router = useRouter();
-
-        const navigateTo = (path: string) => {
+        const navigateTo = (path: any) => {
             router.push({ path });
         };
+
         const cardsData = [
-            { title: "Labour profile", path: "/labourProfile", icon: people, color: "grey", isSaved: false },
             { title: "Labour assessment", path: "/labourAssessment", icon: medical, color: "grey", isSaved: false },
-            { title: "Continuous monitoring", path: "/continuousMonitoring", icon: notificationsOutline, color: "grey", isSaved: false },
             { title: "Delivery details", path: "/labourDeliveryDetails", icon: documentText, color: "grey" },
             { title: "Immediate postnatal checks", path: "/postnatalChecks", icon: checkmarkCircle, color: "grey", isSaved: false },
+            { title: "Continuous monitoring", path: "/continuousMonitoring", icon: notificationsOutline, color: "grey", isSaved: false },
             { title: "Referral", path: "/labourReferral", icon: people, color: "grey", isSaved: false },
             { title: "End labour program", path: "/labourEnd", icon: checkmarkDone, color: "grey", isSaved: false },
         ];
@@ -108,6 +110,8 @@ export default defineComponent({
         return {
             navigateTo,
             cardsData,
+            checkmarkCircle,
+            chevronBackOutline,
         };
     },
     computed: {
@@ -118,19 +122,12 @@ export default defineComponent({
         this.handleProfile();
     },
     methods: {
-        checkmarkCircle() {
-            return checkmarkCircle;
-        },
-        chevronBackOutline() {
-            return chevronBackOutline;
-        },
-        backToANChome() {
-            this.$router.push("/patientProfile");
-        },
-
         async handleProfile() {
             const gravida = await ObservationService.getFirstObsValue(this.patient.patientID, "Gravida", "value_text");
             this.gravida = gravida;
+        },
+        backToANChome() {
+            this.$router.push("/patientProfile");
         },
     },
 });
