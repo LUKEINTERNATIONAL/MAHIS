@@ -1,6 +1,6 @@
 <template>
     <div class="cards-container">
-        <ion-card class="top-card">
+        <ion-card class="top-card action-card" @click="setActiveItemRefFN('appointments')">
             <ion-card-content>
                 <div class="top-card-text">
                     <div class="text-2xl font-bold">{{ appointments.length }}</div>
@@ -8,7 +8,7 @@
                 </div>
             </ion-card-content>
         </ion-card>
-        <ion-card class="top-card">
+        <ion-card class="top-card action-card">
             <ion-card-content>
                 <div class="top-card-text">
                     <div class="text-2xl font-bold">{{ 0 }}</div>
@@ -16,7 +16,7 @@
                 </div>
             </ion-card-content>
         </ion-card>
-        <ion-card class="top-card">
+        <ion-card class="top-card action-card">
             <ion-card-content>
                 <div class="top-card-text">
                     <div class="text-2xl font-bold">{{ dashboardData?.total_complications }}</div>
@@ -24,7 +24,7 @@
                 </div>
             </ion-card-content>
         </ion-card>
-        <ion-card class="top-card">
+        <ion-card class="top-card action-card">
             <ion-card-content>
                 <div class="top-card-text">
                     <div class="text-2xl font-bold">{{ dashboardData?.total_client_registered }}</div>
@@ -266,5 +266,8 @@ export default defineComponent({
 }
 .font-bold {
     font-weight: 700;
+}
+.action-card {
+    cursor: pointer;
 }
 </style>

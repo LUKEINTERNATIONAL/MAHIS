@@ -11,6 +11,7 @@ import { mapState } from "pinia";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { AppointmentService } from "@/services/appointment_service";
 import HisDate from "@/utils/Date";
+import { useNCDDashBoardStore } from "@/stores/NCDDashBoardStores";
 import {
     medkit,
     chevronBackOutline,
@@ -28,15 +29,33 @@ import {
     thermometer,
     people,
 } from "ionicons/icons";
+
+export const useDashboardMixin = () => {
+    const activeIteminMixin = ref<string | null>(null);
+
+    const setActiveItem = (itemId: string) => {
+        activeIteminMixin.value = itemId;
+        console.log("lll: ", activeIteminMixin.value) 
+    };
+
+    return {
+        activeIteminMixin,
+        setActiveItem,
+    };
+};
+
 export default defineComponent({
-    name: "Menu",
+    name: "useDashboardMixin",
     data() {
         return {
             isMobile: false as any,
             appointments: [] as any,
+            activeIteminMixin: null as string | null,
         };
     },
     setup() {
+        const { activeIteminMixin, setActiveItem } = useDashboardMixin();
+
         return {
             chevronBackOutline,
             checkmark,
@@ -53,6 +72,8 @@ export default defineComponent({
             people,
             thermometer,
             clipboard,
+            activeIteminMixin,
+            setActiveItem,
         };
     },
     async mounted() {
@@ -77,6 +98,12 @@ export default defineComponent({
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
         },
+        setActiveItemRefFN(itemID: string) {
+            // const { setActiveItem } = useDashboardMixin();
+            // setActiveItem(itemID);
+            const stores = useNCDDashBoardStore()
+            stores.setSelectedItem(itemID);
+        }
     },
 });
 </script>

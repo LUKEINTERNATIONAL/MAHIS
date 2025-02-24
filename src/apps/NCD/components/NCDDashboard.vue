@@ -3,7 +3,7 @@
         <div class="left_col" v-if="screenWidth > 940">
             <nav class="nav-menu">
                 <ul>
-                    <li v-for="item in menuItems" :key="item.id" :class="{ active: activeItem === item.id }" @click="setActiveItem(item.id)">
+                    <li v-for="item in menuItems" :key="item.id" :class="{ active: activeItem === item.id }" @click="setActiveItemLocal(item.id)">
                         <ion-icon :icon="item.icon" style="font-size: 20px" class="menu-icon"></ion-icon>
                         <span class="ellipsis">{{ item.label }}</span>
                     </li>
@@ -18,7 +18,7 @@
                     v-for="item in menuItems"
                     :key="item.id"
                     :class="{ active: activeItem === item.id }"
-                    @click="setActiveItem(item.id)"
+                    @click="setActiveItemLocal(item.id)"
                 >
                     <ion-icon :icon="item.icon" style="font-size: 20px" class="menu-icon"></ion-icon>
                     <span>{{ item.label }}</span>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonIcon, modalController, IonCheckbox } from "@ionic/vue";
 import { gridOutline, peopleOutline, calendarOutline } from "ionicons/icons";
 import DispositionModal from "@/components/ProfileModal/OutcomeModal.vue";
@@ -49,6 +49,7 @@ import Referral from "@/apps/NCD/components/Dashboard/Referrals.vue";
 import Dashboard from "@/apps/NCD/components/Dashboard/Dashboard.vue";
 import NCDAppointments from "@/apps/NCD/components/NCDAppointments.vue";
 import { useWindowSize } from "@/composables/screenSize";
+import { useNCDDashBoardStore } from "@/stores/NCDDashBoardStores";
 import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 
 interface MenuItem {
@@ -56,6 +57,9 @@ interface MenuItem {
     label: string;
     icon: string;
 }
+
+const NCDDashBoardStores = useNCDDashBoardStore();
+const selectedItem = computed(() => NCDDashBoardStores.selectedItem);
 
 const { screenWidth } = useWindowSize();
 const menuItems = ref<MenuItem[]>([
@@ -77,24 +81,44 @@ const menuItems = ref<MenuItem[]>([
 ]);
 
 const activeItem = ref<string>("dashboard");
-
-// Get store state using storeToRefs for reactivity
 const enrollmentStore = useEnrollementStore();
 const { substance } = storeToRefs(enrollmentStore);
 
-// Watch for changes in substance
 watch(
     () => substance.value,
-    () => {
-        // Implementation of what was previously in buildCards
+    (newValue, oldValue) => {
+        if (newValue !== oldValue) {
+            console.log('Substance changed:', newValue);
+            // Add your substance change handling logic here
+        }
     },
-    { deep: true }
+    { 
+        deep: true,
+        immediate: true 
+    }
 );
 
-// Methods
-const setActiveItem = (id: string): void => {
+const setActiveItemLocal = (id: string): void => {
     activeItem.value = id;
+    const stores = useNCDDashBoardStore()
+    stores.setSelectedItem(activeItem.value);
 };
+
+watch(
+    () => selectedItem.value,
+    (newValue) => {
+        console.log("Active item from mixin changed:", newValue);
+        if (newValue) {
+            if (newValue != null) {
+                setActiveItemLocal(newValue as any);
+            }
+        }
+    },
+    {
+        immediate: true
+    }
+);
+
 </script>
 
 <style scoped>
