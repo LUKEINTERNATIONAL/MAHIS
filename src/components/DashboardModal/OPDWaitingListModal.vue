@@ -59,7 +59,6 @@ import customDatePicker from "@/apps/Immunization/components/customDatePicker.vu
 import { PatientService } from "@/services/patient_service";
 import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
-import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import VueMultiselect from "vue-multiselect";
 import { isEmpty } from "lodash";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
