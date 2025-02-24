@@ -193,7 +193,7 @@
                     <div class="noData" v-else>No Treatment were recorded</div>
                     <div v-if="nextAppointMent">
                         <span class="heading">Next Appointment:</span>
-                        <span class="nextDate">06 September 2024</span>
+                        <span class="nextDate"></span>
                     </div>
                     <div class="noData" v-else>No next appointment was set</div>
                     <!-- <div class="noData" v-else>ANC-Profile</div> -->
