@@ -24,11 +24,15 @@ export class Treatment {
 
     async onSubmitAllergies(patientID: any, providerID: any, allergiesDataObs: any) {
         try {
+            console.log("Allergies Data to Save:", allergiesDataObs);
             const drug_allergy_service = new DrugAllergyService(patientID, providerID);
             await drug_allergy_service.createEncounter();
             await drug_allergy_service.saveObservationList(allergiesDataObs);
             toastSuccess("Allergies saved successfully");
-        } catch (error) {}
+        } catch (error) {
+            console.error("Error saving allergies:", error);
+            toastWarning("Failed to save allergies");
+        }
     }
 }
 
