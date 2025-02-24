@@ -96,7 +96,6 @@ export default defineComponent({
             router.push({ path });
         };
         const cardsData = [
-            { title: "Labour profile", path: "/labourProfile", icon: people, color: "grey", isSaved: false },
             { title: "Labour assessment", path: "/labourAssessment", icon: medical, color: "grey", isSaved: false },
             { title: "Delivery details", path: "/labourDeliveryDetails", icon: documentText, color: "grey" },
             { title: "Immediate postnatal checks", path: "/postnatalChecks", icon: checkmarkCircle, color: "grey", isSaved: false },
