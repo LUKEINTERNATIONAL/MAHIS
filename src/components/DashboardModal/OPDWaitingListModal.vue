@@ -156,7 +156,6 @@ export default defineComponent({
         pageLength: 20,
         lengthChange: false,
         dom: 'Bfrtip',
-        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
         order: [[1, 'desc']] as Array<[number, 'asc' | 'desc']>,
 
       },
@@ -189,6 +188,38 @@ export default defineComponent({
     this.setList();
   },
   watch: {
+    patientsWaitingForConsultation: {
+      handler(newVal) {
+        if (this.list === "CONSULTATION") {
+          this.patients = newVal;
+        }
+      },
+      deep: true,
+    },
+    patientsWaitingForVitals: {
+      handler(newVal) {
+        if (this.list === "VITALS") {
+          this.patients = newVal;
+        }
+      },
+      deep: true,
+    },
+    patientsWaitingForLab: {
+      handler(newVal) {
+        if (this.list === "LAB") {
+          this.patients = newVal;
+        }
+      },
+      deep: true,
+    },
+    patientsWaitingForDispensation: {
+      handler(newVal) {
+        if (this.list === "DISPENSATION") {
+          this.patients = newVal;
+        }
+      },
+      deep: true,
+    },
     counter: {
       handler() {
         this.setList();

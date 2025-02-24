@@ -136,7 +136,6 @@ export default defineComponent({
         pageLength: 20,
         lengthChange: false,
         dom: 'Bfrtip',
-        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
         order: [[1, 'asc']] as Array<[number, 'asc' | 'desc']>,
       },
     };

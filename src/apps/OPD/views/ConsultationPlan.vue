@@ -261,7 +261,6 @@ export default defineComponent({
     setup() {
        const { printVisitSummary } = usePatientProfile();
        const presentingComplaintsValue = ref<string[]>([]);
-
         async function loadSavedEncounters(patientVisitDate: any) {
             const patient = new PatientService();
             const encounters = await EncounterService.getEncounters(patient.getID(), { date: patientVisitDate });
@@ -277,7 +276,7 @@ export default defineComponent({
             }
         }
 
-        function filterObs(observations: any, conceptName: string) {
+        async function filterObs(observations: any, conceptName: string) {
             return observations?.filter((obs: any) => obs.concept.concept_names.some((name: any) => name.name === conceptName));
         }
 
@@ -370,8 +369,9 @@ export default defineComponent({
                     if (this.userRole !== "Lab") {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "DISPENSATION", locationId);
                         await usePatientList().refresh(locationId);
-                        this.togglePrintModal();
-                        return;
+                        this.$router.push("home");
+                        toastSuccess("Patient has finished consultation!");
+
 
                     } else {
                         await PatientOpdList.addPatientToStage(this.patient.patientID, dates.todayDateFormatted(), "CONSULTATION", locationId);
