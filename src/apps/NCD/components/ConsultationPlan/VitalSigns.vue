@@ -188,7 +188,7 @@ export default defineComponent({
         },
         async validateRowData(inputData: any) {
             if (inputData != "onload") {
-                // await this.validationController(inputData);
+                await this.validationController(inputData);
                 const height = getFieldValue(this.vitals, "Height (cm)", "value");
                 const weight = getFieldValue(this.vitals, "Weight", "value");
                 const systolic = getFieldValue(this.vitals, "Systolic", "value");
