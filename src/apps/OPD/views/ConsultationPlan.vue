@@ -92,7 +92,7 @@ import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent, ref } from "vue";
-import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
+import { DRUG_FREQUENCIES, DrugPrescriptionService } from "@/services/drug_prescription_service";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
@@ -355,7 +355,7 @@ export default defineComponent({
                 }
             } else {
                 return async () => {
-                    this.saveDiagnosis();
+                    await this.saveDiagnosis();
                     await this.saveTreatmentPlan();
                     await useOutcomeStore().saveOutcomPatientData();
                     resetOPDPatientData();
