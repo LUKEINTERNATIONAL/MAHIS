@@ -16,36 +16,6 @@ export const examSchema = yup.object().shape({
 export const useLabourPhysicalExamStore = defineStore("physicalExamStore", {
     state: () => ({
         vitals: [
-            // {
-            //     selectdData: [],
-            //     isFinishBtn: false,
-            //     classDash: 'dashed_bottom_border _padding',
-            //     radioBtnContent:
-            //         {
-            //             header:{
-            //                 title: 'Hydration status',
-            //                 selectedValue: ''
-            //             },
-            //             data:[
-            //                 {
-            //                     name: 'Well hydrated',
-            //                     value: 'well',
-            //                     labelPlacement: 'start',
-            //                     colSize: '7',
-            //                     justify: 'space-between',
-            //                 },
-            //                 {
-            //                     name: 'Poorly hydrated',
-            //                     value: 'poorly hydrated',
-            //                     labelPlacement: 'start',
-            //                     colSize: '7',
-            //                     justify: 'space-between',
-            //                 },
-            //             ]
-            //         }
-
-            // },
-
             {
                 selectdData: [],
                 isFinishBtn: false,

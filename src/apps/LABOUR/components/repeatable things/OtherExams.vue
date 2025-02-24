@@ -36,7 +36,14 @@ import { icons } from "../../../../utils/svg";
 import BasicInputField from "../../../../components/BasicInputField.vue";
 import { mapState } from "pinia";
 import { checkmark, pulseOutline } from "ionicons/icons";
-import { dynamicValue, getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+import {
+    dynamicValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    getRadioSelectedValue,
+    modifyFieldValue,
+    modifyRadioValue,
+} from "@/services/data_helpers";
 import BasicCard from "@/components/BasicCard.vue";
 import { fetalSchema, useOtherExamsStore } from "@/apps/LABOUR/stores/repeatable things/otherExams";
 import { YupValidateField } from "@/services/validation_service";
@@ -78,6 +85,7 @@ export default defineComponent({
         this.handleUrineColor();
         this.handleUrineColorOdour();
         this.handleDilated();
+        this.handleGrade();
     },
     watch: {
         urine: {
@@ -86,6 +94,12 @@ export default defineComponent({
                 this.handleUrineColor();
                 this.handleUrineColorOdour();
                 this.handleDilated();
+            },
+            deep: true,
+        },
+        otherExams: {
+            handler() {
+                this.handleGrade();
             },
             deep: true,
         },
@@ -99,6 +113,13 @@ export default defineComponent({
         },
         async handleInputData(event: any) {
             this.handleValidateFatal(event);
+        },
+        handleGrade() {
+            if (getCheckboxSelectedValue(this.otherExams, "Meconium stained")?.value == "meconium stained") {
+                modifyRadioValue(this.otherExams, "Grade", "displayNone", false);
+            } else {
+                modifyRadioValue(this.otherExams, "Grade", "displayNone", true);
+            }
         },
         handleUrine() {
             if (getRadioSelectedValue(this.urine, "woman urinated") == "yes") {

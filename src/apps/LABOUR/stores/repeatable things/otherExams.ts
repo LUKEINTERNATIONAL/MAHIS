@@ -5,6 +5,7 @@ import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers"
 
 export const fetalSchema = yup.object().shape({
     heart: yup.number().typeError("Fetal heart rate can only be number").min(0),
+    Cervical: yup.number().typeError("Cervical dilation can only be number").min(0).max(10),
 });
 
 export const useOtherExamsStore = defineStore("otherExamsStore", {
@@ -28,6 +29,183 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                                     name: "heart",
                                     required: true,
                                     eventType: "input",
+                                    placeholder: "Number (checked every four hours)",
+                                    inputWidth: "100%",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "State of Membranes?",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "Membranes",
+                    },
+                    data: [
+                        {
+                            name: "Ruptured",
+                            value: "ruptured",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "Intact",
+                            value: "intact",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                    ],
+                },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Holder Membranes?",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "Membranes",
+                    },
+                    data: [
+                        {
+                            name: "Artifical",
+                            value: "artifical",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "Spontaneously",
+                            value: "spontaneously",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                    ],
+                },
+            },
+            {
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "State of Liquor",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "State of Liquor",
+                    },
+                    data: [
+                        {
+                            name: "Clear",
+                            value: "clear",
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
+                            checked: false,
+                        },
+                        {
+                            name: "Meconium stained",
+                            value: "meconium stained",
+                            disabled: false,
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
+                            checked: false,
+                        },
+                        {
+                            name: "Blood-stained",
+                            value: "blood-stained",
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
+                            checked: false,
+                        },
+                        {
+                            name: "Absent",
+                            value: "Absent",
+                            disabled: false,
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
+                            checked: false,
+                        },
+                        {
+                            name: "Offensive smell",
+                            value: "offensive smell",
+                            disabled: false,
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "What is the Grade?",
+                        selectedValue: "",
+                        class: "bold",
+                        name: "Grade",
+                        displayNone: true,
+                    },
+                    data: [
+                        {
+                            name: "1",
+                            value: "1",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "2",
+                            value: "2",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "3",
+                            value: "3",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                    ],
+                },
+            },
+            {
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                sectionHeader: "Cervical dilation",
+
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: "Cervical dilation",
+                                    unit: "cm",
+                                    icon: icons.editPen,
+                                    valueType: "text",
+                                    value: "",
+                                    name: "Cervical",
+                                    required: true,
+                                    eventType: "input",
                                     placeholder: "Number (checked every 30 minutes)",
                                     inputWidth: "100%",
                                 },
@@ -42,43 +220,29 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                 classDash: "dashed_bottom_border _padding",
                 radioBtnContent: {
                     header: {
-                        title: "Liquor",
+                        title: "Umbilical Cord ",
                         selectedValue: "",
                         class: "bold",
-                        name: "Liquor",
+                        name: "Umbilical Cord ",
                     },
                     data: [
                         {
-                            name: "Clear",
-                            value: "clear",
+                            name: "+",
+                            value: "+",
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
                         },
                         {
-                            name: "Blood stained",
-                            value: "blood stained",
+                            name: "++",
+                            value: "++",
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
                         },
                         {
-                            name: "Meconium stained (Grade 1 to 3)",
-                            value: "meconium stained",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Absent",
-                            value: "absent",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Offensive smell",
-                            value: "offensive smell",
+                            name: "+++",
+                            value: "+++",
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
@@ -93,7 +257,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                 classDash: "dashed_bottom_border _padding",
                 radioBtnContent: {
                     header: {
-                        title: "Moulding *",
+                        title: "Moulding",
                         selectedValue: "",
                         class: "bold",
                         name: "Moulding",
