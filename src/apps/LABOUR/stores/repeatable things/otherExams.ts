@@ -1,5 +1,11 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import * as yup from "yup";
+import { extractArrayOfNameValue, validateStore } from "@/services/data_helpers";
+
+export const fetalSchema = yup.object().shape({
+    heart: yup.number().typeError("Fetal heart rate can only be number").min(0),
+});
 
 export const useOtherExamsStore = defineStore("otherExamsStore", {
     state: () => ({
@@ -19,11 +25,11 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                                     icon: icons.editPen,
                                     valueType: "text",
                                     value: "",
-                                    name: "cervix dilation",
+                                    name: "heart",
                                     required: true,
                                     eventType: "input",
                                     placeholder: "Number (checked every 30 minutes)",
-                                    inputWidth: "55%",
+                                    inputWidth: "100%",
                                 },
                             ],
                         },
@@ -552,6 +558,12 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
         },
         setUrine(data: any) {
             this.urine = data;
+        },
+        async validateFatalExam() {
+            const fatalExam = extractArrayOfNameValue(this.otherExams);
+            const fatalExamValid = await validateStore(this.otherExams, fetalSchema, fatalExam);
+
+            return fatalExamValid;
         },
     },
     //persist: true,
